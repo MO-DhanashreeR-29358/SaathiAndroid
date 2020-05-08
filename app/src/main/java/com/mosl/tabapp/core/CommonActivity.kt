@@ -51,7 +51,6 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
-import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -128,10 +127,6 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var gson: Gson
   lateinit var remoteConfigModel: RemoteConfigModel
-
-  @Inject
-  lateinit var firebaseHelper: FirebaseHelper
-
   var mService: ForegroundService? = null
 
   override fun getLayout(): Int {
@@ -486,7 +481,6 @@ class CommonActivity : BaseActivity(),
 
 //  locationWorkManager.cancelWorkById(compressionLocationWorkId)
 //  dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
-    firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
     startActivity(login)

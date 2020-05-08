@@ -144,10 +144,15 @@ class DashboardPresenter @Inject constructor(
 
   private fun getDashboardRequest(): DashboardRequestData {
 
-    return DashboardRequestData(
-      profileId = view.getBusinessProfileID(), productId = view.getProductID(),
-      empCode = view.getEmpCode()
+    if (view.getBusinessProfileID().isNotEmpty() || view.getEmpCode()
+        .isNotEmpty() || view.getProductID().isNotEmpty()
     )
+      return DashboardRequestData(
+        profileId = view.getBusinessProfileID(), productId = view.getProductID(),
+        empCode = view.getEmpCode()
+      )
+
+    return DashboardRequestData(null, null, null)
   }
 }
 
