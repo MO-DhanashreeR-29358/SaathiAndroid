@@ -116,7 +116,7 @@ import static java.util.Objects.requireNonNull;
  * Created by raju on 2/7/2017.
  */
 
-public class DashboardFragment extends CommonFragment
+public class DashboardFragmentOld extends CommonFragment
     implements View.OnClickListener, MOSLConstants {
   Bundle args = new Bundle();
   @Inject

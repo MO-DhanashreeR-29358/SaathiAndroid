@@ -8,7 +8,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
-import com.mosl.tabapp.dashboard.base.DashboardFragmentNew
+import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
@@ -34,7 +34,7 @@ object MenuGetterNew {
   fun getFragment(@NavigationConstants pageId: Int): Fragment? {
     val args = Bundle()
     return when (pageId) {
-      NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragmentNew()
+      NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
       NavigationConstants.NAVIGATE_TO_FRESH_REG -> null
       NavigationConstants.NAVIGATE_TO_EXISTING_APP -> null
       NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()

@@ -8,14 +8,14 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 
-import static com.mosl.tabapp.dashboard.base.DashboardFragmentNew.ARG_EMPCODE;
-import static com.mosl.tabapp.dashboard.base.DashboardFragmentNew.ARG_PRODUCT_ID;
-import static com.mosl.tabapp.dashboard.base.DashboardFragmentNew.ARG_PROFILE_ID;
+import static com.mosl.tabapp.dashboard.base.DashboardFragment.ARG_EMPCODE;
+import static com.mosl.tabapp.dashboard.base.DashboardFragment.ARG_PRODUCT_ID;
+import static com.mosl.tabapp.dashboard.base.DashboardFragment.ARG_PROFILE_ID;
 
 @Module
 public abstract class DashboardModule {
 
-    @Provides static DashboardRequestData provideDashboardData(DashboardFragmentNew fragment) {
+  @Provides static DashboardRequestData provideDashboardData(DashboardFragment fragment) {
         Bundle arguments = fragment.getArguments();
         if (arguments != null) {
             String productID = arguments.getString(ARG_PRODUCT_ID);
@@ -27,7 +27,7 @@ public abstract class DashboardModule {
     }
 
     @Binds abstract DashboardView provideDashboardView(
-        DashboardFragmentNew fragment);
+        DashboardFragment fragment);
 
     @Binds abstract DashboardRepository provideDashboardRepository(
         DashboardRepositoryImpl repository);

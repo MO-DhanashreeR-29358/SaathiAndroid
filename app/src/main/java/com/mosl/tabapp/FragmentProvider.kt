@@ -13,12 +13,12 @@ import com.mosl.tabapp.calendar.CalendarFragmentOld
 import com.mosl.tabapp.calendar.CalendarModule
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.createMeeting.CreateMeetingModule
-import com.mosl.tabapp.dashboard.DashboardFragment
+import com.mosl.tabapp.dashboard.DashboardFragmentOld
 import com.mosl.tabapp.dashboard.DashboardHierarchyFragmentOld
 import com.mosl.tabapp.dashboard.DashboardSecondLevelFragmentOld
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightModule
-import com.mosl.tabapp.dashboard.base.DashboardFragmentNew
+import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.base.DashboardModule
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.clients.ClientsModule
@@ -84,7 +84,7 @@ interface FragmentProvider {
   fun provideLeadViewDetailFactory(): LeadViewDetailFragment
 
   @ContributesAndroidInjector
-  fun provideDashboardFragmentFactory(): DashboardFragment
+  fun provideDashboardFragmentFactory(): DashboardFragmentOld
 
   @ContributesAndroidInjector
   fun provideCalendarFragmentFactory(): CalendarFragmentOld
@@ -192,5 +192,5 @@ interface FragmentProvider {
   fun provideActionableInsightsFragmentfactory(): ActionableInsightDialogFragment
 
   @ContributesAndroidInjector(modules = [DashboardModule::class])
-  fun provideNewDashboardFragmentFactory(): DashboardFragmentNew
+  fun provideNewDashboardFragmentFactory(): DashboardFragment
 }

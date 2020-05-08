@@ -71,7 +71,7 @@ import org.json.JSONObject
 import java.util.HashMap
 import javax.inject.Inject
 
-class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListener {
+class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
 
   @Inject
@@ -417,7 +417,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
       val subscribe = saathiApi.getActionableCount(request)
         .compose(applyUiModel())
         .subscribe { uiModel: UiModel<ActionableCountItem> ->
-          renderActionableCount1(
+          renderActionableCountNew(
             uiModel,
             systemName
           )
@@ -561,7 +561,7 @@ class DashboardFragmentNew : CommonFragment(), DashboardView, View.OnClickListen
     }
   }
 
-  private fun renderActionableCount1(uiModel: UiModel<ActionableCountItem>, systemName: String) {
+  private fun renderActionableCountNew(uiModel: UiModel<ActionableCountItem>, systemName: String) {
     toggleProgress(uiModel.inProgress)
 
     uiModel.onSuccess {
