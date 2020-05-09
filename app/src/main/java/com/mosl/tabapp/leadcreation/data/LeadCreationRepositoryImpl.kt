@@ -6,13 +6,14 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.StageRequest
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import io.reactivex.Observable
-import io.reactivex.functions.Function4
+import io.reactivex.functions.Function6
 import javax.inject.Inject
 
 class LeadCreationRepositoryImpl @Inject constructor(
@@ -26,12 +27,16 @@ class LeadCreationRepositoryImpl @Inject constructor(
         getProfessionRowDatas(),
         getInterestInRowDatas(),
         getSourceRowDatas(),
-        Function4 { listOfCategory, listOfProfession, listOfInterestIn, listOfSource ->
+        getStageRowDatas(),
+        getCountryRowDatas(),
+        Function6 { listOfCategory, listOfProfession, listOfInterestIn, listOfSource, listOfStage, listOfCountry ->
           LeadCreationPageData(
               categoryRowDatas = listOfCategory,
               professionRowDatas = listOfProfession,
               interestInRowDatas = listOfInterestIn,
-              sourceRowDatas = listOfSource
+              sourceRowDatas = listOfSource,
+              stageRowDatas = listOfStage,
+              countryRowDatas = listOfCountry
           )
         }
     )
@@ -80,6 +85,21 @@ class LeadCreationRepositoryImpl @Inject constructor(
     )
     return saathiApi.getSourceList(sourceRequest)
         .map { it.mapToRowDataList() }
+  }
+
+  private fun getStageRowDatas(): Observable<List<RowData>> {
+    val stageRequest = StageRequest(
+        businessUnitId = requireNotNull(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+            { "businessUnitId in UserManager is not be null" })
+    )
+    return saathiApi.getStageList(stageRequest)
+        .map { it.stageItemsToRowDatas() }
+  }
+
+  private fun getCountryRowDatas(): Observable<List<RowData>> {
+    return saathiApi.getCountries()
+        .map { it.countryItemsToRowDatas() }
   }
 
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {

@@ -7,7 +7,9 @@ import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
+import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.LookupItem
+import com.mosl.saathi.api.model.lead.StageItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
@@ -167,6 +169,34 @@ internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
           index + 1,
           "${sourceItem.sourceID}",
           sourceItem.sourceName ?: ""
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
+}
+
+internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, stageItem: StageItem ->
+    try {
+      RowData(
+          index + 1,
+          "${stageItem.stageID}",
+          stageItem.stageName
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
+}
+
+internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, countryItem: CountryItem ->
+    try {
+      RowData(
+          index,
+          countryItem.countryId ?: "",
+          countryItem.countryName
       )
     } catch (_: Exception) {
       null

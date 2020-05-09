@@ -82,6 +82,10 @@ class LeadCreationFragment : CommonFragment(),
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
+  private val countryAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
   override fun getLayout(): Int = R.layout.frag_lead_creation
 
   override fun onViewCreated(
@@ -554,6 +558,9 @@ class LeadCreationFragment : CommonFragment(),
       binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
       binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
       binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
+      binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
+      binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+      binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
     }
   }
 
