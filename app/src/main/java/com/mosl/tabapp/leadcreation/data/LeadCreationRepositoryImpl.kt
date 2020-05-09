@@ -103,7 +103,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
   }
 
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
-    val createLeadRequest = input.mapToCreateLeadRequest(userManager.getUser())
+    val createLeadRequest = input mapToCreateLeadRequest userManager.getUser()
     return saathiApi.addUpdateLead(
         request = createLeadRequest
     )

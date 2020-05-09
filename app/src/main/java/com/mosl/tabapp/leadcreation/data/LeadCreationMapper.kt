@@ -19,7 +19,7 @@ import com.mosl.tabapp.model.LeadCreationContact
 import com.mosl.tabapp.model.LeadCreationModel
 import com.mosl.tabapp.model.LeadCreationProductMapping
 
-internal fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): CreateLeadRequest {
+internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): CreateLeadRequest {
 
   val model = mapToLeadCreationModel(user)
   val listOfCreateLeadProduct = model.productMapping.mapToProductList()
