@@ -1053,8 +1053,7 @@
                             android:id="@+id/spCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvCountryError"
@@ -1081,8 +1080,7 @@
                             android:id="@+id/spState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvStateError"
@@ -1109,8 +1107,7 @@
                             android:id="@+id/spCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvCityError"
@@ -1313,8 +1310,7 @@
                             android:id="@+id/spOffState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvOffCity"
@@ -1329,8 +1325,7 @@
                             android:id="@+id/spOffCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:entries="@array/Select" />
+                            android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
                             android:id="@+id/tvOffCityError"
