@@ -7,6 +7,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StateProvinceRequest
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
@@ -102,10 +103,20 @@ class LeadCreationRepositoryImpl @Inject constructor(
         .map { it.countryItemsToRowDatas() }
   }
 
+  override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {
+    val stateRequest = StateProvinceRequest(selectedCountry)
+    return saathiApi.getStateProvinces(stateRequest)
+        .map { it.stateProvinceItemsToRowDatas() }
+  }
+
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
     val createLeadRequest = input mapToCreateLeadRequest userManager.getUser()
     return saathiApi.addUpdateLead(
         request = createLeadRequest
     )
+  }
+
+  companion object {
+    val SELECT_ROW_DATA = RowData(0, "-1", "Select")
   }
 }

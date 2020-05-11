@@ -1,9 +1,11 @@
 package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import io.reactivex.Observable
+import timber.log.Timber
 import javax.inject.Inject
 
 class LeadCreationPresenter @Inject constructor(
@@ -32,6 +34,16 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onPrimaryInfoClicked()
         .subscribe { view.renderPrimaryInfoClick() }
+        .addTo(disposable)
+
+    view.onCountrySelected()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedCountry() }
+        .switchMap {
+          repository.getStateRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderStateOnCountrySelection, Timber::e)
         .addTo(disposable)
 
     view.onAdditionalInfoClicked()

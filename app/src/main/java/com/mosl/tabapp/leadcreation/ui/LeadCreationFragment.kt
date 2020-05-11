@@ -13,6 +13,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.checkedChanges
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -83,6 +84,10 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   private val countryAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val stateAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
@@ -549,6 +554,11 @@ class LeadCreationFragment : CommonFragment(),
   override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
   override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
+  override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
+
+  override fun getSelectedCountry(): RowData {
+    return binding.spCountry.selectedItem as RowData
+  }
 
   override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
     toggleProgressBar(uiModel.inProgress)
@@ -561,6 +571,14 @@ class LeadCreationFragment : CommonFragment(),
       binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
       binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+    }
+  }
+
+  override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spState.setSpinnerData(stateAdapter, it)
     }
   }
 

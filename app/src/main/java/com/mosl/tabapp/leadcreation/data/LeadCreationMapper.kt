@@ -10,8 +10,10 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.StageItem
+import com.mosl.saathi.api.model.lead.StateProvinceItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.ContactDetailModel
@@ -203,3 +205,23 @@ internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
     }
   }
 }
+
+internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, stateProvinceItem: StateProvinceItem ->
+    try {
+      RowData(
+          index + 1,
+          "${stateProvinceItem.stateId}",
+          stateProvinceItem.stateName
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }.toMutableList()
+      .apply {
+        add(0, SELECT_ROW_DATA)
+      }
+      .toList()
+}
+
+

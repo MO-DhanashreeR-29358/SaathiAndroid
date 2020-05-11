@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import io.reactivex.Observable
@@ -22,6 +23,10 @@ interface LeadCreationView : BaseView {
 
   fun onAdditionalInfoClicked(): Observable<Unit>
   fun renderAdditionalInfoClick()
+
+  fun onCountrySelected(): Observable<Int>
+  fun getSelectedCountry(): RowData
+  fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>)
 
   fun onCreateButtonClicked(): Observable<Unit>
   fun getLeadCreationUserInput(): LeadCreationUserInput
