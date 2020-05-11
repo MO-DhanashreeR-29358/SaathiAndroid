@@ -183,6 +183,11 @@ class CommonActivity : BaseActivity(),
 
   }
 
+  private fun stopService() {
+    val serviceIntent = Intent(this, ForegroundService::class.java)
+    stopService(serviceIntent)
+  }
+
   private fun initBackgroundState() {
     val intent = Intent()
     val manufacturer = android.os.Build.MANUFACTURER
@@ -466,7 +471,7 @@ class CommonActivity : BaseActivity(),
 
           uiModel.onSuccess {
             Timber.d("Logout Successfully")
-
+            stopService()
             openLogin()
           }
 
