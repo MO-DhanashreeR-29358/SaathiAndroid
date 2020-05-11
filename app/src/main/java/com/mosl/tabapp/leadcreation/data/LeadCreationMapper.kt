@@ -176,7 +176,7 @@ internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
@@ -190,7 +190,7 @@ internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
