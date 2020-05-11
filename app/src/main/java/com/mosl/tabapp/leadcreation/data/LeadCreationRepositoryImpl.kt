@@ -99,6 +99,17 @@ class LeadCreationRepositoryImpl @Inject constructor(
         .map { it.stageItemsToRowDatas() }
   }
 
+  override fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>> {
+    val productTypeRequest = LookupRequest(
+        businessUnitId = requireNotNull(
+            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+            { "businessUnitId in UserManager is not be null" }),
+        lookupTypeId = MOSLConstants.PRODUCTTYPE,
+        parentId = selectedInterestedProduct
+    )
+    return getRowDatas(productTypeRequest)
+  }
+
   private fun getCountryRowDatas(): Observable<List<RowData>> {
     return saathiApi.getCountries()
         .map { it.countryItemsToRowDatas() }

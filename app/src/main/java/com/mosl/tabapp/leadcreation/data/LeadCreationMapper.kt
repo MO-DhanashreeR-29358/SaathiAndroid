@@ -162,7 +162,7 @@ internal fun List<LookupItem>.mapToRowDatas(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
@@ -235,7 +235,7 @@ internal fun List<CityItem>.cityItemsToRowDatas(): List<RowData> {
   }.addSelectRowData()
 }
 
-private fun List<RowData>.addSelectRowData(): List<RowData> {
+internal fun List<RowData>.addSelectRowData(): List<RowData> {
   return toMutableList().apply {
     add(0, SELECT_ROW_DATA)
   }

@@ -65,8 +65,7 @@
                         android:id="@+id/spCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
                         android:id="@+id/tvCategoryError"
@@ -157,8 +156,7 @@
                         android:id="@+id/spProfession"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -173,8 +171,7 @@
                         android:id="@+id/spInterestIn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
                         android:id="@+id/tvInterestInError"
@@ -201,8 +198,7 @@
                         android:id="@+id/spProductType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
                         android:id="@+id/tvProductTypeError"

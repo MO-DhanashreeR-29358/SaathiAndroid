@@ -36,6 +36,17 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe { view.renderPrimaryInfoClick() }
         .addTo(disposable)
 
+    view.onInterestedProductSelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedInterestedProduct() }
+        .switchMap {
+          repository.getProductTypeRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderProductTypeOnInterestedProductSelection)
+        .addTo(disposable)
+
     view.onCountrySelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)

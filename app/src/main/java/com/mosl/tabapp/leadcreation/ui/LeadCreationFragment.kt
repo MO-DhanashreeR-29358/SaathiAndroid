@@ -559,8 +559,12 @@ class LeadCreationFragment : CommonFragment(),
   override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
+  override fun onInterestedProductSelected(): Observable<Int> =
+    binding.spInterestIn.itemSelections()
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
 
+  override fun getSelectedInterestedProduct(): RowData =
+    binding.spInterestIn.selectedItem as RowData
   override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
   override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
 
@@ -576,6 +580,12 @@ class LeadCreationFragment : CommonFragment(),
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
       binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
     }
+  }
+
+  override fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { binding.spProductType.setSpinnerData(productTypeAdapter, it) }
   }
 
   override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
