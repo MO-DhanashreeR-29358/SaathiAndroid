@@ -151,11 +151,11 @@ class ClientsFragment : CommonFragment(), ClientsView {
     val headerView = topBinding.root
     topBinding.apply {
       tvFamilyCount.text = getFamilyCount().toString()
+      tvMtdCount.text = getTableHead(text)
       llFamiMappedCount.setOnClickListener {
         if (getFamilyCount() > 0) {
           navigateEvent.onNext(getAddtionalParameterMap())
         }
-        tvMtdCount.text = getTableHead(text)
       }
     }
     binding.tableLayout.addView(headerView)
