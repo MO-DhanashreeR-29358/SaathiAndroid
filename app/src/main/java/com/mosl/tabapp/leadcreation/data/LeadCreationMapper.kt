@@ -6,12 +6,14 @@ import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails
 import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
+import com.mosl.saathi.api.model.createlead.LeadSourceItem
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.StageItem
 import com.mosl.saathi.api.model.lead.StateProvinceItem
+import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
@@ -192,6 +194,36 @@ internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
     }
   }.addSelectRowData()
 }
+
+internal fun List<LeadSourceItem>.leadSourceItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, leadSourceItem: LeadSourceItem ->
+    try {
+      RowData(
+          index + 1,
+          leadSourceItem.leadSourceID ?: "",
+          leadSourceItem.leadSourceName ?: ""
+      )
+    } catch (_: Error) {
+      null
+    }
+  }.addSelectRowData()
+}
+
+internal fun List<StatusItem>.statusItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, statusItem: StatusItem ->
+    try {
+      RowData(
+          index + 1,
+          "${statusItem.stageID}",
+          statusItem.statusName
+      )
+    } catch (_: Error) {
+      null
+    }
+  }.addSelectRowData()
+}
+
+
 
 internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
   return mapIndexedNotNull { index: Int, countryItem: CountryItem ->

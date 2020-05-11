@@ -561,10 +561,16 @@ class LeadCreationFragment : CommonFragment(),
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
   override fun onInterestedProductSelected(): Observable<Int> =
     binding.spInterestIn.itemSelections()
+
+  override fun onSourceSelected(): Observable<Int> = binding.spSource.itemSelections()
+  override fun onStageSelected(): Observable<Int> = binding.spStage.itemSelections()
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
 
   override fun getSelectedInterestedProduct(): RowData =
     binding.spInterestIn.selectedItem as RowData
+
+  override fun getSelectedSource(): RowData = binding.spSource.selectedItem as RowData
+  override fun getSelectedStage(): RowData = binding.spStage.selectedItem as RowData
   override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
   override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
 
@@ -586,6 +592,18 @@ class LeadCreationFragment : CommonFragment(),
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { binding.spProductType.setSpinnerData(productTypeAdapter, it) }
+  }
+
+  override fun renderProspectSourceOnSourceSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { binding.spProspectSource.setSpinnerData(prospectSourceAdapter, it) }
+  }
+
+  override fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { binding.spStatus.setSpinnerData(statusAdapter, it) }
   }
 
   override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {

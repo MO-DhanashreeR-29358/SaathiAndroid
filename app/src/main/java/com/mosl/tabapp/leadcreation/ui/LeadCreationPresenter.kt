@@ -49,6 +49,31 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderProductTypeOnInterestedProductSelection)
         .addTo(disposable)
 
+    view.onSourceSelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedSource() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+        .switchMap {
+          repository.getProspectSourceRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderProspectSourceOnSourceSelection)
+        .addTo(disposable)
+
+
+    view.onStageSelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedStage() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+        .switchMap {
+          repository.getStatusRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderStatusOnStageSelection)
+        .addTo(disposable)
+
     view.onCountrySelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)

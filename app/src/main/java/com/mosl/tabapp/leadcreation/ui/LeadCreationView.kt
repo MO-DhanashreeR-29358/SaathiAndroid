@@ -28,6 +28,14 @@ interface LeadCreationView : BaseView {
   fun getSelectedInterestedProduct(): RowData
   fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>)
 
+  fun onSourceSelected(): Observable<Int>
+  fun getSelectedSource(): RowData
+  fun renderProspectSourceOnSourceSelection(uiModel: UiModel<List<RowData>>)
+
+  fun onStageSelected(): Observable<Int>
+  fun getSelectedStage(): RowData
+  fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>)
+
   fun onCountrySelected(): Observable<Int>
   fun getSelectedCountry(): RowData
   fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>)

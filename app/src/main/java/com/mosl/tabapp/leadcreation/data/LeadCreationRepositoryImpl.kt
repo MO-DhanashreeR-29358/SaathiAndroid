@@ -4,11 +4,13 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageRequest
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
+import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
@@ -108,6 +110,18 @@ class LeadCreationRepositoryImpl @Inject constructor(
         parentId = selectedInterestedProduct
     )
     return getRowDatas(productTypeRequest)
+  }
+
+  override fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>> {
+    val prospectSourceRequest = LeadSourceListRequest(selectedSource)
+    return saathiApi.getLeadSourceList(prospectSourceRequest)
+        .map { it.leadSourceItemsToRowDatas() }
+  }
+
+  override fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>> {
+    val statusRequest = StatusRequest(stageID = selectedStage)
+    return saathiApi.getStatusList(statusRequest)
+        .map { it.statusItemsToRowDatas() }
   }
 
   private fun getCountryRowDatas(): Observable<List<RowData>> {

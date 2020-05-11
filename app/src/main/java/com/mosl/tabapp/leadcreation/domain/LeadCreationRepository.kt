@@ -9,6 +9,8 @@ import io.reactivex.Observable
 interface LeadCreationRepository {
   fun getLeadCreationPageData(): Observable<LeadCreationPageData>
   fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>>
+  fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>>
+  fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>>
   fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>>
   fun getCityRowDatas(selectedState: String): Observable<List<RowData>>
   fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
