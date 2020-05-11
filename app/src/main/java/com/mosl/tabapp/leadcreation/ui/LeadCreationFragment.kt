@@ -91,6 +91,10 @@ class LeadCreationFragment : CommonFragment(),
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
+  private val cityAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
   override fun getLayout(): Int = R.layout.frag_lead_creation
 
   override fun onViewCreated(
@@ -555,10 +559,10 @@ class LeadCreationFragment : CommonFragment(),
   override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
+  override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
 
-  override fun getSelectedCountry(): RowData {
-    return binding.spCountry.selectedItem as RowData
-  }
+  override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
+  override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
 
   override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
     toggleProgressBar(uiModel.inProgress)
@@ -579,6 +583,14 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spState.setSpinnerData(stateAdapter, it)
+    }
+  }
+
+  override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spCity.setSpinnerData(cityAdapter, it)
     }
   }
 

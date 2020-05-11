@@ -5,6 +5,7 @@ import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageRequest
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
@@ -107,6 +108,12 @@ class LeadCreationRepositoryImpl @Inject constructor(
     val stateRequest = StateProvinceRequest(selectedCountry)
     return saathiApi.getStateProvinces(stateRequest)
         .map { it.stateProvinceItemsToRowDatas() }
+  }
+
+  override fun getCityRowDatas(selectedState: String): Observable<List<RowData>> {
+    val cityRequest = CityListRequest(selectedState)
+    return saathiApi.getCityList(cityRequest)
+        .map { it.cityItemsToRowDatas() }
   }
 
   override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {

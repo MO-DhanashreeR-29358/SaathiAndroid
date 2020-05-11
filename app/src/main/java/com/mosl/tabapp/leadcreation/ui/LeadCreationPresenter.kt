@@ -47,6 +47,17 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderStateOnCountrySelection, Timber::e)
         .addTo(disposable)
 
+    view.onStateSelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedState() }
+        .switchMap {
+          repository.getCityRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderCityOnStateSelection)
+        .addTo(disposable)
+
     view.onAdditionalInfoClicked()
         .subscribe { view.renderAdditionalInfoClick() }
         .addTo(disposable)

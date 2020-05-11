@@ -7,6 +7,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.SourceListItem
+import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.StageItem
@@ -213,6 +214,20 @@ internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowDat
           index + 1,
           "${stateProvinceItem.stateId}",
           stateProvinceItem.stateName
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }.addSelectRowData()
+}
+
+internal fun List<CityItem>.cityItemsToRowDatas(): List<RowData> {
+  return mapIndexedNotNull { index: Int, cityItem: CityItem ->
+    try {
+      RowData(
+          index + 1,
+          "${cityItem.cityId}",
+          cityItem.cityName
       )
     } catch (_: Exception) {
       null
