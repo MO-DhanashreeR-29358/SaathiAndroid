@@ -38,6 +38,7 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onCountrySelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .map { view.getSelectedCountry() }
         .switchMap {
           repository.getStateRowDatas(it.key)

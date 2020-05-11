@@ -203,7 +203,7 @@ internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowData> {
@@ -217,10 +217,13 @@ internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowDat
     } catch (_: Exception) {
       null
     }
-  }.toMutableList()
-      .apply {
-        add(0, SELECT_ROW_DATA)
-      }
+  }.addSelectRowData()
+}
+
+private fun List<RowData>.addSelectRowData(): List<RowData> {
+  return toMutableList().apply {
+    add(0, SELECT_ROW_DATA)
+  }
       .toList()
 }
 
