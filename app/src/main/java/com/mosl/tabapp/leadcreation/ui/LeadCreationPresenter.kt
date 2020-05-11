@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
+import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.Observable
 import timber.log.Timber
 import javax.inject.Inject
@@ -40,6 +41,7 @@ class LeadCreationPresenter @Inject constructor(
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .map { view.getSelectedInterestedProduct() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getProductTypeRowDatas(it.key)
               .compose(applyUiModel())
@@ -51,6 +53,7 @@ class LeadCreationPresenter @Inject constructor(
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .map { view.getSelectedCountry() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getStateRowDatas(it.key)
               .compose(applyUiModel())
@@ -62,6 +65,7 @@ class LeadCreationPresenter @Inject constructor(
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .map { view.getSelectedState() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getCityRowDatas(it.key)
               .compose(applyUiModel())

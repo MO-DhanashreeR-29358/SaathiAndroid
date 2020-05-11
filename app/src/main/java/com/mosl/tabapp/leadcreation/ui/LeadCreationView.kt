@@ -46,4 +46,8 @@ interface LeadCreationView : BaseView {
   fun onCancelButtonClicked(): Observable<Unit>
 
   fun onSameAsCheckboxClicked(): Observable<Unit>
+
+  companion object {
+    const val INVALID_SELECTION_KEY = "-1"
+  }
 }
