@@ -49,6 +49,7 @@ import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
@@ -193,4 +194,9 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [DashboardModule::class])
   fun provideNewDashboardFragmentFactory(): DashboardFragment
+
+  @ContributesAndroidInjector(
+      modules = [com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingModule::class]
+  )
+  fun provideCreateMeetingFragmentfactory(): CreateMeetingFragmentNew
 }

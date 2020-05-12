@@ -14,7 +14,9 @@
         android:orientation="vertical"
         >
 
-        <include layout="@layout/lms_top_section_update" />
+        <include
+          android:id="@+id/layoutTopSection"
+          layout="@layout/lms_top_section_update" />
 
         <TextView
             android:layout_width="match_parent"
