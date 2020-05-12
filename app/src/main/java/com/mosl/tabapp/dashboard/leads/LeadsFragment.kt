@@ -65,7 +65,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
   @Inject
   lateinit var dashboardModel: DashboardModel
 
-  private lateinit var model: WidgetModel
+  private var model: WidgetModel = WidgetModel()
 
   private val barChartEvent =
     PublishSubject.create<LeadUiEvent>()
