@@ -8,8 +8,13 @@ interface CreateMeetingRepository {
   fun getLeadView(leadId: String): Observable<ClientDetail>
   fun getLookup(
     type: Int,
-    boolean: Boolean? = null
+    boolean: Boolean? = null,
+    parentId: String? = null
   ): Observable<List<LookUp>>
 
   fun getInitialPageData(createMeetingData: CreateMeetingData): Observable<ClientData>
+  fun getAddress(
+    meetingID: String,
+    leadId: String
+  ): Observable<String>
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.view.View
 import android.widget.ArrayAdapter
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -17,6 +18,7 @@ import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import io.reactivex.Observable
 import java.util.Date
 import javax.inject.Inject
 
@@ -29,6 +31,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   lateinit var meetingObjectiveAdapter: ArrayAdapter<LookUp>
   lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
   lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
+  lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
 
   override fun getLayout() = R.layout.frag_create_meeting
@@ -63,6 +66,9 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
 
     travellingModeAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spTravellingMode.adapter = travellingModeAdapter
+
+    meetingReasonAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spMeetingReason.adapter = meetingReasonAdapter
   }
 
   override fun render(uiModel: UiModel<ClientData>) {
@@ -78,7 +84,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
       binding.layoutTopSection.tvCurrentStage.setText(clientDetail.currentStage)
       if (clientDetail.currentStageSince.isNotEmpty()) {
         binding.layoutTopSection.tvCurrentStageSince.setText(
-            String.format("%s Days", clientDetail.currentStage)
+            String.format("%s Days", clientDetail.currentStageSince)
         )
       }
       binding.layoutTopSection.tvName.setText(clientDetail.name)
@@ -96,6 +102,53 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
       meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
       travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
     }
+  }
+
+  override fun renderAddress(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      binding.etLocation.setText(it)
+    }
+  }
+
+  override fun renderMeetingReason(uiModel: UiModel<List<LookUp>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      meetingReasonAdapter.clear()
+      meetingReasonAdapter.setSpinnerData(binding.spMeetingReason, it)
+    }
+  }
+
+  override fun onMeetingLocationSelected(): Observable<Int> {
+    return binding.spMeetingLocation.itemSelections()
+  }
+
+  override fun onActivityTypeSelected(): Observable<Int> {
+    return binding.spActivityType.itemSelections()
+  }
+
+  override fun getSelectedMeetingLocation(): LookUp? {
+    if (binding.spMeetingLocation.selectedItem is LookUp) {
+      return (binding.spMeetingLocation.selectedItem as LookUp)
+    }
+    return null
+  }
+
+  override fun getSelectedActivityType(): LookUp? {
+    if (binding.spActivityType.selectedItem is LookUp) {
+      return (binding.spActivityType.selectedItem as LookUp)
+    }
+    return null
   }
 
   companion object {

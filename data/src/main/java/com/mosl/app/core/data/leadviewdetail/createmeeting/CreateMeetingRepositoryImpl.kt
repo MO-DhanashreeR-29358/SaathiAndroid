@@ -9,6 +9,7 @@ import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
@@ -38,14 +39,21 @@ class CreateMeetingRepositoryImpl @Inject constructor(
 
   override fun getLookup(
     type: Int,
-    boolean: Boolean?
+    boolean: Boolean?,
+    parentId: String?
   ): Observable<List<LookUp>> {
-    return saathiApi.getAllLookup(
-        LookupRequest(
-            userManager.getUser()?.currentBusinessProfile?.businessUnitId!!, type, null, boolean
-        )
-    )
-        .map { CreateMeetingMapper.transformLookupData(it, getType(type)) }
+    return if (type.equals(TRAVELLINGMODEID) || type.equals(MEETINGADDRESSID)) {
+      saathiApi.getAllLookup(
+          LookupRequest("0", type, null, true)
+      )
+    } else {
+      saathiApi.getAllLookup(
+          LookupRequest(
+              userManager.getUser()?.currentBusinessProfile?.businessUnitId!!, type, parentId,
+              boolean
+          )
+      )
+    }.map { CreateMeetingMapper.transformLookupData(it, getType(type)) }
   }
 
   override fun getInitialPageData(createMeetingData: CreateMeetingData): Observable<ClientData> {
@@ -78,6 +86,14 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         })
   }
 
+  override fun getAddress(
+    meetingID: String,
+    leadId: String
+  ): Observable<String> {
+    return saathiApi.getAddressByLeadId(AddressByLeadIdRequest(leadId, meetingID))
+        .map { it.meetingAddress }
+  }
+
   fun getType(type: Int): String {
     return when (type) {
       INTERESTEDIN -> "Select Product"
@@ -85,6 +101,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
       MEETINGDURATION -> "Select Meeting Duration"
       MEETINGADDRESSID -> "Select Meeting Location"
       TRAVELLINGMODEID -> "Select Travelling Mode"
+      MEETINGREASON -> "Select Meeting Reason"
       else -> "Select Activity Type"
     }
   }
@@ -96,3 +113,4 @@ const val MEETINGDURATION = 15
 const val MEETINGADDRESSID = 117
 const val TRAVELLINGMODEID = 118
 const val ACTIVITYTYPE = 13
+const val MEETINGREASON = 14
