@@ -18,6 +18,9 @@ interface LeadCreationView : BaseView {
   fun onOfficePrimaryCheckboxChanged(): Observable<Boolean>
   fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean)
 
+  fun onSameAsCheckboxClicked(): Observable<Unit>
+  fun renderOnSameAsAboveCheckboxClick()
+
   fun onPrimaryInfoClicked(): Observable<Unit>
   fun renderPrimaryInfoClick()
 
@@ -36,6 +39,19 @@ interface LeadCreationView : BaseView {
   fun getSelectedStage(): RowData
   fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>)
 
+  fun onAddressLineOneChanged(): Observable<String>
+  fun renderOnAddressLineOneChange(text: String)
+
+  fun onAddressLineTwoChanged(): Observable<String>
+  fun renderOnAddressLineTwoChange(text: String)
+
+  fun onAddressLineThreeChanged(): Observable<String>
+  fun renderOnAddressLineThreeChange(text: String)
+
+  fun onPincodeChanged(): Observable<String>
+  fun renderOnPincodeChange(pincode: String)
+
+
   fun onCountrySelected(): Observable<Int>
   fun getSelectedCountry(): RowData
   fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>)
@@ -53,7 +69,6 @@ interface LeadCreationView : BaseView {
 
   fun onCancelButtonClicked(): Observable<Unit>
 
-  fun onSameAsCheckboxClicked(): Observable<Unit>
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

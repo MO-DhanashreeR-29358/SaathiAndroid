@@ -5,13 +5,13 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
@@ -49,7 +49,6 @@ import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_lead_creation.etAdd1
 import javax.inject.Inject
 
 class LeadCreationFragment : CommonFragment(),
@@ -154,95 +153,29 @@ class LeadCreationFragment : CommonFragment(),
       }
     }
 
-    binding.etRefereeCode.setOnFocusChangeListener(
-        OnFocusChangeListener { _: View?, _: Boolean ->
-          if (binding.etRefereeCode.getText().toString().length < 4) {
-            RefereeCode = ""
-            RefereeName = ""
-            binding.etRefereeName.setText("")
-            binding.etRefereeEmail.setText("")
-            binding.etRefereeMobile.setText("")
-          }
-        }
-    )
-    binding.etRefereeName.setOnFocusChangeListener(
-        OnFocusChangeListener { view: View?, b: Boolean ->
-          if (binding.etRefereeName.getText().toString().length < 3) {
-            RefereeCode = ""
-            RefereeName = ""
-            binding.etRefereeEmail.setText("")
-            binding.etRefereeMobile.setText("")
-            binding.etRefereeCode.setText("")
-          }
-        }
-    )
-
-    binding.etPincode.addTextChangedListener(
-        object : TextWatcher {
-          override fun beforeTextChanged(
-            s: CharSequence,
-            start: Int,
-            count: Int,
-            after: Int
-          ) {
-          }
-
-          override fun onTextChanged(
-            s: CharSequence,
-            start: Int,
-            before: Int,
-            count: Int
-          ) {
-            if (!CRMAppUtil.isBlank(binding.etPincode.getText().toString())) {
-              if (binding.etPincode.length() < 6) {
-                binding.etPincode.error = "Invalid pincode"
-              } else {
-                binding.etPincode.error = null
-              }
-            } else {
-              binding.etPincode.error = null
-            }
-            if (binding.cbSameAs.isChecked) {
-              binding.etOffPincode.setText(binding.etPincode.getText().toString())
-            }
-          }
-
-          override fun afterTextChanged(s: Editable) {
-            if (binding.cbSameAs.isChecked) {
-              binding.etOffPincode.setText(binding.etPincode.getText().toString())
-            }
-          }
-        }
-    )
-
-    binding.etOffPincode.addTextChangedListener(object : TextWatcher {
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
+    binding.etRefereeCode.setOnFocusChangeListener { _: View?, _: Boolean ->
+      if (binding.etRefereeCode.getText()
+              .toString().length < 4
       ) {
+        RefereeCode = ""
+        RefereeName = ""
+        binding.etRefereeName.setText("")
+        binding.etRefereeEmail.setText("")
+        binding.etRefereeMobile.setText("")
       }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
+    }
+    binding.etRefereeName.setOnFocusChangeListener { _: View?, _: Boolean ->
+      if (binding.etRefereeName.getText()
+              .toString().length < 3
       ) {
-        if (!CRMAppUtil.isBlank(binding.etOffPincode.getText().toString())) {
-          if (binding.etOffPincode.length() < 6) {
-            binding.etOffPincode.error = "Invalid pincode."
-          } else {
-            binding.etOffPincode.error = null
-          }
-        } else {
-          binding.etOffPincode.error = null
-        }
+        RefereeCode = ""
+        RefereeName = ""
+        binding.etRefereeEmail.setText("")
+        binding.etRefereeMobile.setText("")
+        binding.etRefereeCode.setText("")
       }
+    }
 
-      override fun afterTextChanged(s: Editable) {}
-    })
     binding.etLandLine.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(
         s: CharSequence,
@@ -261,9 +194,15 @@ class LeadCreationFragment : CommonFragment(),
       }
 
       override fun afterTextChanged(s: Editable) {
-        if (!CRMAppUtil.isBlank(binding.etLandLine.getText().toString())) {
+        if (!CRMAppUtil.isBlank(
+                binding.etLandLine.getText()
+                    .toString()
+            )
+        ) {
           if (!CRMValidationRule.validateTel(
-                  binding.etLandLine.getText().toString().trim({ it <= ' ' })
+                  binding.etLandLine.getText()
+                      .toString()
+                      .trim({ it <= ' ' })
               )
           ) {
             binding.etLandLine.error = "Invalid Tel number"
@@ -293,9 +232,16 @@ class LeadCreationFragment : CommonFragment(),
       }
 
       override fun afterTextChanged(s: Editable) {
-        if (!CRMAppUtil.isBlank(binding.etName.getText().toString().trim({ it <= ' ' }))) {
+        if (!CRMAppUtil.isBlank(
+                binding.etName.getText()
+                    .toString()
+                    .trim({ it <= ' ' })
+            )
+        ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etName.getText().toString().trim({ it <= ' ' })
+                  binding.etName.getText()
+                      .toString()
+                      .trim({ it <= ' ' })
               )
           ) {
             binding.etName.error = MOSLConstants.ErrorMsgName
@@ -326,11 +272,14 @@ class LeadCreationFragment : CommonFragment(),
 
       override fun afterTextChanged(s: Editable) {
         if (!CRMAppUtil.isBlank(
-                binding.etProspectRefereeName.text.toString().trim({ it <= ' ' })
+                binding.etProspectRefereeName.text.toString()
+                    .trim({ it <= ' ' })
             )
         ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etProspectRefereeName.getText().toString().trim { it <= ' ' }
+                  binding.etProspectRefereeName.getText()
+                      .toString()
+                      .trim { it <= ' ' }
               )
           ) {
             binding.etProspectRefereeName.error = MOSLConstants.ErrorMsgName
@@ -360,9 +309,16 @@ class LeadCreationFragment : CommonFragment(),
       }
 
       override fun afterTextChanged(s: Editable) {
-        if (!CRMAppUtil.isBlank(binding.etContactPerson.getText().toString().trim({ it <= ' ' }))) {
+        if (!CRMAppUtil.isBlank(
+                binding.etContactPerson.getText()
+                    .toString()
+                    .trim({ it <= ' ' })
+            )
+        ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etContactPerson.getText().toString().trim({ it <= ' ' })
+                  binding.etContactPerson.getText()
+                      .toString()
+                      .trim({ it <= ' ' })
               )
           ) {
             binding.etContactPerson.error = MOSLConstants.ErrorMsgName
@@ -375,81 +331,6 @@ class LeadCreationFragment : CommonFragment(),
       }
     })
 
-    binding.etAdd1.addTextChangedListener(object : TextWatcher {
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
-      ) {
-      }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
-      ) {
-      }
-
-      override fun afterTextChanged(s: Editable) {
-        if (CRMAppUtil.isBlank(binding.etAdd1.getText().toString())) {
-          binding.etAdd1.error = "Enter address"
-        }
-        if (binding.cbSameAs.isChecked) {
-          binding.etOffAdd1.setText(etAdd1.getText().toString())
-        }
-      }
-    })
-    binding.etAdd2.addTextChangedListener(object : TextWatcher {
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
-      ) {
-      }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
-      ) {
-      }
-
-      override fun afterTextChanged(s: Editable) {
-        if (CRMAppUtil.isBlank(binding.etAdd2.getText().toString())) {
-          binding.etAdd2.error = "Enter address"
-        }
-        if (binding.cbSameAs.isChecked) {
-          binding.etOffAdd2.setText(binding.etAdd2.getText().toString())
-        }
-      }
-    })
-    binding.etAdd3.addTextChangedListener(object : TextWatcher {
-      override fun beforeTextChanged(
-        s: CharSequence,
-        start: Int,
-        count: Int,
-        after: Int
-      ) {
-      }
-
-      override fun onTextChanged(
-        s: CharSequence,
-        start: Int,
-        before: Int,
-        count: Int
-      ) {
-      }
-
-      override fun afterTextChanged(s: Editable) {
-        if (binding.cbSameAs.isChecked) {
-          binding.etOffAdd3.setText(binding.etAdd1.getText().toString())
-        }
-      }
-    })
     binding.etProspectRefereerMobile.addTextChangedListener(object : TextWatcher {
       override fun beforeTextChanged(
         s: CharSequence,
@@ -465,9 +346,14 @@ class LeadCreationFragment : CommonFragment(),
         before: Int,
         count: Int
       ) {
-        if (!CRMAppUtil.isBlank(binding.etProspectRefereerMobile.getText().toString())) {
+        if (!CRMAppUtil.isBlank(
+                binding.etProspectRefereerMobile.getText()
+                    .toString()
+            )
+        ) {
           if (!CRMValidationRule.validateMobile(
-                  binding.etProspectRefereerMobile.getText().toString()
+                  binding.etProspectRefereerMobile.getText()
+                      .toString()
               )
           ) {
             binding.etProspectRefereeName.error = MOSLConstants.INVALID_MOBILE_NO
@@ -525,6 +411,7 @@ class LeadCreationFragment : CommonFragment(),
     disableField()
     cbOffPrimaryAddress.visible()
     cbSameAs.gone()
+    cbSameAs.isChecked = false
     cbOffPrimaryAddress.isChecked = false
     unCheckedSameAsAbove()
   }
@@ -551,6 +438,55 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onOfficePrimaryCheckboxChanged(): Observable<Boolean> =
     binding.cbOffPrimaryAddress.checkedChanges()
+
+  override fun onAddressLineOneChanged(): Observable<String> {
+    return binding.etAdd1.afterTextChangeEvents()
+        .map {
+          it.editable?.toString() ?: ""
+        }
+  }
+
+  override fun renderOnAddressLineOneChange(text: String) {
+    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
+    if (binding.cbSameAs.isChecked) binding.etOffAdd1.setText(text)
+  }
+
+  override fun onAddressLineTwoChanged(): Observable<String> {
+    return binding.etAdd2.afterTextChangeEvents()
+        .map {
+          it.editable?.toString() ?: ""
+        }
+  }
+
+  override fun renderOnAddressLineTwoChange(text: String) {
+    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
+    if (binding.cbSameAs.isChecked) binding.etOffAdd2.setText(text)
+  }
+
+  override fun onAddressLineThreeChanged(): Observable<String> {
+    return binding.etAdd3.afterTextChangeEvents()
+        .map {
+          it.editable?.toString() ?: ""
+        }
+  }
+
+  override fun renderOnAddressLineThreeChange(text: String) {
+    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
+    if (binding.cbSameAs.isChecked) binding.etOffAdd3.setText(text)
+  }
+
+  override fun onPincodeChanged(): Observable<String> {
+    return binding.etPincode.afterTextChangeEvents()
+        .map {
+          it.editable?.toString()
+        }
+  }
+
+  override fun renderOnPincodeChange(pincode: String) {
+    if (binding.cbSameAs.isChecked) {
+      binding.etOffPincode.setText(pincode)
+    }
+  }
 
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
   override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
@@ -635,6 +571,26 @@ class LeadCreationFragment : CommonFragment(),
       isChecked -> enableField()
       else -> disableField()
     }
+  }
+
+  override fun renderOnSameAsAboveCheckboxClick() {
+    when {
+      binding.cbSameAs.isChecked -> binding.handlingWhenSameAsCheckboxClickedAndChecked()
+      else -> binding.handlingWhenSameAsCheckboxClickedAndUnChecked()
+    }
+  }
+
+  private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndChecked() {
+    disableField(llOffAdd)
+    etOffAdd1.text = etAdd1.text
+    etOffAdd2.text = etAdd2.text
+    etOffAdd3.text = etAdd3.text
+    etOffPincode.text = etPincode.text
+  }
+
+  private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
+    enableField(llOffAdd)
+    unCheckedSameAsAbove()
   }
 
   override fun renderPrimaryInfoClick() {

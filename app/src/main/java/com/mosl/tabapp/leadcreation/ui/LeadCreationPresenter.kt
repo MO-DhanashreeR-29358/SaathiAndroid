@@ -33,6 +33,23 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderOnOfficePrimaryCheckboxChanges)
         .addTo(disposable)
 
+    view.onSameAsCheckboxClicked()
+        .subscribe { view.renderOnSameAsAboveCheckboxClick() }
+        .addTo(disposable)
+
+    view.onAddressLineOneChanged()
+        .subscribe(view::renderOnAddressLineOneChange)
+        .addTo(disposable)
+    view.onAddressLineTwoChanged()
+        .subscribe(view::renderOnAddressLineTwoChange)
+        .addTo(disposable)
+    view.onAddressLineThreeChanged()
+        .subscribe(view::renderOnAddressLineThreeChange)
+        .addTo(disposable)
+    view.onPincodeChanged()
+        .subscribe(view::renderOnPincodeChange)
+        .addTo(disposable)
+
     view.onPrimaryInfoClicked()
         .subscribe { view.renderPrimaryInfoClick() }
         .addTo(disposable)
