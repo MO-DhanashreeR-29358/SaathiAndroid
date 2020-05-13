@@ -61,6 +61,9 @@ interface LeadCreationView : BaseView {
   fun getSelectedState(): RowData
   fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
 
+  fun onCitySelected(): Observable<Int>
+  fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
+
   fun onCreateButtonClicked(): Observable<Unit>
   fun getLeadCreationUserInput(): LeadCreationUserInput
   fun renderOnCreateButtonClick(uiModule: UiModel<String>)

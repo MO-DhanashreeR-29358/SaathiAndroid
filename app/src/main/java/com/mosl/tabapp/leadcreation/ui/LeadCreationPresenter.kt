@@ -122,6 +122,13 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderCityOnStateSelection)
         .addTo(disposable)
 
+    view.onCitySelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .filter { view.isSameAsAboveChecked() }
+        .subscribe(view::renderOnCitySelectAndSameAsAboveChecked)
+        .addTo(disposable)
+
     view.onAdditionalInfoClicked()
         .subscribe { view.renderAdditionalInfoClick() }
         .addTo(disposable)

@@ -497,6 +497,14 @@ class LeadCreationFragment : CommonFragment(),
   override fun onSourceSelected(): Observable<Int> = binding.spSource.itemSelections()
   override fun onStageSelected(): Observable<Int> = binding.spStage.itemSelections()
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
+  override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
+      .doOnNext {
+        "selected city position: $it"
+      }
+
+  override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
+    binding.spOffCity.setSelection(position)
+  }
 
   override fun getSelectedInterestedProduct(): RowData =
     binding.spInterestIn.selectedItem as RowData
@@ -543,6 +551,10 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spState.setSpinnerData(stateAdapter, it)
+      if (binding.cbSameAs.isChecked) {
+        binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
+        binding.spOffState.setSpinnerData(stateAdapter, it)
+      }
     }
   }
 
@@ -551,6 +563,10 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spCity.setSpinnerData(cityAdapter, it)
+      if (binding.cbSameAs.isChecked) {
+        binding.spOffState.setSelection(binding.spState.selectedItemPosition)
+        binding.spOffCity.setSpinnerData(cityAdapter, it)
+      }
     }
   }
 
@@ -582,6 +598,9 @@ class LeadCreationFragment : CommonFragment(),
     etOffAdd2.text = etAdd2.text
     etOffAdd3.text = etAdd3.text
     etOffPincode.text = etPincode.text
+    spOffCountry.setSelection(spCountry.selectedItemPosition)
+    spOffState.setSelection(spState.selectedItemPosition)
+    spOffCity.setSelection(spCity.selectedItemPosition)
   }
 
   private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
