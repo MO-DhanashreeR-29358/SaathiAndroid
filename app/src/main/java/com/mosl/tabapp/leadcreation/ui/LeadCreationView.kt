@@ -64,6 +64,14 @@ interface LeadCreationView : BaseView {
   fun onCitySelected(): Observable<Int>
   fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
 
+  fun onOfficeCountrySelected(): Observable<Int>
+  fun getSelectedOfficeCountry(): RowData
+  fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>)
+
+  fun onOfficeStateSelected(): Observable<Int>
+  fun getSelectedOfficeState(): RowData
+  fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
+
   fun onCreateButtonClicked(): Observable<Unit>
   fun getLeadCreationUserInput(): LeadCreationUserInput
   fun renderOnCreateButtonClick(uiModule: UiModel<String>)

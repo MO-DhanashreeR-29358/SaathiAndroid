@@ -491,16 +491,16 @@ class LeadCreationFragment : CommonFragment(),
   override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
+  override fun onOfficeCountrySelected(): Observable<Int> = binding.spOffCountry.itemSelections()
   override fun onInterestedProductSelected(): Observable<Int> =
     binding.spInterestIn.itemSelections()
 
   override fun onSourceSelected(): Observable<Int> = binding.spSource.itemSelections()
   override fun onStageSelected(): Observable<Int> = binding.spStage.itemSelections()
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
+  override fun onOfficeStateSelected(): Observable<Int> = binding.spOffState.itemSelections()
   override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
-      .doOnNext {
-        "selected city position: $it"
-      }
+
 
   override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
     binding.spOffCity.setSelection(position)
@@ -512,7 +512,9 @@ class LeadCreationFragment : CommonFragment(),
   override fun getSelectedSource(): RowData = binding.spSource.selectedItem as RowData
   override fun getSelectedStage(): RowData = binding.spStage.selectedItem as RowData
   override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
+  override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
   override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
+  override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
 
   override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
     toggleProgressBar(uiModel.inProgress)
@@ -551,10 +553,18 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spState.setSpinnerData(stateAdapter, it)
+      binding.spOffState.setSpinnerData(stateAdapter, it)
       if (binding.cbSameAs.isChecked) {
         binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
-        binding.spOffState.setSpinnerData(stateAdapter, it)
       }
+    }
+  }
+
+  override fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spOffState.setSpinnerData(stateAdapter, it)
     }
   }
 
@@ -563,10 +573,18 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spCity.setSpinnerData(cityAdapter, it)
+      binding.spOffCity.setSpinnerData(cityAdapter, it)
       if (binding.cbSameAs.isChecked) {
         binding.spOffState.setSelection(binding.spState.selectedItemPosition)
-        binding.spOffCity.setSpinnerData(cityAdapter, it)
       }
+    }
+  }
+
+  override fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
+    uiModel.onSuccess {
+      binding.spOffCity.setSpinnerData(cityAdapter, it)
     }
   }
 
@@ -601,6 +619,7 @@ class LeadCreationFragment : CommonFragment(),
     spOffCountry.setSelection(spCountry.selectedItemPosition)
     spOffState.setSelection(spState.selectedItemPosition)
     spOffCity.setSelection(spCity.selectedItemPosition)
+
   }
 
   private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
@@ -755,8 +774,25 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun isDataEmpty(): Boolean = true
 
+  private fun cleanupView() {
+    binding.spCategory.adapter = null
+    binding.spProfession.adapter = null
+    binding.spSource.adapter = null
+    binding.spProductType.adapter = null
+    binding.spProspectSource.adapter = null
+    binding.spStage.adapter = null
+    binding.spCountry.adapter = null
+    binding.spOffCountry.adapter = null
+    binding.spStatus.adapter = null
+    binding.spState.adapter = null
+    binding.spOffState.adapter = null
+    binding.spCity.adapter = null
+    binding.spOffCity.adapter = null
+  }
+
   override fun onDestroyView() {
     presenter.stop()
+    cleanupView()
     super.onDestroyView()
   }
 

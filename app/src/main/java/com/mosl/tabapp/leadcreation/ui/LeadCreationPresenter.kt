@@ -110,6 +110,18 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderStateOnCountrySelection, Timber::e)
         .addTo(disposable)
 
+    view.onOfficeCountrySelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedOfficeCountry() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && !view.isSameAsAboveChecked() }
+        .switchMap {
+          repository.getStateRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOfficeStateOnOfficeCountrySelection, Timber::e)
+        .addTo(disposable)
+
     view.onStateSelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)
@@ -120,6 +132,18 @@ class LeadCreationPresenter @Inject constructor(
               .compose(applyUiModel())
         }
         .subscribe(view::renderCityOnStateSelection)
+        .addTo(disposable)
+
+    view.onOfficeStateSelected()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedOfficeState() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && !view.isSameAsAboveChecked() }
+        .switchMap {
+          repository.getCityRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOfficeCityOnOfficeStateSelection, Timber::e)
         .addTo(disposable)
 
     view.onCitySelected()
