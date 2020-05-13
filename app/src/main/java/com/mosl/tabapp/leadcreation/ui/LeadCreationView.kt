@@ -51,6 +51,7 @@ interface LeadCreationView : BaseView {
   fun onPincodeChanged(): Observable<String>
   fun renderOnPincodeChange(pincode: String)
 
+  fun isSameAsAboveChecked(): Boolean
 
   fun onCountrySelected(): Observable<Int>
   fun getSelectedCountry(): RowData

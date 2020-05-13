@@ -38,15 +38,22 @@ class LeadCreationPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onAddressLineOneChanged()
+        .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnAddressLineOneChange)
         .addTo(disposable)
+
     view.onAddressLineTwoChanged()
+        .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnAddressLineTwoChange)
         .addTo(disposable)
+
     view.onAddressLineThreeChanged()
+        .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnAddressLineThreeChange)
         .addTo(disposable)
+
     view.onPincodeChanged()
+        .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnPincodeChange)
         .addTo(disposable)
 

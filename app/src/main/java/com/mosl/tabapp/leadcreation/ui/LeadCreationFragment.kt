@@ -447,8 +447,7 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   override fun renderOnAddressLineOneChange(text: String) {
-    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
-    if (binding.cbSameAs.isChecked) binding.etOffAdd1.setText(text)
+    binding.etOffAdd1.setText(text)
   }
 
   override fun onAddressLineTwoChanged(): Observable<String> {
@@ -459,8 +458,7 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   override fun renderOnAddressLineTwoChange(text: String) {
-    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
-    if (binding.cbSameAs.isChecked) binding.etOffAdd2.setText(text)
+    binding.etOffAdd2.setText(text)
   }
 
   override fun onAddressLineThreeChanged(): Observable<String> {
@@ -471,8 +469,7 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   override fun renderOnAddressLineThreeChange(text: String) {
-    if (text.isEmpty()) binding.etAdd1.error = "Enter address"
-    if (binding.cbSameAs.isChecked) binding.etOffAdd3.setText(text)
+    binding.etOffAdd3.setText(text)
   }
 
   override fun onPincodeChanged(): Observable<String> {
@@ -483,9 +480,7 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   override fun renderOnPincodeChange(pincode: String) {
-    if (binding.cbSameAs.isChecked) {
       binding.etOffPincode.setText(pincode)
-    }
   }
 
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
@@ -493,6 +488,7 @@ class LeadCreationFragment : CommonFragment(),
   override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
   override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
   override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
+  override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked
   override fun onCreateLeadEventFired(): Observable<CreateLeadEvent> = subject.ofType()
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
   override fun onInterestedProductSelected(): Observable<Int> =
