@@ -6,7 +6,9 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
+import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
 
 interface LeadCreationView : BaseView {
@@ -38,6 +40,9 @@ interface LeadCreationView : BaseView {
   fun onStageSelected(): Observable<Int>
   fun getSelectedStage(): RowData
   fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>)
+
+  fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent>
+  fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
 
   fun onAddressLineOneChanged(): Observable<String>
   fun renderOnAddressLineOneChange(text: String)

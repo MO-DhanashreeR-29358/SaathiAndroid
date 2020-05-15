@@ -2,6 +2,7 @@ package com.mosl.tabapp.leadcreation.data
 
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
@@ -16,8 +17,10 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
+import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class LeadCreationRepositoryImpl @Inject constructor(
@@ -122,6 +125,17 @@ class LeadCreationRepositoryImpl @Inject constructor(
     val statusRequest = StatusRequest(stageID = selectedStage)
     return saathiApi.getStatusList(statusRequest)
         .map { it.statusItemsToRowDatas() }
+  }
+
+  override fun getEmployeeModelsFilterBy(text: String): Observable<List<EmployeeModel>> {
+    val profileRequest = UserBusinessProfileRequest(
+        employeeCode = URLEncoder.encode(text, "utf-8"),
+        employeeName = URLEncoder.encode(text, "utf-8")
+    )
+    return saathiApi.getUserBusinessProfile(profileRequest)
+        .map {
+          it.profilesToEmployeeModels(userManager.getUser())
+        }
   }
 
   private fun getCountryRowDatas(): Observable<List<RowData>> {

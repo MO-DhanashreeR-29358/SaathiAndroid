@@ -8,6 +8,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
 import com.mosl.saathi.api.model.createlead.SourceListItem
+import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -20,6 +21,7 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SE
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.ContactDetailModel
+import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadCreationContact
 import com.mosl.tabapp.model.LeadCreationModel
 import com.mosl.tabapp.model.LeadCreationProductMapping
@@ -223,7 +225,17 @@ internal fun List<StatusItem>.statusItemsToRowDatas(): List<RowData> {
   }.addSelectRowData()
 }
 
-
+internal fun List<BusinessProfile>.profilesToEmployeeModels(user: User?): List<EmployeeModel> {
+  return filter { it.employeeCode != user?.employeeCode }
+      .safeMap {
+        EmployeeModel(
+            it.employeeName ?: "",
+            it.employeeCode ?: "",
+            it.branchCode ?: "",
+            false
+        )
+      }
+}
 
 internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
   return mapIndexedNotNull { index: Int, countryItem: CountryItem ->

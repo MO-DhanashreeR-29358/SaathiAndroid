@@ -98,6 +98,16 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderStatusOnStageSelection)
         .addTo(disposable)
 
+    view.onAssignToSearchEventFired()
+        .map { it.searchText }
+        .filter { it.isNotEmpty() }
+        .switchMap {
+          repository.getEmployeeModelsFilterBy(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnAssignToSearchEventFire)
+        .addTo(disposable)
+
     view.onCountrySelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)

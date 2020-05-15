@@ -33,11 +33,14 @@ import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
 import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
 import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
@@ -111,7 +114,9 @@ class LeadCreationFragment : CommonFragment(),
   private var primaryRM: String? = null
   private var RefereeCode: String? = null
   private var RefereeName: kotlin.String? = null
-
+  private val searchList: CustomListPickerDialog by lazy {
+    CustomListPickerDialog(requireContext())
+  }
   private fun setupView() {
     setupScrollView()
     disableField(binding.llResAdd)
@@ -127,9 +132,7 @@ class LeadCreationFragment : CommonFragment(),
                 LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     or LayoutParams.SOFT_INPUT_ADJUST_PAN
             )
-        val searchList = CustomListPickerDialog(requireContext())
         searchList.threshold = MOSLConstants.SEARCH_LENTH
-
         searchList.show()
         searchList.setCustomTitle(resources.getString(string.str_assing))
         val assingViewListner: ListPickerListneable = object : ListPickerListneable {
@@ -146,7 +149,7 @@ class LeadCreationFragment : CommonFragment(),
           }
 
           override fun onSearchTextChanged(constraint: CharSequence) {
-            // searchUserBusinessProfile(constraint, searchList)
+            subject.onNext(AssignToSearchEvent(constraint.toString()))
           }
         }
         searchList.setmListner(assingViewListner)
@@ -483,6 +486,7 @@ class LeadCreationFragment : CommonFragment(),
       binding.etOffPincode.setText(pincode)
   }
 
+  override fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent> = subject.ofType()
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
   override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
   override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
@@ -546,6 +550,36 @@ class LeadCreationFragment : CommonFragment(),
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { binding.spStatus.setSpinnerData(statusAdapter, it) }
+  }
+
+  override fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>) {
+    toggleSearchListProgress(uiModel.inProgress)
+    uiModel.onFailure {
+      val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
+      val attendeeAdapter = AttendeeAdapter(requireContext(), list)
+      searchList.setAdapter(attendeeAdapter)
+    }
+
+    uiModel.onSuccess {
+      val list = if (it.isEmpty()) {
+        listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
+      } else {
+        it
+      }
+      val attendeeAdapter = AttendeeAdapter(requireContext(), list)
+      searchList.setAdapter(attendeeAdapter)
+    }
+
+  }
+
+  private fun toggleSearchListProgress(inProgress: Boolean) {
+    when {
+      inProgress -> {
+        hideKeyboard(binding.actAssignTo)
+        searchList.showProgress(View.VISIBLE)
+      }
+      else -> searchList.showProgress(View.GONE)
+    }
   }
 
   override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
@@ -788,6 +822,7 @@ class LeadCreationFragment : CommonFragment(),
     binding.spOffState.adapter = null
     binding.spCity.adapter = null
     binding.spOffCity.adapter = null
+    searchList.setAdapter(null)
   }
 
   override fun onDestroyView() {
