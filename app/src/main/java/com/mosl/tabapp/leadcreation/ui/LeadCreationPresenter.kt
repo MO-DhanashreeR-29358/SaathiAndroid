@@ -7,6 +7,7 @@ import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.Observable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class LeadCreationPresenter @Inject constructor(
@@ -99,13 +100,54 @@ class LeadCreationPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onAssignToSearchEventFired()
+        .debounce(1000, MILLISECONDS)
         .map { it.searchText }
         .filter { it.isNotEmpty() }
+        .distinctUntilChanged()
         .switchMap {
           repository.getEmployeeModelsFilterBy(it)
               .compose(applyUiModel())
         }
         .subscribe(view::renderOnAssignToSearchEventFire)
+        .addTo(disposable)
+
+    val refereeCodeObs = view.onRefereeCodeChanged()
+        .debounce(1000, MILLISECONDS)
+        .share()
+
+    refereeCodeObs
+        .filter { it.length > 3 }
+        .distinctUntilChanged()
+        .switchMap {
+          repository.getRefereeCode(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnRefereeCodeChange)
+        .addTo(disposable)
+
+    refereeCodeObs
+        .filter { it.length == 3 }
+        .distinctUntilChanged()
+        .subscribe { view.resetRefereeOnCodeChange() }
+        .addTo(disposable)
+
+    val refereeNameObs = view.onRefereeNameChanged()
+        .debounce(1000, MILLISECONDS)
+
+    refereeNameObs
+        .filter { it.length > 2 }
+        .distinctUntilChanged()
+        .switchMap {
+          repository.getRefereeName(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnRefereeNameChange)
+        .addTo(disposable)
+
+    refereeNameObs
+        .filter { it.length == 2 }
+        .distinctUntilChanged()
+        .subscribe { view.resetRefereeOnNameChange() }
         .addTo(disposable)
 
     view.onCountrySelected()

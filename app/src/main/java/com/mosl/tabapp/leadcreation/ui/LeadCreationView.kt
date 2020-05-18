@@ -6,6 +6,7 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import com.mosl.tabapp.model.EmployeeModel
@@ -43,6 +44,14 @@ interface LeadCreationView : BaseView {
 
   fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent>
   fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
+
+  fun onRefereeCodeChanged(): Observable<String>
+  fun resetRefereeOnCodeChange()
+  fun renderOnRefereeCodeChange(uiModel: UiModel<SearchReferee>)
+
+  fun onRefereeNameChanged(): Observable<String>
+  fun resetRefereeOnNameChange()
+  fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
   fun onAddressLineOneChanged(): Observable<String>
   fun renderOnAddressLineOneChange(text: String)

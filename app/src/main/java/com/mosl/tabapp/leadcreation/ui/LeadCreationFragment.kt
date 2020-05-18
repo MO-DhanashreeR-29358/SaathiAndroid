@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
@@ -40,6 +41,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
 import com.mosl.tabapp.model.AddressDetailModel
@@ -48,6 +50,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
@@ -441,6 +444,61 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onOfficePrimaryCheckboxChanged(): Observable<Boolean> =
     binding.cbOffPrimaryAddress.checkedChanges()
+
+  override fun onRefereeCodeChanged(): Observable<String> {
+    return binding.etRefereeCode.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: emptyString() }
+  }
+
+  override fun resetRefereeOnCodeChange() {
+    binding.apply {
+      etRefereeName.setText(emptyString())
+      etRefereeEmail.setText(emptyString())
+      etRefereeMobile.setText(emptyString())
+    }
+  }
+
+  override fun onRefereeNameChanged(): Observable<String> {
+    return binding.etRefereeName.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: "" }
+  }
+
+  override fun resetRefereeOnNameChange() {
+    binding.apply {
+      etRefereeCode.setText(emptyString())
+      etRefereeEmail.setText(emptyString())
+      etRefereeMobile.setText(emptyString())
+    }
+  }
+
+  override fun renderOnRefereeCodeChange(uiModel: UiModel<SearchReferee>) {
+    binding.pbLoadingIndicatorRefreeCode toggle uiModel.inProgress
+    renderOnRefereeChange(uiModel)
+  }
+
+  override fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>) {
+    binding.pbLoadingIndicatorRefreeName toggle uiModel.inProgress
+    renderOnRefereeChange(uiModel)
+  }
+
+  private fun renderOnRefereeChange(uiModel: UiModel<SearchReferee>) {
+    uiModel.onFailure {
+      binding.etRefereeEmail.setText(emptyString())
+      binding.etRefereeMobile.setText(emptyString())
+    }
+    uiModel.onSuccess {
+      when (it.type) {
+        "ByCode" -> binding.etRefereeName.setText(it.name)
+        else -> binding.etRefereeCode.setText(it.code)
+      }
+      binding.etRefereeEmail.setText(it.email)
+      binding.etRefereeMobile.setText(it.mobile)
+    }
+  }
+
+  private infix fun ProgressBar.toggle(inProgress: Boolean) {
+    if (inProgress) visible() else gone()
+  }
 
   override fun onAddressLineOneChanged(): Observable<String> {
     return binding.etAdd1.afterTextChangeEvents()

@@ -7,6 +7,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadContact
 import com.mosl.saathi.api.model.createlead.CreateLeadProduct
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
+import com.mosl.saathi.api.model.createlead.SearchRefereeResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.CityItem
@@ -18,6 +19,7 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.ContactDetailModel
@@ -279,11 +281,23 @@ internal fun List<CityItem>.cityItemsToRowDatas(): List<RowData> {
   }.addSelectRowData()
 }
 
+internal infix fun SearchRefereeResponse.refereeResponseToReferee(type: String): SearchReferee {
+  return SearchReferee(
+      code = code ?: "",
+      name = name ?: "",
+      email = email ?: "",
+      mobile = mobile ?: "",
+      type = type
+  )
+}
+
 internal fun List<RowData>.addSelectRowData(): List<RowData> {
   return toMutableList().apply {
     add(0, SELECT_ROW_DATA)
   }
       .toList()
 }
+
+
 
 

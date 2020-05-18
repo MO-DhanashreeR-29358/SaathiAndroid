@@ -10,3 +10,11 @@ data class LeadCreationPageData constructor(
   @JvmField val stageRowDatas: List<RowData>,
   @JvmField val countryRowDatas: List<RowData>
 )
+
+data class SearchReferee(
+  @JvmField val code: String,
+  @JvmField val name: String,
+  @JvmField val email: String,
+  @JvmField val mobile: String,
+  @JvmField val type: String
+)

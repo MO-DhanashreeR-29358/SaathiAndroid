@@ -6,6 +6,7 @@ import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
+import com.mosl.saathi.api.model.createlead.SearchRefereeModel
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
@@ -16,6 +17,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
@@ -162,7 +164,31 @@ class LeadCreationRepositoryImpl @Inject constructor(
     )
   }
 
+  override fun getRefereeCode(text: String): Observable<SearchReferee> {
+    return getReferee(type = TYPE_REFEREE_CODE, text = text)
+  }
+
+  override fun getRefereeName(text: String): Observable<SearchReferee> {
+    return getReferee(type = TYPE_REFEREE_NAME, text = text)
+  }
+
+  private fun getReferee(
+    type: String,
+    text: String
+  ): Observable<SearchReferee> {
+    val request = SearchRefereeModel(
+        type = type,
+        hint = text
+    )
+    return saathiApi.getRefereeCode(request)
+        .map {
+          it refereeResponseToReferee type
+        }
+  }
+
   companion object {
     val SELECT_ROW_DATA = RowData(0, "-1", "Select")
+    const val TYPE_REFEREE_CODE = "ByCode"
+    const val TYPE_REFEREE_NAME = "ByName"
   }
 }
