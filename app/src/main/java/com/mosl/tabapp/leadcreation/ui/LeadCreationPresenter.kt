@@ -122,7 +122,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getRefereeCode(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderOnRefereeCodeChange)
+        .subscribe(view::renderOnRefereeCodeChange, Timber::e)
         .addTo(disposable)
 
     refereeCodeObs
@@ -141,7 +141,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getRefereeName(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderOnRefereeNameChange)
+        .subscribe(view::renderOnRefereeNameChange, Timber::e)
         .addTo(disposable)
 
     refereeNameObs
