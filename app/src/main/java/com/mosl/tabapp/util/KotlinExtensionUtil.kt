@@ -13,3 +13,5 @@ fun View.invisible() {
 fun View.gone() {
   visibility = View.GONE
 }
+
+fun emptyString(): String = ""
