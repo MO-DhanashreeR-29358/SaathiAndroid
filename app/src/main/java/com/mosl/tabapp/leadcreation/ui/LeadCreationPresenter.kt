@@ -133,6 +133,7 @@ class LeadCreationPresenter @Inject constructor(
 
     val refereeNameObs = view.onRefereeNameChanged()
         .debounce(1000, MILLISECONDS)
+        .share()
 
     refereeNameObs
         .filter { it.length > 2 }
