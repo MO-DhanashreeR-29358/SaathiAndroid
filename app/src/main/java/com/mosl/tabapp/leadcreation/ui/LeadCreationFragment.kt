@@ -63,6 +63,7 @@ class LeadCreationFragment : CommonFragment(),
   @Inject internal lateinit var presenter: LeadCreationPresenter
   private lateinit var binding: FragLeadCreationBinding
   private val subject = PublishSubject.create<LeadCreationUiEvent>()
+  private var isReferee = false
   private val categoryAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
@@ -483,6 +484,7 @@ class LeadCreationFragment : CommonFragment(),
 
   private fun renderOnRefereeChange(uiModel: UiModel<SearchReferee>) {
     uiModel.onFailure {
+      isReferee = false
       binding.etRefereeEmail.setText(emptyString())
       binding.etRefereeMobile.setText(emptyString())
     }
@@ -493,6 +495,7 @@ class LeadCreationFragment : CommonFragment(),
       }
       binding.etRefereeEmail.setText(it.email)
       binding.etRefereeMobile.setText(it.mobile)
+      isReferee = true
     }
   }
 
@@ -844,6 +847,7 @@ class LeadCreationFragment : CommonFragment(),
         referEmail = binding.etRefereeEmail.text.toString(),
         referName = binding.etRefereeName.text.toString(),
         referMobile = binding.etRefereeMobile.text.toString(),
+        isRefereeCode = isReferee,
         pinCode = binding.etPincode.text.toString(),
         officePinCode = binding.etOffPincode.text.toString(),
         name = binding.etName.text.toString(),
@@ -856,7 +860,7 @@ class LeadCreationFragment : CommonFragment(),
         proReferMob = binding.etProspectRefereerMobile.text.toString(),
         comment = getJsonSafeString(binding.etComments.text.toString()),
         professionalId = binding.spProfession.selectedItem as RowData,
-        primRM = null,// todo attendeeCode,
+        primRM = primaryRM,
         stageId = binding.spStage.selectedItem as RowData,
         statusId = binding.spStatus.selectedItem as RowData,
         residenceAdd = resAdd,

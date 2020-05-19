@@ -22,7 +22,7 @@ data class LeadCreationUserInput(
   @JvmField val referEmail: String,
   @JvmField val referName: String,
   @JvmField val referMobile: String,
-  @JvmField val isRefereeCode: Boolean = true, //todo later
+  @JvmField val isRefereeCode: Boolean,
   @JvmField val pinCode: String,
   @JvmField val officePinCode: String,
   @JvmField val isSameAsChecked: Boolean,
