@@ -23,15 +23,15 @@ class LeadCreationPresenter @Inject constructor(
           repository.getLeadCreationPageData()
               .compose(applyUiModel())
         }
-        .subscribe(view::renderLeadCreationPageData)
+        .subscribe(view::renderLeadCreationPageData, Timber::e)
         .addTo(disposable)
 
     view.onPrimaryCheckboxChanged()
-        .subscribe(view::renderOnPrimaryCheckboxChanges)
+        .subscribe(view::renderOnPrimaryCheckboxChanges, Timber::e)
         .addTo(disposable)
 
     view.onOfficePrimaryCheckboxChanged()
-        .subscribe(view::renderOnOfficePrimaryCheckboxChanges)
+        .subscribe(view::renderOnOfficePrimaryCheckboxChanges, Timber::e)
         .addTo(disposable)
 
     view.onSameAsCheckboxClicked()
@@ -40,22 +40,22 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onAddressLineOneChanged()
         .filter { view.isSameAsAboveChecked() }
-        .subscribe(view::renderOnAddressLineOneChange)
+        .subscribe(view::renderOnAddressLineOneChange, Timber::e)
         .addTo(disposable)
 
     view.onAddressLineTwoChanged()
         .filter { view.isSameAsAboveChecked() }
-        .subscribe(view::renderOnAddressLineTwoChange)
+        .subscribe(view::renderOnAddressLineTwoChange, Timber::e)
         .addTo(disposable)
 
     view.onAddressLineThreeChanged()
         .filter { view.isSameAsAboveChecked() }
-        .subscribe(view::renderOnAddressLineThreeChange)
+        .subscribe(view::renderOnAddressLineThreeChange, Timber::e)
         .addTo(disposable)
 
     view.onPincodeChanged()
         .filter { view.isSameAsAboveChecked() }
-        .subscribe(view::renderOnPincodeChange)
+        .subscribe(view::renderOnPincodeChange, Timber::e)
         .addTo(disposable)
 
     view.onPrimaryInfoClicked()
@@ -71,7 +71,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getProductTypeRowDatas(it.key)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderProductTypeOnInterestedProductSelection)
+        .subscribe(view::renderProductTypeOnInterestedProductSelection, Timber::e)
         .addTo(disposable)
 
     view.onSourceSelected()
@@ -83,7 +83,16 @@ class LeadCreationPresenter @Inject constructor(
           repository.getProspectSourceRowDatas(it.key)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderProspectSourceOnSourceSelection)
+        .subscribe(view::renderProspectSourceOnSourceSelection, Timber::e)
+        .addTo(disposable)
+
+    view.onCategoryChanged()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedCategory() }
+        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+        .map { it.schmeID }
+        .subscribe(view::renderOnCategoryChange, Timber::e)
         .addTo(disposable)
 
 
@@ -96,7 +105,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getStatusRowDatas(it.key)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderStatusOnStageSelection)
+        .subscribe(view::renderStatusOnStageSelection, Timber::e)
         .addTo(disposable)
 
     view.onAssignToSearchEventFired()
@@ -108,7 +117,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getEmployeeModelsFilterBy(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderOnAssignToSearchEventFire)
+        .subscribe(view::renderOnAssignToSearchEventFire, Timber::e)
         .addTo(disposable)
 
     val refereeCodeObs = view.onRefereeCodeChanged()
@@ -184,7 +193,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.getCityRowDatas(it.key)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderCityOnStateSelection)
+        .subscribe(view::renderCityOnStateSelection, Timber::e)
         .addTo(disposable)
 
     view.onOfficeStateSelected()
@@ -203,7 +212,7 @@ class LeadCreationPresenter @Inject constructor(
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .filter { view.isSameAsAboveChecked() }
-        .subscribe(view::renderOnCitySelectAndSameAsAboveChecked)
+        .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
         .addTo(disposable)
 
     view.onAdditionalInfoClicked()
@@ -216,7 +225,7 @@ class LeadCreationPresenter @Inject constructor(
           validator.validate(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderOnCreateButtonClick)
+        .subscribe(view::renderOnCreateButtonClick, Timber::e)
         .addTo(disposable)
 
     view.onCancelButtonClicked()
@@ -229,7 +238,7 @@ class LeadCreationPresenter @Inject constructor(
           repository.createLead(input)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderCreateLead)
+        .subscribe(view::renderCreateLead, Timber::e)
         .addTo(disposable)
 
   }

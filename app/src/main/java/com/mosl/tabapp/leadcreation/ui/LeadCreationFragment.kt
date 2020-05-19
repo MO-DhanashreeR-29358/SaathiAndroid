@@ -547,6 +547,7 @@ class LeadCreationFragment : CommonFragment(),
       binding.etOffPincode.setText(pincode)
   }
 
+  override fun onCategoryChanged(): Observable<Int> = binding.spCategory.itemSelections()
   override fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent> = subject.ofType()
   override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
   override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
@@ -574,12 +575,20 @@ class LeadCreationFragment : CommonFragment(),
   override fun getSelectedInterestedProduct(): RowData =
     binding.spInterestIn.selectedItem as RowData
 
+  override fun getSelectedCategory(): RowData = binding.spCategory.selectedItem as RowData
   override fun getSelectedSource(): RowData = binding.spSource.selectedItem as RowData
   override fun getSelectedStage(): RowData = binding.spStage.selectedItem as RowData
   override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
   override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
   override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
   override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
+
+  override fun renderOnCategoryChange(category: String) {
+    when (category) {
+      "INDIVIDUAL" -> binding.etContactPerson.gone()
+      else -> binding.etContactPerson.visible()
+    }
+  }
 
   override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
     toggleProgressBar(uiModel.inProgress)
@@ -807,9 +816,9 @@ class LeadCreationFragment : CommonFragment(),
         binding.etAdd1.text.toString(),
         binding.etAdd2.text.toString(),
         binding.etAdd3.text.toString(),
-        (binding.spCountry.selectedItem as RowData).key,
-        (binding.spState.selectedItem as RowData).key,
-        (binding.spCity.selectedItem as RowData).key,
+        (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spState.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked(),
         userManager.getUser()?.currentBusinessProfile?.businessUnitId
@@ -820,9 +829,11 @@ class LeadCreationFragment : CommonFragment(),
         binding.etOffAdd1.text.toString(),
         binding.etOffAdd2.text.toString(),
         binding.etOffAdd3.text.toString(),
-        (binding.spOffCountry.selectedItem as RowData).key,
-        (binding.spOffState.selectedItem as RowData).key,
-        (binding.spOffCity.selectedItem as RowData).key,
+        (binding.spOffCountry.selectedItem as? RowData)?.key
+            ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spOffState.selectedItem as? RowData)?.key
+            ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spOffCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked(),
         userManager.getUser()?.currentBusinessProfile?.businessUnitId

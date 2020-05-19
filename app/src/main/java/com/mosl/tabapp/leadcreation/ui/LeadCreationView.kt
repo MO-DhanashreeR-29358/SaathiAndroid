@@ -30,6 +30,11 @@ interface LeadCreationView : BaseView {
   fun onAdditionalInfoClicked(): Observable<Unit>
   fun renderAdditionalInfoClick()
 
+  fun onCategoryChanged(): Observable<Int>
+  fun getSelectedCategory(): RowData
+  fun renderOnCategoryChange(category: String)
+
+
   fun onInterestedProductSelected(): Observable<Int>
   fun getSelectedInterestedProduct(): RowData
   fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>)
