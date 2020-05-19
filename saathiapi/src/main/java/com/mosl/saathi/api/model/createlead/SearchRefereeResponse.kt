@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchRefereeResponse(
   @JvmField @SerializedName("RefereeCode") val code: String?,
-  @JvmField @SerializedName("RefereeCode") val name: String?,
-  @JvmField @SerializedName("RefereeCode") val email: String?,
-  @JvmField @SerializedName("RefereeCode") val mobile: String?
+  @JvmField @SerializedName("RefereeName") val name: String?,
+  @JvmField @SerializedName("RefereeEmail") val email: String?,
+  @JvmField @SerializedName("RefereeMobile") val mobile: String?
 )
