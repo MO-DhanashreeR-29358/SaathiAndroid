@@ -30,9 +30,7 @@ import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.pdf.OTPFragment
-import com.mosl.mobile.pdf.OTPFragment.Companion.newInstance
 import com.mosl.tabapp.R
-import com.mosl.tabapp.R.string
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
@@ -40,6 +38,7 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
@@ -70,6 +69,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
   val subject: PublishSubject<String> = PublishSubject.create()
+
+  private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
 
   override fun getLayout() = R.layout.frag_create_meeting
 
@@ -227,10 +228,21 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     etSearchAttendeeText?.setAdapter(attendeeAdapter)
     pbLoadingIndicator = dialog.findViewById(R.id.pbLoadingIndicator)
     etSearchAttendeeText?.setLoadingIndicator(pbLoadingIndicator)
-//    etSearchAttendee.itemClickEvents().map { event ->
-//      attendeeAdapter.getItem(event.position)
-//    }
+    etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
+      uiSubject.onNext(AttendeeItemClick(position))
+    }
     dialog.show()
+  }
+
+  override fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick> = uiSubject.ofType()
+
+  override fun renderOnAttendeeItemClick(position: Int) {
+    val clientModel = if (attendeeAdapter.count > position) {
+      attendeeAdapter.getItem(position)
+    } else {
+      TODO()
+    }
+    TODO()
   }
 
   override fun toggleSearchState(queryEmpty: Boolean) {
@@ -390,7 +402,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       requireActivity().supportFragmentManager
           .beginTransaction()
 
-    val dialogFragment = newInstance(leadId, ucid)
+    val dialogFragment = OTPFragment.newInstance(leadId, ucid)
     dialogFragment.setTargetFragment(this, 1)
     dialogFragment.setListener(this)
     dialogFragment.show(ft, "")
@@ -439,7 +451,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     uiModel.onSuccess {
       Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
           .show()
-      binding.btnSendOtp.setText(string.btn_label_verify_otp)
+      binding.btnSendOtp.setText(R.string.btn_label_verify_otp)
     }
   }
 

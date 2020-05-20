@@ -161,6 +161,13 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe { view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId) }
         .addTo(disposable)
 
+    view.onAttendeeItemClickEventFired()
+        .map {
+          it.position
+        }
+        .subscribe(view::renderOnAttendeeItemClick)
+        .addTo(disposable)
+
     /*val otpClickObs = view.onSendOTPClicked()
         .map {
           view.getOTPButtonText()

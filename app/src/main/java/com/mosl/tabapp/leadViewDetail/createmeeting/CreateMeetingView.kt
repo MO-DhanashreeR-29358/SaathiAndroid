@@ -5,6 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
 import io.reactivex.Observable
 
 interface CreateMeetingView : BaseView {
@@ -40,6 +41,9 @@ interface CreateMeetingView : BaseView {
   )
 
   fun showToast()
+
+  fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick>
+  fun renderOnAttendeeItemClick(position: Int)
 
   fun toggleOTPVisibility(show: Boolean)
   fun toggleActionableVisibility(show: Boolean)
