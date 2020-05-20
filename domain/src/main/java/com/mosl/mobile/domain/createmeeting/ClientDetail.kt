@@ -26,7 +26,7 @@ data class LookUp(
   }
 
   fun isCustomerService(): Boolean {
-    return lookUpID == 133
+    return lookUpName.equals("Customer Service Related")
   }
 }
 

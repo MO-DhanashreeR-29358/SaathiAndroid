@@ -54,10 +54,13 @@ class CreateMeetingPresenter @Inject constructor(
         .filter(InvalidSelectionPredicate)
         .map { t -> view.getSelectedMeetingLocation() }
         .share()
-    meetingLocationObs.map {
-      Timber.d("location %s", it.isLocationProper())
-      it.isLocationProper()/*  && !it.equals(CreateMeetingConstants.SELECT_MEETING_LOCATION)*/
-    }
+
+    meetingLocationObs.filter { !it.equals(CreateMeetingConstants.SELECT_MEETING_LOCATION) }
+        .map { it.isLocationProper() }
+//    meetingLocationObs.map {
+//      Timber.d("location %s", it.isLocationProper())
+//      it.isLocationProper()/*  && !it.equals(CreateMeetingConstants.SELECT_MEETING_LOCATION)*/
+//    }
 //        .filter {
 //          !it.equals(
 //              CreateMeetingConstants.SELECT_MEETING_LOCATION)
@@ -82,7 +85,7 @@ class CreateMeetingPresenter @Inject constructor(
 
     meetingReasonObs.map {
       Timber.d("customer service ")
-      it.isCustomerService()
+      it.isCustomerService() && !it.equals(CreateMeetingConstants.SELECT_MEETING_REASON)
     }
         .startWith(false)
         .subscribe(view::toggleActionableVisibility)

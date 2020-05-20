@@ -84,10 +84,13 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
     setupViews()
+    if (permissionCheckHelper.locationPermission()) {
+      fusedLocation.initDispatcher(this)
+    }
   }
 
   private fun setupViews() {
-    productAdapter = SpinnerAdapterFactory.getDefaultAdapter<LookUp>(requireContext())
+    productAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spProduct.adapter = productAdapter
 
     activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
@@ -281,7 +284,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
-  lateinit var location: Location
+  var location: Location? = null
 
   override fun onSendOTPClicked(): Observable<Unit> {
     return binding.btnSendOtp.clicks()
@@ -292,16 +295,16 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   override fun getLatitude(): String {
-    return location.latitude.toString()
+    return location?.latitude.toString()
   }
 
   override fun getLongitude(): String {
-    return location.longitude.toString()
+    return location?.longitude.toString()
   }
 
   override fun getGeoArea(): String {
     val geocoder = Geocoder(requireContext(), Locale.getDefault())
-    return geocoder.getFromLocation(location.latitude, location.longitude, 1)
+    return geocoder.getFromLocation(location!!.latitude, location!!.longitude, 1)
         .get(0)
         .getAddressLine(0)
   }
