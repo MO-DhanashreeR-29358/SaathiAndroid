@@ -16,7 +16,25 @@ data class LookUp(
   override fun toString(): String {
     return lookUpName
   }
+
+  fun isPersonalMeeting(): Boolean {
+    return lookUpName.equals("Personal Meeting")
+  }
+
+  fun isLocationProper(): Boolean {
+    return !lookUpName.equals("Other")
+  }
+
+  fun isCustomerService(): Boolean {
+    return lookUpID == 133
+  }
 }
+
+data class Attendee(
+  @JvmField val empName: String,
+  @JvmField val empCode: String,
+  @JvmField val branchCode: String
+)
 
 data class ClientData(
   @JvmField val clientDetail: ClientDetail,

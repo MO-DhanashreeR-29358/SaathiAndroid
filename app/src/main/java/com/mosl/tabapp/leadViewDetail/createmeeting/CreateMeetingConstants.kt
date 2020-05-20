@@ -8,4 +8,7 @@ object CreateMeetingConstants {
 
   @JvmField
   val SELECT_MEETING_LOCATION = LookUp(0, "Select Meeting Location")
+
+  @JvmField
+  val SELECT_MEETING_REASON = LookUp(0, "Select Meeting Reason")
 }

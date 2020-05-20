@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
+import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.ClientDetail
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
@@ -10,12 +11,15 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function7
 import io.reactivex.functions.Function8
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class CreateMeetingRepositoryImpl @Inject constructor(
@@ -94,6 +98,32 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         .map { it.meetingAddress }
   }
 
+  override fun getCustomerServiceData(): Observable<Pair<List<LookUp>, List<LookUp>>> {
+    return Observable.zip(
+        getLookup(CATEGORY), getLookup(ACTIONABLES),
+        BiFunction { t1: List<LookUp>, t2: List<LookUp> ->
+          Pair(t1, t2)
+        })
+  }
+
+  override fun getAttendeeData(searchText: String): Observable<List<Attendee>> {
+    val request = AutoCompleteAttendeeRequest(
+        URLEncoder.encode(searchText, "utf-8"),
+        URLEncoder.encode(searchText, "utf-8")
+    )
+    return saathiApi.getAutoCompleteAttendee(request)
+        .map { CreateMeetingMapper.transformAttendeeData(it) }
+  }
+
+  override fun getSplAttendeeData(searchText: String): Observable<List<Attendee>> {
+    val request = AutoCompleteAttendeeRequest(
+        URLEncoder.encode(searchText, "utf-8"),
+        URLEncoder.encode(searchText, "utf-8")
+    )
+    return saathiApi.getAutoCompleteSplAttendee(request)
+        .map { CreateMeetingMapper.transformAttendeeData(it) }
+  }
+
   fun getType(type: Int): String {
     return when (type) {
       INTERESTEDIN -> "Select Product"
@@ -102,6 +132,8 @@ class CreateMeetingRepositoryImpl @Inject constructor(
       MEETINGADDRESSID -> "Select Meeting Location"
       TRAVELLINGMODEID -> "Select Travelling Mode"
       MEETINGREASON -> "Select Meeting Reason"
+      CATEGORY -> "Select Category"
+      ACTIONABLES -> "Select Actionables"
       else -> "Select Activity Type"
     }
   }
@@ -114,3 +146,6 @@ const val MEETINGADDRESSID = 117
 const val TRAVELLINGMODEID = 118
 const val ACTIVITYTYPE = 13
 const val MEETINGREASON = 14
+const val CATEGORY = 21
+const val ACTIONABLES = 20
+const val OUTSTATIONMEETING = 17

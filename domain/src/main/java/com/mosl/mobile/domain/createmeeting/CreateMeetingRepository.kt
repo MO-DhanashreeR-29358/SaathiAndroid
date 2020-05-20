@@ -17,4 +17,8 @@ interface CreateMeetingRepository {
     meetingID: String,
     leadId: String
   ): Observable<String>
+
+  fun getCustomerServiceData(): Observable<Pair<List<LookUp>, List<LookUp>>>
+  fun getAttendeeData(searchText: String): Observable<List<Attendee>>
+  fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
 }
