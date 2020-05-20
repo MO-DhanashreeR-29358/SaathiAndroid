@@ -20,6 +20,7 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -29,8 +30,10 @@ import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
@@ -38,6 +41,7 @@ import javax.inject.Inject
 class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   lateinit var binding: FragCreateMeetingBinding
   lateinit var attendeeAdapter: AttendeeAdapter
+
   @Inject
   lateinit var presenter: CreateMeetingPresenter
   lateinit var productAdapter: ArrayAdapter<LookUp>
@@ -50,6 +54,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
   lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
+
+  private val subject = PublishSubject.create<CreateMeetingUiEvent>()
 
   override fun getLayout() = R.layout.frag_create_meeting
 
@@ -96,7 +102,10 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     subCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spSubCategory.adapter = subCategoryAdapter
 
-    if (userManager.getUser()!!.isFranchise() || userManager.getUser()!!.isIFA()) {
+    if (userManager.getUser()!!
+            .isFranchise() || userManager.getUser()!!
+            .isIFA()
+    ) {
       binding.linaerLayoutNew.visibility = View.VISIBLE
     }
   }
@@ -207,10 +216,21 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     etSearchAttendeeText?.setAdapter(attendeeAdapter)
     pbLoadingIndicator = dialog.findViewById(R.id.pbLoadingIndicator)
     etSearchAttendeeText?.setLoadingIndicator(pbLoadingIndicator)
-//    etSearchAttendee.itemClickEvents().map { event ->
-//      attendeeAdapter.getItem(event.position)
-//    }
+    etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
+      subject.onNext(AttendeeItemClick(position))
+    }
     dialog.show()
+  }
+
+  override fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick> = subject.ofType()
+
+  override fun renderOnAttendeeItemClick(position: Int) {
+    val clientModel = if (attendeeAdapter.count > position) {
+      attendeeAdapter.getItem(position)
+    } else {
+      TODO()
+    }
+    TODO()
   }
 
   override fun toggleSearchState(queryEmpty: Boolean) {
@@ -310,7 +330,9 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   }
 
   override fun toggleOTPVisibility(show: Boolean) {
-    if (userManager.getUser()!!.isRM()) {
+    if (userManager.getUser()!!
+            .isRM()
+    ) {
       if (show) {
         binding.btnSendOtp.visibility = View.VISIBLE
       } else {

@@ -137,6 +137,13 @@ class CreateMeetingPresenter @Inject constructor(
         }
         ?.subscribe(view::renderSearchResult)
         ?.addTo(disposable)
+
+    view.onAttendeeItemClickEventFired()
+        .map {
+          it.position
+        }
+        .subscribe(view::renderOnAttendeeItemClick)
+        .addTo(disposable)
   }
 
   companion object {
