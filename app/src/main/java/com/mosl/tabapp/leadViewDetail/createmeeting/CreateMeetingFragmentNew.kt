@@ -8,6 +8,8 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +21,6 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
-import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -39,6 +40,7 @@ import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
@@ -211,8 +213,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
   var pbLoadingIndicator: ProgressBar? = null
 
-  override fun getSearchText(): Observable<CharSequence> {
-    return etSearchAttendeeText.textChanges()
+  override fun getSearchText(): Observable<SearchTextChange> {
+    return uiSubject.ofType()
   }
 
   override fun showAttendeDialog() {
@@ -231,6 +233,26 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     etSearchAttendeeText?.setAdapter(attendeeAdapter)
     pbLoadingIndicator = dialog.findViewById(R.id.pbLoadingIndicator)
     etSearchAttendeeText?.setLoadingIndicator(pbLoadingIndicator)
+    etSearchAttendeeText.addTextChangedListener(object : TextWatcher {
+      override fun onTextChanged(
+        s: CharSequence?,
+        start: Int,
+        before: Int,
+        count: Int
+      ) {
+        uiSubject.onNext(SearchTextChange(s?.toString() ?: ""))
+      }
+
+      override fun afterTextChanged(s: Editable?) {}
+
+      override fun beforeTextChanged(
+        s: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+      ) {
+      }
+    })
     etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
       uiSubject.onNext(AttendeeItemClick(position))
     }

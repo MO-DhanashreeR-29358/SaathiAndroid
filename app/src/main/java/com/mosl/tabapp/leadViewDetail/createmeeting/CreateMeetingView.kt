@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import io.reactivex.Observable
 
 interface CreateMeetingView : BaseView {
@@ -25,7 +26,7 @@ interface CreateMeetingView : BaseView {
   fun getSelectedMeetingReason(): LookUp?
   fun getSelectedActivityType(): LookUp?
   fun getSelectedCategory(): LookUp?
-  fun getSearchText(): Observable<CharSequence>
+  fun getSearchText(): Observable<SearchTextChange>
   fun getOTPButtonText(): String
   fun getLatitude(): String
   fun getLongitude(): String
