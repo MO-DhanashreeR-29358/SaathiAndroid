@@ -4,6 +4,8 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +16,6 @@ import android.widget.ProgressBar
 import android.widget.Spinner
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
-import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -31,6 +32,7 @@ import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -196,8 +198,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
   var pbLoadingIndicator: ProgressBar? = null
 
-  override fun getSearchText(): Observable<CharSequence> {
-    return etSearchAttendeeText.textChanges()
+  override fun getSearchText(): Observable<SearchTextChange> {
+    return subject.ofType()
   }
 
   override fun showAttendeDialog() {
@@ -216,6 +218,26 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     etSearchAttendeeText?.setAdapter(attendeeAdapter)
     pbLoadingIndicator = dialog.findViewById(R.id.pbLoadingIndicator)
     etSearchAttendeeText?.setLoadingIndicator(pbLoadingIndicator)
+    etSearchAttendeeText.addTextChangedListener(object : TextWatcher {
+      override fun onTextChanged(
+        s: CharSequence?,
+        start: Int,
+        before: Int,
+        count: Int
+      ) {
+        subject.onNext(SearchTextChange(s?.toString() ?: ""))
+      }
+
+      override fun afterTextChanged(s: Editable?) {}
+
+      override fun beforeTextChanged(
+        s: CharSequence?,
+        start: Int,
+        count: Int,
+        after: Int
+      ) {
+      }
+    })
     etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
       subject.onNext(AttendeeItemClick(position))
     }

@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import com.mosl.app.core.base.BasePresenter
-import com.mosl.commons.rx.CharSequenceToString
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
@@ -51,34 +50,28 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::renderMeetingReason)
         .addTo(disposable)
 
-    val meetingLocationObs = view.onMeetingLocationSelected()
+
+    view.onMeetingLocationSelected()
         .filter(InvalidSelectionPredicate)
-        .map { t -> view.getSelectedMeetingLocation() }
-        .share()
-    meetingLocationObs.map {
-      Timber.d("location %s", it.isLocationProper())
-      it.isLocationProper()/*  && !it.equals(CreateMeetingConstants.SELECT_MEETING_LOCATION)*/
-    }
-//        .filter {
-//          !it.equals(
-//              CreateMeetingConstants.SELECT_MEETING_LOCATION)
-////              && !it.lookUpName.equals("Other", ignoreCase = false)
-//        }
+        .skip(1)
+        .map { view.getSelectedMeetingLocation() }
+        .filter {
+          it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
+              it.lookUpName.equals("other", false)
+        }
         .switchMap {
-          repository.getAddress(
-              view.getSelectedMeetingLocation()?.lookUpID.toString(), createMeetingData.leadId
-          )
+          repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderAddress)
+        .subscribe(view::renderAddress, Timber::e)
         .addTo(disposable)
 
-//    view.onMeetingReasonSelected()
-//        .filter(InvalidSelectionPredicate)
-////        .map { t -> view.getSelectedMeetingReason() }
+
     val meetingReasonObs = view.onMeetingReasonSelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .map { t -> view.getSelectedMeetingReason() }
+        .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
         .share()
 
     meetingReasonObs.map {
@@ -94,7 +87,7 @@ class CreateMeetingPresenter @Inject constructor(
           repository.getCustomerServiceData()
               .compose(applyUiModel())
         }
-        .subscribe(view::renderCustomerServiceData)
+        .subscribe(view::renderCustomerServiceData, Timber::e)
         .addTo(disposable)
 
     view.onCategorySelected()
@@ -120,9 +113,9 @@ class CreateMeetingPresenter @Inject constructor(
         .addTo(disposable)
 
     val searchObs = view.getSearchText()
-        .filter { t -> t.isNotEmpty() && t.isNotBlank() }
+        .filter { it.text.isNotEmpty() }
         .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
-        .map(CharSequenceToString)
+        .map { it.text }
         .distinctUntilChanged()
         .share()
 
