@@ -389,13 +389,14 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     } else {
       ivSuggestMe.setVisibility(View.GONE);
     }
-
-    if (oaoUserId != null && oaoUserId > 0) {
-      ivOpenAccount.setVisibility(View.GONE);
-      ivOaoForm.setVisibility(View.VISIBLE);
-    } else {
-      ivOpenAccount.setVisibility(View.VISIBLE);
-      ivOaoForm.setVisibility(View.GONE);
+    if (userManager.getUser() != null && userManager.getUser().isEkycEnable()) {
+      if (oaoUserId != null && oaoUserId > 0) {
+        ivOpenAccount.setVisibility(View.GONE);
+        ivOaoForm.setVisibility(View.VISIBLE);
+      } else {
+        ivOpenAccount.setVisibility(View.VISIBLE);
+        ivOaoForm.setVisibility(View.GONE);
+      }
     }
 
     if (diyCode > 0) {

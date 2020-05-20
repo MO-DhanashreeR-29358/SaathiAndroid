@@ -109,12 +109,16 @@ class AutoCompleteAdapter(
         SEARCH_TYPE_LEAD
       }
       if (ekyMenuType == SEARCH_TYPE_LEAD || ekyMenuType == SEARCH_TYPE_CLIENT) {
-        if (resultModel.isOaoUserIdValid) {
-          holderView.rlOpenAccount.visibility = View.GONE
-          holderView.rlOAOForm.visibility = View.VISIBLE
-        } else {
-          holderView.rlOpenAccount.visibility = View.VISIBLE
-          holderView.rlOAOForm.visibility = View.GONE
+        userManager.getUser()?.apply {
+          if (this.isEkycEnable()) {
+            if (resultModel.isOaoUserIdValid) {
+              holderView.rlOpenAccount.visibility = View.GONE
+              holderView.rlOAOForm.visibility = View.VISIBLE
+            } else {
+              holderView.rlOpenAccount.visibility = View.VISIBLE
+              holderView.rlOAOForm.visibility = View.GONE
+            }
+          }
         }
         if (resultModel.isDiyLinkValid) {
           holderView.rlDiyLink.visibility = View.VISIBLE

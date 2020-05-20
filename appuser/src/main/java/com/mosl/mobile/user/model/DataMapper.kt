@@ -12,7 +12,7 @@ fun LoginResponse.transform(
 
     val userProfile = user
     return LoginResponse(
-        user = userProfile.transformUser(smtEnabled, password),
+        user = userProfile.transformUser(smtEnabled, password, isEkycEnable),
         smtEnabled = smtEnabled
     )
 }
@@ -31,13 +31,15 @@ fun VersionResponse.transform(
 
 fun com.mosl.saathi.api.model.login.User.transformUser(
     smtEnabled: String,
-    password: String
+    password: String,
+    isEkycEnable: String?
 
 ): User {
     val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
     val currentBusinessProfile: CurrentBusinessProfile = currentBusinessProfile
 
     return User(
+        isEkycEnable = isEkycEnable ?: "0",
         smtEnabled = smtEnabled,
         userId = userId ?: "0",
         employeeCode = employeeCode ?: "0",
