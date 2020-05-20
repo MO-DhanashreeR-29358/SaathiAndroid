@@ -719,7 +719,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_12sdp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:srcCompat="@drawable/ic_actionable"
         />
 

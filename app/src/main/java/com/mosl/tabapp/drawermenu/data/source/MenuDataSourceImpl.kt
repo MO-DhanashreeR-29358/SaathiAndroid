@@ -25,6 +25,8 @@ class MenuDataSourceImpl @Inject constructor(
         getAuSalesBank()
       } else if (user.isSMTEnabled()) {
         getSMTUserMenu(menuItems)
+      } else if (user.isEkycEnable()) {
+        getEkycUserMenu(menuItems)
       } else {
         getUserMenu(menuItems)
       }
@@ -32,10 +34,24 @@ class MenuDataSourceImpl @Inject constructor(
         .subscribeOn(Schedulers.io())
   }
 
+  protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+    return listOf(
+      getDashboard(),
+      getOpenAccount(),
+      getReports(list),
+      getCalendar(),
+      getPendingApproval(),
+      getSalesBrochure(),
+      getSalesStadium(),
+      getBirthdayAnniversary(),
+      getQuery(),
+      getLogout()
+    )
+  }
+
   protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
     return listOf(
         getDashboard(),
-        getOpenAccount(),
         getReports(list),
         getCalendar(),
         getPendingApproval(),

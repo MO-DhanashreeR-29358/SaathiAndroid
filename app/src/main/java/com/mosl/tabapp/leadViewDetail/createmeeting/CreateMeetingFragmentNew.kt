@@ -1,8 +1,12 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.app.Dialog
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +18,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
+import android.widget.Toast
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -25,27 +30,36 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.tabapp.R
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMMOSLCommon
+import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
-class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
+class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
+    FusedLocation.LatLongDispatcher {
   lateinit var binding: FragCreateMeetingBinding
   lateinit var attendeeAdapter: AttendeeAdapter
-
   @Inject
   lateinit var presenter: CreateMeetingPresenter
+  @Inject
+  lateinit var permissionCheckHelper: PermissionCheckHelperFragment
+  @Inject
+  lateinit var fusedLocation: FusedLocation
   lateinit var productAdapter: ArrayAdapter<LookUp>
   lateinit var categoryAdapter: ArrayAdapter<LookUp>
   lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
@@ -56,8 +70,9 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
   lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
+  val subject: PublishSubject<String> = PublishSubject.create()
 
-  private val subject = PublishSubject.create<CreateMeetingUiEvent>()
+  private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
 
   override fun getLayout() = R.layout.frag_create_meeting
 
@@ -104,10 +119,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     subCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spSubCategory.adapter = subCategoryAdapter
 
-    if (userManager.getUser()!!
-            .isFranchise() || userManager.getUser()!!
-            .isIFA()
-    ) {
+    if (userManager.getUser()!!.isFranchise() || userManager.getUser()!!.isIFA()) {
       binding.linaerLayoutNew.visibility = View.VISIBLE
     }
   }
@@ -199,7 +211,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   var pbLoadingIndicator: ProgressBar? = null
 
   override fun getSearchText(): Observable<SearchTextChange> {
-    return subject.ofType()
+    return uiSubject.ofType()
   }
 
   override fun showAttendeDialog() {
@@ -225,7 +237,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
         before: Int,
         count: Int
       ) {
-        subject.onNext(SearchTextChange(s?.toString() ?: ""))
+        uiSubject.onNext(SearchTextChange(s?.toString() ?: ""))
       }
 
       override fun afterTextChanged(s: Editable?) {}
@@ -239,12 +251,12 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
       }
     })
     etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
-      subject.onNext(AttendeeItemClick(position))
+      uiSubject.onNext(AttendeeItemClick(position))
     }
     dialog.show()
   }
 
-  override fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick> = subject.ofType()
+  override fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick> = uiSubject.ofType()
 
   override fun renderOnAttendeeItemClick(position: Int) {
     val clientModel = if (attendeeAdapter.count > position) {
@@ -291,8 +303,29 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
-  fun onSendOTPClicked(): Observable<Unit> {
+  lateinit var location: Location
+
+  override fun onSendOTPClicked(): Observable<Unit> {
     return binding.btnSendOtp.clicks()
+  }
+
+  override fun getOTPButtonText(): String {
+    return binding.btnSendOtp.text.toString()
+  }
+
+  override fun getLatitude(): String {
+    return location.latitude.toString()
+  }
+
+  override fun getLongitude(): String {
+    return location.longitude.toString()
+  }
+
+  override fun getGeoArea(): String {
+    val geocoder = Geocoder(requireContext(), Locale.getDefault())
+    return geocoder.getFromLocation(location.latitude, location.longitude, 1)
+        .get(0)
+        .getAddressLine(0)
   }
 
   override fun onAttendeeClicked(): Observable<Unit> {
@@ -352,9 +385,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
   }
 
   override fun toggleOTPVisibility(show: Boolean) {
-    if (userManager.getUser()!!
-            .isRM()
-    ) {
+    if (userManager.getUser()!!.isRM()) {
       if (show) {
         binding.btnSendOtp.visibility = View.VISIBLE
       } else {
@@ -371,8 +402,85 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView {
     }
   }
 
+  override fun checkPermissionAndProceed() {
+    if (checkPermission()) {
+      if (location != null) {
+        subject.onNext("OTP")
+      } else {
+        fusedLocation.LocationUpdates()
+      }
+    }
+  }
+
+  override fun getOTPSubject(): Observable<String> {
+    return subject.ofType()
+  }
+
+  override fun showOTPDialog(
+    ucid: String,
+    leadId: String
+  ) {
+    val ft =
+      requireActivity().supportFragmentManager
+          .beginTransaction()
+
+    val dialogFragment = OTPFragment.newInstance(leadId, ucid)
+    dialogFragment.setTargetFragment(this, 1)
+    dialogFragment.setListener(this)
+    dialogFragment.show(ft, "")
+  }
+
+  fun checkPermission(): Boolean {
+    if (!permissionCheckHelper.locationPermission()) {
+      permissionCheckHelper.requestLocation()
+      return false
+    } else if (!(requireContext().getSystemService(
+            Context.LOCATION_SERVICE
+        ) as LocationManager).isProviderEnabled(
+            LocationManager.GPS_PROVIDER
+        )
+        && CRMMOSLCommon.hasGPSDevice(requireContext())
+    ) {
+      fusedLocation.initDispatcher(this)
+      return false
+    }
+    return true
+  }
+
+  var isSendOTPSuccesssful = false
+  override fun onSuccessResult(status: Boolean) {
+    isSendOTPSuccesssful = status
+  }
+
+  override fun isOTPSuccessful(): Boolean {
+    return isSendOTPSuccesssful
+  }
+
+  override fun onLatLongChanged(location: Location?) {
+    this.location = location!!
+  }
+
+  override fun showToast() {
+    Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG)
+        .show()
+  }
+
+  override fun renderOTP(uiModel: UiModel<String>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure { showOnFailurePopup(it) }
+
+    uiModel.onSuccess {
+      Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
+          .show()
+      binding.btnSendOtp.setText(R.string.btn_label_verify_otp)
+    }
+  }
+
   companion object {
     const val ARG_LEAD_ID = "LeadID"
     const val ARG_UCID = "UCID"
+    const val SEND_OTP_LABEL = "Send OTP"
+    const val VERIFY_OTP_LABEL = "Verify OTP"
   }
 }

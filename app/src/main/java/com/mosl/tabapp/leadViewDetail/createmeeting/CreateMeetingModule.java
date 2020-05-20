@@ -4,6 +4,7 @@ import android.os.Bundle;
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingRepositoryImpl;
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData;
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository;
+import com.mosl.tabapp.permission.PermissionCheckHelperFragment;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -24,6 +25,11 @@ public abstract class CreateMeetingModule {
             }
         }
         return new CreateMeetingData("0", "0");
+    }
+
+    @Provides static PermissionCheckHelperFragment providePermissionHelper(
+        CreateMeetingFragmentNew fragment) {
+        return new PermissionCheckHelperFragment(fragment);
     }
 
     @Binds abstract CreateMeetingView provideCreateMeetingView(CreateMeetingFragmentNew fragment);

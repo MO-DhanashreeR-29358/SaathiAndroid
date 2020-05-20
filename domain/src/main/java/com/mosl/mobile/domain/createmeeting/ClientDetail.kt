@@ -46,3 +46,11 @@ data class ClientData(
   @JvmField val listTravellingMode: List<LookUp>,
   @JvmField val listMeetingAdressID: List<LookUp>
 )
+
+data class OTPRequestData(
+  @JvmField val latitude: String,
+  @JvmField val longitude: String,
+  @JvmField val geoArea: String,
+  @JvmField val ucid: String,
+  @JvmField val leadid: String
+)

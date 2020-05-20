@@ -16,20 +16,32 @@ interface CreateMeetingView : BaseView {
   fun renderSubCategory(uiModel: UiModel<List<LookUp>>)
   fun renderCustomerServiceData(uiModel: UiModel<Pair<List<LookUp>, List<LookUp>>>)
   fun renderSearchResult(uiModel: UiModel<List<Attendee>>)
+  fun renderOTP(uiModel: UiModel<String>)
   fun onMeetingLocationSelected(): Observable<Int>
   fun onMeetingReasonSelected(): Observable<Int>
   fun onActivityTypeSelected(): Observable<Int>
   fun onCategorySelected(): Observable<Int>
+  fun onSendOTPClicked(): Observable<Unit>
   fun getSelectedMeetingLocation(): LookUp?
   fun getSelectedMeetingReason(): LookUp?
   fun getSelectedActivityType(): LookUp?
   fun getSelectedCategory(): LookUp?
   fun getSearchText(): Observable<SearchTextChange>
+  fun getOTPButtonText(): String
+  fun getLatitude(): String
+  fun getLongitude(): String
+  fun getGeoArea(): String
 
   fun onAttendeeClicked(): Observable<Unit>
   fun onSplAttendeeClicked(): Observable<Unit>
   fun showAttendeDialog()
   fun showSplAttendeDialog()
+  fun showOTPDialog(
+    ucid: String,
+    leadId: String
+  )
+
+  fun showToast()
 
   fun onAttendeeItemClickEventFired(): Observable<AttendeeItemClick>
   fun renderOnAttendeeItemClick(position: Int)
@@ -37,4 +49,8 @@ interface CreateMeetingView : BaseView {
   fun toggleOTPVisibility(show: Boolean)
   fun toggleActionableVisibility(show: Boolean)
   fun toggleSearchState(queryEmpty: Boolean)
+  fun isOTPSuccessful(): Boolean
+
+  fun checkPermissionAndProceed()
+  fun getOTPSubject(): Observable<String>
 }

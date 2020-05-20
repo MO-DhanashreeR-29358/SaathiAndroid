@@ -5,6 +5,7 @@ package com.mosl.mobile.user.model
  */
 data class User(
     @JvmField val smtEnabled: String,
+    @JvmField val isEkycEnable: String,
     @JvmField val userId: String,
     @JvmField val employeeCode: String,
     @JvmField val firstName: String,
@@ -20,16 +21,20 @@ data class User(
 
 ) {
     fun isAufsb(): Boolean {
-        return userTypeSequence.equals("9")
+        return userTypeSequence == "9"
     }
 
     fun isSMTEnabled(): Boolean {
-        return smtEnabled.equals("1")
+        return smtEnabled == "1"
+    }
+
+    fun isEkycEnable(): Boolean {
+        return isEkycEnable == "1"
     }
 
     fun isAuBankSalesSupport(): Boolean {
         currentBusinessProfile.businessProfileId?.apply {
-            return this.equals("1142") || this.equals("1156")
+            return this == "1142" || this == "1156"
         }
         return false
     }

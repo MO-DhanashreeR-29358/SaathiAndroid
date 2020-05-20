@@ -5,8 +5,10 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
+import com.mosl.mobile.domain.createmeeting.OTPRequestData
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.SEND_OTP_LABEL
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.VERIFY_OTP_LABEL
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -131,11 +133,63 @@ class CreateMeetingPresenter @Inject constructor(
         ?.subscribe(view::renderSearchResult)
         ?.addTo(disposable)
 
+    val isOTPSentSuccessful = view.onSendOTPClicked()
+        .map {
+          view.isOTPSuccessful()
+        }
+        .share()
+
+    isOTPSentSuccessful.filter { t: Boolean ->
+      t.equals(true)
+    }
+        .subscribe { view.showToast() }
+        .addTo(disposable)
+
+    isOTPSentSuccessful.filter { t: Boolean -> t.equals(false) }
+        .map { view.getOTPButtonText() }
+        .filter { t -> t.equals(SEND_OTP_LABEL) }
+        .subscribe { view.checkPermissionAndProceed() }
+        .addTo(disposable)
+
+    isOTPSentSuccessful.filter { t: Boolean -> t.equals(false) }
+        .map { view.getOTPButtonText() }
+        .filter { t -> t.equals(VERIFY_OTP_LABEL) }
+        .subscribe { view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId) }
+        .addTo(disposable)
+
     view.onAttendeeItemClickEventFired()
         .map {
           it.position
         }
         .subscribe(view::renderOnAttendeeItemClick)
+        .addTo(disposable)
+
+    /*val otpClickObs = view.onSendOTPClicked()
+        .map {
+          view.getOTPButtonText()
+        }.share()
+
+    otpClickObs.filter { t -> t.equals(SEND_OTP_LABEL) }.subscribe{view.checkPermission()}
+        .addTo(disposable)
+
+    otpClickObs.filter { t -> t.equals(VERIFY_OTP_LABEL) }.subscribe{
+      view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId)
+    }.addTo(disposable)*/
+
+    view.getOTPSubject()
+        .switchMap {
+          repository.sendOTP(
+              OTPRequestData(
+                  latitude = view.getLatitude(),
+                  longitude = view.getLongitude(),
+                  geoArea = view.getGeoArea(),
+                  ucid = createMeetingData.ucid,
+                  leadid = createMeetingData.leadId
+              )
+          )
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOTP)
         .addTo(disposable)
   }
 
