@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.createmeeting.ClientDetail
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.OTPRequestData
 import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
@@ -14,6 +15,7 @@ import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
@@ -122,6 +124,18 @@ class CreateMeetingRepositoryImpl @Inject constructor(
     )
     return saathiApi.getAutoCompleteSplAttendee(request)
         .map { CreateMeetingMapper.transformAttendeeData(it) }
+  }
+
+  override fun sendOTP(data: OTPRequestData): Observable<String> {
+    val request = SendOTPRequest(
+        employeeCode = userManager.getUser()!!.employeeCode,
+        latitude = data.latitude,
+        leadId = data.leadid,
+        longitude = data.longitude,
+        geoArea = data.geoArea,
+        ucid = data.ucid
+    )
+    return saathiApi.getStartMeeting(request)
   }
 
   fun getType(type: Int): String {
