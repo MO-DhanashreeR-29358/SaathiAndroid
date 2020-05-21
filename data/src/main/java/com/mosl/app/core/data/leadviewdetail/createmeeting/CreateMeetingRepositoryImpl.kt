@@ -147,6 +147,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
       TRAVELLINGMODEID -> "Select Travelling Mode"
       MEETINGREASON -> "Select Meeting Reason"
       CATEGORY -> "Select Category"
+      SUBCATEGORY -> "Select Sub Category"
       ACTIONABLES -> "Select Actionables"
       else -> "Select Activity Type"
     }
@@ -161,5 +162,6 @@ const val TRAVELLINGMODEID = 118
 const val ACTIVITYTYPE = 13
 const val MEETINGREASON = 14
 const val CATEGORY = 21
+const val SUBCATEGORY = 22
 const val ACTIONABLES = 20
 const val OUTSTATIONMEETING = 17

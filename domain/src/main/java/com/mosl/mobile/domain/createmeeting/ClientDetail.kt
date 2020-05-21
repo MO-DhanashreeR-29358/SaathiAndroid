@@ -22,11 +22,11 @@ data class LookUp(
   }
 
   fun isLocationProper(): Boolean {
-    return !lookUpName.equals("Other")
+    return !lookUpName.equals("Other", ignoreCase = true)
   }
 
   fun isCustomerService(): Boolean {
-    return lookUpName.equals("Customer Service Related")
+    return lookUpName.equals("Customer Service Related", ignoreCase = true)
   }
 }
 

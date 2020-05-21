@@ -60,7 +60,7 @@ class CreateMeetingPresenter @Inject constructor(
         .map { view.getSelectedMeetingLocation() }
         .filter {
           it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
-              !it.lookUpName.equals("other", false)
+              it.isLocationProper()
         }
         .switchMap {
           repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
@@ -69,9 +69,6 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::renderAddress)
         .addTo(disposable)
 
-//    view.onMeetingReasonSelected()
-//        .filter(InvalidSelectionPredicate)
-////        .map { t -> view.getSelectedMeetingReason() }
     val meetingReasonObs = view.onMeetingReasonSelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)
@@ -80,14 +77,13 @@ class CreateMeetingPresenter @Inject constructor(
         .share()
 
     meetingReasonObs.map {
-      Timber.d("customer service ")
       it.isCustomerService()
     }
         .startWith(false)
         .subscribe(view::toggleActionableVisibility)
         .addTo(disposable)
 
-    meetingReasonObs.map { it.isCustomerService() }
+    meetingReasonObs.filter { it.isCustomerService() }
         .switchMap {
           repository.getCustomerServiceData()
               .compose(applyUiModel())
@@ -97,6 +93,7 @@ class CreateMeetingPresenter @Inject constructor(
 
     view.onCategorySelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .map { view.getSelectedCategory() }
         .switchMap {
           repository.getLookup(SUBCATEGORY, null, it.lookUpID.toString())

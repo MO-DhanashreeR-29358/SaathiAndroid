@@ -200,8 +200,14 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     uiModel.onFailure { showOnFailurePopup(it) }
 
     uiModel.onSuccess {
-      subCategoryAdapter.clear()
-      subCategoryAdapter.setSpinnerData(binding.spSubCategory, it)
+      if (it.size > 1) {
+        binding.llSubcategory.visibility = View.VISIBLE
+        subCategoryAdapter.clear()
+        subCategoryAdapter.setSpinnerData(binding.spSubCategory, it)
+      } else {
+        binding.llSubcategory.visibility = View.GONE
+        binding.etSubCategory.setText("")
+      }
     }
   }
 
@@ -210,12 +216,13 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     uiModel.onFailure {
       showOnFailurePopup(it)
+    }
 
-      uiModel.onSuccess {
-        binding.llActionables.visibility = View.VISIBLE
-        actionableAdapter.setSpinnerData(binding.spActionables, it.second)
-        categoryAdapter.setSpinnerData(binding.spCategory, it.first)
-      }
+    uiModel.onSuccess {
+      binding.llActionables.visibility = View.VISIBLE
+      binding.llSubcategory.visibility = View.GONE
+      actionableAdapter.setSpinnerData(binding.spActionables, it.second)
+      categoryAdapter.setSpinnerData(binding.spCategory, it.first)
     }
   }
 
