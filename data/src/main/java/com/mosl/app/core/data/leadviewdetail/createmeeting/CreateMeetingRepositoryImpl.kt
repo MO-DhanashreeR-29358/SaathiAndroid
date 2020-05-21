@@ -108,6 +108,15 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         })
   }
 
+  override fun getFranchiseIFAUserData(): Observable<Pair<List<LookUp>, List<LookUp>>> {
+    return Observable.zip(
+        getLookup(OUTSTATIONMEETING), getLookup(BACLIENTMEETING),
+        BiFunction { t1: List<LookUp>, t2: List<LookUp> ->
+          Pair(t1, t2)
+        }
+    )
+  }
+
   override fun getAttendeeData(searchText: String): Observable<List<Attendee>> {
     val request = AutoCompleteAttendeeRequest(
         URLEncoder.encode(searchText, "utf-8"),
@@ -149,6 +158,8 @@ class CreateMeetingRepositoryImpl @Inject constructor(
       CATEGORY -> "Select Category"
       SUBCATEGORY -> "Select Sub Category"
       ACTIONABLES -> "Select Actionables"
+      BACLIENTMEETING -> "Select BA Client Meeting"
+      OUTSTATIONMEETING -> "Select Out Station Meeting"
       else -> "Select Activity Type"
     }
   }
@@ -165,3 +176,4 @@ const val CATEGORY = 21
 const val SUBCATEGORY = 22
 const val ACTIONABLES = 20
 const val OUTSTATIONMEETING = 17
+const val BACLIENTMEETING = 16

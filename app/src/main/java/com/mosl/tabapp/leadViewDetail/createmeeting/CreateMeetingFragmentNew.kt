@@ -45,6 +45,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.FranchiseIFAUser
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
@@ -79,6 +80,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
   lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
+  lateinit var outstationAdapter: ArrayAdapter<LookUp>
+  lateinit var baClientAdapter: ArrayAdapter<LookUp>
   val subject: PublishSubject<String> = PublishSubject.create()
 
   private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
@@ -131,9 +134,20 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     subCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spSubCategory.adapter = subCategoryAdapter
 
+    baClientAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spBAClient.adapter = baClientAdapter
+
+    outstationAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spOutStaition.adapter = outstationAdapter
+
     if (userManager.getUser()!!.isFranchise() || userManager.getUser()!!.isIFA()) {
       binding.linaerLayoutNew.visibility = View.VISIBLE
+      uiSubject.onNext(FranchiseIFAUser)
     }
+  }
+
+  override fun isFranchiseIFAUser(): Observable<FranchiseIFAUser> {
+    return uiSubject.ofType()
   }
 
   override fun render(uiModel: UiModel<ClientData>) {
@@ -226,6 +240,18 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
   }
 
+  override fun renderFranchiseIFAUserData(uiModel: UiModel<Pair<List<LookUp>, List<LookUp>>>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      outstationAdapter.setSpinnerData(binding.spOutStaition, it.first)
+      baClientAdapter.setSpinnerData(binding.spBAClient, it.second)
+    }
+  }
   lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
   lateinit var etSearchSplAttendeeText: DelayAutoCompleteTextView
   var pbLoadingIndicator: ProgressBar? = null

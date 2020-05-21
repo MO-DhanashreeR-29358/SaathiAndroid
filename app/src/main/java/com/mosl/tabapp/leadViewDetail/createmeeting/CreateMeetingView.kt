@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.FranchiseIFAUser
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
@@ -17,6 +18,7 @@ interface CreateMeetingView : BaseView {
   fun renderMeetingReason(uiModel: UiModel<List<LookUp>>)
   fun renderSubCategory(uiModel: UiModel<List<LookUp>>)
   fun renderCustomerServiceData(uiModel: UiModel<Pair<List<LookUp>, List<LookUp>>>)
+  fun renderFranchiseIFAUserData(uiModel: UiModel<Pair<List<LookUp>, List<LookUp>>>)
   fun renderSearchResult(
     uiModel: UiModel<List<Attendee>>,
     isAttendee: Boolean
@@ -68,4 +70,5 @@ interface CreateMeetingView : BaseView {
 
   fun checkPermissionAndProceed()
   fun getOTPSubject(): Observable<String>
+  fun isFranchiseIFAUser(): Observable<FranchiseIFAUser>
 }

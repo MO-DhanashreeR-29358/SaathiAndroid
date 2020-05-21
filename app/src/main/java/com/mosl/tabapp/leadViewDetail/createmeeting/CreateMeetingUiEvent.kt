@@ -6,4 +6,5 @@ sealed class CreateMeetingUiEvent {
 
   data class SearchTextChange(val text: String) : CreateMeetingUiEvent()
   data class SearchTextChangeSplAttendee(val text: String) : CreateMeetingUiEvent()
+  object FranchiseIFAUser : CreateMeetingUiEvent()
 }

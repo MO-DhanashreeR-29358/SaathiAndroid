@@ -19,6 +19,7 @@ interface CreateMeetingRepository {
   ): Observable<String>
 
   fun getCustomerServiceData(): Observable<Pair<List<LookUp>, List<LookUp>>>
+  fun getFranchiseIFAUserData(): Observable<Pair<List<LookUp>, List<LookUp>>>
   fun getAttendeeData(searchText: String): Observable<List<Attendee>>
   fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
   fun sendOTP(data: OTPRequestData): Observable<String>

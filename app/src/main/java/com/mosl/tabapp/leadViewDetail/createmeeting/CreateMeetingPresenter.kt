@@ -29,6 +29,14 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::render)
         .addTo(disposable)
 
+    view.isFranchiseIFAUser()
+        .switchMap {
+          repository.getFranchiseIFAUserData()
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderFranchiseIFAUserData)
+        .addTo(disposable)
+
     val activityTypeSelectedObs = view.onActivityTypeSelected()
         .filter(InvalidSelectionPredicate)
         .map { t -> view.getSelectedActivityType() }
