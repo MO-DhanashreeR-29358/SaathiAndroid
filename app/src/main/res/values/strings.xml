@@ -214,8 +214,22 @@
     <string-array name="NotificationCategory">
         <item>Operational</item>
         <item>Business</item>
+    </string-array>
 
-
+    <string-array name="allowedFileTypeArray">
+        <item>TXT</item>
+        <item>DOC</item>
+        <item>DOCS</item>
+        <item>XLS</item>
+        <item>PDF</item>
+        <item>CSV</item>
+        <item>XLSX</item>
+        <item>PNG</item>
+        <item>JPEG</item>
+        <item>JPG</item>
+        <item>GIF</item>
+        <item>PPT</item>
+        <item>PPTX</item>
     </string-array>
     <!--  data for appion short cut -->
     <string name="createlead">Create Lead</string>

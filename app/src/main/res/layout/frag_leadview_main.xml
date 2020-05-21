@@ -18,8 +18,8 @@
             android:id="@+id/htab_collapse_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?attr/colorPrimary"
             android:fitsSystemWindows="true"
+        app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
@@ -27,16 +27,14 @@
                 layout="@layout/include_layout_client_detail"
                 app:layout_collapseMode="parallax" />
 
-
       <androidx.appcompat.widget.Toolbar
                 android:id="@+id/htab_toolbar"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+          android:layout_width="@dimen/toolbar_dimension"
+          android:layout_height="@dimen/toolbar_dimension"
                 android:layout_gravity="top"
                 app:layout_collapseMode="parallax"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <!--  -->
       <com.google.android.material.tabs.TabLayout
                 android:id="@+id/indicatorLeadView"
                 android:layout_width="match_parent"
@@ -44,17 +42,15 @@
                 android:layout_gravity="bottom"
                 app:tabBackground="@color/white_subheading"
                 app:tabIndicatorColor="@color/orange"
+          app:tabMode="scrollable"
                 app:tabSelectedTextColor="@color/orange"
-                app:tabTextColor="@android:color/black"
-                app:tabMode="scrollable"/>
-
-
+          app:tabTextColor="@android:color/black" />
     </com.google.android.material.appbar.CollapsingToolbarLayout>
   </com.google.android.material.appbar.AppBarLayout>
 
-
-    <view class="com.mosl.tabapp.common.LockedViewPager"
+  <view
         android:id="@+id/vpLeadView"
+      class="com.mosl.tabapp.common.LockedViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

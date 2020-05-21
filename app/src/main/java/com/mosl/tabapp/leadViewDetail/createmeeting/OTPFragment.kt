@@ -61,7 +61,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
             leadId = bundle.getString(OTPContract.ARG_LEAD_ID, "0")
             mUCID = bundle.getString(OTPContract.ARG_UCID, "0")
         } catch (e: Exception) {
-            e.printStackTrace();
+            e.printStackTrace()
         }
     }
 
