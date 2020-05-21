@@ -225,6 +225,10 @@ class CreateMeetingPresenter @Inject constructor(
         }
         .subscribe(view::renderOTP)
         .addTo(disposable)
+
+    view.onResetClicked()
+        .subscribe { view.resetData() }
+        .addTo(disposable)
   }
 
   companion object {

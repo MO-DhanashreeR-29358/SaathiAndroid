@@ -537,6 +537,35 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return "kandivli"
   }
 
+  override fun onSaveClicked(): Observable<Unit> {
+    return binding.btnSave.clicks()
+  }
+
+  override fun onResetClicked(): Observable<Unit> {
+    return binding.btnReset.clicks()
+  }
+
+  override fun resetData() {
+    addedAttendeeList.clear()
+    addedSplAttendeeList.clear()
+    binding.tvAttendeeCount.setText("")
+    binding.tvSplAttendeeCount.setText("")
+    binding.spProduct.setSelection(0)
+    binding.spMeetingDuration.setSelection(0)
+    binding.spActivityType.setSelection(0)
+    binding.spMeetingReason.setSelection(0)
+    binding.spMeetingObjective.setSelection(0)
+    binding.spMeetingLocation.setSelection(0)
+    binding.spTravellingMode.setSelection(0)
+    binding.etLocation.setText("")
+    binding.etPinCode.setText("")
+    binding.etAmount.setText("")
+    binding.etMeetingDescription.setText("")
+    binding.etCustomerComment.setText("")
+    binding.btnSendOtp.setText(SEND_OTP_LABEL)
+    toggleOTPVisibility(false)
+  }
+
   override fun onAttendeeClicked(): Observable<Unit> {
     return binding.ibAttendee.clicks()
   }

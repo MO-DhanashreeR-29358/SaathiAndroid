@@ -45,6 +45,8 @@ interface CreateMeetingView : BaseView {
   fun onAttendeeAddedClicked(): Observable<Unit>
   fun onSplAttendeeClicked(): Observable<Unit>
   fun onSplAttendeeAddedClicked(): Observable<Unit>
+  fun onResetClicked(): Observable<Unit>
+  fun onSaveClicked(): Observable<Unit>
   fun showAttendeDialog()
   fun showAttendeAddedDialog()
   fun showSplAttendeDialog()
@@ -72,4 +74,5 @@ interface CreateMeetingView : BaseView {
   fun checkPermissionAndProceed()
   fun sendOTP(): Observable<SendOtpRequest>
   fun isFranchiseIFAUser(): Observable<FranchiseIFAUser>
+  fun resetData()
 }
