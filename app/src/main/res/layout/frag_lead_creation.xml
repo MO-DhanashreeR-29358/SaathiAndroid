@@ -67,19 +67,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp" />
 
-                    <TextView
-                        android:id="@+id/tvCategoryError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
                         android:layout_width="match_parent"
@@ -98,18 +85,6 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvNameError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilContactPerson"
@@ -130,18 +105,6 @@
                             android:textCursorDrawable="@null"
                             android:visibility="gone" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvContactPersonError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tvProfession"
@@ -174,18 +137,6 @@
                         android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
-                        android:id="@+id/tvInterestInError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-                    <TextView
                         android:id="@+id/tvProductType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,18 +150,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp" />
-
-                    <TextView
-                        android:id="@+id/tvProductTypeError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmailId"
@@ -231,18 +170,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvEmailIdError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmailId"
                         android:layout_width="match_parent"
@@ -261,18 +188,6 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvAlternateEmailIdError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobile"
@@ -293,18 +208,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvMobileError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-                    <!-- Alternate mobileno-->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateMobno"
                         android:layout_width="match_parent"
@@ -324,18 +227,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvAlternateMobnoError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-                    <!-- Alternate mobileno end -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilLandLine"
                         android:layout_width="match_parent"
@@ -354,18 +245,6 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvLandLineError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEkycMobile"
@@ -386,18 +265,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvEkycMobileError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilPanNum"
                         android:layout_width="match_parent"
@@ -416,18 +283,6 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvPanNumError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAadharNum"
@@ -448,18 +303,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvAadharNumError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
 
                     <TextView
                         android:id="@+id/tvSource"
@@ -477,18 +320,6 @@
                         android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
-                        android:id="@+id/tvSourceError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-                    <TextView
                         android:id="@+id/tvProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -502,18 +333,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp" />
-
-                    <TextView
-                        android:id="@+id/tvProspectSourceError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -549,18 +368,6 @@
                         android:layout_marginTop="@dimen/_3sdp" />
 
                     <TextView
-                        android:id="@+id/tvStageError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-                    <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -574,19 +381,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp" />
-
-                    <TextView
-                        android:id="@+id/tvStatusError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
 
                     <RelativeLayout
                         android:id="@+id/relativeLayout"
@@ -710,18 +504,6 @@
                             android:visibility="gone" />
                     </RelativeLayout>
 
-                    <TextView
-                        android:id="@+id/tvRefereeCodeError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -782,18 +564,6 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvRefreeEmailError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeMobile"
                         android:layout_width="match_parent"
@@ -816,18 +586,6 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvRefereeMobileError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -849,18 +607,6 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvProspectRefereeNameError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -879,19 +625,6 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvProspectRefereerMobileError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
-
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -909,18 +642,6 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/tvProspectRefereerEmailError"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -975,18 +696,6 @@
                                 android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <TextView
-                            android:id="@+id/tvAdd1Error"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd2"
                             android:layout_width="match_parent"
@@ -1004,19 +713,6 @@
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
                         </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:id="@+id/tvAdd2Error"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilAdd3"
@@ -1052,18 +748,6 @@
                             android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
-                            android:id="@+id/tvCountryError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
-                        <TextView
                             android:id="@+id/tvState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1079,18 +763,6 @@
                             android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
-                            android:id="@+id/tvStateError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
-                        <TextView
                             android:id="@+id/tvCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1104,19 +776,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp" />
-
-                        <TextView
-                            android:id="@+id/tvCityError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilPincode"
@@ -1140,17 +799,6 @@
                                 />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <TextView
-                            android:id="@+id/tvPincodeError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
                     </LinearLayout>
 
 
@@ -1270,37 +918,12 @@
                             android:layout_marginTop="@dimen/_3sdp" />
 
                         <TextView
-                            android:id="@+id/tvOffCountryError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
-
-                        <TextView
                             android:id="@+id/tvOffState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/lbl_lead_creation_state"
                             android:textColor="@color/text_color_personal"
                             android:textSize="@dimen/_11sdp" />
-
-                        <TextView
-                            android:id="@+id/tvOffStateError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
 
                         <com.mosl.tabapp.common.SearchableSpinner
                             android:id="@+id/spOffState"
@@ -1323,19 +946,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/_3sdp" />
 
-                        <TextView
-                            android:id="@+id/tvOffCityError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
-
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/ilOffPincode"
                             android:layout_width="match_parent"
@@ -1357,17 +967,6 @@
                                 />
                         </com.google.android.material.textfield.TextInputLayout>
 
-                        <TextView
-                            android:id="@+id/tvOffPincodeError"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:enabled="false"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:textColor="@color/error_red"
-                            android:textSize="@dimen/_10sdp"
-                            android:visibility="gone" />
                     </LinearLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
