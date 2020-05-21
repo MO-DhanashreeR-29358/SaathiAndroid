@@ -10,6 +10,7 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.tabapp.R
 
@@ -33,14 +34,14 @@ class AttendeeAdapter(
     val holderView: HolderView = convertView.tag as HolderView
     val attendee = resultList.get(position)
     viewColor(position, convertView)
-//    if(clientModel.isNoData){
-//      holderView.attendeeName.setText(clientModel.attendeeName)
-//      holderView.layout.setOnClickListener(null)
-//    }else{
-    holderView.attendeeName.setText(
-        String.format("%s-%s-%s", attendee.empCode, attendee.empName, attendee.branchCode)
-    )
-//    }
+    if (attendee.hasData) {
+      holderView.attendeeName.setText(
+          String.format("%s-%s-%s", attendee.empCode, attendee.empName, attendee.branchCode)
+      )
+    } else {
+      holderView.attendeeName.setText(attendee.empName)
+      holderView.layout.setOnClickListener(null)
+    }
     return convertView
   }
 
@@ -83,6 +84,19 @@ class AttendeeAdapter(
 
   }
 
+  fun setErrorData(throwable: Throwable) {
+    if (throwable is ServiceFailureException) {
+      resultList.addAll(
+          listOf(
+              Attendee(
+                  empName = throwable.errorMessage, empCode = " ",
+                  branchCode = " ", hasData = false
+              )
+          )
+      )
+      notifyDataSetChanged()
+    }
+  }
   fun setResultList(results: List<Attendee>) {
     if (results.isEmpty()) {
       notifyDataSetInvalidated()

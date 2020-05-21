@@ -33,8 +33,21 @@ data class LookUp(
 data class Attendee(
   @JvmField val empName: String,
   @JvmField val empCode: String,
-  @JvmField val branchCode: String
+  @JvmField val branchCode: String,
+  @JvmField val hasData: Boolean
 )
+
+data class AddedAttendee(
+  @JvmField val attendeeName: String,
+  @JvmField val attendeeCode: String,
+  @JvmField val attendeeType: String,
+  @JvmField val attended: Boolean = true
+) {
+  fun isAttendee(): Boolean {
+    return attendeeType.equals("R")
+  }
+}
+
 
 data class ClientData(
   @JvmField val clientDetail: ClientDetail,

@@ -22,11 +22,23 @@ object CreateMeetingMapper {
   }
 
   fun transformAttendeeData(list: List<AutoCompleteAttendeeItem>): List<Attendee> {
-    return list.map {
-      Attendee(
-          empName = it.employeeName ?: "",
-          branchCode = it.branchCode ?: "",
-          empCode = it.employeeCode ?: ""
+    if (list.isNotEmpty()) {
+      return list.map {
+        Attendee(
+            empName = it.employeeName ?: "",
+            branchCode = it.branchCode ?: "",
+            empCode = it.employeeCode ?: "",
+            hasData = true
+        )
+      }
+    } else {
+      return listOf(
+          Attendee(
+              empName = "Not Found",
+              branchCode = "",
+              hasData = false,
+              empCode = ""
+          )
       )
     }
   }

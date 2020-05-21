@@ -60,7 +60,7 @@ class CreateMeetingPresenter @Inject constructor(
         .map { view.getSelectedMeetingLocation() }
         .filter {
           it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
-              it.lookUpName.equals("other", false)
+              !it.lookUpName.equals("other", false)
         }
         .switchMap {
           repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
@@ -117,7 +117,7 @@ class CreateMeetingPresenter @Inject constructor(
         }
         .addTo(disposable)
 
-    val searchObs = view.getSearchText()
+    val searchObs = view.getAttendeeSearchText()
         .filter { it.text.isNotEmpty() }
         .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
         .map { it.text }
@@ -125,7 +125,9 @@ class CreateMeetingPresenter @Inject constructor(
         .share()
 
     searchObs?.map(MapStringIsBlank)
-        ?.subscribe(view::toggleSearchState)
+        ?.subscribe {
+          view.toggleSearchState(it, true)
+        }
         ?.addTo(disposable)
 
     searchObs?.filter { it.length > 2 }
@@ -133,8 +135,37 @@ class CreateMeetingPresenter @Inject constructor(
           repository.getAttendeeData(it)
               .compose(applyUiModel())
         }
-        ?.subscribe(view::renderSearchResult)
+        ?.subscribe { view.renderSearchResult(it, true) }
         ?.addTo(disposable)
+
+    val searchSplAttendeeObs = view.getSplAttendeeSearchText()
+        .filter { it.text.isNotEmpty() }
+        .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
+        .map { it.text }
+        .distinctUntilChanged()
+        .share()
+
+    searchSplAttendeeObs?.map(MapStringIsBlank)
+        ?.subscribe {
+          view.toggleSearchState(it, false)
+        }
+        ?.addTo(disposable)
+
+    searchSplAttendeeObs?.filter { it.length > 2 }
+        ?.switchMap {
+          repository.getSplAttendeeData(it)
+              .compose(applyUiModel())
+        }
+        ?.subscribe { view.renderSearchResult(it, false) }
+        ?.addTo(disposable)
+
+    view.onAttendeeAddedClicked()
+        .subscribe { view.showAttendeAddedDialog() }
+        .addTo(disposable)
+
+    view.onSplAttendeeAddedClicked()
+        .subscribe { view.showSplAttendeAddedDialog() }
+        .addTo(disposable)
 
     val isOTPSentSuccessful = view.onSendOTPClicked()
         .map {
@@ -167,17 +198,12 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::renderOnAttendeeItemClick)
         .addTo(disposable)
 
-    /*val otpClickObs = view.onSendOTPClicked()
+    view.onSplAttendeeItemClickEventFired()
         .map {
-          view.getOTPButtonText()
-        }.share()
-
-    otpClickObs.filter { t -> t.equals(SEND_OTP_LABEL) }.subscribe{view.checkPermission()}
+          it.position
+        }
+        .subscribe(view::renderOnSplAttendeeItemClick)
         .addTo(disposable)
-
-    otpClickObs.filter { t -> t.equals(VERIFY_OTP_LABEL) }.subscribe{
-      view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId)
-    }.addTo(disposable)*/
 
     view.getOTPSubject()
         .switchMap {
