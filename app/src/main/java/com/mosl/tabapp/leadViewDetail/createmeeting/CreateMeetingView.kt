@@ -9,6 +9,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.Attende
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.FranchiseIFAUser
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SendOtpRequest
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
 import io.reactivex.Observable
 
@@ -69,6 +70,6 @@ interface CreateMeetingView : BaseView {
   fun isOTPSuccessful(): Boolean
 
   fun checkPermissionAndProceed()
-  fun getOTPSubject(): Observable<String>
+  fun sendOTP(): Observable<SendOtpRequest>
   fun isFranchiseIFAUser(): Observable<FranchiseIFAUser>
 }

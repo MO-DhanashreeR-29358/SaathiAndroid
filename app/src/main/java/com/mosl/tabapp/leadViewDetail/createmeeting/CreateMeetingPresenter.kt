@@ -210,7 +210,7 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::renderOnSplAttendeeItemClick)
         .addTo(disposable)
 
-    view.getOTPSubject()
+    view.sendOTP()
         .switchMap {
           repository.sendOTP(
               OTPRequestData(

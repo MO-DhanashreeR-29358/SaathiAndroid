@@ -48,6 +48,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.Attende
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.FranchiseIFAUser
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SendOtpRequest
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -82,7 +83,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
   lateinit var outstationAdapter: ArrayAdapter<LookUp>
   lateinit var baClientAdapter: ArrayAdapter<LookUp>
-  val subject: PublishSubject<String> = PublishSubject.create()
 
   private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
 
@@ -622,15 +622,15 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   override fun checkPermissionAndProceed() {
     if (checkPermission()) {
       if (location != null) {
-        subject.onNext("OTP")
+        uiSubject.onNext(SendOtpRequest)
       } else {
         fusedLocation.LocationUpdates()
       }
     }
   }
 
-  override fun getOTPSubject(): Observable<String> {
-    return subject.ofType()
+  override fun sendOTP(): Observable<SendOtpRequest> {
+    return uiSubject.ofType()
   }
 
   override fun showOTPDialog(
