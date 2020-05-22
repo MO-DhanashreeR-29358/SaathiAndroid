@@ -1,13 +1,20 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
+import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
 import com.mosl.mobile.domain.createmeeting.OTPRequestData
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.ARG_LEAD_ID
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.ARG_UCID
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.SEND_OTP_LABEL
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.VERIFY_OTP_LABEL
+import com.mosl.tabapp.model.MeetingApptModel
+import com.mosl.tabapp.navigation.NavigationConstants
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
@@ -18,7 +25,8 @@ import javax.inject.Inject
 class CreateMeetingPresenter @Inject constructor(
   view: CreateMeetingView,
   val repository: CreateMeetingRepository,
-  val createMeetingData: CreateMeetingData
+  val createMeetingData: CreateMeetingData,
+  val screenNavigator: ScreenNavigatorImpl
 ) : BasePresenter<CreateMeetingView>(view) {
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
@@ -229,6 +237,67 @@ class CreateMeetingPresenter @Inject constructor(
     view.onResetClicked()
         .subscribe { view.resetData() }
         .addTo(disposable)
+
+    view.onSaveClicked()
+        .subscribe { view.validateFormData() }
+        .addTo(disposable)
+
+    view.onDataValidated()
+        .filter { it.equals(true) }
+        .map { getInputData() }
+        .subscribe { view.setInputData(it) }
+        .addTo(disposable)
+
+    view.onDataSaved()
+        .switchMap {
+          repository.saveRequest(it.data)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderSaveRequest)
+        .addTo(disposable)
+
+    view.onSaveConfirmClick()
+        .subscribe {
+          val bundle = Bundle()
+          bundle.putString(ARG_LEAD_ID, createMeetingData.leadId)
+          bundle.putString(ARG_UCID, createMeetingData.ucid)
+          screenNavigator.openPage(
+              NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false
+          )
+        }
+        .addTo(disposable)
+  }
+
+  fun getInputData(): MeetingApptModel {
+    val data = MeetingApptModel()
+    data.meetingType = "M"
+    data.displayType = "A"
+    data.pincode = view.getPincode()
+    data.amount = view.getAmount()
+    data.meetingAddress = view.getMeetingAddress()
+    data.meetingAddressTypeId = view.getSelectedMeetingLocation()!!.lookUpID.toString()
+    data.leadId = createMeetingData.leadId
+    data.ucid = createMeetingData.ucid
+    data.product = "0"
+    data.meetingDuration = view.getSelectedMeetingDuration()!!.lookUpID.toString()
+    data.meetingObjectiveID = view.getSelectedMeetingLocation()!!.lookUpID.toString()
+    data.activityTypeID = view.getSelectedActivityType()!!.lookUpID.toString()
+    data.meetingReason = view.getSelectedMeetingReason()!!.lookUpID.toString()
+    data.meetingDes = CRMAppUtil.getJsonSafeString(view.getMeetingDesc())
+    data.customerComment = CRMAppUtil.getJsonSafeString(view.getCustomerComment())
+    data.actionables = view.getSelectedActionable()!!.lookUpID.toString()
+    data.category = view.getSelectedCategory()!!.lookUpID.toString()
+    data.etCategory = view.getCategory()
+    data.subCategory = view.getSelectedSubCategory()!!.lookUpID.toString()
+    data.etSubCategory = view.getSubCategory()
+    data.baClient = view.getSelectedBAClient()!!.lookUpID.toString()
+    data.outStation = view.getSelectedOutstation()!!.lookUpID.toString()
+    data.clientCode = view.getClientCode()
+    data.clientName = view.getClientName()
+    data.geoArea = view.getGeoArea()
+    data.geoLatitude = view.getLatitude()
+    data.geoLongitude = view.getLongitude()
+    return data
   }
 
   companion object {

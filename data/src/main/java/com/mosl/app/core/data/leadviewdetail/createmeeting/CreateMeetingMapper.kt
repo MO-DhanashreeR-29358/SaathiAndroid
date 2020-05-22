@@ -1,9 +1,11 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
 import com.mosl.app.core.data.util.addDefaultSelection
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientDetail
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
@@ -17,7 +19,9 @@ object CreateMeetingMapper {
         clientcode = clientDetailItem.clientCode ?: "",
         currentStage = clientDetailItem.stageName ?: "",
         currentStageSince = clientDetailItem.pendingDays ?: "",
-        leadId = clientDetailItem.leadID
+        leadId = clientDetailItem.leadID,
+        isOnlyClient = clientDetailItem.isOnlyClient,
+        isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: ""
     )
   }
 
@@ -50,7 +54,9 @@ object CreateMeetingMapper {
         clientcode = leadViewItem.leadProductMapping?.get(0)?.clientCode ?: "",
         currentStage = leadViewItem.leadProductMapping?.get(0)?.stageName ?: "",
         currentStageSince = leadViewItem.leadProductMapping?.get(0)?.pendingDays.toString() ?: "",
-        leadId = leadViewItem.leadID
+        leadId = leadViewItem.leadID,
+        isPotentialPMSProduct = leadViewItem.isPotentialPMSProduct ?: "",
+        isOnlyClient = false
     )
   }
 
@@ -60,5 +66,12 @@ object CreateMeetingMapper {
   ): List<LookUp> {
     return list.map { LookUp(it.lookUpid, it.lookUpName ?: "") }
         .addDefaultSelection(LookUp(0, type))
+  }
+
+  fun transformAddUpdateMeeting(addUpdateMeetingItem: AddUpdateMeetingItem): AddUpdateMeeting {
+    return AddUpdateMeeting(
+        leadId = addUpdateMeetingItem.leadId ?: 0,
+        ucidId = addUpdateMeetingItem.uCID ?: 0
+    )
   }
 }

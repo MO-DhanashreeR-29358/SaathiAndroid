@@ -23,4 +23,5 @@ interface CreateMeetingRepository {
   fun getAttendeeData(searchText: String): Observable<List<Attendee>>
   fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
   fun sendOTP(data: OTPRequestData): Observable<String>
+  fun saveRequest(data: String): Observable<AddUpdateMeeting>
 }

@@ -29,6 +29,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
@@ -36,21 +37,59 @@ import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
+import com.mosl.tabapp.R.string
 import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.common.FusedLocation
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_FIFTY_CHARACTERS
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TEN_CHARACTERS
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TWENTY_CHARACTERS
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ENTER_CLIENT_CODE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ENTER_CLIENT_NAME
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_INVALID_PINCODE_NUMBER
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_LOCATION_CANNOT_BE_LEFT_BLANK
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIONABLE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIVITY_TYPE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_BA_CLIENT_MEETING
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_DURATION
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_OBJECTIVE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_OUT_STATION_MEETING
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_ACTIONABLE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_BA_CLIENT_MEETING
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_DURATION
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_LOCATION
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_OBJECTIVE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_REASON
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_OUT_STATION_MEETING
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.FranchiseIFAUser
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveConfirmClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveRequestData
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SendOtpRequest
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.ValidationStatus
+import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -142,11 +181,20 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     if (userManager.getUser()!!.isFranchise() || userManager.getUser()!!.isIFA()) {
       binding.linaerLayoutNew.visibility = View.VISIBLE
+      profileType = true
       uiSubject.onNext(FranchiseIFAUser)
     }
   }
 
   override fun isFranchiseIFAUser(): Observable<FranchiseIFAUser> {
+    return uiSubject.ofType()
+  }
+
+  override fun onDataSaved(): Observable<SaveRequestData> {
+    return uiSubject.ofType()
+  }
+
+  override fun onSaveConfirmClick(): Observable<SaveConfirmClick> {
     return uiSubject.ofType()
   }
 
@@ -180,6 +228,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
       meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
       travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
+      isOnlyClient = clientDetail.isOnlyClient
+      isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
     }
   }
 
@@ -566,6 +616,126 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     toggleOTPVisibility(false)
   }
 
+  override fun validateFormData(): Boolean {
+    val status: Boolean = if (userManager.getUser()!!.isRM() && !isSendOTPSuccesssful &&
+        getSelectedActivityType()!!.isPersonalMeeting()
+    ) {
+      alert("Please verify OTP to create meeting")
+      false
+    } else if (getSelectedActivityType()!!.equals(CreateMeetingConstants.SELECT_ACTIVITY_TYPE)) {
+      setVisibilityAndMessage(binding.tvActivityTypeError, MSG_SELECT_ACTIVITY_TYPE)
+      false
+    } else if (getSelectedSpinnerValue(binding.spProduct)!!.equals(SELECT_PRODUCT)) {
+      setVisibilityAndMessage(binding.tvProductError, MSG_SELECT_PRODUCT)
+      false
+    } else if (getSelectedSpinnerValue(binding.spMeetingDuration)!!.equals(
+            SELECT_MEETING_DURATION
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvMeetingDurationError, MSG_SELECT_MEETING_DURATION)
+      false
+    } else if (getSelectedSpinnerValue(binding.spMeetingObjective)!!.equals(
+            SELECT_MEETING_OBJECTIVE
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvMeetingObjectiveError, MSG_SELECT_MEETING_OBJECTIVE)
+      false
+    } else if (getSelectedSpinnerValue(binding.spMeetingReason)!!.equals(SELECT_MEETING_REASON)) {
+      setVisibilityAndMessage(binding.tvMeetingReasonError, MSG_SELECT_MEETING_REASON)
+      false
+    } else if (binding.etMeetingDescription.text!!.trim().isEmpty()) {
+      setVisibilityAndMessage(
+          binding.tvMeetingDescriptionError,
+          MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
+      )
+      false
+    } else if (binding.etMeetingDescription.text!!.length < 50) {
+      setVisibilityAndMessage(binding.tvMeetingDescriptionError, MSG_ATLEAST_FIFTY_CHARACTERS)
+      false
+    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!!.equals(
+            SELECT_MEETING_LOCATION
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvMeetingLocationError, MSG_SELECT_MEETING_LOCATION)
+      false
+    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode)!!.equals(
+            SELECT_TRAVELLING_MODE
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvTravellingModeError, MSG_SELECT_TRAVELLING_MODE)
+      false
+    } else if (enableLocationGroup && binding.etLocation.text!!.trim().isEmpty()) {
+      setVisibilityAndMessage(binding.tvLocationError, MSG_LOCATION_CANNOT_BE_LEFT_BLANK)
+      false
+    } else if (enableLocationGroup && binding.etLocation.text!!.length < 20) {
+      setVisibilityAndMessage(binding.tvLocationError, MSG_ATLEAST_TWENTY_CHARACTERS)
+      false
+    } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
+      setVisibilityAndMessage(binding.tvPinCodeError, MSG_INVALID_PINCODE_NUMBER)
+      false
+    } else if (profileType && getSelectedSpinnerValue(binding.spBAClient)!!.equals(
+            SELECT_BA_CLIENT_MEETING
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvBAClientError, MSG_SELECT_BA_CLIENT_MEETING)
+      false
+    } else if (profileType && getSelectedSpinnerValue(binding.spOutStaition)!!.equals(
+            SELECT_OUT_STATION_MEETING
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvOutStaitionError, MSG_SELECT_OUT_STATION_MEETING)
+      false
+    } else if (profileType && CRMAppUtil.isBlank(binding.etClientCode.text.toString())) {
+      setVisibilityAndMessage(binding.tvClientCodeError, MSG_ENTER_CLIENT_CODE)
+      false
+    } else if (profileType && CRMAppUtil.isBlank(binding.etClientName.text.toString())) {
+      setVisibilityAndMessage(binding.tvClientNameError, MSG_ENTER_CLIENT_NAME)
+      false
+    } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+            binding.spActionables
+        )!!.equals(
+            SELECT_ACTIONABLE
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvActionablesError, MSG_SELECT_ACTIONABLE)
+      false
+    } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+            binding.spCategory
+        )!!.equals(
+            SELECT_CATEGORY
+        )
+    ) {
+      setVisibilityAndMessage(binding.tvCategoryError, MSG_SELECT_CATEGORY)
+      false
+    } else if (binding.llActionables.visibility == View.VISIBLE && binding.etCategory.text!!.length <= 10) {
+      setVisibilityAndMessage(binding.tvCategoryCommentsError, MSG_ATLEAST_TEN_CHARACTERS)
+      false
+    } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
+      permissionCheckHelper.requestLocation()
+      false
+    } else if (enableLocationGroup && !(requireContext().getSystemService(
+            Context.LOCATION_SERVICE
+        ) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+        && CRMMOSLCommon.hasGPSDevice(requireContext())
+    ) {
+      fusedLocation.initDispatcher(this)
+      false
+    } else true
+    uiSubject.onNext(ValidationStatus(status))
+    return status
+  }
+
+  fun setVisibilityAndMessage(
+    textView: TextView,
+    msg: String
+  ) {
+    textView.apply {
+      visibility = View.VISIBLE
+      setText(msg)
+      requestFocus()
+    }
+  }
+
   override fun onAttendeeClicked(): Observable<Unit> {
     return binding.ibAttendee.clicks()
   }
@@ -616,6 +786,18 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return null
   }
 
+  override fun getSelectedMeetingDuration(): LookUp? {
+    return getSelectedSpinnerValue(binding.spMeetingDuration)
+  }
+
+  override fun getSelectedMeetingObjective(): LookUp? {
+    return getSelectedSpinnerValue(binding.spMeetingObjective)
+  }
+
+  override fun getSelectedSubCategory(): LookUp? {
+    return getSelectedSpinnerValue(binding.spSubCategory)
+  }
+
   override fun getSelectedMeetingReason(): LookUp? {
     if (binding.spMeetingReason.selectedItem is LookUp) {
       return binding.spMeetingReason.selectedItem as LookUp
@@ -630,12 +812,64 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return null
   }
 
+  override fun getSelectedActionable(): LookUp? {
+    return getSelectedSpinnerValue(binding.spActionables)
+  }
+
+  override fun getSelectedBAClient(): LookUp? {
+    return getSelectedSpinnerValue(binding.spBAClient)
+  }
+
+  override fun getSelectedOutstation(): LookUp? {
+    return getSelectedSpinnerValue(binding.spOutStaition)
+  }
+
+  override fun getPincode(): String {
+    return binding.etPinCode.text.toString()
+  }
+
+  override fun getAmount(): String {
+    return binding.etAmount.text.toString()
+  }
+
+  override fun getMeetingAddress(): String {
+    return binding.etLocation.text.toString()
+  }
+
+  override fun getMeetingDesc(): String {
+    return binding.etMeetingDescription.text.toString()
+  }
+
+  override fun getCustomerComment(): String {
+    return binding.etCustomerComment.text.toString()
+  }
+
+  override fun getCategory(): String {
+    return binding.etCategory.text.toString()
+  }
+
+  override fun getSubCategory(): String {
+    return binding.etSubCategory.text.toString()
+  }
+
+  override fun getClientCode(): String {
+    return binding.etClientCode.text.toString()
+  }
+
+  override fun getClientName(): String {
+    return binding.etClientName.text.toString()
+  }
+
   override fun toggleOTPVisibility(show: Boolean) {
     if (userManager.getUser()!!.isRM()) {
       if (show) {
         binding.btnSendOtp.visibility = View.VISIBLE
+        enableLocationGroup = true
+        enableField(binding.llLocationGroup)
       } else {
         binding.btnSendOtp.visibility = View.GONE
+        enableLocationGroup = false
+        disableField(binding.llLocationGroup)
       }
     }
   }
@@ -659,6 +893,10 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   override fun sendOTP(): Observable<SendOtpRequest> {
+    return uiSubject.ofType()
+  }
+
+  override fun onDataValidated(): Observable<ValidationStatus> {
     return uiSubject.ofType()
   }
 
@@ -694,6 +932,10 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   var isSendOTPSuccesssful = false
+  var isPotentialPMSProduct = false
+  var isOnlyClient = false
+  var enableLocationGroup = false
+  var profileType = false
   override fun onSuccessResult(status: Boolean) {
     isSendOTPSuccesssful = status
   }
@@ -723,6 +965,67 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
   }
 
+  override fun setInputData(meetingApptModel: MeetingApptModel) {
+//    if(enableLocationGroup && location == null){
+//      getLatLng(meetingApptModel)
+//    }else {
+    isMockLocation(meetingApptModel)
+//    }
+  }
+
+  private fun isMockLocation(meetingApptModel: MeetingApptModel) {
+    if (enableLocationGroup && CRMAppUtil.isLocationFromMockProvider(requireContext(), location)) {
+      MSFDialog.alertDialog(
+          requireContext(), 0,
+          resources.getString(string.motilal_oswal),
+          MOSLConstants.MOCK_LOCATION_ENABLED_MSG, "OK",
+          true
+      ) { action: Action, data: Array<Any?>? ->
+        if (action == OK) {
+          requireActivity().finish()
+        }
+      }
+    } else {
+      if (isPotentialPMSProduct && !isOnlyClient) {
+        MSFDialog.alertDialog(
+            requireContext(), 0,
+            resources.getString(string.motilal_oswal),
+            MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT, MOSLConstants.YES, MOSLConstants.NO, true
+        ) { action: Action, data: Array<Any?>? ->
+          if (action == OK) {
+            meetingApptModel.isPotentialPMSProduct = "YES"
+            uiSubject.onNext(SaveRequestData(meetingApptModel.json))
+          } else {
+            meetingApptModel.isPotentialPMSProduct = "NO"
+            uiSubject.onNext(SaveRequestData(meetingApptModel.json))
+          }
+        }
+      } else {
+        meetingApptModel.isPotentialPMSProduct = ""
+        uiSubject.onNext(SaveRequestData(meetingApptModel.json))
+      }
+    }
+  }
+
+  override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>) {
+    toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+
+    uiModel.onSuccess {
+      MSFDialog.alertDialog(
+          requireContext(), 0, resources.getString(string.motilal_oswal),
+          MOSLConstants.CREATE_MEETING, "OK", true
+      )
+      { action: Action, data1: Array<Any?>? ->
+        if (action == OK) {
+          uiSubject.onNext(SaveConfirmClick)
+        }
+      }
+    }
+  }
   companion object {
     const val ARG_LEAD_ID = "LeadID"
     const val ARG_UCID = "UCID"

@@ -6,7 +6,9 @@ data class ClientDetail(
   @JvmField val currentStageSince: String,
   @JvmField val name: String,
   @JvmField val branchcode: String,
-  @JvmField val clientcode: String
+  @JvmField val clientcode: String,
+  @JvmField val isOnlyClient: Boolean,
+  @JvmField val isPotentialPMSProduct: String
 )
 
 data class LookUp(
@@ -66,4 +68,9 @@ data class OTPRequestData(
   @JvmField val geoArea: String,
   @JvmField val ucid: String,
   @JvmField val leadid: String
+)
+
+data class AddUpdateMeeting(
+  @JvmField val leadId: Int,
+  @JvmField val ucidId: Int
 )

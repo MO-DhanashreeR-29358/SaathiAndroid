@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.ClientDetail
@@ -21,6 +22,8 @@ import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function7
 import io.reactivex.functions.Function8
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -162,6 +165,14 @@ class CreateMeetingRepositoryImpl @Inject constructor(
       OUTSTATIONMEETING -> "Select Out Station Meeting"
       else -> "Select Activity Type"
     }
+  }
+
+  override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
+    val request = RequestBody.create(MediaType.parse("text/plain"), data)
+    return saathiApi.postAddUpdateMeeting(request)
+        .map {
+          CreateMeetingMapper.transformAddUpdateMeeting(it)
+        }
   }
 }
 
