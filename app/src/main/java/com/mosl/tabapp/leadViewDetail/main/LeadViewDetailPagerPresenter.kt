@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.main
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
 import com.mosl.tabapp.ekyc.EkycNavigator
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
@@ -9,6 +10,7 @@ import javax.inject.Inject
 class LeadViewDetailPagerPresenter @Inject constructor(
   view: LeadViewDetailPagerView,
   val data: LeadViewDetailArgument,
+  val repository: LeadViewDetailPagerRepository,
   val ekycNavigator: EkycNavigator
 ) : BasePresenter<LeadViewDetailPagerView>(view) {
 
@@ -23,7 +25,12 @@ class LeadViewDetailPagerPresenter @Inject constructor(
 
     fetchRetryObs
         .filter { it == "0" }
-        .subscribe()
+        .map { data.leadId }
+        .switchMap {
+          repository.getLeadDetailForId(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderLeadDetail)
         .addTo(disposable)
   }
 }

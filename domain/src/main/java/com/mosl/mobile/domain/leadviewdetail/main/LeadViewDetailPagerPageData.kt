@@ -25,7 +25,7 @@ data class PersonalDetail(
 data class LeadProduct(
   @JvmField val clientCode: String,
   @JvmField val stageName: String,
-  @JvmField val isDefault: String,
+  @JvmField val isDefault: Boolean,
   @JvmField val pendingDays: String,
   @JvmField val interestedIn: String
 )
