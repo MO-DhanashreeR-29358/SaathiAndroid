@@ -105,7 +105,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   override fun setUserProperty(user: User?) {
 
     user?.apply {
-      firebaseHelper.setUserProperty(user.employeeCode)
+      //firebaseHelper.setUserProperty(user.employeeCode)
     }
   }
 
