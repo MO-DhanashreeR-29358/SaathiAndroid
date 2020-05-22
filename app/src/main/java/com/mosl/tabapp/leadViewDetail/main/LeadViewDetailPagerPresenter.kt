@@ -5,6 +5,7 @@ import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
 import com.mosl.tabapp.ekyc.EkycNavigator
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
+import timber.log.Timber
 import javax.inject.Inject
 
 class LeadViewDetailPagerPresenter @Inject constructor(
@@ -20,7 +21,11 @@ class LeadViewDetailPagerPresenter @Inject constructor(
 
     fetchRetryObs
         .filter { it != "0" }
-        .subscribe()
+        .switchMap {
+          repository.getClientDetailAndImage(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderClientDetailAndImage, Timber::e)
         .addTo(disposable)
 
     fetchRetryObs
@@ -30,7 +35,7 @@ class LeadViewDetailPagerPresenter @Inject constructor(
           repository.getLeadDetailForId(it)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderLeadDetail)
+        .subscribe(view::renderLeadDetail, Timber::e)
         .addTo(disposable)
   }
 }

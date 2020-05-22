@@ -29,3 +29,19 @@ data class LeadProduct(
   @JvmField val pendingDays: String,
   @JvmField val interestedIn: String
 )
+
+data class ClientDetail(
+  @JvmField val name: String,
+  @JvmField val id: String,
+  @JvmField val currentStage: String,
+  @JvmField val currentStageSince: String,
+  @JvmField val clientCode: String,
+  @JvmField val branchCode: String,
+  @JvmField val mobile: String,
+  @JvmField val oaoUserId: String
+)
+
+data class ClientDetailAndImage(
+  @JvmField val clientDetail: ClientDetail,
+  @JvmField val image: String
+)

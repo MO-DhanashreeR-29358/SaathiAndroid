@@ -9,8 +9,9 @@ abstract class LeadViewDetailPagerModule {
   @Binds
   abstract fun bindLeadViewDetailPagerView(view: LeadViewDetailPagerFragment): LeadViewDetailPagerView
 
+  @Module
   companion object {
-    @Provides
+    @Provides @JvmStatic
     fun provideLeadViewDetailArgument(fragment: LeadViewDetailPagerFragment): LeadViewDetailArgument {
       val args = fragment.arguments
       return LeadViewDetailArgument(

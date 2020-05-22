@@ -1,8 +1,10 @@
 package com.mosl.app.core.data.leadviewdetail.main
 
+import com.mosl.mobile.domain.leadviewdetail.main.ClientDetail
 import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
 import com.mosl.mobile.domain.leadviewdetail.main.LeadProduct
 import com.mosl.mobile.domain.leadviewdetail.main.PersonalDetail
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 
 fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
@@ -36,5 +38,18 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       diyCode = diyCode.toString(),
       diyLink = diyLink.toString(),
       leadProducts = leadProducts
+  )
+}
+
+internal fun ClientDetailItem.toClientDetail(): ClientDetail {
+  return ClientDetail(
+      name = clientName ?: "",
+      id = leadID.toString(),
+      oaoUserId = oAOUserid.toString(),
+      currentStage = stageName ?: "",
+      currentStageSince = pendingDays ?: "",
+      branchCode = branchCode ?: "",
+      clientCode = clientCode ?: "",
+      mobile = mobile ?: ""
   )
 }
