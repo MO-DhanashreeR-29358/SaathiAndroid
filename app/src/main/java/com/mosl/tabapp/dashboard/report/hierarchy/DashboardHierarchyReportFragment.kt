@@ -30,7 +30,6 @@ import com.mosl.tabapp.dashboard.report.DashboardReportTableRow
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
 import com.mosl.tabapp.databinding.FragHierarchyReportBinding
-import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.report.HierarchyReportTableMapper
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
@@ -48,7 +47,6 @@ class DashboardHierarchyReportFragment : CommonFragment(),
   lateinit var presenter: DashboardHierarchyReportPresenter
   private val onRetryEvent = PublishSubject.create<Unit>()
 
-  private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<DashboardReportTableRow>
   private val navigateEvent = PublishSubject.create<DashboardReportUIEvent>()

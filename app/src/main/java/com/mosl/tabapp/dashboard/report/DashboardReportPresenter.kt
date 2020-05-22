@@ -23,101 +23,101 @@ class DashboardReportPresenter @Inject constructor(
   override fun start() {
 
     val periodChangedObs = view.onPeriodChange()
-        .filter(InvalidSelectionPredicate)
-        .share()
+      .filter(InvalidSelectionPredicate)
+      .share()
 
     val typeFilterChangedObs = view.onTypeFilterChange()
-        .filter(InvalidSelectionPredicate)
-        .share()
+      .filter(InvalidSelectionPredicate)
+      .share()
 
     val filterChange = Observable.merge(
-        view.onDatePickerEvent(),
-        periodChangedObs,
-        typeFilterChangedObs
+      view.onDatePickerEvent(),
+      periodChangedObs,
+      typeFilterChangedObs
     )
 
     Observable.merge(
-        onFetchCalled(),
-        onRetryCalled(),
-        filterChange
+      onFetchCalled(),
+      onRetryCalled(),
+      filterChange
     )
-        .map { getWidgetRequest() }
-        .switchMap {
-          repository.getDashboardData(it)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::renderData)
-        .addTo(disposable)
+      .map { getWidgetRequest() }
+      .switchMap {
+        repository.getDashboardData(it)
+          .compose(applyUiModel())
+      }
+      .subscribe(view::renderData)
+      .addTo(disposable)
 
     Observable.just(data.label)
-        .subscribeOn(Schedulers.io())
-        .subscribe {
-          view.renderLabel(it)
-        }
-        .addTo(disposable)
+      .subscribeOn(Schedulers.io())
+      .subscribe {
+        view.renderLabel(it)
+      }
+      .addTo(disposable)
 
     Observable.just(data.isDateFilter)
-        .subscribeOn(Schedulers.io())
-        .subscribe {
-          view.renderDatePicker(it)
-        }
-        .addTo(disposable)
+      .subscribeOn(Schedulers.io())
+      .subscribe {
+        view.renderDatePicker(it)
+      }
+      .addTo(disposable)
 
     Observable.just(data.periodFilter)
-        .subscribeOn(Schedulers.io())
-        .subscribe {
-          view.renderPeriodFilter(it)
-        }
-        .addTo(disposable)
+      .subscribeOn(Schedulers.io())
+      .subscribe {
+        view.renderPeriodFilter(it)
+      }
+      .addTo(disposable)
 
     Observable.just(data.typeFilter)
-        .subscribeOn(Schedulers.io())
-        .subscribe {
-          view.renderTypeFilter(it)
-        }
-        .addTo(disposable)
+      .subscribeOn(Schedulers.io())
+      .subscribe {
+        view.renderTypeFilter(it)
+      }
+      .addTo(disposable)
 
     view.onNavigateEvent()
-        .subscribe {
-          navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
-        }
-        .addTo(disposable)
+      .subscribe {
+        navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
+      }
+      .addTo(disposable)
 
     view.onDatePickerChange()
-        .subscribe {
-          view.getDatePicker()
-        }
-        .addTo(disposable)
+      .subscribe {
+        view.getDatePicker()
+      }
+      .addTo(disposable)
   }
 
   private fun getWidgetRequest(): DashboardReportRequest {
     val additionalMap = data.additionalMap as HashMap<String, String>
     view.getPeriod()
-        ?.apply {
-          if (this.value.isNotEmpty()) {
-            additionalMap[COL_FILTER] = this.value
-          }
+      ?.apply {
+        if (this.value.isNotEmpty()) {
+          additionalMap[COL_FILTER] = this.value
         }
+      }
     view.getTypeFilter()
-        ?.apply {
-          if (this.toString().isNotEmpty()) {
-            additionalMap[ROW_FILTER] = this.toString()
-                .replace("_", " ")
-          }
-          if (data.label!!.contains(ACTIONABLE)) {
-            additionalMap[WIDGETTYPE] = this.toString()
-                .replace("_", " ")
-          }
+      ?.apply {
+        if (this.toString().isNotEmpty()) {
+          additionalMap[ROW_FILTER] = this.toString()
+            .replace("_", " ")
         }
+        if (data.label!!.contains(ACTIONABLE)) {
+          additionalMap[WIDGETTYPE] = this.toString()
+            .replace("_", " ")
+        }
+      }
     if (data.isDateFilter) {
       additionalMap[FLT_DATE] = view.fromDate()
     }
 
     return DashboardReportRequest(
-        page = PAGE,
-        pageSize = DASHBOARD_REPORT_PAGE_SIZE,
-        widgetSystemName = data.systemsName,
-        addtionalParameters = additionalMap
+      page = PAGE,
+      pageSize = DASHBOARD_REPORT_PAGE_SIZE,
+      widgetSystemName = data.systemsName,
+      addtionalParameters = additionalMap
 
     )
   }
@@ -136,10 +136,10 @@ class DashboardReportPresenter @Inject constructor(
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, ucid)
       navigator.openPage(
-          navigationConstants,
-          args,
-          addToStack = true,
-          forceReload = false
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
       )
     } else if (rmName.isNotEmpty()) {
       val args = Bundle()
@@ -148,16 +148,16 @@ class DashboardReportPresenter @Inject constructor(
       additionalMap[FltLevel] = level
       additionalMap[FltHierarchyEmpCode] = empCode
       args.putSerializable(
-          ADDITIONALPARAMETERS,
-          additionalMap as Serializable
+        ADDITIONALPARAMETERS,
+        additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
       args.putString(WidgetSystemName, systemsName)
       navigator.openPage(
-          navigationConstants,
-          args,
-          addToStack = true,
-          forceReload = false
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
       )
     }
 
