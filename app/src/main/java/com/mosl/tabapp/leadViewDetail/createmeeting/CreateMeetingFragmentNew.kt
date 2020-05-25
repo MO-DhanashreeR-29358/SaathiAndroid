@@ -93,39 +93,41 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import java.util.Date
 import javax.inject.Inject
 
 class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
-    FusedLocation.LatLongDispatcher, AddedAttendeeAdapter.ClickListenerHandler {
+  FusedLocation.LatLongDispatcher, AddedAttendeeAdapter.ClickListenerHandler {
   lateinit var binding: FragCreateMeetingBinding
-  lateinit var attendeeAdapter: AttendeeAdapter
-  lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
-  lateinit var splAttendeeAdapter: AttendeeAdapter
-  lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
+  private lateinit var attendeeAdapter: AttendeeAdapter
+  private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
+  private lateinit var splAttendeeAdapter: AttendeeAdapter
+  private lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
+
   @Inject
   lateinit var presenter: CreateMeetingPresenter
+
   @Inject
   lateinit var permissionCheckHelper: PermissionCheckHelperFragment
+
   @Inject
   lateinit var fusedLocation: FusedLocation
-  lateinit var productAdapter: ArrayAdapter<LookUp>
-  lateinit var categoryAdapter: ArrayAdapter<LookUp>
-  lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
-  lateinit var actionableAdapter: ArrayAdapter<LookUp>
-  lateinit var activityAdapter: ArrayAdapter<LookUp>
-  lateinit var meetingObjectiveAdapter: ArrayAdapter<LookUp>
-  lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
-  lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
-  lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
-  lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
-  lateinit var outstationAdapter: ArrayAdapter<LookUp>
-  lateinit var baClientAdapter: ArrayAdapter<LookUp>
+  private lateinit var productAdapter: ArrayAdapter<LookUp>
+  private lateinit var categoryAdapter: ArrayAdapter<LookUp>
+  private lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
+  private lateinit var actionableAdapter: ArrayAdapter<LookUp>
+  private lateinit var activityAdapter: ArrayAdapter<LookUp>
+  private lateinit var meetingObjectiveAdapter: ArrayAdapter<LookUp>
+  private lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
+  private lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
+  private lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
+  private lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
+  private lateinit var outstationAdapter: ArrayAdapter<LookUp>
+  private lateinit var baClientAdapter: ArrayAdapter<LookUp>
 
   private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
 
-  override fun getLayout() = R.layout.frag_create_meeting
+  override fun getLayout() = layout.frag_create_meeting
 
   override fun onViewCreated(
     view: View,
@@ -133,7 +135,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragCreateMeetingBinding.bind(view)
-    setAppTitle(R.string.page_title_create_meeting)
+    setAppTitle(string.page_title_create_meeting)
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
     setupViews()
@@ -207,21 +209,20 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     uiModel.onSuccess {
       val clientDetail = it.clientDetail
-      binding.layoutTopSection.tvLeadId.setText(clientDetail.leadId.toString())
-      binding.layoutTopSection.tvCurrentStage.setText(clientDetail.currentStage)
+      binding.layoutTopSection.tvLeadId.text = clientDetail.leadId.toString()
+      binding.layoutTopSection.tvCurrentStage.text = clientDetail.currentStage
       if (clientDetail.currentStageSince.isNotEmpty()) {
-        binding.layoutTopSection.tvCurrentStageSince.setText(
-            String.format("%s Days", clientDetail.currentStageSince)
-        )
+        binding.layoutTopSection.tvCurrentStageSince.text =
+          String.format("%s Days", clientDetail.currentStageSince)
       }
-      binding.layoutTopSection.tvName.setText(clientDetail.name)
-      binding.layoutTopSection.tvClientCode.setText(clientDetail.clientcode)
-      binding.layoutTopSection.tvBranchCode.setText(clientDetail.branchcode)
+      binding.layoutTopSection.tvName.text = clientDetail.name
+      binding.layoutTopSection.tvClientCode.text = clientDetail.clientcode
+      binding.layoutTopSection.tvBranchCode.text = clientDetail.branchcode
       val imageUrl = Base64.decode(it.imageUrl, Base64.DEFAULT)
       if (imageUrl != null) {
         CRMAppUtil.setImage(imageUrl, binding.layoutTopSection.ivLead, requireContext())
       }
-      binding.tvDate.setText(CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY))
+      binding.tvDate.text = CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY)
       productAdapter.setSpinnerData(binding.spProduct, it.listInterestedIn)
       meetingObjectiveAdapter.setSpinnerData(binding.spMeetingObjective, it.listMeetingObjective)
       meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
@@ -302,10 +303,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       baClientAdapter.setSpinnerData(binding.spBAClient, it.second)
     }
   }
-  lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
-  lateinit var etSearchSplAttendeeText: DelayAutoCompleteTextView
-  var pbLoadingIndicator: ProgressBar? = null
-  var pbLoadingIndicator1: ProgressBar? = null
+
+  private lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
+  private lateinit var etSearchSplAttendeeText: DelayAutoCompleteTextView
+  private var pbLoadingIndicator: ProgressBar? = null
+  private var pbLoadingIndicator1: ProgressBar? = null
 
   override fun getAttendeeSearchText(): Observable<SearchTextChange> {
     return uiSubject.ofType()
@@ -315,15 +317,15 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return uiSubject.ofType()
   }
 
-  lateinit var attendeeDialog: Dialog
-  lateinit var splAttendeeDialog: Dialog
+  private lateinit var attendeeDialog: Dialog
+  private lateinit var splAttendeeDialog: Dialog
   override fun showAttendeDialog() {
     attendeeDialog = Dialog(requireContext())
     attendeeDialog.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-      setContentView(R.layout.dialog_attendee_list)
-      window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setContentView(layout.dialog_attendee_list)
+      window.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
       setCanceledOnTouchOutside(true)
     }
     etSearchAttendeeText = attendeeDialog.findViewById(R.id.etSearchAttendee)
@@ -405,10 +407,10 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   override fun onSplAttendeeItemClickEventFired(): Observable<SplAttendeeItemClick> =
     uiSubject.ofType()
 
-  var addedAttendeeCount = 0
-  var addedSplAttendeeCount = 0
-  val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
-  val addedSplAttendeeList: ArrayList<AddedAttendee> = ArrayList()
+  private var addedAttendeeCount = 0
+  private var addedSplAttendeeCount = 0
+  private val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
+  private val addedSplAttendeeList: ArrayList<AddedAttendee> = ArrayList()
   override fun renderOnAttendeeItemClick(position: Int) {
     val attendee = attendeeAdapter.getItem(position)
     if (!hasAttendeeAdded(addedAttendeeList, attendee.empCode)) {
@@ -419,18 +421,18 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     } else {
       attendeeDialog.dismiss()
       Toast.makeText(requireContext(), "Attendee Already Added", Toast.LENGTH_SHORT)
-          .show()
+        .show()
     }
   }
 
-  fun setCount(
+  private fun setCount(
     count: Int,
     textView: TextView
   ) {
     if (count <= 0) {
-      textView.setText("")
+      textView.text = ""
     } else {
-      textView.setText(String.format("(%s)", count.toString()))
+      textView.text = String.format("(%s)", count.toString())
     }
   }
 
@@ -444,7 +446,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     } else {
       splAttendeeDialog.dismiss()
       Toast.makeText(requireContext(), "Special Attendee Already Added", Toast.LENGTH_SHORT)
-          .show()
+        .show()
     }
   }
 
@@ -468,7 +470,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     toggleSearchProgress(uiModel.inProgress, isAttendee)
 
     uiModel.onFailure {
-      Timber.d(uiModel.error)
       if (isAttendee) {
         attendeeAdapter.setErrorData(it)
       } else {
@@ -491,7 +492,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
   }
 
-  fun toggleSearchProgress(
+  private fun toggleSearchProgress(
     show: Boolean,
     isAttendee: Boolean
   ) {
@@ -510,7 +511,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
   }
 
-  fun showAddedDialog(isAttendee: Boolean) {
+  private fun showAddedDialog(isAttendee: Boolean) {
     val dialogAddedAttendee = Dialog(requireContext())
     dialogAddedAttendee.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -524,13 +525,13 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     lvAttendee.emptyView = tvEmpty
     if (isAttendee) {
       addedAttendeeAdapter = AddedAttendeeAdapter(
-          requireContext(), addedAttendeeList, this
+        requireContext(), addedAttendeeList, this
       )
       lvAttendee.adapter = addedAttendeeAdapter
       addedAttendeeAdapter.notifyDataSetChanged()
     } else {
       addedSplAttendeeAdapter = AddedAttendeeAdapter(
-          requireContext(), addedSplAttendeeList, this
+        requireContext(), addedSplAttendeeList, this
       )
       lvAttendee.adapter = addedSplAttendeeAdapter
       addedSplAttendeeAdapter.notifyDataSetChanged()
@@ -562,6 +563,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   override fun showSplAttendeAddedDialog() {
     showAddedDialog(false)
   }
+
   var location: Location? = null
 
   override fun onSendOTPClicked(): Observable<Unit> {
@@ -598,8 +600,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   override fun resetData() {
     addedAttendeeList.clear()
     addedSplAttendeeList.clear()
-    binding.tvAttendeeCount.setText("")
-    binding.tvSplAttendeeCount.setText("")
+    binding.tvAttendeeCount.text = ""
+    binding.tvSplAttendeeCount.text = ""
     binding.spProduct.setSelection(0)
     binding.spMeetingDuration.setSelection(0)
     binding.spActivityType.setSelection(0)
@@ -612,55 +614,47 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     binding.etAmount.setText("")
     binding.etMeetingDescription.setText("")
     binding.etCustomerComment.setText("")
-    binding.btnSendOtp.setText(SEND_OTP_LABEL)
+    binding.btnSendOtp.text = SEND_OTP_LABEL
     toggleOTPVisibility(false)
   }
 
   override fun validateFormData(): Boolean {
     val status: Boolean = if (userManager.getUser()!!.isRM() && !isSendOTPSuccesssful &&
-        getSelectedActivityType()!!.isPersonalMeeting()
+      getSelectedActivityType()!!.isPersonalMeeting()
     ) {
       alert("Please verify OTP to create meeting")
       false
-    } else if (getSelectedActivityType()!!.equals(CreateMeetingConstants.SELECT_ACTIVITY_TYPE)) {
+    } else if (getSelectedActivityType()!! == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
       setVisibilityAndMessage(binding.tvActivityTypeError, MSG_SELECT_ACTIVITY_TYPE)
       false
-    } else if (getSelectedSpinnerValue(binding.spProduct)!!.equals(SELECT_PRODUCT)) {
+    } else if (getSelectedSpinnerValue(binding.spProduct)!! == SELECT_PRODUCT) {
       setVisibilityAndMessage(binding.tvProductError, MSG_SELECT_PRODUCT)
       false
-    } else if (getSelectedSpinnerValue(binding.spMeetingDuration)!!.equals(
-            SELECT_MEETING_DURATION
-        )
+    } else if (getSelectedSpinnerValue(binding.spMeetingDuration)!! == SELECT_MEETING_DURATION
     ) {
       setVisibilityAndMessage(binding.tvMeetingDurationError, MSG_SELECT_MEETING_DURATION)
       false
-    } else if (getSelectedSpinnerValue(binding.spMeetingObjective)!!.equals(
-            SELECT_MEETING_OBJECTIVE
-        )
+    } else if (getSelectedSpinnerValue(binding.spMeetingObjective)!! == SELECT_MEETING_OBJECTIVE
     ) {
       setVisibilityAndMessage(binding.tvMeetingObjectiveError, MSG_SELECT_MEETING_OBJECTIVE)
       false
-    } else if (getSelectedSpinnerValue(binding.spMeetingReason)!!.equals(SELECT_MEETING_REASON)) {
+    } else if (getSelectedSpinnerValue(binding.spMeetingReason)!! == SELECT_MEETING_REASON) {
       setVisibilityAndMessage(binding.tvMeetingReasonError, MSG_SELECT_MEETING_REASON)
       false
     } else if (binding.etMeetingDescription.text!!.trim().isEmpty()) {
       setVisibilityAndMessage(
-          binding.tvMeetingDescriptionError,
-          MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
+        binding.tvMeetingDescriptionError,
+        MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
       )
       false
     } else if (binding.etMeetingDescription.text!!.length < 50) {
       setVisibilityAndMessage(binding.tvMeetingDescriptionError, MSG_ATLEAST_FIFTY_CHARACTERS)
       false
-    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!!.equals(
-            SELECT_MEETING_LOCATION
-        )
+    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!! == SELECT_MEETING_LOCATION
     ) {
       setVisibilityAndMessage(binding.tvMeetingLocationError, MSG_SELECT_MEETING_LOCATION)
       false
-    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode)!!.equals(
-            SELECT_TRAVELLING_MODE
-        )
+    } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode)!! == SELECT_TRAVELLING_MODE
     ) {
       setVisibilityAndMessage(binding.tvTravellingModeError, MSG_SELECT_TRAVELLING_MODE)
       false
@@ -673,15 +667,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
       setVisibilityAndMessage(binding.tvPinCodeError, MSG_INVALID_PINCODE_NUMBER)
       false
-    } else if (profileType && getSelectedSpinnerValue(binding.spBAClient)!!.equals(
-            SELECT_BA_CLIENT_MEETING
-        )
+    } else if (profileType && getSelectedSpinnerValue(binding.spBAClient)!! == SELECT_BA_CLIENT_MEETING
     ) {
       setVisibilityAndMessage(binding.tvBAClientError, MSG_SELECT_BA_CLIENT_MEETING)
       false
-    } else if (profileType && getSelectedSpinnerValue(binding.spOutStaition)!!.equals(
-            SELECT_OUT_STATION_MEETING
-        )
+    } else if (profileType && getSelectedSpinnerValue(binding.spOutStaition)!! == SELECT_OUT_STATION_MEETING
     ) {
       setVisibilityAndMessage(binding.tvOutStaitionError, MSG_SELECT_OUT_STATION_MEETING)
       false
@@ -692,18 +682,14 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       setVisibilityAndMessage(binding.tvClientNameError, MSG_ENTER_CLIENT_NAME)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
-            binding.spActionables
-        )!!.equals(
-            SELECT_ACTIONABLE
-        )
+        binding.spActionables
+      )!! == SELECT_ACTIONABLE
     ) {
       setVisibilityAndMessage(binding.tvActionablesError, MSG_SELECT_ACTIONABLE)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
-            binding.spCategory
-        )!!.equals(
-            SELECT_CATEGORY
-        )
+        binding.spCategory
+      )!! == SELECT_CATEGORY
     ) {
       setVisibilityAndMessage(binding.tvCategoryError, MSG_SELECT_CATEGORY)
       false
@@ -714,9 +700,9 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       permissionCheckHelper.requestLocation()
       false
     } else if (enableLocationGroup && !(requireContext().getSystemService(
-            Context.LOCATION_SERVICE
-        ) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
-        && CRMMOSLCommon.hasGPSDevice(requireContext())
+        Context.LOCATION_SERVICE
+      ) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
+      && CRMMOSLCommon.hasGPSDevice(requireContext())
     ) {
       fusedLocation.initDispatcher(this)
       false
@@ -725,13 +711,13 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return status
   }
 
-  fun setVisibilityAndMessage(
+  private fun setVisibilityAndMessage(
     textView: TextView,
     msg: String
   ) {
     textView.apply {
       visibility = View.VISIBLE
-      setText(msg)
+      text = msg
       requestFocus()
     }
   }
@@ -906,7 +892,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   ) {
     val ft =
       requireActivity().supportFragmentManager
-          .beginTransaction()
+        .beginTransaction()
 
     val dialogFragment = OTPFragment.newInstance(leadId, ucid)
     dialogFragment.setTargetFragment(this, 1)
@@ -914,16 +900,16 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     dialogFragment.show(ft, "")
   }
 
-  fun checkPermission(): Boolean {
+  private fun checkPermission(): Boolean {
     if (!permissionCheckHelper.locationPermission()) {
       permissionCheckHelper.requestLocation()
       return false
     } else if (!(requireContext().getSystemService(
-            Context.LOCATION_SERVICE
-        ) as LocationManager).isProviderEnabled(
-            LocationManager.GPS_PROVIDER
-        )
-        && CRMMOSLCommon.hasGPSDevice(requireContext())
+        Context.LOCATION_SERVICE
+      ) as LocationManager).isProviderEnabled(
+        LocationManager.GPS_PROVIDER
+      )
+      && CRMMOSLCommon.hasGPSDevice(requireContext())
     ) {
       fusedLocation.initDispatcher(this)
       return false
@@ -931,11 +917,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return true
   }
 
-  var isSendOTPSuccesssful = false
-  var isPotentialPMSProduct = false
-  var isOnlyClient = false
-  var enableLocationGroup = false
-  var profileType = false
+  private var isSendOTPSuccesssful = false
+  private var isPotentialPMSProduct = false
+  private var isOnlyClient = false
+  private var enableLocationGroup = false
+  private var profileType = false
   override fun onSuccessResult(status: Boolean) {
     isSendOTPSuccesssful = status
   }
@@ -950,7 +936,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
   override fun showToast() {
     Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG)
-        .show()
+      .show()
   }
 
   override fun renderOTP(uiModel: UiModel<String>) {
@@ -960,7 +946,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     uiModel.onSuccess {
       Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
-          .show()
+        .show()
       binding.btnSendOtp.setText(R.string.btn_label_verify_otp)
     }
   }
@@ -976,11 +962,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   private fun isMockLocation(meetingApptModel: MeetingApptModel) {
     if (enableLocationGroup && CRMAppUtil.isLocationFromMockProvider(requireContext(), location)) {
       MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal),
-          MOSLConstants.MOCK_LOCATION_ENABLED_MSG, "OK",
-          true
-      ) { action: Action, data: Array<Any?>? ->
+        requireContext(), 0,
+        resources.getString(string.motilal_oswal),
+        MOSLConstants.MOCK_LOCATION_ENABLED_MSG, "OK",
+        true
+      ) { action: Action, _: Array<Any?>? ->
         if (action == OK) {
           requireActivity().finish()
         }
@@ -988,10 +974,10 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     } else {
       if (isPotentialPMSProduct && !isOnlyClient) {
         MSFDialog.alertDialog(
-            requireContext(), 0,
-            resources.getString(string.motilal_oswal),
-            MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT, MOSLConstants.YES, MOSLConstants.NO, true
-        ) { action: Action, data: Array<Any?>? ->
+          requireContext(), 0,
+          resources.getString(string.motilal_oswal),
+          MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT, MOSLConstants.YES, MOSLConstants.NO, true
+        ) { action: Action, _: Array<Any?>? ->
           if (action == OK) {
             meetingApptModel.isPotentialPMSProduct = "YES"
             uiSubject.onNext(SaveRequestData(meetingApptModel.json))
@@ -1016,16 +1002,17 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     uiModel.onSuccess {
       MSFDialog.alertDialog(
-          requireContext(), 0, resources.getString(string.motilal_oswal),
-          MOSLConstants.CREATE_MEETING, "OK", true
+        requireContext(), 0, resources.getString(string.motilal_oswal),
+        MOSLConstants.CREATE_MEETING, "OK", true
       )
-      { action: Action, data1: Array<Any?>? ->
+      { action: Action, _: Array<Any?>? ->
         if (action == OK) {
           uiSubject.onNext(SaveConfirmClick)
         }
       }
     }
   }
+
   companion object {
     const val ARG_LEAD_ID = "LeadID"
     const val ARG_UCID = "UCID"
