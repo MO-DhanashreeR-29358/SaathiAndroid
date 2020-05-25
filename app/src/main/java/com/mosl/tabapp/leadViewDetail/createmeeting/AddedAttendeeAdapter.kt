@@ -13,7 +13,7 @@ import com.mosl.tabapp.R
 class AddedAttendeeAdapter(
   context: Context,
   val list: ArrayList<AddedAttendee>,
-  val clickListenerHandler: ClickListenerHandler
+  private val clickListenerHandler: ClickListenerHandler
 ) : BaseAdapter() {
   private val inflater: LayoutInflater = LayoutInflater.from(context)
   override fun getView(
@@ -21,17 +21,15 @@ class AddedAttendeeAdapter(
     oldView: View?,
     parent: ViewGroup?
   ): View {
-    val convertView = if (oldView == null) {
-      inflater.inflate(R.layout.item_list_added_attendee, parent, false)
-          .apply {
-            tag = HolderView(this)
-          }
-    } else oldView
+    val convertView = oldView
+      ?: inflater.inflate(R.layout.item_list_added_attendee, parent, false)
+        .apply {
+          tag = HolderView(this)
+        }
     val holderView: HolderView = convertView.tag as HolderView
-    val attendee = list.get(position)
-    holderView.attendeeName.setText(
-        String.format("%s-%s", attendee.attendeeCode, attendee.attendeeName)
-    )
+    val attendee = list[position]
+    holderView.attendeeName.text =
+      String.format("%s-%s", attendee.attendeeCode, attendee.attendeeName)
     holderView.delete.setOnClickListener {
       clickListenerHandler.onDeleteClicked(position, attendee.isAttendee())
     }

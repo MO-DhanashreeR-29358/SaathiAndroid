@@ -25,7 +25,7 @@ import javax.inject.Inject
 class CreateMeetingPresenter @Inject constructor(
   view: CreateMeetingView,
   val repository: CreateMeetingRepository,
-  val createMeetingData: CreateMeetingData,
+  private val createMeetingData: CreateMeetingData,
   val screenNavigator: ScreenNavigatorImpl
 ) : BasePresenter<CreateMeetingView>(view) {
   override fun start() {
@@ -47,7 +47,7 @@ class CreateMeetingPresenter @Inject constructor(
 
     val activityTypeSelectedObs = view.onActivityTypeSelected()
         .filter(InvalidSelectionPredicate)
-        .map { t -> view.getSelectedActivityType() }
+      .map { _ -> view.getSelectedActivityType() }
         .share()
 
     activityTypeSelectedObs.map {
@@ -59,7 +59,7 @@ class CreateMeetingPresenter @Inject constructor(
         .addTo(disposable)
 
     activityTypeSelectedObs
-        .filter { !it.equals(CreateMeetingConstants.SELECT_ACTIVITY_TYPE) }
+      .filter { it != CreateMeetingConstants.SELECT_ACTIVITY_TYPE }
         .switchMap {
           repository.getLookup(
               MEETINGREASON, null, view.getSelectedActivityType()?.lookUpID.toString()
@@ -88,7 +88,7 @@ class CreateMeetingPresenter @Inject constructor(
     val meetingReasonObs = view.onMeetingReasonSelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)
-        .map { t -> view.getSelectedMeetingReason() }
+      .map { _ -> view.getSelectedMeetingReason() }
         .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
         .share()
 
@@ -187,20 +187,20 @@ class CreateMeetingPresenter @Inject constructor(
         .share()
 
     isOTPSentSuccessful.filter { t: Boolean ->
-      t.equals(true)
+      t
     }
         .subscribe { view.showToast() }
         .addTo(disposable)
 
-    isOTPSentSuccessful.filter { t: Boolean -> t.equals(false) }
+    isOTPSentSuccessful.filter { t: Boolean -> !t }
         .map { view.getOTPButtonText() }
-        .filter { t -> t.equals(SEND_OTP_LABEL) }
+      .filter { t -> t == SEND_OTP_LABEL }
         .subscribe { view.checkPermissionAndProceed() }
         .addTo(disposable)
 
-    isOTPSentSuccessful.filter { t: Boolean -> t.equals(false) }
+    isOTPSentSuccessful.filter { t: Boolean -> !t }
         .map { view.getOTPButtonText() }
-        .filter { t -> t.equals(VERIFY_OTP_LABEL) }
+      .filter { t -> t == VERIFY_OTP_LABEL }
         .subscribe { view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId) }
         .addTo(disposable)
 
@@ -262,13 +262,15 @@ class CreateMeetingPresenter @Inject constructor(
           bundle.putString(ARG_LEAD_ID, createMeetingData.leadId)
           bundle.putString(ARG_UCID, createMeetingData.ucid)
           screenNavigator.openPage(
-              NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false
+            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle,
+            addToStack = true,
+            forceReload = false
           )
         }
         .addTo(disposable)
   }
 
-  fun getInputData(): MeetingApptModel {
+  private fun getInputData(): MeetingApptModel {
     val data = MeetingApptModel()
     data.meetingType = "M"
     data.displayType = "A"

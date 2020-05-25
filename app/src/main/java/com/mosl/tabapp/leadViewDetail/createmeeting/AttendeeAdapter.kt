@@ -25,21 +25,19 @@ class AttendeeAdapter(
     oldView: View?,
     parent: ViewGroup?
   ): View {
-    val convertView = if (oldView == null) {
-      inflater.inflate(R.layout.item_list_attendee, parent, false)
-          .apply {
-            tag = HolderView(this)
-          }
-    } else oldView
+    val convertView = oldView
+      ?: inflater.inflate(R.layout.item_list_attendee, parent, false)
+        .apply {
+          tag = HolderView(this)
+        }
     val holderView: HolderView = convertView.tag as HolderView
-    val attendee = resultList.get(position)
+    val attendee = resultList[position]
     viewColor(position, convertView)
     if (attendee.hasData) {
-      holderView.attendeeName.setText(
-          String.format("%s-%s-%s", attendee.empCode, attendee.empName, attendee.branchCode)
-      )
+      holderView.attendeeName.text =
+        String.format("%s-%s-%s", attendee.empCode, attendee.empName, attendee.branchCode)
     } else {
-      holderView.attendeeName.setText(attendee.empName)
+      holderView.attendeeName.text = attendee.empName
       holderView.layout.setOnClickListener(null)
     }
     return convertView
@@ -87,16 +85,17 @@ class AttendeeAdapter(
   fun setErrorData(throwable: Throwable) {
     if (throwable is ServiceFailureException) {
       resultList.addAll(
-          listOf(
-              Attendee(
-                  empName = throwable.errorMessage, empCode = " ",
-                  branchCode = " ", hasData = false
-              )
+        listOf(
+          Attendee(
+            empName = throwable.errorMessage, empCode = " ",
+            branchCode = " ", hasData = false
           )
+        )
       )
       notifyDataSetChanged()
     }
   }
+
   fun setResultList(results: List<Attendee>) {
     if (results.isEmpty()) {
       notifyDataSetInvalidated()

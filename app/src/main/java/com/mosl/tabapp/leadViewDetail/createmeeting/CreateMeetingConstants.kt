@@ -30,7 +30,7 @@ object CreateMeetingConstants {
     var hasDataAdded = false
     if (list.isNotEmpty()) {
       for (addedAttendee in list) {
-        if (addedAttendee.attendeeCode.trim().equals(empCode.trim())) {
+        if (addedAttendee.attendeeCode.trim() == empCode.trim()) {
           hasDataAdded = true
         }
       }
@@ -50,7 +50,7 @@ object CreateMeetingConstants {
   const val MSG_SELECT_OUT_STATION_MEETING = "Select Out Station Meeting"
   const val MSG_SELECT_TRAVELLING_MODE = "Select Travelling Mode"
   const val MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK =
-    "Meeting description cannot be left blank";
+    "Meeting description cannot be left blank"
   const val MSG_ATLEAST_FIFTY_CHARACTERS = "Atleast 50 characters"
   const val MSG_ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters"
   const val MSG_ATLEAST_TEN_CHARACTERS = "Atleast 10 characters"
