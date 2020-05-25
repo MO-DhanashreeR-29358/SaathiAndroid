@@ -8,6 +8,7 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportData
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
 import com.mosl.mobile.domain.productivity.ColHeader
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiApi
 import io.reactivex.Observable
 import org.json.JSONObject
@@ -16,31 +17,33 @@ import javax.inject.Inject
 
 class DashboardReportRepositoryImpl @Inject constructor(
   val api: SaathiApi,
-  val gson: Gson
+  val gson: Gson,
+  val userManagerImpl: UserManagerImpl
 ) : DashboardReportRepository {
 
   override fun getDashboardData(
     dashboardReportRequest: DashboardReportRequest
   ): Observable<DashboardReportCombo> {
 
-    val request = dashboardReportRequest.requestTransform()
+    val request =
+      dashboardReportRequest.requestTransform(userManagerImpl.getUser()?.currentBusinessProfile?.businessProfileId)
     return api.getDashboardSecondLevel(request)
-        .map { it ->
-          val type =
-            object : TypeToken<HashMap<String?, Any?>?>() {}.type
-          val response: HashMap<String, Any> =
-            gson.fromJson(it, type)
-          val status = response["Status"].toString()
-          if (status.equals("true", ignoreCase = true)) {
-            return@map it
-          } else {
-            val message = response["Message"].toString()
-            throw ServiceFailureException(message, message)
-          }
+      .map { it ->
+        val type =
+          object : TypeToken<HashMap<String?, Any?>?>() {}.type
+        val response: HashMap<String, Any> =
+          gson.fromJson(it, type)
+        val status = response["Status"].toString()
+        if (status.equals("true", ignoreCase = true)) {
+          return@map it
+        } else {
+          val message = response["Message"].toString()
+          throw ServiceFailureException(message, message)
         }
-        .map {
-          renderTable(it)
-        }
+      }
+      .map {
+        renderTable(it)
+      }
 
   }
 
@@ -48,7 +51,7 @@ class DashboardReportRepositoryImpl @Inject constructor(
     val jsonObject = JSONObject(response)
     val jsonArray = if (jsonObject.has("Response")) {
       jsonObject.getJSONObject("Response")
-          .getJSONArray("Data")
+        .getJSONArray("Data")
     } else null
     if (jsonArray != null && jsonArray.length() > 0) {
       val colHeaders: MutableList<ColHeader> = mutableListOf()
@@ -56,15 +59,15 @@ class DashboardReportRepositoryImpl @Inject constructor(
       val iterator = first.keys()
       while (iterator.hasNext()) {
         val header = iterator.next()
-            .toString()
+          .toString()
         colHeaders.add(ColHeader(header))
       }
 
       val headers = colHeaders.map {
         it.copy(index = response.indexOf(it.label))
       }
-          .sortedBy { it.index }
-          .map { it.label }
+        .sortedBy { it.index }
+        .map { it.label }
 
       val data: ArrayList<DashboardReportData> = ArrayList()
       val headerData = mutableListOf<String>()
@@ -75,13 +78,13 @@ class DashboardReportRepositoryImpl @Inject constructor(
         val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
         headers.forEach { header ->
           if (!header.equals("WidgetSystemName", ignoreCase = true) &&
-              !header.equals("flg_empcode", ignoreCase = true)
+            !header.equals("flg_empcode", ignoreCase = true)
           ) {
             headerData.add(header)
             values.add(json.get(header).toString())
           }
           hasMap[header] = json.get(header)
-              .toString()
+            .toString()
         }
         data.add(DashboardReportData(setData(values), headerData, hasMap))
       }

@@ -29,27 +29,27 @@ class DashboardHierarchyReportPresenter @Inject constructor(
     Observable.merge(
       onFetchCalled(), onRetryCalled(), view.onViewChange()
     )
-        .map { getWidgetRequest(view.getWidgetSystemsName()) }
-        .switchMap {
-          repository.getDashboardData(it)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::renderData)
-        .addTo(disposable)
+      .map { getWidgetRequest(view.getWidgetSystemsName()) }
+      .switchMap {
+        repository.getDashboardData(it)
+          .compose(applyUiModel())
+      }
+      .subscribe(view::renderData)
+      .addTo(disposable)
 
     view.onNavigateEvent()
-        .subscribe {
-          navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
-        }
-        .addTo(disposable)
+      .subscribe {
+        navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
+      }
+      .addTo(disposable)
   }
 
   private fun getWidgetRequest(systemsName: String): DashboardReportRequest {
     return DashboardReportRequest(
-        page = PAGE,
-        pageSize = DASHBOARD_REPORT_PAGE_SIZE,
-        widgetSystemName = systemsName,
-        addtionalParameters = data.additionalParametersMap
+      page = PAGE,
+      pageSize = DASHBOARD_REPORT_PAGE_SIZE,
+      widgetSystemName = systemsName,
+      addtionalParameters = data.additionalParametersMap
 
     )
   }
@@ -68,10 +68,10 @@ class DashboardHierarchyReportPresenter @Inject constructor(
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, ucid)
       navigator.openPage(
-          navigationConstants,
-          args,
-          addToStack = true,
-          forceReload = false
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
       )
     } else if (rmName.isNotEmpty()) {
       val navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
@@ -80,16 +80,16 @@ class DashboardHierarchyReportPresenter @Inject constructor(
       additionalMap[FltLevel] = level
       additionalMap[FltHierarchyEmpCode] = empCode
       args.putSerializable(
-          ADDITIONALPARAMETERS,
-          additionalMap as Serializable
+        ADDITIONALPARAMETERS,
+        additionalMap as Serializable
       )
       args.putString(LABEL, data.label)
       args.putString(WidgetSystemName, systemsName)
       navigator.openPage(
-          navigationConstants,
-          args,
-          addToStack = true,
-          forceReload = false
+        navigationConstants,
+        args,
+        addToStack = true,
+        forceReload = false
       )
     }
   }
