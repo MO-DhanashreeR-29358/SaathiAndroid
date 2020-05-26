@@ -54,9 +54,9 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
 import com.mosl.tabapp.constants.MoslConstant.dd_MM_yyyy
+import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_FIFTY_CHARACTERS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TEN_CHARACTERS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TWENTY_CHARACTERS
@@ -140,7 +140,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
   private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
   private lateinit var mainFromDate: String
-  private lateinit var fromDat: Date
   override fun getLayout() = layout.frag_create_meeting
 
   override fun onViewCreated(
@@ -245,8 +244,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
       isOnlyClient = clientDetail.isOnlyClient
       isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
-      mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(DATE_FORMAT_TO_DISPLAY)
-      fromDat = CRMAppUtil.getDate(mainFromDate, DATE_FORMAT_TO_DISPLAY)
+      mainFromDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
     }
   }
 
@@ -259,9 +257,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   private fun showSelectDateDialog() {
-    var currentYear = 0
-    var month: Int = 0
-    var day: Int = 0
     var hour: Int = 0
     var minute: Int = 0
 
@@ -284,6 +279,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
 
     val cal = Calendar.getInstance()
+    hour = cal.get(Calendar.HOUR_OF_DAY)
+    minute = cal.get(Calendar.MINUTE)
     cal.add(Calendar.DAY_OF_MONTH, -1)
     if (getSelectedActivityType()!!.lookUpName.equals("Personal Meeting", ignoreCase = true)
       && userManager.getUser()!!.isRM()
@@ -295,20 +292,17 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     dpFromDate.maxDate = System.currentTimeMillis() - 1000
 
     try {
-      val dateSplit = mainFromDate.split("-").toTypedArray()
+      val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
       dpFromDate.init(
         dateSplit[0].toInt(),
         dateSplit[1].toInt() - 1,
         dateSplit[2].toInt()
-      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+      ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         mainFromDate =
           year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-        currentYear = year
-        month = monthOfYear + 1
-        day = dayOfMonth
       }
     } catch (e: Exception) {
-      Timber.d(e, CreateMeetingFragment.TAG)
+      Timber.d(e)
     }
 
 
@@ -329,11 +323,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     btnSubmit.setOnClickListener { v: View? ->
       try {
-        fromDat = CRMAppUtil.getDate(mainFromDate, dd_MM_yyyy)
-        mainFromDate = CRMAppUtil.getDateStr(fromDat, dd_MM_yyyy)
+        val fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
+        val fromPostingDate = CRMAppUtil.getDateStr(fromDat, dd_MM_yyyy)
         val finalSelectedDateStr =
           String.format(
-            "%s %d:%d:00", mainFromDate, hour,
+            "%s %d:%d:00", fromPostingDate, hour,
             minute
           ) //dd-MM-yyyy hh:mm:ss
         val finalSelectedDate =
