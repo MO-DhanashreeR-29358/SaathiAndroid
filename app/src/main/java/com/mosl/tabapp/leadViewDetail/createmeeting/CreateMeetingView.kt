@@ -54,6 +54,7 @@ interface CreateMeetingView : BaseView {
   fun getCategory(): String
   fun getSubCategory(): String
   fun getAttendeeSearchText(): Observable<SearchTextChange>
+  fun getDate(): String
   fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee>
   fun getOTPButtonText(): String
   fun getLatitude(): String
@@ -61,6 +62,8 @@ interface CreateMeetingView : BaseView {
   fun getGeoArea(): String
   fun getClientCode(): String
   fun getClientName(): String
+  fun renderDatePicker()
+  fun onDatePicker(): Observable<Unit>
 
   fun onAttendeeClicked(): Observable<Unit>
   fun onAttendeeAddedClicked(): Observable<Unit>

@@ -69,6 +69,11 @@ class CreateMeetingPresenter @Inject constructor(
         .subscribe(view::renderMeetingReason)
         .addTo(disposable)
 
+    view.onDatePicker()
+      .subscribe {
+        view.renderDatePicker()
+      }
+      .addTo(disposable)
 
     view.onMeetingLocationSelected()
         .filter(InvalidSelectionPredicate)
@@ -280,6 +285,7 @@ class CreateMeetingPresenter @Inject constructor(
     data.meetingAddressTypeId = view.getSelectedMeetingLocation()!!.lookUpID.toString()
     data.leadId = createMeetingData.leadId
     data.ucid = createMeetingData.ucid
+    data.meetingDate = view.getDate()
     data.product = "0"
     data.meetingDuration = view.getSelectedMeetingDuration()!!.lookUpID.toString()
     data.meetingObjectiveID = view.getSelectedMeetingLocation()!!.lookUpID.toString()

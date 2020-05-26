@@ -6,20 +6,25 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.Location
 import android.location.LocationManager
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
@@ -35,6 +40,9 @@ import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.ClientData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.pdf.OTPFragment
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE11
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
+import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.R.string
@@ -44,8 +52,11 @@ import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
+import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
+import com.mosl.tabapp.constants.MoslConstant.dd_MM_yyyy
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_FIFTY_CHARACTERS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TEN_CHARACTERS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_ATLEAST_TWENTY_CHARACTERS
@@ -93,6 +104,8 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
+import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
@@ -126,7 +139,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   private lateinit var baClientAdapter: ArrayAdapter<LookUp>
 
   private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
-
+  private lateinit var mainFromDate: String
+  private lateinit var fromDat: Date
   override fun getLayout() = layout.frag_create_meeting
 
   override fun onViewCreated(
@@ -231,7 +245,128 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
       isOnlyClient = clientDetail.isOnlyClient
       isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
+      mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(DATE_FORMAT_TO_DISPLAY)
+      fromDat = CRMAppUtil.getDate(mainFromDate, DATE_FORMAT_TO_DISPLAY)
     }
+  }
+
+  override fun onDatePicker(): Observable<Unit> {
+    return binding.rlDate.clicks()
+  }
+
+  override fun renderDatePicker() {
+    showSelectDateDialog()
+  }
+
+  private fun showSelectDateDialog() {
+    var currentYear = 0
+    var month: Int = 0
+    var day: Int = 0
+    var hour: Int = 0
+    var minute: Int = 0
+
+    val dialog = Dialog(requireContext()).apply {
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      window
+        .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      setContentView(layout.date_picker)
+      window
+        .setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+    }
+
+    val dpFromDate = dialog.findViewById<DatePicker>(R.id.datePickerFromDate)
+    dpFromDate.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
+    val close =
+      dialog.findViewById<ImageView>(R.id.ibtnClose)
+    val btnSubmit =
+      dialog.findViewById<Button>(R.id.btnSubmit)
+    val timePicker = dialog.findViewById<TimePicker>(R.id.timePicker)
+    timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
+
+    val cal = Calendar.getInstance()
+    cal.add(Calendar.DAY_OF_MONTH, -1)
+    if (getSelectedActivityType()!!.lookUpName.equals("Personal Meeting", ignoreCase = true)
+      && userManager.getUser()!!.isRM()
+    ) {
+      dpFromDate.minDate = System.currentTimeMillis() - 1000
+    } else {
+      dpFromDate.minDate = cal.timeInMillis
+    }
+    dpFromDate.maxDate = System.currentTimeMillis() - 1000
+
+    try {
+      val dateSplit = mainFromDate.split("-").toTypedArray()
+      dpFromDate.init(
+        dateSplit[0].toInt(),
+        dateSplit[1].toInt() - 1,
+        dateSplit[2].toInt()
+      ) { view: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        mainFromDate =
+          year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+        currentYear = year
+        month = monthOfYear + 1
+        day = dayOfMonth
+      }
+    } catch (e: Exception) {
+      Timber.d(e, CreateMeetingFragment.TAG)
+    }
+
+
+    if (VERSION.SDK_INT >= VERSION_CODES.M) {
+      timePicker.hour = hour
+      timePicker.minute = minute
+    } else {
+      timePicker.currentHour = hour
+      timePicker.currentMinute = minute
+    }
+
+    timePicker.setOnTimeChangedListener { arg0: TimePicker?, arg1: Int, arg2: Int ->
+      hour = arg1
+      minute = arg2
+    }
+
+    close.setOnClickListener { v: View? -> dialog.dismiss() }
+
+    btnSubmit.setOnClickListener { v: View? ->
+      try {
+        fromDat = CRMAppUtil.getDate(mainFromDate, dd_MM_yyyy)
+        mainFromDate = CRMAppUtil.getDateStr(fromDat, dd_MM_yyyy)
+        val finalSelectedDateStr =
+          String.format(
+            "%s %d:%d:00", mainFromDate, hour,
+            minute
+          ) //dd-MM-yyyy hh:mm:ss
+        val finalSelectedDate =
+          CRMAppUtil.getDate(finalSelectedDateStr, dd_MMM_yyyy_hh_mm)
+        if (CRMAppUtil.isBeforeandEqualDate(
+            finalSelectedDate
+          )
+        ) { //
+          binding.tvDate.text =
+            CRMAppUtil.getDBDate(finalSelectedDate, DATE_FORMAT_TO_DISPLAY)
+
+          dialog.dismiss()
+        } else {
+          MSFDialog.alertDialog(
+            requireContext(), 0,
+            resources.getString(string.motilal_oswal), MOSLConstants.INVALID_TIME,
+            "OK", true, null
+          )
+        }
+
+      } catch (e: Exception) {
+        e.printStackTrace()
+      }
+    }
+
+    dialog.show()
+
+  }
+
+  fun prefix(input: Int): String? {
+    return if (input.toString().length == 1) {
+      "0$input"
+    } else input.toString() + ""
   }
 
   override fun renderAddress(uiModel: UiModel<String>) {
@@ -313,6 +448,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     return uiSubject.ofType()
   }
 
+  override fun getDate(): String {
+    return getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE11)
+
+  }
+
   override fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee> {
     return uiSubject.ofType()
   }
@@ -366,8 +506,8 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     splAttendeeDialog.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-      setContentView(R.layout.dialog_attendee_list)
-      window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      setContentView(layout.dialog_attendee_list)
+      window.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
       setCanceledOnTouchOutside(true)
     }
     etSearchSplAttendeeText = splAttendeeDialog.findViewById(R.id.etSearchAttendee)
