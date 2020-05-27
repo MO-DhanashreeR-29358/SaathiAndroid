@@ -152,7 +152,9 @@ class SplashActivity : LeanBaseActivity() {
               vararg data: Any
             ) {
               if (action == MSFDialog.Action.OK) {
-                userManager.logout()
+                if (BuildConfig.LOGOUT_ON_UPDATE) {
+                  userManager.logout()
+                }
                 val i = Intent(
                   Intent.ACTION_VIEW
                 )
