@@ -199,7 +199,7 @@ public class DashboardHierarchyFragmentOld extends CommonFragment {
 				(Map<String, String>) hierarchyMap.get("AddtionalParameters");
 			DashboardSecondLevelRequest request =
 				new DashboardSecondLevelRequest(parameterMap, widgetSystemName,
-					(String) hierarchyMap.get("PageSize"), (String) hierarchyMap.get("Page"));
+            (String) hierarchyMap.get("PageSize"), (String) hierarchyMap.get("Page"), "");
 			Disposable subscribe = getSaathiApi().getDashboardHierarchy(request)
 				.map(responseS -> {
 					Gson mGson = new Gson();
