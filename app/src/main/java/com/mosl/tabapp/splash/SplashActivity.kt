@@ -37,300 +37,295 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SplashActivity : LeanBaseActivity() {
-    lateinit var disposables: CompositeDisposable
-    lateinit var binding: ActivitySplashBinding
-    @Inject
-    lateinit var loginRepository: LoginRepositoryImpl
-    @Inject
-    lateinit var userManager: UserManagerImpl
-    @Inject
-    lateinit var shortcutHelper: ShortcutHelper
+  lateinit var disposables: CompositeDisposable
+  lateinit var binding: ActivitySplashBinding
 
-    @Inject
-    lateinit var firebaseHelper: FirebaseHelper
-    private val handler = Handler()
-    private var count = 0
+  @Inject
+  lateinit var loginRepository: LoginRepositoryImpl
 
-    override fun getLayout(): Int {
-        return R.layout.activity_splash
-    }
+  @Inject
+  lateinit var userManager: UserManagerImpl
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
-        disposables = CompositeDisposable()
-        setupView()
-        handler.postDelayed({
-            checkNetwork()
-        }, 2000)
-    }
+  @Inject
+  lateinit var shortcutHelper: ShortcutHelper
 
-    override fun clearWindowBackground(): Boolean {
-        return false
-    }
+  @Inject
+  lateinit var firebaseHelper: FirebaseHelper
+  private val handler = Handler()
+  private var count = 0
 
-    fun setupView() {
-        binding.txtAppInfo.text = java.lang.String.format(
-            Locale.ENGLISH, "App Version : %s(%d)", BuildConfig.VERSION_NAME,
-            BuildConfig.VERSION_CODE
-        )
+  override fun getLayout(): Int {
+    return R.layout.activity_splash
+  }
 
-    }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
+    disposables = CompositeDisposable()
+    setupView()
+    handler.postDelayed({
+      checkNetwork()
+    }, 2000)
+  }
 
-    private fun checkNetwork() {
-        if (this.isNetworkConnected()) {
-            checkVersion()
+  override fun clearWindowBackground(): Boolean {
+    return false
+  }
 
-        } else {
-            // No network
-            if (count < 2) {
-                count++
-                if (!(this).isFinishing) { //show dialog
-                    showConfirmation(
-                        message = "Application needs network to proceed",
-                        cancelable = true,
-                        title = getString(R.string.alert_dialog_title),
-                        positiveButton = R.string.button_label_retrieve,
-                        negativeButton = R.string.button_label_exit
-                    )
-                    { positiveClicked ->
-                        if (positiveClicked) {
-                            checkNetwork()
-                        } else {
-                            finish()
-                        }
-                        Unit
-                    }
-                }
+  private fun setupView() {
+    binding.txtAppInfo.text = java.lang.String.format(
+      Locale.ENGLISH, "App Version : %s(%d)", BuildConfig.VERSION_NAME,
+      BuildConfig.VERSION_CODE
+    )
+
+  }
+
+  private fun checkNetwork() {
+    if (this.isNetworkConnected()) {
+      checkVersion()
+
+    } else {
+      // No network
+      if (count < 2) {
+        count++
+        if (!(this).isFinishing) { //show dialog
+          showConfirmation(
+            message = "Application needs network to proceed",
+            cancelable = true,
+            title = getString(R.string.alert_dialog_title),
+            positiveButton = R.string.button_label_retrieve,
+            negativeButton = R.string.button_label_exit
+          )
+          { positiveClicked ->
+            if (positiveClicked) {
+              checkNetwork()
             } else {
-                actionableAlert(
-                    message = "Application needs network to proceed",
-                    cancelable = false,
-                    buttonText = R.string.button_label_exit
-                ) {
-                    finish()
-                }
+              finish()
             }
-        }
-    }
-
-    private fun checkVersion() {
-        val versionRequest = VersionInfo(appVersion = Utility.getAppVersionCode(applicationContext))
-
-        disposables.add(
-            loginRepository.versionCheck(versionRequest)
-                .compose(applyUiModel())
-                .subscribe(this::renderVersionData)
-        )
-
-    }
-
-    fun toggleProgressBar(show: Boolean) {
-        if (show) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-        }
-    }
-
-
-    private fun renderVersionData(uiModel: UiModel<VersionResponse>) {
-        toggleProgressBar(uiModel.inProgress)
-
-        uiModel.onSuccess {
-
-            val msg = it.msg;
-            when (it.statusCode) {
-                0 -> MSFDialog.alertDialog(
-                    this@SplashActivity, 0,
-                    resources.getString(R.string.MOSL), msg,
-                    UPDATE, false, object : MSFDialog.DialogListener {
-                        override fun alertDialogAction(
-                            action: MSFDialog.Action,
-                            vararg data: Any
-                        ) {
-                            if (action == MSFDialog.Action.OK) {
-                              userManager.logout()
-                                val i = Intent(
-                                    Intent.ACTION_VIEW
-                                )
-                                i.data = Uri.parse(GOOGLE_PLAY_URL)
-                                startActivity(i)
-                                finish()
-                            }
-                        }
-                    })
-                3 -> MSFDialog.alertDialog(
-                    this@SplashActivity, 0,
-                    resources.getString(R.string.MOSL), msg,
-                    UPDATE, CONTINUE, false, object : MSFDialog.DialogListener {
-                        override fun alertDialogAction(
-                            action: MSFDialog.Action,
-                            vararg data: Any
-                        ) {
-                            if (action == MSFDialog.Action.OK) {
-                              userManager.logout()
-                                val i = Intent(
-                                    Intent.ACTION_VIEW
-                                )
-                                i.data = Uri.parse(GOOGLE_PLAY_URL)
-                                startActivity(i)
-                                finish()
-                            } else if (action === MSFDialog.Action.CANCEL) {
-                                handleStartup()
-                            }
-                        }
-                    })
-                2 -> MSFDialog.alertDialog(
-                    this@SplashActivity, 0,
-                    resources.getString(R.string.MOSL), msg,
-                    "Ok", false
-                ) { action, _ ->
-                    if (action == MSFDialog.Action.OK) {
-                        finish()
-                    }
-
-                }
-                1 -> handleStartup()
-            }
-
-        }
-
-        uiModel.onFailure {
-            Timber.e(it, "message %s", it.message)
-            infoDialog(it)
-        }
-        /*uiModel.error?.let {
-          Timber.d("message %s", it.message!!)
-          infoDialog(uiModel.data!!.msg)
-        }*/
-    }
-
-    private fun fetchReportTypes() {
-        disposables.add(
-            loginRepository.fetchReportTypes().compose(applyUiModel())
-                .subscribe {
-                    renderFetchReportData(it)
-                }
-        )
-    }
-
-    private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
-        uiModel.onSuccess {
-            if (it.size > 0) {
-                for (reportTypeResponse in it) {
-                    if (reportTypeResponse.isPreDefinedReports()) {
-                        val childMenuList = reportTypeResponse.childMenuList
-                        for (childMenu in childMenuList) {
-                            if (childMenu.isBasicReports()) {
-                                userManager.setReportMenuList(childMenu.ChildMenuList)
-//                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
-                                openCommonActivity()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        uiModel.onFailure {
-            openCommonActivity()
-        }
-
-    }
-
-    fun handleStartup() {
-        if (userManager.isLoggedIn()) {
-            shortcutHelper.setLoggedInUserShortcuts()
-            login()
-        } else {
-            shortcutHelper.setLogoutUserShortcuts()
-            openLogin()
-        }
-    }
-
-    fun login() {
-        disposables.add(
-            Observable.fromCallable {
-                LoginInfo(
-                    userManager.getUser()!!.employeeCode, userManager.getUser()!!.password
-                )
-            }.switchMap { input ->
-                loginRepository.login(input)
-
-            }.compose(applyUiModel()).subscribe(
-                this::renderLoginData
-            )
-        )
-    }
-
-    fun renderLoginData(uimodel: UiModel<User>) {
-
-        uimodel.onSuccess {
-            firebaseHelper.setUserProperty(it.employeeCode)
-            setUserPreferenceData(it)
-        }
-
-        uimodel.onFailure {
-            shortcutHelper.setLogoutUserShortcuts()
-            openLogin()
-        }
-
-
-    }
-
-    fun setUserPreferenceData(user: User) {
-        if (user.isAufsb()) {
-            openCommonActivity()
-        } else {
-            fetchReportTypes()
-        }
-
-    }
-
-    fun infoDialog(t: Throwable) {
-        val errorMessage: String
-        if (t is ServiceFailureException) {
-            errorMessage = (t).errorMessage
-        } else {
-            errorMessage = SERVER_ERROR_OCCURRED
-        }
-        actionableAlert(errorMessage, false) {
-            finish()
             Unit
+          }
         }
-    }
-
-    fun openLogin() {
-        val login = Intent(this@SplashActivity, LoginActivity::class.java)
-        startActivityForResult(login, 1001)
-//    finish()
-    }
-
-    private fun openCommonActivity() {
-        val intent = Intent(this@SplashActivity, CommonActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        if (resultCode == 1002) {
-            val intent = Intent(this@SplashActivity, CommonActivity::class.java)
-            intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
-            startActivity(intent)
+      } else {
+        actionableAlert(
+          message = "Application needs network to proceed",
+          cancelable = false,
+          buttonText = R.string.button_label_exit
+        ) {
+          finish()
         }
-        finish()
-        super.onActivityResult(requestCode, resultCode, data)
+      }
+    }
+  }
+
+  private fun checkVersion() {
+    val versionRequest = VersionInfo(appVersion = Utility.getAppVersionCode(applicationContext))
+
+    disposables.add(
+      loginRepository.versionCheck(versionRequest)
+        .compose(applyUiModel())
+        .subscribe(this::renderVersionData)
+    )
+
+  }
+
+  fun toggleProgressBar(show: Boolean) {
+    if (show) {
+      binding.progressBar.visibility = View.VISIBLE
+    } else {
+      binding.progressBar.visibility = View.GONE
+    }
+  }
+
+  private fun renderVersionData(uiModel: UiModel<VersionResponse>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onSuccess {
+
+      val msg = it.msg
+      when (it.statusCode) {
+        0 -> MSFDialog.alertDialog(
+          this@SplashActivity, 0,
+          resources.getString(R.string.MOSL), msg,
+          UPDATE, false, object : MSFDialog.DialogListener {
+            override fun alertDialogAction(
+              action: MSFDialog.Action,
+              vararg data: Any
+            ) {
+              if (action == MSFDialog.Action.OK) {
+                userManager.logout()
+                val i = Intent(
+                  Intent.ACTION_VIEW
+                )
+                i.data = Uri.parse(GOOGLE_PLAY_URL)
+                startActivity(i)
+                finish()
+              }
+            }
+          })
+        3 -> MSFDialog.alertDialog(
+          this@SplashActivity, 0,
+          resources.getString(R.string.MOSL), msg,
+          UPDATE, CONTINUE, false
+        ) { action, _ ->
+          if (action == MSFDialog.Action.OK) {
+            userManager.logout()
+            val i = Intent(
+              Intent.ACTION_VIEW
+            )
+            i.data = Uri.parse(GOOGLE_PLAY_URL)
+            startActivity(i)
+            finish()
+          } else if (action === MSFDialog.Action.CANCEL) {
+            handleStartup()
+          }
+        }
+        2 -> MSFDialog.alertDialog(
+          this@SplashActivity, 0,
+          resources.getString(R.string.MOSL), msg,
+          "Ok", false
+        ) { action, _ ->
+          if (action == MSFDialog.Action.OK) {
+            finish()
+          }
+
+        }
+        1 -> handleStartup()
+      }
+
     }
 
-    companion object {
-        val UPDATE = "Update"
-        val CONTINUE = "Continue"
-        val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp"
+    uiModel.onFailure {
+      Timber.e(it, "message %s", it.message)
+      infoDialog(it)
     }
+    /*uiModel.error?.let {
+      Timber.d("message %s", it.message!!)
+      infoDialog(uiModel.data!!.msg)
+    }*/
+  }
+
+  private fun fetchReportTypes() {
+    disposables.add(
+      loginRepository.fetchReportTypes().compose(applyUiModel())
+        .subscribe {
+          renderFetchReportData(it)
+        }
+    )
+  }
+
+  private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
+    uiModel.onSuccess {
+      if (it.isNotEmpty()) {
+        for (reportTypeResponse in it) {
+          if (reportTypeResponse.isPreDefinedReports()) {
+            val childMenuList = reportTypeResponse.childMenuList
+            for (childMenu in childMenuList) {
+              if (childMenu.isBasicReports()) {
+                userManager.setReportMenuList(childMenu.ChildMenuList)
+//                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
+                openCommonActivity()
+              }
+            }
+          }
+        }
+      }
+    }
+
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+
+  }
+
+  private fun handleStartup() {
+    if (userManager.isLoggedIn()) {
+      shortcutHelper.setLoggedInUserShortcuts()
+      login()
+    } else {
+      shortcutHelper.setLogoutUserShortcuts()
+      openLogin()
+    }
+  }
+
+  fun login() {
+    disposables.add(
+      Observable.fromCallable {
+        LoginInfo(
+          userManager.getUser()!!.employeeCode, userManager.getUser()!!.password
+        )
+      }.switchMap { input ->
+        loginRepository.login(input)
+
+      }.compose(applyUiModel()).subscribe(
+        this::renderLoginData
+      )
+    )
+  }
+
+  private fun renderLoginData(uimodel: UiModel<User>) {
+
+    uimodel.onSuccess {
+      firebaseHelper.setUserProperty(it.employeeCode)
+      setUserPreferenceData(it)
+    }
+
+    uimodel.onFailure {
+      shortcutHelper.setLogoutUserShortcuts()
+      openLogin()
+    }
+
+  }
+
+  private fun setUserPreferenceData(user: User) {
+    if (user.isAufsb()) {
+      openCommonActivity()
+    } else {
+      fetchReportTypes()
+    }
+
+  }
+
+  private fun infoDialog(t: Throwable) {
+    val errorMessage: String = if (t is ServiceFailureException) {
+      (t).errorMessage
+    } else {
+      SERVER_ERROR_OCCURRED
+    }
+    actionableAlert(errorMessage, false) {
+      finish()
+      Unit
+    }
+  }
+
+  private fun openLogin() {
+    val login = Intent(this@SplashActivity, LoginActivity::class.java)
+    startActivityForResult(login, 1001)
+  }
+
+  private fun openCommonActivity() {
+    val intent = Intent(this@SplashActivity, CommonActivity::class.java)
+    startActivity(intent)
+    finish()
+  }
+
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    if (resultCode == 1002) {
+      val intent = Intent(this@SplashActivity, CommonActivity::class.java)
+      intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
+      startActivity(intent)
+    }
+    finish()
+    super.onActivityResult(requestCode, resultCode, data)
+  }
+
+  companion object {
+    const val UPDATE = "Update"
+    const val CONTINUE = "Continue"
+    const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp"
+  }
 }
 
