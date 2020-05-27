@@ -21,6 +21,16 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
 
   private var mobile: String? = null
   private var oaoUserId: String? = null
+  private var diyCode: String? = null
+  private var diyLink: String? = null
+  private var createMeetingId: String? = null
+  private var interestedIn: String? = null
+  private var ucId: String? = null
+  private var email: String? = null
+  private var leadOwner: String? = null
+  private var sourceName: String? = null
+  private var prospectSourceName: String? = null
+  private var prospectSourceDetail: String? = null
 
   override fun getLayout(): Int {
     return R.layout.frag_leadview_main
@@ -43,7 +53,32 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
 
     uiModel.onSuccess {
       binding.apply {
-
+        createMeetingId = it.createMeetingId
+        leadOwner = it.leadOwner
+        sourceName = it.source
+        prospectSourceName = it.prospectSource
+        prospectSourceDetail = it.prospectSourceDetail
+        oaoUserId = it.oaoUserId
+        diyCode = it.diyCode
+        diyLink = it.diyLink
+        it.leadProducts
+            .forEach {
+              interestedIn = it.interestedIn
+              if (it.isDefault) {
+                includeClient.detail.apply {
+                  tvClientCode.text = it.clientCode
+                  tvCurrentStage.text = it.stageName
+                  tvCurrentStageSince.text = "${it.pendingDays} Days"
+                }
+              }
+            }
+        ucId = it.personalDetail.ucId
+        email = it.personalDetail.email
+        mobile = it.personalDetail.mobile
+        includeClient.detail.tvName.text = it.personalDetail.name
+        hideAppTitle()
+        includeClient.detail.tvLeadId.text = it.id
+        includeClient.detail.tvBranchCode.text = it.branchCode
       }
     }
   }
