@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
+import com.mosl.app.core.data.annotation.ForcePreferenceClear
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
@@ -50,6 +52,10 @@ class SplashActivity : LeanBaseActivity() {
   lateinit var shortcutHelper: ShortcutHelper
 
   @Inject
+  @field:ForcePreferenceClear
+  lateinit var forcePreferenceClear: BooleanPreference
+
+  @Inject
   lateinit var firebaseHelper: FirebaseHelper
   private val handler = Handler()
   private var count = 0
@@ -63,6 +69,7 @@ class SplashActivity : LeanBaseActivity() {
     binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
     disposables = CompositeDisposable()
     setupView()
+    forcePreferenceClear()
     handler.postDelayed({
       checkNetwork()
     }, 2000)
@@ -78,6 +85,13 @@ class SplashActivity : LeanBaseActivity() {
       BuildConfig.VERSION_CODE
     )
 
+  }
+
+  private fun forcePreferenceClear() {
+    if (!forcePreferenceClear.get() && BuildConfig.LOGOUT_ON_UPDATE && userManager.isLoggedIn()) {
+      userManager.logout()
+      forcePreferenceClear.set(true)
+    }
   }
 
   private fun checkNetwork() {
@@ -170,7 +184,9 @@ class SplashActivity : LeanBaseActivity() {
           UPDATE, CONTINUE, false
         ) { action, _ ->
           if (action == MSFDialog.Action.OK) {
-            userManager.logout()
+            if (BuildConfig.LOGOUT_ON_UPDATE) {
+              userManager.logout()
+            }
             val i = Intent(
               Intent.ACTION_VIEW
             )
