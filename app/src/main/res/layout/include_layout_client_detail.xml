@@ -5,7 +5,9 @@
     android:background="@color/title_black"
     android:orientation="vertical">
 
-    <include layout="@layout/lms_top_section_update" />
+    <include
+        android:id="@+id/detail"
+        layout="@layout/lms_top_section_update" />
 
     <View
         android:layout_width="match_parent"

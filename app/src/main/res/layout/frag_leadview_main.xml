@@ -24,6 +24,7 @@
             app:titleEnabled="false">
 
             <include
+                android:id="@+id/include_client"
                 layout="@layout/include_layout_client_detail"
                 app:layout_collapseMode="parallax" />
 
