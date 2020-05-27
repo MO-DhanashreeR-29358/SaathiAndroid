@@ -9,8 +9,9 @@ import io.reactivex.Observable
 interface HierarchyReportView : BaseView {
 
   fun onNavigateEvent(): Observable<CellEvent>
+  fun titleName(): String
 
-  fun getAdditionalParameterMap(): Map<String, String>
-
+  fun getAdditionalParameterMap(): HashMap<String, String>
+  fun onViewChange(): Observable<Unit>
   fun renderData(uiModel: UiModel<HierarchyReportCombo>)
 }

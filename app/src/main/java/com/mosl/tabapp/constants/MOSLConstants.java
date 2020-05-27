@@ -2,17 +2,12 @@ package com.mosl.tabapp.constants;
 
 // interface MOSLConstants extends LabelConfig, ServiceDetails {
 public interface MOSLConstants extends LabelConfig {
-    String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp";
-    String MSG_ACCOUNT_OPENING =
-            "You have not installed account opening application, Please Click to download";
-
     String USER_TYPE_FRANCHISE = "2";
 
     int SEARCH_LENTH = 3;
 
     //Firebase notification constants
     String FCM_NOTIFICATION_SOURCE = "FCM_NOTIFICATION_SOURCE";
-    String FCM_NOTIFICATION_CATEGORY = "FCM_NOTIFICATION_CATEGORY";
 
     //Tab Constant
     int LEAD_DETAIL = 0;
@@ -22,41 +17,8 @@ public interface MOSLConstants extends LabelConfig {
     String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in PMS product?";
     String SOURCE = "Source";
     //DRAWER MENU
-    int MOSL_MENU_DASHBOARD = 0;
-    int MOSL_MENU_EKYC = 1;
-    int MOSL_MENU_FRESH_REGISTRATION = 0;
-    int MOSL_MENU_EXISTINGS_APPLICATIONS = 1;
-    int MOSL_MENU_MY_REPORTS = 2;
-    int MOSL_MENU_CALENDAR = 3;
-    int MOSL_MENU_PENDING_APPROVALS = 4;
-    int MOSL_MENU_KNOWLEDGE_CENTRE = 5;
-    int MOSL_MENU_SALES_STADIUM_PITCH = 6;
-    int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
-    int MOSL_MENU_SUGGEST_ME = 8;
-    int MOSL_MENU_QUERY = 9;
-    int MOSL_MENU_AU_BANK_MEETING = 0;
-    int MOSL_MENU_AU_BANK_MEETING_REPORT = 1;
-    int MOSL_MENU_LOGOUT = 10;
-    int LOGOUT_CODE = 4;
-    int CALL_CONVERT_EKYC = 3;
-    int NAV_TO_SET_APPOINTMENT = 2;
-    int NAV_TO_PENDING_FOR_APPROVAL = 4;
-    int NAV_TO_PENDING_APPROVAL = 3;
-    int SECOND_CLICK_DASHBORD = 11;
-    int NAV_TO_CREATE_MEETING = 13;
-    int NAV_TO_CLIENT_MEETING = 14;
-    int NAV_TO_UPDATE_MEETING = 15;
-    int NAV_TO_LEAD_VIEW_MAIN = 16;
-    int NAV_TO_LEAD_ACTIVITIES_DETAIL = 17;
-    int NAV_TO_LEAD_DOCUMENT = 18;
 
-    int NAV_TO_LEAD_CREATION = 21;
-    int NAV_TO_ADVISORY_DASHBOARD = 22;
-
-    int NAV_TO_SECOND_LEVEL_REPORT = 26;
-    int NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT = 27;
-    int NAV_TO_WEB_VIEW = 28;
-
+  int LOGOUT_CODE = 4;
     // LookupType (GetAllLookup API)
     int INTERESTEDIN = 5;
     int PRODUCTTYPE = 6;
@@ -102,12 +64,9 @@ public interface MOSLConstants extends LabelConfig {
     String CONFIRM_LEAD_UPDATE = "Are you sure want to update lead ?";
     String ErrorMsgName = "Only alphabets are allowed";
 
-    String CLIENT_INFO = "Android";
-
     // Advisory
     String ADVISORY_TARGET_TITLE = "Target Vs Achievement";
     String LEAD = "Lead";
-    String AUSFB_LEAD = "ausfb_lead";
     String MAP = "map";
     String PERFORMANCE_INCENTIVE = "performance_incentive";
     String CURRENT_QUARTER_STATUS = "current_quarter_status";
@@ -176,18 +135,14 @@ public interface MOSLConstants extends LabelConfig {
     //Login
     String PROFILE_ID = "ProfileID";
     String PRODUCT_ID = "ProductId";
-    String BUSINESS_PROFILE = "BusinessProfile";
     String EMPLOYEE_CODE = "EmployeeCode";
     String MOBILE = "Mobile";
-    String LEAD_OWNER = "LeadOwner";
     String EMAIL = "Email";
     String CREATE_MEETING_ID = "CreateMeeting";
-    String OAOUSERID = "OAOUserID";
     //DefaultBusinessProfile
     String AU_BANK_SALES_SUPPORT = "1142";
 
     //GetAllLookup API
-    String SOURCENAME = "SourceName";
 
     String RESIDENCE = "Residence";//Address Type
     String OFFICE = "Office";
@@ -201,7 +156,6 @@ public interface MOSLConstants extends LabelConfig {
 
     //Search
     String DATA = "Data";
-    String METADATA = "MetaData";
     String LEAD_ID = "LeadID";
     String HIERARCHY_MAP = "HierarchyMap";
     String ADDITIONAL_MAP = "AdditionalMap";
@@ -209,9 +163,6 @@ public interface MOSLConstants extends LabelConfig {
     //  String MEETING_ID = "Meeting Id";
     String MEETING_ID = "MeetingID";
     String MOBNO = "MOBNO";
-    String ACTIVITY_TYPE = "ActivityType";
-    String STATUS_NAME = "StatusName";
-    String ATTENDEE_EMP = "AttendeeEmp";
     String UPDATED_MEETING = "Meeting updated successfully";
     String SET_APPOINTMENTS = "Appointment created successfully";
     String UPDATE_APPOINTMENTS = "Appointment updated successfully";
@@ -274,7 +225,6 @@ public interface MOSLConstants extends LabelConfig {
     String CLIENTCODE = "ClientCode";
 
     //franchise constants
-    String NO_RECORDS_FOUND = "No records found";
     String SYSTEM_NAME = "system_name";
     String FILTER_LIST = "filter_list";
     String SPINNER_LIST = "spinner_list";
@@ -313,8 +263,6 @@ public interface MOSLConstants extends LabelConfig {
 
     String URL_PATH = "URP PATH";
 
-    String SEARCH_TYPE_LEAD_HINT = "Search Lead";
-    String SEARCH_TYPE_CLIENT_HINT = "Search Client";
     String SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for";
 
     String SELF_KEY = "flt_hierarchy";
@@ -356,7 +304,6 @@ public interface MOSLConstants extends LabelConfig {
     String FILE_LARGE_MESSAGE =
             "User not allow to upload More then " + FILE_UPLOAD_SIZE_LIMT + " MB File.";
     String FILE_NOT_ALLOWED_MESSAGE = "File not valid";
-    String SYS_NAME = "SysName";
     String SAME_MOBILEMESSAGE = "Alternate mobile No. cannot be same";
     String SAME_EMAILMESSAGE = "Alternate email Id cannot be same";
     String INVALID_TIME = "Meeting cannot be scheduled in future datetime";
@@ -367,12 +314,6 @@ public interface MOSLConstants extends LabelConfig {
 
     String INVALID_DATE_RANGE = "Select correct from and to date";
 
-
-    String PROSPECT_SOURCENAME = "Prospect sourceName";
-    String PROSPECT_SOURCEDETAIL = "Prospect sourceDetail";
-    String INTRESTEDIN = "IntrestedIn";
-    String NEW_CRM = "NEW_CRM";
-
     //newEkyc
     String NEW_USERID = "USERID";
     String BRANCHEMPCODE = "BRANCHEMPCODE";
@@ -380,10 +321,8 @@ public interface MOSLConstants extends LabelConfig {
     String APPLICATIONTYPE = "APPLICATIONTYPE";
     String OSTYPE = "OSTYPE";
     String APPLOGINID = "APPLOGINID";
-    String OUTPUT = "output";
-    String ISAUFSB = "isAufsb";
     String TOKENKEY = "TOKENKEY";
-    String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao";
+
     String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
 
     // Prospect Reffer changes

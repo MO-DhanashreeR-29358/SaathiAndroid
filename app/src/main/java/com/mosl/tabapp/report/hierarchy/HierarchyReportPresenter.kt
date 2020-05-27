@@ -18,8 +18,9 @@ class HierarchyReportPresenter @Inject constructor(
 ) : BasePresenter<HierarchyReportView>(view) {
   override fun start() {
     Observable.merge(
-        onFetchCalled(), onRetryCalled()
-      ).switchMap {
+      onFetchCalled(), onRetryCalled(), view.onViewChange()
+    )
+      .switchMap {
         repository.getDashboardData(getWidgetRequest())
           .compose(applyUiModel())
       }
@@ -27,7 +28,7 @@ class HierarchyReportPresenter @Inject constructor(
       .addTo(disposable)
 
     view.onNavigateEvent().subscribe {
-      navigationFlow(it.leadId, it.UCID)
+      navigationFlow(it.leadId, it.UCID, it.employeeCode)
     }.addTo(disposable)
   }
 
@@ -35,26 +36,40 @@ class HierarchyReportPresenter @Inject constructor(
     val mMap = view.getAdditionalParameterMap()
     return HierarchyReportInput(
       totalCount = 0,
-      periodFrom = mMap.get(Period_From),
+      periodFrom = mMap[Period_From],
       isExportToExcel = false,
-      employeeCode = mMap.get(EmployeeCode),
+      employeeCode = mMap[EmployeeCode],
       calculatedPage = 0,
       inputTotalCount = 0,
       page = 0,
-      reportTypeSystemName = mMap.get(ReportTypeSystemName),
+      reportTypeSystemName = mMap[ReportTypeSystemName],
       businessChannel = "-1",
       pageSize = MOSLConstants.REPORT_PAGE_SIZE,
-      periodTo = mMap.get(Period_To),
-      branchCode = mMap.get(BranchCode)
+      periodTo = mMap[Period_To],
+      branchCode = mMap[BranchCode]
     )
   }
 
-  private fun navigationFlow(leadID: String, UCID: String) {
+  private fun navigationFlow(
+    leadID: String,
+    UCID: String,
+    employeeCode: String
+  ) {
     val args = Bundle()
-    args.putString(MOSLConstants.LEAD_ID, leadID)
-    args.putString(MOSLConstants.UCID, UCID)
+    var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+    if (employeeCode == "0") {
+      navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+      args.putString(MOSLConstants.LEAD_ID, leadID)
+      args.putString(MOSLConstants.UCID, UCID)
+    } else {
+      val additionalMap = view.getAdditionalParameterMap()
+      additionalMap[EmployeeCode] = employeeCode
+      args.putString(MOSLConstants.STRING_TITLE, view.titleName())
+      args.putSerializable(MOSLConstants.STRING_MAP, additionalMap)
+      navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT
+    }
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER,
+      navigationConstants,
       args,
       addToStack = true,
       forceReload = false

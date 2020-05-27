@@ -15,7 +15,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.LoginRepositoryImpl
-import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
@@ -36,14 +36,13 @@ import timber.log.Timber
 import java.util.Locale
 import javax.inject.Inject
 
-
 class SplashActivity : LeanBaseActivity() {
     lateinit var disposables: CompositeDisposable
     lateinit var binding: ActivitySplashBinding
     @Inject
     lateinit var loginRepository: LoginRepositoryImpl
     @Inject
-    lateinit var userManager: UserManager
+    lateinit var userManager: UserManagerImpl
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
 
@@ -151,6 +150,7 @@ class SplashActivity : LeanBaseActivity() {
                             vararg data: Any
                         ) {
                             if (action == MSFDialog.Action.OK) {
+                              userManager.logout()
                                 val i = Intent(
                                     Intent.ACTION_VIEW
                                 )
@@ -169,6 +169,7 @@ class SplashActivity : LeanBaseActivity() {
                             vararg data: Any
                         ) {
                             if (action == MSFDialog.Action.OK) {
+                              userManager.logout()
                                 val i = Intent(
                                     Intent.ACTION_VIEW
                                 )

@@ -92,7 +92,7 @@
         android:layout_margin="8dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/view2"
         app:layout_constraintStart_toStartOf="@id/view2"
         app:layout_constraintTop_toTopOf="parent"

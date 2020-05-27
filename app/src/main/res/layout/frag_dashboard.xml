@@ -20,7 +20,10 @@
             android:orientation="vertical"
             >
 
-            <include layout="@layout/frag_dashboard_aufsb" />
+            <include
+                android:id="@+id/layoutAufsb"
+                layout="@layout/frag_dashboard_aufsb"
+                />
 
             <TextView
                 android:id="@+id/tvMain"
@@ -545,14 +548,19 @@
                     android:orientation="vertical"
                     >
 
-                    <include layout="@layout/frag_insentives" />
-
-                    <include layout="@layout/frag_performane" />
-
                     <include
-                        layout="@layout/frag_performane_team"
-                        android:visibility="gone"
+                        android:id="@+id/layout_incentives"
+                        layout="@layout/frag_insentives"
                         />
+
+                    <com.mosl.tabapp.dashboard.base.PerformanceLayout
+                        android:id="@+id/performance"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_medium"
+                        />
+
 
                     <LinearLayout
                         android:id="@+id/llCurrentQuarterStatusAdviosory"
@@ -575,13 +583,18 @@
                             android:textSize="@dimen/_14sdp"
                             />
 
-                        <include layout="@layout/frag_current_quarter_status_table_first" />
+                        <com.mosl.tabapp.dashboard.base.CurrentQuarterLayout
+                          android:id="@+id/currentQuarter"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content" />
+
+                        <!--<include layout="@layout/frag_current_quarter_status_table_first" />
 
                         <include layout="@layout/frag_current_quarter_status_table_second" />
 
                         <include layout="@layout/frag_current_quarter_status_table_three" />
 
-                        <include layout="@layout/frag_current_quarter_status_table_four" />
+                        <include layout="@layout/frag_current_quarter_status_table_four" />-->
 
 
                     </LinearLayout>
@@ -706,7 +719,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="@dimen/_12sdp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:srcCompat="@drawable/ic_actionable"
         />
 

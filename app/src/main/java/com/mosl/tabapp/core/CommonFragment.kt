@@ -91,7 +91,7 @@ open class CommonFragment : BaseFragment() {
   }
 
   fun stringOrZero(input: String?): String {
-    return if (input != null && input != "") {
+    return if (input != null && input != "" && input != "null") {
       input
     } else {
       "0"

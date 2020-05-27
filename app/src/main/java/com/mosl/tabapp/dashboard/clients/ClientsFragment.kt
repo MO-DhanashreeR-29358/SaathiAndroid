@@ -30,11 +30,13 @@ import javax.inject.Inject
 class ClientsFragment : CommonFragment(), ClientsView {
 
   private lateinit var binding: FragmentClientsNewBinding
+
   @Inject
   lateinit var presenter: ClientsPresenter
+
   @Inject
   lateinit var dashboardModel: DashboardModel
-  private lateinit var model: WidgetModel
+  private var model: WidgetModel = WidgetModel()
   private var familyCount = 0
   private val arrayListClient = mutableListOf<HashMap<String, String>>()
   private val dataEvent = PublishSubject.create<Boolean>()
@@ -149,11 +151,11 @@ class ClientsFragment : CommonFragment(), ClientsView {
     val headerView = topBinding.root
     topBinding.apply {
       tvFamilyCount.text = getFamilyCount().toString()
+      tvMtdCount.text = getTableHead(text)
       llFamiMappedCount.setOnClickListener {
         if (getFamilyCount() > 0) {
           navigateEvent.onNext(getAddtionalParameterMap())
         }
-        tvMtdCount.text = getTableHead(text)
       }
     }
     binding.tableLayout.addView(headerView)

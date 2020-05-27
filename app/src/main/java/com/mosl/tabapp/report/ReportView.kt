@@ -20,5 +20,6 @@ interface ReportView : BaseView {
   fun fromDate(): String
   fun toDate(): String
   fun onBranchChange(): Observable<Int>
+  fun onViewChange(): Observable<Unit>
   fun getBranch(): AssignedLeadReportModel?
 }

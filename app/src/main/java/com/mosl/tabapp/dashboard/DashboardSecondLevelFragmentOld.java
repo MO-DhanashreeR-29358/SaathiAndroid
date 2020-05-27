@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.mosl.app.core.exception.ServiceFailureException;
@@ -34,9 +33,7 @@ import com.mosl.tabapp.navigation.NavigationConstants;
 import com.mosl.tabapp.tablefixheader.TableFixHeaders;
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,8 +43,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
@@ -83,9 +79,9 @@ import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
  * Created by raju on 6/21/2017.
  */
 
-public class DashboardSecondLevelFragment extends CommonFragment
-        implements View.OnClickListener {
-    private final static String TAG = DashboardSecondLevelFragment.class.getSimpleName();
+public class DashboardSecondLevelFragmentOld extends CommonFragment
+    implements View.OnClickListener {
+    private final static String TAG = DashboardSecondLevelFragmentOld.class.getSimpleName();
     private boolean dateFlag;
     private ArrayList<HashMap<String, String>> hierarchyMapList;
     private TableFixHeaders table;
@@ -103,7 +99,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
     private Dialog dialog;
     private int hour, minute;
     private String mainFromDate, fromPostingDate, dateType, isActionable
-            = "";
+        = "";
     private boolean spinnerDataFlag;
 
     @Override
@@ -113,7 +109,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Bundle savedInstanceState) {
         View secondClickView = super.onCreateView(inflater, container, savedInstanceState);
         setUpView(secondClickView);
         if (getArguments().containsKey(FILTER_LIST) && getArguments().containsKey(SPINNER_LIST)) {
@@ -144,15 +140,15 @@ public class DashboardSecondLevelFragment extends CommonFragment
                 if (getArguments().containsKey(LABEL)) {
                     if (getArguments().containsKey(WIDGETNAME)) {
                         txtLables.setText(
-                                this.getArguments().getString(LABEL) + "-" + getArguments().getString(
-                                        WIDGETNAME));
+                            this.getArguments().getString(LABEL) + "-" + getArguments().getString(
+                                WIDGETNAME));
                     } else {
                         txtLables.setText(this.getArguments().getString(LABEL));
                     }
                 }
                 if (getArguments().containsKey(MAP)) {
                     addtionalParameterMapNew =
-                            (Map<String, String>) this.getArguments().getSerializable(MAP);
+                        (Map<String, String>) this.getArguments().getSerializable(MAP);
                 }
                 if (getArguments().containsKey(FILTER_LIST)) {
                     filterList = this.getArguments().getParcelableArrayList(FILTER_LIST);
@@ -162,18 +158,18 @@ public class DashboardSecondLevelFragment extends CommonFragment
                             rlDate.setVisibility(View.VISIBLE);
                             dateFlag = true;
                             tvDateTime.setText(
-                                    CRMAppUtil.getDateStr(new Date(), NEWDATE_FORMAT_OF_DD_MMM_YYYY));
+                                CRMAppUtil.getDateStr(new Date(), NEWDATE_FORMAT_OF_DD_MMM_YYYY));
                             dateType = FLT_DATE;
                             addtionalParameterMapNew.put(dateType, tvDateTime.getText().toString());
                             webServiceCall();
                         } else if (filterList.get(0)
-                                .getKeyValue()
-                                .equalsIgnoreCase(FLT_DATE_TIME)) {
+                            .getKeyValue()
+                            .equalsIgnoreCase(FLT_DATE_TIME)) {
                             linearLayout.setVisibility(View.VISIBLE);
                             rlDate.setVisibility(View.VISIBLE);
                             dateFlag = false;
                             tvDateTime.setText(
-                                    CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
+                                CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
                             dateType = FLT_DATE_TIME;
                             addtionalParameterMapNew.put(dateType, tvDateTime.getText().toString());
                             webServiceCall();
@@ -187,66 +183,67 @@ public class DashboardSecondLevelFragment extends CommonFragment
                 }
                 if (getArguments().containsKey(SPINNER_LIST)) {
 
-                    ArrayList<TypeActionableFilterModel> typeFilterList = this.getArguments().getParcelableArrayList(SPINNER_LIST);
+                    ArrayList<TypeActionableFilterModel> typeFilterList =
+                        this.getArguments().getParcelableArrayList(SPINNER_LIST);
                     if (typeFilterList != null && !typeFilterList.isEmpty()) {
                         spTypeFilter.setVisibility(View.VISIBLE);
                         linearLayout.setVisibility(View.VISIBLE);
-                        ArrayAdapter<TypeActionableFilterModel> adapter1 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+                        ArrayAdapter<TypeActionableFilterModel> adapter1 =
+                            SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                         spTypeFilter.setAdapter(adapter1);
                         AdapterUtils.setSpinnerData(adapter1, spTypeFilter, typeFilterList);
                         getSpinnerSelection();
                     }
                 }
                 if (filterList != null && filterList.size() > 0) {
-                    ArrayAdapter<FilterRowData> adapter1 = SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+                    ArrayAdapter<FilterRowData> adapter1 =
+                        SpinnerAdapterFactory.getDefaultAdapter(requireContext());
                     spFilter.setAdapter(adapter1);
-                    AdapterUtils.setSpinnerData(adapter1, spFilter, filterList.get(0).getFilterData());
+                    AdapterUtils.setSpinnerData(adapter1, spFilter,
+                        filterList.get(0).getFilterData());
                     getSpinnerSelection();
                 }
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (!isActionable.trim().equalsIgnoreCase(ACTIONABLE)) {
             webServiceCall();
         } else if (isActionable.trim().equalsIgnoreCase(ACTIONABLE)
-                && !getArguments().containsKey(
-                SPINNER_LIST)
-                && !getArguments().containsKey(FILTER_LIST)) {
+            && !getArguments().containsKey(
+            SPINNER_LIST)
+            && !getArguments().containsKey(FILTER_LIST)) {
             webServiceCall();
         }
     }
 
     private void getSpinnerSelection() {
         disposable.add(
-                itemSelections(spFilter)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            filterString = ((FilterRowData) spFilter.getSelectedItem()).getValue()
-                                    .replaceAll("_", " ");
-                            if (spinnerDataFlag) {
-                                isDataPresent();
-                            } else {
-                                webServiceCall();
-                            }
-                        }));
+            itemSelections(spFilter)
+                .filter(InvalidSelectionPredicate)
+                .skip(1)
+                .subscribe(xyz -> {
+                    filterString = ((FilterRowData) spFilter.getSelectedItem()).getValue()
+                        .replaceAll("_", " ");
+                    if (spinnerDataFlag) {
+                        isDataPresent();
+                    } else {
+                        webServiceCall();
+                    }
+                }));
         disposable.add(
-                itemSelections(spTypeFilter)
-                        .filter(InvalidSelectionPredicate)
-                        .skip(1)
-                        .subscribe(xyz -> {
-                            typeFilterString =
-                                    spTypeFilter.getSelectedItem().toString().replaceAll("_", " ");
-                            if (spinnerDataFlag) {
-                                isDataPresent();
-                            } else {
-                                webServiceCall();
-                            }
-                        }));
-
+            itemSelections(spTypeFilter)
+                .filter(InvalidSelectionPredicate)
+                .skip(1)
+                .subscribe(xyz -> {
+                    typeFilterString =
+                        spTypeFilter.getSelectedItem().toString().replaceAll("_", " ");
+                    if (spinnerDataFlag) {
+                        isDataPresent();
+                    } else {
+                        webServiceCall();
+                    }
+                }));
     }
 
     private void isDataPresent() {
@@ -254,7 +251,6 @@ public class DashboardSecondLevelFragment extends CommonFragment
             webServiceCall();
         }
     }
-
 
     private void renderDashboardSecondLevel(UiModel<List<Map<String, Object>>> uiModel) {
         toggleProgress(uiModel.inProgress);
@@ -272,14 +268,15 @@ public class DashboardSecondLevelFragment extends CommonFragment
                 renderTable(data);
             } catch (Exception e) {
                 alertDialog(requireContext(), 0, getResources().getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
+                    SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null);
             }
         }
     }
 
     private void renderTable(List<Map<String, Object>> tableList) {
         hierarchyMapList = new ArrayList<>();
-        SecondClickTableAdapter secondClickTableAdapter = new SecondClickTableAdapter(new ArrayList<>());
+        SecondClickTableAdapter secondClickTableAdapter =
+            new SecondClickTableAdapter(new ArrayList<>());
         table.setAdapter(secondClickTableAdapter);
         if (tableList.size() != 0) {
             ArrayList<String> columns = new ArrayList<>();
@@ -289,67 +286,67 @@ public class DashboardSecondLevelFragment extends CommonFragment
                     for (Object columnName : objDetail.keySet()) {
                         columns.add(columnName.toString());
                         if (columnName.toString()
-                                .equalsIgnoreCase(
-                                        "WidgetSystemName")
-                                || columnName.toString()
-                                .equalsIgnoreCase("flg_empcode")) {
+                            .equalsIgnoreCase(
+                                "WidgetSystemName")
+                            || columnName.toString()
+                            .equalsIgnoreCase("flg_empcode")) {
                         } else {
                             columnsHeader.add(
-                                    getRefreshColumnName(
-                                            columnName.toString()));
+                                getRefreshColumnName(
+                                    columnName.toString()));
                         }
                     }
                     String[] stockArr =
-                            new String[columnsHeader.size()];
+                        new String[columnsHeader.size()];
                     stockArr = columnsHeader.toArray(stockArr);
                     secondClickTableAdapter.setHeaders(
-                            stockArr);
+                        stockArr);
                 }
                 HashMap map = new HashMap();
                 LinkedHashMap<String, String> hm =
-                        new LinkedHashMap<>();
+                    new LinkedHashMap<>();
                 for (String column : columns) {
                     if (column.equalsIgnoreCase(
-                            "WidgetSystemName") || column
-                            .equalsIgnoreCase("flg_empcode")) {
+                        "WidgetSystemName") || column
+                        .equalsIgnoreCase("flg_empcode")) {
                         map.put("flg_empcode",
-                                objDetail.get("flg_empcode"));
+                            objDetail.get("flg_empcode"));
                         map.put("WidgetSystemName",
-                                objDetail.get("WidgetSystemName"));
+                            objDetail.get("WidgetSystemName"));
                     } else {
                         String columnData =
-                                (objDetail.get(column) == null
-                                        || objDetail.get(column)
-                                        .toString() == null) ? ""
-                                        : objDetail.get(column)
-                                        .toString();
+                            (objDetail.get(column) == null
+                                || objDetail.get(column)
+                                .toString() == null) ? ""
+                                : objDetail.get(column)
+                                    .toString();
 
                         if (objDetail.get(
-                                column) instanceof Number) {
+                            column) instanceof Number) {
                             String strValue =
-                                    objDetail.get(column)
-                                            .toString()
-                                            .trim();
+                                objDetail.get(column)
+                                    .toString()
+                                    .trim();
                             if (strValue.indexOf(".") > -1
-                                    && !strValue.endsWith(".0")
-                                    && !strValue.endsWith(".00")) {
+                                && !strValue.endsWith(".0")
+                                && !strValue.endsWith(".00")) {
                                 columnData =
-                                        String.format("%.2f",
-                                                Double.parseDouble(
-                                                        objDetail.get(
-                                                                column)
-                                                                .toString()));
+                                    String.format("%.2f",
+                                        Double.parseDouble(
+                                            objDetail.get(
+                                                column)
+                                                .toString()));
                             } else {
                                 columnData =
-                                        String.format("%.0f",
-                                                Double.parseDouble(
-                                                        objDetail.get(
-                                                                column)
-                                                                .toString()));
+                                    String.format("%.0f",
+                                        Double.parseDouble(
+                                            objDetail.get(
+                                                column)
+                                                .toString()));
                             }
                         }
                         hm.put(getRefreshColumnName(column),
-                                columnData);
+                            columnData);
                     }
                 }
                 secondClickTableAdapter.add(hm);
@@ -389,32 +386,32 @@ public class DashboardSecondLevelFragment extends CommonFragment
             }
 
             DashboardSecondLevelRequest request = new DashboardSecondLevelRequest(
-                    parameterMap, widgetSystemName, DASHBOARD_REPORT_PAGE_SIZE, "1"
-            );
+                parameterMap, widgetSystemName, DASHBOARD_REPORT_PAGE_SIZE, "1",
+                "");
             hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
             hierarchyMap.put("PageSize", DASHBOARD_REPORT_PAGE_SIZE);
             hierarchyMap.put("Page", "1");
             Disposable subscribe = getSaathiApi().getDashboardSecondLevel(request)
-                    .map(responseS -> {
-                        Gson mGson = new Gson();
-                        Type type = new TypeToken<HashMap<String, Object>>() {
-                        }.getType();
-                        HashMap<String, Object> response = mGson.fromJson(responseS, type);
-                        Map<String, Object> responseJsonObj =
-                                (Map<String, Object>) response.get("Response");
-                        List<Map<String, Object>> tableResponseList =
-                                (List<Map<String, Object>>) responseJsonObj.get(
-                                        "Data");
-                        String status = response.get(STATUS).toString();
-                        if (status.equalsIgnoreCase("true")) {
-                            return tableResponseList;
-                        } else {
-                            String message = response.get(MESSAGE).toString();
-                            throw new ServiceFailureException(message, message);
-                        }
-                    })
-                    .compose(applyUiModel())
-                    .subscribe(this::renderDashboardSecondLevel);
+                .map(responseS -> {
+                    Gson mGson = new Gson();
+                    Type type = new TypeToken<HashMap<String, Object>>() {
+                    }.getType();
+                    HashMap<String, Object> response = mGson.fromJson(responseS, type);
+                    Map<String, Object> responseJsonObj =
+                        (Map<String, Object>) response.get("Response");
+                    List<Map<String, Object>> tableResponseList =
+                        (List<Map<String, Object>>) responseJsonObj.get(
+                            "Data");
+                    String status = response.get(STATUS).toString();
+                    if (status.equalsIgnoreCase("true")) {
+                        return tableResponseList;
+                    } else {
+                        String message = response.get(MESSAGE).toString();
+                        throw new ServiceFailureException(message, message);
+                    }
+                })
+                .compose(applyUiModel())
+                .subscribe(this::renderDashboardSecondLevel);
         } else {
             noInternetConnectionDialog();
         }
@@ -436,7 +433,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(R.layout.date_picker);
         dialog.getWindow()
-                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            .setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         DatePicker dpFromDate = dialog.findViewById(R.id.datePickerFromDate);
         dpFromDate.setDescendantFocusability(DatePicker.FOCUS_BLOCK_DESCENDANTS);
@@ -451,17 +448,17 @@ public class DashboardSecondLevelFragment extends CommonFragment
             try {
                 String[] dateSplit = mainFromDate.split("-");
                 dpFromDate.init(Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
-                        Integer.parseInt(dateSplit[2]), (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                                year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+                    Integer.parseInt(dateSplit[2]),
+                    (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                        year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
             } catch (Exception e) {
                 Timber.d(e, TAG);
             }
-
         } else {
             dpFromDate.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
-                    today.get(Calendar.DATE),
-                    (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
-                            year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
+                today.get(Calendar.DATE),
+                (view, year, monthOfYear, dayOfMonth) -> mainFromDate =
+                    year + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth));
         }
 
         timePicker.setOnTimeChangedListener((arg0, arg1, arg2) -> {
@@ -480,17 +477,17 @@ public class DashboardSecondLevelFragment extends CommonFragment
                     fromPostingDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd");
                     if (dateFlag) {
                         tvDateTime.setText(
-                                CRMAppUtil.getDateStr(fromDat, NEWDATE_FORMAT_OF_DD_MMM_YYYY));
+                            CRMAppUtil.getDateStr(fromDat, NEWDATE_FORMAT_OF_DD_MMM_YYYY));
                         addtionalParameterMapNew.put(dateType, tvDateTime.getText().toString());
                         webServiceCall();
                     } else {
                         String splitEndDate = stringArray(fromPostingDate);
                         String[] newEndDate = splitEndDate.split("-");
                         tvDateTime.setText(CRMAppUtil.getDBDate(
-                                CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
-                                        Integer.parseInt(newEndDate[1]),
-                                        Integer.parseInt(newEndDate[2]), hour,
-                                        minute), DATE_FORMAT_TO_DISPLAY));
+                            CRMAppUtil.getDBDateObj(Integer.parseInt(newEndDate[0]),
+                                Integer.parseInt(newEndDate[1]),
+                                Integer.parseInt(newEndDate[2]), hour,
+                                minute), DATE_FORMAT_TO_DISPLAY));
                         addtionalParameterMapNew.put(dateType, tvDateTime.getText().toString());
                         webServiceCall();
                     }
@@ -531,7 +528,6 @@ public class DashboardSecondLevelFragment extends CommonFragment
         return columnName;
     }
 
-
     private String stringArray(String date) {
         String[] spaceString = date.split(" ");
 
@@ -571,8 +567,8 @@ public class DashboardSecondLevelFragment extends CommonFragment
         private LayoutInflater inflater = null;
 
         SecondClickTableAdapter(
-                ArrayList<HashMap<String, String>> hashArray) {
-            commonHeaders = new CommonHeader[]{new CommonHeader("asd")};
+            ArrayList<HashMap<String, String>> hashArray) {
+            commonHeaders = new CommonHeader[] { new CommonHeader("asd") };
             this.hashArray = hashArray;
         }
 
@@ -629,18 +625,18 @@ public class DashboardSecondLevelFragment extends CommonFragment
 
                     view.setOnClickListener(v -> {
                         if (!isBlank(
-                                getValue(row, "LEAD ID", "LeadId", "Lead_Id", "LeadId ClientCode",
-                                        "LEADID/CLIENTCODE"))) {
+                            getValue(row, "LEAD ID", "LeadId", "Lead_Id", "LeadId ClientCode",
+                                "LEADID/CLIENTCODE"))) {
                             leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-                                    "LeadId ClientCode",
-                                    "LEADID/CLIENTCODE");
+                                "LeadId ClientCode",
+                                "LEADID/CLIENTCODE");
                         } else {
                             leadId = "0";
                         }
                         if (!isBlank(
-                                getValue(row, UCID, "Client UCID", "CLIENT UCID", "Client ucid"))) {
+                            getValue(row, UCID, "Client UCID", "CLIENT UCID", "Client ucid"))) {
                             ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
-                                    "Client ucid");
+                                "Client ucid");
                         } else {
                             ucid = "0";
                         }
@@ -648,22 +644,22 @@ public class DashboardSecondLevelFragment extends CommonFragment
                         if (hierarchyMapList.size() >= 1) {
                             if (!isBlank(getValue(row, "RM Name"))) {
                                 addtionalParameterMap.put("flt_level",
-                                        getValue(row, "Hierarchy"));
+                                    getValue(row, "Hierarchy"));
                                 addtionalParameterMap.put("flt_Hierarchy_empCode",
-                                        hierarchyMapList.get(row).get("flg_empcode"));
+                                    hierarchyMapList.get(row).get("flg_empcode"));
                                 hierarchyMap.put("WidgetSystemName",
-                                        hierarchyMapList.get(row)
-                                                .get("WidgetSystemName"));
+                                    hierarchyMapList.get(row)
+                                        .get("WidgetSystemName"));
                                 hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable(HIERARCHY_MAP,
-                                        (Serializable) hierarchyMap);
+                                    (Serializable) hierarchyMap);
                                 bundle.putSerializable(ADDITIONAL_MAP,
-                                        (Serializable) addtionalParameterMap);
+                                    (Serializable) addtionalParameterMap);
                                 bundle.putString(LABEL, txtLables.getText().toString());
                                 navigator.openPage(
-                                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-                                        bundle, true, false);
+                                    NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
+                                    bundle, true, false);
                             }
                         }
                         Bundle bundle = new Bundle();
@@ -673,7 +669,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
                             //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
                             //    true);
                             navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
-                                    false);
+                                false);
                         }
                     });
 
@@ -682,40 +678,40 @@ public class DashboardSecondLevelFragment extends CommonFragment
                     view = getBody(row, column, convertView, parent);
                     view.setOnClickListener(v -> {
                         if (!isBlank(
-                                getValue(row, "LEAD ID", "LeadId", "Lead_Id", "LeadId ClientCode",
-                                        "LEADID/CLIENTCODE"))) {
+                            getValue(row, "LEAD ID", "LeadId", "Lead_Id", "LeadId ClientCode",
+                                "LEADID/CLIENTCODE"))) {
                             leadId = getValue(row, "LEAD ID", "LeadId", "Lead_Id",
-                                    "LeadId ClientCode",
-                                    "LEADID/CLIENTCODE");
+                                "LeadId ClientCode",
+                                "LEADID/CLIENTCODE");
                         } else {
                             leadId = "0";
                         }
                         if (!isBlank(
-                                getValue(row, UCID, "Client UCID", "CLIENT UCID", "Client ucid"))) {
+                            getValue(row, UCID, "Client UCID", "CLIENT UCID", "Client ucid"))) {
                             ucid = getValue(row, UCID, "Client UCID", "CLIENT UCID",
-                                    "Client ucid");
+                                "Client ucid");
                         } else {
                             ucid = "0";
                         }
                         if (hierarchyMapList.size() >= 1) {
                             if (!isBlank(getValue(row, "RM Name"))) {
                                 addtionalParameterMap.put("flt_level",
-                                        getValue(row, "Hierarchy"));
+                                    getValue(row, "Hierarchy"));
                                 addtionalParameterMap.put("flt_Hierarchy_empCode",
-                                        hierarchyMapList.get(row).get("flg_empcode").toString());
+                                    hierarchyMapList.get(row).get("flg_empcode").toString());
                                 hierarchyMap.put("WidgetSystemName",
-                                        hierarchyMapList.get(row)
-                                                .get("WidgetSystemName"));
+                                    hierarchyMapList.get(row)
+                                        .get("WidgetSystemName"));
                                 hierarchyMap.put("AddtionalParameters", addtionalParameterMap);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable(HIERARCHY_MAP,
-                                        (Serializable) hierarchyMap);
+                                    (Serializable) hierarchyMap);
                                 bundle.putSerializable(ADDITIONAL_MAP,
-                                        (Serializable) addtionalParameterMap);
+                                    (Serializable) addtionalParameterMap);
                                 bundle.putString(LABEL, txtLables.getText().toString());
                                 navigator.openPage(
-                                        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-                                        bundle, true, false);
+                                    NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
+                                    bundle, true, false);
                             }
                         }
                         Bundle bundle = new Bundle();
@@ -725,7 +721,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
                             //navigateTo(NAV_TO_LEAD_VIEW_MAIN, bundle, getFragmentManager(),
                             //    true);
                             navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
-                                    false);
+                                false);
                         }
                     });
                     break;
@@ -755,7 +751,7 @@ public class DashboardSecondLevelFragment extends CommonFragment
                 convertView = inflater.inflate(R.layout.item_table_header_first, parent, false);
             }
             RelativeLayout relativeLayout =
-                    convertView.findViewById(R.id.relativeLayout);
+                convertView.findViewById(R.id.relativeLayout);
             TextView head = (convertView.findViewById(android.R.id.text1));
             try {
                 head.setText(headers[0]);
@@ -784,11 +780,11 @@ public class DashboardSecondLevelFragment extends CommonFragment
                 convertView = inflater.inflate(R.layout.item_table_first, parent, false);
             }
             LinearLayout listLayout =
-                    convertView.findViewById(R.id.item_table_first);
+                convertView.findViewById(R.id.item_table_first);
             listLayout.setBackgroundResource(
-                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
             final TextView tv_table_first =
-                    convertView.findViewById(R.id.tv_table_first);
+                convertView.findViewById(R.id.tv_table_first);
             tv_table_first.setText(getDevice(row).data[column + 1]);
 
             return convertView;
@@ -800,9 +796,9 @@ public class DashboardSecondLevelFragment extends CommonFragment
             }
             LinearLayout listLayout = convertView.findViewById(R.id.item_table);
             listLayout.setBackgroundResource(
-                    row % 2 == 0 ? R.color.alternateBackground : R.color.white);
+                row % 2 == 0 ? R.color.alternateBackground : R.color.white);
             ((TextView) convertView.findViewById(android.R.id.text1)).setText(
-                    getDevice(row).data[column]);
+                getDevice(row).data[column]);
             TextView text1 = convertView.findViewById(android.R.id.text1);
             text1.setBackgroundResource(0);
             return convertView;
@@ -859,7 +855,6 @@ public class DashboardSecondLevelFragment extends CommonFragment
             }
             return itemViewType;
         }
-
 
         private CommonHeader getFamily(int row) {
             int family = 0;
