@@ -26,9 +26,11 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.annotation.ForcePreferenceClear
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
@@ -104,6 +106,10 @@ class CommonActivity : BaseActivity(),
   @Inject
   @field:FcmToken
   lateinit var tokenPref: Preference<String>
+
+  @Inject
+  @field:ForcePreferenceClear
+  lateinit var forcePreferenceClear: BooleanPreference
 
   @Inject
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
@@ -471,6 +477,7 @@ class CommonActivity : BaseActivity(),
 
           uiModel.onSuccess {
             Timber.d("Logout Successfully")
+            forcePreferenceClear.set(false)
             stopService()
             openLogin()
           }
