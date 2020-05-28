@@ -21,7 +21,7 @@ object CreateMeetingConstants {
   val SELECT_MEETING_REASON = LookUp(0, "Select Meeting Reason")
   val SELECT_BA_CLIENT_MEETING = LookUp(0, "Select BA Client Meeting")
   val SELECT_OUT_STATION_MEETING = LookUp(0, "Select Out Station Meeting")
-  val SELECT_TRAVELLING_MODE = LookUp(0, "Select Tavelling Mode")
+  val SELECT_TRAVELLING_MODE = LookUp(0, "Select Travelling Mode")
 
   fun hasAttendeeAdded(
     list: ArrayList<AddedAttendee>,
