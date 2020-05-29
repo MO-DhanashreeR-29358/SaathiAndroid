@@ -24,13 +24,14 @@
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/_6sdp"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_menu_three_dot"
+            app:srcCompat="@drawable/ic_more_vert_black_24dp"
             />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivLead"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
+            android:visibility="gone"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
