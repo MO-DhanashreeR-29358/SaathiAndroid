@@ -11,6 +11,7 @@ object CreateMeetingConstants {
   val SELECT_PRODUCT = LookUp(0, "Select Product")
   val SELECT_ACTIONABLE = LookUp(0, "Select Actionables")
   val SELECT_CATEGORY = LookUp(0, "Select Category")
+  val SELECT_SUB_CATEGORY = LookUp(0, "Select Sub Category")
 
   @JvmField
   val SELECT_MEETING_LOCATION = LookUp(0, "Select Meeting Location")
@@ -42,6 +43,7 @@ object CreateMeetingConstants {
   const val MSG_SELECT_PRODUCT = "Select Product"
   const val MSG_SELECT_ACTIONABLE = "Select Actionables"
   const val MSG_SELECT_CATEGORY = "Select Category"
+  const val MSG_SELECT_SUB_CATEGORY = "Select Sub Category"
   const val MSG_SELECT_MEETING_DURATION = "Select Meeting Duration"
   const val MSG_SELECT_MEETING_LOCATION = "Select Meeting Location"
   const val MSG_SELECT_MEETING_OBJECTIVE = "Select Meeting Objective"

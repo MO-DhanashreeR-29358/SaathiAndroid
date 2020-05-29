@@ -263,7 +263,7 @@ class CreateMeetingPresenter @Inject constructor(
       .addTo(disposable)
 
     view.onDataValidated()
-      // .filter { it.equals(true) }
+      .filter { it.boolean }
       .map { getInputData() }
       .subscribe { view.setInputData(it) }
       .addTo(disposable)
@@ -316,10 +316,10 @@ class CreateMeetingPresenter @Inject constructor(
     data.meetingDate = view.getDate()
     data.product = "0"
     data.setProductList(view.getproductList())
-    data.meetingDuration = view.getSelectedMeetingDuration()!!.lookUpID.toString()
-    data.meetingObjectiveID = view.getSelectedMeetingLocation()!!.lookUpID.toString()
-    data.activityTypeID = view.getSelectedActivityType()!!.lookUpID.toString()
-    data.meetingReason = view.getSelectedMeetingReason()!!.lookUpID.toString()
+    data.meetingDuration = view.getSelectedMeetingDuration()?.lookUpID.toString()
+    data.meetingObjectiveID = view.getSelectedMeetingLocation()?.lookUpID.toString()
+    data.activityTypeID = view.getSelectedActivityType()?.lookUpID.toString()
+    data.meetingReason = view.getSelectedMeetingReason()?.lookUpID.toString()
     data.meetingDes = CRMAppUtil.getJsonSafeString(view.getMeetingDesc())
     data.meetingAttendee = attendeeList
     data.splMeetingAttendee = splAttendeeList

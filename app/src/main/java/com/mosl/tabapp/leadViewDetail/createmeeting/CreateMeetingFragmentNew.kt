@@ -77,6 +77,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_ACTIONABLE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_CATEGORY
@@ -85,6 +86,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELEC
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_REASON
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
@@ -101,6 +103,8 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.disableErrorMessages
+import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
@@ -188,12 +192,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
 
     subCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spSubCategory.adapter = subCategoryAdapter
-
-    baClientAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-    binding.spBAClient.adapter = baClientAdapter
-
-    outstationAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-    binding.spOutStaition.adapter = outstationAdapter
 
     meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
     binding.rvProductList.layoutManager = GridLayoutManager(requireContext(), 1)
@@ -382,6 +380,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
 
     uiModel.onSuccess {
+      binding.tilActivityType.disableErrorMessages()
       meetingReasonAdapter.clear()
       meetingReasonAdapter.setSpinnerData(binding.spMeetingReason, it)
     }
@@ -745,6 +744,21 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   override fun resetData() {
+    binding.tilActivityType.disableErrorMessages()
+    binding.tilProduct.disableErrorMessages()
+    binding.tilMeetingDuration.disableErrorMessages()
+    binding.tilMeetingObjective.disableErrorMessages()
+    binding.tilMeetingReason.disableErrorMessages()
+    binding.tilMeetingDescription.disableErrorMessages()
+    binding.tvMeetingDescriptionError.visibility = View.GONE
+    binding.tilTravellingMode.disableErrorMessages()
+    binding.tilLocation.disableErrorMessages()
+    binding.tvLocationError.visibility = View.GONE
+    binding.tvPinCodeError.visibility = View.GONE
+    binding.tilCategory.disableErrorMessages()
+    binding.tvCategoryCommentsError.visibility = View.GONE
+    binding.tilSubCategory.disableErrorMessages()
+    binding.tvSubCategoryCommentsError.visibility = View.GONE
     addedAttendeeList.clear()
     addedSplAttendeeList.clear()
     binding.tvAttendeeCount.text = ""
@@ -774,21 +788,21 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       alert("Please verify OTP to create meeting")
       false
     } else if (getSelectedActivityType()!! == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
-      setVisibilityAndMessage(binding.tvActivityTypeError, MSG_SELECT_ACTIVITY_TYPE)
+      binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
       false
     } else if (getSelectedSpinnerValue(binding.spProduct)!! == SELECT_PRODUCT && meetingProductAdapter.listProduct.size == 0) {
-      setVisibilityAndMessage(binding.tvProductError, MSG_SELECT_PRODUCT)
+      binding.tilProduct.setErrorMessages(MSG_SELECT_PRODUCT)
       false
     } else if (getSelectedSpinnerValue(binding.spMeetingDuration)!! == SELECT_MEETING_DURATION
     ) {
-      setVisibilityAndMessage(binding.tvMeetingDurationError, MSG_SELECT_MEETING_DURATION)
+      binding.tilMeetingDuration.setErrorMessages(MSG_SELECT_MEETING_DURATION)
       false
     } else if (getSelectedSpinnerValue(binding.spMeetingObjective)!! == SELECT_MEETING_OBJECTIVE
     ) {
-      setVisibilityAndMessage(binding.tvMeetingObjectiveError, MSG_SELECT_MEETING_OBJECTIVE)
+      binding.tilMeetingObjective.setErrorMessages(MSG_SELECT_MEETING_OBJECTIVE)
       false
     } else if (getSelectedSpinnerValue(binding.spMeetingReason)!! == SELECT_MEETING_REASON) {
-      setVisibilityAndMessage(binding.tvMeetingReasonError, MSG_SELECT_MEETING_REASON)
+      binding.tilMeetingReason.setErrorMessages(MSG_SELECT_MEETING_REASON)
       false
     } else if (binding.etMeetingDescription.text!!.trim().isEmpty()) {
       setVisibilityAndMessage(
@@ -801,11 +815,11 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       false
     } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!! == SELECT_MEETING_LOCATION
     ) {
-      setVisibilityAndMessage(binding.tvMeetingLocationError, MSG_SELECT_MEETING_LOCATION)
+      binding.tilMeetingLocation.setErrorMessages(MSG_SELECT_MEETING_LOCATION)
       false
     } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode)!! == SELECT_TRAVELLING_MODE && travellingAdapter.travellingList.size == 0
     ) {
-      setVisibilityAndMessage(binding.tvTravellingModeError, MSG_SELECT_TRAVELLING_MODE)
+      binding.tilTravellingMode.setErrorMessages(MSG_SELECT_TRAVELLING_MODE)
       false
     } else if (enableLocationGroup && binding.etLocation.text!!.trim().isEmpty()) {
       setVisibilityAndMessage(binding.tvLocationError, MSG_LOCATION_CANNOT_BE_LEFT_BLANK)
@@ -820,16 +834,25 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
         binding.spActionables
       )!! == SELECT_ACTIONABLE
     ) {
-      setVisibilityAndMessage(binding.tvActionablesError, MSG_SELECT_ACTIONABLE)
+      binding.tilActionables.setErrorMessages(MSG_SELECT_ACTIONABLE)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
         binding.spCategory
       )!! == SELECT_CATEGORY
     ) {
-      setVisibilityAndMessage(binding.tvCategoryError, MSG_SELECT_CATEGORY)
+      binding.tilCategory.setErrorMessages(MSG_SELECT_CATEGORY)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && binding.etCategory.text!!.length <= 10) {
       setVisibilityAndMessage(binding.tvCategoryCommentsError, MSG_ATLEAST_TEN_CHARACTERS)
+      false
+    } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        binding.spSubCategory
+      )!! == SELECT_SUB_CATEGORY
+    ) {
+      binding.tilSubCategory.setErrorMessages(MSG_SELECT_SUB_CATEGORY)
+      false
+    } else if (binding.llActionables.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
+      setVisibilityAndMessage(binding.tvSubCategoryCommentsError, MSG_ATLEAST_TEN_CHARACTERS)
       false
     } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
       permissionCheckHelper.requestLocation()
@@ -854,6 +877,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       visibility = View.VISIBLE
       text = msg
       requestFocus()
+      isFocusableInTouchMode = true
     }
   }
 

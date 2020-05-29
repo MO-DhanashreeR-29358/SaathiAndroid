@@ -228,7 +228,7 @@ public class CreateMeetingFragment extends CommonFragment
 
   @Override
   protected int getLayout() {
-    return R.layout.frag_create_meeting;
+    return R.layout.frag_create_meeting_old;
   }
 
   public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
