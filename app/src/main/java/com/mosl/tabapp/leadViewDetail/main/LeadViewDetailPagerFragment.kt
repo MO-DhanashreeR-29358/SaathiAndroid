@@ -1,6 +1,8 @@
 package com.mosl.tabapp.leadViewDetail.main
 
 import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
@@ -69,7 +71,57 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       setCanceledOnTouchOutside(false)
       setContentView(dialogBinding.root)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      if (userManager.getUser() != null && userManager.getUser()!!
+              .isAufsb()
+      ) {
+        dialogBinding.ivCreateMeeting.visibility = View.GONE
+        dialogBinding.ivSetAppointment.visibility = View.GONE
+        dialogBinding.ivSuggestMe.visibility = View.GONE
+      }
+      if (userManager.getUser() != null && userManager.getUser()!!
+              .isSMTEnabled()
+      ) {
+        dialogBinding.view3.visibility = View.VISIBLE
+        dialogBinding.ivSuggestMe.visibility = View.VISIBLE
+      } else {
+        dialogBinding.ivSuggestMe.visibility = View.GONE
+      }
+      if (userManager.getUser() != null && userManager.getUser()!!
+              .isEkycEnable()
+      ) {
+        if (oaoUserId != null && oaoUserId!!.toInt() > 0) {
+          dialogBinding.ivOpenAccount.visibility = View.GONE
+          dialogBinding.ivOaoForm.visibility = View.VISIBLE
+        } else {
+          dialogBinding.ivOpenAccount.visibility = View.VISIBLE
+          dialogBinding.ivOaoForm.visibility = View.GONE
+        }
+      }
+
+      if (diyCode!!.toInt() > 0) {
+        if (diyLink!!.isNotEmpty()) {
+          dialogBinding.view3.visibility = View.VISIBLE
+        }
+        dialogBinding.ivShareLink.visibility = View.VISIBLE
+      } else {
+        dialogBinding.ivShareLink.visibility = View.GONE
+      }
+      if (diyLink!!.isEmpty() || diyCode?.toInt() == 0) {
+        dialogBinding.ivCopyLink.visibility = View.GONE
+      } else {
+        dialogBinding.ivCopyLink.visibility = View.VISIBLE
+      }
+
+      dialogBinding.ivCreateMeeting.setOnClickListener { }
+      dialogBinding.ivSetAppointment.setOnClickListener { }
+      dialogBinding.ivCall.setOnClickListener { }
+      dialogBinding.ivSms.setOnClickListener { }
+      dialogBinding.ivClose.setOnClickListener { dismiss() }
+      dialogBinding.ivShareLink.setOnClickListener { }
+      dialogBinding.ivSuggestMe.setOnClickListener { }
+      dialogBinding.ivCopyLink.setOnClickListener { }
     }
         .show()
   }
