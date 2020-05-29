@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
@@ -63,13 +64,14 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
   }
 
   override fun showLeadViewDialog() {
-    val dialog = Dialog(requireContext()).apply {
+    Dialog(requireContext()).apply {
       val dialogBinding = DialogLeadviewBinding.inflate(layoutInflater)
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       setCanceledOnTouchOutside(false)
       setContentView(dialogBinding.root)
-
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
+        .show()
   }
 
   override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
