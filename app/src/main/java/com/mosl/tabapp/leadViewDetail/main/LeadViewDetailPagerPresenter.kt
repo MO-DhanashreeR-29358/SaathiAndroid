@@ -37,5 +37,9 @@ class LeadViewDetailPagerPresenter @Inject constructor(
         }
         .subscribe(view::renderLeadDetail, Timber::e)
         .addTo(disposable)
+
+    view.onThreeVerticalDotsClicked()
+        .subscribe { view.showLeadViewDialog() }
+        .addTo(disposable)
   }
 }

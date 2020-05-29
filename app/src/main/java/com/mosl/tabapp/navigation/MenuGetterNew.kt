@@ -16,6 +16,7 @@ import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
@@ -57,6 +58,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
       NavigationConstants.NAVIGATE_TO_REPORTS -> ReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> LeadViewMainFragment()
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER_NEW -> LeadViewDetailPagerFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> LeadViewDetailFragment()
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> DocumentFragment()
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> SMTFragment()
@@ -93,6 +95,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_REPORTS -> true
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
+      NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER_NEW -> true
       NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
       NavigationConstants.NAVIGATE_TO_DOCUMENT -> true
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> true

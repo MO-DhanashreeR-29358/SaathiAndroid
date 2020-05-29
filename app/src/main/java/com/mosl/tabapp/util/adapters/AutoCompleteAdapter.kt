@@ -160,7 +160,7 @@ class AutoCompleteAdapter(
       }
       holderView.rlViewDetail.setOnClickListener {
         bundle.putString(MOBILE, resultModel.mobileNo)
-        openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
+        openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER_NEW, bundle)
       }
       holderView.rlOpenAccount.setOnClickListener {
         clearAll()

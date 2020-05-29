@@ -1,8 +1,12 @@
 package com.mosl.tabapp.leadViewDetail.main
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Base64
 import android.view.View
+import android.view.Window
+import com.jakewharton.rxbinding3.view.clicks
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -11,7 +15,9 @@ import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.DialogLeadviewBinding
 import com.mosl.tabapp.databinding.FragLeadviewMainBinding
+import io.reactivex.Observable
 import javax.inject.Inject
 
 class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
@@ -42,7 +48,28 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadviewMainBinding.bind(view)
+    setupView()
     presenter.start()
+    dataActionSubject.onNext(Fetch)
+  }
+
+  private fun setupView() {
+    binding.includeClient.detail.ivLeadViewArrow.visibility = View.VISIBLE
+
+  }
+
+  override fun onThreeVerticalDotsClicked(): Observable<Unit> {
+    return binding.includeClient.detail.ivLeadViewArrow.clicks()
+  }
+
+  override fun showLeadViewDialog() {
+    val dialog = Dialog(requireContext()).apply {
+      val dialogBinding = DialogLeadviewBinding.inflate(layoutInflater)
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      setCanceledOnTouchOutside(false)
+      setContentView(dialogBinding.root)
+
+    }
   }
 
   override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {

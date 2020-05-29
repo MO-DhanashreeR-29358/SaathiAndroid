@@ -4,11 +4,15 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.main.ClientDetailAndImage
 import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
+import io.reactivex.Observable
 
 interface LeadViewDetailPagerView : BaseView {
 
   fun renderLeadDetail(uiModel: UiModel<LeadDetail>)
   fun renderClientDetailAndImage(uiModel: UiModel<ClientDetailAndImage>)
+
+  fun onThreeVerticalDotsClicked(): Observable<Unit>
+  fun showLeadViewDialog()
 
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"
