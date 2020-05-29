@@ -50,24 +50,24 @@ interface CreateMeetingView : BaseView {
   fun getSelectedProduct(): LookUp?
   fun getSelectedCategory(): LookUp?
   fun getSelectedSubCategory(): LookUp?
-  fun getPincode(): String
-  fun getAmount(): String
-  fun getMeetingAddress(): String
+  fun getPincode(): String?
+  fun getAmount(): String?
+  fun getMeetingAddress(): String?
   fun getMeetingDesc(): String
   fun getCustomerComment(): String?
   fun getCategory(): String
-  fun getSubCategory(): String
+  fun getSubCategory(): String?
   fun getAttendeeSearchText(): Observable<SearchTextChange>
   fun getDate(): String
   fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee>
   fun getOTPButtonText(): String
-  fun getLatitude(): String
-  fun getLongitude(): String
+  fun getLatitude(): String?
+  fun getLongitude(): String?
   fun getAttendeeList(): List<AddedAttendee>
   fun getSplAttendeeList(): List<AddedAttendee>
   fun getTravellingmodeList(): List<CreateMeetingTravellingModel>
   fun getproductList(): List<CreateMeetingProductModel>
-  fun getGeoArea(): String
+  fun getGeoArea(): String?
   fun renderDatePicker()
   fun onDatePicker(): Observable<Unit>
 

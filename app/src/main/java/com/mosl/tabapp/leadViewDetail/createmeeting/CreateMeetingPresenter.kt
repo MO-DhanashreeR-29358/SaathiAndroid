@@ -242,9 +242,9 @@ class CreateMeetingPresenter @Inject constructor(
       .switchMap {
         repository.sendOTP(
           OTPRequestData(
-            latitude = view.getLatitude(),
-            longitude = view.getLongitude(),
-            geoArea = view.getGeoArea(),
+            latitude = view.getLatitude()!!,
+            longitude = view.getLongitude()!!,
+            geoArea = view.getGeoArea()!!,
             ucid = createMeetingData.ucid,
             leadid = createMeetingData.leadId
           )
@@ -307,10 +307,10 @@ class CreateMeetingPresenter @Inject constructor(
     val data = MeetingApptModel()
     data.meetingType = "M"
     data.displayType = "A"
-    // data.pincode = view.getPincode()
-    // data.amount = view.getAmount()
-    // data.meetingAddress = view.getMeetingAddress()
-    // data.meetingAddressTypeId = view.getSelectedMeetingLocation()!!.lookUpID.toString()
+    data.pincode = view.getPincode()
+    data.amount = view.getAmount()
+    data.meetingAddress = view.getMeetingAddress()
+    data.meetingAddressTypeId = view.getSelectedMeetingLocation()?.lookUpID.toString()
     data.leadId = createMeetingData.leadId
     data.ucid = createMeetingData.ucid
     data.meetingDate = view.getDate()
@@ -324,15 +324,15 @@ class CreateMeetingPresenter @Inject constructor(
     data.meetingAttendee = attendeeList
     data.splMeetingAttendee = splAttendeeList
     data.travellingList = view.getTravellingmodeList()
-    // data.customerComment = CRMAppUtil.getJsonSafeString(view.getCustomerComment())
-    // data.actionables = view.getSelectedActionable()!!.lookUpID.toString()
-    // data.category = view.getSelectedCategory()!!.lookUpID.toString()
-    // data.etCategory = view.getCategory()
-    //  data.subCategory = view.getSelectedSubCategory()!!.lookUpID.toString()
-    //  data.etSubCategory = view.getSubCategory()
-    // data.geoArea = view.getGeoArea()
-    // data.geoLatitude = view.getLatitude()
-    // data.geoLongitude = view.getLongitude()
+    data.customerComment = CRMAppUtil.getJsonSafeString(view.getCustomerComment())
+    data.actionables = view.getSelectedActionable()?.lookUpID.toString()
+    data.category = view.getSelectedCategory()?.lookUpID.toString()
+    data.etCategory = view.getCategory()
+    data.subCategory = view.getSelectedSubCategory()?.lookUpID.toString()
+    data.etSubCategory = view.getSubCategory()
+    data.geoArea = view.getGeoArea()
+    data.geoLatitude = view.getLatitude()
+    data.geoLongitude = view.getLongitude()
     return data
   }
 
