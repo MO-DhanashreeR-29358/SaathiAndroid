@@ -128,6 +128,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         subject.onNext(ShareLinkClick)
       }
       dialogBinding.ivSuggestMe.setOnClickListener {
+        dismiss()
+        subject.onNext(SuggestMeClick)
       }
       dialogBinding.ivCopyLink.setOnClickListener { }
     }
@@ -140,6 +142,15 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
   override fun renderOnShareLinkClick(leadId: String) {
     renderDiyLink(leadId, this)
+  }
+
+  override fun onSuggestMeClicked(): Observable<SuggestMeClick> {
+    return subject.ofType()
+  }
+
+  override fun renderOnSuggestMeClick(uiModel: UiModel<String>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
   }
 
   override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {

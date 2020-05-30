@@ -8,6 +8,7 @@ import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
+import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
 import javax.inject.Inject
@@ -53,4 +54,14 @@ class LeadViewDetailPagerRepositoryImpl @Inject constructor(
         }
   }
 
+  override fun getUrlForProspectOnline(
+    leadId: String,
+    ucId: String
+  ): Observable<String> {
+    val request = RegisterProspectOnlineRequest(leadId, ucId)
+    return saathiApi.getRegisterProspectOnline(request)
+        .map {
+          it.encryptedURL
+        }
+  }
 }

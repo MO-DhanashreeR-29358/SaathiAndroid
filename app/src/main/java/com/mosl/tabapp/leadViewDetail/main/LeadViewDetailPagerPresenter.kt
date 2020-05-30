@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.main
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
 import com.mosl.tabapp.ekyc.EkycNavigator
 import io.reactivex.Observable
@@ -12,7 +13,8 @@ class LeadViewDetailPagerPresenter @Inject constructor(
   view: LeadViewDetailPagerView,
   val data: LeadViewDetailArgument,
   val repository: LeadViewDetailPagerRepository,
-  val ekycNavigator: EkycNavigator
+  val ekycNavigator: EkycNavigator,
+  val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadViewDetailPagerView>(view) {
 
   override fun start() {
@@ -44,6 +46,20 @@ class LeadViewDetailPagerPresenter @Inject constructor(
 
     view.onShareLinkClicked()
         .subscribe { view.renderOnShareLinkClick(data.leadId) }
+        .addTo(disposable)
+
+    view.onSuggestMeClicked()
+        .map { data }
+        .switchMap {
+          repository.getUrlForProspectOnline(data.leadId, data.ucId)
+              .compose(applyUiModel())
+        }
+        .subscribe { uiModel ->
+          view.renderOnSuggestMeClick(uiModel)
+          uiModel.onSuccess {
+            navigator.navigateToSuggestMe(it)
+          }
+        }
         .addTo(disposable)
   }
 }
