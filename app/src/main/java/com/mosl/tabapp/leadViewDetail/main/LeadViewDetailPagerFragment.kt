@@ -1,6 +1,9 @@
 package com.mosl.tabapp.leadViewDetail.main
 
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,6 +11,7 @@ import android.util.Base64
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Toast
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
@@ -16,6 +20,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.main.ClientDetailAndImage
 import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
 import com.mosl.tabapp.R
+import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewBinding
@@ -131,7 +136,10 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         dismiss()
         subject.onNext(SuggestMeClick)
       }
-      dialogBinding.ivCopyLink.setOnClickListener { }
+      dialogBinding.ivCopyLink.setOnClickListener {
+        dismiss()
+        subject.onNext(CopyLinkClick)
+      }
     }
         .show()
   }
@@ -146,6 +154,30 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
   override fun onSuggestMeClicked(): Observable<SuggestMeClick> {
     return subject.ofType()
+  }
+
+  override fun onCopyLinkClicked(): Observable<CopyLinkClick> {
+    return subject.ofType()
+  }
+
+  override fun renderOnCopyLinkClick() {
+    if (diyLink?.isEmpty() == true) {
+      Toast.makeText(
+          requireContext(), string.txt_lable_link_error_msg,
+          Toast.LENGTH_LONG
+      )
+          .show()
+
+    } else {
+      val clipboard = requireContext().getSystemService(
+          Context.CLIPBOARD_SERVICE
+      ) as ClipboardManager
+      val clip = ClipData.newPlainText("label", diyLink)
+      clipboard.primaryClip = clip
+      Toast.makeText(requireContext(), string.txt_lable_link_msg, Toast.LENGTH_LONG)
+          .show()
+
+    }
   }
 
   override fun renderOnSuggestMeClick(uiModel: UiModel<String>) {

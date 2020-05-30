@@ -18,6 +18,8 @@ interface LeadViewDetailPagerView : BaseView {
   fun renderOnShareLinkClick(leadId: String)
   fun onSuggestMeClicked(): Observable<SuggestMeClick>
   fun renderOnSuggestMeClick(uiModel: UiModel<String>)
+  fun onCopyLinkClicked(): Observable<CopyLinkClick>
+  fun renderOnCopyLinkClick()
 
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"
