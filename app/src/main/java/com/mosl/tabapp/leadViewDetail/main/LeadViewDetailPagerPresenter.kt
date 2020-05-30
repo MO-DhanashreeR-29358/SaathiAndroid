@@ -41,5 +41,9 @@ class LeadViewDetailPagerPresenter @Inject constructor(
     view.onThreeVerticalDotsClicked()
         .subscribe { view.showLeadViewDialog() }
         .addTo(disposable)
+
+    view.onShareLinkClicked()
+        .subscribe { view.renderOnShareLinkClick(data.leadId) }
+        .addTo(disposable)
   }
 }

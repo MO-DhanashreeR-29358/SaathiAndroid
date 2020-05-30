@@ -20,10 +20,13 @@ import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewBinding
 import com.mosl.tabapp.databinding.FragLeadviewMainBinding
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
-class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
+class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, DiyLinkClickListner {
 
   private lateinit var binding: FragLeadviewMainBinding
   @Inject internal lateinit var presenter: LeadViewDetailPagerPresenter
@@ -40,6 +43,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
   private var sourceName: String? = null
   private var prospectSourceName: String? = null
   private var prospectSourceDetail: String? = null
+  private val subject = PublishSubject.create<LeadViewDetailUiEvent>()
 
   override fun getLayout(): Int {
     return R.layout.frag_leadview_main
@@ -119,11 +123,23 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
       dialogBinding.ivCall.setOnClickListener { }
       dialogBinding.ivSms.setOnClickListener { }
       dialogBinding.ivClose.setOnClickListener { dismiss() }
-      dialogBinding.ivShareLink.setOnClickListener { }
-      dialogBinding.ivSuggestMe.setOnClickListener { }
+      dialogBinding.ivShareLink.setOnClickListener {
+        dismiss()
+        subject.onNext(ShareLinkClick)
+      }
+      dialogBinding.ivSuggestMe.setOnClickListener {
+      }
       dialogBinding.ivCopyLink.setOnClickListener { }
     }
         .show()
+  }
+
+  override fun onShareLinkClicked(): Observable<ShareLinkClick> {
+    return subject.ofType()
+  }
+
+  override fun renderOnShareLinkClick(leadId: String) {
+    renderDiyLink(leadId, this)
   }
 
   override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
@@ -191,6 +207,10 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView {
         )
       }
     }
+  }
+
+  override fun getDiyUrl(url: String) {
+    diyLink = url
   }
 
   override fun onDestroyView() {
