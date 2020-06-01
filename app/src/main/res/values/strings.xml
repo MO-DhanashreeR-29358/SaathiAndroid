@@ -216,6 +216,21 @@
         <item>Business</item>
     </string-array>
 
+    <string-array name="leadViewDetailTabArrayWhenLeadIdZero">
+        <item>Details</item>
+        <item>Activities</item>
+        <item>Mapping History</item>
+        <item>Interaction &amp; Events</item>
+    </string-array>
+
+    <string-array name="leadViewDetailTabArrayWhenLeadIdNotZero">
+        <item>Details</item>
+        <item>Activities</item>
+        <item>Profiling</item>
+        <item>Mapping History</item>
+        <item>Interaction &amp; Events</item>
+    </string-array>
+
     <string-array name="allowedFileTypeArray">
         <item>TXT</item>
         <item>DOC</item>

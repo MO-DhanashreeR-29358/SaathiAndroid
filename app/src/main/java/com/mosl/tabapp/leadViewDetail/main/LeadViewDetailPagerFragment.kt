@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding3.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
@@ -22,10 +24,12 @@ import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.databinding.DialogLeadviewBinding
 import com.mosl.tabapp.databinding.FragLeadviewMainBinding
+import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
@@ -48,13 +52,24 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
   private var diyLink: String? = null
   private var createMeetingId: String? = null
   private var interestedIn: String? = null
-  private var ucId: String? = null
+  private var ucId: String = "0"
+  private var leadId: String = "0"
   private var email: String? = null
   private var leadOwner: String? = null
   private var sourceName: String? = null
   private var prospectSourceName: String? = null
   private var prospectSourceDetail: String? = null
+  private var initialPage = 0
   private val subject = PublishSubject.create<LeadViewDetailUiEvent>()
+
+  private val tabArray: Array<String> by lazy {
+    resources.getStringArray(
+        if (leadId == "0")
+          R.array.leadViewDetailTabArrayWhenLeadIdZero
+        else
+          R.array.leadViewDetailTabArrayWhenLeadIdNotZero
+    )
+  }
 
   override fun getLayout(): Int {
     return R.layout.frag_leadview_main
@@ -73,7 +88,29 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
   private fun setupView() {
     binding.includeClient.detail.ivLeadViewArrow.visibility = View.VISIBLE
+    setupPager()
+  }
 
+  private fun setupPager() {
+    val newAdapter = LeadViewDetailFragmentStateAdapter(activity as AppCompatActivity, leadId, ucId)
+    binding.vpLeadView.adapter = newAdapter
+    binding.vpLeadView.currentItem = initialPage
+    TabLayoutMediator(
+        binding.indicatorLeadView,
+        binding.vpLeadView
+    ) { tab, position ->
+      tab.text = tabArray[position]
+    }.attach()
+  }
+
+  override fun extractArguments(bundle: Bundle) {
+    super.extractArguments(bundle)
+    leadId = bundle.getString(MOSLConstants.LEADID, "0") ?: "0"
+    ucId = bundle.getString(MOSLConstants.UCID, "0") ?: "0"
+    val notificationData = bundle.getParcelable<NotificationData>(MOSLConstants.NOTIFICATION_DATA)
+    if (notificationData?.section == "ACTIVITIES") {
+      initialPage = 1
+    }
   }
 
   override fun onThreeVerticalDotsClicked(): Observable<Unit> {
@@ -358,6 +395,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
   override fun onDestroyView() {
     presenter.stop()
+    binding.vpLeadView.adapter = null
     super.onDestroyView()
   }
 
