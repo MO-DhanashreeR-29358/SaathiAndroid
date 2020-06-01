@@ -201,7 +201,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
           "Yes", "No", true
       ) { action: Action, data: Array<Any?>? ->
         if (action == OK) {
-          requireContext().initiateCall(mobile!!)
+          requireContext().initiateCall(requireNotNull(mobile))
         }
       }
     }
@@ -219,7 +219,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
       )
           .show()
     } else {
-      requireContext().initiateMessage(mobile!!)
+      requireContext().initiateMessage(requireNotNull(mobile))
     }
   }
 
