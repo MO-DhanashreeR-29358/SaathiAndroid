@@ -3,7 +3,6 @@ package com.mosl.tabapp.leadViewDetail.main
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
-import com.mosl.tabapp.ekyc.EkycNavigator
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
@@ -13,7 +12,6 @@ class LeadViewDetailPagerPresenter @Inject constructor(
   view: LeadViewDetailPagerView,
   val data: LeadViewDetailArgument,
   val repository: LeadViewDetailPagerRepository,
-  val ekycNavigator: EkycNavigator,
   val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadViewDetailPagerView>(view) {
 
@@ -60,6 +58,40 @@ class LeadViewDetailPagerPresenter @Inject constructor(
             navigator.navigateToSuggestMe(it)
           }
         }
+        .addTo(disposable)
+
+    view.onOaoFormClicked()
+        .subscribe { navigator.navigateToSuggestMe(it.oaoId) }
+        .addTo(disposable)
+
+    view.onOpenAccountClicked()
+        .subscribe { view.renderOpenAccountClick() }
+        .addTo(disposable)
+
+    val createMeetingObs = view.onCreateMeetingClicked()
+        .map { it.id }
+        .share()
+
+    createMeetingObs
+        .filter { it == "0" }
+        .subscribe { navigator.navigateToCreateMeeting(data) }
+        .addTo(disposable)
+
+    createMeetingObs
+        .filter { it != "0" }
+        .subscribe(view::renderCreateMeetingClick)
+        .addTo(disposable)
+
+    view.onSetAppointmentClick()
+        .subscribe { navigator.navigateToSetAppointment(data) }
+        .addTo(disposable)
+
+    view.onCallClicked()
+        .subscribe { view.renderCallClick() }
+        .addTo(disposable)
+
+    view.onSMSClicked()
+        .subscribe { view.renderSMSClick() }
         .addTo(disposable)
   }
 }

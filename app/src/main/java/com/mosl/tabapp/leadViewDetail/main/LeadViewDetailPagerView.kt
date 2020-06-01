@@ -20,6 +20,17 @@ interface LeadViewDetailPagerView : BaseView {
   fun renderOnSuggestMeClick(uiModel: UiModel<String>)
   fun onCopyLinkClicked(): Observable<CopyLinkClick>
   fun renderOnCopyLinkClick()
+  fun onOaoFormClicked(): Observable<OaoFormClick>
+  fun onOpenAccountClicked(): Observable<OpenAccountClick>
+  fun renderOpenAccountClick()
+  fun onCreateMeetingClicked(): Observable<CreateMeetingClick>
+  fun renderCreateMeetingClick(id: String)
+  fun onSetAppointmentClick(): Observable<SetAppointmentClick>
+  fun onCallClicked(): Observable<CallClick>
+  fun renderCallClick()
+  fun onSMSClicked(): Observable<SMSClick>
+  fun renderSMSClick()
+
 
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"

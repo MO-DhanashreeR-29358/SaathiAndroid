@@ -23,9 +23,15 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.databinding.DialogLeadviewBinding
 import com.mosl.tabapp.databinding.FragLeadviewMainBinding
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
+import com.mosl.tabapp.util.initiateCall
+import com.mosl.tabapp.util.initiateMessage
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
@@ -123,10 +129,30 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         dialogBinding.ivCopyLink.visibility = View.VISIBLE
       }
 
-      dialogBinding.ivCreateMeeting.setOnClickListener { }
-      dialogBinding.ivSetAppointment.setOnClickListener { }
-      dialogBinding.ivCall.setOnClickListener { }
-      dialogBinding.ivSms.setOnClickListener { }
+      dialogBinding.ivOaoForm.setOnClickListener {
+        dismiss()
+        subject.onNext(OaoFormClick(requireNotNull(oaoUserId)))
+      }
+      dialogBinding.ivOpenAccount.setOnClickListener {
+        dismiss()
+        subject.onNext(OpenAccountClick)
+      }
+      dialogBinding.ivCreateMeeting.setOnClickListener {
+        dismiss()
+        subject.onNext(CreateMeetingClick(createMeetingId ?: "3"))
+      }
+      dialogBinding.ivSetAppointment.setOnClickListener {
+        dismiss()
+        subject.onNext(SetAppointmentClick)
+      }
+      dialogBinding.ivCall.setOnClickListener {
+        dismiss()
+        subject.onNext(CallClick)
+      }
+      dialogBinding.ivSms.setOnClickListener {
+        dismiss()
+        subject.onNext(SMSClick)
+      }
       dialogBinding.ivClose.setOnClickListener { dismiss() }
       dialogBinding.ivShareLink.setOnClickListener {
         dismiss()
@@ -142,6 +168,80 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
       }
     }
         .show()
+  }
+
+  override fun onCreateMeetingClicked(): Observable<CreateMeetingClick> {
+    return subject.ofType()
+  }
+
+  override fun renderCreateMeetingClick(id: String) {
+    val message = when (id.toInt()) {
+      1 -> getString(R.string.mgs_update_address)
+      2 -> getString(R.string.mgs_update_profile)
+      else -> getString(R.string.mgs_update_profile_address)
+    }
+    erroMsgDialog(message)
+  }
+
+  override fun onCallClicked(): Observable<CallClick> {
+    return subject.ofType()
+  }
+
+  override fun renderCallClick() {
+    if (mobile == null || CRMAppUtil.isBlank(mobile)) {
+      Toast.makeText(
+          requireContext(), "Contact number not available",
+          Toast.LENGTH_LONG
+      )
+          .show()
+    } else {
+      MSFDialog.alertDialog(
+          requireContext(), 0,
+          resources.getString(string.motilal_oswal), "Do you want to call?",
+          "Yes", "No", true
+      ) { action: Action, data: Array<Any?>? ->
+        if (action == OK) {
+          requireContext().initiateCall(mobile!!)
+        }
+      }
+    }
+  }
+
+  override fun onSMSClicked(): Observable<SMSClick> {
+    return subject.ofType()
+  }
+
+  override fun renderSMSClick() {
+    if (mobile == null || CRMAppUtil.isBlank(mobile)) {
+      Toast.makeText(
+          requireContext(), "Contact number not available",
+          Toast.LENGTH_LONG
+      )
+          .show()
+    } else {
+      requireContext().initiateMessage(mobile!!)
+    }
+  }
+
+  override fun onSetAppointmentClick(): Observable<SetAppointmentClick> {
+    return subject.ofType()
+  }
+
+  override fun onOaoFormClicked(): Observable<OaoFormClick> {
+    return subject.ofType()
+  }
+
+  override fun onOpenAccountClicked(): Observable<OpenAccountClick> {
+    return subject.ofType()
+  }
+
+  override fun renderOpenAccountClick() {
+    gotoEkycPage(
+        EkycModule(
+            mobile, email, leadOwner, sourceName, prospectSourceName,
+            prospectSourceDetail, interestedIn
+        )
+    )
   }
 
   override fun onShareLinkClicked(): Observable<ShareLinkClick> {
