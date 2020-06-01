@@ -114,7 +114,7 @@ class MenuDataSourceImpl @Inject constructor(
 
   internal fun getIncentiveReport(): BaseMenu {
     return BaseMenu(
-      icon = R.drawable.ic_menu_dashboard,
+      icon = R.drawable.ic_menu_incentive_reports,
       label = R.string.MOSL_MENU_INCENTIVE_REPORT_TXT,
       enabled = true,
       pageId = NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT
