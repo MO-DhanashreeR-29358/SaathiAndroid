@@ -28,7 +28,7 @@
             app:hintEnabled="false"
             >
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_activity_type"
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
@@ -209,15 +209,13 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_meeting_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintTextAppearance="@style/InputLayout"
             >
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etMeetingDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
@@ -228,19 +226,14 @@
                 android:textCursorDrawable="@null"
                 />
         </com.google.android.material.textfield.TextInputLayout>
-        <TextView
-            android:id="@+id/tvMeetingDescriptionError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:enabled="false"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:textColor="@color/error_red"
-            android:textSize="@dimen/_10sdp"
-            android:visibility="gone"
-            />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_meeting_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:errorTextAppearance="@style/error_appearance"
+            app:hintEnabled="false"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -351,7 +344,7 @@
             app:hintTextAppearance="@style/InputLayout"
             >
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etCustomerComment"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
@@ -437,7 +430,7 @@
                 app:hintTextAppearance="@style/InputLayout"
                 >
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -453,14 +446,13 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout"
+                app:errorTextAppearance="@style/error_appearance"
                 >
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
@@ -471,28 +463,23 @@
                     android:textCursorDrawable="@null"
                     />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tvLocationError"
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_location"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
                 />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_pinCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:hintTextAppearance="@style/InputLayout"
                 >
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPinCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -504,17 +491,13 @@
                     android:textCursorDrawable="@null"
                     />
             </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:id="@+id/tvPinCodeError"
-                android:layout_width="wrap_content"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_pinCode"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
                 />
         </LinearLayout>
 
@@ -596,7 +579,6 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_et_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
@@ -604,7 +586,7 @@
                 app:hintTextAppearance="@style/InputLayout"
                 >
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCategory"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
@@ -619,18 +601,14 @@
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/tvCategoryCommentsError"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_et_category"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:enabled="false"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:textColor="@color/error_red"
-                android:textSize="@dimen/_10sdp"
-                android:visibility="gone"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
                 />
+
             <LinearLayout
                 android:id="@+id/llSubcategory"
                 android:layout_width="match_parent"
@@ -665,7 +643,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_et_sub_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
@@ -673,7 +650,7 @@
                     app:hintTextAppearance="@style/InputLayout"
                     >
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSubCategory"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_80sdp"
@@ -687,17 +664,13 @@
                         android:textCursorDrawable="@null"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
-                <TextView
-                    android:id="@+id/tvSubCategoryCommentsError"
-                    android:layout_width="wrap_content"
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_et_sub_category"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:enabled="false"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:textColor="@color/error_red"
-                    android:textSize="@dimen/_10sdp"
-                    android:visibility="gone"
+                    app:errorTextAppearance="@style/error_appearance"
+                    app:hintEnabled="false"
                     />
             </LinearLayout>
         </LinearLayout>

@@ -32,7 +32,7 @@
         <item name="android:radioButtonStyle">@style/CRMRadioButton</item>
         <item name="android:checkboxStyle">@style/CRMCheckBoxSelector</item>
         <item name="editTextStyle">@style/CRMEdittextSelector</item>
-        <!--<item name="android:editTextStyle">@style/CRMEdittextSelector</item>-->
+        <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
         <!--<item name="alertDialogTheme">@style/AlertDialogTheme</item>-->
 
     </style>
@@ -211,7 +211,7 @@
         <item name="colorAccent">@android:color/black</item>
     </style>
 
-    <style name="InputLayout" parent="@android:style/TextAppearance.Medium">
+    <style name="InputLayout" parent="@android:style/TextAppearance">
         <!--textColorHint-->
 
         <item name="android:textColorHint">@android:color/black</item>

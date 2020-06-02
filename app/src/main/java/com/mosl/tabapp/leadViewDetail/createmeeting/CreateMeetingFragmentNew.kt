@@ -316,7 +316,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       minute = arg2
     }
 
-    close.setOnClickListener { v: View? -> dialog.dismiss() }
+    close.setOnClickListener { dialog.dismiss() }
 
     btnSubmit.setOnClickListener {
       try {
@@ -380,7 +380,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     }
 
     uiModel.onSuccess {
-      binding.tilActivityType.disableErrorMessages()
       meetingReasonAdapter.clear()
       meetingReasonAdapter.setSpinnerData(binding.spMeetingReason, it)
     }
@@ -744,21 +743,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   override fun resetData() {
-    binding.tilActivityType.disableErrorMessages()
-    binding.tilProduct.disableErrorMessages()
-    binding.tilMeetingDuration.disableErrorMessages()
-    binding.tilMeetingObjective.disableErrorMessages()
-    binding.tilMeetingReason.disableErrorMessages()
-    binding.tilMeetingDescription.disableErrorMessages()
-    binding.tvMeetingDescriptionError.visibility = View.GONE
-    binding.tilTravellingMode.disableErrorMessages()
-    binding.tilLocation.disableErrorMessages()
-    binding.tvLocationError.visibility = View.GONE
-    binding.tvPinCodeError.visibility = View.GONE
-    binding.tilCategory.disableErrorMessages()
-    binding.tvCategoryCommentsError.visibility = View.GONE
-    binding.tilSubCategory.disableErrorMessages()
-    binding.tvSubCategoryCommentsError.visibility = View.GONE
+    errorDisabled()
     addedAttendeeList.clear()
     addedSplAttendeeList.clear()
     binding.tvAttendeeCount.text = ""
@@ -781,7 +766,25 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     travellingAdapter.deleteAllProduct()
   }
 
+  private fun errorDisabled() {
+    binding.tilActivityType.disableErrorMessages()
+    binding.tilProduct.disableErrorMessages()
+    binding.tilMeetingDuration.disableErrorMessages()
+    binding.tilMeetingObjective.disableErrorMessages()
+    binding.tilMeetingReason.disableErrorMessages()
+    binding.tilMeetingDescription.disableErrorMessages()
+    binding.tilLocation.disableErrorMessages()
+    binding.tilTravellingMode.disableErrorMessages()
+    binding.tilLocation.disableErrorMessages()
+    binding.tilCategory.disableErrorMessages()
+    binding.tilSubCategory.disableErrorMessages()
+    binding.tilPinCode.disableErrorMessages()
+    binding.tilEtCategory.disableErrorMessages()
+    binding.tilEtSubCategory.disableErrorMessages()
+  }
+
   override fun validateFormData(): Boolean {
+    errorDisabled()
     val status: Boolean = if (userManager.getUser()!!.isRM() && !isSendOTPSuccesssful &&
       getSelectedActivityType()!!.isPersonalMeeting()
     ) {
@@ -805,13 +808,12 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       binding.tilMeetingReason.setErrorMessages(MSG_SELECT_MEETING_REASON)
       false
     } else if (binding.etMeetingDescription.text!!.trim().isEmpty()) {
-      setVisibilityAndMessage(
-        binding.tvMeetingDescriptionError,
+      binding.tilMeetingDescription.setErrorMessages(
         MSG_MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK
       )
       false
     } else if (binding.etMeetingDescription.text!!.length < 50) {
-      setVisibilityAndMessage(binding.tvMeetingDescriptionError, MSG_ATLEAST_FIFTY_CHARACTERS)
+      binding.tilMeetingDescription.setErrorMessages(MSG_ATLEAST_FIFTY_CHARACTERS)
       false
     } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!! == SELECT_MEETING_LOCATION
     ) {
@@ -822,13 +824,13 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       binding.tilTravellingMode.setErrorMessages(MSG_SELECT_TRAVELLING_MODE)
       false
     } else if (enableLocationGroup && binding.etLocation.text!!.trim().isEmpty()) {
-      setVisibilityAndMessage(binding.tvLocationError, MSG_LOCATION_CANNOT_BE_LEFT_BLANK)
+      binding.tilLocation.setErrorMessages(MSG_LOCATION_CANNOT_BE_LEFT_BLANK)
       false
     } else if (enableLocationGroup && binding.etLocation.text!!.length < 20) {
-      setVisibilityAndMessage(binding.tvLocationError, MSG_ATLEAST_TWENTY_CHARACTERS)
+      binding.tilLocation.setErrorMessages(MSG_ATLEAST_TWENTY_CHARACTERS)
       false
     } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
-      setVisibilityAndMessage(binding.tvPinCodeError, MSG_INVALID_PINCODE_NUMBER)
+      binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
         binding.spActionables
@@ -843,7 +845,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       binding.tilCategory.setErrorMessages(MSG_SELECT_CATEGORY)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && binding.etCategory.text!!.length <= 10) {
-      setVisibilityAndMessage(binding.tvCategoryCommentsError, MSG_ATLEAST_TEN_CHARACTERS)
+      binding.tilEtCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
         binding.spSubCategory
@@ -852,7 +854,7 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
       binding.tilSubCategory.setErrorMessages(MSG_SELECT_SUB_CATEGORY)
       false
     } else if (binding.llActionables.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
-      setVisibilityAndMessage(binding.tvSubCategoryCommentsError, MSG_ATLEAST_TEN_CHARACTERS)
+      binding.tilEtSubCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
       false
     } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
       permissionCheckHelper.requestLocation()
@@ -867,18 +869,6 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
     } else true
     uiSubject.onNext(ValidationStatus(status))
     return status
-  }
-
-  private fun setVisibilityAndMessage(
-    textView: TextView,
-    msg: String
-  ) {
-    textView.apply {
-      visibility = View.VISIBLE
-      text = msg
-      requestFocus()
-      isFocusableInTouchMode = true
-    }
   }
 
   override fun onAttendeeClicked(): Observable<Unit> {
