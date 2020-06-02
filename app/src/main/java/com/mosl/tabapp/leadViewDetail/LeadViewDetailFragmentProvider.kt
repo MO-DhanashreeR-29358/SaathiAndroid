@@ -5,6 +5,8 @@ import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesModule
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentModule
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailModule
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerModule
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
@@ -34,5 +36,8 @@ abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector(modules = [LeadViewDetailPagerModule::class])
   abstract fun provideLeadViewDetailPagerFragmentFactory(): LeadViewDetailPagerFragment
+
+  @ContributesAndroidInjector(modules = [LeadDetailModule::class])
+  abstract fun provideLeadDetailFragmentFactory(): LeadDetailFragment
 
 }

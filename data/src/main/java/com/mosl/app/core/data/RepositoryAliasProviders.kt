@@ -9,6 +9,7 @@ import com.mosl.app.core.data.dashboardreport.DashboardReportRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl
 import com.mosl.app.core.data.leadviewdetail.history.MappingHistoryRepositoryImpl
+import com.mosl.app.core.data.leadviewdetail.leaddetail.LeadDetailRepositoryImpl
 import com.mosl.app.core.data.leadviewdetail.main.LeadViewDetailPagerRepositoryImpl
 import com.mosl.app.core.data.notification.NotificationRepositoryImpl
 import com.mosl.app.core.data.pendingapproval.PendingApprovalRepositoryImpl
@@ -27,6 +28,7 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.lead.report.LeadsReportRepository
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
+import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailRepository
 import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
 import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.pendingapproval.PendingApprovalRepository
@@ -98,7 +100,9 @@ interface RepositoryAliasProviders {
   @Binds
   fun provideLeadViewDetailPagerRepository(repository: LeadViewDetailPagerRepositoryImpl): LeadViewDetailPagerRepository
 
-
   @Binds
   fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
+
+  @Binds
+  fun bindLeadDetailRepository(repository: LeadDetailRepositoryImpl): LeadDetailRepository
 }
