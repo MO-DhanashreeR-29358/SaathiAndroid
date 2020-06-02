@@ -729,9 +729,16 @@ class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragmen
   }
 
   override fun getGeoArea(): String {
+    var geoArea = ""
     val geocoder = Geocoder(requireContext(), Locale.getDefault())
-    val addressLine = geocoder.getFromLocation(location!!.latitude, location!!.longitude, 1)
-    return addressLine[0].getAddressLine(0)
+    location?.apply {
+      val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
+      if (addressLine.size > 0) {
+        geoArea = addressLine[0].getAddressLine(0)
+      }
+    }
+
+    return geoArea
   }
 
   override fun onSaveClicked(): Observable<Unit> {
