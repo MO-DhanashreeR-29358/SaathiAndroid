@@ -28,7 +28,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
-import com.mosl.tabapp.common.CRMMOSLCommon.disableField
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
@@ -58,7 +57,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class LeadCreationFragment : CommonFragment(),
-    LeadCreationView {
+  LeadCreationView {
 
   @Inject internal lateinit var presenter: LeadCreationPresenter
   private lateinit var binding: FragLeadCreationBinding
@@ -116,11 +115,10 @@ class LeadCreationFragment : CommonFragment(),
   }
 
   private var primaryRM: String? = null
-  private var RefereeCode: String? = null
-  private var RefereeName: kotlin.String? = null
   private val searchList: CustomListPickerDialog by lazy {
     CustomListPickerDialog(requireContext())
   }
+
   private fun setupView() {
     setupScrollView()
     disableField(binding.llResAdd)
@@ -132,10 +130,10 @@ class LeadCreationFragment : CommonFragment(),
       setListener { primaryRM = null }
       setOnClickListener {
         requireActivity().window
-            .setSoftInputMode(
-                LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                    or LayoutParams.SOFT_INPUT_ADJUST_PAN
-            )
+          .setSoftInputMode(
+            LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                or LayoutParams.SOFT_INPUT_ADJUST_PAN
+          )
         searchList.threshold = MOSLConstants.SEARCH_LENTH
         searchList.show()
         searchList.setCustomTitle(resources.getString(string.str_assing))
@@ -161,22 +159,18 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     binding.etRefereeCode.setOnFocusChangeListener { _: View?, _: Boolean ->
-      if (binding.etRefereeCode.getText()
-              .toString().length < 4
+      if (binding.etRefereeCode.text
+          .toString().length < 4
       ) {
-        RefereeCode = ""
-        RefereeName = ""
         binding.etRefereeName.setText("")
         binding.etRefereeEmail.setText("")
         binding.etRefereeMobile.setText("")
       }
     }
     binding.etRefereeName.setOnFocusChangeListener { _: View?, _: Boolean ->
-      if (binding.etRefereeName.getText()
-              .toString().length < 3
+      if (binding.etRefereeName.text
+          .toString().length < 3
       ) {
-        RefereeCode = ""
-        RefereeName = ""
         binding.etRefereeEmail.setText("")
         binding.etRefereeMobile.setText("")
         binding.etRefereeCode.setText("")
@@ -202,15 +196,15 @@ class LeadCreationFragment : CommonFragment(),
 
       override fun afterTextChanged(s: Editable) {
         if (!CRMAppUtil.isBlank(
-                binding.etLandLine.getText()
-                    .toString()
-            )
+            binding.etLandLine.text
+              .toString()
+          )
         ) {
           if (!CRMValidationRule.validateTel(
-                  binding.etLandLine.getText()
-                      .toString()
-                      .trim({ it <= ' ' })
-              )
+              binding.etLandLine.text
+                .toString()
+                .trim { it <= ' ' }
+            )
           ) {
             binding.etLandLine.error = "Invalid Tel number"
           } else {
@@ -240,16 +234,16 @@ class LeadCreationFragment : CommonFragment(),
 
       override fun afterTextChanged(s: Editable) {
         if (!CRMAppUtil.isBlank(
-                binding.etName.getText()
-                    .toString()
-                    .trim({ it <= ' ' })
-            )
+            binding.etName.text
+              .toString()
+              .trim { it <= ' ' }
+          )
         ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etName.getText()
-                      .toString()
-                      .trim({ it <= ' ' })
-              )
+              binding.etName.text
+                .toString()
+                .trim { it <= ' ' }
+            )
           ) {
             binding.etName.error = MOSLConstants.ErrorMsgName
           } else {
@@ -279,15 +273,15 @@ class LeadCreationFragment : CommonFragment(),
 
       override fun afterTextChanged(s: Editable) {
         if (!CRMAppUtil.isBlank(
-                binding.etProspectRefereeName.text.toString()
-                    .trim({ it <= ' ' })
-            )
+            binding.etProspectRefereeName.text.toString()
+              .trim { it <= ' ' }
+          )
         ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etProspectRefereeName.getText()
-                      .toString()
-                      .trim { it <= ' ' }
-              )
+              binding.etProspectRefereeName.text
+                .toString()
+                .trim { it <= ' ' }
+            )
           ) {
             binding.etProspectRefereeName.error = MOSLConstants.ErrorMsgName
           } else {
@@ -317,16 +311,16 @@ class LeadCreationFragment : CommonFragment(),
 
       override fun afterTextChanged(s: Editable) {
         if (!CRMAppUtil.isBlank(
-                binding.etContactPerson.getText()
-                    .toString()
-                    .trim({ it <= ' ' })
-            )
+            binding.etContactPerson.text
+              .toString()
+              .trim { it <= ' ' }
+          )
         ) {
           if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                  binding.etContactPerson.getText()
-                      .toString()
-                      .trim({ it <= ' ' })
-              )
+              binding.etContactPerson.text
+                .toString()
+                .trim { it <= ' ' }
+            )
           ) {
             binding.etContactPerson.error = MOSLConstants.ErrorMsgName
           } else {
@@ -354,14 +348,14 @@ class LeadCreationFragment : CommonFragment(),
         count: Int
       ) {
         if (!CRMAppUtil.isBlank(
-                binding.etProspectRefereerMobile.getText()
-                    .toString()
-            )
+            binding.etProspectRefereerMobile.text
+              .toString()
+          )
         ) {
           if (!CRMValidationRule.validateMobile(
-                  binding.etProspectRefereerMobile.getText()
-                      .toString()
-              )
+              binding.etProspectRefereerMobile.text
+                .toString()
+            )
           ) {
             binding.etProspectRefereeName.error = MOSLConstants.INVALID_MOBILE_NO
           } else {
@@ -391,9 +385,9 @@ class LeadCreationFragment : CommonFragment(),
 
   private fun TextView.toggleIcon(parent: View) {
     setCompoundDrawablesWithIntrinsicBounds(
-        0, 0,
-        if (parent.visibility == View.VISIBLE) R.drawable.ic_minus else R.drawable.ic_plus,
-        0
+      0, 0,
+      if (parent.visibility == View.VISIBLE) R.drawable.ic_minus else R.drawable.ic_plus,
+      0
     )
   }
 
@@ -448,7 +442,7 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onRefereeCodeChanged(): Observable<String> {
     return binding.etRefereeCode.afterTextChangeEvents()
-        .map { it.editable?.toString() ?: emptyString() }
+      .map { it.editable?.toString() ?: emptyString() }
   }
 
   override fun resetRefereeOnCodeChange() {
@@ -461,7 +455,7 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onRefereeNameChanged(): Observable<String> {
     return binding.etRefereeName.afterTextChangeEvents()
-        .map { it.editable?.toString() ?: "" }
+      .map { it.editable?.toString() ?: "" }
   }
 
   override fun resetRefereeOnNameChange() {
@@ -505,9 +499,9 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onAddressLineOneChanged(): Observable<String> {
     return binding.etAdd1.afterTextChangeEvents()
-        .map {
-          it.editable?.toString() ?: ""
-        }
+      .map {
+        it.editable?.toString() ?: ""
+      }
   }
 
   override fun renderOnAddressLineOneChange(text: String) {
@@ -516,9 +510,9 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onAddressLineTwoChanged(): Observable<String> {
     return binding.etAdd2.afterTextChangeEvents()
-        .map {
-          it.editable?.toString() ?: ""
-        }
+      .map {
+        it.editable?.toString() ?: ""
+      }
   }
 
   override fun renderOnAddressLineTwoChange(text: String) {
@@ -527,9 +521,9 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onAddressLineThreeChanged(): Observable<String> {
     return binding.etAdd3.afterTextChangeEvents()
-        .map {
-          it.editable?.toString() ?: ""
-        }
+      .map {
+        it.editable?.toString() ?: ""
+      }
   }
 
   override fun renderOnAddressLineThreeChange(text: String) {
@@ -538,13 +532,13 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun onPincodeChanged(): Observable<String> {
     return binding.etPincode.afterTextChangeEvents()
-        .map {
-          it.editable?.toString()
-        }
+      .map {
+        it.editable?.toString()
+      }
   }
 
   override fun renderOnPincodeChange(pincode: String) {
-      binding.etOffPincode.setText(pincode)
+    binding.etOffPincode.setText(pincode)
   }
 
   override fun onCategoryChanged(): Observable<Int> = binding.spCategory.itemSelections()
@@ -566,7 +560,6 @@ class LeadCreationFragment : CommonFragment(),
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
   override fun onOfficeStateSelected(): Observable<Int> = binding.spOffState.itemSelections()
   override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
-
 
   override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
     binding.spOffCity.setSelection(position)
@@ -694,10 +687,10 @@ class LeadCreationFragment : CommonFragment(),
 
   private fun Spinner.setSpinnerData(
     arrayAdapter: ArrayAdapter<RowData>,
-    rowDatas: List<RowData>
+    rowData: List<RowData>
   ) {
     adapter = arrayAdapter
-    arrayAdapter.setSpinnerData(this, rowDatas)
+    arrayAdapter.setSpinnerData(this, rowData)
   }
 
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {
@@ -733,15 +726,15 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun renderPrimaryInfoClick() {
     toggleSectionExpansion(
-        binding.llPersonalInformation,
-        binding.tvPersonalInfo
+      binding.llPersonalInformation,
+      binding.tvPersonalInfo
     )
   }
 
   override fun renderAdditionalInfoClick() {
     toggleSectionExpansion(
-        binding.llAdditionInfo,
-        binding.tvAdditionInfo
+      binding.llAdditionInfo,
+      binding.tvAdditionInfo
     )
   }
 
@@ -754,10 +747,10 @@ class LeadCreationFragment : CommonFragment(),
 
     uiModule.onSuccess {
       MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal), MOSLConstants.CONFIRM_LEAD, "YES",
-          "NO", true
-      ) { action: Action, data: Array<Any?>? ->
+        requireContext(), 0,
+        resources.getString(string.motilal_oswal), MOSLConstants.CONFIRM_LEAD, "YES",
+        "NO", true
+      ) { action: Action, _: Array<Any?>? ->
         if (action == OK) {
           subject.onNext(CreateLeadEvent)
         }
@@ -778,10 +771,10 @@ class LeadCreationFragment : CommonFragment(),
       val response = data.response
       if (data.status && response != null) {
         MSFDialog.alertDialog(
-            context, 0,
-            getString(string.motilal_oswal),
-            "Lead Created Successfully with lead Id " + response.leadID,
-            "OK", true
+          context, 0,
+          getString(string.motilal_oswal),
+          "Lead Created Successfully with lead Id " + response.leadID,
+          "OK", true
         ) { action: Action, _: Array<Any?>? ->
           if (action == OK) { //dashbordFragment();
             navigator.openHome()
@@ -794,11 +787,11 @@ class LeadCreationFragment : CommonFragment(),
           dedupeDialog(dedupeModel)
         } else if (data.errors != null) {
           val errorMsg = data.errors!![0]
-              .message
+            .message
           MSFDialog.alertDialog(
-              context, 0,
-              getString(string.motilal_oswal),
-              errorMsg, "OK", true, null
+            context, 0,
+            getString(string.motilal_oswal),
+            errorMsg, "OK", true, null
           )
         }
       }
@@ -812,70 +805,70 @@ class LeadCreationFragment : CommonFragment(),
   override fun getLeadCreationUserInput(): LeadCreationUserInput {
 
     val resAdd = AddressDetailModel(
-        RESIDENCEADDRESS,
-        binding.etAdd1.text.toString(),
-        binding.etAdd2.text.toString(),
-        binding.etAdd3.text.toString(),
-        (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spState.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        binding.etPincode.text.toString(),
-        binding.cbPrimaryAddress.isChecked(),
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      RESIDENCEADDRESS,
+      binding.etAdd1.text.toString(),
+      binding.etAdd2.text.toString(),
+      binding.etAdd3.text.toString(),
+      (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+      (binding.spState.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+      (binding.spCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+      binding.etPincode.text.toString(),
+      binding.cbPrimaryAddress.isChecked,
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId
     )
 
     val offAdd = AddressDetailModel(
-        OFFICEADDRESS,
-        binding.etOffAdd1.text.toString(),
-        binding.etOffAdd2.text.toString(),
-        binding.etOffAdd3.text.toString(),
-        (binding.spOffCountry.selectedItem as? RowData)?.key
-            ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spOffState.selectedItem as? RowData)?.key
-            ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spOffCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        binding.etOffPincode.text.toString(),
-        binding.cbOffPrimaryAddress.isChecked(),
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      OFFICEADDRESS,
+      binding.etOffAdd1.text.toString(),
+      binding.etOffAdd2.text.toString(),
+      binding.etOffAdd3.text.toString(),
+      (binding.spOffCountry.selectedItem as? RowData)?.key
+        ?: LeadCreationView.INVALID_SELECTION_KEY,
+      (binding.spOffState.selectedItem as? RowData)?.key
+        ?: LeadCreationView.INVALID_SELECTION_KEY,
+      (binding.spOffCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+      binding.etOffPincode.text.toString(),
+      binding.cbOffPrimaryAddress.isChecked,
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId
     )
 
     return LeadCreationUserInput(
-        selectedCategory = binding.spCategory.selectedItem as RowData,
-        etCategoryName = binding.etName.text.toString(),
-        etContactPerson = binding.etContactPerson.text.toString(),
-        selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
-        selectedProductType = binding.spProductType.selectedItem as RowData,
-        emailId = binding.etEmailId.text.toString(),
-        alternateEmailId = binding.etAlternateEmailId.text.toString(),
-        mobileNo = binding.etMobile.text.toString(),
-        alternateMobileNo = binding.etAlternateMobno.text.toString(),
-        landlineNo = binding.etLandLine.text.toString(),
-        ekycMobileNo = binding.etEkycMobile.text.toString(),
-        panNo = binding.etPanNum.text.toString(),
-        aadharNo = binding.etAadharNum.text.toString(),
-        sourceName = binding.spProspectSource.selectedItem.toString(),
-        referCode = binding.etRefereeCode.text.toString(),
-        referEmail = binding.etRefereeEmail.text.toString(),
-        referName = binding.etRefereeName.text.toString(),
-        referMobile = binding.etRefereeMobile.text.toString(),
-        isRefereeCode = isReferee,
-        pinCode = binding.etPincode.text.toString(),
-        officePinCode = binding.etOffPincode.text.toString(),
-        name = binding.etName.text.toString(),
-        isSameAsChecked = binding.cbSameAs.isChecked,
-        selectedSource = binding.spSource.selectedItem as RowData,
-        selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
-        prospectSourceDetail = binding.etProspectSourceDetails.text.toString(),
-        proReferName = binding.etProspectRefereeName.text.toString(),
-        proReferEmail = binding.etProspectRefereerEmail.text.toString(),
-        proReferMob = binding.etProspectRefereerMobile.text.toString(),
-        comment = getJsonSafeString(binding.etComments.text.toString()),
-        professionalId = binding.spProfession.selectedItem as RowData,
-        primRM = primaryRM,
-        stageId = binding.spStage.selectedItem as RowData,
-        statusId = binding.spStatus.selectedItem as RowData,
-        residenceAdd = resAdd,
-        officeAdd = offAdd
+      selectedCategory = binding.spCategory.selectedItem as RowData,
+      etCategoryName = binding.etName.text.toString(),
+      etContactPerson = binding.etContactPerson.text.toString(),
+      selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
+      selectedProductType = binding.spProductType.selectedItem as RowData,
+      emailId = binding.etEmailId.text.toString(),
+      alternateEmailId = binding.etAlternateEmailId.text.toString(),
+      mobileNo = binding.etMobile.text.toString(),
+      alternateMobileNo = binding.etAlternateMobno.text.toString(),
+      landlineNo = binding.etLandLine.text.toString(),
+      ekycMobileNo = binding.etEkycMobile.text.toString(),
+      panNo = binding.etPanNum.text.toString(),
+      aadharNo = binding.etAadharNum.text.toString(),
+      sourceName = binding.spProspectSource.selectedItem.toString(),
+      referCode = binding.etRefereeCode.text.toString(),
+      referEmail = binding.etRefereeEmail.text.toString(),
+      referName = binding.etRefereeName.text.toString(),
+      referMobile = binding.etRefereeMobile.text.toString(),
+      isRefereeCode = isReferee,
+      pinCode = binding.etPincode.text.toString(),
+      officePinCode = binding.etOffPincode.text.toString(),
+      name = binding.etName.text.toString(),
+      isSameAsChecked = binding.cbSameAs.isChecked,
+      selectedSource = binding.spSource.selectedItem as RowData,
+      selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
+      prospectSourceDetail = binding.etProspectSourceDetails.text.toString(),
+      proReferName = binding.etProspectRefereeName.text.toString(),
+      proReferEmail = binding.etProspectRefereerEmail.text.toString(),
+      proReferMob = binding.etProspectRefereerMobile.text.toString(),
+      comment = getJsonSafeString(binding.etComments.text.toString()),
+      professionalId = binding.spProfession.selectedItem as RowData,
+      primRM = primaryRM,
+      stageId = binding.spStage.selectedItem as RowData,
+      statusId = binding.spStatus.selectedItem as RowData,
+      residenceAdd = resAdd,
+      officeAdd = offAdd
     )
   }
 
