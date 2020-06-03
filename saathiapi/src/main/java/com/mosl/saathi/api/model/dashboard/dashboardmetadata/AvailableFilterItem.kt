@@ -11,5 +11,5 @@ data class AvailableFilterItem(
   val keyValue: String?,
 
   @JvmField @SerializedName("FilterData")
-  val filterData: FilterData?
+  val filterData: FilterData
 )

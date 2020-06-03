@@ -8,13 +8,13 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
-import com.mosl.tabapp.dashboard.DashboardFragment
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragment
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragment
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
+import com.mosl.tabapp.dashboard.base.DashboardFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportFragment
+import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
@@ -49,8 +49,8 @@ object MenuGetterNew {
         args.putString(URL_PATH, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
         arguments = args
       }
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardSecondLevelFragment()
-      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
+      NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
@@ -63,7 +63,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
-      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
+      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragmentNew()
       NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()

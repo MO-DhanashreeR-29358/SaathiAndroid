@@ -2,406 +2,342 @@ package com.mosl.tabapp.constants;
 
 // interface MOSLConstants extends LabelConfig, ServiceDetails {
 public interface MOSLConstants extends LabelConfig {
-    String GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp";
-    String MSG_ACCOUNT_OPENING =
-            "You have not installed account opening application, Please Click to download";
+  String USER_TYPE_FRANCHISE = "2";
 
-    String USER_TYPE_FRANCHISE = "2";
+  int SEARCH_LENTH = 3;
 
-    int SEARCH_LENTH = 3;
+  //Firebase notification constants
+  String FCM_NOTIFICATION_SOURCE = "FCM_NOTIFICATION_SOURCE";
 
-    //Firebase notification constants
-    String FCM_NOTIFICATION_SOURCE = "FCM_NOTIFICATION_SOURCE";
-    String FCM_NOTIFICATION_CATEGORY = "FCM_NOTIFICATION_CATEGORY";
+  //Tab Constant
+  int LEAD_DETAIL = 0;
 
-    //Tab Constant
-    int LEAD_DETAIL = 0;
+  String YES = "YES";
+  String NO = "NO";
+  String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in PMS product?";
+  String SOURCE = "Source";
+  //DRAWER MENU
 
-    String YES = "YES";
-    String NO = "NO";
-    String POTENTIAL_INVEST_IN_PRODUCT = "Does the Lead have potential to invest in PMS product?";
-    String SOURCE = "Source";
-    //DRAWER MENU
-    int MOSL_MENU_DASHBOARD = 0;
-    int MOSL_MENU_EKYC = 1;
-    int MOSL_MENU_FRESH_REGISTRATION = 0;
-    int MOSL_MENU_EXISTINGS_APPLICATIONS = 1;
-    int MOSL_MENU_MY_REPORTS = 2;
-    int MOSL_MENU_CALENDAR = 3;
-    int MOSL_MENU_PENDING_APPROVALS = 4;
-    int MOSL_MENU_KNOWLEDGE_CENTRE = 5;
-    int MOSL_MENU_SALES_STADIUM_PITCH = 6;
-    int MOSL_MENU_BIRTHDAY_ANIVERSARY = 7;
-    int MOSL_MENU_SUGGEST_ME = 8;
-    int MOSL_MENU_QUERY = 9;
-    int MOSL_MENU_AU_BANK_MEETING = 0;
-    int MOSL_MENU_AU_BANK_MEETING_REPORT = 1;
-    int MOSL_MENU_LOGOUT = 10;
-    int LOGOUT_CODE = 4;
-    int CALL_CONVERT_EKYC = 3;
-    int NAV_TO_SET_APPOINTMENT = 2;
-    int NAV_TO_PENDING_FOR_APPROVAL = 4;
-    int NAV_TO_PENDING_APPROVAL = 3;
-    int SECOND_CLICK_DASHBORD = 11;
-    int NAV_TO_CREATE_MEETING = 13;
-    int NAV_TO_CLIENT_MEETING = 14;
-    int NAV_TO_UPDATE_MEETING = 15;
-    int NAV_TO_LEAD_VIEW_MAIN = 16;
-    int NAV_TO_LEAD_ACTIVITIES_DETAIL = 17;
-    int NAV_TO_LEAD_DOCUMENT = 18;
+  int LOGOUT_CODE = 4;
+  // LookupType (GetAllLookup API)
+  int INTERESTEDIN = 5;
+  int PRODUCTTYPE = 6;
+  int LEADCATEGORY = 7;
+  int ACTIVITYTYPE = 13;
+  int MEETINGREASON = 14;
+  int MEETINGDURATION = 15;
+  int BACLIENTMEETING = 16;
+  int OUTSTATIONMEETING = 17;
+  int MEETINGOBJECTIVE = 18;
+  int ACTIONABLES = 20;
+  int CATEGORY = 21;
+  int SUBCATEGORY = 22;
+  int LEADPROFILE = 23;
+  int BANKMEETINGTYPE = 128;
+  int WEEKS = 24;
+  int DAYS = 25;
+  int REPEATMODE = 26;
+  int PROFESSIONID = 116;
+  int MEETINGADDRESSID = 117;
+  int TRAVELLINGMODEID = 118;
 
-    int NAV_TO_LEAD_CREATION = 21;
-    int NAV_TO_ADVISORY_DASHBOARD = 22;
+  //Address Type Id
+  int RESIDENCEADDRESS = 1;
+  int OFFICEADDRESS = 2;
 
-    int NAV_TO_SECOND_LEVEL_REPORT = 26;
-    int NAV_TO_SECOND_LEVEL_HIERARCHY_REPORT = 27;
-    int NAV_TO_WEB_VIEW = 28;
+  //Contact Type Name
+  String REPORT_PAGE_SIZE = "50";
+  String DASHBOARD_REPORT_PAGE_SIZE = "100";
 
-    // LookupType (GetAllLookup API)
-    int INTERESTEDIN = 5;
-    int PRODUCTTYPE = 6;
-    int LEADCATEGORY = 7;
-    int ACTIVITYTYPE = 13;
-    int MEETINGREASON = 14;
-    int MEETINGDURATION = 15;
-    int BACLIENTMEETING = 16;
-    int OUTSTATIONMEETING = 17;
-    int MEETINGOBJECTIVE = 18;
-    int ACTIONABLES = 20;
-    int CATEGORY = 21;
-    int SUBCATEGORY = 22;
-    int LEADPROFILE = 23;
-    int BANKMEETINGTYPE = 128;
-    int WEEKS = 24;
-    int DAYS = 25;
-    int REPEATMODE = 26;
-    int PROFESSIONID = 116;
-    int MEETINGADDRESSID = 117;
-    int TRAVELLINGMODEID = 118;
+  //Common
 
-    //Address Type Id
-    int RESIDENCEADDRESS = 1;
-    int OFFICEADDRESS = 2;
+  String SOME_ERROR_OCCURED_PLEASE_RETRY = "Some error occurred, please retry";
+  String MISSING_FILE = "File not found";
+  String SOME_SERVER_ERROR_OCCURRED =
+      "Something went wrong while getting response from server. Please try again.";
+  String SOME_SEELECTION_METHOD = "Please select at least one answer.";
+  String FILE_DOWNLOADED = "File downloaded at: ";
+  String MISSING_FILE_VIEWER = "Need supported app to view file: ";
+  String INTERNET_CONNECTION =
+      "Operation could not be completed. Please check your network connections.";
+  String CONFIRM_LEAD = "Are you sure want to create lead ?";
+  String CONFIRM_LEAD_UPDATE = "Are you sure want to update lead ?";
+  String ErrorMsgName = "Only alphabets are allowed";
 
-    //Contact Type Name
-    String REPORT_PAGE_SIZE = "50";
-    String DASHBOARD_REPORT_PAGE_SIZE = "100";
+  // Advisory
+  String ADVISORY_TARGET_TITLE = "Target Vs Achievement";
+  String LEAD = "Lead";
+  String MAP = "map";
+  String PERFORMANCE_INCENTIVE = "performance_incentive";
+  String CURRENT_QUARTER_STATUS = "current_quarter_status";
+  String MY_PERFORMANCE_INCENTIVE = "My_Performance_Incentive";
+  String PERFORMANCE_INCENTIVE_ACHIEVEMNET = "Performance_Incentive_Achievemnet";
+  String OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES =
+      "OaoSalesOneup_TeamPerformanceAndIncentives";
+  String SYS_MY_CLIENTS_SNAPSHOOT = "My_Clients_Snapshot";
+  String MY_LEAD = "My_Lead";
+  String MY_LEAD_AU_SUPPORT = "My_Lead_AU_Support";
+  String MyClient_MyLead = "MyClient_MyLead";
+  String ACTIONABLE = "Actionable";
+  String TEAM_LEAD = "Team_Lead";
+  String TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT = "Team_target_achievemnet";
+  String SELF_TARGET_ACHIEVEMNET = "target_achievemnet";
+  String AUSFB_TARGET_ACHIEVEMNET = "Target_Achievemnet_AU_Support";
+  String DASHBOARD_MODEL = "dashboardModel";
+  String MONTH_ON_MONTH = "MonthOnMonth";
+  String MONTH_ON_MONTH_ACCOUNT_REVENUE = "MonthOnMonthAccountRevenue";
+  String SYS_LEAD_SNAPSHOT = "LeadSnapshot";
+  String SYS_BUSINESS_SNAPSHOT = "BusinessSnapshot";
+  String SYS_RH_BUSINESS_SNAPSHOT = "RH_BusinessSnapshot";
+  String SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT =
+      "ProductSalesDirect1UP_BusinessSnapshot";
+  String SYS_TEAM_SNAPSHOT = "Team_Snapshot";
+  String MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY = "MyClients_MySnapshot_Productivity";
 
-    //Common
+  //Team
+  String TEAM_TARGET_TITLE = "Target Vs Achievement";
+  //hierarchy
+  String BUSINESS_SNAPSHOT_TITLE = "Business Snapshot";
+  String TRENDS_TITLE = "Month on Month Trend";
 
-    String SOME_ERROR_OCCURED_PLEASE_RETRY = "Some error occurred, please retry";
-    String MISSING_FILE = "File not found";
-    String SOME_SERVER_ERROR_OCCURRED =
-            "Something went wrong while getting response from server. Please try again.";
-    String SOME_SEELECTION_METHOD = "Please select at least one answer.";
-    String FILE_DOWNLOADED = "File downloaded at: ";
-    String MISSING_FILE_VIEWER = "Need supported app to view file: ";
-    String INTERNET_CONNECTION =
-            "Operation could not be completed. Please check your network connections.";
-    String CONFIRM_LEAD = "Are you sure want to create lead ?";
-    String CONFIRM_LEAD_UPDATE = "Are you sure want to update lead ?";
-    String ErrorMsgName = "Only alphabets are allowed";
+  //LeadView Tab
+  String DETAILS = "Details";
+  String ACTIVITIES = "Activities";
+  String PROFILING = "Profiling";
+  String MAPPING_HISTORY = "Mapping History";
+  String MAPPING_INTERACTION = "Interaction & Events";
 
-    String CLIENT_INFO = "Android";
+  //Lead Table
+  String REJECTED = "Rejected";
 
-    // Advisory
-    String ADVISORY_TARGET_TITLE = "Target Vs Achievement";
-    String LEAD = "Lead";
-    String AUSFB_LEAD = "ausfb_lead";
-    String MAP = "map";
-    String PERFORMANCE_INCENTIVE = "performance_incentive";
-    String CURRENT_QUARTER_STATUS = "current_quarter_status";
-    String MY_PERFORMANCE_INCENTIVE = "My_Performance_Incentive";
-    String PERFORMANCE_INCENTIVE_ACHIEVEMNET = "Performance_Incentive_Achievemnet";
-    String OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES =
-            "OaoSalesOneup_TeamPerformanceAndIncentives";
-    String SYS_MY_CLIENTS_SNAPSHOOT = "My_Clients_Snapshot";
-    String MY_LEAD = "My_Lead";
-    String MY_LEAD_AU_SUPPORT = "My_Lead_AU_Support";
-    String MyClient_MyLead = "MyClient_MyLead";
-    String ACTIONABLE = "Actionable";
-    String TEAM_LEAD = "Team_Lead";
-    String TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT = "Team_target_achievemnet";
-    String SELF_TARGET_ACHIEVEMNET = "target_achievemnet";
-    String AUSFB_TARGET_ACHIEVEMNET = "Target_Achievemnet_AU_Support";
-    String DASHBOARD_MODEL = "dashboardModel";
-    String MONTH_ON_MONTH = "MonthOnMonth";
-    String MONTH_ON_MONTH_ACCOUNT_REVENUE = "MonthOnMonthAccountRevenue";
-    String SYS_LEAD_SNAPSHOT = "LeadSnapshot";
-    String SYS_BUSINESS_SNAPSHOT = "BusinessSnapshot";
-    String SYS_RH_BUSINESS_SNAPSHOT = "RH_BusinessSnapshot";
-    String SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT =
-            "ProductSalesDirect1UP_BusinessSnapshot";
-    String SYS_TEAM_SNAPSHOT = "Team_Snapshot";
-    String MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY = "MyClients_MySnapshot_Productivity";
+  //Target tab
+  String MEETING = "Meeting";
+  //BusinessSnapshot tab
+  String DATE = "Date";
+  String NAME = "Name";
+  String TIME = "Time";
+  String ENTITY_FIELD = "entity Field";
 
-    //Team
-    String TEAM_TARGET_TITLE = "Target Vs Achievement";
-    //hierarchy
-    String BUSINESS_SNAPSHOT_TITLE = "Business Snapshot";
-    String TRENDS_TITLE = "Month on Month Trend";
+  String EMAIL_MESSAGE_CLIENT = "Do you want to send email to your client ?";
+  String EMAIL_ALL_MESSAGE = "Do you want to send email to all clients ?";
 
-    //LeadView Tab
-    String DETAILS = "Details";
-    String ACTIVITIES = "Activities";
-    String PROFILING = "Profiling";
-    String MAPPING_HISTORY = "Mapping History";
-    String MAPPING_INTERACTION = "Interaction & Events";
+  String NEW_CLIENT_NAME = "Name";
+  String MODULE_NAME = "Module Name";
+  String CLIENT_CODE = "Client Code";
+  String PRODUCT = "Product";
+  String DASHBOARD = "Dashboard";
 
-    //Lead Table
-    String REJECTED = "Rejected";
+  String UCID = "UCID";
+  String STATUS = "Status";
+  String MESSAGE = "Message";
+  String RESPONSE = "Response";
 
-    //Target tab
-    String MEETING = "Meeting";
-    //BusinessSnapshot tab
-    String DATE = "Date";
-    String NAME = "Name";
-    String TIME = "Time";
-    String ENTITY_FIELD = "entity Field";
+  //Login
+  String PROFILE_ID = "ProfileID";
+  String PRODUCT_ID = "ProductId";
+  String EMPLOYEE_CODE = "EmployeeCode";
+  String MOBILE = "Mobile";
+  String EMAIL = "Email";
+  String CREATE_MEETING_ID = "CreateMeeting";
+  //DefaultBusinessProfile
+  String AU_BANK_SALES_SUPPORT = "1142";
 
-    String EMAIL_MESSAGE_CLIENT = "Do you want to send email to your client ?";
-    String EMAIL_ALL_MESSAGE = "Do you want to send email to all clients ?";
+  //GetAllLookup API
 
-    String NEW_CLIENT_NAME = "Name";
-    String MODULE_NAME = "Module Name";
-    String CLIENT_CODE = "Client Code";
-    String PRODUCT = "Product";
-    String DASHBOARD = "Dashboard";
+  String RESIDENCE = "Residence";//Address Type
+  String OFFICE = "Office";
 
-    String UCID = "UCID";
-    String STATUS = "Status";
-    String MESSAGE = "Message";
-    String RESPONSE = "Response";
+  //GetLeadDetail
+  String LEADID = "LeadID";
 
-    //Login
-    String PROFILE_ID = "ProfileID";
-    String PRODUCT_ID = "ProductId";
-    String BUSINESS_PROFILE = "BusinessProfile";
-    String EMPLOYEE_CODE = "EmployeeCode";
-    String MOBILE = "Mobile";
-    String LEAD_OWNER = "LeadOwner";
-    String EMAIL = "Email";
-    String CREATE_MEETING_ID = "CreateMeeting";
-    String OAOUSERID = "OAOUserID";
-    //DefaultBusinessProfile
-    String AU_BANK_SALES_SUPPORT = "1142";
+  String OPERATIONAL = "Operational";
+  String BUSINESS = "Business";
+  String OK = "OK";
 
-    //GetAllLookup API
-    String SOURCENAME = "SourceName";
+  //Search
+  String DATA = "Data";
+  String LEAD_ID = "LeadID";
+  String HIERARCHY_MAP = "HierarchyMap";
+  String ADDITIONAL_MAP = "AdditionalMap";
+  String NOTIFICATION_DATA = "NOTIFICATION_DATA";
+  //  String MEETING_ID = "Meeting Id";
+  String MEETING_ID = "MeetingID";
+  String MOBNO = "MOBNO";
+  String UPDATED_MEETING = "Meeting updated successfully";
+  String SET_APPOINTMENTS = "Appointment created successfully";
+  String UPDATE_APPOINTMENTS = "Appointment updated successfully";
+  String SET_USER_PROFILE = "User profile updated successfully";
+  String CREATE_MEETING = "Meeting created successfully";
+  String DOCUMENT_RENAME = "Document renamed successfully";
+  String DOCUMENT_UPLOADED = "Document uploaded successfully";
+  String DOCUMENT_DELETED = "Document deleted successfully";
+  String APPT_CANCELLED = "Appointment cancelled successfully";
+  String SELECT_MEETING_DURATION = "Select Meeting Duration";
+  String SELECT_BANK = "Select Bank";
+  String SELECT_BRANCH = "Select Bank Branch";
+  String SELECT_MEETING_REASON = "Select Meeting Reason";
+  String SELECT_PRODUCT = "Select Product";
+  String SELECT_PROFILE = "Select Profile";
+  String SELECT_ACTIVITY_TYPE = "Select Activity Type";
+  String SELECT_APPT_DATE_TYPE = "Appointment Date should be future Date";
+  String SELECT_ACTIONABLES = "Select Actionables";
+  String SELECT_BA_CLIENT_MEETING = "Select BA Client Meeting";
+  String SELECT_OUT_STATION_MEETING = "Select Out Station Meeting";
+  String SELECT_CATEGORY = "Select Category";
+  String SELECT_MEETING_OBJECTIVE = "Select Meeting Objective";
+  String SELECT_MEETING_LOCATION = "Select Meeting Location";
+  String SELECT_TRAVELLING_MODE = "Select Travelling Mode";
+  String SELECT_SUB_CATEGORY = "Select Sub Category";
+  String SELECT_WEEK = "Select Week";
+  String SELECT_WEEK_DAYS = "Select Week Day";
+  String START_TIME_ERROR = "Start Date/Time should not be less than Appointment Date/Time";
+  String END_TIME_ERROR = "End Date/Time should not be less than Start Date/Time";
+  String END_TIME_EQUAL_ERROR = "End Date/Time should not be Equal to Start Date/Time";
+  String EMAIL_SEND = "Email Send request is submitted successfully";
+  String GIFT_SEND = "Send Gift request is submitted successfully";
+  String ATLEAST_TEN_CHARACTERS = "Atleast 10 characters";
+  String ATLEAST_FIFTY_CHARACTERS = "Atleast 50 characters";
+  String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
+  String INVALID_PINCODE_NUMBER = "Invalid pincode number";
+  String ATTENDEE_ALREADY_ADDED = "Attendee already added";
+  String EMPLOYEE_ALREADY_ADDED = "Employee already added";
+  String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";
+  String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
+  String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";
 
-    String RESIDENCE = "Residence";//Address Type
-    String OFFICE = "Office";
+  //Birthday Message
+  String BIRTHDAY_MESSAGE =
+      "On your special day we wish you Strong Health, Great Success, and True Happiness in your life.";
+  String ANNIVERSARY_MESSAGE =
+      "May your marriage be blessed with love, joy and companionship for all the years of your lives! A very happy Wedding Anniversary to both of you!";
 
-    //GetLeadDetail
-    String LEADID = "LeadID";
+  //Pending Approval
 
-    String OPERATIONAL = "Operational";
-    String BUSINESS = "Business";
-    String OK = "OK";
+  String EMPLOYEE_CODE_APP = "Employee Code";
+  String EMP_NAME = "Emp Name";
+  String LEAD_ID_APP = "Lead ID";
+  String FIELD_NAME = "Field Name";
+  String REQUEST_DATE = "Request Date";
+  String APPROVED_DATE = "Approved/Reject Date";
+  String SUB_OPTION = "Sub Option";
+  String APPROVAL_REQUEST_ID = "ApprovalRequestId";
 
-    //Search
-    String DATA = "Data";
-    String METADATA = "MetaData";
-    String LEAD_ID = "LeadID";
-    String HIERARCHY_MAP = "HierarchyMap";
-    String ADDITIONAL_MAP = "AdditionalMap";
-    String NOTIFICATION_DATA = "NOTIFICATION_DATA";
-    //  String MEETING_ID = "Meeting Id";
-    String MEETING_ID = "MeetingID";
-    String MOBNO = "MOBNO";
-    String ACTIVITY_TYPE = "ActivityType";
-    String STATUS_NAME = "StatusName";
-    String ATTENDEE_EMP = "AttendeeEmp";
-    String UPDATED_MEETING = "Meeting updated successfully";
-    String SET_APPOINTMENTS = "Appointment created successfully";
-    String UPDATE_APPOINTMENTS = "Appointment updated successfully";
-    String SET_USER_PROFILE = "User profile updated successfully";
-    String CREATE_MEETING = "Meeting created successfully";
-    String DOCUMENT_RENAME = "Document renamed successfully";
-    String DOCUMENT_UPLOADED = "Document uploaded successfully";
-    String DOCUMENT_DELETED = "Document deleted successfully";
-    String APPT_CANCELLED = "Appointment cancelled successfully";
-    String SELECT_MEETING_DURATION = "Select Meeting Duration";
-    String SELECT_BANK = "Select Bank";
-    String SELECT_BRANCH = "Select Bank Branch";
-    String SELECT_MEETING_REASON = "Select Meeting Reason";
-    String SELECT_PRODUCT = "Select Product";
-    String SELECT_PROFILE = "Select Profile";
-    String SELECT_ACTIVITY_TYPE = "Select Activity Type";
-    String SELECT_APPT_DATE_TYPE = "Appointment Date should be future Date";
-    String SELECT_ACTIONABLES = "Select Actionables";
-    String SELECT_BA_CLIENT_MEETING = "Select BA Client Meeting";
-    String SELECT_OUT_STATION_MEETING = "Select Out Station Meeting";
-    String SELECT_CATEGORY = "Select Category";
-    String SELECT_MEETING_OBJECTIVE = "Select Meeting Objective";
-    String SELECT_MEETING_LOCATION = "Select Meeting Location";
-    String SELECT_TRAVELLING_MODE = "Select Travelling Mode";
-    String SELECT_SUB_CATEGORY = "Select Sub Category";
-    String SELECT_WEEK = "Select Week";
-    String SELECT_WEEK_DAYS = "Select Week Day";
-    String START_TIME_ERROR = "Start Date/Time should not be less than Appointment Date/Time";
-    String END_TIME_ERROR = "End Date/Time should not be less than Start Date/Time";
-    String END_TIME_EQUAL_ERROR = "End Date/Time should not be Equal to Start Date/Time";
-    String EMAIL_SEND = "Email Send request is submitted successfully";
-    String GIFT_SEND = "Send Gift request is submitted successfully";
-    String ATLEAST_TEN_CHARACTERS = "Atleast 10 characters";
-    String ATLEAST_FIFTY_CHARACTERS = "Atleast 50 characters";
-    String ATLEAST_TWENTY_CHARACTERS = "Atleast 20 characters";
-    String INVALID_PINCODE_NUMBER = "Invalid pincode number";
-    String ATTENDEE_ALREADY_ADDED = "Attendee already added";
-    String EMPLOYEE_ALREADY_ADDED = "Employee already added";
-    String SPL_ATTENDEE_ALREADY_ADDED = "Special Attendee already added";
-    String MEETING_DESCRIPTION_CANNOT_BE_LEFT_BLANK = "Meeting description cannot be left blank";
-    String LOCATION_CANNOT_BE_LEFT_BLANK = "Meeting address cannot be left blank";
+  String CLIENTCODE = "ClientCode";
 
-    //Birthday Message
-    String BIRTHDAY_MESSAGE =
-            "On your special day we wish you Strong Health, Great Success, and True Happiness in your life.";
-    String ANNIVERSARY_MESSAGE =
-            "May your marriage be blessed with love, joy and companionship for all the years of your lives! A very happy Wedding Anniversary to both of you!";
+  //franchise constants
+  String SYSTEM_NAME = "system_name";
+  String FILTER_LIST = "filter_list";
+  String SPINNER_LIST = "spinner_list";
 
-    //Pending Approval
+  String PARAMETERS = "Parameters";
+  String Q1 = "Q1";
+  String Q2 = "Q2";
+  String Q3 = "Q3";
+  String Q4 = "Q4";
+  String YTD = "YTD";
+  String FAMILYSTATUS = "FAMILYSTATUS";
+  String PARAMETER = "Parameter";
+  String WIDGETTYPE = "WidgetType";
+  String DAY = "Day";
+  String MTD_CNT = "MTD_CNT";
+  String MTD = "MTD";
+  String YTD_CNT = "YTD_CNT";
+  String REVENUE_TYPE = "REVENUETYPE";
+  String NO_OF_CLIENTS = "NOOFCLIENTS";
+  String REVENUE_GENERATED = "REVENUEGENERATED";
 
-    String EMPLOYEE_CODE_APP = "Employee Code";
-    String EMP_NAME = "Emp Name";
-    String LEAD_ID_APP = "Lead ID";
-    String FIELD_NAME = "Field Name";
-    String REQUEST_DATE = "Request Date";
-    String APPROVED_DATE = "Approved/Reject Date";
-    String SUB_OPTION = "Sub Option";
-    String APPROVAL_REQUEST_ID = "ApprovalRequestId";
+  String ATTENDEEE_NOT_FOUND_MESSAGE = "Not found";
 
-    String CLIENTCODE = "ClientCode";
+  //dashbord second level
+  String COL_FILTER = "colfilter";
+  String ROW_FILTER = "rowfilter";
+  String WIDGETNAME = "Widget name";
+  String LABEL = "Label";
+  String KEY = "key";
 
-    //franchise constants
-    String NO_RECORDS_FOUND = "No records found";
-    String SYSTEM_NAME = "system_name";
-    String FILTER_LIST = "filter_list";
-    String SPINNER_LIST = "spinner_list";
+  String TYPESOFLEAD = "types_of_lead";
+  //profile type
+  String RETAIL = "retail";
+  String FRANCHIES = "franchies";
+  String IFA = "ifa";
 
-    String PARAMETERS = "Parameters";
-    String Q1 = "Q1";
-    String Q2 = "Q2";
-    String Q3 = "Q3";
-    String Q4 = "Q4";
-    String YTD = "YTD";
-    String FAMILYSTATUS = "FAMILYSTATUS";
-    String PARAMETER = "Parameter";
-    String WIDGETTYPE = "WidgetType";
-    String DAY = "Day";
-    String MTD_CNT = "MTD_CNT";
-    String MTD = "MTD";
-    String YTD_CNT = "YTD_CNT";
-    String REVENUE_TYPE = "REVENUETYPE";
-    String NO_OF_CLIENTS = "NOOFCLIENTS";
-    String REVENUE_GENERATED = "REVENUEGENERATED";
+  String URL_PATH = "URP PATH";
 
-    String ATTENDEEE_NOT_FOUND_MESSAGE = "Not found";
+  String SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for";
 
-    //dashbord second level
-    String COL_FILTER = "colfilter";
-    String ROW_FILTER = "rowfilter";
-    String WIDGETNAME = "Widget name";
-    String LABEL = "Label";
-    String KEY = "key";
+  String SELF_KEY = "flt_hierarchy";
 
-    String TYPESOFLEAD = "types_of_lead";
-    //profile type
-    String RETAIL = "retail";
-    String FRANCHIES = "franchies";
-    String IFA = "ifa";
+  String FLT_DATE = "flt_date";
+  String FLT_DATE_TIME = "flt_datetime";
 
-    String URL_PATH = "URP PATH";
+  //portfolio
 
-    String SEARCH_TYPE_LEAD_HINT = "Search Lead";
-    String SEARCH_TYPE_CLIENT_HINT = "Search Client";
-    String SEARCH_TYPE_DASHBOARD_HINT = "Dashboard for";
+  String PURCHASE_VALUE = "Purchase Value";
+  String OVERALL_GAIN_LOSS = "Overall gain Loss";
+  String PERCENTAGE_GAIN_LOSS = "Percentage gain loss";
+  String INVEST_AMT = "Investment Amount";
+  String STGL = "ST G/L";
+  String LTGL = "LT G/L";
+  String CASH = "Cash";
+  String RUPEE = "\u20B9";
+  String TOTAL_GAIN_LOSS = "Total Gain Loss";
+  String AMOUNT = "Amount";
+  String PRODUCT_TYPE = "Product type";
+  String TOTAL = "TOTAL";
+  String ASSET_SUB_TYPE_ID = "Asset Sub Type ID";
+  String MUTUAL_FUND = "Mutual Fund";
 
-    String SELF_KEY = "flt_hierarchy";
+  String mFormat = "yyyy-MM-dd'T'kk:mm:ss";
+  //   String CAL_DATE_FORMAT="dd/MMM/yyyy";
+  String CAL_DATE_FORMAT = "dd-MM-yyyy";
+  String mFormatWithSpace = "yyyy-MM-dd' 'kk:mm:ss";
+  String mFormatWithDash = "yyyy-MM-dd'-'kk:mm:ss";
+  String DATE_FORMAT_TO_DISPLAY = "dd MMM yyyy hh:mm a";
+  String DATE_FORMAT_TO_SERVER = "yyyy-MM-dd'T'kk:mm:ssZZZ";
+  String DATE_FORMAT_TO_SERVER_MEETING = "yyyy-MM-dd'T'kk:mm:ss";
+  String DATE_FORMAT_TO_SERVER_MEETING_SEND = "yyyy-MM-dd";
+  String DATE_FORMAT_OF_DD_MMM_YYYY = "dd-MMM-yyyy";
+  String NEWDATE_FORMAT_OF_DD_MMM_YYYY = "dd MMM yyyy";
 
-    String FLT_DATE = "flt_date";
-    String FLT_DATE_TIME = "flt_datetime";
+  int FILE_UPLOAD_SIZE_LIMT = 5;
+  int FILE_UPLOAD_COUNT_LIMT = 4;
+  String FILE_LARGE_MESSAGE =
+      "User not allow to upload More then " + FILE_UPLOAD_SIZE_LIMT + " MB File.";
+  String FILE_NOT_ALLOWED_MESSAGE = "File not valid";
+  String SAME_MOBILEMESSAGE = "Alternate mobile No. cannot be same";
+  String SAME_EMAILMESSAGE = "Alternate email Id cannot be same";
+  String INVALID_TIME = "Meeting cannot be scheduled in future datetime";
 
-    //portfolio
+  //region notification keys
+  String MESSAGE_DOB_ANNI_COMPARE = "Anniversary Should be less than Date of birth";
+  String MESSAGE_DOB_ANNI_EQUAL = "Anniversary Should not be same as Date of birth";
 
-    String PURCHASE_VALUE = "Purchase Value";
-    String OVERALL_GAIN_LOSS = "Overall gain Loss";
-    String PERCENTAGE_GAIN_LOSS = "Percentage gain loss";
-    String INVEST_AMT = "Investment Amount";
-    String STGL = "ST G/L";
-    String LTGL = "LT G/L";
-    String CASH = "Cash";
-    String RUPEE = "\u20B9";
-    String TOTAL_GAIN_LOSS = "Total Gain Loss";
-    String AMOUNT = "Amount";
-    String PRODUCT_TYPE = "Product type";
-    String TOTAL = "TOTAL";
-    String ASSET_SUB_TYPE_ID = "Asset Sub Type ID";
-    String MUTUAL_FUND = "Mutual Fund";
+  String INVALID_DATE_RANGE = "Select correct from and to date";
 
-    String mFormat = "yyyy-MM-dd'T'kk:mm:ss";
-    //   String CAL_DATE_FORMAT="dd/MMM/yyyy";
-    String CAL_DATE_FORMAT = "dd-MM-yyyy";
-    String mFormatWithSpace = "yyyy-MM-dd' 'kk:mm:ss";
-    String mFormatWithDash = "yyyy-MM-dd'-'kk:mm:ss";
-    String DATE_FORMAT_TO_DISPLAY = "dd MMM yyyy hh:mm a";
-    String DATE_FORMAT_TO_SERVER = "yyyy-MM-dd'T'kk:mm:ssZZZ";
-    String DATE_FORMAT_TO_SERVER_MEETING = "yyyy-MM-dd'T'kk:mm:ss";
-    String DATE_FORMAT_TO_SERVER_MEETING_SEND = "yyyy-MM-dd";
-    String DATE_FORMAT_OF_DD_MMM_YYYY = "dd-MMM-yyyy";
-    String NEWDATE_FORMAT_OF_DD_MMM_YYYY = "dd MMM yyyy";
+  //newEkyc
+  String NEW_USERID = "USERID";
+  String BRANCHEMPCODE = "BRANCHEMPCODE";
+  String COMMANDTYPE = "COMMANDTYPE";
+  String APPLICATIONTYPE = "APPLICATIONTYPE";
+  String OSTYPE = "OSTYPE";
+  String APPLOGINID = "APPLOGINID";
+  String TOKENKEY = "TOKENKEY";
 
-    int FILE_UPLOAD_SIZE_LIMT = 5;
-    int FILE_UPLOAD_COUNT_LIMT = 4;
-    String FILE_LARGE_MESSAGE =
-            "User not allow to upload More then " + FILE_UPLOAD_SIZE_LIMT + " MB File.";
-    String FILE_NOT_ALLOWED_MESSAGE = "File not valid";
-    String SYS_NAME = "SysName";
-    String SAME_MOBILEMESSAGE = "Alternate mobile No. cannot be same";
-    String SAME_EMAILMESSAGE = "Alternate email Id cannot be same";
-    String INVALID_TIME = "Meeting cannot be scheduled in future datetime";
+  String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
 
-    //region notification keys
-    String MESSAGE_DOB_ANNI_COMPARE = "Anniversary Should be less than Date of birth";
-    String MESSAGE_DOB_ANNI_EQUAL = "Anniversary Should not be same as Date of birth";
+  // Prospect Reffer changes
+  String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
+  String INVALID_MOBILE_NO = "Invalid mobile number.";
+  String INVALID_EMAIL_ID = "Invalid email id.";
+  String ENTER_EMAIL_ID = "Enter email id.";
+  String ENTER_MOBILE_NUMBER = "Enter mobile number";
+  String WEBSITE_PROSPECT_REFERRAL = "Website-ProspectReferral";
+  String MOCK_LOCATION_ENABLED_MSG =
+      "Mocked location enabled. Please uninstall mock location apps to continue ";
 
-    String INVALID_DATE_RANGE = "Select correct from and to date";
-
-
-    String PROSPECT_SOURCENAME = "Prospect sourceName";
-    String PROSPECT_SOURCEDETAIL = "Prospect sourceDetail";
-    String INTRESTEDIN = "IntrestedIn";
-    String NEW_CRM = "NEW_CRM";
-
-    //newEkyc
-    String NEW_USERID = "USERID";
-    String BRANCHEMPCODE = "BRANCHEMPCODE";
-    String COMMANDTYPE = "COMMANDTYPE";
-    String APPLICATIONTYPE = "APPLICATIONTYPE";
-    String OSTYPE = "OSTYPE";
-    String APPLOGINID = "APPLOGINID";
-    String OUTPUT = "output";
-    String ISAUFSB = "isAufsb";
-    String TOKENKEY = "TOKENKEY";
-    String NEWEKYC_PACKAGE_NAME = "com.mosl.mobile.modao";
-    String WEBSITE_CLIENT_REFERRAL = "Website-Client Referral";
-
-    // Prospect Reffer changes
-    String ENTER_PROSPECT_REFEREE_NAME = "Enter Prospect Referee Name";
-    String INVALID_MOBILE_NO = "Invalid mobile number.";
-    String INVALID_LAND_LINE = "Invalid Tel number.";
-    String INVALID_PAN = "Invalid PAN number.";
-    String INVALID_AADHAR = "Invalid Aadhar number.";
-    String INVALID_EMAIL_ID = "Invalid email id.";
-    String ENTER_EMAIL_ID = "Enter email id.";
-    String ENTER_MOBILE_NUMBER = "Enter mobile number";
-    String WEBSITE_PROSPECT_REFERRAL = "Website-ProspectReferral";
-    String MOCK_LOCATION_ENABLED_MSG =
-            "Mocked location enabled. Please uninstall mock location apps to continue ";
-
-    String STRING_MAP = "map";
-    String STRING_TITLE = "title";
-    String SEND_OTP_LABLE = "Send OTP";
-    String VERIFY_OTP_LABLE = "Verify OTP";
+  String STRING_MAP = "map";
+  String STRING_TITLE = "title";
+  String SEND_OTP_LABLE = "Send OTP";
+  String VERIFY_OTP_LABLE = "Verify OTP";
 }
 

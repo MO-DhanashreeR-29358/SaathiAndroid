@@ -23,7 +23,7 @@ class ReportPresenter @Inject constructor(
   val userManager: UserManager
 ) : BasePresenter<ReportView>(view) {
   override fun start() {
-    onFetchCalled().switchMap {
+    Observable.merge(onFetchCalled(), view.onViewChange()).switchMap {
       repository.getBranch()
         .compose(applyUiModel())
     }
@@ -42,7 +42,7 @@ class ReportPresenter @Inject constructor(
     val combine: Observable<Int> =
       Observable.combineLatest(branchChangedObs, dateChangedObs,
         BiFunction { _, _ -> REPORTNO })
-    combine.map { ignored -> getWidgetRequest() }
+    combine.map { getWidgetRequest() }
       .switchMap {
         repository.getDashboardData(it)
           .compose(applyUiModel())
@@ -67,8 +67,7 @@ class ReportPresenter @Inject constructor(
       reportTypeSystemName = view.widgetSystemsName(),
       businessChannel = "-1",
       pageSize = MOSLConstants.REPORT_PAGE_SIZE,
-      periodTo =
-      view.toDate(),
+      periodTo = view.toDate(),
       branchCode = getBranch(view.getBranch())
     )
   }
@@ -84,7 +83,7 @@ class ReportPresenter @Inject constructor(
   private fun navigationFlow(leadID: String, UCID: String, employeeCode: String) {
     val args = Bundle()
     var navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-    if (employeeCode.equals("0")) {
+    if (employeeCode == "0") {
       navigationConstants = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, UCID)

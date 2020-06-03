@@ -12,6 +12,15 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.STRING_TITLE
+import com.mosl.tabapp.constants.MoslConstant
+import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_UCID
+import com.mosl.tabapp.constants.MoslConstant.Client_ucid
+import com.mosl.tabapp.constants.MoslConstant.LEADID_CLIENTCODE
+import com.mosl.tabapp.constants.MoslConstant.LEAD_ID
+import com.mosl.tabapp.constants.MoslConstant.LeadId
+import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
+import com.mosl.tabapp.constants.MoslConstant.Lead_Id
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragHierarchyReportBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
@@ -37,6 +46,8 @@ class HierarchyReportFragment : CommonFragment(),
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<HierarchyReportTableRow>
   private val navigateEvent = PublishSubject.create<CellEvent>()
+  private lateinit var additionalMap: HashMap<String, String>
+  private val onRetryEvent = PublishSubject.create<Unit>()
 
   override fun getLayout(): Int {
     return R.layout.frag_hierarchy_report
@@ -51,7 +62,6 @@ class HierarchyReportFragment : CommonFragment(),
   }
 
   private fun setUpView() {
-
     binding.txtLables.text = arguments?.getString(STRING_TITLE)
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = HierarchyReportTableMapper.header(
@@ -60,31 +70,41 @@ class HierarchyReportFragment : CommonFragment(),
     val mfAdapter =
       requireContext().createRowAdapter<HierarchyReportTableRow>(dynamicHeaderRow)
         .apply {
-          viewProvider.rowClickListener = { row, view ->
+          viewProvider.rowClickListener = { row, _ ->
             val reportData = tableRowAdapter.getItem(row).data
             val leadId = getValue(
-              "LEAD ID", "LeadId", "Lead_Id",
-              "LeadId ClientCode", "LEADID/CLIENTCODE", hasMap = reportData.hasMap
+              LEAD_ID,
+              LeadId,
+              Lead_Id,
+              LeadId_ClientCode,
+              LEADID_CLIENTCODE,
+              hasMap = reportData.hasMap
             )
-            val UCID = getValue(
-              "Client UCID", "CLIENT UCID",
-              "Client ucid", hasMap = reportData.hasMap
+            val ucid = getValue(
+              Client_UCID, CLIENT_UCID, Client_ucid, hasMap = reportData.hasMap
+            )
+            val employeeCode = getValue(
+              MoslConstant.Employee_Code, MoslConstant.EMPLOYEE_CODE,
+              hasMap = reportData.hasMap
             )
             navigateEvent.onNext(
               CellEvent(
                 leadId
-                , UCID
+                , ucid,
+                employeeCode
               )
             )
           }
         }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
+    additionalMap = arguments
+      ?.getSerializable(MOSLConstants.STRING_MAP) as HashMap<String, String>
   }
 
   private fun getValue(vararg keys: String, hasMap: Map<String, String>): String {
     for (key in keys) {
-      val value: String? = hasMap.get(key)
+      val value: String? = hasMap[key]
       if (value != null) {
         return value
       }
@@ -117,9 +137,24 @@ class HierarchyReportFragment : CommonFragment(),
     return navigateEvent.ofType()
   }
 
-  override fun getAdditionalParameterMap(): Map<String, String> {
-    return arguments
-      ?.getSerializable(MOSLConstants.STRING_MAP) as Map<String, String>
+  override fun titleName(): String {
+    return binding.txtLables.text.toString()
+  }
+
+  override fun getAdditionalParameterMap(): HashMap<String, String> {
+    return additionalMap
+  }
+
+  override fun onViewChange(): Observable<Unit> {
+    return onRetryEvent.ofType()
+  }
+
+  override fun onFragmentReopened(args: Bundle) {
+    super.onFragmentReopened(args)
+    additionalMap = args
+      .getSerializable(MOSLConstants.STRING_MAP) as HashMap<String, String>
+    binding.txtLables.text = args.getString(STRING_TITLE)
+    onRetryEvent.onNext(Unit)
   }
 
 }

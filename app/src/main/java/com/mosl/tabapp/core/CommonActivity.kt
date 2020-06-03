@@ -26,9 +26,11 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.annotation.ForcePreferenceClear
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
@@ -51,7 +53,6 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
-import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -107,6 +108,10 @@ class CommonActivity : BaseActivity(),
   lateinit var tokenPref: Preference<String>
 
   @Inject
+  @field:ForcePreferenceClear
+  lateinit var forcePreferenceClear: BooleanPreference
+
+  @Inject
   lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
 
   @Inject
@@ -128,10 +133,6 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var gson: Gson
   lateinit var remoteConfigModel: RemoteConfigModel
-
-  @Inject
-  lateinit var firebaseHelper: FirebaseHelper
-
   var mService: ForegroundService? = null
 
   override fun getLayout(): Int {
@@ -186,6 +187,11 @@ class CommonActivity : BaseActivity(),
     setupObservables()
     setBanner()
 
+  }
+
+  private fun stopService() {
+    val serviceIntent = Intent(this, ForegroundService::class.java)
+    stopService(serviceIntent)
   }
 
   private fun initBackgroundState() {
@@ -471,7 +477,8 @@ class CommonActivity : BaseActivity(),
 
           uiModel.onSuccess {
             Timber.d("Logout Successfully")
-
+            forcePreferenceClear.set(false)
+            stopService()
             openLogin()
           }
 
@@ -486,7 +493,6 @@ class CommonActivity : BaseActivity(),
 
 //  locationWorkManager.cancelWorkById(compressionLocationWorkId)
 //  dataSyncWorkManager.cancelWorkById(compressionDataSyncWorkId)
-    firebaseHelper.setUserProperty("")
     shortcutHelper.setLogoutUserShortcuts()
     val login = Intent(this, SplashActivity::class.java)
     startActivity(login)

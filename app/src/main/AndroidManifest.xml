@@ -75,12 +75,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme" />
 
-        <activity
-            android:name=".collateral.WebActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/CRMMOSLTheme"
-            android:windowSoftInputMode="stateHidden" />
 
 
         <meta-data

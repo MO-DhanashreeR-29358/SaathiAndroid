@@ -83,6 +83,18 @@ open class CommonFragment : BaseFragment() {
     }
   }
 
+  protected fun disableField(layout: ViewGroup) {
+    layout.isEnabled = false
+    for (i in 0 until layout.childCount) {
+      val child = layout.getChildAt(i)
+      if (child is ViewGroup) {
+        disableField(child)
+      } else {
+        child.isEnabled = false
+      }
+    }
+  }
+
   fun stringOrDefault(
     input: String?,
     defaultVal: String
@@ -91,7 +103,7 @@ open class CommonFragment : BaseFragment() {
   }
 
   fun stringOrZero(input: String?): String {
-    return if (input != null && input != "") {
+    return if (input != null && input != "" && input != "null") {
       input
     } else {
       "0"

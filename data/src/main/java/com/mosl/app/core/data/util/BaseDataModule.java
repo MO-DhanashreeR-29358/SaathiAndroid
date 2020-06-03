@@ -7,6 +7,7 @@ import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.rx.RxDispatchers;
 import com.mosl.commons.rx.Dispatchers;
+import com.mosl.mobile.coredata.PreferenceDataModule;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.schedulers.Schedulers;
@@ -20,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import timber.log.Timber;
 
-@Module
+@Module(includes = { PreferenceDataModule.class })
 public abstract class BaseDataModule {
     @Provides
     static Dispatchers provideDispatchers() {

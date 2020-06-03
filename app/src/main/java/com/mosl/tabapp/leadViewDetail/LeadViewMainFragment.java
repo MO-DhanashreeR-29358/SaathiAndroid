@@ -73,12 +73,8 @@ import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SUGGEST
 
 public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener,
     AutoCompleteAdapter.DiyLinkClickListner {
-
-  private static final String SEARCH_TYPE_LEAD = "Lead";
-  private static final String SEARCH_TYPE_CLIENT = "Client";
   @Inject
   EkycNavigator ekycNavigator;
-  private ArrayList<Fragment> pageListLeadView;
   private ImageView ivLead;
   private TextView tvClientCode, tvLeadId, tvBranchCode, tvCurrentStage, tvCurrentStageSince,
       tvName;
@@ -88,7 +84,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
   private String mUCID = "0";
   private Integer oaoUserId = 0;
   private String LeadOwner = "";
-  private String searchType = SEARCH_TYPE_LEAD;
   private LockedViewPager vpLeadView;
   private TabLayout indicatorLeadView;
   private int createMeetingId = 0;
@@ -111,10 +106,11 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
   private void getUserID(Bundle args) {
     try {
-      leadId = args.getString(LEAD_ID);
+      if (args.containsKey(LEAD_ID)) {
+        leadId = stringOrZero(args.getString(LEAD_ID, "0"));
+      }
       if (args.containsKey(UCID)) {
-        mUCID = args.getString(UCID, "0").equals("") ? "0"
-            : args.getString(UCID, "0");
+        mUCID = stringOrZero(args.getString(UCID, "0"));
       }
       if (!mUCID.equalsIgnoreCase("0")) {
         getClientDetail(mUCID);
@@ -157,21 +153,21 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     LeadViewActivitiesFragment leadViewActivitieFragment;
     MappingHistoryFragment leadViewHistoryFragment;
     LeadViewInteractionFragment leadViewInteractionFragment;
-    pageListLeadView = new ArrayList<>();
+    ArrayList<Fragment> pageListLeadView = new ArrayList<>();
     if (leadId != null && leadId.equalsIgnoreCase("0")) {
       headingClient[0] = DETAILS;
       headingClient[1] = ACTIVITIES;
       headingClient[2] = MAPPING_HISTORY;
       headingClient[3] = MAPPING_INTERACTION;
       leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
-          this.getArguments().getString(LEAD_ID), mUCID);
+          leadId, mUCID);
       leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
-          this.getArguments().getString(LEAD_ID), mUCID);
+          leadId, mUCID);
       leadViewHistoryFragment = MappingHistoryFragment.newInstance(2, MAPPING_HISTORY,
-          this.getArguments().getString(LEAD_ID), mUCID);
+          leadId, mUCID);
       leadViewInteractionFragment =
           LeadViewInteractionFragment.newInstance(3, MAPPING_INTERACTION,
-              this.getArguments().getString(LEAD_ID), mUCID);
+              leadId, mUCID);
       leadViewDetailFragment.setViewPager(vpLeadView);
       leadViewActivitieFragment.setViewPager(vpLeadView);
       leadViewHistoryFragment.setViewPager(vpLeadView);
@@ -296,7 +292,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       tvBranchCode.setText(getBranchCode());
       mobileNo = getMobile();
       oaoUserId = getOaoUserId();
-      searchType = SEARCH_TYPE_CLIENT;
     }
   }
 
@@ -333,7 +328,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       diyCode = data.diyCode;
       diyLink = stringOrEmpty(data.diyLink);
       List<LeadProductMappingItem> productMapping = data.leadProductMapping;
-      if (productMapping.size() != 0) {
+      if (productMapping.size() > 0) {
         for (int i = 0; i < productMapping.size(); i++) {
           LeadProductMappingItem item = productMapping.get(i);
           String clientCode = stringOrEmpty(item.clientCode);
@@ -357,11 +352,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         String name = stringOrEmpty(contact.name);
         setTitle(name);
       }
-      if (!mUCID.equalsIgnoreCase("0")) {
-        searchType = SEARCH_TYPE_CLIENT;
-      } else {
-        searchType = SEARCH_TYPE_LEAD;
-      }
       tvLeadId.setText(leadId);
       tvBranchCode.setText(branchCode);
     }
@@ -370,8 +360,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
   private void leadViewDialog() {
     final Dialog dialog = new Dialog(requireContext());
     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-    dialog.getWindow()
-        .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     dialog.setCanceledOnTouchOutside(false);
     dialog.setContentView(R.layout.dialog_leadview);
     dialog.getWindow()
@@ -389,24 +378,25 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
     ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
     View view3 = dialog.findViewById(R.id.view3);
-    if (userManager.getUser().isAufsb()) {
+    if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
       ivCreateMeeting.setVisibility(View.GONE);
       ivSetAppointment.setVisibility(View.GONE);
       ivSuggestMe.setVisibility(View.GONE);
     }
-    if (userManager.getUser().isSMTEnabled()) {
+    if (userManager.getUser() != null && userManager.getUser().isSMTEnabled()) {
       view3.setVisibility(View.VISIBLE);
       ivSuggestMe.setVisibility(View.VISIBLE);
     } else {
       ivSuggestMe.setVisibility(View.GONE);
     }
-
-    if (oaoUserId != null && oaoUserId > 0) {
-      ivOpenAccount.setVisibility(View.GONE);
-      ivOaoForm.setVisibility(View.VISIBLE);
-    } else {
-      ivOpenAccount.setVisibility(View.VISIBLE);
-      ivOaoForm.setVisibility(View.GONE);
+    if (userManager.getUser() != null && userManager.getUser().isEkycEnable()) {
+      if (oaoUserId != null && oaoUserId > 0) {
+        ivOpenAccount.setVisibility(View.GONE);
+        ivOaoForm.setVisibility(View.VISIBLE);
+      } else {
+        ivOpenAccount.setVisibility(View.VISIBLE);
+        ivOaoForm.setVisibility(View.GONE);
+      }
     }
 
     if (diyCode > 0) {
@@ -434,7 +424,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     });
     ivCreateMeeting.setOnClickListener(view -> {
       Bundle bundle = new Bundle();
-      bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
+      bundle.putString(LEAD_ID, leadId);
       bundle.putString(UCID, mUCID);
       if (createMeetingId == 0) {
         navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
@@ -449,7 +439,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     });
     ivSetAppointment.setOnClickListener(view -> {
       Bundle bundle = new Bundle();
-      bundle.putString(LEAD_ID, getArguments().getString(LEAD_ID));
+      bundle.putString(LEAD_ID, leadId);
       bundle.putString(UCID, mUCID);
       navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
       dialog.dismiss();
@@ -461,15 +451,12 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       } else {
         MSFDialog.alertDialog(requireContext(), 0,
             getResources().getString(R.string.motilal_oswal), "Do you want to call?",
-            "Yes", "No", true, new MSFDialog.DialogListener() {
-              @Override
-              public void alertDialogAction(MSFDialog.Action action, Object... data) {
-                if (action == MSFDialog.Action.OK) {
-                  Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                  callIntent.setData(Uri.parse("tel:" + mobileNo));
-                  callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                  requireContext().startActivity(callIntent);
-                }
+            "Yes", "No", true, (action, data) -> {
+              if (action == MSFDialog.Action.OK) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:" + mobileNo));
+                callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                requireContext().startActivity(callIntent);
               }
             });
       }
@@ -489,9 +476,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       dialog.dismiss();
     });
 
-    ivClose.setOnClickListener(view -> {
-      dialog.dismiss();
-    });
+    ivClose.setOnClickListener(view -> dialog.dismiss());
     ivShareLink.setOnClickListener(view -> {
       dialog.dismiss();
       renderDiyLink(leadId, this);
@@ -535,7 +520,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
       RegisterProspectOnlineRequest request =
           new RegisterProspectOnlineRequest(
-              this.getArguments().getString(LEAD_ID), mUCID);
+              leadId, mUCID);
       Disposable subscribe = getSaathiApi().getRegisterProspectOnline(request)
           .compose(applyUiModel())
           .subscribe(this::renderSuggestMe);
