@@ -256,6 +256,8 @@ public interface MOSLConstants extends LabelConfig {
   String KEY = "key";
 
   String TYPESOFLEAD = "types_of_lead";
+    String TYPE = "Type";
+    String POSITION = "Position";
   //profile type
   String RETAIL = "retail";
   String FRANCHIES = "franchies";
