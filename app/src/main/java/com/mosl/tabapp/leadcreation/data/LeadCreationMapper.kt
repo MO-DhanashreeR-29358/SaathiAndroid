@@ -182,7 +182,7 @@ internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }.addSelectRowData()
+  }
 }
 
 internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
@@ -196,7 +196,7 @@ internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }.addSelectRowData()
+  }
 }
 
 internal fun List<LeadSourceItem>.leadSourceItemsToRowDatas(): List<RowData> {
@@ -210,7 +210,7 @@ internal fun List<LeadSourceItem>.leadSourceItemsToRowDatas(): List<RowData> {
     } catch (_: Error) {
       null
     }
-  }.addSelectRowData()
+  }
 }
 
 internal fun List<StatusItem>.statusItemsToRowDatas(): List<RowData> {
@@ -224,7 +224,7 @@ internal fun List<StatusItem>.statusItemsToRowDatas(): List<RowData> {
     } catch (_: Error) {
       null
     }
-  }.addSelectRowData()
+  }
 }
 
 internal fun List<BusinessProfile>.profilesToEmployeeModels(user: User?): List<EmployeeModel> {

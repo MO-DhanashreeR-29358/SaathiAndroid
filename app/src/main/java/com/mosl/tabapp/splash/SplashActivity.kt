@@ -283,7 +283,7 @@ class SplashActivity : LeanBaseActivity() {
   private fun renderLoginData(uimodel: UiModel<User>) {
 
     uimodel.onSuccess {
-      firebaseHelper.setUserProperty(it.employeeCode)
+      //firebaseHelper.setUserProperty(it.employeeCode)
       setUserPreferenceData(it)
     }
 

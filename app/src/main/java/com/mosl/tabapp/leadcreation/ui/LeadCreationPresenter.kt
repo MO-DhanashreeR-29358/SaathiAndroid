@@ -76,9 +76,9 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onSourceSelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
+        //.skip(1)
         .map { view.getSelectedSource() }
-        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+        //.filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getProspectSourceRowDatas(it.key)
               .compose(applyUiModel())
@@ -98,9 +98,9 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onStageSelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
+        //.skip(1)
         .map { view.getSelectedStage() }
-        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+        //.filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getStatusRowDatas(it.key)
               .compose(applyUiModel())
