@@ -1,6 +1,8 @@
 package com.mosl.tabapp.leadcreation.data
 
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
@@ -8,6 +10,7 @@ import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SearchRefereeModel
 import com.mosl.saathi.api.model.createlead.SourceListRequest
+import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageRequest
@@ -18,6 +21,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
@@ -170,6 +174,27 @@ class LeadCreationRepositoryImpl @Inject constructor(
 
   override fun getRefereeName(text: String): Observable<SearchReferee> {
     return getReferee(type = TYPE_REFEREE_NAME, text = text)
+  }
+
+  override fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead> {
+    val request = TransferLeadRequest(
+        mobile = leadIdMobilePair.second,
+        currentUser = userManager.user.employeeCode
+    )
+    return saathiApi.transferLead(request)
+        .map {
+          if (it.status) {
+            TransferLead(
+                leadIdForTransfer = leadIdMobilePair.first,
+                isPaymentDone = it.response?.isPaymentDone ?: false,
+                message = it.message
+            )
+
+          } else {
+            throw ServiceFailureException(it.message)
+          }
+
+        }
   }
 
   private fun getReferee(

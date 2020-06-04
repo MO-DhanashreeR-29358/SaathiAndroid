@@ -18,3 +18,9 @@ data class SearchReferee(
   @JvmField val mobile: String,
   @JvmField val type: String
 )
+
+data class TransferLead(
+  @JvmField val leadIdForTransfer: String,
+  @JvmField val isPaymentDone: Boolean,
+  @JvmField val message: String
+)

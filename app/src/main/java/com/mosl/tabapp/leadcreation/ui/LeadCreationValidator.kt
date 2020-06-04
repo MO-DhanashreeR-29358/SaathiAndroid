@@ -13,13 +13,14 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
       input.selectedCategory.value == SELECT -> "Select Category"
       input.etCategoryName.isBlank() -> "Select ${input.selectedCategory.value} name"
       input.etCategoryName.invalidAlphaNumbric() -> ERROR_ALPHABETS
-      input.selectedCategory.value != "INDIVIDUAL" &&
+      !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
           input.etContactPerson.isBlank() -> ERROR_CONTACT_PERSON
-      input.etContactPerson.invalidAlphaNumbric() -> ERROR_ALPHABETS
+      !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
+          input.etContactPerson.invalidAlphaNumbric() -> ERROR_ALPHABETS
       input.selectedInterestIn.value == SELECT -> "Select Interest In"
-      input.selectedInterestIn.value == "PMS" &&
+      input.selectedInterestIn.value.equals("PMS", true) &&
           input.selectedProductType.value == SELECT -> "Select ProductType"
-      input.emailId.isBlank() -> MOSLConstants.ENTER_EMAIL_ID
+      input.emailId.isNotBlank() &&
       input.emailId.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
       input.alternateEmailId.isNotBlank() &&
           input.alternateEmailId.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID

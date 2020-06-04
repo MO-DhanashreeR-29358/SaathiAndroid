@@ -241,5 +241,18 @@ class LeadCreationPresenter @Inject constructor(
         .subscribe(view::renderCreateLead, Timber::e)
         .addTo(disposable)
 
+    view.onTransferLeadEventFired()
+        .map { it.leadId to view.getMobile() }
+        .switchMap {
+          repository.transferLeadForMobile(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderTransferLead)
+        .addTo(disposable)
+
+    view.onTransferLeadPaymentFired()
+        .subscribe { navigator.navigateToLeadViewPager(it.leadId) }
+        .addTo(disposable)
+
   }
 }

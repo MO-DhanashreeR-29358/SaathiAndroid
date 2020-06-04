@@ -7,8 +7,11 @@ import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadEvent
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadPayment
 import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
 
@@ -99,6 +102,11 @@ interface LeadCreationView : BaseView {
   fun renderCreateLead(uiModel: UiModel<SaathiCommonResponse<CreateLeadResponse>>)
 
   fun onCancelButtonClicked(): Observable<Unit>
+
+  fun onTransferLeadEventFired(): Observable<TransferLeadEvent>
+  fun onTransferLeadPaymentFired(): Observable<TransferLeadPayment>
+  fun getMobile(): String
+  fun renderTransferLead(uiModel: UiModel<TransferLead>)
 
 
   companion object {

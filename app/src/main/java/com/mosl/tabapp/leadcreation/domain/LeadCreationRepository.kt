@@ -18,4 +18,5 @@ interface LeadCreationRepository {
   fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
   fun getRefereeCode(text: String): Observable<SearchReferee>
   fun getRefereeName(text: String): Observable<SearchReferee>
+  fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead>
 }

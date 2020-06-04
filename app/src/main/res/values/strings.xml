@@ -376,7 +376,7 @@
     <string name="text_lead_creation_residence_address">Residence Address</string>
     <string name="text_lead_creation_primary_address"> Primary Address</string>
     <string name="text_lead_creation_prospect_source">Prospect Source*</string>
-    <string name="hint_lead_creation_prospect_source_detail">Prospect Source*</string>
+    <string name="hint_lead_creation_prospect_source_detail">Prospect Source Details</string>
     <string name="hint_lead_creation_pan">Pan Number</string>
     <string name="hint_lead_creation_referee_code">Referee Code</string>
     <string name="hint_lead_creation_referee_name">Referee Name</string>
