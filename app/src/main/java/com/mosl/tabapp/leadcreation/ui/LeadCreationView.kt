@@ -57,6 +57,8 @@ interface LeadCreationView : BaseView {
   fun resetRefereeOnCodeChange()
   fun renderOnRefereeCodeChange(uiModel: UiModel<SearchReferee>)
 
+  fun getRefereeCode(): String
+
   fun onRefereeNameChanged(): Observable<String>
   fun resetRefereeOnNameChange()
   fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)

@@ -147,6 +147,10 @@ class LeadCreationPresenter @Inject constructor(
     refereeNameObs
         .filter { it.length > 2 }
         .distinctUntilChanged()
+        .filter {
+          view.getRefereeCode()
+              .isBlank()
+        }
         .switchMap {
           repository.getRefereeName(it)
               .compose(applyUiModel())

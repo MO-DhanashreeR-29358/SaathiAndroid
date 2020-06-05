@@ -453,6 +453,10 @@ class LeadCreationFragment : CommonFragment(),
         .map { it.editable?.toString() ?: emptyString() }
   }
 
+  override fun getRefereeCode(): String {
+    return binding.etRefereeCode.text?.toString() ?: emptyString()
+  }
+
   override fun resetRefereeOnCodeChange() {
     binding.apply {
       etRefereeName.setText(emptyString())
