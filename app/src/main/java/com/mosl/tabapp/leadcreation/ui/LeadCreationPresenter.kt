@@ -109,7 +109,7 @@ class LeadCreationPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onAssignToSearchEventFired()
-        .debounce(1000, MILLISECONDS)
+        .debounce(1000, MILLISECONDS, dispatchers.main)
         .map { it.searchText }
         .filter { it.isNotEmpty() }
         .distinctUntilChanged()
@@ -121,7 +121,7 @@ class LeadCreationPresenter @Inject constructor(
         .addTo(disposable)
 
     val refereeCodeObs = view.onRefereeCodeChanged()
-        .debounce(1000, MILLISECONDS)
+        .debounce(1000, MILLISECONDS, dispatchers.main)
         .share()
 
     refereeCodeObs
@@ -141,7 +141,7 @@ class LeadCreationPresenter @Inject constructor(
         .addTo(disposable)
 
     val refereeNameObs = view.onRefereeNameChanged()
-        .debounce(1000, MILLISECONDS)
+        .debounce(1000, MILLISECONDS, dispatchers.main)
         .share()
 
     refereeNameObs
