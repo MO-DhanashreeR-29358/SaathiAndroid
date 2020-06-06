@@ -672,8 +672,8 @@ interface SaathiApi {
 
     @POST("report/IncentiveReport")
     fun getIncentiveReport(
-        @Body request: IncentiveReportRequest
-    ): Observable<String>
+      @Body request: IncentiveReportRequest
+    ): Observable<SaathiCommonResponse<String>>
 
     @POST("Lead/GetEkycExpressURL")
     fun getEkycExpressUrl(

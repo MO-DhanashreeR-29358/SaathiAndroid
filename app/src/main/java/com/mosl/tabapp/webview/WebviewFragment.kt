@@ -147,7 +147,7 @@ class WebviewFragment : CommonFragment() {
             return saathiApiNew.getIncentiveReport(
                 IncentiveReportRequest(userManager.user.employeeCode)
             ).map {
-                it.apply {
+                it.response?.apply {
                     this.replace(" ", "%20")
                 }
             }
