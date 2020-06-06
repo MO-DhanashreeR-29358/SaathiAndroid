@@ -61,7 +61,7 @@ object MenuGetterNew {
                 args.putString(WebviewFragment.PAGE_ID, INCENTIVE_REPORT_ID)
                 arguments = args
             }
-
+            NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
@@ -118,6 +118,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> true
             NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> true
             NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> true
+            NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> true
             else -> return false
         }
     }

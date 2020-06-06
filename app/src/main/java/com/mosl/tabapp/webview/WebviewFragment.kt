@@ -170,7 +170,7 @@ class WebviewFragment : CommonFragment() {
             }
         } else {
             return saathiApiNew.getEkycExpressUrl(
-                EkycExpressRequest(RESUME_APPLICATIONS_KEY, null)
+                EkycExpressRequest(RESUME_APPLICATIONS_KEY, arguments?.getString(OAO_USER_ID))
             ).map {
                 it.url?.apply {
                     this.replace(" ", "%20")
@@ -199,5 +199,6 @@ class WebviewFragment : CommonFragment() {
         const val EXISTING_APPLICATIONS_KEY = "ExistingApplication"
         const val RESUME_APPLICATIONS_ID = "4"
         const val RESUME_APPLICATIONS_KEY = "OAOForm"
+        const val OAO_USER_ID = "oaoUserID"
     }
 }

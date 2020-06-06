@@ -1,6 +1,7 @@
 package com.mosl.tabapp.navigation;
 
 import androidx.annotation.IntDef;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -25,17 +26,18 @@ import java.lang.annotation.RetentionPolicy;
     NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL,
     NavigationConstants.NAVIGATE_TO_DOCUMENT,
     NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT,
-    NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL,
-    NavigationConstants.NAVIGATE_TO_NOTIFICATION,
-    NavigationConstants.NAVIGATE_TO_REPORTS,
-    NavigationConstants.NAVIGATE_TO_LEAD_CREATION,
-    NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
-    NavigationConstants.NAVIGATE_TO_UPDATE_MEETING,
-    NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS,
-    NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT,
-    NavigationConstants.NAVIGATE_TO_CREATE_MEETING,
-    NavigationConstants.NAVIGATE_TO_CALENDER_LIST,
-    NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT
+        NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL,
+        NavigationConstants.NAVIGATE_TO_NOTIFICATION,
+        NavigationConstants.NAVIGATE_TO_REPORTS,
+        NavigationConstants.NAVIGATE_TO_LEAD_CREATION,
+        NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
+        NavigationConstants.NAVIGATE_TO_UPDATE_MEETING,
+        NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS,
+        NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT,
+        NavigationConstants.NAVIGATE_TO_CREATE_MEETING,
+        NavigationConstants.NAVIGATE_TO_CALENDER_LIST,
+        NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT,
+        NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION,
 })
 public @interface NavigationConstants {
   int NAVIGATE_TO_NONE = -1;
@@ -69,4 +71,5 @@ public @interface NavigationConstants {
   int NAVIGATE_TO_NOTIFICATION = 29;
   int NAVIGATE_TO_REPORTS = 30;
   int NAVIGATE_TO_INCENTIVE_REPORT = 31;
+  int NAVIGATE_TO_RESUME_APPLICATION = 32;
 }
