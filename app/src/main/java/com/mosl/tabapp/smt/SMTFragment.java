@@ -20,8 +20,6 @@ import com.mosl.tabapp.core.CommonFragment;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 import static android.content.Context.DOWNLOAD_SERVICE;
 
 public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCallBack {
@@ -75,15 +73,8 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	}
 
 	@Override public void openEkyc(String OAOUserId) {
-		HashMap<String, String> map = new HashMap();
-		map.put(NEW_USERID, OAOUserId);
-		map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
-		map.put(COMMANDTYPE, "RESUME");
-		map.put(APPLICATIONTYPE, "CRM");
-		map.put(OSTYPE, "ANDROID");
-		map.put(APPLOGINID, userManager.getUser().employeeCode);
-		map.put(TOKENKEY, userManager.getUser().token);
-		//gotoNewEkyc(getInputBody(map));
+		navigator.openNewEkycApp(true, OAOUserId);
+
 	}
 
 	public class WebViewClient extends android.webkit.WebViewClient {
