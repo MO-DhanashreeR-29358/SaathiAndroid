@@ -36,7 +36,7 @@ import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
-import java.util.Objects
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped
@@ -105,8 +105,6 @@ class ActivityNavigationHelper @Inject constructor(
   ) {
     val target = appMenu.pageId
     when (target) {
-      NavigationConstants.NAVIGATE_TO_FRESH_REG -> openEkycApp(false)
-      NavigationConstants.NAVIGATE_TO_EXISTING_APP -> openEkycApp(true)
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> getSuggestMe(context)
       NavigationConstants.NAVIGATE_TO_REPORTS -> navigateToReport(appMenu)
       else -> loadFragment(target)
