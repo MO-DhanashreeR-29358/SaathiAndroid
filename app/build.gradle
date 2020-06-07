@@ -49,8 +49,8 @@ android {
     minSdkVersion 17
     targetSdkVersion rootProject.ext.versions.targetSdkVersion
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-  //  buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
-   // buildConfigField 'long', 'GIT_TIMESTAMP', "${gitTimestamp()}L"
+    buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
+    buildConfigField 'long', 'GIT_TIMESTAMP', "${gitTimestamp()}L"
     vectorDrawables.useSupportLibrary = true
   }
 
