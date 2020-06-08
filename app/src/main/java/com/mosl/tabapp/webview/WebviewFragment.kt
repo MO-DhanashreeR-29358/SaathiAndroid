@@ -5,18 +5,13 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.webkit.CookieManager
-import android.webkit.URLUtil
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.webview.IncentiveReportRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
@@ -49,6 +44,7 @@ class WebviewFragment : CommonFragment() {
   private fun parseArguments(args: Bundle) {
     val pageId = args.getString(PAGE_ID)
     val url = args.getString(URL)
+
     when {
       url != null -> subject.onNext(WebViewRequest.Url(url))
       pageId != null -> subject.onNext(WebViewRequest.Id(pageId))
@@ -132,24 +128,28 @@ class WebviewFragment : CommonFragment() {
       .subscribe { this.renderUrl(it) })
   }
 
-  internal fun renderUrl(uiModel: UiModel<SaathiCommonResponse<String>>) {
+  internal fun renderUrl(uiModel: UiModel<String>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
       showOnFailurePopup(it)
     }
     uiModel.onSuccess {
-      it.response?.apply {
-        loadUrl(this.replace(" ", "%20"))
-      }
+
+      loadUrl(it)
+
     }
   }
 
-  internal fun getUrlObservable(pageId: String): Observable<SaathiCommonResponse<String>> {
+  internal fun getUrlObservable(pageId: String): Observable<String> {
 
     return saathiApiNew.getIncentiveReport(
       IncentiveReportRequest(userManager.user.employeeCode)
-    )
+    ).map {
+      it.response?.apply {
+        this.replace(" ", "%20")
+      }
+    }
 
   }
 
@@ -166,5 +166,6 @@ class WebviewFragment : CommonFragment() {
     const val URL = "url"
     const val PAGE_ID = "page_id"
     const val ENC_UCID = "encUcid"
+    const val INCENTIVE_REPORT_ID = "1"
   }
 }
