@@ -60,6 +60,8 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.visible
+import com.mosl.validator.data.ValidationError
+import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
@@ -750,11 +752,121 @@ class LeadCreationFragment : CommonFragment(),
     )
   }
 
+  private fun showErrorWithFocus(error: ValidationError) {
+    error.error?.let {
+      when (error.identifier as Int) {
+        1 -> {
+          binding.tlCategory.error = getString(it)
+          binding.tlCategory.requestFocus()
+        }
+        2 -> {
+          val rowData = binding.spCategory.selectedItem as RowData
+          binding.etName.error = getString(it, rowData.value)
+          binding.etName.requestFocus()
+        }
+        3 -> {
+          binding.etName.error = getString(it)
+          binding.etName.requestFocus()
+
+        }
+        4, 5 -> {
+          binding.etContactPerson.error = getString(it)
+          binding.etContactPerson.requestFocus()
+        }
+        6 -> {
+          binding.tlInterest.error = getString(it)
+          binding.tlInterest.requestFocus()
+        }
+        7 -> {
+          binding.tlProductType.error = getString(it)
+          binding.tlProductType.requestFocus()
+        }
+        8 -> {
+          binding.etEmailId.error = getString(it)
+          binding.etEmailId.requestFocus()
+        }
+        9, 10 -> {
+          binding.etAlternateEmailId.error = getString(it)
+          binding.etAlternateEmailId.requestFocus()
+        }
+        11, 12 -> {
+          binding.etMobile.error = getString(it)
+          binding.etMobile.requestFocus()
+        }
+        13, 14 -> {
+          binding.etAlternateMobno.error = getString(it)
+          binding.etAlternateMobno.requestFocus()
+        }
+        15 -> {
+          binding.etLandLine.error = getString(it)
+          binding.etLandLine.requestFocus()
+        }
+        16 -> {
+          binding.etEkycMobile.error = getString(it)
+          binding.etEkycMobile.requestFocus()
+        }
+        17 -> {
+          binding.etPanNum.error = getString(it)
+          binding.etPanNum.requestFocus()
+        }
+        18 -> {
+          binding.etAadharNum.error = getString(it)
+          binding.etAadharNum.requestFocus()
+        }
+        19 -> {
+          binding.etRefereeCode.error = getString(it)
+          binding.etRefereeCode.requestFocus()
+        }
+        20, 21 -> {
+          binding.etRefereeName.error = getString(it)
+          binding.etRefereeName.requestFocus()
+        }
+        22, 23 -> {
+          binding.etRefereeMobile.error = getString(it)
+          binding.etRefereeMobile.requestFocus()
+        }
+        24 -> {
+          binding.etRefereeEmail.error = getString(it)
+          binding.etRefereeEmail.requestFocus()
+        }
+        25 -> {
+          binding.etPincode.error = getString(it)
+          binding.etPincode.requestFocus()
+        }
+        26 -> {
+          binding.etOffPincode.error = getString(it)
+          binding.etOffPincode.requestFocus()
+        }
+        27 -> {
+          binding.tlProfession.error = getString(it)
+          binding.tlProfession.requestFocus()
+        }
+
+        else -> {
+        }
+
+      }
+    }
+  }
+
+  private fun removeErrorMessage() {
+    binding.apply {
+      tlCategory.error = null
+      tlInterest.error = null
+      tlProductType.error = null
+      tlProfession.error = null
+    }
+  }
+
   override fun renderOnCreateButtonClick(uiModule: UiModel<String>) {
     toggleProgressBar(uiModule.inProgress)
+    removeErrorMessage()
     uiModule.onFailure {
-      showOnFailurePopup(it)
+      //showOnFailurePopup(it)
       openSectionExpansion(binding.llPersonalInformation, binding.tvPersonalInfo)
+      if (it is ValidationException) {
+        showErrorWithFocus(it.error)
+      }
     }
 
     uiModule.onSuccess {
@@ -949,8 +1061,10 @@ class LeadCreationFragment : CommonFragment(),
         selectedCategory = binding.spCategory.selectedItem as RowData,
         etCategoryName = binding.etName.text.toString(),
         etContactPerson = binding.etContactPerson.text.toString(),
+        selectedProfession = binding.spProfession.selectedItem as RowData,
         selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
-        selectedProductType = binding.spProductType.selectedItem as RowData,
+        selectedProductType = binding.spProductType.selectedItem as? RowData
+            ?: LeadCreationView.SELECT_ROW_DATA,
         emailId = binding.etEmailId.text.toString(),
         alternateEmailId = binding.etAlternateEmailId.text.toString(),
         mobileNo = binding.etMobile.text.toString(),

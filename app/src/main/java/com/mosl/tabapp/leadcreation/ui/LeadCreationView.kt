@@ -113,5 +113,6 @@ interface LeadCreationView : BaseView {
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"
+    val SELECT_ROW_DATA = RowData(0, "-1", "Select")
   }
 }

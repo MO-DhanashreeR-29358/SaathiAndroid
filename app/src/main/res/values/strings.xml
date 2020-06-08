@@ -405,4 +405,24 @@
     <string name="lbl_lead_creation_same_address"> Same as Above</string>
     <string name="lbl_lead_creation_primary_address"> Primary Address</string>
     <string name="page_title_lead_creation">Lead Creation</string>
+
+    <string name="error_message_category">Select Category</string>
+    <string name="error_message_cat_name">Select %s name</string>
+    <string name="error_message_alphabets">Only alphabets are allowed</string>
+    <string name="error_message_contact">Enter contact person</string>
+    <string name="error_message_referee_code">Enter referee code</string>
+    <string name="error_message_pincode">Invalid Pincode</string>
+    <string name="error_message_profession">Select Profession</string>
+    <string name="error_message_interest">Select Interest In</string>
+    <string name="error_message_product_type">Select ProductType</string>
+    <string name="error_message_invalid_email">Invalid email id.</string>
+    <string name="error_message_same_email">Alternate email Id cannot be same</string>
+    <string name="error_message_enter_mobile">Enter mobile number</string>
+    <string name="error_message_enter_email">Enter email id.</string>
+    <string name="error_message_invalid_mobile">Invalid mobile number.</string>
+    <string name="error_message_invalid_landline">Invalid Tel number.</string>
+    <string name="error_message_invalid_pan">Invalid PAN number.</string>
+    <string name="error_message_invalid_aadhar">Invalid Aadhar number.</string>
+    <string name="error_message_same_mobile">Alternate mobile No. cannot be same</string>
+    <string name="error_message_prospect_referee">Enter Prospect Referee Name</string>
 </resources>

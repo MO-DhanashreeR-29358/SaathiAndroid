@@ -1,5 +1,7 @@
 package com.mosl.tabapp.leadcreation.ui
 
+import androidx.annotation.StringRes
+import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.constants.MOSLConstants
@@ -9,64 +11,173 @@ import com.mosl.validator.data.ValidationResult
 class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
 
   override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
-    val errorMessage = when {
-      input.selectedCategory.value == SELECT -> "Select Category"
-      input.etCategoryName.isBlank() -> "Select ${input.selectedCategory.value} name"
-      input.etCategoryName.invalidAlphaNumbric() -> ERROR_ALPHABETS
+    val identifier: Int
+    val errorMessageRes = when {
+
+      input.selectedCategory.value == SELECT -> {
+        identifier = 1
+        R.string.error_message_category
+      }
+
+      input.etCategoryName.isBlank() -> {
+        identifier = 2
+        R.string.error_message_cat_name
+      } // "Select ${input.selectedCategory.value} name"
+
+      input.etCategoryName.invalidAlphaNumbric() -> {
+        identifier = 3
+        R.string.error_message_alphabets
+      }  //ERROR_ALPHABETS
+
       !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
-          input.etContactPerson.isBlank() -> ERROR_CONTACT_PERSON
+          input.etContactPerson.isBlank() -> {
+        identifier = 4
+        R.string.error_message_contact
+      } //ERROR_CONTACT_PERSON
+
       !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
-          input.etContactPerson.invalidAlphaNumbric() -> ERROR_ALPHABETS
-      input.selectedInterestIn.value == SELECT -> "Select Interest In"
+          input.etContactPerson.invalidAlphaNumbric() -> {
+        identifier = 5
+        R.string.error_message_alphabets
+      } //ERROR_ALPHABETS
+
+      input.selectedProfession.value == SELECT -> {
+        identifier = 27
+        R.string.error_message_profession
+      }
+
+      input.selectedInterestIn.value == SELECT -> {
+        identifier = 6
+        R.string.error_message_interest
+      } //"Select Interest In"
+
       input.selectedInterestIn.value.equals("PMS", true) &&
-          input.selectedProductType.value == SELECT -> "Select ProductType"
+          input.selectedProductType.value == SELECT -> {
+        identifier = 7
+        R.string.error_message_product_type
+      } //"Select ProductType"
+
       input.emailId.isNotBlank() &&
-      input.emailId.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
+          input.emailId.invalidEmail() -> {
+        identifier = 8
+        R.string.error_message_invalid_email
+      } // MOSLConstants.INVALID_EMAIL_ID
+
       input.alternateEmailId.isNotBlank() &&
-          input.alternateEmailId.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
+          input.alternateEmailId.invalidEmail() -> {
+        identifier = 9
+        R.string.error_message_invalid_email
+      } //MOSLConstants.INVALID_EMAIL_ID
+
       input.alternateEmailId.isNotBlank() &&
-          input.emailId == input.alternateEmailId -> MOSLConstants.SAME_EMAILMESSAGE
-      input.mobileNo.isBlank() -> MOSLConstants.ENTER_MOBILE_NUMBER
-      input.mobileNo.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
+          input.emailId == input.alternateEmailId -> {
+        identifier = 10
+        R.string.error_message_same_email
+      } // MOSLConstants.SAME_EMAILMESSAGE
+
+      input.mobileNo.isBlank() -> {
+        identifier = 11
+        R.string.error_message_enter_mobile
+      } //MOSLConstants.ENTER_MOBILE_NUMBER
+
+      input.mobileNo.invalidMobileNo() -> {
+        identifier = 12
+        R.string.error_message_invalid_mobile
+      } //MOSLConstants.INVALID_MOBILE_NO
+
       input.alternateMobileNo.isNotBlank() &&
-          input.alternateMobileNo.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
+          input.alternateMobileNo.invalidMobileNo() -> {
+        identifier = 13
+        R.string.error_message_invalid_mobile
+      } //MOSLConstants.INVALID_MOBILE_NO
+
       input.alternateMobileNo.isNotBlank() &&
-          input.mobileNo == input.alternateMobileNo -> MOSLConstants.SAME_MOBILEMESSAGE
+          input.mobileNo == input.alternateMobileNo -> {
+        identifier = 14
+        R.string.error_message_same_mobile
+      } //MOSLConstants.SAME_MOBILEMESSAGE
+
       input.landlineNo.isNotBlank() &&
-          input.landlineNo.invalidLandLine() -> MOSLConstants.INVALID_LAND_LINE
+          input.landlineNo.invalidLandLine() -> {
+        identifier = 15
+        R.string.error_message_invalid_landline
+      } // MOSLConstants.INVALID_LAND_LINE
+
       input.ekycMobileNo.isNotBlank() &&
-          input.ekycMobileNo.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
+          input.ekycMobileNo.invalidMobileNo() -> {
+        identifier = 16
+        R.string.error_message_invalid_mobile
+      } //MOSLConstants.INVALID_MOBILE_NO
+
       input.panNo.isNotBlank() &&
-          input.panNo.invalidPan() -> MOSLConstants.INVALID_PAN
+          input.panNo.invalidPan() -> {
+        identifier = 17
+        R.string.error_message_invalid_pan
+      } //MOSLConstants.INVALID_PAN
+
       input.aadharNo.isNotBlank() &&
-          input.aadharNo.invalidAadhar() -> MOSLConstants.INVALID_AADHAR
+          input.aadharNo.invalidAadhar() -> {
+        identifier = 18
+        R.string.error_message_invalid_aadhar
+      } //MOSLConstants.INVALID_AADHAR
+
       input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
-          input.referCode.length < 4 -> ERROR_REFEREE_CODE
+          input.referCode.length < 4 -> {
+        identifier = 19
+        R.string.error_message_referee_code
+      } //ERROR_REFEREE_CODE
+
       input.referName.isNotBlank() &&
-          input.referName.invalidAlphaNumbric() -> ERROR_ALPHABETS
+          input.referName.invalidAlphaNumbric() -> {
+        identifier = 20
+        R.string.error_message_alphabets
+      } //ERROR_ALPHABETS
+
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referName.isBlank() -> MOSLConstants.ENTER_PROSPECT_REFEREE_NAME
+          input.referName.isBlank() -> {
+        identifier = 21
+        R.string.error_message_prospect_referee
+      } //MOSLConstants.ENTER_PROSPECT_REFEREE_NAME
+
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referMobile.isBlank() -> MOSLConstants.ENTER_MOBILE_NUMBER
+          input.referMobile.isBlank() -> {
+        identifier = 22
+        R.string.error_message_enter_mobile
+      } //MOSLConstants.ENTER_MOBILE_NUMBER
+
       input.referMobile.isNotBlank() &&
-          input.referMobile.invalidMobileNo() -> MOSLConstants.INVALID_MOBILE_NO
+          input.referMobile.invalidMobileNo() -> {
+        identifier = 23
+        R.string.error_message_invalid_mobile
+      }
 
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referEmail.isBlank() -> MOSLConstants.ENTER_EMAIL_ID
-      input.referEmail.isNotBlank() &&
-          input.referEmail.invalidEmail() -> MOSLConstants.INVALID_EMAIL_ID
-      input.pinCode.isNotBlank() &&
-          input.pinCode.length < 6 -> ERROR_PINCODE
-      input.officePinCode.isNotBlank() &&
-          input.officePinCode.length < 6 -> ERROR_PINCODE
+          input.referEmail.isBlank() -> {
+        identifier = 24
+        R.string.error_message_enter_email
+      }
 
-      else -> null
+      input.pinCode.isNotBlank() &&
+          input.pinCode.length < 6 -> {
+        identifier = 25
+        R.string.error_message_pincode
+      }
+
+      input.officePinCode.isNotBlank() &&
+          input.officePinCode.length < 6 -> {
+        identifier = 26
+        R.string.error_message_pincode
+      }
+      else -> {
+        identifier = 0
+        null
+      }
     }
 
     return returnValidationResult(
-        errorMessage,
+        errorMessageRes,
         actionOnError = {
-          withMessage(it)
+          withError(error = requireNotNull(errorMessageRes), identifier = identifier)
         },
         actionOnSuccess = { withData("Input is correct") }
     )
@@ -75,12 +186,12 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
   }
 
   private inline fun returnValidationResult(
-    errorMessage: String?,
-    actionOnError: (String) -> ValidationResult<String>,
+    @StringRes errorMessageRes: Int?,
+    actionOnError: (Int) -> ValidationResult<String>,
     actionOnSuccess: () -> ValidationResult<String>
   ): ValidationResult<String> {
-    return if (errorMessage != null)
-      actionOnError(errorMessage)
+    return if (errorMessageRes != null)
+      actionOnError(errorMessageRes)
     else
       actionOnSuccess()
   }

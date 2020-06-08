@@ -7,6 +7,7 @@ data class LeadCreationUserInput(
   @JvmField val selectedCategory: RowData,
   @JvmField val etCategoryName: String,
   @JvmField val etContactPerson: String,
+  @JvmField val selectedProfession: RowData,
   @JvmField val selectedInterestIn: RowData,
   @JvmField val selectedProductType: RowData,
   @JvmField val emailId: String,

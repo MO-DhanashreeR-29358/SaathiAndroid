@@ -60,12 +60,21 @@
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
-
-                    <Spinner
-                        android:id="@+id/spCategory"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+                        <Spinner
+                            android:id="@+id/spCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
@@ -114,12 +123,21 @@
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
-
-                    <Spinner
-                        android:id="@+id/spProfession"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_profession"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+                        <Spinner
+                            android:id="@+id/spProfession"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -129,12 +147,20 @@
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
-
-                    <Spinner
-                        android:id="@+id/spInterestIn"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_interest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+                        <Spinner
+                            android:id="@+id/spInterestIn"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <TextView
                         android:id="@+id/tvProductType"
@@ -144,12 +170,21 @@
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
 
-
-                    <Spinner
-                        android:id="@+id/spProductType"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_product_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+                        <Spinner
+                            android:id="@+id/spProductType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmailId"
@@ -328,11 +363,21 @@
                         android:textSize="@dimen/_11sdp" />
 
 
-                    <Spinner
-                        android:id="@+id/spProspectSource"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_prospect_source"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp" />
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+                        <Spinner
+                            android:id="@+id/spProspectSource"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
