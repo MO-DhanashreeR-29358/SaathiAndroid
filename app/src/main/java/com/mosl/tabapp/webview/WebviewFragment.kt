@@ -43,11 +43,15 @@ class WebviewFragment : CommonFragment() {
     }
 
     private fun parseArguments(args: Bundle) {
+        var oaoUserID = ""
         val pageId = args.getString(PAGE_ID)
         val url = args.getString(URL)
+        if (args.containsKey(OAO_USER_ID)) {
+            oaoUserID = args.getString(OAO_USER_ID)
+        }
         when {
             url != null -> subject.onNext(WebViewRequest.Url(url))
-            pageId != null -> subject.onNext(WebViewRequest.Id(pageId))
+            pageId != null -> subject.onNext(WebViewRequest.Id(pageId, oaoUserID))
         }
     }
 
