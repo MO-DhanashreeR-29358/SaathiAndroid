@@ -198,7 +198,7 @@ class MenuDataSourceImpl @Inject constructor(
 
     internal fun getCheckApproval(): BaseMenu {
         return BaseMenu(
-            icon = R.drawable.ic_menu_incentive_reports,
+            icon = R.drawable.ic_cheque_approval,
             label = R.string.MOSL_MENU_CHECK_APPROVAL_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL
