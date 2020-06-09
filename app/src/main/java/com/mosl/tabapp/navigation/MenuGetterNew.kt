@@ -26,6 +26,7 @@ import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
+import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.EXISTING_APPLICATIONS_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.FRESH_REGISTRATION_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
@@ -59,6 +60,10 @@ object MenuGetterNew {
             }
             NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, INCENTIVE_REPORT_ID)
+                arguments = args
+            }
+            NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL -> WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, CHECK_APPROVAL_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
@@ -119,6 +124,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> true
             NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> true
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> true
+            NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL -> true
             else -> return false
         }
     }

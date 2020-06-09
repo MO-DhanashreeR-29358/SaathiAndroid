@@ -38,6 +38,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_CALENDER_LIST,
         NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT,
         NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION,
+        NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL,
 })
 public @interface NavigationConstants {
   int NAVIGATE_TO_NONE = -1;
@@ -72,4 +73,5 @@ public @interface NavigationConstants {
   int NAVIGATE_TO_REPORTS = 30;
   int NAVIGATE_TO_INCENTIVE_REPORT = 31;
   int NAVIGATE_TO_RESUME_APPLICATION = 32;
+  int NAVIGATE_TO_CHECK_APPROVAL = 33;
 }

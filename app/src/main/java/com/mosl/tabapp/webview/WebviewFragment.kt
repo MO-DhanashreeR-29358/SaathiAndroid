@@ -175,9 +175,18 @@ class WebviewFragment : CommonFragment() {
                     }
                 }
             }
-            else -> {
+            webViewRequest.id.equals(RESUME_APPLICATIONS_ID) -> {
                 return saathiApiNew.getEkycExpressUrl(
                     EkycExpressRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId)
+                ).map {
+                    it.url?.apply {
+                        this.replace(" ", "%20")
+                    }
+                }
+            }
+            else -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    EkycExpressRequest(CHECK_APPROVAL_KEY, null)
                 ).map {
                     it.url?.apply {
                         this.replace(" ", "%20")
@@ -199,7 +208,6 @@ class WebviewFragment : CommonFragment() {
     companion object {
         const val URL = "url"
         const val PAGE_ID = "page_id"
-        const val ENC_UCID = "encUcid"
         const val INCENTIVE_REPORT_ID = "1"
         const val FRESH_REGISTRATION_ID = "2"
         const val FRESH_REGISTRATION_KEY = "FreshRegistration"
@@ -207,6 +215,8 @@ class WebviewFragment : CommonFragment() {
         const val EXISTING_APPLICATIONS_KEY = "ExistingApplication"
         const val RESUME_APPLICATIONS_ID = "4"
         const val RESUME_APPLICATIONS_KEY = "OAOForm"
+        const val CHECK_APPROVAL_ID = "5"
+        const val CHECK_APPROVAL_KEY = "ChequeApproval"
         const val OAO_USER_ID = "oaoUserID"
     }
 }
