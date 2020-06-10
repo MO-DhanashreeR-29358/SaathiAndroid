@@ -22,4 +22,6 @@ interface LeadDetailView : BaseView {
   fun onDocumentClicked(): Observable<Unit>
   fun onDOBClicked(): Observable<Unit>
   fun onAnniversaryClicked(): Observable<Unit>
+  fun onRefereeCodeFocusChanged(): Observable<Boolean>
+  fun renderOnRefereeCodeFocusChange()
 }

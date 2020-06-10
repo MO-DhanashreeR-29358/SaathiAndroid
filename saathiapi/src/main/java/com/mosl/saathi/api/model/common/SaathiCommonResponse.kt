@@ -10,10 +10,10 @@ data class SaathiCommonResponse<T>(
   @JvmField @SerializedName("Erros") val errors: List<ApiError>?
 ) {
   val isSuccessful: Boolean
-    get() = status == true
+    get() = status
 
   fun getMessage(): String {
-    return errors!!.get(0).message ?: "An Error Occurred"
+    return errors?.let { it[0].message } ?: "An Error Occurred"
   }
 }
 

@@ -6,11 +6,13 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadviewDetailBinding
+import com.mosl.tabapp.util.emptyString
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -114,6 +116,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun onAnniversaryClicked(): Observable<Unit> {
     return binding.etAnniversary.clicks()
+  }
+
+  override fun onRefereeCodeFocusChanged(): Observable<Boolean> {
+    return binding.etRefereeCode.focusChanges()
+  }
+
+  override fun renderOnRefereeCodeFocusChange() {
+    if (binding.etRefereeCode.text.toString().length < 4) {
+      binding.etRefereeName.setText(emptyString())
+      binding.etRefereeEmail.setText(emptyString())
+      binding.etRefereeNumber.setText(emptyString())
+    }
   }
 
   override fun onDestroyView() {
