@@ -18,11 +18,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManagerImpl
-import com.mosl.mobile.user.model.LoginInfo
-import com.mosl.mobile.user.model.ReportType
-import com.mosl.mobile.user.model.User
-import com.mosl.mobile.user.model.VersionInfo
-import com.mosl.mobile.user.model.VersionResponse
+import com.mosl.mobile.user.model.*
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.Utility
 import com.mosl.tabapp.BuildConfig
@@ -35,7 +31,7 @@ import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class SplashActivity : LeanBaseActivity() {
@@ -283,7 +279,7 @@ class SplashActivity : LeanBaseActivity() {
   private fun renderLoginData(uimodel: UiModel<User>) {
 
     uimodel.onSuccess {
-      //firebaseHelper.setUserProperty(it.employeeCode)
+      firebaseHelper.setUserProperty(it.employeeCode)
       setUserPreferenceData(it)
     }
 
