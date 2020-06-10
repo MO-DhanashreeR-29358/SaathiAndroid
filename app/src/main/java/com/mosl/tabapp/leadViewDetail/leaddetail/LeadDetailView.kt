@@ -24,4 +24,6 @@ interface LeadDetailView : BaseView {
   fun onAnniversaryClicked(): Observable<Unit>
   fun onRefereeCodeFocusChanged(): Observable<Boolean>
   fun renderOnRefereeCodeFocusChange()
+  fun onRefereeNameFocusChanged(): Observable<Boolean>
+  fun renderOnRefereeNameFocusChange()
 }

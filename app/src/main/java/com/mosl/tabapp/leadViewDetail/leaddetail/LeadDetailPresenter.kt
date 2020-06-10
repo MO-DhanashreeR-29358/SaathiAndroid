@@ -21,8 +21,13 @@ class LeadDetailPresenter @Inject constructor(
     view.onNestedScrollViewTouched()
         .subscribe { view.renderOnNestedScrollViewTouch() }
         .addTo(disposable)
+
     view.onRefereeCodeFocusChanged()
         .subscribe { view.renderOnRefereeCodeFocusChange() }
+        .addTo(disposable)
+
+    view.onRefereeNameFocusChanged()
+        .subscribe { view.renderOnRefereeNameFocusChange() }
         .addTo(disposable)
 
   }

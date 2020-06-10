@@ -13,6 +13,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragLeadviewDetailBinding
 import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.string
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -123,8 +124,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   }
 
   override fun renderOnRefereeCodeFocusChange() {
-    if (binding.etRefereeCode.text.toString().length < 4) {
+    if (binding.etRefereeCode.string().length < 4) {
       binding.etRefereeName.setText(emptyString())
+      binding.etRefereeEmail.setText(emptyString())
+      binding.etRefereeNumber.setText(emptyString())
+    }
+  }
+
+  override fun onRefereeNameFocusChanged(): Observable<Boolean> {
+    return binding.etRefereeName.focusChanges()
+  }
+
+  override fun renderOnRefereeNameFocusChange() {
+    if (binding.etRefereeName.string().length < 3) {
+      binding.etRefereeCode.setText(emptyString())
       binding.etRefereeEmail.setText(emptyString())
       binding.etRefereeNumber.setText(emptyString())
     }
