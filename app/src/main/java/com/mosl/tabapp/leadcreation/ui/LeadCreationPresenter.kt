@@ -166,9 +166,7 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onCountrySelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
         .map { view.getSelectedCountry() }
-        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
           repository.getStateRowDatas(it.key)
               .compose(applyUiModel())
@@ -178,9 +176,8 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onOfficeCountrySelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
         .map { view.getSelectedOfficeCountry() }
-        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && !view.isSameAsAboveChecked() }
+        .filter { !view.isSameAsAboveChecked() }
         .switchMap {
           repository.getStateRowDatas(it.key)
               .compose(applyUiModel())
@@ -190,7 +187,6 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onStateSelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
         .map { view.getSelectedState() }
         .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
@@ -202,9 +198,8 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onOfficeStateSelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
         .map { view.getSelectedOfficeState() }
-        .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && !view.isSameAsAboveChecked() }
+        .filter { !view.isSameAsAboveChecked() }
         .switchMap {
           repository.getCityRowDatas(it.key)
               .compose(applyUiModel())
@@ -214,7 +209,6 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onCitySelected()
         .filter(InvalidSelectionPredicate)
-        .skip(1)
         .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
         .addTo(disposable)

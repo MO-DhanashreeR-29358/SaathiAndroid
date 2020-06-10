@@ -83,7 +83,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -93,6 +93,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -102,7 +109,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etContactPerson"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -113,6 +120,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
                             android:visibility="gone" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_contact_person"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -193,7 +208,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -203,6 +218,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -212,7 +234,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAlternateEmailId"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -222,6 +244,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_alternate_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -231,7 +260,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -241,6 +270,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -250,7 +286,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAlternateMobno"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -260,6 +296,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_alternate_mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -269,7 +312,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etLandLine"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -279,6 +322,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_land"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -288,7 +338,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etEkycMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -298,6 +348,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_ekyc_mob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -307,7 +364,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etPanNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -317,6 +374,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_pan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -326,7 +390,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAadharNum"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -336,6 +400,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_aadhar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -385,7 +456,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectSourceDetails"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -395,6 +466,13 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_prospet_source_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -525,7 +603,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etRefereeCode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -534,6 +612,13 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_refer_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <ProgressBar
@@ -560,7 +645,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etRefereeName"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -569,8 +654,14 @@
                                 android:inputType="textNoSuggestions"
                                 android:maxLines="1"
                                 android:singleLine="true"
-                                android:textCursorDrawable="@null"
+                                android:textCursorDrawable="@null" />
 
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_refer_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false"
                                 />
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -594,7 +685,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etRefereeEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -603,9 +694,14 @@
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:singleLine="true"
-                            android:textCursorDrawable="@null"
+                            android:textCursorDrawable="@null" />
 
-
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_refer_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -616,7 +712,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etRefereeMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -629,6 +725,13 @@
                             android:textCursorDrawable="@null"
 
                             />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/til_refer_mob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -637,7 +740,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectRefereeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -658,7 +761,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectRefereerMobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -676,7 +779,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectRefereerEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -730,7 +833,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -748,7 +851,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -766,7 +869,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -829,7 +932,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -842,6 +945,13 @@
                                 android:textCursorDrawable="@null"
 
                                 />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_pin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -898,7 +1008,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etOffAdd1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -918,7 +1028,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etOffAdd2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -936,7 +1046,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etOffAdd3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -998,7 +1108,7 @@
                             android:layout_marginTop="@dimen/_3sdp"
                             app:hintTextAppearance="@style/InputLayout">
 
-                            <androidx.appcompat.widget.AppCompatEditText
+                            <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etOffPincode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1010,6 +1120,13 @@
                                 android:textCursorDrawable="@null"
 
                                 />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/til_off_pin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -1020,7 +1137,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout">
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"

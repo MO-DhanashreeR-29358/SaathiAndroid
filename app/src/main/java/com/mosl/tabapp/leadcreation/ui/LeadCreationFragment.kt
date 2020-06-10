@@ -57,8 +57,10 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.gone
+import com.mosl.tabapp.util.setErrorMessages
 import com.mosl.tabapp.util.visible
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
@@ -756,90 +758,68 @@ class LeadCreationFragment : CommonFragment(),
     error.error?.let {
       when (error.identifier as Int) {
         1 -> {
-          binding.tlCategory.error = getString(it)
-          binding.tlCategory.requestFocus()
+          binding.tlCategory.setErrorMessages(getString(it))
         }
         2 -> {
           val rowData = binding.spCategory.selectedItem as RowData
-          binding.etName.error = getString(it, rowData.value)
-          binding.etName.requestFocus()
+          binding.tilName.setErrorMessages(getString(it, rowData.value))
         }
         3 -> {
-          binding.etName.error = getString(it)
-          binding.etName.requestFocus()
-
+          binding.tilName.setErrorMessages(getString(it))
         }
         4, 5 -> {
-          binding.etContactPerson.error = getString(it)
-          binding.etContactPerson.requestFocus()
+          binding.tilContactPerson.setErrorMessages(getString(it))
         }
         6 -> {
-          binding.tlInterest.error = getString(it)
-          binding.tlInterest.requestFocus()
+          binding.tlInterest.setErrorMessages(getString(it))
         }
         7 -> {
-          binding.tlProductType.error = getString(it)
-          binding.tlProductType.requestFocus()
+          binding.tlProductType.setErrorMessages(getString(it))
         }
         8 -> {
-          binding.etEmailId.error = getString(it)
-          binding.etEmailId.requestFocus()
+          binding.tilEmail.setErrorMessages(getString(it))
         }
         9, 10 -> {
-          binding.etAlternateEmailId.error = getString(it)
-          binding.etAlternateEmailId.requestFocus()
+          binding.tilAlternateEmail.setErrorMessages(getString(it))
         }
         11, 12 -> {
-          binding.etMobile.error = getString(it)
-          binding.etMobile.requestFocus()
+          binding.tilMobile.setErrorMessages(getString(it))
         }
         13, 14 -> {
-          binding.etAlternateMobno.error = getString(it)
-          binding.etAlternateMobno.requestFocus()
+          binding.tilAlternateMobile.setErrorMessages(getString(it))
         }
         15 -> {
-          binding.etLandLine.error = getString(it)
-          binding.etLandLine.requestFocus()
+          binding.tilLand.setErrorMessages(getString(it))
         }
         16 -> {
-          binding.etEkycMobile.error = getString(it)
-          binding.etEkycMobile.requestFocus()
+          binding.tilEkycMob.setErrorMessages(getString(it))
         }
         17 -> {
-          binding.etPanNum.error = getString(it)
-          binding.etPanNum.requestFocus()
+          binding.tilPan.setErrorMessages(getString(it))
         }
         18 -> {
-          binding.etAadharNum.error = getString(it)
-          binding.etAadharNum.requestFocus()
+          binding.tilAadhar.setErrorMessages(getString(it))
         }
         19 -> {
-          binding.etRefereeCode.error = getString(it)
-          binding.etRefereeCode.requestFocus()
+          binding.tilReferCode.setErrorMessages(getString(it))
         }
         20, 21 -> {
-          binding.etRefereeName.error = getString(it)
-          binding.etRefereeName.requestFocus()
+          binding.tilReferName.setErrorMessages(getString(it))
         }
         22, 23 -> {
-          binding.etRefereeMobile.error = getString(it)
-          binding.etRefereeMobile.requestFocus()
+          binding.tilReferMob.setErrorMessages(getString(it))
         }
         24 -> {
-          binding.etRefereeEmail.error = getString(it)
-          binding.etRefereeEmail.requestFocus()
+          binding.tilReferEmail.setErrorMessages(getString(it))
         }
         25 -> {
-          binding.etPincode.error = getString(it)
-          binding.etPincode.requestFocus()
+          binding.tilPin.setErrorMessages(getString(it))
         }
         26 -> {
-          binding.etOffPincode.error = getString(it)
-          binding.etOffPincode.requestFocus()
+          binding.tilOffPin.setErrorMessages(getString(it))
         }
         27 -> {
-          binding.tlProfession.error = getString(it)
-          binding.tlProfession.requestFocus()
+          binding.tlProfession.setErrorMessages(getString(it))
         }
 
         else -> {
@@ -851,10 +831,26 @@ class LeadCreationFragment : CommonFragment(),
 
   private fun removeErrorMessage() {
     binding.apply {
-      tlCategory.error = null
-      tlInterest.error = null
-      tlProductType.error = null
-      tlProfession.error = null
+      tlCategory.disableErrorMessages()
+      tilName.disableErrorMessages()
+      tilContactPerson.disableErrorMessages()
+      tilEmail.disableErrorMessages()
+      tilAlternateEmail.disableErrorMessages()
+      tilAlternateMobile.disableErrorMessages()
+      tilMobile.disableErrorMessages()
+      tilLand.disableErrorMessages()
+      tilEkycMob.disableErrorMessages()
+      tilPan.disableErrorMessages()
+      tilAadhar.disableErrorMessages()
+      tilReferCode.disableErrorMessages()
+      tilReferName.disableErrorMessages()
+      tilReferEmail.disableErrorMessages()
+      tilReferMob.disableErrorMessages()
+      tilPin.disableErrorMessages()
+      tilOffPin.disableErrorMessages()
+      tlInterest.disableErrorMessages()
+      tlProductType.disableErrorMessages()
+      tlProfession.disableErrorMessages()
     }
   }
 
