@@ -30,12 +30,69 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.renderOnRefereeNameFocusChange() }
         .addTo(disposable)
 
+    view.onLeadNameAfterTextChanged()
+        .subscribe { view.renderOnLeadNameAfterTextChange(it) }
+        .addTo(disposable)
 
+    view.onProsRefereeNameAfterTextChanged()
+        .subscribe { view.renderOnProsRefereeNameAfterTextChange(it) }
+        .addTo(disposable)
 
     view.onProsRefereeMobileTextChanged()
-        .filter { it.isNotBlank() }
         .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
         .addTo(disposable)
+
+    view.onProsRefereeEmailTextChanged()
+        .subscribe { view.renderOnProsRefereeEmailTextChange(it) }
+        .addTo(disposable)
+
+    view.onContactPersonAfterTextChanged()
+        .subscribe { view.renderOnContactPersonAfterTextChange(it) }
+        .addTo(disposable)
+
+    view.onLandLineAfterTextChanged()
+        .subscribe { view.renderOnLandLineAfterTextChange(it) }
+        .addTo(disposable)
+
+    view.onAlterMobileTextChanged()
+        .subscribe { view.renderOnAlterMobileTextChange(it) }
+        .addTo(disposable)
+
+    view.onAlterEmailTextChanged()
+        .subscribe { view.renderOnAlterEmailTextChange(it) }
+        .addTo(disposable)
+    view.onEmailTextChanged()
+        .subscribe { view.renderOnEmailTextChange(it) }
+        .addTo(disposable)
+    view.onPanTextChanged()
+        .subscribe { view.renderOnPanTextChange(it) }
+        .addTo(disposable)
+    view.onAadharAfterTextChanged()
+        .subscribe { view.renderOnAadharAfterTextChange(it) }
+        .addTo(disposable)
+    view.onPinTextChanged()
+        .subscribe { view.renderOnPinTextChange(it) }
+        .addTo(disposable)
+
+    view.onOfficePinTextChanged()
+        .subscribe { view.renderOnOfficePinTextChange(it) }
+        .addTo(disposable)
+
+    view.onAdd1AfterTextChanged()
+        .filter { view.isCbSameAsChecked() }
+        .subscribe { view.renderOnAdd1AfterTextChange(it) }
+        .addTo(disposable)
+
+    view.onAdd2AfterTextChanged()
+        .filter { view.isCbSameAsChecked() }
+        .subscribe { view.renderOnAdd2AfterTextChange(it) }
+        .addTo(disposable)
+
+    view.onAdd3AfterTextChanged()
+        .filter { view.isCbSameAsChecked() }
+        .subscribe { view.renderOnAdd3AfterTextChange(it) }
+        .addTo(disposable)
+
 
   }
 }

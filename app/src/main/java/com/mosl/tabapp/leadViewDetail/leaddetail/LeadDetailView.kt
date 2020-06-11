@@ -32,4 +32,32 @@ interface LeadDetailView : BaseView {
   fun renderOnProsRefereeNameAfterTextChange(text: String)
   fun onProsRefereeMobileTextChanged(): Observable<String>
   fun renderOnProsRefereeMobileTextChange(text: String)
+  fun onProsRefereeEmailTextChanged(): Observable<String>
+  fun renderOnProsRefereeEmailTextChange(text: String)
+
+  fun onContactPersonAfterTextChanged(): Observable<String>
+  fun renderOnContactPersonAfterTextChange(text: String)
+  fun onLandLineAfterTextChanged(): Observable<String>
+  fun renderOnLandLineAfterTextChange(text: String)
+  fun onAlterMobileTextChanged(): Observable<String>
+  fun renderOnAlterMobileTextChange(text: String)
+  fun onAlterEmailTextChanged(): Observable<String>
+  fun renderOnAlterEmailTextChange(text: String)
+  fun onEmailTextChanged(): Observable<String>
+  fun renderOnEmailTextChange(text: String)
+  fun onPanTextChanged(): Observable<String>
+  fun renderOnPanTextChange(text: String)
+  fun onAadharAfterTextChanged(): Observable<String>
+  fun renderOnAadharAfterTextChange(text: String)
+  fun onPinTextChanged(): Observable<String>
+  fun renderOnPinTextChange(text: String)
+  fun onOfficePinTextChanged(): Observable<String>
+  fun renderOnOfficePinTextChange(text: String)
+  fun onAdd1AfterTextChanged(): Observable<String>
+  fun renderOnAdd1AfterTextChange(text: String)
+  fun onAdd2AfterTextChanged(): Observable<String>
+  fun renderOnAdd2AfterTextChange(text: String)
+  fun onAdd3AfterTextChanged(): Observable<String>
+  fun renderOnAdd3AfterTextChange(text: String)
+  fun isCbSameAsChecked(): Boolean
 }
