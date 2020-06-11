@@ -30,5 +30,12 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.renderOnRefereeNameFocusChange() }
         .addTo(disposable)
 
+
+
+    view.onProsRefereeMobileTextChanged()
+        .filter { it.isNotBlank() }
+        .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
+        .addTo(disposable)
+
   }
 }

@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
+import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.FragLeadviewDetailBinding
+import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.string
 import io.reactivex.Observable
@@ -20,13 +22,13 @@ import javax.inject.Inject
 class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   @Inject internal lateinit var presenter: LeadDetailPresenter
-  private lateinit var binding: FragLeadviewDetailBinding
+  private lateinit var binding: FragmentLeadDetailBinding
 
   private var leadId = "0"
   private var ucId = "0"
 
   override fun getLayout(): Int {
-    return R.layout.frag_leadview_detail
+    return R.layout.fragment_lead_detail
   }
 
   override fun onViewCreated(
@@ -34,7 +36,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragLeadviewDetailBinding.bind(view)
+    binding = FragmentLeadDetailBinding.bind(view)
     setupView()
     presenter.start()
   }
@@ -140,6 +142,39 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       binding.etRefereeCode.setText(emptyString())
       binding.etRefereeEmail.setText(emptyString())
       binding.etRefereeNumber.setText(emptyString())
+    }
+  }
+
+  override fun onLeadNameAfterTextChanged(): Observable<String> {
+    return binding.etLeadName.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: emptyString() }
+  }
+
+  override fun renderOnLeadNameAfterTextChange(text: String) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onProsRefereeNameAfterTextChanged(): Observable<String> {
+    return binding.etProspectRefereeName.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: emptyString() }
+  }
+
+  override fun renderOnProsRefereeNameAfterTextChange(text: String) {
+    TODO("Not yet implemented")
+  }
+
+  override fun onProsRefereeMobileTextChanged(): Observable<String> {
+    return binding.etProspectRefereerMobile.textChanges()
+        .map { it.toString() }
+  }
+
+  override fun renderOnProsRefereeMobileTextChange(text: String) {
+    when {
+      text.isNotBlank() -> {
+      }
+      else -> {
+        //binding.tlProspectRefereeMob.set
+      }
     }
   }
 

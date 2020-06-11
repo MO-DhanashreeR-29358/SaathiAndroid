@@ -26,4 +26,10 @@ interface LeadDetailView : BaseView {
   fun renderOnRefereeCodeFocusChange()
   fun onRefereeNameFocusChanged(): Observable<Boolean>
   fun renderOnRefereeNameFocusChange()
+  fun onLeadNameAfterTextChanged(): Observable<String>
+  fun renderOnLeadNameAfterTextChange(text: String)
+  fun onProsRefereeNameAfterTextChanged(): Observable<String>
+  fun renderOnProsRefereeNameAfterTextChange(text: String)
+  fun onProsRefereeMobileTextChanged(): Observable<String>
+  fun renderOnProsRefereeMobileTextChange(text: String)
 }
