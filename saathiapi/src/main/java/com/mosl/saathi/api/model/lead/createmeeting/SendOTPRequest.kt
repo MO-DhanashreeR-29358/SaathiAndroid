@@ -8,8 +8,8 @@ data class SendOTPRequest(
     @JvmField @SerializedName("GeoArea") val geoArea: String,
     @JvmField @SerializedName("GeoLongitude") val longitude: String,
     @JvmField @SerializedName("GeoLatitude") val latitude: String,
-    @JvmField @SerializedName("DeviceType") val deviceType: String,
-    @JvmField @SerializedName("SendFlag") val sendFlag: Int,
+  @JvmField @SerializedName("DeviceType") val deviceType: String = "2",
+  @JvmField @SerializedName("SendFlag") val sendFlag: Int = 0,
     @JvmField @SerializedName("EmployeeCode") val employeeCode: String
 
 )

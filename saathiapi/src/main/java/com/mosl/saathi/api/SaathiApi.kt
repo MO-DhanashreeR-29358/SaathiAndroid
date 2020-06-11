@@ -32,6 +32,8 @@ import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
+import com.mosl.saathi.api.model.createlead.SearchRefereeModel
+import com.mosl.saathi.api.model.createlead.SearchRefereeResponse
 import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
@@ -332,6 +334,11 @@ interface SaathiApi {
   fun addUpdateLead(
     @Body request: CreateLeadRequest
   ): Observable<SaathiCommonResponse<CreateLeadResponse>>
+
+  @POST("Common/GetRefereeCode")
+  fun getRefereeCode(
+    @Body request: SearchRefereeModel
+  ): Observable<SearchRefereeResponse>
 
   // ==================== Query ===========================
 

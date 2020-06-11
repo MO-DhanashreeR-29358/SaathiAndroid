@@ -11,14 +11,14 @@ import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
-import com.mosl.tabapp.leadcreation.LeadCreationFragment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
@@ -65,7 +65,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
-      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
+      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragmentNew()
       NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()

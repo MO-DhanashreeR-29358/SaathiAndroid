@@ -86,12 +86,14 @@ android {
       versionName versionProps['uatName']
       applicationIdSuffix '.uat'
       signingConfig signingConfigs.internal
+      buildConfigField 'boolean', 'LOGOUT_ON_UPDATE', "${versionProps['clearUserLogin']}"
       dimension 'releaseType'
     }
     prod {
       versionCode versionProps['prodCode'].toInteger()
       versionName versionProps['prodName']
       signingConfig signingConfigs.prod
+      buildConfigField 'boolean', 'LOGOUT_ON_UPDATE', "${versionProps['prodClearUserLogin']}"
       dimension 'releaseType'
     }
   }

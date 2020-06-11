@@ -4,6 +4,8 @@ import com.mosl.navigator.BaseNavigator
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailNavigator
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailNavigatorImpl
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigator
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigatorImpl
 import dagger.Binds
 import dagger.Module
 
@@ -14,6 +16,9 @@ abstract class NavigatorAliasProviders {
 
   @Binds
   abstract fun provideEkycNavigator(screenNavigator: ScreenNavigatorImpl): EkycNavigator
+
+  @Binds
+  abstract fun provideLeadCreationNavigator(navigator: LeadCreationNavigatorImpl): LeadCreationNavigator
 
   @Binds
   abstract fun provideLeadViewDetailNavigator(
