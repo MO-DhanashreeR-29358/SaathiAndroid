@@ -12,9 +12,13 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
+import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.setErrorMessages
 import com.mosl.tabapp.util.string
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -151,7 +155,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   }
 
   override fun renderOnLeadNameAfterTextChange(text: String) {
-    TODO("Not yet implemented")
+    when {
+      text.isNotBlank() -> {
+        when {
+          CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
+              text
+          ) -> binding.tlLeadName.disableErrorMessages()
+          else -> {
+            binding.tlLeadName.setErrorMessages(MOSLConstants.ErrorMsgName)
+          }
+        }
+      }
+      else -> {
+        binding.tlLeadName.disableErrorMessages()
+      }
+    }
   }
 
   override fun onProsRefereeNameAfterTextChanged(): Observable<String> {
@@ -160,7 +178,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   }
 
   override fun renderOnProsRefereeNameAfterTextChange(text: String) {
-    TODO("Not yet implemented")
+    when {
+      text.isNotBlank() -> {
+        when {
+          CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
+              text
+          ) -> binding.tlProspectRefereeName.disableErrorMessages()
+          else -> {
+            binding.tlProspectRefereeName.setErrorMessages(MOSLConstants.ErrorMsgName)
+          }
+        }
+      }
+      else -> {
+        binding.tlProspectRefereeName.disableErrorMessages()
+      }
+    }
   }
 
   override fun onProsRefereeMobileTextChanged(): Observable<String> {
@@ -171,9 +203,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   override fun renderOnProsRefereeMobileTextChange(text: String) {
     when {
       text.isNotBlank() -> {
+        when {
+          CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
+              text
+          ) -> binding.tlProspectRefereeMob.disableErrorMessages()
+          else -> {
+            binding.tlProspectRefereeMob.setErrorMessages(MOSLConstants.ErrorMsgName)
+          }
+        }
       }
       else -> {
-        //binding.tlProspectRefereeMob.set
+        binding.tlProspectRefereeMob.disableErrorMessages()
       }
     }
   }
