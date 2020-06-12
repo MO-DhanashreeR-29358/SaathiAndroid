@@ -6,22 +6,36 @@ import android.text.InputType
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
+import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
+import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
+import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tabapp.util.string
+import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import javax.inject.Inject
 
@@ -29,9 +43,42 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   @Inject internal lateinit var presenter: LeadDetailPresenter
   private lateinit var binding: FragmentLeadDetailBinding
+  private var isReferee = false
 
   private var leadId = "0"
   private var ucId = "0"
+
+  private val professionAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val profileAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val interestedAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val stageAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val statusAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val countryAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val stateAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+  private val cityAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
 
   override fun getLayout(): Int {
     return R.layout.fragment_lead_detail
@@ -63,6 +110,44 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           InputFilter.LengthFilter(10),
           InputFilter.AllCaps()
       )
+      includePortfolio.apply {
+        btnBrokPortfolio.gone()
+        btnAssetPortfolio.gone()
+        llPortfolio.visible()
+        llBorkingPortfolio.visible()
+        llCash.visible()
+        llAssestPortfolio.visible()
+        setIcon(llPortfolio, txtPortfolioSnapshot, "OUTER")
+        setIcon(llProfitLoss, txtPorfitLoss, "OUTER")
+        setIcon(llAvailableLimits, txtAvailableLimits, "OUTER")
+
+        setIcon(llBorkingPortfolio, txtBrokingPortfolio, "INNER")
+        setIcon(llAssestPortfolio, txtAssestPortfolio, "INNER")
+        setIcon(llCash, txtCash, "INNER")
+
+        setIcon(llBorkingProducts, txtBrokingProducts, "INNER")
+        setIcon(llAssestProducts, txtAssestProducts, "INNER")
+      }
+    }
+  }
+
+  private fun setIcon(
+    parent: View,
+    icon: TextView,
+    Section: String
+  ) {
+    if (Section.equals("OUTER", ignoreCase = true)) {
+      if (parent.visibility == View.VISIBLE) {
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
+      } else {
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
+      }
+    } else if (Section.equals("INNER", ignoreCase = true)) {
+      if (parent.visibility == View.VISIBLE) {
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
+      } else {
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.down_button, 0)
+      }
     }
   }
 
@@ -488,6 +573,86 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun renderOnAdd3AfterTextChange(text: String) {
     binding.etAdd3.setText(text)
+  }
+
+  override fun onRefereeCodeChanged(): Observable<String> {
+    return binding.etRefereeCode.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: emptyString() }
+  }
+
+  override fun getRefereeCode(): String {
+    return binding.etRefereeCode.text?.toString() ?: emptyString()
+  }
+
+  override fun resetRefereeOnCodeChange() {
+    binding.apply {
+      etRefereeName.setText(emptyString())
+      etRefereeEmail.setText(emptyString())
+      etRefereeNumber.setText(emptyString())
+    }
+  }
+
+  override fun onRefereeNameChanged(): Observable<String> {
+    return binding.etRefereeName.afterTextChangeEvents()
+        .map { it.editable?.toString() ?: "" }
+  }
+
+  override fun resetRefereeOnNameChange() {
+    binding.apply {
+      etRefereeCode.setText(emptyString())
+      etRefereeEmail.setText(emptyString())
+      etRefereeNumber.setText(emptyString())
+    }
+  }
+
+  override fun renderOnRefereeCodeChange(uiModel: UiModel<SearchReferee>) {
+    binding.pbLoadingIndicatorRefreeCode toggle uiModel.inProgress
+    renderOnRefereeChange(uiModel)
+  }
+
+  override fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>) {
+    binding.pbLoadingIndicatorRefreeName toggle uiModel.inProgress
+    renderOnRefereeChange(uiModel)
+  }
+
+  private fun renderOnRefereeChange(uiModel: UiModel<SearchReferee>) {
+    uiModel.onFailure {
+      isReferee = false
+      binding.etRefereeEmail.setText(emptyString())
+      binding.etRefereeNumber.setText(emptyString())
+    }
+    uiModel.onSuccess {
+      when (it.type) {
+        "ByCode" -> binding.etRefereeName.setText(it.name)
+        else -> binding.etRefereeCode.setText(it.code)
+      }
+      binding.etRefereeEmail.setText(it.email)
+      binding.etRefereeNumber.setText(it.mobile)
+      isReferee = true
+    }
+  }
+
+  private infix fun ProgressBar.toggle(inProgress: Boolean) {
+    if (inProgress) visible() else gone()
+  }
+
+  override fun isRefereeCodeFocused(): Boolean {
+    return binding.etRefereeCode.isFocused
+  }
+
+  override fun isRefereeNameFocused(): Boolean {
+    return binding.etRefereeName.isFocused
+  }
+
+  override fun render(uiModel: UiModel<LeadDetailPageData>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { data ->
+      binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+      // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
+      binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+      binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+    }
   }
 
   override fun onDestroyView() {

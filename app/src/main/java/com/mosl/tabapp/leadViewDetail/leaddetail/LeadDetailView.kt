@@ -2,7 +2,10 @@ package com.mosl.tabapp.leadViewDetail.leaddetail
 
 import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
+import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -34,7 +37,6 @@ interface LeadDetailView : BaseView {
   fun renderOnProsRefereeMobileTextChange(text: String)
   fun onProsRefereeEmailTextChanged(): Observable<String>
   fun renderOnProsRefereeEmailTextChange(text: String)
-
   fun onContactPersonAfterTextChanged(): Observable<String>
   fun renderOnContactPersonAfterTextChange(text: String)
   fun onLandLineAfterTextChanged(): Observable<String>
@@ -60,4 +62,19 @@ interface LeadDetailView : BaseView {
   fun onAdd3AfterTextChanged(): Observable<String>
   fun renderOnAdd3AfterTextChange(text: String)
   fun isCbSameAsChecked(): Boolean
+
+  fun onRefereeCodeChanged(): Observable<String>
+  fun isRefereeCodeFocused(): Boolean
+  fun resetRefereeOnCodeChange()
+  fun renderOnRefereeCodeChange(uiModel: UiModel<SearchReferee>)
+  fun getRefereeCode(): String
+  fun onRefereeNameChanged(): Observable<String>
+  fun isRefereeNameFocused(): Boolean
+  fun resetRefereeOnNameChange()
+  fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
+
+  fun render(uiModel: UiModel<LeadDetailPageData>)
+
+
+
 }

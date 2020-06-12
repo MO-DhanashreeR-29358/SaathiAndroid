@@ -13,14 +13,12 @@ import android.view.Window
 import android.view.WindowManager.LayoutParams
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
-import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
-import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -61,6 +59,7 @@ import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
+import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tabapp.util.visible
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
@@ -699,14 +698,6 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onSuccess {
       binding.spOffCity.setSpinnerData(cityAdapter, it)
     }
-  }
-
-  private fun Spinner.setSpinnerData(
-    arrayAdapter: ArrayAdapter<RowData>,
-    rowData: List<RowData>
-  ) {
-    adapter = arrayAdapter
-    arrayAdapter.setSpinnerData(this, rowData)
   }
 
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {

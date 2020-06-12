@@ -2,12 +2,18 @@ package com.mosl.tabapp.leadcreation.domain
 
 import com.mosl.tabapp.common.RowData
 
-data class LeadCreationPageData constructor(
+data class LeadCreationPageData(
   @JvmField val categoryRowDatas: List<RowData>,
   @JvmField val professionRowDatas: List<RowData>,
   @JvmField val interestInRowDatas: List<RowData>,
   @JvmField val sourceRowDatas: List<RowData>,
   @JvmField val stageRowDatas: List<RowData>,
+  @JvmField val countryRowDatas: List<RowData>
+)
+
+data class LeadDetailPageData(
+  @JvmField val professionRowDatas: List<RowData>,
+  @JvmField val interestInRowDatas: List<RowData>,
   @JvmField val countryRowDatas: List<RowData>
 )
 

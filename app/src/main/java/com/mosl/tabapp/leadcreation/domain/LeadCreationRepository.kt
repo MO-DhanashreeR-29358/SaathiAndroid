@@ -19,4 +19,8 @@ interface LeadCreationRepository {
   fun getRefereeCode(text: String): Observable<SearchReferee>
   fun getRefereeName(text: String): Observable<SearchReferee>
   fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead>
+
+  fun getProfessionRowDatas(): Observable<List<RowData>>
+  fun getInterestInRowDatas(): Observable<List<RowData>>
+  fun getCountryRowDatas(): Observable<List<RowData>>
 }

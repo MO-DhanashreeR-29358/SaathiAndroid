@@ -65,7 +65,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
     return getRowDatas(categoryRequest)
   }
 
-  private fun getProfessionRowDatas(): Observable<List<RowData>> {
+  override fun getProfessionRowDatas(): Observable<List<RowData>> {
     val professionRequest = LookupRequest(
         businessUnitId = requireNotNull(
             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -75,7 +75,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
     return getRowDatas(professionRequest)
   }
 
-  private fun getInterestInRowDatas(): Observable<List<RowData>> {
+  override fun getInterestInRowDatas(): Observable<List<RowData>> {
     val interestInRequest = LookupRequest(
         businessUnitId = requireNotNull(
             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -144,7 +144,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
         }
   }
 
-  private fun getCountryRowDatas(): Observable<List<RowData>> {
+  override fun getCountryRowDatas(): Observable<List<RowData>> {
     return saathiApi.getCountries()
         .map { it.countryItemsToRowDatas() }
   }

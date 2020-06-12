@@ -492,8 +492,7 @@
                         style="@style/CRMSpinnerSelector_leadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:entries="@array/Select" />
+                        android:layout_marginTop="@dimen/_3sdp" />
 
 
                     <com.google.android.material.textfield.TextInputLayout

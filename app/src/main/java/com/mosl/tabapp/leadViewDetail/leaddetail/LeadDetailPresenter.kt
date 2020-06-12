@@ -1,14 +1,21 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
+import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.functions.Function3
+import timber.log.Timber
+import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class LeadDetailPresenter @Inject constructor(
   view: LeadDetailView,
-  val data: LeadDetailArgument
+  val data: LeadDetailArgument,
+  val repository: LeadCreationRepository
 ) : BasePresenter<LeadDetailView>(view) {
   override fun start() {
     val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
@@ -16,6 +23,21 @@ class LeadDetailPresenter @Inject constructor(
 
     screenLoadObs
         .subscribe { view.renderArguments(data) }
+        .addTo(disposable)
+
+    screenLoadObs
+        .switchMap {
+          Observable.zip(
+              repository.getProfessionRowDatas(),
+              repository.getInterestInRowDatas(),
+              repository.getCountryRowDatas(),
+              Function3 { listOfProfession: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
+                LeadDetailPageData(listOfProfession, listOfInterest, listOfCountry)
+              }
+          )
+              .compose(applyUiModel())
+        }
+        .subscribe(view::render, Timber::e)
         .addTo(disposable)
 
     view.onNestedScrollViewTouched()
@@ -93,6 +115,50 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.renderOnAdd3AfterTextChange(it) }
         .addTo(disposable)
 
+    val refereeCodeObs = view.onRefereeCodeChanged()
+        .debounce(1000, MILLISECONDS, dispatchers.main)
+        .filter { view.isRefereeCodeFocused() }
+        .share()
 
+    refereeCodeObs
+        .filter { it.length > 3 }
+        .distinctUntilChanged()
+        .switchMap {
+          repository.getRefereeCode(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnRefereeCodeChange, Timber::e)
+        .addTo(disposable)
+
+    refereeCodeObs
+        .filter { it.length == 3 }
+        .distinctUntilChanged()
+        .subscribe { view.resetRefereeOnCodeChange() }
+        .addTo(disposable)
+
+    val refereeNameObs = view.onRefereeNameChanged()
+        .debounce(1000, MILLISECONDS, dispatchers.main)
+        .filter { view.isRefereeNameFocused() }
+        .share()
+
+    refereeNameObs
+        .filter { it.length > 2 }
+        .distinctUntilChanged()
+        .filter {
+          view.getRefereeCode()
+              .isBlank()
+        }
+        .switchMap {
+          repository.getRefereeName(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOnRefereeNameChange, Timber::e)
+        .addTo(disposable)
+
+    refereeNameObs
+        .filter { it.length == 2 }
+        .distinctUntilChanged()
+        .subscribe { view.resetRefereeOnNameChange() }
+        .addTo(disposable)
   }
 }
