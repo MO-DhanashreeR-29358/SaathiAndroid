@@ -34,7 +34,6 @@ public abstract class CommonDataModule {
 	@Binds abstract LeadDetailRepository bindLeadDetailRepository(
 		LeadDetailRepositoryImpl repository);
 
-
 	@Provides
 	static CertPinProvider provideCertPinnerProvider() {
 		return CertPinProviderImpl.INSTANCE;
