@@ -13,6 +13,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -28,6 +29,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -649,9 +651,75 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
       binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+      interestedAdapter.addAll(data.interestInRowDatas)
       // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
       binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+    }
+  }
+
+  override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { data ->
+
+    }
+  }
+
+  override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked
+  override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
+  override fun onOfficeCountrySelected(): Observable<Int> = binding.spOffCountry.itemSelections()
+
+  override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
+  override fun onOfficeStateSelected(): Observable<Int> = binding.spOffState.itemSelections()
+  override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
+
+  override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
+    binding.spOffCity.setSelection(position)
+  }
+
+  override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
+  override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
+  override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
+  override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
+
+  override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spState.setSpinnerData(stateAdapter, it)
+      binding.spOffState.setSpinnerData(stateAdapter, it)
+      if (binding.cbSameAs.isChecked) {
+        binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
+      }
+    }
+  }
+
+  override fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spOffState.setSpinnerData(stateAdapter, it)
+    }
+  }
+
+  override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      binding.spCity.setSpinnerData(cityAdapter, it)
+      binding.spOffCity.setSpinnerData(cityAdapter, it)
+      if (binding.cbSameAs.isChecked) {
+        binding.spOffState.setSelection(binding.spState.selectedItemPosition)
+      }
+    }
+  }
+
+  override fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
+    uiModel.onSuccess {
+      binding.spOffCity.setSpinnerData(cityAdapter, it)
     }
   }
 

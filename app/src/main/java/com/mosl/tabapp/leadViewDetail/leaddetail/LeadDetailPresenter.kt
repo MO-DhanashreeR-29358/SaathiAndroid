@@ -1,11 +1,14 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
+import com.mosl.tabapp.leadcreation.ui.LeadCreationView
+import com.mosl.tabapp.leaddetail.LeadDetailRepository
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import timber.log.Timber
@@ -15,11 +18,29 @@ import javax.inject.Inject
 class LeadDetailPresenter @Inject constructor(
   view: LeadDetailView,
   val data: LeadDetailArgument,
-  val repository: LeadCreationRepository
+  val repository: LeadCreationRepository,
+  val detailRepository: LeadDetailRepository
 ) : BasePresenter<LeadDetailView>(view) {
   override fun start() {
     val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
         .share()
+
+    screenLoadObs
+        .map { data.leadId }
+        .filter { it == "0" }
+        .subscribe()
+        .addTo(disposable)
+
+    screenLoadObs
+        .map { data.leadId }
+        .filter { it != "0" }
+        .switchMap {
+          detailRepository.getLeadDetail(it)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderLeadDetail, Timber::e)
+        .addTo(disposable)
+
 
     screenLoadObs
         .subscribe { view.renderArguments(data) }
@@ -160,5 +181,55 @@ class LeadDetailPresenter @Inject constructor(
         .distinctUntilChanged()
         .subscribe { view.resetRefereeOnNameChange() }
         .addTo(disposable)
+
+    view.onCountrySelected()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedCountry() }
+        .switchMap {
+          repository.getStateRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderStateOnCountrySelection, Timber::e)
+        .addTo(disposable)
+
+    view.onOfficeCountrySelected()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedOfficeCountry() }
+        .filter { !view.isSameAsAboveChecked() }
+        .switchMap {
+          repository.getStateRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOfficeStateOnOfficeCountrySelection, Timber::e)
+        .addTo(disposable)
+
+    view.onStateSelected()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedState() }
+        .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
+        .switchMap {
+          repository.getCityRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderCityOnStateSelection, Timber::e)
+        .addTo(disposable)
+
+    view.onOfficeStateSelected()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedOfficeState() }
+        .filter { !view.isSameAsAboveChecked() }
+        .switchMap {
+          repository.getCityRowDatas(it.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOfficeCityOnOfficeStateSelection, Timber::e)
+        .addTo(disposable)
+
+    view.onCitySelected()
+        .filter(InvalidSelectionPredicate)
+        .filter { view.isSameAsAboveChecked() }
+        .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
+        .addTo(disposable)
+
   }
 }

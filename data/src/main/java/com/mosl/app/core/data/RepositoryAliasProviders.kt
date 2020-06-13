@@ -105,4 +105,5 @@ interface RepositoryAliasProviders {
 
   @Binds
   fun bindLeadDetailRepository(repository: LeadDetailRepositoryImpl): LeadDetailRepository
+
 }

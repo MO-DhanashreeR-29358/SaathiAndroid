@@ -4,8 +4,10 @@ import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.LeadDetail
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -74,6 +76,27 @@ interface LeadDetailView : BaseView {
   fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
   fun render(uiModel: UiModel<LeadDetailPageData>)
+  fun renderLeadDetail(uiModel: UiModel<LeadDetail>)
+
+  fun isSameAsAboveChecked(): Boolean
+  fun onCountrySelected(): Observable<Int>
+  fun getSelectedCountry(): RowData
+  fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>)
+
+  fun onStateSelected(): Observable<Int>
+  fun getSelectedState(): RowData
+  fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
+
+  fun onCitySelected(): Observable<Int>
+  fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
+
+  fun onOfficeCountrySelected(): Observable<Int>
+  fun getSelectedOfficeCountry(): RowData
+  fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>)
+
+  fun onOfficeStateSelected(): Observable<Int>
+  fun getSelectedOfficeState(): RowData
+  fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
 
 
 
