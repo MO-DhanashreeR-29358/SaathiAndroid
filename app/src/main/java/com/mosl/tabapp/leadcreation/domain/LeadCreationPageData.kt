@@ -12,7 +12,7 @@ data class LeadCreationPageData(
 )
 
 data class LeadDetailPageData(
-  @JvmField val professionRowDatas: List<RowData>,
+  @JvmField val profileRowDatas: List<RowData>,
   @JvmField val interestInRowDatas: List<RowData>,
   @JvmField val countryRowDatas: List<RowData>
 )

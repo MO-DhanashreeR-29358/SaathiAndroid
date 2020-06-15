@@ -7,7 +7,8 @@ import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadD
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -76,7 +77,7 @@ interface LeadDetailView : BaseView {
   fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
   fun render(uiModel: UiModel<LeadDetailPageData>)
-  fun renderLeadDetail(uiModel: UiModel<LeadDetail>)
+  fun renderLeadDetail(uiModel: UiModel<LeadDetailAndProfession>)
 
   fun isSameAsAboveChecked(): Boolean
   fun onCountrySelected(): Observable<Int>
@@ -97,6 +98,8 @@ interface LeadDetailView : BaseView {
   fun onOfficeStateSelected(): Observable<Int>
   fun getSelectedOfficeState(): RowData
   fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
+
+  fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>)
 
 
 

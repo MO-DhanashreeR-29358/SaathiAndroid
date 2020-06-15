@@ -21,6 +21,7 @@ interface LeadCreationRepository {
   fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead>
 
   fun getProfessionRowDatas(): Observable<List<RowData>>
+
   fun getInterestInRowDatas(): Observable<List<RowData>>
   fun getCountryRowDatas(): Observable<List<RowData>>
   fun getProfileRowDatas(): Observable<List<RowData>>

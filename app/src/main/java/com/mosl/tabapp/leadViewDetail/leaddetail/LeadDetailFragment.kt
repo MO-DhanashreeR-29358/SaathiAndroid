@@ -29,7 +29,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -650,7 +650,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
-      binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+      binding.spProfile.setSpinnerData(profileAdapter, data.profileRowDatas)
       interestedAdapter.addAll(data.interestInRowDatas)
       // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
@@ -658,11 +658,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
   }
 
-  override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
+  override fun renderLeadDetail(uiModel: UiModel<LeadDetailAndProfession>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
-
+      binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
     }
   }
 

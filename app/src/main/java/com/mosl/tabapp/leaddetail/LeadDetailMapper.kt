@@ -1,5 +1,8 @@
 package com.mosl.tabapp.leaddetail
 
+import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
+import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
+import com.mosl.saathi.api.model.lead.ClientSummaryResponse
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.tabapp.util.emptyString
 
@@ -8,5 +11,57 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       leadOwner = leadOwner ?: emptyString(),
       contactPerson = contactPerson ?: emptyString(),
       sourceId = sourceID.toString()
+  )
+}
+
+fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
+
+  val products = products?.map {
+    Product(
+        channel = it.channel ?: emptyString(),
+        ucId = it.uCID.toString(),
+        branchCode = it.branchCode,
+        clientCode = it.holdingNumber ?: emptyString(),
+        advisorCode = it.advisors?.get(0)?.advisorCode ?: emptyString()
+    )
+  } ?: emptyList<Product>()
+
+  return ClientDetail(
+      name = clientName ?: emptyString(),
+      address = address ?: emptyString(),
+      pan = pANNumber ?: emptyString(),
+      accountType = accountType ?: emptyString(),
+      familyUcid = familyUCID,
+      advisoryType = advisoryType ?: emptyString(),
+      aadhar = aadhaarNumber ?: emptyString(),
+      account = accountNo ?: emptyString(),
+      profile = profile ?: emptyString(),
+      defaultBank = defaultBank ?: emptyString(),
+      products = products
+  )
+
+}
+
+fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
+  val portfolio = portfolioSnapshot[0]
+
+  return ClientPortfolio(
+      netWorth = portfolio.networth ?: emptyString(),
+      dayChangeAmount = portfolio.dayChangeAmount ?: emptyString(),
+      dayChangePer = portfolio.dayChangePercentage,
+      overallChangeAmt = portfolio.overallChangeAmount ?: emptyString(),
+      overallChangePer = portfolio.overallChangePercentage ?: emptyString()
+  )
+}
+
+fun ClientGainLossSummaryResponse.gainLossSummaryToClientProfitLoss(): ClientProfitLoss {
+
+  val product = totalGainLoss[0]
+  return ClientProfitLoss(
+      totalGain = product.tOTALGAIN ?: emptyString(),
+      totalStGain = product.tOTALSTGAIN ?: emptyString(),
+      totalLtGainLoss = product.tOTALLTGAIN ?: emptyString(),
+      stGainPer = product.sTGAINPER ?: emptyString(),
+      ltGainPer = product.lTGAINPER ?: emptyString()
   )
 }

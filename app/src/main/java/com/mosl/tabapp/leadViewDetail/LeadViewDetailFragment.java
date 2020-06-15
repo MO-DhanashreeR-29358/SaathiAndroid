@@ -138,7 +138,6 @@ import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
-import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
@@ -3128,7 +3127,6 @@ public class LeadViewDetailFragment extends CommonFragment
                 tvUCID.setText(String.valueOf(product.uCID));
                 tvBranchCode.setText(product.branchCode);
                 tvClientCode.setText(product.holdingNumber);
-
                 List<AdvisorsItem> advisors = product.advisors;
                 if (advisors != null && advisors.size() > 0) {
                     advisorCode = stringOrEmpty(advisors.get(0).advisorCode);

@@ -8,8 +8,11 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView
+import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadDetailRepository
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
@@ -28,14 +31,24 @@ class LeadDetailPresenter @Inject constructor(
     screenLoadObs
         .map { data.leadId }
         .filter { it == "0" }
-        .subscribe()
+        .switchMap {
+          detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss)
         .addTo(disposable)
 
     screenLoadObs
         .map { data.leadId }
         .filter { it != "0" }
         .switchMap {
-          detailRepository.getLeadDetail(it)
+          Observable.zip(
+              repository.getProfessionRowDatas(),
+              detailRepository.getLeadDetail(it),
+              BiFunction { rows: List<RowData>, detail: LeadDetail ->
+                LeadDetailAndProfession(rows, detail)
+              }
+          )
               .compose(applyUiModel())
         }
         .subscribe(view::renderLeadDetail, Timber::e)
@@ -49,11 +62,11 @@ class LeadDetailPresenter @Inject constructor(
     screenLoadObs
         .switchMap {
           Observable.zip(
-              repository.getProfessionRowDatas(),
+              repository.getProfileRowDatas(),
               repository.getInterestInRowDatas(),
               repository.getCountryRowDatas(),
-              Function3 { listOfProfession: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
-                LeadDetailPageData(listOfProfession, listOfInterest, listOfCountry)
+              Function3 { listOfProfile: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
+                LeadDetailPageData(listOfProfile, listOfInterest, listOfCountry)
               }
           )
               .compose(applyUiModel())
