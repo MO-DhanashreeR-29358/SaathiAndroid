@@ -29,6 +29,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
@@ -478,6 +479,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.tlPan.disableErrorMessages()
       }
     }
+  }
+
+  override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
+
   }
 
   override fun onAadharAfterTextChanged(): Observable<String> {

@@ -26,6 +26,7 @@ fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
     )
   } ?: emptyList<Product>()
 
+
   return ClientDetail(
       name = clientName ?: emptyString(),
       address = address ?: emptyString(),
@@ -45,12 +46,43 @@ fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
 fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
   val portfolio = portfolioSnapshot[0]
 
+  val brokingPortfolio = brokingProduct.map {
+    BrokingPortfolio(
+        productId = it.productId,
+        productName = it.product,
+        marketValue = it.marketValue,
+        purchaseValue = it.purchaseValue,
+        overallGainLoss = it.overallGainLoss,
+        percentageGainLoss = it.percentageGainLoss
+    )
+  }
+  val assetPortfolio = assetProduct.map {
+    AssetPortfolio(
+        productId = it.productID,
+        productName = it.product,
+        productType = it.producttype,
+        marketValue = it.marketValue,
+        purchaseValue = it.purchaseValue,
+        overallGainLoss = it.overallGainLoss,
+        percentageGainLoss = it.percentageGainLoss
+    )
+  }
+  val cashPortfolio = cashPortfolio.map {
+    CashPortfolio(
+        productName = it.product,
+        totalLedgerBalance = it.totalLedgerBalance
+    )
+  }
+
   return ClientPortfolio(
       netWorth = portfolio.networth ?: emptyString(),
       dayChangeAmount = portfolio.dayChangeAmount ?: emptyString(),
       dayChangePer = portfolio.dayChangePercentage,
       overallChangeAmt = portfolio.overallChangeAmount ?: emptyString(),
-      overallChangePer = portfolio.overallChangePercentage ?: emptyString()
+      overallChangePer = portfolio.overallChangePercentage ?: emptyString(),
+      brokingPortfolio = brokingPortfolio,
+      assetPortfolio = assetPortfolio,
+      cashPortfolio = cashPortfolio
   )
 }
 
