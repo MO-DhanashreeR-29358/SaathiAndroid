@@ -23,6 +23,7 @@ import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
+import com.mosl.shared.util.isEmulator
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.common.FusedLocation.LatLongDispatcher
@@ -35,6 +36,7 @@ import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
+
 
 class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
@@ -105,7 +107,9 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   override fun setUserProperty(user: User?) {
 
     user?.apply {
-      firebaseHelper.setUserProperty(user.employeeCode)
+      if (!isEmulator()) {
+        firebaseHelper.setUserProperty(user.employeeCode)
+      }
     }
   }
 

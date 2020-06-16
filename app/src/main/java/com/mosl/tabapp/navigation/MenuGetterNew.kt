@@ -7,7 +7,6 @@ import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
-import com.mosl.tabapp.constants.MOSLConstants.URL_PATH
 import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
@@ -26,7 +25,8 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.smt.SMTFragment
-import com.mosl.tabapp.ui.WebViewFragment
+import com.mosl.tabapp.webview.WebviewFragment
+import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 
 object MenuGetterNew {
@@ -41,14 +41,19 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
       NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
       NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
-      NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebViewFragment().apply {
-        args.putString(URL_PATH, CRMWebServiceHandler.COLLATERAL_URL)
+      NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebviewFragment().apply {
+        args.putString(WebviewFragment.URL, CRMWebServiceHandler.COLLATERAL_URL)
         arguments = args
       }
-      NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> WebViewFragment().apply {
-        args.putString(URL_PATH, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
+      NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> WebviewFragment().apply {
+        args.putString(WebviewFragment.URL, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
         arguments = args
       }
+      NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> WebviewFragment().apply {
+        args.putString(WebviewFragment.PAGE_ID, INCENTIVE_REPORT_ID)
+        arguments = args
+      }
+
       NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
       NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
@@ -102,6 +107,7 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> true
       NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> true
       NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> true
+      NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> true
       else -> return false
     }
   }

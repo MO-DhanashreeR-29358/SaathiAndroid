@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
-public class WebViewFragment extends CommonFragment implements MOSLConstants {
+public class WebViewFragmentOld extends CommonFragment implements MOSLConstants {
     private View view;
     private WebView webView;
     private ProgressBar progressBar;
