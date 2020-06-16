@@ -161,6 +161,7 @@ import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
+import com.mosl.saathi.api.model.webview.IncentiveReportRequest
 import io.reactivex.Observable
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -741,6 +742,11 @@ interface SaathiApi {
   fun saveGeoLocation(
     @Body request: LocationRequest
   ): Observable<LocationDataResponse>
+
+  @POST("report/IncentiveReport")
+  fun getIncentiveReport(
+    @Body request: IncentiveReportRequest
+  ): Observable<SaathiCommonResponse<String>>
 
   /*==================================================*/
   @POST("Auth/$LoginEndPoint")
