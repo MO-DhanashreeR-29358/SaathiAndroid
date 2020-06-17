@@ -187,6 +187,7 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onStateSelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .map { view.getSelectedState() }
         .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
         .switchMap {
@@ -198,6 +199,7 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onOfficeStateSelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .map { view.getSelectedOfficeState() }
         .filter { !view.isSameAsAboveChecked() }
         .switchMap {
@@ -209,6 +211,7 @@ class LeadCreationPresenter @Inject constructor(
 
     view.onCitySelected()
         .filter(InvalidSelectionPredicate)
+        .skip(1)
         .filter { view.isSameAsAboveChecked() }
         .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
         .addTo(disposable)

@@ -41,10 +41,10 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
         R.string.error_message_alphabets
       } //ERROR_ALPHABETS
 
-      input.selectedProfession.value == SELECT -> {
+      /*input.selectedProfession.value == SELECT -> {
         identifier = 27
         R.string.error_message_profession
-      }
+      }*/
 
       input.selectedInterestIn.value == SELECT -> {
         identifier = 6

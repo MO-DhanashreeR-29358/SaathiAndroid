@@ -264,7 +264,7 @@ internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowDat
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal fun List<CityItem>.cityItemsToRowDatas(): List<RowData> {
@@ -278,7 +278,7 @@ internal fun List<CityItem>.cityItemsToRowDatas(): List<RowData> {
     } catch (_: Exception) {
       null
     }
-  }
+  }.addSelectRowData()
 }
 
 internal infix fun SearchRefereeResponse.refereeResponseToReferee(type: String): SearchReferee {

@@ -594,8 +594,16 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun renderOnCategoryChange(category: String) {
     when (category) {
-      "INDIVIDUAL" -> binding.etContactPerson.gone()
-      else -> binding.etContactPerson.visible()
+      "INDIVIDUAL" -> {
+        binding.etContactPerson.gone()
+        binding.tilContactPerson.gone()
+      }
+      else -> {
+        binding.etContactPerson.visible()
+        binding.tilContactPerson.disableErrorMessages()
+        binding.tilContactPerson.visible()
+
+      }
     }
   }
 
@@ -818,9 +826,9 @@ class LeadCreationFragment : CommonFragment(),
         26 -> {
           binding.tilOffPin.setErrorMessages(getString(it))
         }
-        27 -> {
+        /*27 -> {
           binding.tlProfession.setErrorMessages(getString(it))
-        }
+        }*/
 
         else -> {
         }
