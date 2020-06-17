@@ -80,20 +80,51 @@ fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
       dayChangePer = portfolio.dayChangePercentage,
       overallChangeAmt = portfolio.overallChangeAmount ?: emptyString(),
       overallChangePer = portfolio.overallChangePercentage ?: emptyString(),
-      brokingPortfolio = brokingPortfolio,
-      assetPortfolio = assetPortfolio,
-      cashPortfolio = cashPortfolio
+      brokingPortfolios = brokingPortfolio,
+      assetPortfolios = assetPortfolio,
+      cashPortfolios = cashPortfolio
   )
 }
 
 fun ClientGainLossSummaryResponse.gainLossSummaryToClientProfitLoss(): ClientProfitLoss {
 
   val product = totalGainLoss[0]
+
+  val brokingProducts = brokingProductwiseGainloss.map {
+    BrokingProduct(
+        productId = it.assetSubTypeId,
+        productName = it.assetSubTypeId,
+        stGainLoss = it.assetSubTypeId,
+        ltGainLoss = it.assetSubTypeId,
+        totalGainLoss = it.assetSubTypeId,
+        assetSubType = it.assetSubTypeId
+    )
+  }
+
+  val assetProducts = assetProductwiseGainloss.map {
+    AssetProduct(
+        productId = it.assetSubTypeId,
+        productName = it.assetSubTypeId,
+        stGainLoss = it.assetSubTypeId,
+        ltGainLoss = it.assetSubTypeId,
+        totalGainLoss = it.assetSubTypeId
+    )
+  }
+
+  val limits = availableLimits.map {
+    AvailableLimit(
+        cash = it.cASH,
+        amount = it.aMOUNT
+    )
+  }
   return ClientProfitLoss(
       totalGain = product.tOTALGAIN ?: emptyString(),
       totalStGain = product.tOTALSTGAIN ?: emptyString(),
       totalLtGainLoss = product.tOTALLTGAIN ?: emptyString(),
       stGainPer = product.sTGAINPER ?: emptyString(),
-      ltGainPer = product.lTGAINPER ?: emptyString()
+      ltGainPer = product.lTGAINPER ?: emptyString(),
+      brokingProducts = brokingProducts,
+      assetProducts = assetProducts,
+      availableLimits = limits
   )
 }

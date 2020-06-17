@@ -57,9 +57,9 @@ data class ClientPortfolio(
   @JvmField val dayChangePer: String,
   @JvmField val overallChangeAmt: String,
   @JvmField val overallChangePer: String,
-  @JvmField val brokingPortfolio: List<BrokingPortfolio>,
-  @JvmField val assetPortfolio: List<AssetPortfolio>,
-  @JvmField val cashPortfolio: List<CashPortfolio>
+  @JvmField val brokingPortfolios: List<BrokingPortfolio>,
+  @JvmField val assetPortfolios: List<AssetPortfolio>,
+  @JvmField val cashPortfolios: List<CashPortfolio>
 )
 
 data class BrokingPortfolio(
@@ -91,6 +91,31 @@ data class ClientProfitLoss(
   @JvmField val totalStGain: String,
   @JvmField val totalGain: String,
   @JvmField val stGainPer: String,
-  @JvmField val ltGainPer: String
+  @JvmField val ltGainPer: String,
+  @JvmField val brokingProducts: List<BrokingProduct>,
+  @JvmField val assetProducts: List<AssetProduct>,
+  @JvmField val availableLimits: List<AvailableLimit>
+)
+
+data class BrokingProduct(
+  @JvmField val productId: String,
+  @JvmField val productName: String,
+  @JvmField val stGainLoss: String,
+  @JvmField val ltGainLoss: String,
+  @JvmField val totalGainLoss: String,
+  @JvmField val assetSubType: String
+)
+
+data class AssetProduct(
+  @JvmField val productId: String,
+  @JvmField val productName: String,
+  @JvmField val stGainLoss: String,
+  @JvmField val ltGainLoss: String,
+  @JvmField val totalGainLoss: String
+)
+
+data class AvailableLimit(
+  @JvmField val cash: String,
+  @JvmField val amount: String
 )
 
