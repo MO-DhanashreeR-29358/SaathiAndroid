@@ -51,7 +51,7 @@ class LeadDetailPresenter @Inject constructor(
           )
               .compose(applyUiModel())
         }
-        .subscribe(view::renderLeadDetail, Timber::e)
+        .subscribe(view::renderLeadDetailAndProfession, Timber::e)
         .addTo(disposable)
 
 

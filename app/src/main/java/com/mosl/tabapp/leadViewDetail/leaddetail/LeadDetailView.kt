@@ -77,7 +77,7 @@ interface LeadDetailView : BaseView {
   fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
   fun render(uiModel: UiModel<LeadDetailPageData>)
-  fun renderLeadDetail(uiModel: UiModel<LeadDetailAndProfession>)
+  fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
 
   fun isSameAsAboveChecked(): Boolean
   fun onCountrySelected(): Observable<Int>
@@ -100,7 +100,6 @@ interface LeadDetailView : BaseView {
   fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
 
   fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>)
-
 
 
 }

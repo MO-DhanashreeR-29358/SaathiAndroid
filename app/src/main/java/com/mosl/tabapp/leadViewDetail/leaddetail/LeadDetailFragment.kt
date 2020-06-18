@@ -15,10 +15,12 @@ import com.jakewharton.rxbinding3.view.touches
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
@@ -30,7 +32,12 @@ import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.Contact
+import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadProductMap
+import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
+import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -40,6 +47,7 @@ import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tabapp.util.string
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
+import java.util.ArrayList
 import javax.inject.Inject
 
 class LeadDetailFragment : CommonFragment(), LeadDetailView {
@@ -50,6 +58,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private var leadId = "0"
   private var ucId = "0"
+
+  private var stage: String? = null
+  private var status: String? = null
 
   private val professionAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -71,6 +82,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
+  private val pmsProductAdapter: ArrayAdapter<String> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<String>(requireContext())
+  }
+
   private val countryAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
@@ -81,7 +96,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   private val cityAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
-
 
   override fun getLayout(): Int {
     return R.layout.fragment_lead_detail
@@ -663,13 +677,112 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
   }
 
-  override fun renderLeadDetail(uiModel: UiModel<LeadDetailAndProfession>) {
+  override fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
       binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+      data.detail.renderLeadDetail()
     }
   }
+
+  var pmsList: List<String> = emptyList()
+
+  private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+
+  private fun LeadDetail.renderLeadDetail() {
+    leadEditable = when {
+      canEditLead == "0" || isProductSpecialist.equals("Y", true) -> false
+      else -> true
+    }
+
+    binding.spPmsProduct.apply {
+      adapter = pmsProductAdapter
+    }
+
+    pmsProductAdapter.setSpinnerDataWithSelection(
+        binding.spPmsProduct, pmsList, isPotentialPMSProduct
+    )
+    binding.etProspectRefereerEmail.setText(prospectReferEmail)
+    binding.etProspectRefereeName.setText(prospectReferName)
+    binding.etRefereeCode.setText(refereeCode)
+    binding.etRefereeName.setText(refereeName)
+    binding.etRefereeEmail.setText(referEmail)
+    binding.etRefereeNumber.setText(referMobile)
+    binding.etCreatedBy.setText(createdBy)
+    binding.etCreatedThrough.setText(createdThrough)
+    binding.etLastModifiedBy.setText(lastModifiedBy)
+    try {
+      binding.etLastModifiedDate.setText(
+          CRMAppUtil.getDateFromString(
+              lastModifiedDate,
+              "yyyy-MM-dd'T'kk:mm:ss", MOSLConstants.DATE_FORMAT_TO_DISPLAY
+          )
+      )
+    } catch (e: Exception) {
+      binding.etLastModifiedDate.setText(lastModifiedDate.replace("T", " "))
+    }
+
+    binding.etProspectSource.setText(prospectSource)
+    binding.etProspectSourceDetail.setText(leadSourceDetails)
+    binding.etComments.setText(comments)
+    binding.etContactPerson.visibility =
+      if (leadCategoryText.equals("Individual", ignoreCase = true)) {
+        isIndividualsFlag = true
+        View.GONE
+      } else {
+        isIndividualsFlag = false
+        View.VISIBLE
+      }
+    binding.etLeadCategory.setText(leadCategoryText)
+
+    if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
+      leadProductMapping.renderMapping()
+    }
+
+    contact?.run {
+      renderContact(leadCategoryText)
+    }
+
+  }
+
+  private fun LeadProductMap.renderMapping() {
+    stage = stageId
+    status = statusId
+    leadDetailAddProductList.add(getLeadDetailAddProductModel(this))
+
+  }
+
+  private fun getLeadDetailAddProductModel(
+    item: LeadProductMappingItem
+  ): LeadDetailAddProductModel? {
+    val crossSellingProducts: List<CrossSellingProductsModel> =
+      getCrossSellingProductsModel(item.crossSellingProducts)
+    return LeadDetailAddProductModel(
+        item.stageID.toString(),
+        stringOrEmpty(item.stageName), item.statusID.toString(),
+        stringOrEmpty(item.statusName), item.interestedIn.toString(),
+        stringOrEmpty(item.productName),
+        stringOrEmpty(item.primaryRMName),
+        stringOrEmpty(item.productSpecialistName),
+        stringOrEmpty(item.assignedBy),
+        stringOrEmpty(item.assignedByDate),
+        stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
+        item.isDefault,
+        crossSellingProducts,
+        item.isCrossSellingProduct,
+        stringOrEmpty(item.isProductSpecialistEditDisabled),
+        stringOrEmpty(item.isProductDisabled),
+        stringOrEmpty(item.productSpecialist)
+    )
+  }
+
+  private fun Contact.renderContact(category: String) {
+
+  }
+
+  var leadEditable = true
+  var isIndividualsFlag = false
 
   override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked
   override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()

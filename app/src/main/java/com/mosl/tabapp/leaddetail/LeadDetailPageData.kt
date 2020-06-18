@@ -1,21 +1,73 @@
 package com.mosl.tabapp.leaddetail
 
+import com.mosl.saathi.api.model.lead.ContactAddressItem
 import com.mosl.tabapp.common.RowData
 
 data class LeadDetail(
   @JvmField val leadOwner: String,
   @JvmField val contactPerson: String,
-  @JvmField val sourceId: String
-    /*@JvmField val leadProspetSourceId: String,*/
-    /*@JvmField val refereeCode: String,*/
-    /*@JvmField val refereeName: String,*/
-    /*@JvmField val isReferee: Boolean,*/
-    /*@JvmField val profile: String,*/
-    /*@JvmField val profession: String,*/
-    /*@JvmField val createdDate: String,*/
-    /*@JvmField val isPotentialPMSProduct: Boolean,*/
-    /*@JvmField val leadId: String,*/
-    /*@JvmField val leadCategoryText: String*/
+  @JvmField val sourceId: String,
+  @JvmField val leadProspectSourceId: String,
+  @JvmField val refereeCode: String,
+  @JvmField val refereeName: String,
+  @JvmField val isReferee: Boolean,
+  @JvmField val profile: String,
+  @JvmField val profession: String,
+  @JvmField val createdDate: String,
+  @JvmField val isPotentialPMSProduct: String = "",
+  @JvmField val leadId: String,
+  @JvmField val leadCategoryText: String,
+  @JvmField val sourceName: String,
+  @JvmField val referEmail: String,
+  @JvmField val referMobile: String,
+  @JvmField val createdBy: String,
+  @JvmField val createdThrough: String,
+  @JvmField val prospectSource: String,
+  @JvmField val lastModifiedBy: String,
+  @JvmField val lastModifiedDate: String,
+  @JvmField val comments: String,
+  @JvmField val leadSourceDetails: String,
+  @JvmField val canEditLead: String,
+  @JvmField val isProductSpecialist: String,
+  @JvmField val prospectReferEmail: String,
+  @JvmField val prospectReferName: String,
+  @JvmField val leadProductMapping: List<LeadProductMap>?,
+  @JvmField val contact: Contact?,
+  @JvmField val leadFieldValue: LeadFieldValue
+)
+
+data class LeadProductMap(
+  @JvmField val stageId: String,
+  @JvmField val statusId: String,
+  @JvmField val clientCode: String
+)
+
+data class Contact(
+  @JvmField val isSameAsAbove: Boolean,
+  @JvmField val ucId: Int,
+  @JvmField val pan: String,
+  @JvmField val aadhar: String,
+  @JvmField val ekycMob: String,
+  @JvmField val email: String,
+  @JvmField val alterEmail: String,
+  @JvmField val landline: String,
+  @JvmField val alterMob: String,
+  @JvmField val mob: String,
+  @JvmField val doA: String,
+  @JvmField val doB: String,
+  @JvmField val name: String,
+  @JvmField val address: ContactAddressItem
+)
+
+data class LeadFieldValue(
+  @JvmField val fieldSectionId: String,
+  @JvmField val mandatory: String,
+  @JvmField val leadFieldValue: String,
+  @JvmField val fieldName: String,
+  @JvmField val controlType: String,
+  @JvmField val lFSysName: String,
+  @JvmField val leadFieldId: String,
+  @JvmField val dropdownValue: String
 )
 
 data class LeadDetailAndProfession(
