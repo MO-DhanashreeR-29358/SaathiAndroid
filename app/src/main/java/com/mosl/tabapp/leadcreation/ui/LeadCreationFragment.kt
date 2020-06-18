@@ -826,10 +826,6 @@ class LeadCreationFragment : CommonFragment(),
         26 -> {
           binding.tilOffPin.setErrorMessages(getString(it))
         }
-        /*27 -> {
-          binding.tlProfession.setErrorMessages(getString(it))
-        }*/
-
         else -> {
         }
 
@@ -1041,9 +1037,9 @@ class LeadCreationFragment : CommonFragment(),
         binding.etAdd3.text.toString(),
         (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
         (binding.spState.selectedItem as? RowData)?.key
-            ?: "",//LeadCreationView.INVALID_SELECTION_KEY,
+            ?: "",
         (binding.spCity.selectedItem as? RowData)?.key
-            ?: "",//LeadCreationView.INVALID_SELECTION_KEY,
+            ?: "",
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked,
         userManager.getUser()?.currentBusinessProfile?.businessUnitId
@@ -1057,9 +1053,9 @@ class LeadCreationFragment : CommonFragment(),
         (binding.spOffCountry.selectedItem as? RowData)?.key
             ?: LeadCreationView.INVALID_SELECTION_KEY,
         (binding.spOffState.selectedItem as? RowData)?.key
-            ?: "",//LeadCreationView.INVALID_SELECTION_KEY,
+            ?: "",
         (binding.spOffCity.selectedItem as? RowData)?.key
-            ?: "",//LeadCreationView.INVALID_SELECTION_KEY,
+            ?: "",
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked,
         userManager.getUser()?.currentBusinessProfile?.businessUnitId
