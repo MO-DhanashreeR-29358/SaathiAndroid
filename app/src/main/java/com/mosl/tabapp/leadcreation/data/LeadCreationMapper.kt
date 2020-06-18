@@ -103,7 +103,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
     setPanNo(panNo)
     setAadharNo(aadharNo)
     setBusinessUnitID(user?.currentBusinessProfile?.businessUnitId)
-    setLeadCategoryID(etCategoryName)
+    setLeadCategoryID(selectedCategory.key)
     setContactPerson(contactPerson)
     setSourceID(selectedSource.key)
     setLeadSourceID(selectedProspectSource.key)
