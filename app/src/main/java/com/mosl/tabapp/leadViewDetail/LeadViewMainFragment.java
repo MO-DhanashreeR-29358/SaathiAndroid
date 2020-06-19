@@ -37,6 +37,7 @@ import com.mosl.tabapp.core.EkycModule;
 import com.mosl.tabapp.ekyc.EkycNavigator;
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment;
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment;
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment;
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment;
 import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
@@ -149,7 +150,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       CRMAppUtil.setImage(new byte[0], ivLead, requireContext());
     }
     String[] headingClient = new String[5];
-    LeadViewDetailFragment leadViewDetailFragment;
+    LeadDetailFragment leadViewDetailFragment;
     LeadViewActivitiesFragment leadViewActivitieFragment;
     MappingHistoryFragment leadViewHistoryFragment;
     LeadViewInteractionFragment leadViewInteractionFragment;
@@ -159,7 +160,8 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       headingClient[1] = ACTIVITIES;
       headingClient[2] = MAPPING_HISTORY;
       headingClient[3] = MAPPING_INTERACTION;
-      leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS,
+
+      leadViewDetailFragment = LeadDetailFragment.newInstance(0, DETAILS,
           leadId, mUCID);
       leadViewActivitieFragment = LeadViewActivitiesFragment.newInstance(1, ACTIVITIES,
           leadId, mUCID);
@@ -183,7 +185,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
       headingClient[2] = PROFILING;
       headingClient[3] = MAPPING_HISTORY;
       headingClient[4] = MAPPING_INTERACTION;
-      leadViewDetailFragment = LeadViewDetailFragment.newInstance(0, DETAILS, leadId, mUCID);
+      leadViewDetailFragment = LeadDetailFragment.newInstance(0, DETAILS, leadId, mUCID);
       leadViewActivitieFragment =
           LeadViewActivitiesFragment.newInstance(1, ACTIVITIES, leadId, mUCID);
       LeadProfilingFragment leadViewProfilingFragment =

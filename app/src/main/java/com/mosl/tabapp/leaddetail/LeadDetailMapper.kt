@@ -10,7 +10,34 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
   return LeadDetail(
       leadOwner = leadOwner ?: emptyString(),
       contactPerson = contactPerson ?: emptyString(),
-      sourceId = sourceID.toString()
+      sourceId = sourceID.toString(),
+      leadProspectSourceId = prospectSource ?: emptyString(),
+      refereeCode = refereeCode ?: emptyString(),
+      refereeName = refereeName ?: emptyString(),
+      profile = profile ?: emptyString(),
+      profession = profession ?: emptyString(),
+      createdDate = creationDate ?: emptyString(),
+      isPotentialPMSProduct = isPotentialPMSProduct ?: emptyString(),
+      leadId = leadID.toString(),
+      leadCategoryText = leadCategoryText ?: emptyString(),
+      sourceName = sourceName ?: emptyString(),
+      referEmail = refereeEmail ?: emptyString(),
+      referMobile = refereeMobile ?: emptyString(),
+      createdBy = createdBy ?: emptyString(),
+      createdThrough = createdThrough ?: emptyString(),
+      prospectSource = prospectSource ?: emptyString(),
+      lastModifiedBy = lastModifiedBy ?: emptyString(),
+      lastModifiedDate = lastModificationDate ?: emptyString(),
+      comments = comments ?: emptyString(),
+      leadSourceDetails = leadSourceDetails ?: emptyString(),
+      canEditLead = canEditLead.toString(),
+      isProductSpecialist = isProductSpecialist ?: emptyString(),
+      prospectReferEmail = prospectRefereEmail ?: emptyString(),
+      prospectReferName = prospectRefereName ?: emptyString(),
+      //contact = contact,
+      //leadProductMapping = leadProductMapping,
+      isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true)
+
   )
 }
 
@@ -28,6 +55,8 @@ fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
 
 
   return ClientDetail(
+      ucId = uCID.toString(),
+      code = clientCode ?: emptyString(),
       name = clientName ?: emptyString(),
       address = address ?: emptyString(),
       pan = pANNumber ?: emptyString(),
@@ -39,6 +68,7 @@ fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
       profile = profile ?: emptyString(),
       defaultBank = defaultBank ?: emptyString(),
       products = products
+
   )
 
 }

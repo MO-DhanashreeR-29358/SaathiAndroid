@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
@@ -20,7 +21,6 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
-import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
@@ -29,6 +29,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
+import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
@@ -36,7 +37,6 @@ import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadProductMap
-import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
@@ -495,8 +495,34 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
   }
 
-  override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
+  private var advisoryCode = ""
 
+  override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
+    toggleProgressBar(uiModel.inProgress)
+
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { data ->
+
+      if (data.detail.products.isNotEmpty()) {
+        val product = data.detail.products[0]
+        binding.tvClientCode.text = product.clientCode
+        binding.tvUCID.text = product.ucId
+        binding.tvBranchCode.text = product.branchCode
+        binding.tvChannel.text = product.channel
+        advisoryCode = product.advisorCode
+      }
+
+      binding.tvClientAddress.text = data.detail.address
+      binding.tvClientName.text = data.detail.name
+      binding.tvPanCard.text = data.detail.pan
+      binding.tvAccountType.text = data.detail.accountType
+      binding.tvFamilyUCID.text = data.detail.familyUcid
+      binding.tvAdvisoryType.text = data.detail.advisoryType
+      binding.tvAadharCard.text = data.detail.aadhar
+      binding.tvAccountNumber.text = data.detail.account
+      binding.tvProfile.text = data.detail.profile
+      binding.tvDefaultBank.text = data.detail.defaultBank
+    }
   }
 
   override fun onAadharAfterTextChanged(): Observable<String> {
@@ -736,23 +762,28 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       }
     binding.etLeadCategory.setText(leadCategoryText)
 
-    if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
+    /*if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
       leadProductMapping.renderMapping()
     }
 
     contact?.run {
       renderContact(leadCategoryText)
+    }*/
+
+  }
+
+  private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
+
+  private fun List<LeadProductMap>.renderMapping() {
+    mapNotNull {
+      stage = it.stageId
+      status = it.statusId
+      binding.tvClientCode.setText(it.clientCode)
+      //leadDetailAddProductList.add(getLeadDetailAddProductModel(this))
     }
-
+    //leadDetailAddProductAdapter = LeadDetailAddProductAdapter()
   }
-
-  private fun LeadProductMap.renderMapping() {
-    stage = stageId
-    status = statusId
-    leadDetailAddProductList.add(getLeadDetailAddProductModel(this))
-
-  }
-
+/*
   private fun getLeadDetailAddProductModel(
     item: LeadProductMappingItem
   ): LeadDetailAddProductModel? {
@@ -775,7 +806,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         stringOrEmpty(item.isProductDisabled),
         stringOrEmpty(item.productSpecialist)
     )
-  }
+  }*/
 
   private fun Contact.renderContact(category: String) {
 
@@ -844,5 +875,31 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   override fun onDestroyView() {
     presenter.stop()
     super.onDestroyView()
+  }
+
+  private var pager: ViewPager? = null
+  fun setViewPager(viewPager: ViewPager) {
+    pager = viewPager
+  }
+
+  companion object {
+    @JvmStatic
+    fun newInstance(
+      position: Int,
+      type: String,
+      leadID: String,
+      ucId: String
+    ): LeadDetailFragment {
+      return LeadDetailFragment().apply {
+        val args = Bundle().apply {
+          putInt(MOSLConstants.POSITION, position)
+          putString(MOSLConstants.TYPE, type)
+          putString(MOSLConstants.LEADID, leadID);
+          putString(MOSLConstants.UCID, ucId);
+        }
+        arguments = args
+      }
+    }
+
   }
 }

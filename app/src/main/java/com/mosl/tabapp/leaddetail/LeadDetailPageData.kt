@@ -30,10 +30,10 @@ data class LeadDetail(
   @JvmField val canEditLead: String,
   @JvmField val isProductSpecialist: String,
   @JvmField val prospectReferEmail: String,
-  @JvmField val prospectReferName: String,
-  @JvmField val leadProductMapping: List<LeadProductMap>?,
-  @JvmField val contact: Contact?,
-  @JvmField val leadFieldValue: LeadFieldValue
+  @JvmField val prospectReferName: String//,
+    // @JvmField val leadProductMapping: List<LeadProductMap>?,
+    //@JvmField val contact: Contact?,
+    //@JvmField val leadFieldValue: LeadFieldValue
 )
 
 data class LeadProductMap(
@@ -82,9 +82,11 @@ data class ClientDetailWithPortfolioAndProfitLoss(
 )
 
 data class ClientDetail(
+  @JvmField val code: String,
   @JvmField val name: String,
   @JvmField val address: String,
   @JvmField val pan: String,
+  @JvmField val ucId: String,
   @JvmField val products: List<Product>,
   @JvmField val accountType: String,
   @JvmField val familyUcid: String,

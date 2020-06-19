@@ -3667,7 +3667,7 @@ public class LeadViewDetailFragment extends CommonFragment
         private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
 
         private LeadDetailAddProductAdapter(Context c,
-                                            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
+            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
             inflater = LayoutInflater.from(c);
             mContext = c;
             this.leadDetailAddProductModelList = leadDetailAddProductModelList;
