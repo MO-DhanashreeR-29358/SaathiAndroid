@@ -37,7 +37,7 @@ class LeadDetailRepositoryImpl @Inject constructor(
     )
   }
 
-  private fun getClientDetail(ucId: String): Observable<ClientDetail> {
+  override fun getClientDetail(ucId: String): Observable<ClientDetail> {
     return saathiApi.getClientDetail(ClientDetailRequest(ucId.toInt()))
         .map {
           it.clientDetailItemToClientDetail()

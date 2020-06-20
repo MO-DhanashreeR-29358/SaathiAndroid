@@ -30,12 +30,14 @@ class LeadDetailPresenter @Inject constructor(
 
     screenLoadObs
         .map { data.leadId }
-        .filter { it == "0" }
+        //.filter { it == "0" }
         .switchMap {
-          detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
+          //detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
+          detailRepository.getClientDetail(data.ucId)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss)
+        // .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss)
+        .subscribe(view::renderClientDetail, Timber::e)
         .addTo(disposable)
 
     screenLoadObs

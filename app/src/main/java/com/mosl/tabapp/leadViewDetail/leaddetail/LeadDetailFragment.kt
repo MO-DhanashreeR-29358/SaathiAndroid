@@ -16,6 +16,7 @@ import com.jakewharton.rxbinding3.view.touches
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
+import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -32,6 +33,7 @@ import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
@@ -109,6 +111,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     binding = FragmentLeadDetailBinding.bind(view)
     setupView()
     presenter.start()
+    dataActionSubject.onNext(Fetch)
   }
 
   private fun setupView() {
@@ -497,6 +500,37 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private var advisoryCode = ""
 
+  override fun renderClientDetail(uiModel: UiModel<ClientDetail>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess { data ->
+
+      if (data.products.isNotEmpty()) {
+        val product = data.products[0]
+        binding.tvClientCode.text = product.clientCode
+        binding.tvUCID.text = product.ucId
+        binding.tvBranchCode.text = product.branchCode
+        binding.tvChannel.text = product.channel
+        advisoryCode = product.advisorCode
+      }
+
+      binding.tvClientAddress.text = data.address
+      binding.tvClientName.text = data.name
+      binding.tvPanCard.text = data.pan
+      binding.tvAccountType.text = data.accountType
+      binding.tvFamilyUCID.text = data.familyUcid
+      binding.tvAdvisoryType.text = data.advisoryType
+      binding.tvAadharCard.text = data.aadhar
+      binding.tvAccountNumber.text = data.account
+      binding.tvProfile.text = data.profile
+      binding.tvDefaultBank.text = data.defaultBank
+
+      binding.llClient.visibility = View.VISIBLE
+      binding.llClientPortfolioDetails.visibility = View.VISIBLE
+      toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
+    }
+  }
+
   override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
     toggleProgressBar(uiModel.inProgress)
 
@@ -522,6 +556,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       binding.tvAccountNumber.text = data.detail.account
       binding.tvProfile.text = data.detail.profile
       binding.tvDefaultBank.text = data.detail.defaultBank
+
+      binding.llClient.visibility = View.VISIBLE
+      binding.llClientPortfolioDetails.visibility = View.VISIBLE
+      toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
     }
   }
 

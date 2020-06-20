@@ -24,6 +24,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <TextView
@@ -50,6 +51,7 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
+                    tools:visibility="visible"
                     android:visibility="gone">
 
                     <LinearLayout
@@ -533,6 +535,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -575,6 +578,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -876,6 +880,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
 
@@ -898,6 +903,7 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
+                            tools:visibility="visible"
                             android:visibility="gone" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -918,6 +924,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -986,6 +993,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
 
@@ -1112,6 +1120,7 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
+                        tools:visibility="visible"
                         android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1210,6 +1219,7 @@
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginEnd="5dp"
                             android:paddingStart="@dimen/_15sdp"
+                            tools:visibility="visible"
                             android:visibility="gone" />
                     </RelativeLayout>
 
@@ -1255,6 +1265,7 @@
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginEnd="5dp"
                             android:paddingStart="@dimen/_15sdp"
+                            tools:visibility="visible"
                             android:visibility="gone" />
                     </RelativeLayout>
 
@@ -1643,6 +1654,7 @@
                             android:text="@string/lead_detail_same_as_above"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp"
+                            tools:visibility="visible"
                             android:visibility="gone" />
 
                         <CheckBox
@@ -1955,6 +1967,7 @@
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
+                tools:visibility="visible"
                 android:visibility="gone">
 
                 <TextView
@@ -1980,6 +1993,7 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="vertical"
+                    tools:visibility="visible"
                     android:visibility="gone">
 
                     <include

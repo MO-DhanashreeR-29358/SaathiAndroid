@@ -7,6 +7,7 @@ import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadD
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import io.reactivex.Observable
@@ -100,6 +101,7 @@ interface LeadDetailView : BaseView {
   fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
 
   fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>)
+  fun renderClientDetail(uiModel: UiModel<ClientDetail>)
 
 
 }

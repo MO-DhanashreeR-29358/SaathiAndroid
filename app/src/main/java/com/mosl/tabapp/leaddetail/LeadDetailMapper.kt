@@ -49,7 +49,10 @@ fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
         ucId = it.uCID.toString(),
         branchCode = it.branchCode,
         clientCode = it.holdingNumber ?: emptyString(),
-        advisorCode = it.advisors?.get(0)?.advisorCode ?: emptyString()
+        advisorCode = if (it.advisors?.isNotEmpty() == true) {
+          it.advisors?.get(0)?.advisorCode ?: emptyString()
+        } else emptyString()
+
     )
   } ?: emptyList<Product>()
 

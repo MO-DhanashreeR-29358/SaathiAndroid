@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
 
 class LeadViewDetailFragmentStateAdapter(
@@ -21,7 +21,7 @@ class LeadViewDetailFragmentStateAdapter(
   override fun createFragment(position: Int): Fragment {
 
     return when (position) {
-      0 -> LeadViewDetailFragment.newInstance(0, MOSLConstants.DETAILS, leadId, ucId)
+      0 -> LeadDetailFragment.newInstance(0, MOSLConstants.DETAILS, leadId, ucId)
       1 -> LeadViewActivitiesFragment.newInstance(1, MOSLConstants.ACTIVITIES, leadId, ucId)
       else -> {
         if (leadId == "0") {
