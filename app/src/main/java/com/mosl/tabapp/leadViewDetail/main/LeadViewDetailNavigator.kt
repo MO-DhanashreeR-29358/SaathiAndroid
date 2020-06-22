@@ -12,6 +12,10 @@ interface LeadViewDetailNavigator {
   fun openNewEkycApp(id: String)
   fun navigateToCreateMeeting(data: LeadViewDetailArgument)
   fun navigateToSetAppointment(data: LeadViewDetailArgument)
+  fun openDocument(
+    leadId: String,
+    ucId: String
+  )
 }
 
 class LeadViewDetailNavigatorImpl @Inject constructor(
@@ -41,6 +45,21 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
     }
     screenNavigator.openPage(
         NavigationConstants.NAVIGATE_TO_CREATE_MEETING,
+        bundle,
+        true
+    )
+  }
+
+  override fun openDocument(
+    leadId: String,
+    ucId: String
+  ) {
+    val bundle = Bundle().apply {
+      putString(MOSLConstants.LEAD_ID, leadId)
+      putString(MOSLConstants.UCID, ucId)
+    }
+    screenNavigator.openPage(
+        NavigationConstants.NAVIGATE_TO_DOCUMENT,
         bundle,
         true
     )

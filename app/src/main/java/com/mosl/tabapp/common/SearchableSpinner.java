@@ -6,15 +6,14 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
+import androidx.appcompat.widget.AppCompatSpinner;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Shefali on 3/1/2016.
  */
-public class SearchableSpinner extends Spinner implements View.OnTouchListener,
+public class SearchableSpinner extends AppCompatSpinner implements View.OnTouchListener,
         SearchableListDialog.SearchableItem {
 
     private Context _context;

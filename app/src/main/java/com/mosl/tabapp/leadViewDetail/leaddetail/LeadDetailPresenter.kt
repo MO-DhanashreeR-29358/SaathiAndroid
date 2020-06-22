@@ -5,6 +5,7 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailNavigator
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView
@@ -22,7 +23,8 @@ class LeadDetailPresenter @Inject constructor(
   view: LeadDetailView,
   val data: LeadDetailArgument,
   val repository: LeadCreationRepository,
-  val detailRepository: LeadDetailRepository
+  val detailRepository: LeadDetailRepository,
+  val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadDetailView>(view) {
   override fun start() {
     val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
@@ -32,12 +34,12 @@ class LeadDetailPresenter @Inject constructor(
         .map { data.leadId }
         //.filter { it == "0" }
         .switchMap {
-          //detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
-          detailRepository.getClientDetail(data.ucId)
+          detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
+              //detailRepository.getClientDetail(data.ucId)
               .compose(applyUiModel())
         }
-        // .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss)
-        .subscribe(view::renderClientDetail, Timber::e)
+        .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss, Timber::e)
+        // .subscribe(view::renderClientDetail, Timber::e)
         .addTo(disposable)
 
     screenLoadObs
@@ -78,6 +80,22 @@ class LeadDetailPresenter @Inject constructor(
 
     view.onNestedScrollViewTouched()
         .subscribe { view.renderOnNestedScrollViewTouch() }
+        .addTo(disposable)
+
+    view.onClientDetailSectionClicked()
+        .subscribe { view.toggleClientDetailSection() }
+        .addTo(disposable)
+    view.onClientPortfolioSectionClicked()
+        .subscribe { view.toggleClientPortfolioSection() }
+        .addTo(disposable)
+    view.onLeadDetailSectionClicked()
+        .subscribe { view.toggleLeadDetailSection() }
+        .addTo(disposable)
+
+    view.onDocumentClicked()
+        .subscribe({ navigator.openDocument(data.leadId, data.ucId) }, {
+          Timber.e(it)
+        })
         .addTo(disposable)
 
     view.onRefereeCodeFocusChanged()

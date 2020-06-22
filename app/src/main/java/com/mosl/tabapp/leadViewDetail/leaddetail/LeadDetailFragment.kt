@@ -240,6 +240,30 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     return binding.etRefereeCode.focusChanges()
   }
 
+  override fun onClientDetailSectionClicked(): Observable<Unit> {
+    return binding.tvClientDetail.clicks()
+  }
+
+  override fun onClientPortfolioSectionClicked(): Observable<Unit> {
+    return binding.tvClientPortfolioDetails.clicks()
+  }
+
+  override fun onLeadDetailSectionClicked(): Observable<Unit> {
+    return binding.tvLeadDetail.clicks()
+  }
+
+  override fun toggleClientDetailSection() {
+    toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
+  }
+
+  override fun toggleLeadDetailSection() {
+    toggleSectionExpansion(binding.llLeadDetail, binding.tvLeadDetail)
+  }
+
+  override fun toggleClientPortfolioSection() {
+    toggleSectionExpansion(binding.llClientPortfolio, binding.tvClientPortfolioDetails)
+  }
+
   override fun renderOnRefereeCodeFocusChange() {
     if (binding.etRefereeCode.string().length < 4) {
       binding.etRefereeName.setText(emptyString())

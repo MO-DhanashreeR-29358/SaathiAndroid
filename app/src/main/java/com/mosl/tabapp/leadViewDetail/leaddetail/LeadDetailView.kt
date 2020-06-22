@@ -67,6 +67,14 @@ interface LeadDetailView : BaseView {
   fun renderOnAdd3AfterTextChange(text: String)
   fun isCbSameAsChecked(): Boolean
 
+  fun onClientDetailSectionClicked(): Observable<Unit>
+  fun onClientPortfolioSectionClicked(): Observable<Unit>
+  fun onLeadDetailSectionClicked(): Observable<Unit>
+
+  fun toggleClientDetailSection()
+  fun toggleLeadDetailSection()
+  fun toggleClientPortfolioSection()
+
   fun onRefereeCodeChanged(): Observable<String>
   fun isRefereeCodeFocused(): Boolean
   fun resetRefereeOnCodeChange()

@@ -69,7 +69,9 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
   @Inject
   internal lateinit var presenter: DocumentPresenter
   private val subject = PublishSubject.create<DocumentUiEvent>()
-  private val fileTypeArray = resources.getStringArray(R.array.allowedFileTypeArray)
+  private val fileTypeArray by lazy {
+    resources.getStringArray(R.array.allowedFileTypeArray)
+  }
   private lateinit var documentList: ArrayList<LeadDocumentsItemData>
   private val permissionsArr = arrayOf(
       Manifest.permission.CAMERA,
