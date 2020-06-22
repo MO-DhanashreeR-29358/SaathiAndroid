@@ -25,4 +25,8 @@ interface LeadCreationRepository {
   fun getInterestInRowDatas(): Observable<List<RowData>>
   fun getCountryRowDatas(): Observable<List<RowData>>
   fun getProfileRowDatas(): Observable<List<RowData>>
+  fun updateProfile(
+    profile: RowData,
+    ucId: String
+  ): Observable<Pair<String, String>>
 }

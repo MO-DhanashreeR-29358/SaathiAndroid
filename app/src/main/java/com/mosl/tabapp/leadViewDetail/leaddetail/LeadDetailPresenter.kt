@@ -78,6 +78,15 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe(view::render, Timber::e)
         .addTo(disposable)
 
+    view.onUpdateProfileEventFired()
+        .switchMap {
+          repository.updateProfile(it.selectedProfile, data.ucId)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderUpdateProfile)
+        .addTo(disposable)
+
+
     view.onNestedScrollViewTouched()
         .subscribe { view.renderOnNestedScrollViewTouch() }
         .addTo(disposable)
@@ -108,6 +117,10 @@ class LeadDetailPresenter @Inject constructor(
 
     view.onLeadNameAfterTextChanged()
         .subscribe { view.renderOnLeadNameAfterTextChange(it) }
+        .addTo(disposable)
+
+    view.onProfileLayoutClicked()
+        .subscribe { view.renderProfileClick() }
         .addTo(disposable)
 
     view.onProsRefereeNameAfterTextChanged()

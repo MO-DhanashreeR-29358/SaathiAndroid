@@ -21,6 +21,7 @@ interface LeadDetailView : BaseView {
   fun onSameAsCheckboxClicked(): Observable<Unit>
   fun onSubmitButtonClicked(): Observable<Unit>
   fun onProfileLayoutClicked(): Observable<Unit>
+  fun renderProfileClick()
   fun onAddProductClicked(): Observable<Unit>
   fun onEditLeadDetailClicked(): Observable<Unit>
   fun onClientDetailClicked(): Observable<Unit>
@@ -87,6 +88,9 @@ interface LeadDetailView : BaseView {
 
   fun render(uiModel: UiModel<LeadDetailPageData>)
   fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
+
+  fun onUpdateProfileEventFired(): Observable<UpdateProfile>
+  fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)
 
   fun isSameAsAboveChecked(): Boolean
   fun onCountrySelected(): Observable<Int>

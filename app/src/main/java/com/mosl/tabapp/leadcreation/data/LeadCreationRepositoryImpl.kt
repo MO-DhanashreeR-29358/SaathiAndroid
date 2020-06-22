@@ -5,6 +5,7 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
@@ -24,6 +25,7 @@ import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.util.emptyString
 import io.reactivex.Observable
 import io.reactivex.functions.Function6
 import java.net.URLEncoder
@@ -157,6 +159,18 @@ class LeadCreationRepositoryImpl @Inject constructor(
         lookupTypeId = MOSLConstants.LEADPROFILE
     )
     return getRowDatas(request)
+  }
+
+  override fun updateProfile(
+    profile: RowData,
+    ucId: String
+  ): Observable<Pair<String, String>> {
+    val request = ClientProfileRequest(profile.value, false, ucId)
+    return saathiApi.saveClientProfile(request)
+        .map {
+          val approval = it.approvalMessage ?: emptyString()
+          approval to it.clientPotential
+        }
   }
 
   override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {

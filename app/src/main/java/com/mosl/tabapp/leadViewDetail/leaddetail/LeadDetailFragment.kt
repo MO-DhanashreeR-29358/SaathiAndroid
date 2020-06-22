@@ -1,11 +1,15 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.InputType
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -21,6 +25,7 @@ import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.drawable
@@ -29,6 +34,7 @@ import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
@@ -40,6 +46,7 @@ import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadProductMap
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
+import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -49,6 +56,7 @@ import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tabapp.util.string
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -63,6 +71,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private var stage: String? = null
   private var status: String? = null
+
+  private val subject = PublishSubject.create<LeadDetailUiEvent>()
 
   private val professionAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -202,6 +212,46 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun onProfileLayoutClicked(): Observable<Unit> {
     return binding.llProfile.clicks()
+  }
+
+  override fun onUpdateProfileEventFired(): Observable<UpdateProfile> {
+    return subject.ofType()
+  }
+
+  override fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onSuccess {
+      if (it.first.isEmpty())
+        binding.tvProfile.text = it.second
+      else
+        MSFDialog.alertDialog(
+            requireContext(), 0, getString(R.string.motilal_oswal), it.first
+            , "OK", true, null
+        )
+    }
+  }
+
+  override fun renderProfileClick() {
+    Dialog(requireContext()).apply {
+      val dialogBinding = DialogUpdateProfileBinding.inflate(layoutInflater)
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      setCanceledOnTouchOutside(false)
+      setContentView(dialogBinding.root)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      dialogBinding.spProfile.apply {
+        adapter = profileAdapter
+      }
+      dialogBinding.ivClose.setOnClickListener { dismiss() }
+      dialogBinding.btnUpdate.setOnClickListener {
+        val selectedProfile = dialogBinding.spProfile.selectedItem as RowData
+        subject.onNext(UpdateProfile(selectedProfile))
+        dismiss()
+      }
+
+    }
+        .show()
   }
 
   override fun onAddProductClicked(): Observable<Unit> {
@@ -757,6 +807,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
+      profileAdapter.addAll(data.profileRowDatas)
       binding.spProfile.setSpinnerData(profileAdapter, data.profileRowDatas)
       interestedAdapter.addAll(data.interestInRowDatas)
       // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
