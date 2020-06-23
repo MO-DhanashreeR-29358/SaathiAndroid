@@ -15,19 +15,8 @@ import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
-import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.ACTIONABLE
-import com.mosl.tabapp.constants.MOSLConstants.FILTER_LIST
-import com.mosl.tabapp.constants.MOSLConstants.LABEL
-import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
-import com.mosl.tabapp.constants.MOSLConstants.MAP
-import com.mosl.tabapp.constants.MOSLConstants.MEETING_ID
-import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
-import com.mosl.tabapp.constants.MOSLConstants.SPINNER_LIST
-import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
-import com.mosl.tabapp.constants.MOSLConstants.UCID
-import com.mosl.tabapp.constants.MOSLConstants.WIDGETNAME
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDetailData
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightNavigator
 import com.mosl.tabapp.ekyc.EkycNavigator
@@ -268,6 +257,16 @@ class ScreenNavigatorImpl @Inject constructor(
             }
             putSerializable(MAP, addtionalParameterMap as Serializable)
         }
-        openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true)
+        if (actionableInsightDetailData.data.systemName.equals(STB_ACTIONABLE_NA_NC)) {
+            openPage(NAVIGATE_TO_LEAD_ASSIGN_STP, args, true)
+
+        } else {
+            openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true)
+        }
     }
+
+    companion object {
+        const val STB_ACTIONABLE_NA_NC = "STB_Actionable_NA_NC"
+    }
+
 }

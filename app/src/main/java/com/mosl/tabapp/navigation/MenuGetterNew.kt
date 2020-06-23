@@ -9,6 +9,7 @@ import com.mosl.tabapp.calendar.CalendarFragment
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
 import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
+import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
 import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
@@ -68,6 +69,7 @@ object MenuGetterNew {
             }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
+            NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> DashboardReportAssignFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
@@ -125,6 +127,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> true
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL -> true
+            NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> true
             else -> return false
         }
     }

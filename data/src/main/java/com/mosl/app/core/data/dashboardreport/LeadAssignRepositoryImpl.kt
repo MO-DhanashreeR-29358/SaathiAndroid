@@ -1,0 +1,40 @@
+package com.mosl.app.core.data.dashboardreport
+
+import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
+import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
+import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.saathi.api.SaathiApi
+import io.reactivex.Observable
+import javax.inject.Inject
+
+class LeadAssignRepositoryImpl @Inject constructor(
+    private val saathiApi: SaathiApi,
+    val userManager: UserManager
+) : LeadAssignRepository {
+
+
+    override fun getStpLeadAssignList(leadAssignRequest: LeadAssignRequest):
+            Observable<List<LeadAssignItem>> {
+
+        val request = leadAssignRequest.mapToRequest()
+
+        return saathiApi.getLeadAssignStpList(request)
+            .map {
+                it.mapToResponseList()
+            }
+    }
+
+//    override fun getStpLeadTransfer(stpLeadTransferRequest: STPLeadTransferRequest):
+//            Observable<STPLeadTransferResponse> {
+//
+//        val request = multiUpdateApprovalModel.mapToMultiApprovalrRquest()
+//
+//        return saathiApi.postMultiUpdateApproval(request)
+//            .map {
+//                mapToMultiUpdateApprovalresponse(it.response, it.message)
+//            }
+//    }
+
+
+}
