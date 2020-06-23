@@ -25,8 +25,7 @@ class DashboardReportAssignTableAdapter(
 ) : BaseTableAdapter() {
     private var commonHeaders: Array<CommonHeader>
     private val headers = arrayOf(
-        NAME, PROSPECT_ID, REGISTRATION_DATE, LAST_CONNECTED, STAGE, LEAD_STATUS,
-        TEAM_LEADER
+        NAME, PROSPECT_ID, REGISTRATION_DATE
     )
     private var isAllChecked = false
     private var isSingleAllChecked = false

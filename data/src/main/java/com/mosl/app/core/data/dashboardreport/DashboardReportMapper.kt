@@ -1,12 +1,11 @@
 package com.mosl.app.core.data.dashboardreport
 
 import com.mosl.app.core.data.util.safeMap
-import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
-import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
-import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
+import com.mosl.mobile.domain.dashboardreport.*
 import com.mosl.saathi.api.model.dashboard.dashboardsecondlevel.DashboardSecondLevelRequest
 import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpItemResponse
 import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpRequest
+import com.mosl.saathi.api.model.dashboard.reportassgin.STPLeadTransferRequest
 
 fun DashboardReportRequest.requestTransform(businessProfileId: String?): DashboardSecondLevelRequest {
     return DashboardSecondLevelRequest(
@@ -29,6 +28,27 @@ fun LeadAssignRequest.mapToRequest(): GetLeadAssignStpRequest {
 
     )
 
+}
+
+fun STPLeadTransferModel.mapToAssignRequest(): STPLeadTransferRequest {
+
+    return STPLeadTransferRequest(
+        prospectIds = prospectId,
+        assignToTransferLead = assignToTransferLead,
+        checkAllFlag = checkAllFlag
+    )
+
+}
+
+fun mapToMultiUpdateApprovalresponse(
+    response: String?,
+    message: String
+): STPLeadTransferResponse {
+    return STPLeadTransferResponse(
+        response = response,
+        message = message
+
+    )
 }
 
 fun List<GetLeadAssignStpItemResponse>.mapToResponseList(): List<LeadAssignItem> {

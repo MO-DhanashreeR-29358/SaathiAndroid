@@ -9,9 +9,8 @@ data class LeadAssignRequest(
 
 )
 
-data class STPLeadTransferRequest(
+data class STPLeadTransferModel(
     @JvmField val prospectId: String,
     @JvmField val assignToTransferLead: String,
-    @JvmField val leadTransferCmt: String,
     @JvmField val checkAllFlag: Int = 0
 )

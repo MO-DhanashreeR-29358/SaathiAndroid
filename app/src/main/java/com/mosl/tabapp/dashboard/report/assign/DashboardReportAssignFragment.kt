@@ -12,8 +12,8 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
+import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
 import com.mosl.mobile.domain.pendingapproval.EmployeeModel
-import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalResponse
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -168,8 +168,8 @@ class DashboardReportAssignFragment : CommonFragment(),
                     hm[PROSPECT_ID] = it.prospectId
                     hm[REGISTRATION_DATE] = it.registrationDate
                     hm[LAST_CONNECTED] = it.lastConnected
-                    hm[STAGE] = it.registrationDate
-                    hm[LEAD_STATUS] = it.stage
+                    hm[STAGE] = it.stage
+                    hm[LEAD_STATUS] = it.leadStatus
                     hm[TEAM_LEADER] = it.teamLeader
                     dashboardReportAssignTableAdapter.add(hm)
                 }
@@ -211,7 +211,7 @@ class DashboardReportAssignFragment : CommonFragment(),
         selectedApprovalList = arrayList
     }
 
-    override fun multiUpdateApproval(uiModel: UiModel<MultiUpdateApprovalResponse>) {
+    override fun multiUpdateApproval(uiModel: UiModel<STPLeadTransferResponse>) {
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure { error ->

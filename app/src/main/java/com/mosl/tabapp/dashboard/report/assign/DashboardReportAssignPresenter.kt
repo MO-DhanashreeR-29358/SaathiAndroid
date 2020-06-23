@@ -3,7 +3,7 @@ package com.mosl.tabapp.dashboard.report.assign
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
 import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
-import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalModel
+import com.mosl.mobile.domain.dashboardreport.STPLeadTransferModel
 import com.mosl.mobile.user.login.UserManagerImpl
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
@@ -27,12 +27,12 @@ class DashboardReportAssignPresenter @Inject constructor(
             .subscribe(view::renderLeadAssignStpList)
             .addTo(disposable)
 
-//    view.onBtnEvent().map {
-//      getMultiUpdateRequest(it.status)
-//    }.switchMap {
-//      repository.getMultiUpdateApproval(it)
-//        .compose(applyUiModel())
-//    }.subscribe(view::multiUpdateApproval).addTo(disposable)
+        view.onBtnEvent().map {
+            getSTPLeadTransferRequest("14169")
+        }.switchMap {
+            repository.getStpLeadTransfer(it)
+                .compose(applyUiModel())
+        }.subscribe(view::multiUpdateApproval).addTo(disposable)
 
         view.onSelectedApprovalList().subscribe {
             view.selectedApprovalList(it.selectedArrayList)
@@ -40,7 +40,7 @@ class DashboardReportAssignPresenter @Inject constructor(
 
     }
 
-    private fun getMultiUpdateRequest(status: String): MultiUpdateApprovalModel {
+    private fun getSTPLeadTransferRequest(empCode: String): STPLeadTransferModel {
         var approvalRequestId = StringBuilder()
         for (approvalId in view.getSelectedAppovalList()) {
             if (approvalRequestId.toString() == "") {
@@ -49,7 +49,7 @@ class DashboardReportAssignPresenter @Inject constructor(
                 approvalRequestId.append(",").append(approvalId)
             }
         }
-        return MultiUpdateApprovalModel(status, approvalRequestId.toString())
+        return STPLeadTransferModel(approvalRequestId.toString(), empCode)
     }
 
     private fun getLeadAssignStpRequest(): LeadAssignRequest {

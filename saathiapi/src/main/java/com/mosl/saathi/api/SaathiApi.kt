@@ -45,6 +45,7 @@ import com.mosl.saathi.api.model.dashboard.lead.report.LeadsReportRequest
 import com.mosl.saathi.api.model.dashboard.productivity.ProductivityRequest
 import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpItemResponse
 import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpRequest
+import com.mosl.saathi.api.model.dashboard.reportassgin.STPLeadTransferRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.BusinessSnapshotRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
@@ -395,15 +396,20 @@ interface SaathiApi {
         @Body request: GetLeadAssignStpRequest
     ): Observable<List<GetLeadAssignStpItemResponse>>
 
-    @POST("ApprovalRequest/MultiUpdateApprovalRequest")
-    fun postMultiUpdateApprovalOld(
-        @Body request: MultiUpdateApprovalRequest
-    ): Observable<String>
+  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+  fun postMultiUpdateApprovalOld(
+    @Body request: MultiUpdateApprovalRequest
+  ): Observable<String>
 
-    @POST("ApprovalRequest/MultiUpdateApprovalRequest")
-    fun postMultiUpdateApproval(
-        @Body request: MultiUpdateApprovalRequest
-    ): Observable<SaathiCommonResponse<String>>
+  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+  fun postMultiUpdateApproval(
+    @Body request: MultiUpdateApprovalRequest
+  ): Observable<SaathiCommonResponse<String>>
+
+  @POST("Lead/STPLeadTransfer")
+  fun getSTPLeadTransfer(
+    @Body request: STPLeadTransferRequest
+  ): Observable<SaathiCommonResponse<String>>
   //====================== Dashboard =====================
 
   @POST("UserApi/GetBankCode")

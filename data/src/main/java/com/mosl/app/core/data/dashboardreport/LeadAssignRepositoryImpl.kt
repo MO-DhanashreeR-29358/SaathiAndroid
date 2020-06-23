@@ -1,8 +1,6 @@
 package com.mosl.app.core.data.dashboardreport
 
-import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
-import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
-import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
+import com.mosl.mobile.domain.dashboardreport.*
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import io.reactivex.Observable
@@ -25,16 +23,16 @@ class LeadAssignRepositoryImpl @Inject constructor(
             }
     }
 
-//    override fun getStpLeadTransfer(stpLeadTransferRequest: STPLeadTransferRequest):
-//            Observable<STPLeadTransferResponse> {
-//
-//        val request = multiUpdateApprovalModel.mapToMultiApprovalrRquest()
-//
-//        return saathiApi.postMultiUpdateApproval(request)
-//            .map {
-//                mapToMultiUpdateApprovalresponse(it.response, it.message)
-//            }
-//    }
+    override fun getStpLeadTransfer(stpLeadTransferModel: STPLeadTransferModel):
+            Observable<STPLeadTransferResponse> {
+
+        val request = stpLeadTransferModel.mapToAssignRequest()
+
+        return saathiApi.getSTPLeadTransfer(request)
+            .map {
+                mapToMultiUpdateApprovalresponse(it.response, it.message)
+            }
+    }
 
 
 }
