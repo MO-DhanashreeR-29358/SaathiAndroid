@@ -128,7 +128,7 @@ class DashboardReportAssignFragment : CommonFragment(),
     }
 
     private fun errorDisable() {
-        binding.tilEmployee.error = ""
+        binding.tilEmployee.disableErrorMessages()
     }
 
     override fun validateFormData(): Boolean {
@@ -250,6 +250,10 @@ class DashboardReportAssignFragment : CommonFragment(),
         error = msg
         isFocusableInTouchMode = true;
         requestFocus()
+    }
+
+    fun TextInputLayout.disableErrorMessages() {
+        isErrorEnabled = false
     }
 
     companion object {
