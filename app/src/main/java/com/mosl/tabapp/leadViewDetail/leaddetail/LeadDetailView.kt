@@ -24,12 +24,15 @@ interface LeadDetailView : BaseView {
   fun renderProfileClick()
   fun onAddProductClicked(): Observable<Unit>
   fun onEditLeadDetailClicked(): Observable<Unit>
+  fun renderEditLeadDetailClick()
   fun onClientDetailClicked(): Observable<Unit>
   fun onClientPortfolioDetailClicked(): Observable<Unit>
   fun onLeadDetailClicked(): Observable<Unit>
   fun onDocumentClicked(): Observable<Unit>
   fun onDOBClicked(): Observable<Unit>
+  fun renderDOBClick()
   fun onAnniversaryClicked(): Observable<Unit>
+  fun renderAnniversaryClick()
   fun onRefereeCodeFocusChanged(): Observable<Boolean>
   fun renderOnRefereeCodeFocusChange()
   fun onRefereeNameFocusChanged(): Observable<Boolean>

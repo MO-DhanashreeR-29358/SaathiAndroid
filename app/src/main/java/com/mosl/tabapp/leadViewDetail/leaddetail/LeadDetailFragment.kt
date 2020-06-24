@@ -11,7 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
@@ -31,6 +33,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
+import com.mosl.tabapp.common.CustomDatePickerDialog
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
@@ -45,6 +48,7 @@ import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadProductMap
+import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -262,6 +266,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     return binding.llEditLeadDetail.clicks()
   }
 
+  private var editableFlag = true
+
+  override fun renderEditLeadDetailClick() {
+    if (leadId != "0" && isLeadEditable) {
+      if (editableFlag) {
+        setEnableDisable(true)
+        editableFlag = false
+      } else {
+        setEnableDisable(false)
+        editableFlag = true
+      }
+    }
+  }
+
   override fun onClientDetailClicked(): Observable<Unit> {
     return binding.tvClientDetail.clicks()
   }
@@ -280,6 +298,34 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun onDOBClicked(): Observable<Unit> {
     return binding.etDob.clicks()
+  }
+
+  override fun renderDOBClick() {
+    CustomDatePickerDialog(
+        requireContext(),
+        false,
+        binding.etDob.text.toString(),
+        true
+    )
+    { date ->
+      binding.tvAnniversaryError.visibility = View.GONE
+      binding.etDob.setText(date)
+      binding.etDob.setClearIconVisible(true)
+    }.show()
+  }
+
+  override fun renderAnniversaryClick() {
+    CustomDatePickerDialog(
+        requireContext(),
+        false,
+        binding.etAnniversary.text.toString(),
+        true
+    )
+    { date ->
+      binding.tvAnniversaryError.visibility = View.GONE
+      binding.etAnniversary.setText(date)
+      binding.etAnniversary.setClearIconVisible(true)
+    }.show()
   }
 
   override fun onAnniversaryClicked(): Observable<Unit> {
@@ -829,8 +875,69 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
 
+  private fun setEnableDisable(status: Boolean) {
+    binding.apply {
+      etLeadName.isEnabled = status
+      etPanNumber.isEnabled = status
+      etAadharNumber.isEnabled = status
+      etContactPerson.isEnabled = status
+      etLandlineNumber.isEnabled = status
+      etRefereeCode.isEnabled = status
+      etRefereeName.isEnabled = status
+      etProspectRefereeName.isEnabled = status
+      etProspectRefereerMobile.isEnabled = status
+      etProspectRefereerEmail.isEnabled = status
+      etLandlineNumber.isEnabled = status
+      etDob.isEnabled = status
+      etAnniversary.isEnabled = status
+      etAlternateMobileNumber.isEnabled = status
+      etAlternateEmail.isEnabled = status
+      etEmail.isEnabled = status
+      etContactPerson.isEnabled = status
+      etComments.isEnabled = status
+      btnSubmit.isEnabled = status
+      spProfile.isEnabled = status
+      spProfession.isEnabled = status
+      cbSameAs.isEnabled = status
+      cbPrimaryAddress.isEnabled = status
+      cbOffPrimaryAddress.isEnabled = status
+      spPmsProduct.isEnabled = status
+      if (status) {
+        if (cbPrimaryAddress.isChecked) {
+          enableField(llResAdd)
+          enableField(llOffAdd)
+        }
+        if (cbOffPrimaryAddress.isChecked) {
+          enableField(llOffAdd)
+          enableField(llResAdd)
+        }
+      } else {
+        disableField(llOffAdd)
+        disableField(llResAdd)
+      }
+      if (mLeadFieldSectionModelList.isNotEmpty()) {
+        for (mSection in mLeadFieldSectionModelList) {
+          if (mSection.selectionList != null) {
+            for (modal in mSection.selectionList) {
+              val cObj = modal.controlObject
+              if (cObj != null) {
+                if (cObj is EditText) {
+                  cObj.isEnabled = status
+                } else if (cObj is Spinner) {
+                  cObj.isEnabled = status
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  private val mLeadFieldSectionModelList = emptyList<LeadFieldSectionModel>()
+
   private fun LeadDetail.renderLeadDetail() {
-    leadEditable = when {
+    isLeadEditable = when {
       canEditLead == "0" || isProductSpecialist.equals("Y", true) -> false
       else -> true
     }
@@ -925,7 +1032,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   }
 
-  var leadEditable = true
+  private var isLeadEditable = true
   var isIndividualsFlag = false
 
   override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked

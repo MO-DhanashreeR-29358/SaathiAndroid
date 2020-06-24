@@ -31,8 +31,9 @@ class LeadDetailPresenter @Inject constructor(
         .share()
 
     screenLoadObs
-        .map { data.leadId }
-        //.filter { it == "0" }
+        .filter { //data.leadId == "0" &&
+          data.ucId.toInt() >= 0
+        }
         .switchMap {
           detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
               //detailRepository.getClientDetail(data.ucId)
@@ -83,9 +84,15 @@ class LeadDetailPresenter @Inject constructor(
           repository.updateProfile(it.selectedProfile, data.ucId)
               .compose(applyUiModel())
         }
-        .subscribe(view::renderUpdateProfile)
+        .subscribe(view::renderUpdateProfile, Timber::e)
         .addTo(disposable)
 
+    view.onEditLeadDetailClicked()
+        .subscribe { view.renderEditLeadDetailClick() }
+        .addTo(disposable)
+    view.onAnniversaryClicked()
+        .subscribe { view.renderAnniversaryClick() }
+        .addTo(disposable)
 
     view.onNestedScrollViewTouched()
         .subscribe { view.renderOnNestedScrollViewTouch() }
