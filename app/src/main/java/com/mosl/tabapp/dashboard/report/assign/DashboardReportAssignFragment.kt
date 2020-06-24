@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.ArrayAdapter
+import com.google.android.material.textfield.TextInputLayout
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -136,6 +137,24 @@ class DashboardReportAssignFragment : CommonFragment(),
         }
     }
 
+    override fun onDataValidated(): Observable<DashboardReportAssignUIEvent.ValidationStatus> {
+        return subject.ofType()
+    }
+
+    override fun validateFormData(): Boolean {
+
+        val status: Boolean =
+            if (getEmployeeFilter().value == ("Select RM,TL")) {
+                binding.tilEmployee.setErrorMessages(MSG_SELECT_EMPLOYEE)
+                false
+            } else {
+                true
+            }
+        subject.onNext(DashboardReportAssignUIEvent.ValidationStatus(status))
+        return status
+    }
+
+
     override fun renderLeadAssignStpList(uiModel: UiModel<List<LeadAssignItem>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure {
@@ -230,7 +249,13 @@ class DashboardReportAssignFragment : CommonFragment(),
         return selectedApprovalList
     }
 
+    fun TextInputLayout.setErrorMessages(msg: String) {
+        error = msg
+        isErrorEnabled = false
+    }
+
     companion object {
         const val date6 = "yyyy-MM-dd"
+        const val MSG_SELECT_EMPLOYEE = "Please select employee"
     }
 }

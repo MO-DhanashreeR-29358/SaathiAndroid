@@ -37,12 +37,17 @@ class DashboardReportAssignPresenter @Inject constructor(
             }
             .addTo(disposable)
 
-        view.onBtnEvent().map {
-            view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
-        }.switchMap {
-            repository.getStpLeadTransfer(it)
-                .compose(applyUiModel())
-        }.subscribe(view::multiUpdateApproval).addTo(disposable)
+        view.onBtnEvent().subscribe {
+            view.validateFormData()
+        }.addTo(disposable)
+
+        view.onDataValidated()
+            .map {
+                view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
+            }.switchMap {
+                repository.getStpLeadTransfer(it)
+                    .compose(applyUiModel())
+            }.subscribe(view::multiUpdateApproval).addTo(disposable)
 
         view.onSelectedApprovalList().subscribe {
             view.selectedApprovalList(it.selectedArrayList)

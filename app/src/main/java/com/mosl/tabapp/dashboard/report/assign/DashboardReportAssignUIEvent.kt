@@ -11,4 +11,6 @@ sealed class DashboardReportAssignUIEvent {
         @JvmField val selectedArrayList: ArrayList<String>
     ) :
         DashboardReportAssignUIEvent()
+
+    data class ValidationStatus(val boolean: Boolean) : DashboardReportAssignUIEvent()
 }
