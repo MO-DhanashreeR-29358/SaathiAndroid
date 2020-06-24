@@ -54,7 +54,6 @@ class DashboardReportAssignFragment : CommonFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragDashboardReportAssignBinding.bind(view)
-        setAppTitle("Lead Assign")
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
@@ -114,6 +113,13 @@ class DashboardReportAssignFragment : CommonFragment(),
                 )
             }
         }
+    }
+
+    override fun renderLabel(labelName: String?) {
+        labelName?.let {
+            setAppTitle(it)
+        }
+
     }
 
 

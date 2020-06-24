@@ -18,6 +18,7 @@ interface DashboardReportAssignlView : BaseView {
     fun multiUpdateApproval(uiModel: UiModel<STPLeadTransferResponse>)
     fun getSelectedAppovalList(): MutableList<String>
     fun renderEmployeeFilter(typeFilter: List<FilterRowData>)
+    fun renderLabel(labelName: String?)
     fun onDataValidated(): Observable<DashboardReportAssignUIEvent.ValidationStatus>
     fun validateFormData(): Boolean
 }

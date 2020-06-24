@@ -37,6 +37,13 @@ class DashboardReportAssignPresenter @Inject constructor(
             }
             .addTo(disposable)
 
+        Observable.just(data.label)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                view.renderLabel(it)
+            }
+            .addTo(disposable)
+
         view.onBtnEvent().subscribe {
             view.validateFormData()
         }.addTo(disposable)
