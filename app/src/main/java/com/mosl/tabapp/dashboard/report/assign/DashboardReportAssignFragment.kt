@@ -5,7 +5,6 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.ArrayAdapter
 import com.jakewharton.rxbinding3.widget.itemSelections
-import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -13,12 +12,10 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
 import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
-import com.mosl.mobile.domain.pendingapproval.EmployeeModel
-import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.R.string
-import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter.Companion.LAST_CONNECTED
@@ -38,7 +35,6 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 class DashboardReportAssignFragment : CommonFragment(),
@@ -46,7 +42,7 @@ class DashboardReportAssignFragment : CommonFragment(),
     DashboardReportAssignlView {
     lateinit var binding: FragDashboardReportAssignBinding
     private lateinit var dashboardReportAssignTableAdapter: DashboardReportAssignTableAdapter
-    private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
+    private lateinit var employeeAdapter: ArrayAdapter<FilterRowData>
     private val subject = PublishSubject.create<DashboardReportAssignUIEvent>()
     private var selectedApprovalList = mutableListOf<String>()
     private val refreshEvent = PublishSubject.create<Int>()
@@ -133,19 +129,10 @@ class DashboardReportAssignFragment : CommonFragment(),
         }
     }
 
-    override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
-        uiModel.onFailure {
-            showOnFailurePopup(it)
-        }
-        uiModel.onSuccess {
-            employeeAdapter.setSpinnerData(binding.spSelectEmployee, it.listOfEmployee)
-            val arrRepeatMode = ArrayList<RowData>()
-            it.listOfProfile.safeMap { item ->
-                arrRepeatMode.add(
-                    RowData(+1, item.entityField, item.referenceName)
-                )
-            }
 
+    override fun renderEmployeeFilter(typeFilter: List<FilterRowData>) {
+        if (typeFilter.isNotEmpty()) {
+            employeeAdapter.setSpinnerData(binding.spSelectEmployee, typeFilter)
         }
     }
 
@@ -187,12 +174,12 @@ class DashboardReportAssignFragment : CommonFragment(),
 
     }
 
-    override fun onEmployeeChange(): Observable<Int> {
+    override fun onEmployeeFilterChange(): Observable<Int> {
         return binding.spSelectEmployee.itemSelections()
     }
 
-    override fun getEmployee(): EmployeeModel {
-        return binding.spSelectEmployee.selectedItem as EmployeeModel
+    override fun getEmployeeFilter(): FilterRowData {
+        return binding.spSelectEmployee.selectedItem as FilterRowData
     }
 
     override fun onRefreshEvent(): Observable<Int> {

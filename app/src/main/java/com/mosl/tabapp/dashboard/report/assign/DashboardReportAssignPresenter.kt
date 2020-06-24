@@ -5,14 +5,17 @@ import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
 import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
 import com.mosl.mobile.domain.dashboardreport.STPLeadTransferModel
 import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.tabapp.dashboard.report.DashboardReportData
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class DashboardReportAssignPresenter @Inject constructor(
     view: DashboardReportAssignlView,
     val repository: LeadAssignRepository,
-    val userManager: UserManagerImpl
+    val userManager: UserManagerImpl,
+    val data: DashboardReportData
 ) : BasePresenter<DashboardReportAssignlView>(view) {
 
     override fun start() {
@@ -27,8 +30,15 @@ class DashboardReportAssignPresenter @Inject constructor(
             .subscribe(view::renderLeadAssignStpList)
             .addTo(disposable)
 
+        Observable.just(data.periodFilter)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                view.renderEmployeeFilter(it)
+            }
+            .addTo(disposable)
+
         view.onBtnEvent().map {
-            getSTPLeadTransferRequest("14169")
+            view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
         }.switchMap {
             repository.getStpLeadTransfer(it)
                 .compose(applyUiModel())
