@@ -99,7 +99,7 @@ class DashboardReportAssignFragment : CommonFragment(),
                 MSFDialog.alertDialog(
                     requireContext(), 0,
                     resources.getString(string.motilal_oswal),
-                    "Are you sure, you want to cancel selected request?", "Yes", "No", true
+                    ERROR_MSG_PROSPECT, "Yes", "No", true
                 ) { action: Action, _ ->
                     if (action == OK) {
                         dashboardReportAssignTableAdapter.clearList()
@@ -110,7 +110,7 @@ class DashboardReportAssignFragment : CommonFragment(),
                 MSFDialog.alertDialog(
                     requireContext(), 0,
                     resources.getString(string.motilal_oswal),
-                    "Please select at least one record", "OK", true, null
+                    PLEASE_SELECT_AT_LEAST_ONE_RECORD, "OK", true, null
                 )
             }
         }
@@ -141,7 +141,7 @@ class DashboardReportAssignFragment : CommonFragment(),
                 MSFDialog.alertDialog(
                     requireContext(), 0,
                     resources.getString(string.motilal_oswal),
-                    "Please select at least one record", "OK", true, null
+                    PLEASE_SELECT_AT_LEAST_ONE_RECORD, "OK", true, null
                 )
                 false
             } else {
@@ -259,5 +259,7 @@ class DashboardReportAssignFragment : CommonFragment(),
     companion object {
         const val date6 = "yyyy-MM-dd"
         const val MSG_SELECT_EMPLOYEE = "Please select employee"
+        const val PLEASE_SELECT_AT_LEAST_ONE_RECORD = "Please select at least one record"
+        const val ERROR_MSG_PROSPECT = "Are you sure, you want to cancel selected prospect?"
     }
 }
