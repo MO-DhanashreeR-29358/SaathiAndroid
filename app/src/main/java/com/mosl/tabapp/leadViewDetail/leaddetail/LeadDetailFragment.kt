@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
@@ -30,20 +31,27 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
+import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomDatePickerDialog
 import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.StringStuff
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.ClientPortfolio
+import com.mosl.tabapp.leaddetail.ClientProfitLoss
 import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
@@ -651,36 +659,143 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
   }
 
+  private fun ClientDetail.renderClient() {
+    if (products.isNotEmpty()) {
+      val product = products[0]
+      binding.tvClientCode.text = product.clientCode
+      binding.tvUCID.text = product.ucId
+      binding.tvBranchCode.text = product.branchCode
+      binding.tvChannel.text = product.channel
+      advisoryCode = product.advisorCode
+    }
+
+    binding.tvClientAddress.text = address
+    binding.tvClientName.text = name
+    binding.tvPanCard.text = pan
+    binding.tvAccountType.text = accountType
+    binding.tvFamilyUCID.text = familyUcid
+    binding.tvAdvisoryType.text = advisoryType
+    binding.tvAadharCard.text = aadhar
+    binding.tvAccountNumber.text = account
+    binding.tvProfile.text = profile
+    binding.tvDefaultBank.text = defaultBank
+
+    binding.llClient.visibility = View.VISIBLE
+    binding.llClientPortfolioDetails.visibility = View.VISIBLE
+    toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
+  }
+
   override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess { data ->
+      data.detail.renderClient()
+      data.portfolio.renderPortfolio()
+      data.profitLoss.renderProfit()
 
-      if (data.detail.products.isNotEmpty()) {
-        val product = data.detail.products[0]
-        binding.tvClientCode.text = product.clientCode
-        binding.tvUCID.text = product.ucId
-        binding.tvBranchCode.text = product.branchCode
-        binding.tvChannel.text = product.channel
-        advisoryCode = product.advisorCode
+    }
+  }
+
+  private fun ClientPortfolio.renderPortfolio() {
+    binding.includePortfolio.apply {
+      networth.text = StringStuff.commaDecorator(netWorth)
+      daychgamt.text = StringStuff.commaDecorator(dayChangeAmount)
+      daychgperst.text = "${StringStuff.commaDecorator(dayChangePer)} %%"
+
+      overallchgamt.text = StringStuff.commaDecorator(overallChangeAmt)
+      overallchgperst.text = "${StringStuff.commaDecorator(overallChangePer)} %%"
+
+      val bgColor = if (dayChangeAmount.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      daychgamt.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColor))
+
+      val bgColorPer = if (dayChangePer.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      daychgperst.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorPer))
+
+      val bgColorOverall = if (overallChangeAmt.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      overallchgamt.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorOverall))
+
+      val bgColorOverallPer = if (overallChangePer.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      overallchgperst.setBackgroundColor(
+          ContextCompat.getColor(requireContext(), bgColorOverallPer)
+      )
+
+      ///////////broking portfolio
+
+      val brokingMapList = mutableListOf<HashMap<String, String>>()
+      brokingPortfolios.forEach {
+        val map = hashMapOf(
+            MOSLConstants.PRODUCT to it.productName,
+            MOSLConstants.INVEST_AMT to StringStuff.commaDecorator(it.investmentValue),
+            MOSLConstants.PURCHASE_VALUE to StringStuff.commaDecorator(it.marketValue),
+            MOSLConstants.OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
+            MOSLConstants.PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
+                "${it.percentageGainLoss} %"
+            ),
+            MOSLConstants.PRODUCT_ID to it.productId
+        )
+        brokingMapList.add(map)
       }
 
-      binding.tvClientAddress.text = data.detail.address
-      binding.tvClientName.text = data.detail.name
-      binding.tvPanCard.text = data.detail.pan
-      binding.tvAccountType.text = data.detail.accountType
-      binding.tvFamilyUCID.text = data.detail.familyUcid
-      binding.tvAdvisoryType.text = data.detail.advisoryType
-      binding.tvAadharCard.text = data.detail.aadhar
-      binding.tvAccountNumber.text = data.detail.account
-      binding.tvProfile.text = data.detail.profile
-      binding.tvDefaultBank.text = data.detail.defaultBank
+      val brokingAdapter =
+        PortfolioSnapshotBrokAdapter(requireContext(), brokingMapList as ArrayList)
+      listBrokingPortfolio.adapter = brokingAdapter
 
-      binding.llClient.visibility = View.VISIBLE
-      binding.llClientPortfolioDetails.visibility = View.VISIBLE
-      toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
+      //////////asset portfolio
+
+      val assetMapList = mutableListOf<HashMap<String, String>>()
+      assetPortfolios.forEach {
+        val map = hashMapOf(
+            MOSLConstants.PRODUCT to it.productName,
+            MOSLConstants.INVEST_AMT to StringStuff.commaDecorator(it.marketValue),
+            MOSLConstants.PURCHASE_VALUE to StringStuff.commaDecorator(it.purchaseValue),
+            MOSLConstants.OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
+            MOSLConstants.PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
+                "${it.percentageGainLoss} %"
+            ),
+            MOSLConstants.PRODUCT_ID to it.productId,
+            MOSLConstants.PRODUCT_TYPE to it.productType
+        )
+        assetMapList.add(map)
+      }
+
+      val assetAdapter = PortfolioSnapshotAssetAdapter(requireContext(), assetMapList as ArrayList)
+      listAssestPortfolio.adapter = assetAdapter
+
+      ///////////Ledger
+
+      val ledgerMapList = mutableListOf<HashMap<String, String>>()
+      availableLedgers.forEach {
+        val map = hashMapOf(
+            MOSLConstants.PRODUCT to it.productName,
+            MOSLConstants.TOTAL to StringStuff.commaDecorator(it.balanceLedger)
+        )
+        ledgerMapList.add(map)
+      }
+
+      val ledgerAdapter = PortfolioSnapshotCashAdapter(requireContext(), ledgerMapList as ArrayList)
+      listAssestPortfolio.adapter = ledgerAdapter
     }
+  }
+
+  private fun ClientProfitLoss.renderProfit() {
+
   }
 
   override fun onAadharAfterTextChanged(): Observable<String> {

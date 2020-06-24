@@ -83,8 +83,9 @@ fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
     BrokingPortfolio(
         productId = it.productId,
         productName = it.product,
+        productType = it.productType,
         marketValue = it.marketValue,
-        purchaseValue = it.purchaseValue,
+        investmentValue = it.purchaseValue,
         overallGainLoss = it.overallGainLoss,
         percentageGainLoss = it.percentageGainLoss
     )
@@ -100,10 +101,10 @@ fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
         percentageGainLoss = it.percentageGainLoss
     )
   }
-  val cashPortfolio = cashPortfolio.map {
-    CashPortfolio(
+  val ledgers = cashPortfolio.map {
+    AvailableLedger(
         productName = it.product,
-        totalLedgerBalance = it.totalLedgerBalance
+        balanceLedger = it.totalLedgerBalance
     )
   }
 
@@ -111,11 +112,13 @@ fun ClientSummaryResponse.summaryResponseToClientPortfolio(): ClientPortfolio {
       netWorth = portfolio.networth ?: emptyString(),
       dayChangeAmount = portfolio.dayChangeAmount ?: emptyString(),
       dayChangePer = portfolio.dayChangePercentage,
+      dayFlag = portfolio.dayChangeUpdown.toInt(),
+      overallFlag = portfolio.overallChangeUpdown.toInt(),
       overallChangeAmt = portfolio.overallChangeAmount ?: emptyString(),
       overallChangePer = portfolio.overallChangePercentage ?: emptyString(),
       brokingPortfolios = brokingPortfolio,
       assetPortfolios = assetPortfolio,
-      cashPortfolios = cashPortfolio
+      availableLedgers = ledgers
   )
 }
 
@@ -129,8 +132,7 @@ fun ClientGainLossSummaryResponse.gainLossSummaryToClientProfitLoss(): ClientPro
         productName = it.assetSubTypeId,
         stGainLoss = it.assetSubTypeId,
         ltGainLoss = it.assetSubTypeId,
-        totalGainLoss = it.assetSubTypeId,
-        assetSubType = it.assetSubTypeId
+        totalGainLoss = it.assetSubTypeId
     )
   }
 
@@ -146,18 +148,20 @@ fun ClientGainLossSummaryResponse.gainLossSummaryToClientProfitLoss(): ClientPro
 
   val limits = availableLimits.map {
     AvailableLimit(
-        cash = it.cASH,
+        cashType = it.cASH,
         amount = it.aMOUNT
     )
   }
   return ClientProfitLoss(
-      totalGain = product.tOTALGAIN ?: emptyString(),
-      totalStGain = product.tOTALSTGAIN ?: emptyString(),
-      totalLtGainLoss = product.tOTALLTGAIN ?: emptyString(),
-      stGainPer = product.sTGAINPER ?: emptyString(),
-      ltGainPer = product.lTGAINPER ?: emptyString(),
+      totalGainLoss = product.tOTALGAIN ?: emptyString(),
+      stGainLoss = product.tOTALSTGAIN ?: emptyString(),
+      ltGainLoss = product.tOTALLTGAIN ?: emptyString(),
+      stGainLossPer = product.sTGAINPER ?: emptyString(),
+      ltGainLossPer = product.lTGAINPER ?: emptyString(),
       brokingProducts = brokingProducts,
       assetProducts = assetProducts,
-      availableLimits = limits
+      availableLimits = limits,
+      ltFlag = product.lTGAINUpdown.toInt(),
+      stFlag = product.sTGAINUpdown
   )
 }
