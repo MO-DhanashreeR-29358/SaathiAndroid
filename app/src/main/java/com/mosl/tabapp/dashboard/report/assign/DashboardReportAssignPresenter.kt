@@ -42,6 +42,7 @@ class DashboardReportAssignPresenter @Inject constructor(
         }.addTo(disposable)
 
         view.onDataValidated()
+            .filter { it.boolean }
             .map {
                 view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
             }.switchMap {

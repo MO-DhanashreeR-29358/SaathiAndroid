@@ -88,27 +88,13 @@ class DashboardReportAssignFragment : CommonFragment(),
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btnAssign -> if (getSelectedAppovalList().size > 0) {
-                MSFDialog.alertDialog(
-                    requireContext(), 0,
-                    resources.getString(string.motilal_oswal),
-                    "Are you sure, you want to assign selected request?", "Yes", "No", true
-                ) { action: Action, _ ->
-                    if (action == OK) {
-                        subject.onNext(
-                            DashboardReportAssignUIEvent.BtnEvent(
-                                "2"
-                            )
-                        )
-                    }
-                }
-            } else {
-                MSFDialog.alertDialog(
-                    requireContext(), 0,
-                    resources.getString(string.motilal_oswal),
-                    "Please select at least one record", "OK", true, null
+            R.id.btnAssign ->
+                subject.onNext(
+                    DashboardReportAssignUIEvent.BtnEvent(
+                        "2"
+                    )
                 )
-            }
+
             R.id.btnReset -> if (getSelectedAppovalList().size > 0) {
                 MSFDialog.alertDialog(
                     requireContext(), 0,
@@ -141,11 +127,22 @@ class DashboardReportAssignFragment : CommonFragment(),
         return subject.ofType()
     }
 
-    override fun validateFormData(): Boolean {
+    private fun errorDisable() {
+        binding.tilEmployee.error = ""
+    }
 
+    override fun validateFormData(): Boolean {
+        errorDisable()
         val status: Boolean =
-            if (getEmployeeFilter().value == ("Select RM,TL")) {
+            if (getEmployeeFilter().text == ("Select RM,TL")) {
                 binding.tilEmployee.setErrorMessages(MSG_SELECT_EMPLOYEE)
+                false
+            } else if (getSelectedAppovalList().size == 0) {
+                MSFDialog.alertDialog(
+                    requireContext(), 0,
+                    resources.getString(string.motilal_oswal),
+                    "Please select at least one record", "OK", true, null
+                )
                 false
             } else {
                 true
@@ -251,7 +248,8 @@ class DashboardReportAssignFragment : CommonFragment(),
 
     fun TextInputLayout.setErrorMessages(msg: String) {
         error = msg
-        isErrorEnabled = false
+        isFocusableInTouchMode = true;
+        requestFocus()
     }
 
     companion object {

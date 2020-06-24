@@ -10,15 +10,14 @@
         android:id="@+id/til_employee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_margin="@dimen/margin_small"
         app:errorTextAppearance="@style/error_appearance"
         app:hintEnabled="false">
 
         <Spinner
             android:id="@+id/spSelectEmployee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_medium" />
+            android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
