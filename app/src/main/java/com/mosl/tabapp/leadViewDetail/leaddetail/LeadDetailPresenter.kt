@@ -98,6 +98,11 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.renderOnNestedScrollViewTouch() }
         .addTo(disposable)
 
+    view.onAddProductClicked()
+        .filter { view.isLeadEditable() }
+        .subscribe { view.openAddProductDialog() }
+        .addTo(disposable)
+
     view.onClientDetailSectionClicked()
         .subscribe { view.toggleClientDetailSection() }
         .addTo(disposable)

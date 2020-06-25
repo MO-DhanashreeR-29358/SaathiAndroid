@@ -23,6 +23,8 @@ interface LeadDetailView : BaseView {
   fun onProfileLayoutClicked(): Observable<Unit>
   fun renderProfileClick()
   fun onAddProductClicked(): Observable<Unit>
+  fun isLeadEditable(): Boolean
+  fun openAddProductDialog()
   fun onEditLeadDetailClicked(): Observable<Unit>
   fun renderEditLeadDetailClick()
   fun onClientDetailClicked(): Observable<Unit>

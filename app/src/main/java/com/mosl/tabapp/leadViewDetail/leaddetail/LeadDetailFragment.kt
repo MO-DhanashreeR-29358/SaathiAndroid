@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ListView
@@ -26,6 +27,7 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -42,6 +44,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.common.StringStuff
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
@@ -90,6 +93,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   private var status: String? = null
 
   private val subject = PublishSubject.create<LeadDetailUiEvent>()
+
+  private var interestedDatas = emptyList<RowData>()
+  private val statusDatas = emptyList<RowData>()
+  private val stageDatas = emptyList<RowData>()
 
   private val professionAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -274,6 +281,56 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   override fun onAddProductClicked(): Observable<Unit> {
     return binding.rlAddProduct.clicks()
   }
+
+  override fun isLeadEditable(): Boolean = isLeadEditable
+
+  override fun openAddProductDialog() {
+    Dialog(requireContext()).apply {
+      val dialogBinding = DialogLeadviewAddProductBinding.inflate(layoutInflater)
+      requestWindowFeature(Window.FEATURE_NO_TITLE)
+      setCanceledOnTouchOutside(false)
+      setContentView(dialogBinding.root)
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+      dialogBinding.dacProductSpecialist.setHint(resources.getString(R.string.str_prod_spl))
+      dialogBinding.actAssignTo.setHint(resources.getString(R.string.str_assing))
+      dialogBinding.dacProductSpecialist.setListener {
+
+      }
+      dialogBinding.dacProductSpecialist.setOnClickListener {
+      }
+      dialogBinding.actAssignTo.setListener { }
+      dialogBinding.actAssignTo.setOnClickListener { }
+      window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
+      dialogBinding.spInterestedIn.adapter = interestedAdapter
+      interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedDatas)
+      dialogBinding.btnSave.setOnClickListener {
+
+        //Mandatory check
+        if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
+          dialogBinding.tvspIntrestError.visibility = View.VISIBLE
+          dialogBinding.tvspIntrestError.text = "Select Interested Product"
+
+        }
+        if (dialogBinding.spStage.selectedItemPosition < 1) {
+          dialogBinding.tvspStageError.visibility = View.VISIBLE
+          dialogBinding.tvspStageError.text = "Select Stage"
+        }
+        if (dialogBinding.spStatus.selectedItemPosition < 1) {
+          dialogBinding.tvspStatusError.visibility = View.VISIBLE
+          dialogBinding.tvspStatusError.text = "Select Status"
+        }
+        dismiss()
+
+      }
+      dialogBinding.btnClose.setOnClickListener {
+        hideKeyboard(binding.root)
+        dismiss()
+      }
+    }
+        .show()
+  }
+
 
   override fun onEditLeadDetailClicked(): Observable<Unit> {
     return binding.llEditLeadDetail.clicks()
@@ -1205,10 +1262,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun render(uiModel: UiModel<LeadDetailPageData>) {
     toggleProgressBar(uiModel.inProgress)
-    uiModel.onFailure { showOnFailurePopup(it) }
+    uiModel.onFailure {
+      interestedDatas.toMutableList()
+          .clear()
+      showOnFailurePopup(it)
+    }
     uiModel.onSuccess { data ->
       profileAdapter.addAll(data.profileRowDatas)
       binding.spProfile.setSpinnerData(profileAdapter, data.profileRowDatas)
+      interestedDatas = data.interestInRowDatas
       interestedAdapter.addAll(data.interestInRowDatas)
       // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
