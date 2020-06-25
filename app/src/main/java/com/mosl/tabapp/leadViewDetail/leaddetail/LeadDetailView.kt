@@ -79,6 +79,24 @@ interface LeadDetailView : BaseView {
   fun toggleLeadDetailSection()
   fun toggleClientPortfolioSection()
 
+  fun onPortfolioSnapshotClicked(): Observable<Unit>
+  fun togglePortfolio()
+  fun onProfitLossSnapshotClicked(): Observable<Unit>
+  fun toggleProfitLoss()
+  fun onAvailableLimitSnapshotClicked(): Observable<Unit>
+  fun toggleAvailableLimit()
+
+  fun onBrokingPortfolioClicked(): Observable<Unit>
+  fun toggleBrokingPortfolio()
+  fun onAssetPortfolioClicked(): Observable<Unit>
+  fun toggleAssetPortfolio()
+  fun onLedgerClicked(): Observable<Unit>
+  fun toggleLedger()
+  fun onBrokingProductClicked(): Observable<Unit>
+  fun toggleBrokingProduct()
+  fun onAssetProductClicked(): Observable<Unit>
+  fun toggleAssetProduct()
+
   fun onRefereeCodeChanged(): Observable<String>
   fun isRefereeCodeFocused(): Boolean
   fun resetRefereeOnCodeChange()

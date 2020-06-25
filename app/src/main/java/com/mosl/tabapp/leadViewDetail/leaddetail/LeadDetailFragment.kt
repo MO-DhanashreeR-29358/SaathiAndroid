@@ -373,6 +373,103 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     toggleSectionExpansion(binding.llClientPortfolio, binding.tvClientPortfolioDetails)
   }
 
+  override fun onPortfolioSnapshotClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtPortfolioSnapshot.clicks()
+  }
+
+  override fun togglePortfolio() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llPortfolio,
+        binding.includePortfolio.txtPortfolioSnapshot,
+        OUTER
+    )
+  }
+
+  override fun onProfitLossSnapshotClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtPorfitLoss.clicks()
+  }
+
+  override fun onAvailableLimitSnapshotClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtAvailableLimits.clicks()
+  }
+
+  override fun toggleProfitLoss() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llProfitLoss,
+        binding.includePortfolio.txtPorfitLoss,
+        OUTER
+    )
+  }
+
+  override fun toggleAvailableLimit() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llAvailableLimits,
+        binding.includePortfolio.txtAvailableLimits,
+        OUTER
+    )
+  }
+
+  override fun onBrokingPortfolioClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtBrokingPortfolio.clicks()
+  }
+
+  override fun toggleBrokingPortfolio() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llBorkingPortfolio,
+        binding.includePortfolio.txtBrokingPortfolio,
+        INNER
+    )
+  }
+
+  override fun onAssetPortfolioClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtAssestPortfolio.clicks()
+
+  }
+
+  override fun toggleAssetPortfolio() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llAssestPortfolio,
+        binding.includePortfolio.txtAssestPortfolio,
+        INNER
+    )
+  }
+
+  override fun onLedgerClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtCash.clicks()
+  }
+
+  override fun toggleLedger() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llCash,
+        binding.includePortfolio.txtCash,
+        INNER
+    )
+  }
+
+  override fun onBrokingProductClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtBrokingProducts.clicks()
+  }
+
+  override fun toggleBrokingProduct() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llBorkingProducts,
+        binding.includePortfolio.txtBrokingProducts,
+        INNER
+    )
+  }
+
+  override fun onAssetProductClicked(): Observable<Unit> {
+    return binding.includePortfolio.txtAssestProducts.clicks()
+  }
+
+  override fun toggleAssetProduct() {
+    toggleSectionExpansion(
+        binding.includePortfolio.llAssestProducts,
+        binding.includePortfolio.txtAssestProducts,
+        INNER
+    )
+  }
+
   override fun renderOnRefereeCodeFocusChange() {
     if (binding.etRefereeCode.string().length < 4) {
       binding.etRefereeName.setText(emptyString())
@@ -706,10 +803,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     binding.includePortfolio.apply {
       networth.text = StringStuff.commaDecorator(netWorth)
       daychgamt.text = StringStuff.commaDecorator(dayChangeAmount)
-      daychgperst.text = "${StringStuff.commaDecorator(dayChangePer)} %%"
+      daychgperst.text = "${StringStuff.commaDecorator(dayChangePer)} %"
 
       overallchgamt.text = StringStuff.commaDecorator(overallChangeAmt)
-      overallchgperst.text = "${StringStuff.commaDecorator(overallChangePer)} %%"
+      overallchgperst.text = "${StringStuff.commaDecorator(overallChangePer)} %"
 
       val bgColor = if (dayChangeAmount.startsWith("-")) {
         color.action_bar_negative
@@ -914,6 +1011,30 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       setListViewHeightBasedOnChildren(lvPLLimits)
     }
 
+  }
+
+  private fun toggleSectionExpansion(
+    parent: View,
+    icon: TextView,
+    expansion: String
+  ) {
+    if (expansion.equals("OuterSectionExpansion", ignoreCase = true)) {
+      if (parent.visibility == View.VISIBLE) {
+        parent.visibility = View.GONE
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
+      } else {
+        parent.visibility = View.VISIBLE
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
+      }
+    } else if (expansion.equals("InnerSectionExpansion", ignoreCase = true)) {
+      if (parent.visibility == View.VISIBLE) {
+        parent.visibility = View.GONE
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.down_button, 0)
+      } else {
+        parent.visibility = View.VISIBLE
+        icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
+      }
+    }
   }
 
   override fun onAadharAfterTextChanged(): Observable<String> {
@@ -1353,6 +1474,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         arguments = args
       }
     }
+
+    const val OUTER = "OuterSectionExpansion"
+    const val INNER = "InnerSectionExpansion"
 
   }
 }

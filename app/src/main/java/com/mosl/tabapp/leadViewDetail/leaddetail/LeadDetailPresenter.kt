@@ -108,6 +108,31 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.toggleLeadDetailSection() }
         .addTo(disposable)
 
+    view.onPortfolioSnapshotClicked()
+        .subscribe { view.togglePortfolio() }
+        .addTo(disposable)
+    view.onBrokingPortfolioClicked()
+        .subscribe { view.toggleBrokingPortfolio() }
+        .addTo(disposable)
+    view.onAssetPortfolioClicked()
+        .subscribe { view.toggleAssetPortfolio() }
+        .addTo(disposable)
+    view.onLedgerClicked()
+        .subscribe { view.toggleLedger() }
+        .addTo(disposable)
+    view.onProfitLossSnapshotClicked()
+        .subscribe { view.toggleProfitLoss() }
+        .addTo(disposable)
+    view.onBrokingProductClicked()
+        .subscribe { view.toggleBrokingProduct() }
+        .addTo(disposable)
+    view.onAssetProductClicked()
+        .subscribe { view.toggleAssetProduct() }
+        .addTo(disposable)
+    view.onAvailableLimitSnapshotClicked()
+        .subscribe { view.toggleAvailableLimit() }
+        .addTo(disposable)
+
     view.onDocumentClicked()
         .subscribe({ navigator.openDocument(data.leadId, data.ucId) }, {
           Timber.e(it)
