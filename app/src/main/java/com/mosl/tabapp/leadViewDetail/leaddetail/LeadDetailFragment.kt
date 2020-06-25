@@ -9,9 +9,11 @@ import android.text.InputType
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams
 import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -43,6 +45,9 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLLimitsAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotAssetAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
@@ -756,6 +761,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       val brokingAdapter =
         PortfolioSnapshotBrokAdapter(requireContext(), brokingMapList as ArrayList)
       listBrokingPortfolio.adapter = brokingAdapter
+      brokingAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(listBrokingPortfolio)
 
       //////////asset portfolio
 
@@ -777,6 +784,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
       val assetAdapter = PortfolioSnapshotAssetAdapter(requireContext(), assetMapList as ArrayList)
       listAssestPortfolio.adapter = assetAdapter
+      assetAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(listAssestPortfolio)
 
       ///////////Ledger
 
@@ -791,10 +800,119 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
       val ledgerAdapter = PortfolioSnapshotCashAdapter(requireContext(), ledgerMapList as ArrayList)
       listAssestPortfolio.adapter = ledgerAdapter
+      ledgerAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(listAssestPortfolio)
     }
   }
 
+  private fun setListViewHeightBasedOnChildren(listView: ListView) {
+    val listAdapter = listView.adapter ?: return
+    var totalHeight = 0
+    for (i in 0 until listAdapter.count) {
+      val listItem = listAdapter.getView(i, null, listView)
+      listItem.measure(0, 0)
+      totalHeight += listItem.measuredHeight
+    }
+    val params = listView.layoutParams
+    params.height = totalHeight + listView.dividerHeight * (listAdapter.count - 1)
+    listView.layoutParams = params
+    listView.requestLayout()
+  }
+
   private fun ClientProfitLoss.renderProfit() {
+
+    binding.includePortfolio.apply {
+      tvTotalGainLoss.text = StringStuff.commaDecorator(totalGainLoss)
+
+      tvLTGainLoss.text = StringStuff.commaDecorator(ltGainLoss)
+      tvLTGainLossPer.text = "${StringStuff.commaDecorator(ltGainLossPer)} %"
+
+      val bgColor = if (ltGainLoss.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      tvLTGainLoss.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColor))
+
+      val bgColorPer = if (ltGainLossPer.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      tvLTGainLossPer.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorPer))
+
+      tvSTGainLoss.text = StringStuff.commaDecorator(stGainLoss)
+      tvSTGainLossPer.text = "${StringStuff.commaDecorator(stGainLossPer)} %"
+
+      val bgColorSt = if (stGainLoss.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      tvSTGainLoss.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorSt))
+
+      val bgColorPerSt = if (stGainLossPer.startsWith("-")) {
+        color.action_bar_negative
+      } else {
+        color.action_bar_positive
+      }
+      tvSTGainLossPer.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorPerSt))
+
+      ///////////broking product
+
+      val brokingMapList = mutableListOf<HashMap<String, String>>()
+      brokingProducts.forEach {
+        val map = hashMapOf(
+            MOSLConstants.PRODUCT_ID to it.productId,
+            MOSLConstants.PRODUCT to it.productName,
+            MOSLConstants.STGL to StringStuff.commaDecorator(it.stGainLoss),
+            MOSLConstants.LTGL to StringStuff.commaDecorator(it.ltGainLoss),
+            MOSLConstants.TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
+        )
+        brokingMapList.add(map)
+      }
+
+      val brokingAdapter =
+        PortfolioPLBrokingAdapter(requireContext(), brokingMapList as ArrayList)
+      lvPLBrok.adapter = brokingAdapter
+      brokingAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(lvPLBrok)
+
+      //////////asset product
+
+      val assetMapList = mutableListOf<HashMap<String, String>>()
+      assetProducts.forEach {
+        val map = hashMapOf(
+            MOSLConstants.PRODUCT_ID to it.productId,
+            MOSLConstants.PRODUCT to it.productName,
+            MOSLConstants.STGL to StringStuff.commaDecorator(it.stGainLoss),
+            MOSLConstants.LTGL to StringStuff.commaDecorator(it.ltGainLoss),
+            MOSLConstants.TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
+        )
+        assetMapList.add(map)
+      }
+
+      val assetAdapter = PortfolioPLAssetAdapter(requireContext(), assetMapList as ArrayList)
+      lvPLAsset.adapter = assetAdapter
+      assetAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(lvPLAsset)
+
+      ///////////Limit
+
+      val limitMapList = mutableListOf<HashMap<String, String>>()
+      availableLimits.forEach {
+        val map = hashMapOf(
+            MOSLConstants.CASH to it.cashType,
+            MOSLConstants.AMOUNT to StringStuff.commaDecorator(it.amount)
+        )
+        limitMapList.add(map)
+      }
+
+      val limitAdapter = PortfolioPLLimitsAdapter(requireContext(), limitMapList as ArrayList)
+      lvPLLimits.adapter = limitAdapter
+      limitAdapter.notifyDataSetChanged()
+      setListViewHeightBasedOnChildren(lvPLLimits)
+    }
 
   }
 
