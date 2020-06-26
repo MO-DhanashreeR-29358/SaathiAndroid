@@ -10,6 +10,7 @@ import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadEmployees
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -113,6 +114,10 @@ interface LeadDetailView : BaseView {
   fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
 
   fun onUpdateProfileEventFired(): Observable<UpdateProfile>
+  fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent>
+  fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>)
+  fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>)
+  fun onAssignToEventFired(): Observable<AssignToEvent>
   fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)
 
   fun isSameAsAboveChecked(): Boolean

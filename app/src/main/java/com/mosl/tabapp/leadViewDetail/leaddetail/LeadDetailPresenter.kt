@@ -316,6 +316,27 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe(view::renderCityOnStateSelection, Timber::e)
         .addTo(disposable)
 
+    view.onProductSpecialEventFired()
+        .switchMap {
+          detailRepository.getLeadEmpForProduct(
+              search = it.selectedProduct,
+              primaryRm = it.primaryRM
+          )
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderProductSpecial)
+        .addTo(disposable)
+
+    view.onAssignToEventFired()
+        .switchMap {
+          detailRepository.getLeadEmpForAssign(
+              search = it.search
+          )
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderAssignTo)
+        .addTo(disposable)
+
     view.onOfficeStateSelected()
         .filter(InvalidSelectionPredicate)
         .map { view.getSelectedOfficeState() }

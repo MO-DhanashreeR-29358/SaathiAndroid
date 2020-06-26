@@ -75,6 +75,12 @@ data class LeadDetailAndProfession(
   @JvmField val detail: LeadDetail
 )
 
+data class LeadEmployees(
+  @JvmField val code: String,
+  @JvmField val name: String,
+  @JvmField val branchCode: String
+)
+
 data class ClientDetailWithPortfolioAndProfitLoss(
   @JvmField val detail: ClientDetail,
   @JvmField val portfolio: ClientPortfolio,

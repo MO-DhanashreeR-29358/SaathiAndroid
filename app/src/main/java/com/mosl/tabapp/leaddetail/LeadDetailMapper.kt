@@ -1,10 +1,40 @@
 package com.mosl.tabapp.leaddetail
 
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
+import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
 import com.mosl.saathi.api.model.lead.ClientSummaryResponse
 import com.mosl.saathi.api.model.lead.LeadViewItem
+import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.tabapp.util.emptyString
+
+fun List<ProductSpecialistItem>.productItemsToLeadEmployees(): List<LeadEmployees> {
+  return mapNotNull {
+    try {
+      LeadEmployees(
+          code = it.employeeCode,
+          name = it.employeeName,
+          branchCode = it.branchCode
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
+}
+
+fun List<BusinessProfile>.profilesToLeadEmployees(): List<LeadEmployees> {
+  return mapNotNull {
+    try {
+      LeadEmployees(
+          code = it.employeeCode ?: emptyString(),
+          name = it.employeeName ?: emptyString(),
+          branchCode = it.branchCode ?: emptyString()
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
+}
 
 fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
   return LeadDetail(

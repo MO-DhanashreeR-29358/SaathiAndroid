@@ -3,10 +3,13 @@ package com.mosl.tabapp.leaddetail
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
+import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class LeadDetailRepositoryImpl @Inject constructor(
@@ -41,6 +44,32 @@ class LeadDetailRepositoryImpl @Inject constructor(
     return saathiApi.getClientDetail(ClientDetailRequest(ucId.toInt()))
         .map {
           it.clientDetailItemToClientDetail()
+        }
+  }
+
+  override fun getLeadEmpForProduct(
+    search: String,
+    primaryRm: String
+  ): Observable<List<LeadEmployees>> {
+    val request = ProductSpecialistRequest(
+        employeeCode = URLEncoder.encode(search, "utf-8"),
+        employeeName = URLEncoder.encode(search, "utf-8"),
+        primaryRM = primaryRm
+    )
+    return saathiApi.getProductSpecialist(request)
+        .map {
+          it.productItemsToLeadEmployees()
+        }
+  }
+
+  override fun getLeadEmpForAssign(search: String): Observable<List<LeadEmployees>> {
+    val request = UserBusinessProfileRequest(
+        employeeCode = URLEncoder.encode(search, "utf-8"),
+        employeeName = URLEncoder.encode(search, "utf-8")
+    )
+    return saathiApi.getUserBusinessProfile(request)
+        .map {
+          it.profilesToLeadEmployees()
         }
   }
 

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
 import android.view.MotionEvent
@@ -36,12 +37,15 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomDatePickerDialog
+import com.mosl.tabapp.common.CustomListPickerDialog
+import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.common.StringStuff
 import com.mosl.tabapp.constants.MOSLConstants
@@ -49,6 +53,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
@@ -65,7 +70,9 @@ import com.mosl.tabapp.leaddetail.ClientProfitLoss
 import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadEmployees
 import com.mosl.tabapp.leaddetail.LeadProductMap
+import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
@@ -286,7 +293,107 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun isLeadEditable(): Boolean = isLeadEditable
 
+  private var specialistAdd: String? = null
+  private var primaryRm: String? = null
+
   private var addProductDialogBinding: DialogLeadviewAddProductBinding? = null
+
+  private var productSpecialDialog: CustomListPickerDialog? = null
+  private var assignToDialog: CustomListPickerDialog? = null
+
+  override fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent> {
+    return subject.ofType()
+  }
+
+  override fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>) {
+    if (uiModel.inProgress) {
+      assignToDialog?.showProgress(View.VISIBLE)
+    } else {
+      assignToDialog?.showProgress(View.GONE)
+    }
+
+    uiModel.onFailure {
+      val model = listOf(
+          EmployeeModel.getNoData(getErrorOnFailureNew(it))
+      )
+      assignToDialog?.setAdapter(
+          AttendeeAdapter(
+              requireContext(),
+              model
+          )
+      )
+    }
+
+    uiModel.onSuccess {
+      var list = emptyList<EmployeeModel>()
+      if (it.isNotEmpty()) {
+        it.filter {
+          it.code == userManager.user.employeeCode
+        }
+            .map {
+              EmployeeModel(
+                  it.name, it.code, it.branchCode, false
+              )
+            }
+      } else {
+        EmployeeModel.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE)
+      }
+
+      assignToDialog?.setAdapter(
+          AttendeeAdapter(
+              requireContext(), list
+          )
+      )
+    }
+
+  }
+
+  override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
+    if (uiModel.inProgress) {
+      productSpecialDialog?.showProgress(View.VISIBLE)
+    } else {
+      productSpecialDialog?.showProgress(View.GONE)
+    }
+
+    uiModel.onFailure {
+      val model = listOf(
+          EmployeeModel.getNoData(getErrorOnFailureNew(it))
+      )
+      productSpecialDialog?.setAdapter(
+          AttendeeAdapter(
+              requireContext(),
+              model
+          )
+      )
+    }
+
+    uiModel.onSuccess {
+      var list = emptyList<EmployeeModel>()
+      if (it.isNotEmpty()) {
+        it.filter {
+          it.code == userManager.user.employeeCode
+        }
+            .map {
+              EmployeeModel(
+                  it.name, it.code, it.branchCode, false
+              )
+            }
+      } else {
+        EmployeeModel.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE)
+      }
+
+      productSpecialDialog?.setAdapter(
+          AttendeeAdapter(
+              requireContext(), list
+          )
+      )
+    }
+
+  }
+
+  override fun onAssignToEventFired(): Observable<AssignToEvent> {
+    return subject.ofType()
+  }
 
   override fun openAddProductDialog() {
     Dialog(requireContext()).apply {
@@ -294,36 +401,123 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       val dialogBinding = addProductDialogBinding!!
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       setCanceledOnTouchOutside(false)
-      setContentView(dialogBinding?.root)
+      setContentView(dialogBinding.root)
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-      dialogBinding?.dacProductSpecialist.setHint(resources.getString(R.string.str_prod_spl))
-      dialogBinding?.actAssignTo.setHint(resources.getString(R.string.str_assing))
-      dialogBinding?.dacProductSpecialist.setListener {
+      dialogBinding.dacProductSpecialist.setHint(resources.getString(R.string.str_prod_spl))
+      dialogBinding.actAssignTo.setHint(resources.getString(R.string.str_assing))
+      dialogBinding.dacProductSpecialist.setListener {
+        specialistAdd = ""
+      }
+      dialogBinding.dacProductSpecialist.setOnClickListener {
+
+        requireActivity().window
+            .setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+            )
+
+        val searchListProductSpecialist =
+          CustomListPickerDialog(requireContext())
+
+        searchListProductSpecialist.threshold = MOSLConstants.SEARCH_LENTH
+
+        searchListProductSpecialist.show()
+        searchListProductSpecialist.setCustomTitle(
+            resources.getString(R.string.str_prod_spl)
+        )
+        val productSpecialistViewListner: ListPickerListneable = object : ListPickerListneable {
+          override fun onListItemSelect(data: Parcelable) {
+            val clientModel =
+              data as EmployeeModel
+            if (clientModel.isNoData) {
+              return
+            }
+            dialogBinding.dacProductSpecialist.setText(clientModel.attendeeName)
+            specialistAdd = clientModel.attendeeCode
+            dialogBinding.dacProductSpecialist.setClearIconVisible(true)
+            searchListProductSpecialist.dismiss()
+          }
+
+          override fun onSearchTextChanged(constraint: CharSequence?) {
+            if (constraint != null) {
+
+              primaryRm = if (CRMAppUtil.isBlank(leadOwne.trim())) {
+                advisoryCode
+              } else {
+                leadOwne
+              }
+              val rm = primaryRm!!
+              productSpecialDialog = searchListProductSpecialist
+              subject.onNext(
+                  ProductSpecialistEvent(selectedProduct = constraint.toString(), primaryRM = rm)
+              )
+
+              //searchProductSpecialist(constraint, searchListProductSpecialist)
+            }
+          }
+        }
+        searchListProductSpecialist.setmListner(productSpecialistViewListner)
+
 
       }
-      dialogBinding?.dacProductSpecialist?.setOnClickListener {
+      dialogBinding.actAssignTo.setListener {
+        primaryRm = ""
       }
-      dialogBinding?.actAssignTo?.setListener { }
-      dialogBinding?.actAssignTo?.setOnClickListener { }
+      dialogBinding.actAssignTo.setOnClickListener {
+        requireActivity().window
+            .setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+            )
+        val searchList = CustomListPickerDialog(requireContext())
+        searchList.show()
+        searchList.threshold = MOSLConstants.SEARCH_LENTH
+        searchList.setCustomTitle(resources.getString(R.string.str_assing))
+        val assingViewListner: ListPickerListneable = object : ListPickerListneable {
+          override fun onListItemSelect(data: Parcelable) {
+            val clientModel =
+              data as EmployeeModel
+            if (clientModel.isNoData) {
+              return
+            }
+            dialogBinding.actAssignTo.setText(clientModel.attendeeName)
+            primaryRm = clientModel.attendeeCode
+            dialogBinding.actAssignTo.setClearIconVisible(true)
+            searchList.dismiss()
+          }
+
+          override fun onSearchTextChanged(constraint: CharSequence?) {
+
+            if (constraint != null) {
+
+              assignToDialog = searchList
+              subject.onNext(AssignToEvent(constraint.toString()))
+
+              //searchUserBusinessProfile(constraint, searchList)
+            }
+          }
+        }
+        searchList.setmListner(assingViewListner)
+      }
       window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-      dialogBinding?.spInterestedIn?.adapter = interestedAdapter
-      dialogBinding?.spStage?.adapter = stageAdapter
-      dialogBinding?.spStatus?.adapter = statusAdapter
-      interestedAdapter.setSpinnerData(dialogBinding?.spInterestedIn!!, interestedDatas)
+      dialogBinding.spInterestedIn.adapter = interestedAdapter
+      dialogBinding.spStage.adapter = stageAdapter
+      dialogBinding.spStatus.adapter = statusAdapter
+      interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn!!, interestedDatas)
 
-      dialogBinding!!.spInterestedIn.itemSelections()
+      dialogBinding.spInterestedIn.itemSelections()
           .filter(InvalidSelectionPredicate)
-          .map { dialogBinding!!.spInterestedIn.selectedItem as RowData }
+          .map { dialogBinding.spInterestedIn.selectedItem as RowData }
           .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
           .subscribe {
             subject.onNext(SelectInterestedProductEvent(it))
           }
           .addTo(disposable)
 
-      dialogBinding!!.spStage.itemSelections()
+      dialogBinding.spStage.itemSelections()
           .filter(InvalidSelectionPredicate)
-          .map { dialogBinding!!.spStage.selectedItem as RowData }
+          .map { dialogBinding.spStage.selectedItem as RowData }
           .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
           .subscribe {
             subject.onNext(SelectStageEvent(it))
@@ -359,7 +553,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
         .show()
   }
-
 
   override fun onEditLeadDetailClicked(): Observable<Unit> {
     return binding.llEditLeadDetail.clicks()
@@ -1381,6 +1574,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private val mLeadFieldSectionModelList = emptyList<LeadFieldSectionModel>()
 
+  private var leadOwne = ""
+
   private fun LeadDetail.renderLeadDetail() {
     isLeadEditable = when {
       canEditLead == "0" || isProductSpecialist.equals("Y", true) -> false
@@ -1390,6 +1585,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     binding.spPmsProduct.apply {
       adapter = pmsProductAdapter
     }
+
+    leadOwne = leadOwner
+
 
     pmsProductAdapter.setSpinnerDataWithSelection(
         binding.spPmsProduct, pmsList, isPotentialPMSProduct
@@ -1578,6 +1776,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   override fun onDestroyView() {
     presenter.stop()
     addProductDialogBinding = null
+    productSpecialDialog = null
+    assignToDialog = null
     super.onDestroyView()
   }
 
