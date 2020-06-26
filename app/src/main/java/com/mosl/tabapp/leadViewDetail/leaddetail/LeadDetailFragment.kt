@@ -32,6 +32,8 @@ import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.tabapp.R
@@ -95,8 +97,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
   private val subject = PublishSubject.create<LeadDetailUiEvent>()
 
   private var interestedDatas = emptyList<RowData>()
-  private val statusDatas = emptyList<RowData>()
-  private val stageDatas = emptyList<RowData>()
+  private var statusDatas = emptyList<RowData>()
+  private var stageDatas = emptyList<RowData>()
 
   private val professionAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -284,27 +286,54 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   override fun isLeadEditable(): Boolean = isLeadEditable
 
+  private var addProductDialogBinding: DialogLeadviewAddProductBinding? = null
+
   override fun openAddProductDialog() {
     Dialog(requireContext()).apply {
-      val dialogBinding = DialogLeadviewAddProductBinding.inflate(layoutInflater)
+      addProductDialogBinding = DialogLeadviewAddProductBinding.inflate(layoutInflater)
+      val dialogBinding = addProductDialogBinding!!
       requestWindowFeature(Window.FEATURE_NO_TITLE)
       setCanceledOnTouchOutside(false)
-      setContentView(dialogBinding.root)
+      setContentView(dialogBinding?.root)
       window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-      dialogBinding.dacProductSpecialist.setHint(resources.getString(R.string.str_prod_spl))
-      dialogBinding.actAssignTo.setHint(resources.getString(R.string.str_assing))
-      dialogBinding.dacProductSpecialist.setListener {
+      dialogBinding?.dacProductSpecialist.setHint(resources.getString(R.string.str_prod_spl))
+      dialogBinding?.actAssignTo.setHint(resources.getString(R.string.str_assing))
+      dialogBinding?.dacProductSpecialist.setListener {
 
       }
-      dialogBinding.dacProductSpecialist.setOnClickListener {
+      dialogBinding?.dacProductSpecialist?.setOnClickListener {
       }
-      dialogBinding.actAssignTo.setListener { }
-      dialogBinding.actAssignTo.setOnClickListener { }
+      dialogBinding?.actAssignTo?.setListener { }
+      dialogBinding?.actAssignTo?.setOnClickListener { }
       window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-      dialogBinding.spInterestedIn.adapter = interestedAdapter
-      interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedDatas)
-      dialogBinding.btnSave.setOnClickListener {
+      dialogBinding?.spInterestedIn?.adapter = interestedAdapter
+      dialogBinding?.spStage?.adapter = stageAdapter
+      dialogBinding?.spStatus?.adapter = statusAdapter
+      interestedAdapter.setSpinnerData(dialogBinding?.spInterestedIn!!, interestedDatas)
+
+      dialogBinding!!.spInterestedIn.itemSelections()
+          .filter(InvalidSelectionPredicate)
+          .map { dialogBinding!!.spInterestedIn.selectedItem as RowData }
+          .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
+          .subscribe {
+            subject.onNext(SelectInterestedProductEvent(it))
+          }
+          .addTo(disposable)
+
+      dialogBinding!!.spStage.itemSelections()
+          .filter(InvalidSelectionPredicate)
+          .map { dialogBinding!!.spStage.selectedItem as RowData }
+          .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
+          .subscribe {
+            subject.onNext(SelectStageEvent(it))
+          }
+          .addTo(disposable)
+
+
+
+
+      dialogBinding?.btnSave?.setOnClickListener {
 
         //Mandatory check
         if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
@@ -1508,8 +1537,47 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
   }
 
+  override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> {
+    return subject.ofType()
+  }
+
+  override fun selectedStage(): Observable<SelectStageEvent> {
+    return subject.ofType()
+  }
+
+  override fun renderStage(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure {
+      stageDatas.toMutableList()
+          .clear()
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      stageDatas.toMutableList()
+          .clear()
+      stageDatas = it
+      stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageDatas)
+    }
+  }
+
+  override fun renderStatus(uiModel: UiModel<List<RowData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure {
+      statusDatas.toMutableList()
+          .clear()
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      statusDatas.toMutableList()
+          .clear()
+      statusDatas = it
+      statusAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStatus, statusDatas)
+    }
+  }
+
   override fun onDestroyView() {
     presenter.stop()
+    addProductDialogBinding = null
     super.onDestroyView()
   }
 

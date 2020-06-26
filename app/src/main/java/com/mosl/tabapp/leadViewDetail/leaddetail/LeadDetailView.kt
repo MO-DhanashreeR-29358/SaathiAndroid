@@ -134,9 +134,18 @@ interface LeadDetailView : BaseView {
   fun onOfficeStateSelected(): Observable<Int>
   fun getSelectedOfficeState(): RowData
   fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
-
   fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>)
   fun renderClientDetail(uiModel: UiModel<ClientDetail>)
+
+  fun interestedProductSelected(): Observable<SelectInterestedProductEvent>
+  fun renderStage(uiModel: UiModel<List<RowData>>)
+  fun renderStatus(uiModel: UiModel<List<RowData>>)
+  fun selectedStage(): Observable<SelectStageEvent>
+
+  companion object {
+    const val INVALID_SELECTION_KEY = "-1"
+    val SELECT_ROW_DATA = RowData(0, "-1", "Select")
+  }
 
 
 }

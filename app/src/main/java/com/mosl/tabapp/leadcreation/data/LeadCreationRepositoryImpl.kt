@@ -102,7 +102,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
         .map { it.mapToRowDataList() }
   }
 
-  private fun getStageRowDatas(): Observable<List<RowData>> {
+  override fun getStageRowDatas(): Observable<List<RowData>> {
     val stageRequest = StageRequest(
         businessUnitId = requireNotNull(
             userManager.getUser()?.currentBusinessProfile?.businessUnitId,

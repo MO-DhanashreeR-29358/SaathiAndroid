@@ -98,6 +98,25 @@ class LeadDetailPresenter @Inject constructor(
         .subscribe { view.renderOnNestedScrollViewTouch() }
         .addTo(disposable)
 
+    view.interestedProductSelected()
+        .switchMap {
+          repository.getStageRowDatas()
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderStage)
+        .addTo(disposable)
+
+
+
+
+    view.selectedStage()
+        .switchMap {
+          repository.getStatusRowDatas(it.selectedStage.key)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderStatus)
+        .addTo(disposable)
+
     view.onAddProductClicked()
         .filter { view.isLeadEditable() }
         .subscribe { view.openAddProductDialog() }
