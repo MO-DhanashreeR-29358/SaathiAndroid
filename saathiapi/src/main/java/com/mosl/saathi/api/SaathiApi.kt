@@ -406,7 +406,7 @@ interface SaathiApi {
     @Body request: MultiUpdateApprovalRequest
   ): Observable<SaathiCommonResponse<String>>
 
-  @POST("Lead/STPLeadTransfer")
+  @POST("Lead/STPAssignedLead")
   fun getSTPLeadTransfer(
     @Body request: STPLeadTransferRequest
   ): Observable<SaathiCommonResponse<String>>

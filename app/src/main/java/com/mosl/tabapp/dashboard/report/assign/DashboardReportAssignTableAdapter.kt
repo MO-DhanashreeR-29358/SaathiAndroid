@@ -45,6 +45,10 @@ class DashboardReportAssignTableAdapter(
         isSingleAllChecked = false
     }
 
+    fun clearReport() {
+        commonHeaders[0].list.clear()
+    }
+
     fun add(row: HashMap<String, String>) {
         commonHeaders[0].list.add(
             Item(

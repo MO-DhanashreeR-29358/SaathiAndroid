@@ -168,7 +168,7 @@ class DashboardReportAssignFragment : CommonFragment(),
         }
 
         uiModel.onSuccess {
-
+            dashboardReportAssignTableAdapter.clearReport()
             if (it.isNotEmpty()) {
                 it.map {
                     val hm =

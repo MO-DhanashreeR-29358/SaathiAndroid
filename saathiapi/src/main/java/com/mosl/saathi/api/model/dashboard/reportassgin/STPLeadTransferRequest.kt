@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class STPLeadTransferRequest(
 
-    @JvmField @SerializedName("ProspectIds")
+    @JvmField @SerializedName("ProspectIDList")
     val prospectIds: String,
 
     @JvmField @SerializedName("AssignTo_transferLead")
