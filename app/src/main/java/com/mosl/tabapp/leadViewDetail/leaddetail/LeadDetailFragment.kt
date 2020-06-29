@@ -76,6 +76,8 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -86,6 +88,7 @@ import com.mosl.tabapp.util.string
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.dialog_leadview_add_product.spInterestedIn
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -482,6 +485,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
               return
             }
             dialogBinding.actAssignTo.setText(clientModel.attendeeName)
+            dialogBinding.actAssignTo.isEnabled = true
             primaryRm = clientModel.attendeeCode
             dialogBinding.actAssignTo.setClearIconVisible(true)
             searchList.dismiss()
@@ -490,7 +494,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           override fun onSearchTextChanged(constraint: CharSequence?) {
 
             if (constraint != null) {
-
               assignToDialog = searchList
               subject.onNext(AssignToEvent(constraint.toString()))
 
@@ -543,6 +546,60 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           dialogBinding.tvspStatusError.visibility = View.VISIBLE
           dialogBinding.tvspStatusError.text = "Select Status"
         }
+        ///////////
+
+        //Mandatory chec end
+        val interestedInKey =
+          (dialogBinding.spInterestedIn.selectedItem as RowData).key
+        val interestedInDisplayText =
+          (dialogBinding.spInterestedIn.selectedItem as RowData).value
+        if (leadDetailAddProductList.size == 0) {
+          leadDetailAddProductAdapter =
+            com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter(
+                requireContext(),
+                leadDetailAddProductList
+            )
+        }
+        if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
+          MSFDialog.alertDialog(
+              requireContext(), 0,
+              resources.getString(R.string.motilal_oswal),
+              "$interestedInDisplayText is already selected", "OK", true, null
+          )
+        } else {
+          if (isPotentialPMSProduct) {
+            MSFDialog.alertDialog(
+                requireActivity(), 0,
+                resources.getString(R.string.motilal_oswal),
+                MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT, MOSLConstants.YES, MOSLConstants.NO,
+                true
+            ) { action: Action, data: Array<Any?>? ->
+              if (action == OK) {
+                addProduct(
+                    (spInterestedIn.getSelectedItem() as RowData).key,
+                    (spStage.getSelectedItem() as RowData).key,
+                    (spStatus.getSelectedItem() as RowData).key,
+                    MOSLConstants.YES
+                )
+              } else {
+                addProduct(
+                    (spInterestedIn.getSelectedItem() as RowData).key,
+                    (spStage.getSelectedItem() as RowData).key,
+                    (spStatus.getSelectedItem() as RowData).key,
+                    MOSLConstants.NO
+                )
+              }
+            }
+          } else {
+            addProduct(
+                (spInterestedIn.getSelectedItem() as RowData).key,
+                (spStage.getSelectedItem() as RowData).key,
+                (spStatus.getSelectedItem() as RowData).key, ""
+            )
+          }
+        }
+
+        //////////
         dismiss()
 
       }
