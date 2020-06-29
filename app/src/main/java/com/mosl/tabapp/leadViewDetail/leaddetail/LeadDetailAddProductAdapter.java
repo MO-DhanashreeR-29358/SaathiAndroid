@@ -59,6 +59,7 @@ import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 import static com.mosl.tabapp.ws.CRMWebServiceHandler.getSaathiApi;
 
@@ -522,8 +523,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
         final LinearLayout progressLayout) {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            getCompositeDisposable().add(
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
+            disposable.add(
                 getSaathiApi().getStatusList(new StatusRequest(productId, "1"))
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
@@ -570,12 +571,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private void newGetCrossSellingProductId(final String intrestedIn, final Spinner spStatus,
         final String statusId, final LinearLayout progressLayout) {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
             CrossSellingProductRequest request =
                 new CrossSellingProductRequest(
                     userManager.getUser().currentBusinessProfile.businessUnitId,
                     intrestedIn);
-            getCompositeDisposable().add(getSaathiApi().getCrossSellingProduct(request)
+            disposable.add(getSaathiApi().getCrossSellingProduct(request)
                 .compose(applyUiModel())
                 .subscribe(uiModel ->
                     renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
@@ -613,7 +614,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             }
 
             ArrayAdapter<RowData> arrAdapCrossSellingProductId =
-                SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+                SpinnerAdapterFactory.getDefaultAdapter(mContext);
             spStatus.setAdapter(arrAdapCrossSellingProductId);
             AdapterUtils.setSpinnerData(arrAdapCrossSellingProductId, spStatus,
                 arrCrossSellingProductId);
@@ -626,12 +627,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private void newGetCrossSellingStatus(final Spinner spStatus, final String statusId,
         final LinearLayout progressLayout) {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
             LookupRequest lookupRequest =
                 new LookupRequest(
                     userManager.getUser().currentBusinessProfile.businessUnitId, 111,
                     null, null);
-            getCompositeDisposable().add(getSaathiApi().getAllLookup(lookupRequest)
+            disposable.add(getSaathiApi().getAllLookup(lookupRequest)
                 .compose(applyUiModel())
                 .subscribe(
                     uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
@@ -667,7 +668,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     ));
             }
             ArrayAdapter<RowData> arrAdapCrossSellingStatus =
-                SpinnerAdapterFactory.getDefaultAdapter(requireContext());
+                SpinnerAdapterFactory.getDefaultAdapter(mContext);
             spStatus.setAdapter(arrAdapCrossSellingStatus);
             AdapterUtils.setSpinnerData(arrAdapCrossSellingStatus, spStatus, arrCrossSellingStatus);
 
@@ -680,10 +681,10 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private void lowMargin(String productId, final LinearLayout progressLayout,
         final LinearLayout llLowMarginAdd, final boolean isDefault) {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
             ConfigurationByStatusRequest request =
                 new ConfigurationByStatusRequest(productId);
-            getCompositeDisposable().add(
+            disposable.add(
                 getSaathiApi().getStageWiseConfigurationByStatus(request)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
@@ -761,7 +762,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         final String statusId, String productSpecialist, final String leadMappingId,
         final String asignedTo, final boolean isDefault, String isProductSpecEnabled,
         String productSpecialistId) {
-        final Dialog dialog = new Dialog(requireContext());
+        final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow()
             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -788,7 +789,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         productSpecialistEdit.setText(productSpecialist);
         specialistEdit = productSpecialistId;
         productSpecialistEdit.setClearIconVisible(true);
-        productSpecialistEdit.setHint(getResources().getString(R.string.str_prod_spl));
+        productSpecialistEdit.setHint(mContext.getString(R.string.str_prod_spl));
         if (isProductSpecEnabled.equals("1")) {
             productSpecialistEdit.setEnabled(false);
         } else {
@@ -801,12 +802,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             final CustomListPickerDialog searchListProductSpecialist =
-                new CustomListPickerDialog(requireContext());
+                new CustomListPickerDialog(mContext);
 
             searchListProductSpecialist.setThreshold(SEARCH_LENTH);
             searchListProductSpecialist.show();
             searchListProductSpecialist.setCustomTitle(
-                getResources().getString(R.string.str_prod_spl));
+                mContext.getString(R.string.str_prod_spl));
             CustomListPickerDialog.ListPickerListneable productSpecialistViewListner =
                 new CustomListPickerDialog.ListPickerListneable() {
                     @Override
@@ -832,16 +833,16 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             dialog.findViewById(R.id.actAssignTo);
         actAssignTo.setText(asignedTo);
         actAssignTo.setClearIconVisible(true);
-        actAssignTo.setHint(getResources().getString(R.string.str_assing));
+        actAssignTo.setHint(mContext.getString(R.string.str_assing));
 
         actAssignTo.setOnClickListener(v -> {
             requireActivity().getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             final CustomListPickerDialog searchList =
-                new CustomListPickerDialog(requireContext());
+                new CustomListPickerDialog(mContext);
             searchList.show();
-            searchList.setCustomTitle(getResources().getString(R.string.str_assing));
+            searchList.setCustomTitle(mContext.getString(R.string.str_assing));
 
             searchList.setThreshold(SEARCH_LENTH);
             CustomListPickerDialog.ListPickerListneable assingViewListner =
@@ -929,7 +930,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             RowData selectedStatus = (RowData) spStatusDialog.getSelectedItem();
             if (isPotentialPMSProduct || isPMSProductStageStatus) {
                 MSFDialog.alertDialog(requireActivity(), 0,
-                    getResources().getString(R.string.motilal_oswal),
+                    mContext.getString(R.string.motilal_oswal),
                     POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
                     (action, data) -> {
                         if (action == MSFDialog.Action.OK) {
@@ -983,7 +984,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         String primaryRM, String productSpecialistId, String newStageCodeStr,
         String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
         Map dataMap) {
-        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
             showProgress();
             UpdateLeadMappingRequest mappingRequest = new UpdateLeadMappingRequest(
                 etLeadID.getText().toString().trim(),
@@ -1002,7 +1003,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 actAssignTo,
                 dataMap
             );
-            getCompositeDisposable().add(getSaathiApi().updateLeadProductMapping(mappingRequest)
+            disposable.add(getSaathiApi().updateLeadProductMapping(mappingRequest)
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
         } else {
@@ -1050,8 +1051,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     }
                 }
 
-                alertDialog(requireContext(), 0,
-                    getResources().getString(R.string.motilal_oswal),
+                alertDialog(mContext, 0,
+                    mContext.getString(R.string.motilal_oswal),
                     "Products Updated Successfully", "Ok", true, null);
             }
         }
