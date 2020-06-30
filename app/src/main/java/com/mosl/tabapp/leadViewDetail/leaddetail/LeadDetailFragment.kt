@@ -54,7 +54,6 @@ import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
-import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioPLLimitsAdapter
@@ -398,6 +397,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     return subject.ofType()
   }
 
+  private val isPotentialPMSProduct = false
+
   override fun openAddProductDialog() {
     Dialog(requireContext()).apply {
       addProductDialogBinding = DialogLeadviewAddProductBinding.inflate(layoutInflater)
@@ -555,9 +556,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           (dialogBinding.spInterestedIn.selectedItem as RowData).value
         if (leadDetailAddProductList.size == 0) {
           leadDetailAddProductAdapter =
-            com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment.LeadDetailAddProductAdapter(
+            LeadDetailAddProductAdapter(
                 requireContext(),
-                leadDetailAddProductList
+                leadDetailAddProductList,
+                binding.lvAddProduct,
+                leadId,
+                isLeadEditable,
+                statusDatas,
+                statusAdapter,
+                userManager.getUser()?.employeeCode,
+                status,
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                binding.spPmsProduct
             )
         }
         if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
@@ -577,15 +587,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
               if (action == OK) {
                 addProduct(
                     (spInterestedIn.getSelectedItem() as RowData).key,
-                    (spStage.getSelectedItem() as RowData).key,
-                    (spStatus.getSelectedItem() as RowData).key,
+                    (dialogBinding.spStage.getSelectedItem() as RowData).key,
+                    (dialogBinding.spStatus.getSelectedItem() as RowData).key,
                     MOSLConstants.YES
                 )
               } else {
                 addProduct(
                     (spInterestedIn.getSelectedItem() as RowData).key,
-                    (spStage.getSelectedItem() as RowData).key,
-                    (spStatus.getSelectedItem() as RowData).key,
+                    (dialogBinding.spStage.getSelectedItem() as RowData).key,
+                    (dialogBinding.spStatus.getSelectedItem() as RowData).key,
                     MOSLConstants.NO
                 )
               }
@@ -593,8 +603,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           } else {
             addProduct(
                 (spInterestedIn.getSelectedItem() as RowData).key,
-                (spStage.getSelectedItem() as RowData).key,
-                (spStatus.getSelectedItem() as RowData).key, ""
+                (dialogBinding.spStage.getSelectedItem() as RowData).key,
+                (dialogBinding.spStatus.getSelectedItem() as RowData).key, ""
             )
           }
         }
@@ -1692,7 +1702,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   }
 
-  private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
+  private var leadDetailAddProductAdapter: com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailAddProductAdapter? =
+    null
 
   private fun List<LeadProductMap>.renderMapping() {
     mapNotNull {

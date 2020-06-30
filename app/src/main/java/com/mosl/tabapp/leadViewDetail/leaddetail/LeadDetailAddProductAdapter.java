@@ -13,8 +13,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -39,9 +37,10 @@ import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.RowData;
 import com.mosl.tabapp.databinding.ChildCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewAddCrossSellingProductBinding;
+import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewUpdateCrossSellingProductBinding;
+import com.mosl.tabapp.databinding.IncludeEdittextLowmarginBinding;
 import com.mosl.tabapp.databinding.ItemListAddProductBinding;
-import com.mosl.tabapp.leadViewDetail.LowMargin;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
@@ -49,6 +48,7 @@ import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
 import io.reactivex.disposables.CompositeDisposable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.droidparts.widget.ClearableEditText;
@@ -56,10 +56,14 @@ import org.droidparts.widget.ClearableEditText;
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
+import static com.mosl.shared.util.Utility.stringOrEmpty;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.constants.MOSLConstants.NO;
+import static com.mosl.tabapp.constants.MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT;
 import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH;
+import static com.mosl.tabapp.constants.MOSLConstants.YES;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 import static com.mosl.tabapp.ws.CRMWebServiceHandler.getSaathiApi;
 
@@ -67,25 +71,23 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private final LayoutInflater inflater;
     Context mContext;
+    private List<RowData> arrStatus;
+    private List<RowData> arrCrossSellingProductId;
+    private String employeeCode;
     private ListView lvAddProduct;
     private String etLeadId;
+    private ArrayAdapter<RowData> arrAdapStatus;
+    private boolean isLowMargin;
+    private List<LowMargin> lowMarginList = new ArrayList<>();
     private Boolean isLeadEditable = true;
+    private Boolean isPMSProductStageStatus = false;
+    private String userBusinessUnitId;
+
+    private String statusId;
+    private String pmsProductSpinnerValue = "";
     private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
     private CompositeDisposable disposable = new CompositeDisposable();
-
-    private LeadDetailAddProductAdapter(Context c,
-        List<LeadDetailAddProductModel> leadDetailAddProductModelList,
-        ListView addProductView,
-        String leadId,
-        Boolean isLeadEditable
-    ) {
-        inflater = LayoutInflater.from(c);
-        mContext = c;
-        lvAddProduct = addProductView;
-        etLeadId = leadId;
-        this.isLeadEditable = isLeadEditable;
-        this.leadDetailAddProductModelList = leadDetailAddProductModelList;
-    }
+    private String specialistEdit = "";
 
     @Override
     public int getCount() {
@@ -111,6 +113,70 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         notifyDataSetChanged();
         setListViewHeightBasedOnChildrenDetail(
             lvAddProduct);
+    }
+
+    private String newStageCodeStr = "";
+
+    private LeadDetailAddProductModel getProduct(String id) {
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equals(id)) {
+                return model;
+            }
+        }
+        return null;
+    }
+
+    private boolean checkProduct(String productName) {
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equalsIgnoreCase(productName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateProductData(String interestIn, String stageId, String stageValue,
+        String statusId, String statusValue, String productSpecialist, String primaryRM) {
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equals(interestIn)) {
+                model.setStageId(stageId);
+                model.setStageValue(stageValue);
+                model.setStatusId(statusId);
+                model.setStatusValue(statusValue);
+                model.setProductSpecialist(productSpecialist);
+                model.setPrimaryRM(primaryRM);
+                break;
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private String newStageNameStr = "";
+    private boolean isPotentialPMSProduct = false;
+
+    private LeadDetailAddProductAdapter(Context c,
+        List<LeadDetailAddProductModel> leadDetailAddProductModelList,
+        ListView addProductView,
+        String leadId,
+        Boolean isLeadEditable,
+        List<RowData> arrStatus,
+        ArrayAdapter<RowData> arrAdapStatus,
+        String employeeCode,
+        String statusId,
+        String userBusinessUnitId,
+        String pmsProductSpinnerValue
+    ) {
+        inflater = LayoutInflater.from(c);
+        mContext = c;
+        lvAddProduct = addProductView;
+        etLeadId = leadId;
+        this.pmsProductSpinnerValue = pmsProductSpinnerValue;
+        this.isLeadEditable = isLeadEditable;
+        this.arrStatus = arrStatus;
+        this.employeeCode = employeeCode;
+        this.arrAdapStatus = arrAdapStatus;
+        this.userBusinessUnitId = userBusinessUnitId;
+        this.leadDetailAddProductModelList = leadDetailAddProductModelList;
     }
 
     @SuppressLint("ViewHolder")
@@ -283,7 +349,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 .equals("1")) {
                 final Dialog dialog = new Dialog(mContext);
                 DialogLeadviewAddCrossSellingProductBinding dialogBinding =
-                    DialogLeadviewAddCrossSellingProductBinding.inflate(inflater)
+                    DialogLeadviewAddCrossSellingProductBinding.inflate(inflater);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.setCanceledOnTouchOutside(false);
@@ -420,7 +486,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                     leadDetailAddProductModel.getLeadMappingProductId(),
                                                     leadDetailAddProductModel.getInterestedIn(),
                                                     leadDetailAddProductModel.getPrimaryRM(),
-                                                    userManager.getUser().employeeCode,
+                                                    employeeCode,
                                                     CRMAppUtil.getDBDate(),
                                                     leadDetailAddProductModel.getStageId(),
                                                     leadDetailAddProductModel.getStatusId()
@@ -487,40 +553,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return view;
     }
 
-    private LeadDetailAddProductModel getProduct(String id) {
-        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equals(id)) {
-                return model;
-            }
-        }
-        return null;
-    }
-
-    private boolean checkProduct(String productName) {
-        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equalsIgnoreCase(productName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void updateProductData(String interestIn, String stageId, String stageValue,
-        String statusId, String statusValue, String productSpecialist, String primaryRM) {
-        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equals(interestIn)) {
-                model.setStageId(stageId);
-                model.setStageValue(stageValue);
-                model.setStatusId(statusId);
-                model.setStatusValue(statusValue);
-                model.setProductSpecialist(productSpecialist);
-                model.setPrimaryRM(primaryRM);
-                break;
-            }
-        }
-        notifyDataSetChanged();
-    }
-
     private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
         final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
@@ -530,7 +562,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
                         statusId)));
         } else {
-            noInternetConnectionDialog();
+            //========   noInternetConnectionDialog();
         }
     }
 
@@ -545,7 +577,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         if (error != null) {
             arrStatus = new ArrayList<>();
-            showOnFailurePopup(error);
+            //=======    showOnFailurePopup(error);
         }
 
         List<StatusItem> data = uiModel.data;
@@ -574,14 +606,14 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
             CrossSellingProductRequest request =
                 new CrossSellingProductRequest(
-                    userManager.getUser().currentBusinessProfile.businessUnitId,
+                    userBusinessUnitId,
                     intrestedIn);
             disposable.add(getSaathiApi().getCrossSellingProduct(request)
                 .compose(applyUiModel())
                 .subscribe(uiModel ->
                     renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
         } else {
-            noInternetConnectionDialog();
+            //====== noInternetConnectionDialog();
         }
     }
 
@@ -596,7 +628,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         if (error != null) {
             arrCrossSellingProductId.clear();
-            showOnFailurePopup(error);
+            //showOnFailurePopup(error);
         }
 
         List<CrossSellingProduct> data = uiModel.data;
@@ -630,14 +662,14 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
             LookupRequest lookupRequest =
                 new LookupRequest(
-                    userManager.getUser().currentBusinessProfile.businessUnitId, 111,
+                    userBusinessUnitId, 111,
                     null, null);
             disposable.add(getSaathiApi().getAllLookup(lookupRequest)
                 .compose(applyUiModel())
                 .subscribe(
                     uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
         } else {
-            noInternetConnectionDialog();
+            //======== noInternetConnectionDialog();
         }
     }
 
@@ -652,7 +684,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         ArrayList<RowData> arrCrossSellingStatus;
         if (error != null) {
-            showOnFailurePopup(error);
+            //======  showOnFailurePopup(error);
         }
 
         List<LookupItem> data = uiModel.data;
@@ -690,7 +722,18 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
                         llLowMarginAdd, isDefault)));
         } else {
-            noInternetConnectionDialog();
+            //=========== noInternetConnectionDialog();
+        }
+    }
+
+    String stringOrDefault(
+        String input,
+        String defaultVal
+    ) {
+        if (input != null && !input.isEmpty() && input.equalsIgnoreCase("null")) {
+            return input;
+        } else {
+            return "0";
         }
     }
 
@@ -709,7 +752,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             llLowMarginAdd.removeAllViews();
             lowMarginList.clear();
             isLowMargin = false;
-            showOnFailurePopup(error);
+            //======== showOnFailurePopup(error);
         }
 
         List<StageWiseConfiguration> data = uiModel.data;
@@ -730,20 +773,21 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 llLowMarginAdd.removeAllViews();
 
                 for (LowMargin lowMargin : lowMarginList) {
-                    if (isDefault == lowMargin.isDefaultProduct()) {
+                    if (isDefault == lowMargin.isDefaultProduct) {
                         isLowMargin = true;
-                        @SuppressLint("InflateParams") View childValue = getLayoutInflater()
-                            .inflate(R.layout.include_edittext_lowmargin, null);
-                        TextView tvHead = childValue.findViewById(R.id.tvHead);
-                        EditText edHead = childValue.findViewById(R.id.etSection);
-                        if (lowMargin.isMandatory()) {
-                            tvHead.setText(String.format("%s*", lowMargin.getViewName()));
-                            edHead.setHint("At least enter 3 digits");
+                        IncludeEdittextLowmarginBinding childBinding =
+                            IncludeEdittextLowmarginBinding.inflate(inflater);
+
+                        /*TextView tvHead = childValue.findViewById(R.id.tvHead);
+                        EditText edHead = childValue.findViewById(R.id.etSection);*/
+                        if (lowMargin.isMandatory) {
+                            childBinding.tvHead.setText(String.format("%s*", lowMargin.viewName));
+                            childBinding.etSection.setHint("At least enter 3 digits");
                         } else {
-                            tvHead.setText(lowMargin.getViewName());
+                            childBinding.tvHead.setText(lowMargin.viewName);
                         }
-                        lowMargin.setEditText(edHead);
-                        llLowMarginAdd.addView(childValue);
+                        lowMargin.setEditText(childBinding.etSection);
+                        llLowMarginAdd.addView(childBinding.getRoot());
                     } else {
                         llLowMarginAdd.removeAllViews();
                         lowMarginList.clear();
@@ -767,38 +811,39 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         dialog.getWindow()
             .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
+        DialogLeadviewAddProductBinding dialogBinding =
+            DialogLeadviewAddProductBinding.inflate(inflater);
         dialog.setContentView(R.layout.dialog_leadview_add_product);
         dialog.getWindow()
             .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        final Spinner spStageDialog = dialog.findViewById(R.id.spStage);
-        final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-        final LinearLayout llLowMarginAdd =
-            dialog.findViewById(R.id.lowMarginAdd);
-        tvspIntrestError = dialog.findViewById(R.id.tvspIntrestError);
+        //        final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
+        // final LinearLayout llLowMarginAdd =
+        //   dialog.findViewById(R.id.lowMarginAdd);
+        /*tvspIntrestError = dialog.findViewById(R.id.tvspIntrestError);
         tvspStatusError = dialog.findViewById(R.id.tvspStatusError);
-        tvspStageError = dialog.findViewById(R.id.tvspStageError);
-        final LinearLayout progressLayout =
+        tvspStageError = dialog.findViewById(R.id.tvspStageError);*/
+        /*final LinearLayout progressLayout =
             dialog.findViewById(R.id.customProgress);
         LinearLayout llInterestedIn = dialog.findViewById(R.id.llInterestedIn);
         Button btnSave = dialog.findViewById(R.id.btnSave);
-        Button btnClose = dialog.findViewById(R.id.btnClose);
-        final ClearableEditText productSpecialistEdit =
-            dialog.findViewById(R.id.dacProductSpecialist);
-        productSpecialistEdit.setText(productSpecialist);
+        Button btnClose = dialog.findViewById(R.id.btnClose);*/
+        /*final ClearableEditText productSpecialistEdit =
+            dialog.findViewById(R.id.dacProductSpecialist);*/
+        dialogBinding.dacProductSpecialist.setText(productSpecialist);
         specialistEdit = productSpecialistId;
-        productSpecialistEdit.setClearIconVisible(true);
-        productSpecialistEdit.setHint(mContext.getString(R.string.str_prod_spl));
+        dialogBinding.dacProductSpecialist.setClearIconVisible(true);
+        dialogBinding.dacProductSpecialist.setHint(mContext.getString(R.string.str_prod_spl));
         if (isProductSpecEnabled.equals("1")) {
-            productSpecialistEdit.setEnabled(false);
+            dialogBinding.dacProductSpecialist.setEnabled(false);
         } else {
-            productSpecialistEdit.setEnabled(true);
+            dialogBinding.dacProductSpecialist.setEnabled(true);
         }
-        productSpecialistEdit.setListener(() -> specialistEdit = "");
-        productSpecialistEdit.setOnClickListener(v -> {
+        dialogBinding.dacProductSpecialist.setListener(() -> specialistEdit = "");
+        dialogBinding.dacProductSpecialist.setOnClickListener(v -> {
 
-            requireActivity().getWindow()
+            dialog.getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             final CustomListPickerDialog searchListProductSpecialist =
@@ -816,15 +861,15 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         if (clientModel.isNoData()) {
                             return;
                         }
-                        productSpecialistEdit.setText(clientModel.getAttendeeName());
-                        productSpecialistEdit.setClearIconVisible(true);
+                        dialogBinding.dacProductSpecialist.setText(clientModel.getAttendeeName());
+                        dialogBinding.dacProductSpecialist.setClearIconVisible(true);
                         specialistEdit = clientModel.getAttendeeCode();
                         searchListProductSpecialist.dismiss();
                     }
 
                     @Override
                     public void onSearchTextChanged(final CharSequence constraint) {
-                        searchProductSpecialist(constraint, searchListProductSpecialist);
+                        //========  searchProductSpecialist(constraint, searchListProductSpecialist);
                     }
                 };
             searchListProductSpecialist.setmListner(productSpecialistViewListner);
@@ -836,7 +881,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         actAssignTo.setHint(mContext.getString(R.string.str_assing));
 
         actAssignTo.setOnClickListener(v -> {
-            requireActivity().getWindow()
+            dialog.getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             final CustomListPickerDialog searchList =
@@ -860,64 +905,65 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                     @Override
                     public void onSearchTextChanged(final CharSequence constraint) {
-                        searchUserBusinessProfile(constraint, searchList);
+                        //============  searchUserBusinessProfile(constraint, searchList);
                     }
                 };
             searchList.setmListner(assingViewListner);
         });
-        llInterestedIn.setVisibility(View.GONE);
-        GetStageSelectList(spStageDialog, stageId, progressLayout);
+        dialogBinding.llInterestedIn.setVisibility(View.GONE);
+        //======== GetStageSelectList(spStageDialog, stageId, progressLayout);
 
         disposable.add(
-            itemSelections(spStageDialog)
+            itemSelections(dialogBinding.spStage)
                 .filter(InvalidSelectionPredicate)
                 .subscribe(position -> {
-                    if (tvspStageError != null) {
-                        tvspStageError.setVisibility(View.GONE);
+                    if (dialogBinding.tvspStageError != null) {
+                        dialogBinding.tvspStageError.setVisibility(View.GONE);
                     }
-                    llLowMarginAdd.removeAllViews();
+                    dialogBinding.lowMarginAdd.removeAllViews();
                     lowMarginList.clear();
-                    newStageCodeStr = ((RowData) spStageDialog.getSelectedItem()).getKey();
-                    newStageNameStr = ((RowData) spStageDialog.getSelectedItem()).getValue();
-                    if (((RowData) spStageDialog.getSelectedItem()).getSchmeID()
+                    newStageCodeStr = ((RowData) dialogBinding.spStage.getSelectedItem()).getKey();
+                    newStageNameStr =
+                        ((RowData) dialogBinding.spStage.getSelectedItem()).getValue();
+                    if (((RowData) dialogBinding.spStage.getSelectedItem()).getSchmeID()
                         .equalsIgnoreCase(YES)) {
-                        if (spPmsProduct.getSelectedItem().toString().equals(NO)) {
+                        if (pmsProductSpinnerValue.equals(NO)) {
                             isPMSProductStageStatus = true;
                         }
                     } else {
                         isPMSProductStageStatus = false;
                     }
                     if (!newStageCodeStr.equalsIgnoreCase("-1")) {
-                        newGetStatus(newStageCodeStr, spStatusDialog, statusId, progressLayout);
+                        //========newGetStatus(newStageCodeStr, dialogBinding.spStatus, statusId, customProgress);
                     }
                 }));
 
         disposable.add(
-            itemSelections(spStatusDialog)
+            itemSelections(dialogBinding.spStatus)
                 .filter(InvalidSelectionPredicate)
                 .subscribe(position -> {
-                    if (tvspStatusError != null) {
-                        tvspStatusError.setVisibility(View.GONE);
+                    if (dialogBinding.tvspStatusError != null) {
+                        dialogBinding.tvspStatusError.setVisibility(View.GONE);
                     }
-                    llLowMarginAdd.removeAllViews();
+                    dialogBinding.lowMarginAdd.removeAllViews();
                     lowMarginList.clear();
                     if (position != 0) {
-                        lowMargin(((RowData) spStatusDialog.getSelectedItem()).getKey(),
-                            progressLayout, llLowMarginAdd, isDefault);
+                        lowMargin(((RowData) dialogBinding.spStatus.getSelectedItem()).getKey(),
+                            dialogBinding.customProgress, dialogBinding.lowMarginAdd, isDefault);
                     }
                 }));
 
-        btnSave.setOnClickListener(view -> {
-            if (spStageDialog.getSelectedItemPosition() < 1) {
-                tvspStageError.setVisibility(View.VISIBLE);
-                tvspStageError.setText("Select Stage");
+        dialogBinding.btnSave.setOnClickListener(view -> {
+            if (dialogBinding.spStage.getSelectedItemPosition() < 1) {
+                dialogBinding.tvspStageError.setVisibility(View.VISIBLE);
+                dialogBinding.tvspStageError.setText("Select Stage");
                 //TODO Show Error
                 return;
             }
-            if (spStatusDialog.getSelectedItemPosition() < 1) {
+            if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
                 //TODO Show Error
-                tvspStatusError.setVisibility(View.VISIBLE);
-                tvspStatusError.setText("Select Status");
+                dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
+                dialogBinding.tvspStatusError.setText("Select Status");
                 return;
             }
             Map dataMap = lowMarginSubmit(lowMarginList);
@@ -925,11 +971,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 return;
             }
             final String primaryRM =
-                CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
+                ""; // CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
 
-            RowData selectedStatus = (RowData) spStatusDialog.getSelectedItem();
+            RowData selectedStatus = (RowData) dialogBinding.spStatus.getSelectedItem();
             if (isPotentialPMSProduct || isPMSProductStageStatus) {
-                MSFDialog.alertDialog(requireActivity(), 0,
+                MSFDialog.alertDialog(mContext, 0,
                     mContext.getString(R.string.motilal_oswal),
                     POTENTIAL_INVEST_IN_PRODUCT, YES, NO, true,
                     (action, data) -> {
@@ -973,11 +1019,27 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             dialog.dismiss();
         });
 
-        btnClose.setOnClickListener(view -> {
-            hideKeyboard(leadViewDetailView);
+        dialogBinding.btnClose.setOnClickListener(view -> {
+            //=== hideKeyboard(leadViewDetailView);
             dialog.dismiss();
         });
         dialog.show();
+    }
+
+    private Map lowMarginSubmit(List<LowMargin> lowMarginList) {
+        Map inputMap = new HashMap();
+        for (LowMargin model : lowMarginList) {
+            if (model.isMandatory) {
+                if (model.getEditText().getText().toString().trim().length() < 3) {
+                    model.getEditText().requestFocus();
+                    model.getEditText().setError("Atleast enter 3 digits");
+                    inputMap.clear();
+                    return inputMap;
+                }
+                inputMap.put(model.keyName, model.getEditText().getText().toString().trim());
+            }
+        }
+        return inputMap;
     }
 
     void updateProduct(String interestIn, String leadMappingId,
@@ -985,15 +1047,15 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
         Map dataMap) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
-            showProgress();
+            //====== showProgress();
             UpdateLeadMappingRequest mappingRequest = new UpdateLeadMappingRequest(
-                etLeadID.getText().toString().trim(),
+                etLeadId,
                 interestIn,
                 leadMappingId,
                 interestIn,
                 primaryRM,
                 productSpecialistId,
-                userManager.getUser().employeeCode,
+                employeeCode,
                 CRMAppUtil.getDBDate(),
                 newStageCodeStr,
                 newStageNameStr,
@@ -1007,32 +1069,31 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
         } else {
-            noInternetConnectionDialog();
+            //======= noInternetConnectionDialog();
         }
     }
 
     private void renderUpdateLeadProductMapping(UiModel<List<LeadProductMappingItem>> uiModel,
         UpdateLeadMappingRequest mappingRequest) {
-        toggleProgress(uiModel.inProgress);
+        //=====  toggleProgress(uiModel.inProgress);
         if (uiModel.inProgress) {
-            hideKeyboard(leadViewDetailView);
+            //========       hideKeyboard(leadViewDetailView);
         }
 
         Throwable error = uiModel.error;
         if (error != null) {
-            showOnFailurePopup(error);
+            //======     showOnFailurePopup(error);
         }
 
         List<LeadProductMappingItem> data = uiModel.data;
         if (data != null) {
             if (isLowMargin) {
-                navigator.openHome();
+                //====     navigator.openHome();
             } else {
                 for (LeadProductMappingItem datum : data) {
                     String potentialPMSProduct = stringOrEmpty(datum.isPotentialPMSProduct);
                     isPotentialPMSProduct = potentialPMSProduct.isEmpty();
-                    spPmsProduct.setSelection(
-                        getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
+                    //=====   spPmsProduct.setSelection(getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
 
                     if (String.valueOf(datum.interestedIn)
                         .equals(mappingRequest.interestedIn)) {
@@ -1046,8 +1107,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                             mappingRequest.actAssignTo
                         );
                     } else {
-                        leadDetailAddProductAdapter.addProduct(
-                            getLeadDetailAddProductModel(datum));
+                        //====== leadDetailAddProductAdapter.addProduct(getLeadDetailAddProductModel(datum));
                     }
                 }
 
