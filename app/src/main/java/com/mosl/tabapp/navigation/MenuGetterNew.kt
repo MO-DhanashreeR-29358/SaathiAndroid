@@ -14,7 +14,7 @@ import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragme
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
@@ -62,9 +62,9 @@ object MenuGetterNew {
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME -> SMTFragment()
       NavigationConstants.NAVIGATE_TO_UPDATE_MEETING -> UpdateMeetingFragment()
       NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS -> LeadActivitiesDetailFragment()
-      NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
-      NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragmentNew()
-      NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
+        NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT -> SetAppointmentFragment()
+        NavigationConstants.NAVIGATE_TO_CREATE_MEETING -> CreateMeetingFragment()
+        NavigationConstants.NAVIGATE_TO_CALENDER_LIST -> CalendarAppointsListFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
       NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
       NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
