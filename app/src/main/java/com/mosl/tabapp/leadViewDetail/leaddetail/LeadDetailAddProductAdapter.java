@@ -187,9 +187,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         ItemListAddProductBinding holderBinding = ItemListAddProductBinding.inflate(inflater);
 
         //view = inflater.inflate(R.layout.item_list_add_product, viewGroup, false);
-
-        return holderBinding.getRoot();
-
         /*final LeadViewDetailFragment.LeadDetailAddProductAdapter.Holder
             holder = new LeadViewDetailFragment.LeadDetailAddProductAdapter.Holder();
         holder.tvProduct = view.findViewById(R.id.tvProduct);
@@ -270,10 +267,10 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                         newGetCrossSellingStatus(dialogBinding.spStatus,
                             mSection.getCrossSellingStatusId(),
-                            dialogBinding.customProgress);
+                            dialogBinding.includeCustomProgress.customProgress);
                         newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
                             dialogBinding.spProductId, mSection.getCrossSellingProductId(),
-                            progressLayout);
+                            dialogBinding.includeCustomProgress.customProgress);
 
                         disposable.add(
                             itemSelections(dialogBinding.spStatus)
@@ -372,9 +369,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 Button btnSave = dialog.findViewById(R.id.btnSave);
                 Button btnClose = dialog.findViewById(R.id.btnClose);*/
 
-                newGetCrossSellingStatus(dialogBinding.spStatus, "", dialogBinding.customProgress);
+                newGetCrossSellingStatus(dialogBinding.spStatus, "",
+                    dialogBinding.includeCustomProgress.customProgress);
                 newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
-                    dialogBinding.spProductId, "", dialogBinding.customProgress);
+                    dialogBinding.spProductId, "",
+                    dialogBinding.includeCustomProgress.customProgress);
 
                 disposable.add(
                     itemSelections(dialogBinding.spProductId)
@@ -550,7 +549,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     leadDetailAddProductModel.getProductSpecialistId());
             }
         });
-        return view;
+        return holderBinding.getRoot();
     }
 
     private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
@@ -949,7 +948,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     lowMarginList.clear();
                     if (position != 0) {
                         lowMargin(((RowData) dialogBinding.spStatus.getSelectedItem()).getKey(),
-                            dialogBinding.customProgress, dialogBinding.lowMarginAdd, isDefault);
+                            dialogBinding.includeCustomProgress.customProgress,
+                            dialogBinding.lowMarginAdd, isDefault);
                     }
                 }));
 

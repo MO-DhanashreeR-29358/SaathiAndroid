@@ -278,5 +278,7 @@
     </LinearLayout>
 
 
-    <include layout="@layout/layout_custom_progress_crm" />
+    <include
+        android:id="@+id/include_custom_progress"
+        layout="@layout/layout_custom_progress_crm" />
 </RelativeLayout>

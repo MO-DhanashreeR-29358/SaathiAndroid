@@ -75,8 +75,6 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
-import com.mosl.tabapp.ui.MSFDialog.Action
-import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -87,7 +85,6 @@ import com.mosl.tabapp.util.string
 import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.dialog_leadview_add_product.spInterestedIn
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -577,7 +574,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
               "$interestedInDisplayText is already selected", "OK", true, null
           )
         } else {
-          if (isPotentialPMSProduct) {
+          /*if (isPotentialPMSProduct) {
             MSFDialog.alertDialog(
                 requireActivity(), 0,
                 resources.getString(R.string.motilal_oswal),
@@ -606,7 +603,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 (dialogBinding.spStage.getSelectedItem() as RowData).key,
                 (dialogBinding.spStatus.getSelectedItem() as RowData).key, ""
             )
-          }
+          }*/
         }
 
         //////////
