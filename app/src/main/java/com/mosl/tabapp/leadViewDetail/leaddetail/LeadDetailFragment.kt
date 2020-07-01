@@ -567,7 +567,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 userManager.getUser()?.employeeCode,
                 status,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                binding.spPmsProduct
+                (binding.spPmsProduct.selectedItem as RowData).value
             )
         }
         if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
@@ -1578,7 +1578,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   var pmsList: List<String> = emptyList()
 
-  private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+  private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
 
   private fun setEnableDisable(status: Boolean) {
     binding.apply {

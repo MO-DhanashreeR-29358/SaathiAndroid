@@ -126,35 +126,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return null;
     }
 
-    private boolean checkProduct(String productName) {
-        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equalsIgnoreCase(productName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void updateProductData(String interestIn, String stageId, String stageValue,
-        String statusId, String statusValue, String productSpecialist, String primaryRM) {
-        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equals(interestIn)) {
-                model.setStageId(stageId);
-                model.setStageValue(stageValue);
-                model.setStatusId(statusId);
-                model.setStatusValue(statusValue);
-                model.setProductSpecialist(productSpecialist);
-                model.setPrimaryRM(primaryRM);
-                break;
-            }
-        }
-        notifyDataSetChanged();
-    }
-
-    private String newStageNameStr = "";
-    private boolean isPotentialPMSProduct = false;
-
-    private LeadDetailAddProductAdapter(Context c,
+    LeadDetailAddProductAdapter(Context c,
         List<LeadDetailAddProductModel> leadDetailAddProductModelList,
         ListView addProductView,
         String leadId,
@@ -177,6 +149,34 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         this.arrAdapStatus = arrAdapStatus;
         this.userBusinessUnitId = userBusinessUnitId;
         this.leadDetailAddProductModelList = leadDetailAddProductModelList;
+    }
+
+    private void updateProductData(String interestIn, String stageId, String stageValue,
+        String statusId, String statusValue, String productSpecialist, String primaryRM) {
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equals(interestIn)) {
+                model.setStageId(stageId);
+                model.setStageValue(stageValue);
+                model.setStatusId(statusId);
+                model.setStatusValue(statusValue);
+                model.setProductSpecialist(productSpecialist);
+                model.setPrimaryRM(primaryRM);
+                break;
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+    private String newStageNameStr = "";
+    private boolean isPotentialPMSProduct = false;
+
+    boolean checkProduct(String productName) {
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equalsIgnoreCase(productName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @SuppressLint("ViewHolder")
