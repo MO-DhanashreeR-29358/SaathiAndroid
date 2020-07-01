@@ -8,10 +8,10 @@ import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
 import com.mosl.mobile.domain.createmeeting.OTPRequestData
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.ARG_LEAD_ID
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.ARG_UCID
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.SEND_OTP_LABEL
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew.Companion.VERIFY_OTP_LABEL
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_LEAD_ID
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_UCID
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.SEND_OTP_LABEL
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.VERIFY_OTP_LABEL
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.MeetingApptModel

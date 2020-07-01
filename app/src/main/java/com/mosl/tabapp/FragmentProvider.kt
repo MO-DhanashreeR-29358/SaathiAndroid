@@ -44,12 +44,10 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.LeadCreationFragment
@@ -196,7 +194,7 @@ interface FragmentProvider {
   fun provideNewDashboardFragmentFactory(): DashboardFragment
 
   @ContributesAndroidInjector(
-      modules = [com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingModule::class]
+    modules = [com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingModule::class]
   )
-  fun provideCreateMeetingFragmentfactory(): CreateMeetingFragmentNew
+  fun provideCreateMeetingFragmentfactory(): com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 }

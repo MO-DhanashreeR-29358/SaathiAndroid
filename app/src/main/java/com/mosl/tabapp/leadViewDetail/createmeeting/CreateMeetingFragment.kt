@@ -17,16 +17,7 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.Window
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.ImageView
-import android.widget.ListView
-import android.widget.ProgressBar
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.TimePicker
-import android.widget.Toast
+import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
@@ -36,11 +27,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
-import com.mosl.mobile.domain.createmeeting.AddedAttendee
-import com.mosl.mobile.domain.createmeeting.Attendee
-import com.mosl.mobile.domain.createmeeting.ClientData
-import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE11
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
@@ -89,14 +76,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELEC
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveConfirmClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveRequestData
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SendOtpRequest
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.ValidationStatus
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.ui.MSFDialog
@@ -108,12 +88,15 @@ import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.emptyList
+import kotlin.collections.isNotEmpty
+import kotlin.collections.toTypedArray
 
-class CreateMeetingFragmentNew : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
+class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
   FusedLocation.LatLongDispatcher, AddedAttendeeAdapter.ClickListenerHandler {
   lateinit var binding: FragCreateMeetingBinding
   private lateinit var attendeeAdapter: AttendeeAdapter
