@@ -40,6 +40,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION,
         NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL,
         NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP,
+        NavigationConstants.NAVIGATE_TO_MOST_GUIDE
 })
 public @interface NavigationConstants {
   int NAVIGATE_TO_NONE = -1;
@@ -76,4 +77,5 @@ public @interface NavigationConstants {
   int NAVIGATE_TO_RESUME_APPLICATION = 32;
     int NAVIGATE_TO_CHECK_APPROVAL = 33;
     int NAVIGATE_TO_LEAD_ASSIGN_STP = 34;
+  int NAVIGATE_TO_MOST_GUIDE = 35;
 }

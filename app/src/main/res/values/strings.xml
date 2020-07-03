@@ -6,6 +6,7 @@
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
     <string name="MOSL_MENU_INCENTIVE_REPORT_TXT">Incentive Report</string>
     <string name="MOSL_MENU_CHECK_APPROVAL_TXT">Check Approval</string>
+    <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
@@ -336,9 +337,7 @@
     <string name="txt_label_current_quarter_status">Current Quarter Status</string>
     <string name="error_lable_no_records_found">No records found</string>
     <string name="txt_lable_approve">Approve</string>
-    <string name="txt_label_assign">Assign</string>
     <string name="txt_lable_reject">Reject</string>
-    <string name="txt_label_reset">Reset</string>
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>

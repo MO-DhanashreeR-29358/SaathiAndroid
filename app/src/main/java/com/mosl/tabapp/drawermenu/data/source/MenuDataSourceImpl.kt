@@ -205,6 +205,15 @@ class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+  internal fun getMostGuide(): BaseMenu {
+    return BaseMenu(
+      icon = R.drawable.ic_menu_most_guide,
+      label = R.string.MOSL_MENU_MOST_GUIDE_TXT,
+      enabled = true,
+      pageId = NavigationConstants.NAVIGATE_TO_MOST_GUIDE
+    )
+  }
+
     internal fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_my_reports,

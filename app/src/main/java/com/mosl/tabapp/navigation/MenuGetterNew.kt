@@ -67,6 +67,10 @@ object MenuGetterNew {
                 args.putString(WebviewFragment.PAGE_ID, CHECK_APPROVAL_ID)
                 arguments = args
             }
+            NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, WebviewFragment.MOST_GUIDE_ID)
+                arguments = args
+            }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD -> DashboardReportFragment()
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> DashboardReportAssignFragment()
@@ -128,6 +132,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL -> true
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> true
+            NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
             else -> return false
         }
     }

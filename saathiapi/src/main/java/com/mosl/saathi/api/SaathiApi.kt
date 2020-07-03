@@ -100,8 +100,8 @@ import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
-import com.mosl.saathi.api.model.webview.EkycExpressRequest
-import com.mosl.saathi.api.model.webview.EkycExpressResponse
+import com.mosl.saathi.api.model.webview.CommonURLRequest
+import com.mosl.saathi.api.model.webview.CommonURLResponse
 import com.mosl.saathi.api.model.webview.IncentiveReportRequest
 import io.reactivex.Observable
 import okhttp3.RequestBody
@@ -689,23 +689,24 @@ interface SaathiApi {
       @Body request: IncentiveReportRequest
     ): Observable<SaathiCommonResponse<String>>
 
-    @POST("Lead/GetEkycExpressURL")
-    fun getEkycExpressUrl(
-        @Body request: EkycExpressRequest
-    ): Observable<EkycExpressResponse>
+  /*==================================================*/
+  @POST("Auth/$LoginEndPoint")
+  fun login(
+    @Header("EmployeeCode") employeeCode: String, @Body loginRequest: LoginRequest
+  ): Observable<LoginResponse>
 
-    /*==================================================*/
-    @POST("Auth/$LoginEndPoint")
-    fun login(
-        @Header("EmployeeCode") employeeCode: String, @Body loginRequest: LoginRequest
-    ): Observable<LoginResponse>
-
-    @POST("Common/${ApiEndpoints.AppVersionEndPoint}")
-    @ExtraDataWrapper
-    fun appVersion(
+  @POST("Common/${ApiEndpoints.AppVersionEndPoint}")
+  @ExtraDataWrapper
+  fun appVersion(
     @Header(
       "macaddress"
     ) macAddress: String, @Body versionRequest: VersionRequest
   ): Observable<List<VersionResponse>>
+
+    @POST("Lead/GetCommonURLforMobileApp")
+    fun getEkycExpressUrl(
+        @Body request: CommonURLRequest
+    ): Observable<CommonURLResponse>
+
 
 }
