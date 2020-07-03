@@ -44,7 +44,9 @@ class MenuDataSourceImpl @Inject constructor(
       getPendingApproval(),
       getSalesBrochure(),
       getSalesStadium(),
+      getMostGuide(),
       getBirthdayAnniversary(),
+      getMostGuide(),
       getQuery(),
       getLogout()
     )
@@ -59,7 +61,9 @@ class MenuDataSourceImpl @Inject constructor(
       getPendingApproval(),
       getSalesBrochure(),
       getSalesStadium(),
+      getMostGuide(),
       getBirthdayAnniversary(),
+      getMostGuide(),
       getQuery(),
       getLogout()
     )
@@ -77,6 +81,7 @@ class MenuDataSourceImpl @Inject constructor(
       getSalesStadium(),
       getBirthdayAnniversary(),
       getSuggestMe(),
+      getMostGuide(),
       getQuery(),
       getLogout()
     )
@@ -99,6 +104,7 @@ class MenuDataSourceImpl @Inject constructor(
       getIncentiveReport(),
       getSalesBrochure(),
       getSalesStadium(),
+      getMostGuide(),
       getLogout()
     )
   }
@@ -118,6 +124,16 @@ class MenuDataSourceImpl @Inject constructor(
       label = R.string.MOSL_MENU_INCENTIVE_REPORT_TXT,
       enabled = true,
       pageId = NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT
+    )
+  }
+
+
+  internal fun getMostGuide(): BaseMenu {
+    return BaseMenu(
+      icon = R.drawable.ic_menu_most_guide,
+      label = R.string.MOSL_MENU_MOST_GUIDE_TXT,
+      enabled = true,
+      pageId = NavigationConstants.NAVIGATE_TO_MOST_GUIDE
     )
   }
 
