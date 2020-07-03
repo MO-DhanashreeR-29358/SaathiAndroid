@@ -28,10 +28,12 @@ import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.EXISTING_APPLICATIONS_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.FRESH_REGISTRATION_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
-import com.mosl.tabapp.ws.CRMWebServiceHandler
+import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
 object MenuGetterNew {
     @JvmStatic
@@ -52,11 +54,11 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
             NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
             NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebviewFragment().apply {
-                args.putString(WebviewFragment.URL, CRMWebServiceHandler.COLLATERAL_URL)
+                args.putString(WebviewFragment.PAGE_ID, COLLATERAL_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> WebviewFragment().apply {
-                args.putString(WebviewFragment.URL, CRMWebServiceHandler.SALES_STADIUM_PITCH_URL)
+                args.putString(WebviewFragment.PAGE_ID, STADIUM_PITCH_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT -> WebviewFragment().apply {
@@ -68,7 +70,7 @@ object MenuGetterNew {
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> WebviewFragment().apply {
-                args.putString(WebviewFragment.PAGE_ID, WebviewFragment.MOST_GUIDE_ID)
+                args.putString(WebviewFragment.PAGE_ID, MOST_GUIDE_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
