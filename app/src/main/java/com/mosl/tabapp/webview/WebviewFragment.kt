@@ -213,7 +213,6 @@ class WebviewFragment : CommonFragment() {
         webSettings.javaScriptEnabled = true
         webSettings.allowFileAccess = true
         webSettings.domStorageEnabled = true
-        webSettings.setSupportMultipleWindows(true)
 
         binding.webView.setDownloadListener { url, userAgent, contentDisposition, miType, contentLength ->
             val request = DownloadManager.Request(Uri.parse(url))
