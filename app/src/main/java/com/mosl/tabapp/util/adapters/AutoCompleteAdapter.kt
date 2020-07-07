@@ -5,27 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Filter
-import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
-import com.mosl.tabapp.constants.MOSLConstants.EMPLOYEE_CODE
-import com.mosl.tabapp.constants.MOSLConstants.LEADID
-import com.mosl.tabapp.constants.MOSLConstants.MOBILE
-import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_ID
-import com.mosl.tabapp.constants.MOSLConstants.PROFILE_ID
-import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.webview.WebviewFragment
 
 class AutoCompleteAdapter(
   val context: Context,
@@ -180,7 +170,10 @@ class AutoCompleteAdapter(
         clickListener.onSearchResultClick()
       }
       holderView.rlOAOForm.setOnClickListener {
-        navigator.openNewEkycApp(true, resultModel.oaoUserId.toString())
+        convertToEkyc.gotoEkycExpressPage(
+          WebviewFragment.RESUME_APPLICATIONS_ID,
+          resultModel.oaoUserId.toString()
+        )
         clickListener.onSearchResultClick()
       }
       holderView.llExpand.setOnClickListener {
@@ -276,6 +269,7 @@ class AutoCompleteAdapter(
 
   interface ConvertToEkyc {
     fun gotoEkycPage(ekycModule: EkycModule)
+    fun gotoEkycExpressPage(id: String, oaoUserID: String = "")
     fun renderDiyLink(
       leadId: String,
       callBack: DiyLinkClickListner?

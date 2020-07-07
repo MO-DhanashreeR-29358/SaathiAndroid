@@ -17,25 +17,16 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.dashboard.DashboardData
-import com.mosl.mobile.domain.dashboard.DashboardRequestData
-import com.mosl.mobile.domain.dashboard.Incentive
-import com.mosl.mobile.domain.dashboard.IncentivePolicy
-import com.mosl.mobile.domain.dashboard.IncentiveTableData
-import com.mosl.mobile.domain.dashboard.IncentiveTableData1
+import com.mosl.mobile.domain.dashboard.*
 import com.mosl.tabapp.R
-import com.mosl.tabapp.R.color
-import com.mosl.tabapp.R.drawable
-import com.mosl.tabapp.R.string
+import com.mosl.tabapp.R.*
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.Dashboard
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.dashboard.clients.ClientsFragment
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
@@ -59,14 +50,23 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.downloadImage
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
+import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.tv_email
+import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.*
 import org.json.JSONObject
 import timber.log.Timber
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.indices
+import kotlin.collections.isNotEmpty
+import kotlin.collections.listOf
+import kotlin.collections.set
 
 class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener {
   internal lateinit var binding: FragDashboardBinding
@@ -928,6 +928,15 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
 
   override fun getEmpCode(): String {
     return employeeCode
+  }
+
+  override fun renderFreshRegistration() {
+    gotoEkycExpressPage(WebviewFragment.FRESH_REGISTRATION_ID, "")
+  }
+
+  override fun renderExistingApplication() {
+    gotoEkycExpressPage(WebviewFragment.EXISTING_APPLICATIONS_ID, "")
+
   }
 
   override fun showCallPopup(number: String) {

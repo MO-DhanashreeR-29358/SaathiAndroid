@@ -29,8 +29,6 @@ import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
-import com.mosl.tabapp.webview.WebviewFragment.Companion.EXISTING_APPLICATIONS_ID
-import com.mosl.tabapp.webview.WebviewFragment.Companion.FRESH_REGISTRATION_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
@@ -41,14 +39,6 @@ object MenuGetterNew {
         val args = Bundle()
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
-            NavigationConstants.NAVIGATE_TO_FRESH_REG -> WebviewFragment().apply {
-                args.putString(WebviewFragment.PAGE_ID, FRESH_REGISTRATION_ID)
-                arguments = args
-            }
-            NavigationConstants.NAVIGATE_TO_EXISTING_APP -> WebviewFragment().apply {
-                args.putString(WebviewFragment.PAGE_ID, EXISTING_APPLICATIONS_ID)
-                arguments = args
-            }
             NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
             NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()

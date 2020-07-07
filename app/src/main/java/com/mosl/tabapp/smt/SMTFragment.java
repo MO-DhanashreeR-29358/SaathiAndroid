@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.webview.WebviewFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -73,8 +74,7 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	}
 
 	@Override public void openEkyc(String OAOUserId) {
-		navigator.openNewEkycApp(true, OAOUserId);
-
+		gotoEkycExpressPage(WebviewFragment.RESUME_APPLICATIONS_ID, OAOUserId);
 	}
 
 	public class WebViewClient extends android.webkit.WebViewClient {

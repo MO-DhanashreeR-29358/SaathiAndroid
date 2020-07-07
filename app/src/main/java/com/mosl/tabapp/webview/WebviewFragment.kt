@@ -21,6 +21,7 @@ import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.webview.CommonURLRequest
 import com.mosl.tabapp.R
+import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
 import io.reactivex.Observable
@@ -39,6 +40,10 @@ class WebviewFragment : CommonFragment() {
 
     @Inject
     lateinit var saathiApiNew: SaathiApi
+
+    @Inject
+    lateinit var bannerNavigator: BannerNavigator
+
     private var mUploadMessage: ValueCallback<Uri>? = null
     lateinit var mCapturedImageURI: Uri
     private var mFilePathCallback: ValueCallback<Array<Uri>>? = null
@@ -318,29 +323,36 @@ class WebviewFragment : CommonFragment() {
             .subscribe { this.renderUrl(it) })
     }
 
-    internal fun renderUrl(uiModel: UiModel<String>) {
+    internal fun renderUrl(uiModel: UiModel<Pair<String?, String>>) {
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure {
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
+            when (it.second) {
 
-            loadUrl(it)
+                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID -> {
+                    it.first?.apply { bannerNavigator.openUrlInAppCrome(this.replace(" ", "%20")) }
+                }
+                else -> it.first?.apply {
+                    loadUrl(
+                        this.replace(" ", "%20")
+                    )
+                }
+            }
 
         }
     }
 
-    private fun getUrlObservable(webViewRequest: WebViewRequest.Id): Observable<String> {
+    private fun getUrlObservable(webViewRequest: WebViewRequest.Id): Observable<Pair<String?, String>> {
 
         when (webViewRequest.id) {
             INCENTIVE_REPORT_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(INCENTIVE_REPORT_KEY, null, userManager.user.employeeCode)
-                ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                ).map { it ->
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             FRESH_REGISTRATION_ID -> {
@@ -348,63 +360,49 @@ class WebviewFragment : CommonFragment() {
                     CommonURLRequest(FRESH_REGISTRATION_KEY, null, null)
                 )
                     .map {
-                        it.url?.apply {
-                            this.replace(" ", "%20")
-                        }
+                        Pair(it.url, webViewRequest.id)
                     }
             }
             EXISTING_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(EXISTING_APPLICATIONS_KEY, null, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             RESUME_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             STADIUM_PITCH_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(STADIUM_PITCH_KEY, null, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             COLLATERAL_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(COLLATERAL_KEY, null, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             MOST_GUIDE_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(MOST_GUIDE_KEY, webViewRequest.oaoUserId, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null)
                 ).map {
-                    it.url?.apply {
-                        this.replace(" ", "%20")
-                    }
+                    Pair(it.url, webViewRequest.id)
                 }
             }
         }

@@ -110,25 +110,31 @@ open class CommonFragment : BaseFragment() {
     return if (throwable is ServiceFailureException) {
       (throwable).errorMessage
     } else {
-      SERVER_ERROR_OCCURRED;
+        SERVER_ERROR_OCCURRED;
     }
   }
 
-  fun gotoEkycPage(
-    ekycModule: EkycModule
-  ) {
-    (requireActivity() as CommonActivity).gotoEkycPage(ekycModule)
-  }
+    fun gotoEkycPage(
+        ekycModule: EkycModule
+    ) {
+        (requireActivity() as CommonActivity).gotoEkycPage(ekycModule)
+    }
 
-  fun renderDiyLink(
-    leadId: String,
-    callBack: DiyLinkClickListner
-  ) {
-    (requireActivity() as CommonActivity).renderDiyLink(leadId, callBack)
-  }
+    fun gotoEkycExpressPage(
+        id: String, oaoUserId: String
+    ) {
+        (requireActivity() as CommonActivity).gotoEkycExpressPage(id, oaoUserId)
+    }
 
-  fun noInternetConnectionDialog() {
-    MSFDialog.alertDialog(
+    fun renderDiyLink(
+        leadId: String,
+        callBack: DiyLinkClickListner
+    ) {
+        (requireActivity() as CommonActivity).renderDiyLink(leadId, callBack)
+    }
+
+    fun noInternetConnectionDialog() {
+        MSFDialog.alertDialog(
         requireContext(), 0,
         resources.getString(R.string.motilal_oswal), MOSLConstants.INTERNET_CONNECTION, "OK", true,
         null

@@ -1,6 +1,5 @@
 package com.mosl.tabapp.dashboard.base
 
-import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
@@ -9,7 +8,6 @@ import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
@@ -123,17 +121,13 @@ class DashboardPresenter @Inject constructor(
 
     view.onFreshRegistrationClicked()
       .subscribe {
-        val args = Bundle()
-        args.putString(WebviewFragment.PAGE_ID, WebviewFragment.FRESH_REGISTRATION_ID)
-        navigator.openPage(NavigationConstants.NAVIGATE_TO_FRESH_REG, args, true)
+       view.renderFreshRegistration()
       }
       .addTo(disposable)
 
     view.onExistingRegistrationClicked()
       .subscribe {
-        val args = Bundle()
-        args.putString(WebviewFragment.PAGE_ID, WebviewFragment.EXISTING_APPLICATIONS_ID)
-        navigator.openPage(NavigationConstants.NAVIGATE_TO_EXISTING_APP, args, true)
+        view.renderExistingApplication()
       }
       .addTo(disposable)
 
