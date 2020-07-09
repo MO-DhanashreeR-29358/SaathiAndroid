@@ -1,4 +1,4 @@
-package com.mosl.app.core.data.annotation
+package com.mosl.mobile.user.annotation
 
 import javax.inject.Qualifier
 import kotlin.annotation.AnnotationRetention.RUNTIME
