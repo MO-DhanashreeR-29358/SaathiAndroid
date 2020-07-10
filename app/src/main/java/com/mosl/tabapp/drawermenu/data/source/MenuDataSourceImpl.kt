@@ -34,6 +34,22 @@ class MenuDataSourceImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
+  protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+    return listOf(
+      getDashboard(),
+      getOpenAccount(),
+      getReports(list),
+      getIncentiveReport(),
+      getCalendar(),
+      getPendingApproval(),
+      getSalesBrochure(),
+      getSalesStadium(),
+      getBirthdayAnniversary(),
+      getMostGuide(),
+      getQuery(),
+      getLogout()
+    )
+  }
     protected fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         isCheckApproval: Boolean
@@ -72,6 +88,21 @@ class MenuDataSourceImpl @Inject constructor(
         }
     }
 
+  protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+    return listOf(
+      getDashboard(),
+      getReports(list),
+      getIncentiveReport(),
+      getCalendar(),
+      getPendingApproval(),
+      getSalesBrochure(),
+      getSalesStadium(),
+      getBirthdayAnniversary(),
+      getMostGuide(),
+      getQuery(),
+      getLogout()
+    )
+  }
 
     protected fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
