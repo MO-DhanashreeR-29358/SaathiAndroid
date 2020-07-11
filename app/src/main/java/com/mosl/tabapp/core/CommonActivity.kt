@@ -37,7 +37,6 @@ import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.*
-import com.mosl.navigator.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
@@ -56,7 +55,6 @@ import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
-import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -109,6 +107,9 @@ class CommonActivity : BaseActivity(),
   @Inject
   lateinit var shortcutHelper: ShortcutHelper
   private var searchType = SEARCH_TYPE_LEAD
+
+  @Inject
+  lateinit var saathiApiNew: SaathiApi
 
   @Inject
   lateinit var eventListenerFactory: HttpListenerFactory
@@ -428,6 +429,12 @@ class CommonActivity : BaseActivity(),
         if (menu.pageId == NavigationConstants.NAVIGATE_TO_LOGOUT) {
           logoutCustomer()
           binding.drawerLayout.closeDrawers()
+        } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_FRESH_REG) {
+          gotoEkycExpressPage(WebviewFragment.FRESH_REGISTRATION_ID)
+          binding.drawerLayout.closeDrawers()
+        } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EXISTING_APP) {
+          gotoEkycExpressPage(WebviewFragment.EXISTING_APPLICATIONS_ID)
+          binding.drawerLayout.closeDrawers()
         }
 
         activityNavHelper.onMenuClicked(menu)
@@ -453,6 +460,7 @@ class CommonActivity : BaseActivity(),
         }
       })
   }
+
 
   private fun doLogout() {
     val notificationManager = getSystemService(
@@ -620,6 +628,10 @@ class CommonActivity : BaseActivity(),
   override fun gotoEkycPage(ekycModule: EkycModule) {
     Timber.d("ekyc module %s", ekycModule.toString())
     activityNavHelper.convertEkycApi(this, ekycModule)
+  }
+
+  override fun gotoEkycExpressPage(id: String, oaoUserID: String) {
+    activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
   }
 
   override fun renderDiyLink(
