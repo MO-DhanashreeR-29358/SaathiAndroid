@@ -367,10 +367,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     uiModel.onSuccess {
-      var list = emptyList<EmployeeModel>()
-      if (it.isNotEmpty()) {
+      var list = if (it.isNotEmpty()) {
         it.filter {
-          it.code == userManager.user.employeeCode
+          it.code != userManager.user.employeeCode
         }
             .map {
               EmployeeModel(
@@ -378,7 +377,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
               )
             }
       } else {
-        EmployeeModel.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE)
+        listOf(EmployeeModel.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE))
       }
 
       productSpecialDialog?.setAdapter(
