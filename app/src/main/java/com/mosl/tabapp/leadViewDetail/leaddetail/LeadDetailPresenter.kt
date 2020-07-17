@@ -317,6 +317,8 @@ class LeadDetailPresenter @Inject constructor(
         .addTo(disposable)
 
     view.onProductSpecialEventFired()
+        .filter { it.selectedProduct.isNotEmpty() }
+        .distinctUntilChanged()
         .switchMap {
           detailRepository.getLeadEmpForProduct(
               search = it.selectedProduct,
