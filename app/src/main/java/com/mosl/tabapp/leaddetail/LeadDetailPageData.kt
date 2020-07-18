@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leaddetail
 
 import com.mosl.saathi.api.model.lead.ContactAddressItem
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.common.RowData
 
 data class LeadDetail(
@@ -30,10 +31,10 @@ data class LeadDetail(
   @JvmField val canEditLead: String,
   @JvmField val isProductSpecialist: String,
   @JvmField val prospectReferEmail: String,
-  @JvmField val prospectReferName: String//,
-    // @JvmField val leadProductMapping: List<LeadProductMap>?,
-    //@JvmField val contact: Contact?,
-    //@JvmField val leadFieldValue: LeadFieldValue
+  @JvmField val prospectReferName: String,
+  @JvmField val leadProductMapping: List<LeadProductMappingItem>?//,
+    // @JvmField val contact: Contact?,
+    // @JvmField val leadFieldValue: LeadFieldValue
 )
 
 data class LeadProductMap(

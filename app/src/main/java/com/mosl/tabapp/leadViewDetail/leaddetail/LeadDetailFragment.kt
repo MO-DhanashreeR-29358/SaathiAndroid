@@ -39,11 +39,14 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomDatePickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog
@@ -73,9 +76,9 @@ import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadEmployees
-import com.mosl.tabapp.leaddetail.LeadProductMap
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
+import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
@@ -162,6 +165,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   private fun setupView() {
     with(binding) {
+      lvAddProduct.adapter = leadDetailAddProductAdapter
+      CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
       nestedScrollView.apply {
         descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
         isFocusable = true
@@ -1728,28 +1733,73 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       }
     binding.etLeadCategory.setText(leadCategoryText)
 
-    /*if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
+    if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
       leadProductMapping.renderMapping()
     }
 
     contact?.run {
       renderContact(leadCategoryText)
-    }*/
-
-  }
-
-  private var leadDetailAddProductAdapter: com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailAddProductAdapter? =
-    null
-
-  private fun List<LeadProductMap>.renderMapping() {
-    mapNotNull {
-      stage = it.stageId
-      status = it.statusId
-      binding.tvClientCode.setText(it.clientCode)
-      //leadDetailAddProductList.add(getLeadDetailAddProductModel(this))
     }
-    //leadDetailAddProductAdapter = LeadDetailAddProductAdapter()
+
   }
+
+  private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
+
+  private fun List<LeadProductMappingItem>.renderMapping() {
+    mapNotNull {
+      stage = it.stageID?.toString() ?: emptyString()
+      status = it.statusID?.toString() ?: emptyString()
+      binding.tvClientCode.setText(it.clientCode)
+      leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
+    }
+//    leadDetailAddProductAdapter = LeadDetailAddProductAdapter(requireContext(),leadDetailAddProductList)
+  }
+
+  private fun getLeadDetailAddProductModel(
+    item: LeadProductMappingItem
+  ): LeadDetailAddProductModel {
+    val crossSellingProducts: List<CrossSellingProductsModel> =
+      getCrossSellingProductsModel(item.crossSellingProducts)
+    return LeadDetailAddProductModel(
+        item.stageID.toString(),
+        stringOrEmpty(item.stageName), item.statusID.toString(),
+        stringOrEmpty(item.statusName), item.interestedIn.toString(),
+        stringOrEmpty(item.productName),
+        stringOrEmpty(item.primaryRMName),
+        stringOrEmpty(item.productSpecialistName),
+        stringOrEmpty(item.assignedBy),
+        stringOrEmpty(item.assignedByDate),
+        stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
+        item.isDefault,
+        crossSellingProducts,
+        item.isCrossSellingProduct,
+        stringOrEmpty(item.isProductSpecialistEditDisabled),
+        stringOrEmpty(item.isProductDisabled),
+        stringOrEmpty(item.productSpecialist)
+    )
+  }
+
+  private fun getCrossSellingProductsModel(
+    products: List<CrossSellingProduct>?
+  ): List<CrossSellingProductsModel> {
+    val crossSellingProducts: MutableList<CrossSellingProductsModel> =
+      ArrayList()
+    if (products != null && products.size > 0) {
+      for ((leadProductId, productId, statusId, productName, statusName) in products) {
+        crossSellingProducts.add(
+            CrossSellingProductsModel(
+                leadProductId,
+                productId,
+                statusId,
+                productName,
+                statusName
+            )
+        )
+      }
+    }
+    return crossSellingProducts
+  }
+
 /*
   private fun getLeadDetailAddProductModel(
     item: LeadProductMappingItem
