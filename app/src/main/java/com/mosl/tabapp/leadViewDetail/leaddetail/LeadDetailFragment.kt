@@ -1737,9 +1737,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
       leadProductMapping.renderMapping()
     }
 
-    contact?.run {
+    /*contact?.run {
       renderContact(leadCategoryText)
-    }
+    }*/
 
   }
 
