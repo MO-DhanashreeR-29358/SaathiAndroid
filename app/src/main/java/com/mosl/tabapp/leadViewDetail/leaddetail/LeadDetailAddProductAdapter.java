@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest;
@@ -47,15 +46,12 @@ import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-
-import org.droidparts.widget.ClearableEditText;
-
+import io.reactivex.disposables.CompositeDisposable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.reactivex.disposables.CompositeDisposable;
+import org.droidparts.widget.ClearableEditText;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -128,13 +124,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             }
         }
         return null;
-    }
-
-    LeadDetailAddProductAdapter(Context c,
-                                List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
-        inflater = LayoutInflater.from(c);
-        mContext = c;
-        this.leadDetailAddProductModelList = leadDetailAddProductModelList;
     }
 
     LeadDetailAddProductAdapter(Context c,

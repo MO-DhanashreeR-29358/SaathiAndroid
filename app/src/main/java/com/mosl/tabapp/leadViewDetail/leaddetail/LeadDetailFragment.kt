@@ -7,9 +7,19 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
-import android.view.*
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.*
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
@@ -35,27 +45,55 @@ import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
-import com.mosl.tabapp.common.*
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMMOSLCommon
+import com.mosl.tabapp.common.CRMValidationRule
+import com.mosl.tabapp.common.CustomDatePickerDialog
+import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.StringStuff
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
-import com.mosl.tabapp.leadViewDetail.*
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLLimitsAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.AddProductData
+import com.mosl.tabapp.leaddetail.ClientDetail
+import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.ClientPortfolio
+import com.mosl.tabapp.leaddetail.ClientProfitLoss
+import com.mosl.tabapp.leaddetail.Contact
+import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadEmployees
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
-import com.mosl.tabapp.util.*
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.disableErrorMessages
+import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.gone
+import com.mosl.tabapp.util.setErrorMessages
+import com.mosl.tabapp.util.setSpinnerData
+import com.mosl.tabapp.util.string
+import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 import javax.inject.Inject
 
 class LeadDetailFragment : CommonFragment(), LeadDetailView {
@@ -563,7 +601,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
                         )
                 }
-                if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
+                if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) ?: false) {
                     MSFDialog.alertDialog(
                         requireContext(), 0,
                         resources.getString(R.string.motilal_oswal),
@@ -1742,7 +1780,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
         leadDetailAddProductAdapter =
-            LeadDetailAddProductAdapter(requireContext(), leadDetailAddProductList)
+            LeadDetailAddProductAdapter(
+                requireContext(),
+                leadDetailAddProductList,
+                binding.lvAddProduct,
+                leadId,
+                isLeadEditable,
+                statusDatas,
+                statusAdapter,
+                userManager.getUser()?.employeeCode,
+                status,
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+            )
+
     }
 
     private fun getLeadDetailAddProductModel(
