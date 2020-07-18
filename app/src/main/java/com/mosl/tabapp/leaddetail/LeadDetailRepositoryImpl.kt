@@ -5,6 +5,7 @@ import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import io.reactivex.Observable
@@ -38,6 +39,13 @@ class LeadDetailRepositoryImpl @Inject constructor(
           )
         }
     )
+  }
+
+  override fun addProduct(request: InsertLeadProductRequest): Observable<List<AddProductData>> {
+    return saathiApi.insertLeadProductMapping(request)
+        .map {
+          it.leadProductMappingItemsToAddProductDatas()
+        }
   }
 
   override fun getClientDetail(ucId: String): Observable<ClientDetail> {

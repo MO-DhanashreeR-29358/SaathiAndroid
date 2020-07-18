@@ -19,6 +19,7 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
@@ -38,6 +39,7 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
@@ -62,6 +64,7 @@ import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
 import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.AddProductData
 import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.ClientPortfolio
@@ -75,6 +78,7 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -347,6 +351,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
   }
 
+  override fun addProductEventFired(): Observable<AddProductEvent> {
+    return subject.ofType()
+  }
+
+  override fun renderAddProduct(uiModel: UiModel<List<AddProductData>>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onFailure {
+      showOnFailurePopup(it)
+    }
+    uiModel.onSuccess {
+      Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG)
+          .show()
+    }
+  }
+
   override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
     if (uiModel.inProgress) {
       productSpecialDialog?.showProgress(View.VISIBLE)
@@ -459,7 +478,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
         searchListProductSpecialist.setmListner(productSpecialistViewListner)
 
-
       }
       dialogBinding.actAssignTo.setListener {
         primaryRm = ""
@@ -535,14 +553,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
           dialogBinding.tvspIntrestError.text = "Select Interested Product"
 
         }
-        if (dialogBinding.spStage.selectedItemPosition < 1) {
+        /*if (dialogBinding.spStage.selectedItemPosition < 1) {
           dialogBinding.tvspStageError.visibility = View.VISIBLE
           dialogBinding.tvspStageError.text = "Select Stage"
         }
         if (dialogBinding.spStatus.selectedItemPosition < 1) {
           dialogBinding.tvspStatusError.visibility = View.VISIBLE
           dialogBinding.tvspStatusError.text = "Select Status"
-        }
+        }*/
         ///////////
 
         //Mandatory chec end
@@ -563,7 +581,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 userManager.getUser()?.employeeCode,
                 status,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                (binding.spPmsProduct.selectedItem as RowData).value
+                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
             )
         }
         if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
@@ -573,23 +591,23 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
               "$interestedInDisplayText is already selected", "OK", true, null
           )
         } else {
-          /*if (isPotentialPMSProduct) {
+          if (isPotentialPMSProduct) {
             MSFDialog.alertDialog(
                 requireActivity(), 0,
                 resources.getString(R.string.motilal_oswal),
                 MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT, MOSLConstants.YES, MOSLConstants.NO,
                 true
             ) { action: Action, data: Array<Any?>? ->
-              if (action == OK) {
+              if (action == Action.OK) {
                 addProduct(
-                    (spInterestedIn.getSelectedItem() as RowData).key,
+                    (dialogBinding.spInterestedIn.getSelectedItem() as RowData).key,
                     (dialogBinding.spStage.getSelectedItem() as RowData).key,
                     (dialogBinding.spStatus.getSelectedItem() as RowData).key,
                     MOSLConstants.YES
                 )
               } else {
                 addProduct(
-                    (spInterestedIn.getSelectedItem() as RowData).key,
+                    (dialogBinding.spInterestedIn.getSelectedItem() as RowData).key,
                     (dialogBinding.spStage.getSelectedItem() as RowData).key,
                     (dialogBinding.spStatus.getSelectedItem() as RowData).key,
                     MOSLConstants.NO
@@ -598,23 +616,45 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             }
           } else {
             addProduct(
-                (spInterestedIn.getSelectedItem() as RowData).key,
+                (dialogBinding.spInterestedIn.getSelectedItem() as RowData).key,
                 (dialogBinding.spStage.getSelectedItem() as RowData).key,
                 (dialogBinding.spStatus.getSelectedItem() as RowData).key, ""
             )
-          }*/
+          }
         }
-
-        //////////
         dismiss()
-
       }
+
       dialogBinding.btnClose.setOnClickListener {
         hideKeyboard(binding.root)
         dismiss()
       }
     }
         .show()
+  }
+
+  private fun addProduct(
+    interestedIn: String,
+    stage: String,
+    status: String,
+    productMapping: String
+  ) {
+    //data
+    val data = InsertLeadProductRequest(
+        leadId,
+        ucId,
+        interestedIn,
+        interestedIn,
+        primaryRm!!,
+        specialistAdd!!,
+        userManager.getUser()!!.employeeCode,
+        CRMAppUtil.getDBDate(),
+        stage,
+        status,
+        productMapping
+    )
+    //event
+    subject.onNext(AddProductEvent(data))
   }
 
   override fun onEditLeadDetailClicked(): Observable<Unit> {

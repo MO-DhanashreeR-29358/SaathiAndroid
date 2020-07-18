@@ -43,6 +43,14 @@ class LeadDetailPresenter @Inject constructor(
         // .subscribe(view::renderClientDetail, Timber::e)
         .addTo(disposable)
 
+    view.addProductEventFired()
+        .switchMap {
+          detailRepository.addProduct(it.addProduct)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderAddProduct)
+        .addTo(disposable)
+
     screenLoadObs
         .map { data.leadId }
         .filter { it != "0" }
@@ -326,7 +334,7 @@ class LeadDetailPresenter @Inject constructor(
           )
               .compose(applyUiModel())
         }
-        .subscribe(view::renderProductSpecial)
+        .subscribe(view::renderProductSpecial, Timber::e)
         .addTo(disposable)
 
     view.onAssignToEventFired()

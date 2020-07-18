@@ -1,5 +1,6 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
+import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
 import com.mosl.tabapp.common.RowData
 
 sealed class LeadDetailUiEvent
@@ -11,4 +12,5 @@ data class ProductSpecialistEvent(
   val primaryRM: String
 ) : LeadDetailUiEvent()
 
+data class AddProductEvent(val addProduct: InsertLeadProductRequest) : LeadDetailUiEvent()
 data class AssignToEvent(val search: String) : LeadDetailUiEvent()

@@ -81,6 +81,24 @@ data class LeadEmployees(
   @JvmField val branchCode: String
 )
 
+data class AddProductData(
+  @JvmField val leadId: String,
+  @JvmField val ucId: String,
+  @JvmField val potentialPmsProduct: String,
+  @JvmField val stageId: String,
+  @JvmField val statusId: String,
+  @JvmField val stageName: String,
+  @JvmField val statusName: String,
+  @JvmField val interestedIn: String,
+  @JvmField val prodName: String,
+  @JvmField val primRMName: String,
+  @JvmField val productSpecialistName: String,
+  @JvmField val assignedBy: String,
+  @JvmField val assignedByDate: String,
+  @JvmField val clientCode: String,
+  @JvmField val leadProductMappingId: String
+)
+
 data class ClientDetailWithPortfolioAndProfitLoss(
   @JvmField val detail: ClientDetail,
   @JvmField val portfolio: ClientPortfolio,

@@ -7,6 +7,7 @@ import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadD
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leaddetail.AddProductData
 import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
@@ -116,6 +117,8 @@ interface LeadDetailView : BaseView {
   fun onUpdateProfileEventFired(): Observable<UpdateProfile>
   fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent>
   fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>)
+  fun addProductEventFired(): Observable<AddProductEvent>
+  fun renderAddProduct(uiModel: UiModel<List<AddProductData>>)
   fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>)
   fun onAssignToEventFired(): Observable<AssignToEvent>
   fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)

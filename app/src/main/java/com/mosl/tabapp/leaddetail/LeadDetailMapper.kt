@@ -4,6 +4,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.lead.BusinessProfile
 import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
 import com.mosl.saathi.api.model.lead.ClientSummaryResponse
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.tabapp.util.emptyString
@@ -69,6 +70,33 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true)
 
   )
+}
+
+fun List<LeadProductMappingItem>.leadProductMappingItemsToAddProductDatas(): List<AddProductData> {
+  return mapNotNull {
+    try {
+      AddProductData(
+          leadId = it.leadID?.toString() ?: emptyString(),
+          ucId = it.uCID ?: emptyString(),
+          potentialPmsProduct = it.isPotentialPMSProduct ?: emptyString(),
+          stageId = it.stageID?.toString() ?: emptyString(),
+          statusId = it.statusID?.toString() ?: emptyString(),
+          interestedIn = it.interestedIn.toString(),
+          prodName = it.productName ?: emptyString(),
+          primRMName = it.primaryRMName ?: emptyString(),
+          productSpecialistName = it.productSpecialistName ?: emptyString(),
+          assignedBy = it.assignedBy ?: emptyString(),
+          assignedByDate = it.assignedByDate ?: emptyString(),
+          clientCode = it.clientCode ?: emptyString(),
+          leadProductMappingId = it.leadProductMappingID?.toString() ?: emptyString(),
+          stageName = it.stageName ?: emptyString(),
+          statusName = it.statusName ?: emptyString()
+
+      )
+    } catch (_: Exception) {
+      null
+    }
+  }
 }
 
 fun ClientDetailItem.clientDetailItemToClientDetail(): ClientDetail {
