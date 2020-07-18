@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leaddetail
 
 import com.mosl.saathi.api.model.lead.ContactAddressItem
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.common.RowData
 
@@ -97,7 +98,14 @@ data class AddProductData(
   @JvmField val assignedBy: String,
   @JvmField val assignedByDate: String,
   @JvmField val clientCode: String,
-  @JvmField val leadProductMappingId: String
+  @JvmField val leadProductMappingId: String,
+  @JvmField val crossSellingProducts: List<CrossSellingProduct>,
+  @JvmField val isDefault: Boolean,
+  @JvmField val isCrossSellingProduct: Boolean,
+  @JvmField val isProdSpecEditDisabled: String,
+  @JvmField val isProdDisabled: String,
+  @JvmField val prodSpecialist: String
+
 )
 
 data class ClientDetailWithPortfolioAndProfitLoss(

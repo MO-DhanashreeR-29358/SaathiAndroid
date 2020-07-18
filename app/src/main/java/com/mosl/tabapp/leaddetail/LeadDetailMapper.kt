@@ -90,8 +90,13 @@ fun List<LeadProductMappingItem>.leadProductMappingItemsToAddProductDatas(): Lis
           clientCode = it.clientCode ?: emptyString(),
           leadProductMappingId = it.leadProductMappingID?.toString() ?: emptyString(),
           stageName = it.stageName ?: emptyString(),
-          statusName = it.statusName ?: emptyString()
-
+          statusName = it.statusName ?: emptyString(),
+          crossSellingProducts = it.crossSellingProducts ?: emptyList(),
+          isDefault = it.isDefault,
+          isCrossSellingProduct = it.isCrossSellingProduct,
+          isProdSpecEditDisabled = it.isProductSpecialistEditDisabled ?: emptyString(),
+          isProdDisabled = it.isProductDisabled ?: emptyString(),
+          prodSpecialist = it.productSpecialist ?: emptyString()
       )
     } catch (_: Exception) {
       null

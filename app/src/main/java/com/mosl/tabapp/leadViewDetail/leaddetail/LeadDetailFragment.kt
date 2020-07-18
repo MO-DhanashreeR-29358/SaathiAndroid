@@ -80,8 +80,10 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
@@ -373,8 +375,68 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onSuccess {
             Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG)
                 .show()
+
+            if ("0".equals(leadId, ignoreCase = true)) {
+
+                val leadID = it[0].leadId
+                val uCID = it[0].ucId
+                MSFDialog.alertDialog(
+                    requireActivity(), 0,
+                    resources.getString(
+                        R.string.motilal_oswal
+                    ), "Product Added Successfully with leadId "
+                    + leadID, "OK", true
+                ) { action: Action, data1: Array<Any?>? ->
+                    if (action == OK) {
+                        val bundle = Bundle()
+                        bundle.putString(MOSLConstants.LEAD_ID, leadID)
+                        bundle.putString(MOSLConstants.UCID, uCID)
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                            false
+                        )
+                    }
+                }
+            } else {
+                if (it.isNotEmpty()) {
+                    for (datum in it) {
+                        val potentialPMSProduct = stringOrEmpty(datum.potentialPmsProduct)
+                        isPotentialPMSProduct = potentialPMSProduct.isEmpty()
+                        pmsProductAdapter.setSpinnerDataWithSelection(
+                            binding.spPmsProduct, pmsProductArray.toList(), potentialPMSProduct
+                        )
+                        leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
+                    }
+                    leadDetailAddProductAdapter =
+                        LeadDetailAddProductAdapter(
+                            requireContext(),
+                            leadDetailAddProductList,
+                            binding.lvAddProduct,
+                            leadId,
+                            isLeadEditable,
+                            statusDatas,
+                            statusAdapter,
+                            userManager.getUser()?.employeeCode,
+                            status,
+                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                            (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+                        )
+                    binding.lvAddProduct.setAdapter(leadDetailAddProductAdapter)
+                    CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+                }
+                MSFDialog.alertDialog(
+                    requireActivity(), 0,
+                    resources.getString(R.string.motilal_oswal),
+                    "Product Added Successfully", "OK",
+                    true
+                ) { _: Action?, _: Array<Any?>? ->
+                    //leadSection()
+                }
+            }
         }
     }
+
+    private val pmsProductArray = resources.getStringArray(R.array.selectPmsProduct)
 
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
         if (uiModel.inProgress) {
@@ -422,7 +484,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return subject.ofType()
     }
 
-    private val isPotentialPMSProduct = false
+    private var isPotentialPMSProduct = false
 
     override fun openAddProductDialog() {
         Dialog(requireContext()).apply {
@@ -1817,6 +1879,30 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             stringOrEmpty(item.isProductSpecialistEditDisabled),
             stringOrEmpty(item.isProductDisabled),
             stringOrEmpty(item.productSpecialist)
+        )
+    }
+
+    private fun getLeadDetailAddProductModel(
+        item: AddProductData
+    ): LeadDetailAddProductModel {
+        val crossSellingProducts: List<CrossSellingProductsModel> =
+            getCrossSellingProductsModel(item.crossSellingProducts)
+        return LeadDetailAddProductModel(
+            item.stageId,
+            stringOrEmpty(item.stageName), item.statusId,
+            stringOrEmpty(item.statusName), item.interestedIn,
+            stringOrEmpty(item.prodName),
+            stringOrEmpty(item.primRMName),
+            stringOrEmpty(item.productSpecialistName),
+            stringOrEmpty(item.assignedBy),
+            stringOrEmpty(item.assignedByDate),
+            stringOrEmpty(item.clientCode), item.leadProductMappingId,
+            item.isDefault,
+            crossSellingProducts,
+            item.isCrossSellingProduct,
+            stringOrEmpty(item.isProdSpecEditDisabled),
+            stringOrEmpty(item.isProdDisabled),
+            stringOrEmpty(item.prodSpecialist)
         )
     }
 
