@@ -436,7 +436,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    private val pmsProductArray = resources.getStringArray(R.array.selectPmsProduct)
+    private val pmsProductArray = arrayOf("Select Potential Product", "YES", "NO")
 
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
         if (uiModel.inProgress) {
