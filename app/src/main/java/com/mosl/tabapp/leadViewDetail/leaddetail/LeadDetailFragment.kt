@@ -122,6 +122,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private val profileAdapter: ArrayAdapter<RowData> by lazy {
+
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
@@ -409,6 +410,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     }
                     leadDetailAddProductAdapter =
                         LeadDetailAddProductAdapter(
+                            saathiApi,
                             requireContext(),
                             leadDetailAddProductList,
                             binding.lvAddProduct,
@@ -650,6 +652,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 if (leadDetailAddProductList.size == 0) {
                     leadDetailAddProductAdapter =
                         LeadDetailAddProductAdapter(
+                            saathiApi,
                             requireContext(),
                             leadDetailAddProductList,
                             binding.lvAddProduct,
@@ -1843,6 +1846,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
         leadDetailAddProductAdapter =
             LeadDetailAddProductAdapter(
+                saathiApi,
                 requireContext(),
                 leadDetailAddProductList,
                 binding.lvAddProduct,

@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
+import com.mosl.saathi.api.SaathiApi;
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest;
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest;
@@ -35,12 +36,10 @@ import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.RowData;
-import com.mosl.tabapp.databinding.ChildCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewAddCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewUpdateCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.IncludeEdittextLowmarginBinding;
-import com.mosl.tabapp.databinding.ItemListAddProductBinding;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
@@ -65,12 +64,12 @@ import static com.mosl.tabapp.constants.MOSLConstants.POTENTIAL_INVEST_IN_PRODUC
 import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH;
 import static com.mosl.tabapp.constants.MOSLConstants.YES;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
-import static com.mosl.tabapp.ws.CRMWebServiceHandler.getSaathiApi;
 
 public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private final LayoutInflater inflater;
     Context mContext;
+    private SaathiApi saathiApi;
     private List<RowData> arrStatus;
     private List<RowData> arrCrossSellingProductId;
     private String employeeCode;
@@ -126,7 +125,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return null;
     }
 
-    LeadDetailAddProductAdapter(Context c,
+    LeadDetailAddProductAdapter(SaathiApi api,
+        Context c,
                                 List<LeadDetailAddProductModel> leadDetailAddProductModelList,
                                 ListView addProductView,
                                 String leadId,
@@ -139,6 +139,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         String pmsProductSpinnerValue
     ) {
         inflater = LayoutInflater.from(c);
+        saathiApi = api;
         mContext = c;
         lvAddProduct = addProductView;
         etLeadId = leadId;
@@ -184,11 +185,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         final LeadDetailAddProductModel leadDetailAddProductModel =
             leadDetailAddProductModelList.get(i);
-        ItemListAddProductBinding holderBinding = ItemListAddProductBinding.inflate(inflater);
+        //ItemListAddProductBinding holderBinding = ItemListAddProductBinding.inflate(inflater);
 
-        //view = inflater.inflate(R.layout.item_list_add_product, viewGroup, false);
-        /*final LeadViewDetailFragment.LeadDetailAddProductAdapter.Holder
-            holder = new LeadViewDetailFragment.LeadDetailAddProductAdapter.Holder();
+        view = inflater.inflate(R.layout.item_list_add_product, viewGroup, false);
+        final LeadDetailAddProductAdapter.Holder
+            holder = new LeadDetailAddProductAdapter.Holder();
         holder.tvProduct = view.findViewById(R.id.tvProduct);
         holder.tvProductSpecialist = view.findViewById(R.id.tvProductSpecialist);
         holder.tvPrimaryRM = view.findViewById(R.id.tvPrimaryRM);
@@ -202,38 +203,37 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         holder.llChildCrossSellingProduct =
             view.findViewById(R.id.llChildCrossSellingProduct);
         holder.tvAddInvestmentProduct =
-            view.findViewById(R.id.tvAddInvestmentProduct);*/
+            view.findViewById(R.id.tvAddInvestmentProduct);
 
-        holderBinding.tvProduct.setText(leadDetailAddProductModel.getInterestedInValue());
-        holderBinding.tvProductSpecialist.setText(leadDetailAddProductModel.getProductSpecialist());
-        holderBinding.tvPrimaryRM.setText(leadDetailAddProductModel.getPrimaryRM());
-        holderBinding.tvStage.setText(leadDetailAddProductModel.getStageValue());
-        holderBinding.tvProductID.setText(leadDetailAddProductModel.getInterestedInValue());
-        holderBinding.tvStatus.setText(leadDetailAddProductModel.getStatusValue());
+        holder.tvProduct.setText(leadDetailAddProductModel.getInterestedInValue());
+        holder.tvProductSpecialist.setText(leadDetailAddProductModel.getProductSpecialist());
+        holder.tvPrimaryRM.setText(leadDetailAddProductModel.getPrimaryRM());
+        holder.tvStage.setText(leadDetailAddProductModel.getStageValue());
+        holder.tvProductID.setText(leadDetailAddProductModel.getInterestedInValue());
+        holder.tvStatus.setText(leadDetailAddProductModel.getStatusValue());
         if (leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("Equity")
             || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("MF")) {
-            holderBinding.llCrossSellingProducts.setVisibility(View.VISIBLE);
+            holder.llCrossSellingProducts.setVisibility(View.VISIBLE);
         } else {
-            holderBinding.llCrossSellingProducts.setVisibility(View.GONE);
+            holder.llCrossSellingProducts.setVisibility(View.GONE);
         }
 
         for (final CrossSellingProductsModel mSection : leadDetailAddProductModel.getCrossSellingProductsModelList()) {
-            /*@SuppressLint("ViewHolder") ViewGroup childSection =
-                (ViewGroup) requireActivity().getLayoutInflater()
-                    .inflate(R.layout.child_cross_selling_product, null);
+            @SuppressLint("ViewHolder") ViewGroup childSection =
+                (ViewGroup) inflater.inflate(R.layout.child_cross_selling_product, null);
             TextView tvCrossSellingProduct =
                 childSection.findViewById(R.id.tvCrossSellingProduct);
             TextView tvCrosellingStatus =
                 childSection.findViewById(R.id.tvCrosellingStatus);
             LinearLayout llCrossSellingUpdateProduct =
-                childSection.findViewById(R.id.llCrossSellingUpdateProduct);*/
+                childSection.findViewById(R.id.llCrossSellingUpdateProduct);
 
-            ChildCrossSellingProductBinding childSectionBinding =
-                ChildCrossSellingProductBinding.inflate(inflater);
-            childSectionBinding.tvCrosellingStatus.setText(mSection.getCrossSellingStatusName());
-            childSectionBinding.tvCrossSellingProduct.setText(
+            //ChildCrossSellingProductBinding childSectionBinding =
+            //  ChildCrossSellingProductBinding.inflate(inflater);
+            tvCrosellingStatus.setText(mSection.getCrossSellingStatusName());
+            tvCrossSellingProduct.setText(
                 mSection.getCrossSellingProductName());
-            childSectionBinding.llCrossSellingUpdateProduct.setOnClickListener(
+            llCrossSellingUpdateProduct.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -300,7 +300,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                     );
 
                                 disposable.add(
-                                    getSaathiApi().saveLeadCrossSellingProduct(productRequest)
+                                    saathiApi.saveLeadCrossSellingProduct(productRequest)
                                         .compose(applyUiModel())
                                         .subscribe(uiModel -> {
                                             //======  toggleProgress(uiModel.inProgress);
@@ -339,9 +339,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         dialog.show();
                     }
                 });
-            holderBinding.llChildCrossSellingProduct.addView(childSectionBinding.getRoot());
+            holder.llChildCrossSellingProduct.addView(childSection);
         }
-        holderBinding.tvAddInvestmentProduct.setOnClickListener(v -> {
+        holder.tvAddInvestmentProduct.setOnClickListener(v -> {
             if (isLeadEditable && !leadDetailAddProductModel.getIsProductDisabled()
                 .equals("1")) {
                 final Dialog dialog = new Dialog(mContext);
@@ -416,7 +416,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 ((RowData) dialogBinding.spProductId.getSelectedItem()).getKey()
                             );
                         disposable.add(
-                            getSaathiApi().saveLeadCrossSellingProduct(productRequest)
+                            saathiApi.saveLeadCrossSellingProduct(productRequest)
                                 .compose(applyUiModel())
                                 .subscribe(uiModel -> {
                                     //========= toggleProgress(uiModel.inProgress);
@@ -459,11 +459,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         });
         if (leadDetailAddProductModel.isDefault()
             || leadDetailAddProductModel.isCrossSellingProduct()) {
-            holderBinding.llDeleteLeadDetail.setVisibility(View.GONE);
+            holder.llDeleteLeadDetail.setVisibility(View.GONE);
         } else {
-            holderBinding.llDeleteLeadDetail.setVisibility(View.VISIBLE);
+            holder.llDeleteLeadDetail.setVisibility(View.VISIBLE);
         }
-        holderBinding.llDeleteLeadDetail.setOnClickListener(new View.OnClickListener() {
+        holder.llDeleteLeadDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (isLeadEditable
@@ -491,7 +491,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                     leadDetailAddProductModel.getStatusId()
                                                 );
                                             disposable.add(
-                                                getSaathiApi().deleteLeadCrossSellingProduct(
+                                                saathiApi.deleteLeadCrossSellingProduct(
                                                     productRequest)
                                                     .compose(applyUiModel())
                                                     .subscribe(
@@ -535,7 +535,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             }
         });
 
-        holderBinding.llAddProduct.setOnClickListener(view1 -> {
+        holder.llAddProduct.setOnClickListener(view1 -> {
             if (isLeadEditable && !leadDetailAddProductModel.getIsProductDisabled()
                 .equals("1")) {
                 editProduct(leadDetailAddProductModel.getInterestedIn(),
@@ -549,14 +549,14 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     leadDetailAddProductModel.getProductSpecialistId());
             }
         });
-        return holderBinding.getRoot();
+        return view;
     }
 
     private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
         final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
             disposable.add(
-                getSaathiApi().getStatusList(new StatusRequest(productId, "1"))
+                saathiApi.getStatusList(new StatusRequest(productId, "1"))
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
                         statusId)));
@@ -607,7 +607,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 new CrossSellingProductRequest(
                     userBusinessUnitId,
                     intrestedIn);
-            disposable.add(getSaathiApi().getCrossSellingProduct(request)
+            disposable.add(saathiApi.getCrossSellingProduct(request)
                 .compose(applyUiModel())
                 .subscribe(uiModel ->
                     renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
@@ -663,7 +663,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 new LookupRequest(
                     userBusinessUnitId, 111,
                     null, null);
-            disposable.add(getSaathiApi().getAllLookup(lookupRequest)
+            disposable.add(saathiApi.getAllLookup(lookupRequest)
                 .compose(applyUiModel())
                 .subscribe(
                     uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
@@ -716,7 +716,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             ConfigurationByStatusRequest request =
                 new ConfigurationByStatusRequest(productId);
             disposable.add(
-                getSaathiApi().getStageWiseConfigurationByStatus(request)
+                saathiApi.getStageWiseConfigurationByStatus(request)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
                         llLowMarginAdd, isDefault)));
@@ -1065,7 +1065,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 actAssignTo,
                 dataMap
             );
-            disposable.add(getSaathiApi().updateLeadProductMapping(mappingRequest)
+            disposable.add(saathiApi.updateLeadProductMapping(mappingRequest)
                 .compose(applyUiModel())
                 .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
         } else {
