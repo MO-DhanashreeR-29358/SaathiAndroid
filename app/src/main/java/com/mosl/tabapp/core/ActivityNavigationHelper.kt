@@ -277,6 +277,13 @@ class ActivityNavigationHelper @Inject constructor(
                     it.url?.apply { this.replace(" ", "%20") }
                 }
             }
+            WebviewFragment.E_MODIFICATION_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(WebviewFragment.E_MODIFICATION_KEY, null, null)
+                ).map {
+                    it.url?.apply { this.replace(" ", "%20") }
+                }
+            }
             else -> {
                 return saathiApi.getEkycExpressUrl(
                     CommonURLRequest(

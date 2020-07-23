@@ -34,22 +34,24 @@ class MenuDataSourceImpl @Inject constructor(
             .subscribeOn(Schedulers.io())
     }
 
-  protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getOpenAccount(),
-      getReports(list),
-      getIncentiveReport(),
-      getCalendar(),
-      getPendingApproval(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getBirthdayAnniversary(),
-      getMostGuide(),
-      getQuery(),
-      getLogout()
-    )
-  }
+    protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+        return listOf(
+            getDashboard(),
+            getOpenAccount(),
+            getEModification(),
+            getReports(list),
+            getIncentiveReport(),
+            getCalendar(),
+            getPendingApproval(),
+            getSalesBrochure(),
+            getSalesStadium(),
+            getBirthdayAnniversary(),
+            getMostGuide(),
+            getQuery(),
+            getLogout()
+        )
+    }
+
     protected fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         isCheckApproval: Boolean
@@ -58,6 +60,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCheckApproval(),
@@ -74,6 +77,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCalendar(),
@@ -88,21 +92,22 @@ class MenuDataSourceImpl @Inject constructor(
         }
     }
 
-  protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getReports(list),
-      getIncentiveReport(),
-      getCalendar(),
-      getPendingApproval(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getBirthdayAnniversary(),
-      getMostGuide(),
-      getQuery(),
-      getLogout()
-    )
-  }
+    protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
+        return listOf(
+            getDashboard(),
+            getEModification(),
+            getReports(list),
+            getIncentiveReport(),
+            getCalendar(),
+            getPendingApproval(),
+            getSalesBrochure(),
+            getSalesStadium(),
+            getBirthdayAnniversary(),
+            getMostGuide(),
+            getQuery(),
+            getLogout()
+        )
+    }
 
     protected fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
@@ -111,6 +116,7 @@ class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             listOf(
                 getDashboard(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCheckApproval(),
@@ -126,6 +132,7 @@ class MenuDataSourceImpl @Inject constructor(
         } else {
             listOf(
                 getDashboard(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCalendar(),
@@ -148,6 +155,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCheckApproval(),
@@ -165,6 +173,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getReports(list),
                 getIncentiveReport(),
                 getCalendar(),
@@ -193,6 +202,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
                 getIncentiveReport(),
@@ -206,6 +216,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
                 getIncentiveReport(),
@@ -308,6 +319,16 @@ class MenuDataSourceImpl @Inject constructor(
                     navigateKey = ""
                 )
             )
+        )
+    }
+
+
+    internal fun getEModification(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_emodification,
+            label = R.string.MOSL_MENU_E_MODIFICATION_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_E_MODIFICATION
         )
     }
 

@@ -79,4 +79,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_CHECK_APPROVAL = 33;
     int NAVIGATE_TO_LEAD_ASSIGN_STP = 34;
     int NAVIGATE_TO_MOST_GUIDE = 35;
+    int NAVIGATE_TO_E_MODIFICATION = 36;
 }

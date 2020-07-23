@@ -8,6 +8,7 @@
     <string name="MOSL_MENU_CHECK_APPROVAL_TXT">Check Approval</string>
     <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
+    <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
