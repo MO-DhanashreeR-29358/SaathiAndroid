@@ -9,5 +9,6 @@ data class LocationDataModel(
   val deviceId: String,
   val accuracy: String,
   val geoPinCode: String,
-  val id: String
+  val id: String,
+  val version: String
 )

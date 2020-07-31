@@ -17,7 +17,9 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+
 import androidx.core.app.NotificationCompat;
+
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -31,25 +33,30 @@ import com.mosl.mobile.user.login.UserManager;
 import com.mosl.shared.Encryptor.AESEncryptor;
 import com.mosl.shared.util.AppDateFormats;
 import com.mosl.shared.util.Utility;
+import com.mosl.tabapp.BuildConfig;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
 import com.mosl.tabapp.urls.ServiceUrlsImpl;
-import dagger.android.AndroidInjection;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
-import org.json.JSONException;
-import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
@@ -174,11 +181,11 @@ public class ForegroundServiceOld extends Service {
       }
       if (userManager.getUser() != null) {
         locationData = new LocationData(mCurrentLocation.getLatitude() + "",
-            mCurrentLocation.getLongitude() + "",
-            getDeviceID(getApplicationContext().getContentResolver()),
-            userManager.getUser().employeeCode,
-            CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
-            geoPincode);
+                mCurrentLocation.getLongitude() + "",
+                getDeviceID(getApplicationContext().getContentResolver()),
+                userManager.getUser().employeeCode,
+                CRMAppUtil.getCurrentDisplayDate(), mCurrentLocation.getAccuracy() + "", geoArea,
+                geoPincode, BuildConfig.VERSION_CODE + "");
         if ((lastLocationTime.get().isEmpty() || isTimeInterval(lastLocationTime.get(), 13))
             && !isLocationFromMockProvider(getApplicationContext(), mCurrentLocation)) {
           lastLocationTime.set(
