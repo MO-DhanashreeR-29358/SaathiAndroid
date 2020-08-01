@@ -7,7 +7,8 @@ public class Data {
   public static final Migration MIGRATION_1_2 = new Migration(1, 2) {
     @Override
     public void migrate(SupportSQLiteDatabase database) {
-      // Since we didn't alter the table, there's nothing else to do here.
+        database.execSQL("ALTER TABLE location_db "
+                + " ADD COLUMN version String");
     }
   };
 

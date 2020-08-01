@@ -15,7 +15,7 @@ import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.annotation.ForcePreferenceClear
+import com.mosl.mobile.user.annotation.ForcePreferenceDelete
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.model.*
@@ -49,8 +49,8 @@ class SplashActivity : LeanBaseActivity() {
     lateinit var shortcutHelper: ShortcutHelper
 
     @Inject
-    @field:ForcePreferenceClear
-    lateinit var forcePreferenceClear: BooleanPreference
+    @field:ForcePreferenceDelete
+    lateinit var forcePreferenceDelete: BooleanPreference
 
     @Inject
     lateinit var firebaseHelper: FirebaseHelper
@@ -85,9 +85,9 @@ class SplashActivity : LeanBaseActivity() {
     }
 
     private fun forcePreferenceClear() {
-        if (forcePreferenceClear.get()) {
+        if (forcePreferenceDelete.get()) {
             userManager.logout()
-            forcePreferenceClear.set(false)
+            forcePreferenceDelete.set(false)
         }
     }
 

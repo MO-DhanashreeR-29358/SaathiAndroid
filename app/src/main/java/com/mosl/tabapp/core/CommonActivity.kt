@@ -32,7 +32,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.annotation.ForcePreferenceClear
+import com.mosl.mobile.user.annotation.ForcePreferenceDelete
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
@@ -98,8 +98,8 @@ class CommonActivity : BaseActivity(),
     lateinit var tokenPref: Preference<String>
 
     @Inject
-    @field:ForcePreferenceClear
-    lateinit var forcePreferenceClear: BooleanPreference
+    @field:ForcePreferenceDelete
+    lateinit var forcePreferenceDelete: BooleanPreference
 
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
@@ -480,7 +480,7 @@ class CommonActivity : BaseActivity(),
 
                     uiModel.onSuccess {
                         Timber.d("Logout Successfully")
-                        forcePreferenceClear.set(false)
+                        forcePreferenceDelete.set(false)
                         stopService()
                         openLogin()
                     }
