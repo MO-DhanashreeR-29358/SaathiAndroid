@@ -8,7 +8,7 @@ import android.view.View
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
-import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
@@ -50,7 +50,7 @@ class SplashActivity : LeanBaseActivity() {
 
     @Inject
     @field:ForcePreferenceDelete
-    lateinit var forcePreferenceDelete: BooleanPreference
+    lateinit var forcePreferenceDelete: IntegerPreference
 
     @Inject
     lateinit var firebaseHelper: FirebaseHelper
@@ -85,9 +85,9 @@ class SplashActivity : LeanBaseActivity() {
     }
 
     private fun forcePreferenceClear() {
-        if (forcePreferenceDelete.get()) {
+        if (forcePreferenceDelete.get() == BuildConfig.VERSION_CODE) {
             userManager.logout()
-            forcePreferenceDelete.set(false)
+            forcePreferenceDelete.set(100)
         }
     }
 

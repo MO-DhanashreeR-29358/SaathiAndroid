@@ -25,7 +25,7 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
-import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
@@ -100,7 +100,7 @@ class CommonActivity : BaseActivity(),
 
     @Inject
     @field:ForcePreferenceDelete
-    lateinit var forcePreferenceDelete: BooleanPreference
+    lateinit var forcePreferenceDelete: IntegerPreference
 
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
@@ -481,7 +481,7 @@ class CommonActivity : BaseActivity(),
 
                     uiModel.onSuccess {
                         Timber.d("Logout Successfully")
-                        forcePreferenceDelete.set(false)
+                        forcePreferenceDelete.set(100)
                         stopService()
                         openLogin()
                     }
