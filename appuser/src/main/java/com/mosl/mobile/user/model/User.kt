@@ -8,6 +8,7 @@ data class User(
     @JvmField val isEkycEnable: String,
     @JvmField val isUseUrl: String,
     @JvmField val isChequeApprovalEnable: String,
+    @JvmField val isRetrieveOTPEnable: String,
     @JvmField val userId: String,
     @JvmField val employeeCode: String,
     @JvmField val firstName: String,
@@ -34,8 +35,13 @@ data class User(
         return isEkycEnable == "1"
     }
 
+
     fun isCheckApprovalEnable(): Boolean {
         return isChequeApprovalEnable == "1"
+    }
+
+    fun isRetrieveOTPEnable(): Boolean {
+        return isRetrieveOTPEnable == "1"
     }
 
     fun isUseUrlEnable(): Boolean {

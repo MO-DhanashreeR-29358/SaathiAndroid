@@ -22,41 +22,23 @@ class MenuDataSourceImpl @Inject constructor(
             if (user.isAufsb()) {
                 getAufsbUserMenu()
             } else if (user.isAuBankSalesSupport()) {
-                getAuSalesBank(user.isCheckApprovalEnable())
+                getAuSalesBank(user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
             } else if (user.isSMTEnabled()) {
-                getSMTUserMenu(menuItems, user.isCheckApprovalEnable())
+                getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
             } else if (user.isEkycEnable()) {
-                getEkycUserMenu(menuItems, user.isCheckApprovalEnable())
+                getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
             } else {
-                getUserMenu(menuItems, user.isCheckApprovalEnable())
+                getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
             }
         }
             .subscribeOn(Schedulers.io())
     }
 
-    protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-        return listOf(
-            getDashboard(),
-            getOpenAccount(),
-            getEModification(),
-            getReports(list),
-            getIncentiveReport(),
-            getCalendar(),
-            getPendingApproval(),
-            getSalesBrochure(),
-            getSalesStadium(),
-            getBirthdayAnniversary(),
-            getMostGuide(),
-            getQuery(),
-            getLogout()
-        )
-    }
-
     protected fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean, isRetrieveOTPEnable: Boolean
     ): List<BaseMenu> {
-        return if (isCheckApproval) {
+        return if (isCheckApproval && isRetrieveOTPEnable) {
             listOf(
                 getDashboard(),
                 getOpenAccount(),
@@ -69,6 +51,41 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
+                getRetrieveOTP(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isRetrieveOTPEnable) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getLogout()
@@ -92,28 +109,11 @@ class MenuDataSourceImpl @Inject constructor(
         }
     }
 
-    protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-        return listOf(
-            getDashboard(),
-            getEModification(),
-            getReports(list),
-            getIncentiveReport(),
-            getCalendar(),
-            getPendingApproval(),
-            getSalesBrochure(),
-            getSalesStadium(),
-            getBirthdayAnniversary(),
-            getMostGuide(),
-            getQuery(),
-            getLogout()
-        )
-    }
-
     protected fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean, isRetrieveOTPEnable: Boolean
     ): List<BaseMenu> {
-        return if (isCheckApproval) {
+        return if (isCheckApproval && isRetrieveOTPEnable) {
             listOf(
                 getDashboard(),
                 getEModification(),
@@ -125,6 +125,39 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
+                getRetrieveOTP(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isRetrieveOTPEnable) {
+            listOf(
+                getDashboard(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getLogout()
@@ -149,9 +182,9 @@ class MenuDataSourceImpl @Inject constructor(
 
     protected fun getSMTUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean, isRetrieveOTPEnable: Boolean
     ): List<BaseMenu> {
-        return return if (isCheckApproval) {
+        return if (isCheckApproval && isRetrieveOTPEnable) {
             listOf(
                 getDashboard(),
                 getOpenAccount(),
@@ -165,6 +198,43 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesStadium(),
                 getBirthdayAnniversary(),
                 getSuggestMe(),
+                getRetrieveOTP(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getSuggestMe(),
+                getMostGuide(),
+                getQuery(),
+                getLogout()
+            )
+        } else if (isRetrieveOTPEnable) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getSuggestMe(),
+                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getLogout()
@@ -197,8 +267,11 @@ class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    protected fun getAuSalesBank(isCheckApproval: Boolean): List<BaseMenu> {
-        return if (isCheckApproval) {
+    protected fun getAuSalesBank(
+        isCheckApproval: Boolean,
+        isRetrieveOTPEnable: Boolean
+    ): List<BaseMenu> {
+        return if (isCheckApproval && isRetrieveOTPEnable) {
             listOf(
                 getDashboard(),
                 getOpenAccount(),
@@ -209,6 +282,35 @@ class MenuDataSourceImpl @Inject constructor(
                 getCheckApproval(),
                 getSalesBrochure(),
                 getSalesStadium(),
+                getRetrieveOTP(),
+                getMostGuide(),
+                getLogout()
+            )
+        } else if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getAUBankMeeting(),
+                getAUBankMeetingReport(),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getMostGuide(),
+                getLogout()
+            )
+        } else if (isRetrieveOTPEnable) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getEModification(),
+                getAUBankMeeting(),
+                getAUBankMeetingReport(),
+                getIncentiveReport(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getRetrieveOTP(),
                 getMostGuide(),
                 getLogout()
             )
@@ -261,6 +363,15 @@ class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_MOST_GUIDE_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_MOST_GUIDE
+        )
+    }
+
+    internal fun getRetrieveOTP(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_retrieve_otp,
+            label = R.string.MOSL_MENU_RETRIEVE_OTP_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP
         )
     }
 

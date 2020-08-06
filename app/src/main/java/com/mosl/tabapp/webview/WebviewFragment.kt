@@ -403,6 +403,13 @@ class WebviewFragment : CommonFragment() {
                     Pair(it.url, webViewRequest.id)
                 }
             }
+            RETRIEVE_OTP_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(RETRIEVE_OTP_KEY, null, null)
+                ).map {
+                    Pair(it.url, webViewRequest.id)
+                }
+            }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null)
@@ -444,5 +451,7 @@ class WebviewFragment : CommonFragment() {
         const val CHECK_APPROVAL_KEY = "ChequeApproval"
         const val E_MODIFICATION_ID = "9"
         const val E_MODIFICATION_KEY = "EModification"
+        const val RETRIEVE_OTP_ID = "10"
+        const val RETRIEVE_OTP_KEY = "RetriveOTP"
     }
 }

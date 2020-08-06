@@ -7,6 +7,7 @@
     <string name="MOSL_MENU_INCENTIVE_REPORT_TXT">Incentive Report</string>
     <string name="MOSL_MENU_CHECK_APPROVAL_TXT">Check Approval</string>
     <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
+    <string name="MOSL_MENU_RETRIEVE_OTP_TXT">Retrieve OTP</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
     <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
