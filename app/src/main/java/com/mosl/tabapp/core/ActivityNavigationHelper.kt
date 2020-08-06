@@ -315,7 +315,11 @@ class ActivityNavigationHelper @Inject constructor(
                 Objects.requireNonNull<List<ProspectResponse>>(data.response)[0]
             if (prospectResponse.isRegistrationAllowed()) {
                 val oaoUserId = prospectResponse.ekycUserID
-                gotoEkycExpressPage(context, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId)
+                if (userManager.user.isUseUrlEnable()) {
+                    gotoEkycExpressPage(context, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId)
+                } else {
+                    ekycNavigator.openNewEkycApp(true, oaoUserId)
+                }
             } else {
                 MSFDialog.alertDialog(
                     context, 0,
@@ -370,8 +374,8 @@ class ActivityNavigationHelper @Inject constructor(
         }
     }
 
-    private fun openEkycApp(isExistingOrNewUser: Boolean) {
-        ekycNavigator.openNewEkycApp(isExistingOrNewUser, "")
+    fun openEkycApp(isExistingOrNewUser: Boolean, userId: String = "") {
+        ekycNavigator.openNewEkycApp(isExistingOrNewUser, userId)
     }
 
     private fun openLeadViewDetail(data: NotificationData): Bundle {

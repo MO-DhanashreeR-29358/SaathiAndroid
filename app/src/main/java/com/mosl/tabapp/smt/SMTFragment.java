@@ -74,8 +74,8 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	}
 
 	@Override public void openEkyc(String OAOUserId) {
-		gotoEkycExpressPage(WebviewFragment.RESUME_APPLICATIONS_ID, OAOUserId);
-	}
+        gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, OAOUserId);
+    }
 
 	public class WebViewClient extends android.webkit.WebViewClient {
 		@Override

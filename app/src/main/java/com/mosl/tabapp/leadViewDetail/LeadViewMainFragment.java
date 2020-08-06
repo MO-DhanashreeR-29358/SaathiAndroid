@@ -422,7 +422,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         ivOaoForm.setOnClickListener(view -> {
             dialog.dismiss();
-            gotoEkycExpressPage(WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
+            gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
         });
         ivOpenAccount.setOnClickListener(view -> {
             dialog.dismiss();

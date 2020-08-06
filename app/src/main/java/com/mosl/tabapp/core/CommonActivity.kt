@@ -36,6 +36,7 @@ import com.mosl.mobile.user.annotation.ForcePreferenceDelete
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.shared.util.MSFDialog
@@ -430,13 +431,13 @@ class CommonActivity : BaseActivity(),
                     logoutCustomer()
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_FRESH_REG) {
-                    gotoEkycExpressPage(WebviewFragment.FRESH_REGISTRATION_ID)
+                    gotoEkycExpressPage(false, WebviewFragment.FRESH_REGISTRATION_ID)
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EXISTING_APP) {
-                    gotoEkycExpressPage(WebviewFragment.EXISTING_APPLICATIONS_ID)
+                    gotoEkycExpressPage(true, WebviewFragment.EXISTING_APPLICATIONS_ID)
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_E_MODIFICATION) {
-                    gotoEkycExpressPage(WebviewFragment.E_MODIFICATION_ID)
+                    gotoEkycExpressPage(true, WebviewFragment.E_MODIFICATION_ID)
                     binding.drawerLayout.closeDrawers()
                 }
 
@@ -633,8 +634,12 @@ class CommonActivity : BaseActivity(),
         activityNavHelper.convertEkycApi(this, ekycModule)
     }
 
-    override fun gotoEkycExpressPage(id: String, oaoUserID: String) {
-        activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
+    override fun gotoEkycExpressPage(isExistingOrNewUser: Boolean, id: String, oaoUserID: String) {
+        if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID) {
+            activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
+        } else {
+            activityNavHelper.openEkycApp(isExistingOrNewUser, oaoUserID)
+        }
     }
 
     override fun renderDiyLink(

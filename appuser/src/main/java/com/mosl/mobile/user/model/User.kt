@@ -6,6 +6,7 @@ package com.mosl.mobile.user.model
 data class User(
     @JvmField val smtEnabled: String,
     @JvmField val isEkycEnable: String,
+    @JvmField val isUseUrl: String,
     @JvmField val isChequeApprovalEnable: String,
     @JvmField val userId: String,
     @JvmField val employeeCode: String,
@@ -35,6 +36,10 @@ data class User(
 
     fun isCheckApprovalEnable(): Boolean {
         return isChequeApprovalEnable == "1"
+    }
+
+    fun isUseUrlEnable(): Boolean {
+        return isUseUrl == "1"
     }
 
     fun isAuBankSalesSupport(): Boolean {

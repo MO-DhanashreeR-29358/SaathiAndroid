@@ -171,6 +171,7 @@ class AutoCompleteAdapter(
       }
       holderView.rlOAOForm.setOnClickListener {
         convertToEkyc.gotoEkycExpressPage(
+          true,
           WebviewFragment.RESUME_APPLICATIONS_ID,
           resultModel.oaoUserId.toString()
         )
@@ -269,7 +270,7 @@ class AutoCompleteAdapter(
 
   interface ConvertToEkyc {
     fun gotoEkycPage(ekycModule: EkycModule)
-    fun gotoEkycExpressPage(id: String, oaoUserID: String = "")
+    fun gotoEkycExpressPage(isExistingOrNewUser: Boolean, id: String, oaoUserID: String = "")
     fun renderDiyLink(
       leadId: String,
       callBack: DiyLinkClickListner?

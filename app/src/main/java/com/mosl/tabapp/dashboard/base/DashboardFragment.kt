@@ -60,12 +60,6 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableMap
-import kotlin.collections.indices
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
 import kotlin.collections.set
 
 class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener {
@@ -931,11 +925,11 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
   }
 
   override fun renderFreshRegistration() {
-    gotoEkycExpressPage(WebviewFragment.FRESH_REGISTRATION_ID, "")
+    gotoEkycExpressPage(false, WebviewFragment.FRESH_REGISTRATION_ID, "")
   }
 
   override fun renderExistingApplication() {
-    gotoEkycExpressPage(WebviewFragment.EXISTING_APPLICATIONS_ID, "")
+      gotoEkycExpressPage(true, WebviewFragment.EXISTING_APPLICATIONS_ID, "")
 
   }
 

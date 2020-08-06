@@ -121,9 +121,13 @@ open class CommonFragment : BaseFragment() {
     }
 
     fun gotoEkycExpressPage(
-        id: String, oaoUserId: String
+        isExistingOrNewUser: Boolean, id: String, oaoUserId: String
     ) {
-        (requireActivity() as CommonActivity).gotoEkycExpressPage(id, oaoUserId)
+        (requireActivity() as CommonActivity).gotoEkycExpressPage(
+            isExistingOrNewUser,
+            id,
+            oaoUserId
+        )
     }
 
     fun renderDiyLink(

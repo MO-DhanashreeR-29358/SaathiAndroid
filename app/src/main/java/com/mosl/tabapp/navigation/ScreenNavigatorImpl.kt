@@ -10,16 +10,18 @@ import com.mosl.app.core.utils.toast
 import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
+import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDetailData
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightNavigator
-import com.mosl.tabapp.ekyc.EkycNavigator
+import com.mosl.tabapp.ekyc.*
 import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesNavigator
 import com.mosl.tabapp.leadViewDetail.activity.mapToMeetingParcel
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment.Companion.ARG_MEETING_DETAILS
@@ -53,27 +55,30 @@ class ScreenNavigatorImpl @Inject constructor(
         isExistingUser: Boolean,
         userId: String
     ) {
-        val args = Bundle()
-        args.putString(WebviewFragment.PAGE_ID, WebviewFragment.RESUME_APPLICATIONS_ID)
-        args.putString(WebviewFragment.OAO_USER_ID, userId)
-        openPage(NAVIGATE_TO_RESUME_APPLICATION, args, true)
-
-//    val commandType = if (isExistingUser) RESUME else NEW
-//    try {
-//      val launchIntentForPackage =
-//        activity.packageManager.getLaunchIntentForPackage(EKYC_PACKAGE_NAME)
-//      launchIntentForPackage?.setFlags(
-//          Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//      )
-//      launchIntentForPackage?.putExtra(
-//          OUTPUT, EkycSecurityUtil.encrypt(userManager.getDataForEkyc(commandType, userId))
-//      )
-//      activity.startActivity(launchIntentForPackage)
-//    } catch (e: Exception) {
-//      val intent = Intent(Intent.ACTION_VIEW)
-//      intent.setData(Uri.parse(PLAY_STORE_URL + EKYC_PACKAGE_NAME))
-//      activity.startActivity(intent)
-//    }
+        if (userManager.user.isUseUrlEnable()) {
+            val args = Bundle()
+            args.putString(WebviewFragment.PAGE_ID, WebviewFragment.RESUME_APPLICATIONS_ID)
+            args.putString(WebviewFragment.OAO_USER_ID, userId)
+            openPage(NAVIGATE_TO_RESUME_APPLICATION, args, true)
+        } else {
+            val commandType = if (isExistingUser) RESUME else NEW
+            try {
+                val launchIntentForPackage =
+                    activity.packageManager.getLaunchIntentForPackage(EKYC_PACKAGE_NAME)
+                launchIntentForPackage?.setFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                )
+                launchIntentForPackage?.putExtra(
+                    OUTPUT,
+                    EkycSecurityUtil.encrypt(userManager.getDataForEkyc(commandType, userId))
+                )
+                activity.startActivity(launchIntentForPackage)
+            } catch (e: Exception) {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setData(Uri.parse(PLAY_STORE_URL + EKYC_PACKAGE_NAME))
+                activity.startActivity(intent)
+            }
+        }
     }
 
     override fun goBack() {

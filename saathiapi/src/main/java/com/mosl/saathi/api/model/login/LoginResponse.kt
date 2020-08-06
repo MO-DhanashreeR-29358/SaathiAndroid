@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class LoginResponse(
     @SerializedName("SMTEnabled") @JvmField val smtEnabled: String,
+    @SerializedName("IsUseUrl") @JvmField val isUseUrl: String,
     @SerializedName("IsEkycEnable") @JvmField val isEkycEnable: String?,
     @SerializedName("IsChequeApprovalEnable") @JvmField val isChequeApprovalEnable: String?,
     @SerializedName("User") @JvmField val user: User
