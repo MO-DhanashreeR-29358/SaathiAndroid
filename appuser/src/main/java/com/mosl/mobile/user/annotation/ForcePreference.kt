@@ -5,4 +5,4 @@ import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Retention(RUNTIME)
 @Qualifier
-annotation class ForcePreferenceDelete
+annotation class ForcePreference
