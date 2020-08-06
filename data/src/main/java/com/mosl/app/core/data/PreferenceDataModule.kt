@@ -15,6 +15,6 @@ class PreferenceDataModule {
     @Singleton
     @Provides
     internal fun provideForcePreferenceDelete(prefs: SharedPreferences): IntegerPreference {
-        return IntegerPreference(prefs, FORCE_PREFERENCE_DELETE, 199)
+        return IntegerPreference(prefs, FORCE_PREFERENCE_DELETE, 195)
     }
 }
