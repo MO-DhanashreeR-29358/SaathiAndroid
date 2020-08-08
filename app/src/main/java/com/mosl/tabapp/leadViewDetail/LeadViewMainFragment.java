@@ -44,7 +44,6 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter;
-import com.mosl.tabapp.webview.WebviewFragment;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -422,12 +421,14 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         ivOaoForm.setOnClickListener(view -> {
             dialog.dismiss();
-            gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
+            gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
+                    prospectSourceDetail, intrestedIn, oaoUserId.toString()));
+            // gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
         });
         ivOpenAccount.setOnClickListener(view -> {
             dialog.dismiss();
             gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
-                    prospectSourceDetail, intrestedIn));
+                    prospectSourceDetail, intrestedIn, oaoUserId.toString()));
         });
         ivCreateMeeting.setOnClickListener(view -> {
             Bundle bundle = new Bundle();

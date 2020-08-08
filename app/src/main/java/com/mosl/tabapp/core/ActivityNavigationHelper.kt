@@ -216,8 +216,14 @@ class ActivityNavigationHelper @Inject constructor(
     ) {
         if (context.isNetworkConnected()) {
             val request = ProspectRequest(
-                ekycModule.mobile, ekycModule.email, ekycModule.branchEmpCode, ekycModule.source,
-                ekycModule.prospectSource, ekycModule.prospectSourceDetails, ekycModule.interestedIn
+                ekycModule.mobile,
+                ekycModule.email,
+                ekycModule.branchEmpCode,
+                ekycModule.source,
+                ekycModule.prospectSource,
+                ekycModule.prospectSourceDetails,
+                ekycModule.interestedIn,
+                ekycModule.oaoUserId
             )
 
             disposable.add(saathiApi
@@ -315,7 +321,7 @@ class ActivityNavigationHelper @Inject constructor(
                 Objects.requireNonNull<List<ProspectResponse>>(data.response)[0]
             if (prospectResponse.isRegistrationAllowed()) {
                 val oaoUserId = prospectResponse.ekycUserID
-                if (userManager.user.isUseUrlEnable()) {
+                if (prospectResponse.isUseUrlEnable()) {
                     gotoEkycExpressPage(context, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId)
                 } else {
                     ekycNavigator.openNewEkycApp(true, oaoUserId)

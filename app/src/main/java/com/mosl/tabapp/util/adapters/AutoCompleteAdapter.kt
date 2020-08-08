@@ -15,7 +15,6 @@ import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import com.mosl.tabapp.webview.WebviewFragment
 
 class AutoCompleteAdapter(
   val context: Context,
@@ -159,7 +158,8 @@ class AutoCompleteAdapter(
           branchEmpCode = resultModel.leadOwner, interestedIn = resultModel.interestedIn,
           prospectSourceDetails = resultModel.prospectSourceDetails,
           prospectSource = resultModel.prospectSourceName,
-          source = resultModel.sourceName
+          source = resultModel.sourceName,
+          oaoUserId = ""
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
@@ -170,11 +170,15 @@ class AutoCompleteAdapter(
         clickListener.onSearchResultClick()
       }
       holderView.rlOAOForm.setOnClickListener {
-        convertToEkyc.gotoEkycExpressPage(
-          true,
-          WebviewFragment.RESUME_APPLICATIONS_ID,
-          resultModel.oaoUserId.toString()
+        val data = EkycModule(
+          mobile = resultModel.mobileNo, email = resultModel.email,
+          branchEmpCode = resultModel.leadOwner, interestedIn = resultModel.interestedIn,
+          prospectSourceDetails = resultModel.prospectSourceDetails,
+          prospectSource = resultModel.prospectSourceName,
+          source = resultModel.sourceName,
+          oaoUserId = resultModel.oaoUserId.toString()
         )
+        convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
       }
       holderView.llExpand.setOnClickListener {

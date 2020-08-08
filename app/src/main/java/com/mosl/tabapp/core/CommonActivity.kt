@@ -434,7 +434,7 @@ class CommonActivity : BaseActivity(),
                     gotoEkycExpressPage(false, WebviewFragment.FRESH_REGISTRATION_ID)
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EXISTING_APP) {
-                    gotoEkycExpressPage(true, WebviewFragment.EXISTING_APPLICATIONS_ID)
+                    activityNavHelper.openEkycApp(true)
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_E_MODIFICATION) {
                     gotoEkycExpressPage(true, WebviewFragment.E_MODIFICATION_ID)
