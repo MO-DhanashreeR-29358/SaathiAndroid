@@ -165,7 +165,7 @@ class ScreenNavigatorImpl @Inject constructor(
                 .build()
             intent.launchUrl(activity, Uri.parse(url))
         } catch (e: Exception) {
-            openUrlInWebView(url)
+            openUrlInBrowser(url)
         }
     }
 
