@@ -75,7 +75,6 @@ import static com.mosl.tabapp.model.ClientDetail.getName;
 import static com.mosl.tabapp.model.ClientDetail.getOaoUserId;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_CREATE_MEETING;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT;
-import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SIP;
 import static com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_SUGGEST_ME;
 
 public class LeadViewMainFragment extends CommonFragment implements View.OnClickListener,
@@ -384,7 +383,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         ImageView ivCopyLink = dialog.findViewById(R.id.ivCopyLink);
         ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
         ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
-        ImageView ivSip = dialog.findViewById(R.id.ivSip);
         View view3 = dialog.findViewById(R.id.view3);
         if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
             ivCreateMeeting.setVisibility(View.GONE);
@@ -490,11 +488,6 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         ivShareLink.setOnClickListener(view -> {
             dialog.dismiss();
             renderDiyLink(leadId, this);
-        });
-        ivSip.setOnClickListener(view -> {
-            Bundle bundle = new Bundle();
-            dialog.dismiss();
-            navigator.openPage(NAVIGATE_TO_SIP, bundle, true, false);
         });
         ivSuggestMe.setOnClickListener(view -> {
             getSuggestMe();

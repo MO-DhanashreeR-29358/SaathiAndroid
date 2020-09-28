@@ -49,17 +49,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/view4"
-        app:layout_constraintStart_toEndOf="@+id/view2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:id="@+id/view4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view3"
+        app:layout_constraintStart_toEndOf="@+id/view2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -67,8 +58,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:layout_constraintEnd_toEndOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -79,8 +70,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:layout_constraintEnd_toEndOf="@id/view1"
         app:layout_constraintStart_toStartOf="@id/view1"
         app:layout_constraintTop_toTopOf="parent"
@@ -91,8 +82,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/view2"
         app:layout_constraintStart_toStartOf="@id/view2"
@@ -104,15 +95,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/view2"
         app:layout_constraintStart_toStartOf="@id/view2"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_oao_form"
         tools:visibility="visible" />
-
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivSuggestMe"
@@ -128,25 +118,12 @@
         app:srcCompat="@drawable/ic_suggest_me" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/ivSip"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/view4"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_sip" />
-
-    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivCall"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:layout_constraintEnd_toEndOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivCreateMeeting"
@@ -157,8 +134,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingTop="5dp"
         app:layout_constraintEnd_toEndOf="@id/view1"
         app:layout_constraintStart_toStartOf="@id/view1"
         app:layout_constraintTop_toBottomOf="@id/ivSetAppointment"

@@ -276,31 +276,6 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/rlSip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/margin_small">
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivSip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_set_appointment_search" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    android:layout_toEndOf="@+id/ivSip"
-                    android:text="@string/MOSL_MENU_SIP"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp" />
-
-            </RelativeLayout>
-
         </LinearLayout>
 
 
