@@ -130,6 +130,9 @@ class AutoCompleteAdapter(
       holderView.rlSetAppointment.setOnClickListener {
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       }
+      holderView.rlSip.setOnClickListener {
+        openPage(NavigationConstants.NAVIGATE_TO_SIP, bundle)
+      }
       holderView.rlCreateMeeting.setOnClickListener {
         when (creacteMeetingId) {
           0 -> {
@@ -265,6 +268,7 @@ class AutoCompleteAdapter(
     val rlViewDetail: RelativeLayout = parent.findViewById(R.id.rlViewDetail)
     val rlOpenAccount: RelativeLayout = parent.findViewById(R.id.rlOpenAccount)
     val rlOAOForm: RelativeLayout = parent.findViewById(R.id.rlOAOForm)
+    val rlSip: RelativeLayout = parent.findViewById(R.id.rlSip)
     val ivDropDownArrow: ImageView = parent.findViewById(R.id.ivDropDownArrow)
   }
 

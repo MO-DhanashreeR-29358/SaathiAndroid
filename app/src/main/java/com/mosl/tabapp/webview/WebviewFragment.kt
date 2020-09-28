@@ -410,6 +410,13 @@ class WebviewFragment : CommonFragment() {
                     Pair(it.url, webViewRequest.id)
                 }
             }
+            SIP_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(SIP_KEY, null, userManager.user.employeeCode)
+                ).map {
+                    Pair(it.url, webViewRequest.id)
+                }
+            }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null)
@@ -453,5 +460,7 @@ class WebviewFragment : CommonFragment() {
         const val E_MODIFICATION_KEY = "EModification"
         const val RETRIEVE_OTP_ID = "10"
         const val RETRIEVE_OTP_KEY = "RetriveOTP"
+        const val SIP_ID = "11"
+        const val SIP_KEY = "getSIP"
     }
 }

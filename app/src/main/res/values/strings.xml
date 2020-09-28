@@ -34,6 +34,7 @@
     <string name="YTD">YTD</string>
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
+    <string name="MOSL_MENU_SIP">SIP</string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>
