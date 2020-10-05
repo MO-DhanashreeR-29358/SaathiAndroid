@@ -75,14 +75,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme" />
 
-
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="dda79f66330d41eeba7f4fcf83cfc3d519aaf942" />
-        <!--<meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="3cc8c76f5c3a4f08cb553d9080f4c4f1cade791c" />-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="@string/file_provider_authority"

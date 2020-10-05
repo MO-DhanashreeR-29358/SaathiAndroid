@@ -160,8 +160,6 @@ class CommonActivity : BaseActivity(),
         hideAppTitle()
         setupMenuDrawer()
         if (savedInstanceState == null) {
-//      screenNavigator.openHome()
-
             activityNavHelper.loadIntent(intent)
         } else {
             globalTitles =
@@ -456,13 +454,15 @@ class CommonActivity : BaseActivity(),
     }
 
     internal fun logoutCustomer() {
-        MSFDialog.alertDialog(this@CommonActivity, 0, getString(R.string.alert_dialog_title),
-            getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true, { action, _ ->
-                if (action === Action.OK) {
+        MSFDialog.alertDialog(
+            this@CommonActivity, 0, getString(R.string.alert_dialog_title),
+            getString(R.string.MOSL_MENU_LOGOUT_TXT), "Yes", "No", true
+        ) { action, _ ->
+            if (action === Action.OK) {
 
-                    doLogout()
-                }
-            })
+                doLogout()
+            }
+        }
     }
 
 
