@@ -2,8 +2,8 @@ package com.mosl.mobile.user.login
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.mosl.app.core.prefs.BooleanPreference
-import com.mosl.mobile.user.annotation.ForcePreference
+import com.mosl.app.core.prefs.IntegerPreference
+import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.helper.UserPrefStore
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.User
@@ -18,8 +18,8 @@ import javax.inject.Singleton
 class UserCacheImpl @Inject internal constructor(
     private val gson: Gson,
     private val userStore: UserPrefStore,
-    @ForcePreference
-    private var forcePreference: BooleanPreference
+    @PreferenceClear
+    private var forcePreference: IntegerPreference
 ) : UserCache {
 
     override fun saveUser(user: User) {
@@ -28,7 +28,7 @@ class UserCacheImpl @Inject internal constructor(
 
     override fun getUser(): User? {
         return when {
-            forcePreference.get() -> null
+            forcePreference.get() == 199 -> null
             userStore.userInfo.isSet -> gson.fromJson(userStore.userInfo.get(), User::class.java)
             else -> null
         }

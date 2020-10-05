@@ -25,20 +25,19 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
-import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.annotation.ForcePreference
+import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
-import com.mosl.saathi.api.SaathiApi
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
@@ -99,8 +98,8 @@ class CommonActivity : BaseActivity(),
     lateinit var tokenPref: Preference<String>
 
     @Inject
-    @field:ForcePreference
-    lateinit var forcePreference: BooleanPreference
+    @field:PreferenceClear
+    lateinit var forcePreference: IntegerPreference
 
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
@@ -108,9 +107,6 @@ class CommonActivity : BaseActivity(),
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
     private var searchType = SEARCH_TYPE_LEAD
-
-    @Inject
-    lateinit var saathiApiNew: SaathiApi
 
     @Inject
     lateinit var eventListenerFactory: HttpListenerFactory
@@ -481,7 +477,7 @@ class CommonActivity : BaseActivity(),
 
                     uiModel.onSuccess {
                         Timber.d("Logout Successfully")
-                        forcePreference.set(false)
+                        forcePreference.set(100)
                         stopService()
                         openLogin()
                     }

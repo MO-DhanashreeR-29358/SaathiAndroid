@@ -1,3 +1,3 @@
 package com.mosl.mobile.app_user
 
-const val FORCE_PREFERENCE = "forcePreference"
+const val PREFERENCE_CLEAR = "preferenceClear"
