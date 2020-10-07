@@ -8,14 +8,14 @@ import android.view.View
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
-import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.user.annotation.ForcePreference
+import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.model.*
@@ -49,8 +49,8 @@ class SplashActivity : LeanBaseActivity() {
     lateinit var shortcutHelper: ShortcutHelper
 
     @Inject
-    @field:ForcePreference
-    lateinit var forcePreference: BooleanPreference
+    @field:PreferenceClear
+    lateinit var forcePreference: IntegerPreference
 
     @Inject
     lateinit var firebaseHelper: FirebaseHelper
@@ -85,9 +85,9 @@ class SplashActivity : LeanBaseActivity() {
     }
 
     private fun forcePreferenceClear() {
-        if (forcePreference.get()) {
+        if (forcePreference.get() == Utility.getAppVersionCode(applicationContext)) {
             userManager.logout()
-            forcePreference.set(false)
+            forcePreference.set(100)
         }
     }
 

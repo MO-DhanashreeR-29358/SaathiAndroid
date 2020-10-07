@@ -39,9 +39,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -79,8 +81,9 @@ import com.mosl.tabapp.model.SplAttendeeModel;
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
+
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -88,10 +91,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.PublishSubject;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
@@ -701,6 +707,7 @@ public class CreateMeetingFragment extends CommonFragment
                   enableLocationGroup = true;
                   enableField(llLocationGroup);
                   setVisibilityOTP(true);
+                  tvStartDate.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
                 } else {
                   enableLocationGroup = false;
                   disableField(llLocationGroup);

@@ -121,6 +121,7 @@ class AutoCompleteAdapter(
         if (this.isAufsb()) {
           holderView.rlSetAppointment.visibility = View.GONE
           holderView.rlCreateMeeting.visibility = View.GONE
+          holderView.rlViewDetail.visibility = View.GONE
         }
       }
 
