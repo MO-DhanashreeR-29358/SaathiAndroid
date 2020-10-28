@@ -10,6 +10,7 @@
     <string name="MOSL_MENU_RETRIEVE_OTP_TXT">Retrieve OTP</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
     <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
+    <string name="MOSL_MENU_SIP_TXT">SIP</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
@@ -34,6 +35,7 @@
     <string name="YTD">YTD</string>
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
+    <string name="MOSL_MENU_SIP">SIP</string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>

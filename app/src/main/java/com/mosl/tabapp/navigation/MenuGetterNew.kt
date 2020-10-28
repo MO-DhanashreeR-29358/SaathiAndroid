@@ -32,6 +32,7 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.RETRIEVE_OTP_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
 object MenuGetterNew {
@@ -67,6 +68,10 @@ object MenuGetterNew {
 
             NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, RETRIEVE_OTP_ID)
+                arguments = args
+            }
+            NavigationConstants.NAVIGATE_TO_SIP -> WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, SIP_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
@@ -132,6 +137,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> true
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
             NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP -> true
+            NavigationConstants.NAVIGATE_TO_SIP -> true
             else -> return false
         }
     }
