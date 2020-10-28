@@ -68,7 +68,7 @@ class WebviewFragment : CommonFragment() {
         val pageId = args.getString(PAGE_ID)
         val url = args.getString(URL)
         if (args.containsKey(OAO_USER_ID)) {
-            oaoUserID = args.getString(OAO_USER_ID)
+            oaoUserID = args.getString(OAO_USER_ID).toString()
         }
         when {
             url != null -> subject.onNext(WebViewRequest.Url(url))

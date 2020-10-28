@@ -203,7 +203,7 @@ class PendingApprovalTableAdapter(
                         hashArray[j] as LinkedHashMap<*, *>
                     val sortedData = linkedHashMap[sortCol] as String?
                     if (isNumber) {
-                        outDbl.add(java.lang.Double.valueOf(sortedData))
+                        outDbl.add(sortedData?.let { java.lang.Double.valueOf(it) })
                     } else {
                         outStr.add(sortedData)
                     }
