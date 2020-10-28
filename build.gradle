@@ -19,8 +19,8 @@ buildscript {
   }
 }
 
-ext.versions = ["compileSdkVersion": 28,
-                "targetSdkVersion": 28,
+ext.versions = ["compileSdkVersion": 29,
+                "targetSdkVersion": 29,
                 "buildToolsVersion": "28.0.3",
                 'multidex': '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',
