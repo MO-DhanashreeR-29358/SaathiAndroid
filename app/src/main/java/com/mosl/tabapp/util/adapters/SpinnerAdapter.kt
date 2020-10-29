@@ -16,7 +16,7 @@ class SpinnerAdapter<T : SpinnerData>(
     private val textViewResourceId: Int = R.layout.simple_spinner_item
 ) : ArrayAdapter<T>(context, layoutResource, spinnerData) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return createViewFromResource(
             position, parent, textViewResourceId,
             LayoutInflater.from(context)
