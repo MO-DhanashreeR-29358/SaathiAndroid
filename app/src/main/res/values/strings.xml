@@ -26,6 +26,7 @@
     <string name="MOSL_MENU_SETTING">Setting</string>
     <string name="preference_location_summary">Location tracking needed for Conveyance</string>
     <string name="preference_location_title">24x7 Location Tracking</string>
+    <string name="preff_24_7_key">checkTwentyFourSeven</string>
     <string name="preference_location_key">preference_key_location</string>
     <string name="preference_latitude_key">preference_key_latitude</string>
     <string name="preference_distance_key">preference_key_distance</string>

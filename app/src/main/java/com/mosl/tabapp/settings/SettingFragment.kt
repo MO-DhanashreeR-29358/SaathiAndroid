@@ -1,14 +1,12 @@
 package com.mosl.tabapp.settings
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.os.Bundle
 import android.os.IBinder
+import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.preference.Preference
@@ -17,6 +15,7 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.tabapp.R
 import com.mosl.tabapp.service.ForegroundService
@@ -34,11 +33,20 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
 
     var mService: ForegroundService? = null
 
-    @field:TwentyFourSevenCheck
-    @Inject
-    lateinit var twentyFourSevenCheck: BooleanPreference
+//    @field:TwentyFourSevenCheck
+//    @Inject
+//    lateinit var twentyFourSevenCheck: BooleanPreference
+
+    /**/
+    lateinit var sharedPreferences: SharedPreferences
+    var editor: SharedPreferences.Editor? = null
+    /**/
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+
+        sharedPreferences = requireActivity().getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
             findPreference<SwitchPreference>(getString(R.string.preference_location_key)) as SwitchPreference
@@ -46,7 +54,8 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
-        preference.isChecked = twentyFourSevenCheck.get()
+//        preference.isChecked = twentyFourSevenCheck.get()
+        preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
     }
 
     private fun getLastKnownLocation() {
@@ -127,7 +136,9 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    twentyFourSevenCheck.set(false)
+//                    twentyFourSevenCheck.set(false)
+                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+                    editor?.commit()
                     stopService()
                 }
             }
@@ -149,7 +160,9 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
                     requireContext(), "Location tracking started", Toast.LENGTH_SHORT
                 )
                     .show()
-                twentyFourSevenCheck.set(true)
+//                twentyFourSevenCheck.set(true)
+                editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
+                editor?.commit()
                 startService()
             } else if (action === AlertDialogHelper.Action.CANCEL) {
                 Timber.d("Cancel Clicked")

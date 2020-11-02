@@ -3,10 +3,7 @@ package com.mosl.tabapp.core
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
@@ -34,6 +31,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
@@ -100,9 +98,9 @@ class CommonActivity : BaseActivity(),
     @field:FcmToken
     lateinit var tokenPref: Preference<String>
 
-    @field:TwentyFourSevenCheck
+    /*@field:TwentyFourSevenCheck
     @Inject
-    lateinit var twentyFourSevenCheck: BooleanPreference
+    lateinit var twentyFourSevenCheck: BooleanPreference*/
 
     @Inject
     @field:PreferenceClear
@@ -131,6 +129,12 @@ class CommonActivity : BaseActivity(),
     lateinit var gson: Gson
     lateinit var remoteConfigModel: RemoteConfigModel
     var mService: ForegroundService? = null
+
+    /**/
+    lateinit var sharedPreferences: SharedPreferences
+    var editor: SharedPreferences.Editor? = null
+    var twentyFourSevenCheck = false
+    /**/
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -169,12 +173,16 @@ class CommonActivity : BaseActivity(),
                 savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
         }
 
+        sharedPreferences = getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+        twentyFourSevenCheck = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+
         locationWorkManager = WorkManager.getInstance(this)
         dataSyncWorkManager = WorkManager.getInstance(this)
 
         userManager.getUser()?.apply {
             if (!this.isAufsb()) {
-                if (twentyFourSevenCheck.get()) {
+                if (twentyFourSevenCheck) {
                     initBackgroundState()
                     startService(Intent(this@CommonActivity, ForegroundService::class.java))
                 }
@@ -188,7 +196,7 @@ class CommonActivity : BaseActivity(),
 
     override fun onResume() {
         super.onResume()
-        if (twentyFourSevenCheck.get() && !isForegroundServiceRunning(ForegroundService::class.java)) {
+        if (twentyFourSevenCheck && !isForegroundServiceRunning(ForegroundService::class.java)) {
             bindService(
                 Intent(this, ForegroundService::class.java),
                 mServiceConnection,
@@ -511,7 +519,9 @@ class CommonActivity : BaseActivity(),
                         Timber.d("Logout Successfully")
                         forcePreference.set(100)
                         stopService()
-                        twentyFourSevenCheck.set(false)
+//                        twentyFourSevenCheck.set(false)
+                        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+                        editor?.commit()
                         openLogin()
                     }
 
