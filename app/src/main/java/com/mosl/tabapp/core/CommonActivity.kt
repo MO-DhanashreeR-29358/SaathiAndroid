@@ -1,6 +1,7 @@
 package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
@@ -25,6 +26,7 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
@@ -34,6 +36,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
+import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -96,6 +99,10 @@ class CommonActivity : BaseActivity(),
     @Inject
     @field:FcmToken
     lateinit var tokenPref: Preference<String>
+
+    @field:TwentyFourSevenCheck
+    @Inject
+    lateinit var twentyFourSevenCheck: BooleanPreference
 
     @Inject
     @field:PreferenceClear
@@ -167,14 +174,37 @@ class CommonActivity : BaseActivity(),
 
         userManager.getUser()?.apply {
             if (!this.isAufsb()) {
-                initBackgroundState()
-                startService(Intent(this@CommonActivity, ForegroundService::class.java))
+                if (twentyFourSevenCheck.get()) {
+                    initBackgroundState()
+                    startService(Intent(this@CommonActivity, ForegroundService::class.java))
+                }
                 // startWorkManager()
             }
         }
         setupObservables()
         setBanner()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (twentyFourSevenCheck.get() && !isForegroundServiceRunning(ForegroundService::class.java)) {
+            bindService(
+                Intent(this, ForegroundService::class.java),
+                mServiceConnection,
+                Context.BIND_AUTO_CREATE
+            )
+        }
+    }
+
+    private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun stopService() {
@@ -433,6 +463,8 @@ class CommonActivity : BaseActivity(),
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_E_MODIFICATION) {
                     gotoEkycExpressPage(true, WebviewFragment.E_MODIFICATION_ID)
                     binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SETTING) {
+                    screenNavigator.openSettingActivity()
                 }
 
                 activityNavHelper.onMenuClicked(menu)
@@ -479,6 +511,7 @@ class CommonActivity : BaseActivity(),
                         Timber.d("Logout Successfully")
                         forcePreference.set(100)
                         stopService()
+                        twentyFourSevenCheck.set(false)
                         openLogin()
                     }
 

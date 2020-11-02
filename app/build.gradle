@@ -147,7 +147,8 @@ dependencies {
   implementation deps.androidx.recylerview
   implementation deps.androidx.vectordrawable
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-  debugImplementation deps.androidx.multidex
+    implementation 'androidx.preference:preference:1.1.1'
+    debugImplementation deps.androidx.multidex
   implementation deps.pagerslidingtabstrip
   implementation deps.sdpAndroid
   implementation deps.circleImageView

@@ -27,6 +27,8 @@ import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragmen
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingView.Companion.ARG_UPDATE_MEETING
 import com.mosl.tabapp.leadViewDetail.updatemeeting.mapToUpdateMeetingScreenData
 import com.mosl.tabapp.navigation.NavigationConstants.*
+import com.mosl.tabapp.settings.SettingActivity
+import timber.log.Timber
 import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
@@ -92,6 +94,15 @@ class ScreenNavigatorImpl @Inject constructor(
 
     override fun openPage(request: NavigationRequest) {
         handleNavigationRequest(request)
+    }
+
+    override fun openSettingActivity() {
+        try {
+            val intent = Intent(activity, SettingActivity::class.java)
+            activity.startActivity(intent)
+        } catch (e: Exception) {
+            Timber.tag("Settings Click Exceptn").d(e)
+        }
     }
 
     protected fun handleNavigationRequest(request: NavigationRequest) {

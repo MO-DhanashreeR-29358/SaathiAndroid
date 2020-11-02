@@ -55,6 +55,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isCheckApproval) {
@@ -73,6 +74,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getBirthdayAnniversary(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isRetrieveOTPEnable) {
@@ -91,6 +93,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else {
@@ -108,6 +111,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getBirthdayAnniversary(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         }
@@ -133,6 +137,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isCheckApproval) {
@@ -150,6 +155,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getBirthdayAnniversary(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isRetrieveOTPEnable) {
@@ -167,6 +173,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else {
@@ -183,6 +190,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getBirthdayAnniversary(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         }
@@ -210,6 +218,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isCheckApproval) {
@@ -229,6 +238,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSuggestMe(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else if (isRetrieveOTPEnable) {
@@ -248,6 +258,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         } else {
@@ -266,6 +277,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSuggestMe(),
                 getMostGuide(),
                 getQuery(),
+                getSetting(),
                 getLogout()
             )
         }
@@ -275,6 +287,7 @@ class MenuDataSourceImpl @Inject constructor(
         return listOf(
             getDashboard(),
             getOpenAccount(),
+            getSetting(),
             getLogout()
         )
     }
@@ -297,6 +310,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesStadium(),
                 getRetrieveOTP(),
                 getMostGuide(),
+                getSetting(),
                 getLogout()
             )
         } else if (isCheckApproval) {
@@ -312,6 +326,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getMostGuide(),
+                getSetting(),
                 getLogout()
             )
         } else if (isRetrieveOTPEnable) {
@@ -327,6 +342,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesStadium(),
                 getRetrieveOTP(),
                 getMostGuide(),
+                getSetting(),
                 getLogout()
             )
         } else {
@@ -341,6 +357,7 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getMostGuide(),
+                getSetting(),
                 getLogout()
             )
         }
@@ -528,6 +545,15 @@ class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
             enabled = enabled,
             pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
+        )
+    }
+
+    internal  fun getSetting(): BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_setting,
+            label = R.string.MOSL_MENU_SETTING,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_SETTING
         )
     }
 

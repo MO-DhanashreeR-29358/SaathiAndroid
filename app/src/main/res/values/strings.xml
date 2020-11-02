@@ -23,6 +23,14 @@
     <string name="MOSL_MENU_KNOWLEDGE_CENTRE_TXT">Sales Brochure</string>
     <string name="MOSL_MENU_SALES_STADIUM_PITCH_TXT">Sales Stadium Pitch</string>
     <string name="MOSL_MENU_PENDING_APPROVALS_TXT">My Pending Approvals</string>
+    <string name="MOSL_MENU_SETTING">Setting</string>
+    <string name="preference_location_summary">Location tracking needed for Conveyance</string>
+    <string name="preference_location_title">24x7 Location Tracking</string>
+    <string name="preference_location_key">preference_key_location</string>
+    <string name="preference_latitude_key">preference_key_latitude</string>
+    <string name="preference_distance_key">preference_key_distance</string>
+    <string name="preference_loc_key">preference_key_loc</string>
+    <string name="preference_longitude_key">preference_key_longitude</string>
     <string name="MOSL_MENU_LOGOUT_TXT">Logout</string>
     <string name="MOSL">Motilal Oswal</string>
     <string name="MOSL_LOGOUT_ALERT_MSG">Do you want to logout?</string>
@@ -371,4 +379,6 @@
     <string name="hint_lable_enter_category_description">Enter Category Description*</string>
     <string name="txt_lable_category">Category*</string>
     <string name="txt_lable_actionables">Actionables*</string>
+    <string name="dialog_ok">OK</string>
+    <string name="alert_dialog_location_message">We Motilal Oswal Financial Services Limited (herein after referred to as \'MOFSL\' for short) care about data privacy and security. By using Saathi, you agree to have read, understood and bound by our Privacy Policy, Please be advised that by proceeding further you expressly consent to have your GPS (satellite navigation system) data collected, transmitted, transferred, stored and processed by MOFSL.</string>
 </resources>

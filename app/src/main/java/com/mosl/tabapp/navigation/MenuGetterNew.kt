@@ -25,6 +25,7 @@ import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
+import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
@@ -95,6 +96,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
+            NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
             else -> null
         }
     }
@@ -138,6 +140,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
             NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP -> true
             NavigationConstants.NAVIGATE_TO_SIP -> true
+            NavigationConstants.NAVIGATE_TO_SETTING -> true
             else -> return false
         }
     }
