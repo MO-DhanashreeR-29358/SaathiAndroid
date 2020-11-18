@@ -29,17 +29,8 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
     fun locationPermission(): Boolean {
         val value =
             ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
-        val coarseLocation =
-            ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_COARSE_LOCATION)
-        val backgroundLocation =
-            ActivityCompat.checkSelfPermission(
-                fragment.requireContext(),
-                ACCESS_BACKGROUND_LOCATION
-            )
 
-        return value == PackageManager.PERMISSION_GRANTED &&
-                coarseLocation == PackageManager.PERMISSION_GRANTED &&
-                backgroundLocation == PackageManager.PERMISSION_GRANTED
+        return value == PackageManager.PERMISSION_GRANTED
     }
 
     private fun storagePermission(): Boolean {
