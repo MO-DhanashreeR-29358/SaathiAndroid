@@ -28,10 +28,6 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
     fun locationPermission(): Boolean {
         val value =
             ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
-        val backgroundValue = ActivityCompat.checkSelfPermission(
-            fragment.requireContext(),
-            ACCESS_BACKGROUND_LOCATION
-        )
 
         return value == PackageManager.PERMISSION_GRANTED
     }
