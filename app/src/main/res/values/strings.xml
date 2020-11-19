@@ -387,4 +387,13 @@
     <string name="consent_check">ConsentCheck</string>
     <string name="terms_condition_msg">Please Agree with Terms &amp; Conditions to Access your account</string>
     <string name="enable_gps">To Continue, turn on device location, which uses Google\'s location service</string>
+
+    <string name="dialog_app_name">Searchable Spinner</string>
+    <string name="search_dialog_close">Close</string>
+    <string name="search_dialog_title">Search State</string>
+
+    <declare-styleable name="SearchableSpinner">
+        <attr name="closeText" format="string" />
+        <attr name="dialogTitle" format="string" />
+    </declare-styleable>
 </resources>
