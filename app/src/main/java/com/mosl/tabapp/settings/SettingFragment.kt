@@ -19,12 +19,11 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
 import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
+class SettingFragment : PreferenceFragmentCompat() {
 
     lateinit var preference: SwitchPreference
 
