@@ -73,7 +73,7 @@ class ForegroundService : Service() {
             if (userManager.isLoggedIn() && hasGPSDevice(applicationContext)) {
                 startLocationUpdates()
             }
-            refreshHandler.postDelayed(this, 15 * 60 * 1000.toLong())
+            refreshHandler.postDelayed(this, 5 * 60 * 1000.toLong())
         }
     }
 
@@ -82,7 +82,7 @@ class ForegroundService : Service() {
             if (isNetworkConnected() && userManager.isLoggedIn()) {
                 initLocationApi()
             }
-            refreshHandlerAPI.postDelayed(this, 32 * 60 * 1000.toLong())
+            refreshHandlerAPI.postDelayed(this, 15 * 60 * 1000.toLong())
         }
     }
 
@@ -173,7 +173,7 @@ class ForegroundService : Service() {
     fun initLocationApi() {
 
         if ((lastLocationAPITime.get().isEmpty() ||
-                    Utility.isTimeInterval(lastLocationAPITime.get(), 27))
+                    Utility.isTimeInterval(lastLocationAPITime.get(), /*27*/13))
         ) {
             val db1 = get()
                 .getDB()
@@ -268,7 +268,7 @@ class ForegroundService : Service() {
             )
             if ((lastLocationTime.get().isEmpty() || Utility.isTimeInterval(
                     lastLocationTime.get(),
-                    12
+                    4/*12*/
                 )) && !isLocationFromMockProvider(applicationContext, location)
             ) {
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
