@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.mosl.tabapp.settings.SettingActivity;
 
 import javax.inject.Inject;
 
@@ -35,7 +36,7 @@ import timber.log.Timber;
     // location updates will be received if another app is requesting the locations
     // than your app can handle
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
-    private static final int REQUEST_CHECK_SETTINGS = 100;
+    public static final int REQUEST_CHECK_SETTINGS = 100;
     private final AppCompatActivity activity;
     LatLongDispatcher dispatcher;
     boolean showDialog = false;
@@ -76,6 +77,20 @@ import timber.log.Timber;
                 }
             }
         };
+        mRequestingLocationUpdates = false;
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
+        builder.addLocationRequest(mLocationRequest);
+        mLocationSettingsRequest = builder.build();
+        startLocationUpdates();
+    }
+
+     public void initV2() {
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+        mSettingsClient = LocationServices.getSettingsClient(activity);
         mRequestingLocationUpdates = false;
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);

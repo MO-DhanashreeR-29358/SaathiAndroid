@@ -15,9 +15,11 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
 import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
+import dagger.android.AndroidInjection
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -39,13 +41,16 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
     var editor: SharedPreferences.Editor? = null
     /**/
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+    @Inject
+    internal lateinit var fusedLocation: FusedLocation
 
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sharedPreferences = requireActivity().getSharedPreferences(
             getString(R.string.preff_24_7_key),
             Context.MODE_PRIVATE
         )
         editor = sharedPreferences.edit()
+
 
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
@@ -56,6 +61,35 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
 
 //        preference.isChecked = twentyFourSevenCheck.get()
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
+            if (newValue is Boolean) {
+                if (::fusedLocation.isInitialized)
+                    fusedLocation.initV2()
+                if (newValue) {
+//                    showPrefrenceDialog(preference)
+                    Toast.makeText(
+                        requireContext(), "Location tracking started", Toast.LENGTH_SHORT
+                    )
+                        .show()
+//                twentyFourSevenCheck.set(true)
+                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
+                    editor?.commit()
+                    startService()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Location tracking stopped",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+//                    twentyFourSevenCheck.set(false)
+                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+                    editor?.commit()
+                    stopService()
+                }
+            }
+            return@setOnPreferenceChangeListener true
+        }
     }
 
     private fun getLastKnownLocation() {
@@ -106,33 +140,7 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
 
         Timber.d("lat n long %s%s", latitude, longitude)
 
-        preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
-            if (newValue is Boolean) {
-                if (newValue) {
-//                    showPrefrenceDialog(preference)
-                    Toast.makeText(
-                        requireContext(), "Location tracking started", Toast.LENGTH_SHORT
-                    )
-                        .show()
-//                twentyFourSevenCheck.set(true)
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-                    editor?.commit()
-                    startService()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Location tracking stopped",
-                        Toast.LENGTH_SHORT
-                    ).show()
 
-//                    twentyFourSevenCheck.set(false)
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
-                    editor?.commit()
-                    stopService()
-                }
-            }
-            return@setOnPreferenceChangeListener true
-        }
 //        }
     }
 
