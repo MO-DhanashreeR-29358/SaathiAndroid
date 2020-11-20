@@ -22,7 +22,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.mosl.tabapp.settings.SettingActivity;
+import com.mosl.tabapp.settings.GpsCallBack;
 
 import javax.inject.Inject;
 
@@ -30,6 +30,7 @@ import timber.log.Timber;
 
 /*@ActivityScoped*/ public class FusedLocation {
     private static final String TAG = "FusedLocation";
+    private boolean isFromSettingFragment = false;
     // location updates interval - 10sec
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
     // fastest updates interval - 5 sec
@@ -49,6 +50,7 @@ import timber.log.Timber;
     private android.location.Location mCurrentLocation;
     // boolean flag to toggle the ui
     private Boolean mRequestingLocationUpdates;
+    private GpsCallBack gpsCallBack;
 
     @Inject
     public FusedLocation(AppCompatActivity activity) {
@@ -88,7 +90,7 @@ import timber.log.Timber;
         startLocationUpdates();
     }
 
-     public void initV2() {
+    public void initV2() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mSettingsClient = LocationServices.getSettingsClient(activity);
         mRequestingLocationUpdates = false;
@@ -153,10 +155,13 @@ import timber.log.Timber;
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         // Nothing to do. startLocationupdates() gets called in onResume again.
+                        gpsCallBack.gpsStatus(true);
                         break;
                     case Activity.RESULT_CANCELED:
-                        mRequestingLocationUpdates = false;
+                        if (!isFromSettingFragment)
+                            mRequestingLocationUpdates = false;
                         //startLocationUpdates();
+                        gpsCallBack.gpsStatus(false);
                         break;
                 }
                 break;
@@ -181,6 +186,11 @@ import timber.log.Timber;
         //        + "---"
         //        + mCurrentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
         //}
+    }
+
+    public void initGpsCallBack(GpsCallBack gpsCallBack) {
+        isFromSettingFragment = true;
+        this.gpsCallBack = gpsCallBack;
     }
 
     public interface LatLongDispatcher {

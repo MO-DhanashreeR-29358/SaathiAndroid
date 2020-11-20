@@ -19,7 +19,6 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
 import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
-import dagger.android.AndroidInjection
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -55,41 +54,68 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
             findPreference<SwitchPreference>(getString(R.string.preference_location_key)) as SwitchPreference
-
+        fusedLocation.initGpsCallBack(gpsCallBack)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
 //        preference.isChecked = twentyFourSevenCheck.get()
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        if (!isGpsEnabled())
+            disableToggleButton()
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
                 if (::fusedLocation.isInitialized)
                     fusedLocation.initV2()
-                if (newValue) {
+                if (newValue)
 //                    showPrefrenceDialog(preference)
-                    Toast.makeText(
-                        requireContext(), "Location tracking started", Toast.LENGTH_SHORT
-                    )
-                        .show()
-//                twentyFourSevenCheck.set(true)
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-                    editor?.commit()
-                    startService()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Location tracking stopped",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-//                    twentyFourSevenCheck.set(false)
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
-                    editor?.commit()
-                    stopService()
-                }
+                    if (isGpsEnabled())
+                        enableToggleButton()
+                    else {
+                    }
+                else
+                    disableToggleButton()
             }
             return@setOnPreferenceChangeListener true
         }
+    }
+
+    private fun isGpsEnabled(): Boolean =
+        (requireContext().getSystemService(Context.LOCATION_SERVICE) as android.location.LocationManager).isProviderEnabled(
+            android.location.LocationManager.GPS_PROVIDER
+        )
+
+
+    private fun disableToggleButton() {
+        Toast.makeText(
+            requireContext(),
+            "Location tracking stopped",
+            Toast.LENGTH_SHORT
+        ).show()
+
+//                    twentyFourSevenCheck.set(false)
+        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        editor?.commit()
+        stopService()
+        preference.isChecked = false
+    }
+
+    private fun enableToggleButton() {
+        Toast.makeText(
+            requireContext(), "Location tracking started", Toast.LENGTH_SHORT
+        )
+            .show()
+//                twentyFourSevenCheck.set(true)
+        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
+        editor?.commit()
+        startService()
+    }
+
+
+    private val gpsCallBack = GpsCallBack {
+        if (it)
+            enableToggleButton()
+        else
+            disableToggleButton()
     }
 
     private fun getLastKnownLocation() {
@@ -194,5 +220,13 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
     private fun stopService() {
         val serviceIntent = Intent(requireContext(), ForegroundService::class.java)
         activity?.stopService(serviceIntent)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != FusedLocation.REQUEST_CHECK_SETTINGS)
+            super.onActivityResult(requestCode, resultCode, data)
+        else
+            fusedLocation.onActivityResult(requestCode, resultCode, data)
+
     }
 }
