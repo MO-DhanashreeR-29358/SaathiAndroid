@@ -23,7 +23,6 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
-import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
@@ -34,7 +33,6 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
-import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -173,7 +171,8 @@ class CommonActivity : BaseActivity(),
                 savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
         }
 
-        sharedPreferences = getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
+        sharedPreferences =
+            getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         twentyFourSevenCheck = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
 
@@ -192,17 +191,6 @@ class CommonActivity : BaseActivity(),
         setupObservables()
         setBanner()
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (twentyFourSevenCheck && !isForegroundServiceRunning(ForegroundService::class.java)) {
-            bindService(
-                Intent(this, ForegroundService::class.java),
-                mServiceConnection,
-                Context.BIND_AUTO_CREATE
-            )
-        }
     }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
@@ -263,7 +251,7 @@ class CommonActivity : BaseActivity(),
         }
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         userManager.getUser()?.apply {
             if (!this.isAufsb()) {
@@ -273,16 +261,27 @@ class CommonActivity : BaseActivity(),
                 )
             }
         }
-    }
+    }*/
 
-    override fun onStop() {
-        super.onStop()
-        userManager.getUser()?.apply {
-            if (!this.isAufsb()) {
-                unbindService(mServiceConnection)
-            }
+    override fun onResume() {
+        super.onResume()
+        if (twentyFourSevenCheck && !isForegroundServiceRunning(ForegroundService::class.java)) {
+            bindService(
+                Intent(this, ForegroundService::class.java),
+                mServiceConnection,
+                Context.BIND_AUTO_CREATE
+            )
         }
     }
+
+    /* override fun onStop() {
+         super.onStop()
+         userManager.getUser()?.apply {
+             if (!this.isAufsb()) {
+                 unbindService(mServiceConnection)
+             }
+         }
+     }*/
 
     private fun setBanner() {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
