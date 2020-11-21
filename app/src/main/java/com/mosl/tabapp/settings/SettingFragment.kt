@@ -33,14 +33,8 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
 
     var mService: ForegroundService? = null
 
-//    @field:TwentyFourSevenCheck
-//    @Inject
-//    lateinit var twentyFourSevenCheck: BooleanPreference
-
-    /**/
     lateinit var sharedPreferences: SharedPreferences
     var editor: SharedPreferences.Editor? = null
-    /**/
 
     @Inject
     lateinit var fusedLocation: FusedLocation
@@ -60,18 +54,15 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
-//        preference.isChecked = twentyFourSevenCheck.get()
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
                 fusedLocation.initDispatcher(this)
                 if (newValue) {
-//                    showPrefrenceDialog(preference)
                     Toast.makeText(
                         requireContext(), "Location tracking started", Toast.LENGTH_SHORT
                     )
                         .show()
-//                twentyFourSevenCheck.set(true)
                     editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
                     editor?.commit()
                     startService()
@@ -82,7 +73,6 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
                         Toast.LENGTH_SHORT
                     ).show()
 
-//                    twentyFourSevenCheck.set(false)
                     editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
                     editor?.commit()
                     stopService()
@@ -98,11 +88,6 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             Toast.makeText(
                 requireContext(),
                 "Please Provide Location Permission!",
@@ -139,35 +124,6 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
         }
 
         Timber.d("lat n long %s%s", latitude, longitude)
-
-
-//        }
-    }
-
-    private fun showPrefrenceDialog(preference: Preference) {
-        AlertDialogHelper.alertDialog(
-            requireContext(), 0,
-            resources.getString(R.string.alert_dialog_title),
-            resources.getString(R.string.alert_dialog_location_message),
-            "I Agree", "Cancel", false
-        ) { action, _ ->
-            if (action === AlertDialogHelper.Action.OK) {
-                Timber.d("I Agree Clicked")
-                Toast.makeText(
-                    requireContext(), "Location tracking started", Toast.LENGTH_SHORT
-                )
-                    .show()
-//                twentyFourSevenCheck.set(true)
-                editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-                editor?.commit()
-                startService()
-            } else if (action === AlertDialogHelper.Action.CANCEL) {
-                Timber.d("Cancel Clicked")
-                if (preference is SwitchPreference) {
-                    preference.isChecked = false
-                }
-            }
-        }
     }
 
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
