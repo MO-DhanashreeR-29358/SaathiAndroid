@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.Geocoder
-import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
@@ -24,7 +23,7 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatcher {
+class SettingFragment : PreferenceFragmentCompat() {
 
     lateinit var preference: SwitchPreference
 
@@ -36,7 +35,7 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
     var editor: SharedPreferences.Editor? = null
 
     @Inject
-    lateinit var fusedLocation: FusedLocation
+    internal lateinit var fusedLocation: FusedLocation
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sharedPreferences = requireActivity().getSharedPreferences(
@@ -49,36 +48,62 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
             findPreference<SwitchPreference>(getString(R.string.preference_location_key)) as SwitchPreference
-
+        fusedLocation.initGpsCallBack(gpsCallBack)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        if (!isGpsEnabled())
+            disableToggleButton()
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
-                fusedLocation.initDispatcher(this)
-                if (newValue) {
-                    Toast.makeText(
-                        requireContext(), "Location tracking started", Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-                    editor?.commit()
-                    startService()
-                } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "Location tracking stopped",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
-                    editor?.commit()
-                    stopService()
-                }
+                if (newValue)
+                    if (isGpsEnabled())
+                        enableToggleButton()
+                    else
+                        fusedLocation.init()
+                else
+                    disableToggleButton()
             }
             return@setOnPreferenceChangeListener true
         }
+    }
+
+    private fun isGpsEnabled(): Boolean =
+        (requireContext().getSystemService(Context.LOCATION_SERVICE) as android.location.LocationManager).isProviderEnabled(
+            android.location.LocationManager.GPS_PROVIDER
+        )
+
+
+    private fun disableToggleButton() {
+        Toast.makeText(
+            requireContext(),
+            "Location tracking stopped",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        editor?.commit()
+        stopService()
+        preference.isChecked = false
+    }
+
+    private fun enableToggleButton() {
+        Toast.makeText(
+            requireContext(), "Location tracking started", Toast.LENGTH_SHORT
+        )
+            .show()
+        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
+        editor?.commit()
+        startService()
+    }
+
+
+    private val gpsCallBack = GpsCallBack {
+        if (it)
+            enableToggleButton()
+        else
+            disableToggleButton()
     }
 
     private fun getLastKnownLocation() {
@@ -92,6 +117,7 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
                 "Please Provide Location Permission!",
                 Toast.LENGTH_SHORT
             ).show()
+            fusedLocation.requestPermissions()
             return
         } else {
             fusedLocationClient.lastLocation
@@ -101,6 +127,11 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
                     }
                 }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     private fun updateLongLat(
@@ -136,11 +167,6 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
         }
     }
 
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     private fun startService() {
         initBackgroundState(requireContext())
         requireActivity().bindService(
@@ -156,6 +182,23 @@ class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatc
         activity?.stopService(serviceIntent)
     }
 
-    override fun onLatLongChanged(location: Location?) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode != FusedLocation.REQUEST_PERMISSIONS_REQUEST_CODE)
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        else fusedLocation.onRequestPermissionsResult(
+            requestCode,
+            permissions as Array<String>, grantResults
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != FusedLocation.REQUEST_CHECK_SETTINGS)
+            super.onActivityResult(requestCode, resultCode, data)
+        else
+            fusedLocation.onActivityResult(requestCode, resultCode, data)
     }
 }

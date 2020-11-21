@@ -36,19 +36,20 @@ class SettingActivity : DaggerAppCompatActivity() {
         finish()
     }
 
-    /*override fun onRequestPermissionsResult(
+    override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == UserLocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE)
-            supportFragmentManager.findFragmentById(R.id.fragment_container)?.onRequestPermissionsResult(
-                requestCode,
-                permissions,
-                grantResults
-            )
-    }*/
+        if (requestCode == FusedLocation.REQUEST_PERMISSIONS_REQUEST_CODE)
+            supportFragmentManager.findFragmentById(R.id.fragment_container)
+                ?.onRequestPermissionsResult(
+                    requestCode,
+                    permissions,
+                    grantResults
+                )
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
