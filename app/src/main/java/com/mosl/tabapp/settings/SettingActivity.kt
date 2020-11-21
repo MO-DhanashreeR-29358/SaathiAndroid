@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.core.CommonActivity
+import com.mosl.tabapp.settings.UserLocationHelper.Companion.REQUEST_CHECK_SETTINGS
 import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 
@@ -37,7 +38,7 @@ class SettingActivity() : DaggerAppCompatActivity() {
         finish()
     }
 
-    /*override fun onRequestPermissionsResult(
+    override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
@@ -49,11 +50,11 @@ class SettingActivity() : DaggerAppCompatActivity() {
                 permissions,
                 grantResults
             )
-    }*/
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == FusedLocation.REQUEST_CHECK_SETTINGS)
+        if (requestCode == REQUEST_CHECK_SETTINGS)
             supportFragmentManager.findFragmentById(R.id.fragment_container)?.onActivityResult(
                 requestCode,
                 resultCode,

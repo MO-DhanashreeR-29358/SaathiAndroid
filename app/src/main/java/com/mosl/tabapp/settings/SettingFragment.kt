@@ -19,11 +19,12 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
 import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
+import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
+class SettingFragment : PreferenceFragmentCompat() {
 
     lateinit var preference: SwitchPreference
 
@@ -41,7 +42,7 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
     /**/
 
     @Inject
-    internal lateinit var fusedLocation: FusedLocation
+    internal lateinit var userLocationHelper: UserLocationHelper
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sharedPreferences = requireActivity().getSharedPreferences(
@@ -54,7 +55,7 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
             findPreference<SwitchPreference>(getString(R.string.preference_location_key)) as SwitchPreference
-        fusedLocation.initGpsCallBack(gpsCallBack)
+        userLocationHelper.initGpsCallBack(gpsCallBack)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
@@ -64,14 +65,12 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
             disableToggleButton()
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
-                if (::fusedLocation.isInitialized)
-                    fusedLocation.initV2()
                 if (newValue)
 //                    showPrefrenceDialog(preference)
                     if (isGpsEnabled())
                         enableToggleButton()
-                    else {
-                    }
+                    else
+                        userLocationHelper.start()
                 else
                     disableToggleButton()
             }
@@ -143,6 +142,11 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
                     }
                 }
         }
+    }
+
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     private fun updateLongLat(
@@ -222,11 +226,23 @@ class SettingFragment @Inject constructor() : PreferenceFragmentCompat() {
         activity?.stopService(serviceIntent)
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode != UserLocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE)
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        else userLocationHelper.onRequestPermissionsResult(
+            requestCode,
+            permissions as Array<String>, grantResults
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode != FusedLocation.REQUEST_CHECK_SETTINGS)
+        if (requestCode != UserLocationHelper.REQUEST_CHECK_SETTINGS)
             super.onActivityResult(requestCode, resultCode, data)
         else
-            fusedLocation.onActivityResult(requestCode, resultCode, data)
-
+            userLocationHelper.onActivityResult(requestCode, resultCode, data)
     }
 }
