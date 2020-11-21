@@ -103,7 +103,7 @@ import timber.log.Timber;
             startLocationUpdates();
     }
 
-    private void requestPermissions() {
+    public void requestPermissions() {
         ActivityCompat.requestPermissions(
                 activity,
                 new String[]{

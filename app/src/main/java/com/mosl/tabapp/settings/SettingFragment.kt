@@ -17,7 +17,6 @@ import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
-import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
@@ -32,14 +31,8 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     var mService: ForegroundService? = null
 
-//    @field:TwentyFourSevenCheck
-//    @Inject
-//    lateinit var twentyFourSevenCheck: BooleanPreference
-
-    /**/
     lateinit var sharedPreferences: SharedPreferences
     var editor: SharedPreferences.Editor? = null
-    /**/
 
     @Inject
     internal lateinit var fusedLocation: FusedLocation
@@ -59,14 +52,12 @@ class SettingFragment : PreferenceFragmentCompat() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
-//        preference.isChecked = twentyFourSevenCheck.get()
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
         if (!isGpsEnabled())
             disableToggleButton()
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
                 if (newValue)
-//                    showPrefrenceDialog(preference)
                     if (isGpsEnabled())
                         enableToggleButton()
                     else
@@ -91,7 +82,6 @@ class SettingFragment : PreferenceFragmentCompat() {
             Toast.LENGTH_SHORT
         ).show()
 
-//                    twentyFourSevenCheck.set(false)
         editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
         editor?.commit()
         stopService()
@@ -103,7 +93,6 @@ class SettingFragment : PreferenceFragmentCompat() {
             requireContext(), "Location tracking started", Toast.LENGTH_SHORT
         )
             .show()
-//                twentyFourSevenCheck.set(true)
         editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
         editor?.commit()
         startService()
@@ -123,16 +112,12 @@ class SettingFragment : PreferenceFragmentCompat() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             Toast.makeText(
                 requireContext(),
                 "Please Provide Location Permission!",
                 Toast.LENGTH_SHORT
             ).show()
+            fusedLocation.requestPermissions()
             return
         } else {
             fusedLocationClient.lastLocation
@@ -169,35 +154,6 @@ class SettingFragment : PreferenceFragmentCompat() {
         }
 
         Timber.d("lat n long %s%s", latitude, longitude)
-
-
-//        }
-    }
-
-    private fun showPrefrenceDialog(preference: Preference) {
-        AlertDialogHelper.alertDialog(
-            requireContext(), 0,
-            resources.getString(R.string.alert_dialog_title),
-            resources.getString(R.string.alert_dialog_location_message),
-            "I Agree", "Cancel", false
-        ) { action, _ ->
-            if (action === AlertDialogHelper.Action.OK) {
-                Timber.d("I Agree Clicked")
-                Toast.makeText(
-                    requireContext(), "Location tracking started", Toast.LENGTH_SHORT
-                )
-                    .show()
-//                twentyFourSevenCheck.set(true)
-                editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-                editor?.commit()
-                startService()
-            } else if (action === AlertDialogHelper.Action.CANCEL) {
-                Timber.d("Cancel Clicked")
-                if (preference is SwitchPreference) {
-                    preference.isChecked = false
-                }
-            }
-        }
     }
 
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
