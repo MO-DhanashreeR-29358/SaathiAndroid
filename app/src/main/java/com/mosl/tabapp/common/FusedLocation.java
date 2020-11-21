@@ -22,7 +22,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.mosl.tabapp.settings.SettingActivity;
 
 import javax.inject.Inject;
 
@@ -60,7 +59,7 @@ import timber.log.Timber;
         init();
     }
 
-    private void init() {
+    public void init() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mSettingsClient = LocationServices.getSettingsClient(activity);
         mLocationCallback = new LocationCallback() {
@@ -88,19 +87,6 @@ import timber.log.Timber;
         startLocationUpdates();
     }
 
-     public void initV2() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-        mSettingsClient = LocationServices.getSettingsClient(activity);
-        mRequestingLocationUpdates = false;
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        mLocationSettingsRequest = builder.build();
-        startLocationUpdates();
-    }
 
     @SuppressLint("MissingPermission")
     public void startLocationUpdates() {

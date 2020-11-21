@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
@@ -19,11 +20,12 @@ import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
 import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
+import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-class SettingFragment : PreferenceFragmentCompat() {
+class SettingFragment : PreferenceFragmentCompat(), FusedLocation.LatLongDispatcher {
 
     lateinit var preference: SwitchPreference
 
@@ -41,7 +43,7 @@ class SettingFragment : PreferenceFragmentCompat() {
     /**/
 
     @Inject
-    internal lateinit var fusedLocation: FusedLocation
+    lateinit var fusedLocation: FusedLocation
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sharedPreferences = requireActivity().getSharedPreferences(
@@ -62,8 +64,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
             if (newValue is Boolean) {
-                if (::fusedLocation.isInitialized)
-                    fusedLocation.initV2()
+                fusedLocation.initDispatcher(this)
                 if (newValue) {
 //                    showPrefrenceDialog(preference)
                     Toast.makeText(
@@ -180,6 +181,11 @@ class SettingFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
     private fun startService() {
         initBackgroundState(requireContext())
         requireActivity().bindService(
@@ -193,5 +199,8 @@ class SettingFragment : PreferenceFragmentCompat() {
     private fun stopService() {
         val serviceIntent = Intent(requireContext(), ForegroundService::class.java)
         activity?.stopService(serviceIntent)
+    }
+
+    override fun onLatLongChanged(location: Location?) {
     }
 }

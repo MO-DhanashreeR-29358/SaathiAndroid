@@ -6,10 +6,9 @@ import androidx.appcompat.widget.Toolbar
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.core.CommonActivity
-import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 
-class SettingActivity() : DaggerAppCompatActivity() {
+class SettingActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
