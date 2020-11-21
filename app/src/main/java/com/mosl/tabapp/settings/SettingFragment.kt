@@ -18,7 +18,6 @@ import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
-import com.mosl.tabapp.util.AlertDialogHelper
 import com.mosl.tabapp.util.Utility.Companion.initBackgroundState
 import dagger.android.support.AndroidSupportInjection
 import timber.log.Timber
