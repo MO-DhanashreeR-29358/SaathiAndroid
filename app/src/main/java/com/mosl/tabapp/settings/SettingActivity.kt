@@ -6,8 +6,6 @@ import androidx.appcompat.widget.Toolbar
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.core.CommonActivity
-import com.mosl.tabapp.settings.UserLocationHelper.Companion.REQUEST_CHECK_SETTINGS
-import dagger.android.AndroidInjection
 import dagger.android.support.DaggerAppCompatActivity
 
 class SettingActivity() : DaggerAppCompatActivity() {

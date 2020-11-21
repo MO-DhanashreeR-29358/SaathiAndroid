@@ -1,5 +1,6 @@
 package com.mosl.tabapp.common;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -95,7 +97,20 @@ import timber.log.Timber;
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
         builder.addLocationRequest(mLocationRequest);
         mLocationSettingsRequest = builder.build();
-        startLocationUpdates();
+        if (isFromSettingFragment)
+            requestPermissions();
+        else
+            startLocationUpdates();
+    }
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(
+                activity,
+                new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                },
+                REQUEST_PERMISSIONS_REQUEST_CODE
+        );
     }
 
     @SuppressLint("MissingPermission")
