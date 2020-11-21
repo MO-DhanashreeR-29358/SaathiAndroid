@@ -42,7 +42,7 @@ class SettingFragment : PreferenceFragmentCompat() {
     /**/
 
     @Inject
-    internal lateinit var userLocationHelper: UserLocationHelper
+    internal lateinit var fusedLocation: FusedLocation
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         sharedPreferences = requireActivity().getSharedPreferences(
@@ -55,7 +55,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
             findPreference<SwitchPreference>(getString(R.string.preference_location_key)) as SwitchPreference
-        userLocationHelper.initGpsCallBack(gpsCallBack)
+        fusedLocation.initGpsCallBack(gpsCallBack)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
@@ -70,7 +70,7 @@ class SettingFragment : PreferenceFragmentCompat() {
                     if (isGpsEnabled())
                         enableToggleButton()
                     else
-                        userLocationHelper.start()
+                        fusedLocation.init()
                 else
                     disableToggleButton()
             }
@@ -231,18 +231,18 @@ class SettingFragment : PreferenceFragmentCompat() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if (requestCode != UserLocationHelper.REQUEST_PERMISSIONS_REQUEST_CODE)
+        if (requestCode != FusedLocation.REQUEST_PERMISSIONS_REQUEST_CODE)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        else userLocationHelper.onRequestPermissionsResult(
+        else fusedLocation.onRequestPermissionsResult(
             requestCode,
             permissions as Array<String>, grantResults
         )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode != UserLocationHelper.REQUEST_CHECK_SETTINGS)
+        if (requestCode != FusedLocation.REQUEST_CHECK_SETTINGS)
             super.onActivityResult(requestCode, resultCode, data)
         else
-            userLocationHelper.onActivityResult(requestCode, resultCode, data)
+            fusedLocation.onActivityResult(requestCode, resultCode, data)
     }
 }

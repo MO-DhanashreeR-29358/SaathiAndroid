@@ -10,8 +10,8 @@ abstract class SettingFragmentModule {
     companion object {
         @Provides
         @JvmStatic
-        fun provideSettingsFragment(appCompatActivity: SettingActivity): UserLocationHelper {
-            return UserLocationHelper(appCompatActivity)
+        fun provideSettingsFragment(appCompatActivity: SettingActivity): FusedLocation {
+            return FusedLocation(appCompatActivity)
         }
     }
 

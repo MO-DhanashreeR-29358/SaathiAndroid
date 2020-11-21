@@ -4,10 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Looper;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.common.api.ApiException;
@@ -22,6 +26,8 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.mosl.tabapp.BuildConfig;
+import com.mosl.tabapp.R;
 import com.mosl.tabapp.settings.GpsCallBack;
 
 import javax.inject.Inject;
@@ -38,6 +44,7 @@ import timber.log.Timber;
     // than your app can handle
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
     public static final int REQUEST_CHECK_SETTINGS = 100;
+    public static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
     private final AppCompatActivity activity;
     LatLongDispatcher dispatcher;
     boolean showDialog = false;
@@ -62,7 +69,7 @@ import timber.log.Timber;
         init();
     }
 
-    private void init() {
+    public void init() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mSettingsClient = LocationServices.getSettingsClient(activity);
         mLocationCallback = new LocationCallback() {
@@ -72,27 +79,14 @@ import timber.log.Timber;
                 // location is received
                 mCurrentLocation = locationResult.getLastLocation();
                 if (mCurrentLocation != null) {
-                    dispatcher.onLatLongChanged(
-                            mCurrentLocation);
+                    if (dispatcher != null)
+                        dispatcher.onLatLongChanged(
+                                mCurrentLocation);
                     //showToast("" + locationResult.getLastLocation().getAccuracy());
                     //mLastUpdateTime = DateFormat.getTimeInstance().format(new Date());
                 }
             }
         };
-        mRequestingLocationUpdates = false;
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
-        builder.addLocationRequest(mLocationRequest);
-        mLocationSettingsRequest = builder.build();
-        startLocationUpdates();
-    }
-
-    public void initV2() {
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-        mSettingsClient = LocationServices.getSettingsClient(activity);
         mRequestingLocationUpdates = false;
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
@@ -166,6 +160,35 @@ import timber.log.Timber;
                 }
                 break;
         }
+    }
+
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode != REQUEST_PERMISSIONS_REQUEST_CODE) return;
+        if (grantResults.length == 0) {
+
+        } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startLocationUpdates();
+        } else {
+            new AlertDialog.Builder(activity)
+                    .setMessage(activity.getString(R.string.permission_denied_explanation))
+                    .setPositiveButton(activity.getString(R.string.settings), (dialogInterface, i) -> openAppSettings()).show();
+
+        }
+    }
+
+
+    private void openAppSettings() {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package",
+                BuildConfig.APPLICATION_ID, null);
+        intent.setData(uri);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (intent.resolveActivity(activity.getPackageManager()) != null)
+            activity.startActivity(intent);
+
     }
 
     public void stopLocationUpdates() {
