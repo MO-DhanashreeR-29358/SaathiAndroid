@@ -44,13 +44,11 @@ fun isLocationFromMockProvider(
   context: Context,
   location: Location
 ): Boolean {
-  val isMock: Boolean
-  if (Build.VERSION.SDK_INT >= 18) {
-    isMock = location.isFromMockProvider
+  return if (Build.VERSION.SDK_INT >= 18) {
+    location.isFromMockProvider
   } else {
-    isMock = isMockSettingsON(context)
+    isMockSettingsON(context)
   }
-  return isMock
 }
 
 fun formatMonth(month: String): String {

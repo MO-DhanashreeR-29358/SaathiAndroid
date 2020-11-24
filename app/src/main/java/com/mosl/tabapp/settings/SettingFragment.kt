@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.*
 import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.Toast
@@ -14,7 +15,7 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
-import com.mosl.shared.util.isMockSettingsON
+import com.mosl.shared.util.isLocationFromMockProvider
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
@@ -124,7 +125,7 @@ class SettingFragment : PreferenceFragmentCompat() {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
-                        updateLongLat(location.longitude, location.latitude)
+                        updateLongLat(location.longitude, location.latitude, location)
                     }
                 }
         }
@@ -137,7 +138,8 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     private fun updateLongLat(
         longitude: Double,
-        latitude: Double
+        latitude: Double,
+        location: Location
     ) {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val addressList = geocoder.getFromLocation(latitude, longitude, 1)
@@ -145,17 +147,23 @@ class SettingFragment : PreferenceFragmentCompat() {
         val prefLatitude = findPreference<Preference>(getString(R.string.preference_latitude_key))
         val prefLongitude = findPreference<Preference>(getString(R.string.preference_longitude_key))
 
-        if(!isMockSettingsON(requireContext())){
+        if (!isLocationFromMockProvider(requireContext(), location)) {
             prefLatitude?.summary = latitude.toString()
             prefLongitude?.summary = longitude.toString()
+        } else {
+            showToast(getString(R.string.mock_location_label))
         }
 
         val prefLocation = findPreference<Preference>(getString(R.string.preference_loc_key))
-        if (addressList.size > 0 && !isMockSettingsON(requireContext())) {
+        if (addressList.size > 0 && !isLocationFromMockProvider(requireContext(), location)) {
             prefLocation?.summary = addressList[0].getAddressLine(0)
         }
 
         Timber.d("lat n long %s%s", latitude, longitude)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private val mServiceConnection: ServiceConnection = object : ServiceConnection {
