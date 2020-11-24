@@ -191,7 +191,7 @@ class ForegroundService : Service() {
 
     private fun locationUpdate() {
         val locationResponse = repository.getGeoLocation(
-            get().getDB()?.daoAccess()?.getLocationList()!!.transformLocationData()
+            get().getDB()?.daoAccess()?.locationList!!.transformLocationData()
         ).blockingFirst()
         renderLocation(locationResponse)
     }
@@ -286,6 +286,7 @@ class ForegroundService : Service() {
                     .d(locationData.toString())
             }
         } catch (e: IOException) {
+            Timber.tag("LocatnChange Exception").d(e)
             e.printStackTrace()
         }
     }
