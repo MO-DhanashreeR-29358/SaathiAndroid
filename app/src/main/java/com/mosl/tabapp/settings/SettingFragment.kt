@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
+import com.mosl.shared.util.isMockSettingsON
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.service.ForegroundService
@@ -142,14 +143,15 @@ class SettingFragment : PreferenceFragmentCompat() {
         val addressList = geocoder.getFromLocation(latitude, longitude, 1)
 
         val prefLatitude = findPreference<Preference>(getString(R.string.preference_latitude_key))
-        prefLatitude?.summary = latitude.toString()
+        val prefLongitude = findPreference<Preference>(getString(R.string.preference_longitude_key))
 
-        val prefLongitude =
-            findPreference<Preference>(getString(R.string.preference_longitude_key))
-        prefLongitude?.summary = longitude.toString()
+        if(!isMockSettingsON(requireContext())){
+            prefLatitude?.summary = latitude.toString()
+            prefLongitude?.summary = longitude.toString()
+        }
 
         val prefLocation = findPreference<Preference>(getString(R.string.preference_loc_key))
-        if (addressList.size > 0) {
+        if (addressList.size > 0 && !isMockSettingsON(requireContext())) {
             prefLocation?.summary = addressList[0].getAddressLine(0)
         }
 
