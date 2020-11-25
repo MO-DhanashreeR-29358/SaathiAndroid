@@ -26,6 +26,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.common_base_layout.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -375,6 +376,11 @@ class WebviewFragment : CommonFragment() {
                     CommonURLRequest(E_MODIFICATION_KEY, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
+            NEW_LAS_APPLICATION_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(NEW_LAS_APPLICATION_KEY, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
             RESUME_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId, null)
@@ -453,5 +459,9 @@ class WebviewFragment : CommonFragment() {
         const val E_MODIFICATION_KEY = "EModification"
         const val SIP_ID = "11"
         const val SIP_KEY = "SIP"
+        const val NEW_LAS_APPLICATION_ID = "12"
+        const val NEW_LAS_APPLICATION_KEY = "LASaccount"
+        const val RESUME_LAS_APPLICATION_ID = "13"
+        const val RESUME_LAS_APPLICATION_KEY = "ExistingLASaccount"
     }
 }

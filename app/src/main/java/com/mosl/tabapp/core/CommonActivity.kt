@@ -59,6 +59,7 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
+import java.nio.channels.WritableByteChannel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
@@ -472,6 +473,12 @@ class CommonActivity : BaseActivity(),
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SETTING) {
                     screenNavigator.openSettingActivity()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION) {
+                    gotoEkycExpressPage(true, WebviewFragment.NEW_LAS_APPLICATION_ID)
+                    binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION) {
+                    gotoEkycExpressPage(true, WebviewFragment.RESUME_LAS_APPLICATION_ID)
+                    binding.drawerLayout.closeDrawers()
                 }
 
                 activityNavHelper.onMenuClicked(menu)
@@ -673,7 +680,7 @@ class CommonActivity : BaseActivity(),
     }
 
     override fun gotoEkycExpressPage(isExistingOrNewUser: Boolean, id: String, oaoUserID: String) {
-        if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID) {
+        if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID || id == WebviewFragment.NEW_LAS_APPLICATION_ID || id == WebviewFragment.RESUME_LAS_APPLICATION_ID) {
             activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
         } else {
             activityNavHelper.openEkycApp(isExistingOrNewUser, oaoUserID)

@@ -135,6 +135,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
             NavigationConstants.NAVIGATE_TO_SIP -> true
             NavigationConstants.NAVIGATE_TO_SETTING -> true
+            NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION -> true
+            NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
             else -> return false
         }
     }

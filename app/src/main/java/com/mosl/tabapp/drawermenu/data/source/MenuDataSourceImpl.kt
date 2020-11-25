@@ -19,16 +19,22 @@ class MenuDataSourceImpl @Inject constructor(
     ): Observable<List<BaseMenu>> {
         return Observable.fromCallable {
             val user = userManager.user
-            if (user.isAufsb()) {
-                getAufsbUserMenu()
-            } else if (user.isAuBankSalesSupport()) {
-                getAuSalesBank(user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
-            } else if (user.isSMTEnabled()) {
-                getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
-            } else if (user.isEkycEnable()) {
-                getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
-            } else {
-                getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+            when {
+                user.isAufsb() -> {
+                    getAufsbUserMenu()
+                }
+                user.isAuBankSalesSupport() -> {
+                    getAuSalesBank(user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                }
+                user.isSMTEnabled() -> {
+                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                }
+                user.isEkycEnable() -> {
+                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                }
+                else -> {
+                    getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                }
             }
         }
             .subscribeOn(Schedulers.io())
@@ -42,6 +48,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -61,6 +68,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -80,6 +88,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -98,6 +107,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -200,6 +210,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -220,6 +231,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -240,6 +252,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -259,6 +272,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getReports(list),
@@ -294,6 +308,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -310,6 +325,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -326,6 +342,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -341,6 +358,7 @@ class MenuDataSourceImpl @Inject constructor(
             listOf(
                 getDashboard(),
                 getOpenAccount(),
+                getLASAccount(),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -459,13 +477,13 @@ class MenuDataSourceImpl @Inject constructor(
                 ChildMenu(
                     label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
                     enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+                    pageId = NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
                     navigateKey = ""
                 ),
                 ChildMenu(
                     label = R.string.MOSL_MENU_RESUME_APPLICATIONS_TXT,
                     enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+                    pageId = NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
                     navigateKey = ""
                 )
             )

@@ -290,6 +290,20 @@ class ActivityNavigationHelper @Inject constructor(
                     it.url?.apply { this.replace(" ", "%20") }
                 }
             }
+            WebviewFragment.NEW_LAS_APPLICATION_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(WebviewFragment.NEW_LAS_APPLICATION_KEY, null, null)
+                ).map {
+                    it.url?.apply { this.replace("", "%20") }
+                }
+            }
+            WebviewFragment.RESUME_LAS_APPLICATION_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(WebviewFragment.RESUME_APPLICATIONS_KEY, null, null)
+                ).map {
+                    it.url?.apply { this.replace("", "%20") }
+                }
+            }
             else -> {
                 return saathiApi.getEkycExpressUrl(
                     CommonURLRequest(
