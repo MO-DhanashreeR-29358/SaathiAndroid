@@ -52,7 +52,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -90,7 +89,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -134,7 +132,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -170,7 +167,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesBrochure(),
                 getSalesStadium(),
                 getBirthdayAnniversary(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -215,7 +211,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesStadium(),
                 getBirthdayAnniversary(),
                 getSuggestMe(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -255,7 +250,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getSalesStadium(),
                 getBirthdayAnniversary(),
                 getSuggestMe(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getQuery(),
                 getSetting(),
@@ -308,7 +302,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getCheckApproval(),
                 getSalesBrochure(),
                 getSalesStadium(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
@@ -340,7 +333,6 @@ class MenuDataSourceImpl @Inject constructor(
                 getIncentiveReport(),
                 getSalesBrochure(),
                 getSalesStadium(),
-                getRetrieveOTP(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
@@ -399,14 +391,6 @@ class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getRetrieveOTP(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_menu_retrieve_otp,
-            label = R.string.MOSL_MENU_RETRIEVE_OTP_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP
-        )
-    }
 
     internal fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
         return BaseMenu(
