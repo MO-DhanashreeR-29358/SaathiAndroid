@@ -26,7 +26,6 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.common_base_layout.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -167,8 +166,7 @@ class WebviewFragment : CommonFragment() {
                 val imageStorageDir = File(
                     Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_PICTURES
-                    )
-                    , "AndroidExampleFolder"
+                    ), "AndroidExampleFolder"
                 )
                 if (!imageStorageDir.exists()) {
                     // Create AndroidExampleFolder at sdcard
@@ -192,8 +190,7 @@ class WebviewFragment : CommonFragment() {
 
                 // Set camera intent to file chooser
                 chooserIntent.putExtra(
-                    Intent.EXTRA_INITIAL_INTENTS
-                    , arrayOf<Parcelable>(captureIntent)
+                    Intent.EXTRA_INITIAL_INTENTS, arrayOf<Parcelable>(captureIntent)
                 )
 
                 // On select image call onActivityResult method of activity
@@ -379,6 +376,11 @@ class WebviewFragment : CommonFragment() {
             NEW_LAS_APPLICATION_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(NEW_LAS_APPLICATION_KEY, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
+            RESUME_LAS_APPLICATION_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(RESUME_LAS_APPLICATION_KEY, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
             RESUME_APPLICATIONS_ID -> {

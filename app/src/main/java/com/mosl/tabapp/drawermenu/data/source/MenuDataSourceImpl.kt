@@ -24,16 +24,16 @@ open class MenuDataSourceImpl @Inject constructor(
                     getAufsbUserMenu()
                 }
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                    getAuSalesBank(user.isCheckApprovalEnable())
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable())
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable())
                 }
                 else -> {
-                    getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isRetrieveOTPEnable())
+                    getUserMenu(menuItems, user.isCheckApprovalEnable())
                 }
             }
         }
