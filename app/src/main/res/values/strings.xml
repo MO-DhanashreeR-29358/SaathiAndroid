@@ -9,10 +9,13 @@
     <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
     <string name="MOSL_MENU_RETRIEVE_OTP_TXT">Retrieve OTP</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
+    <string name="MOSL_MENU_LAS_TXT">LAS Account Application</string>
     <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
     <string name="MOSL_MENU_SIP_TXT">SIP</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
+    <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>
+    <string name="MOSL_MENU_RESUME_APPLICATIONS_TXT">Resume Application</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
     <string name="MOSL_MENU_SUGGEST_ME_TXT">Suggest Me Tool</string>
     <string name="MOSL_MENU_MY_REPORTS_TXT">My Reports</string>

@@ -466,6 +466,28 @@ class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    internal fun getLASAccount(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_update_ekyc,
+            label = R.string.MOSL_MENU_LAS_TXT,
+            enabled = true,
+            children = listOf(
+                ChildMenu(
+                    label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label = R.string.MOSL_MENU_RESUME_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+                    navigateKey = ""
+                )
+            )
+        )
+    }
+
 
     internal fun getEModification(): BaseMenu {
         return BaseMenu(
@@ -548,7 +570,7 @@ class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal  fun getSetting(): BaseMenu{
+    internal fun getSetting(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_setting,
             label = R.string.MOSL_MENU_SETTING,
