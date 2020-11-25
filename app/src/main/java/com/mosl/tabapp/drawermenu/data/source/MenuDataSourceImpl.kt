@@ -321,7 +321,7 @@ open class MenuDataSourceImpl @Inject constructor(
 
     internal fun getLASAccount(): BaseMenu {
         return BaseMenu(
-            icon = R.drawable.ic_update_ekyc,
+            icon = R.drawable.ic_las,
             label = R.string.MOSL_MENU_LAS_TXT,
             enabled = true,
             children = listOf(
