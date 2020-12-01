@@ -704,6 +704,7 @@ public class CreateMeetingFragmentOld extends CommonFragment
                   enableLocationGroup = true;
                   enableField(llLocationGroup);
                   setVisibilityOTP(true);
+                  tvStartDate.setText(CRMAppUtil.getDBDate(new Date(), DATE_FORMAT_TO_DISPLAY));
                 } else {
                   enableLocationGroup = false;
                   disableField(llLocationGroup);

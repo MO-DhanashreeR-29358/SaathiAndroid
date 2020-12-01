@@ -1,8 +1,7 @@
 package com.mosl.tabapp.permission
 
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest
+import android.Manifest.permission.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION_CODES
@@ -50,7 +49,10 @@ class PermissionCheckHelper(val activityCompat: AppCompatActivity) {
 
   @RequiresApi(VERSION_CODES.M) fun requestAllPermissions() {
     activityCompat.requestPermissions(
-        arrayOf(CAMERA, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE), PERMISSION_ALL_CODE
+      arrayOf(
+        CAMERA, ACCESS_FINE_LOCATION,
+        READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+      ), PERMISSION_ALL_CODE
     )
   }
 

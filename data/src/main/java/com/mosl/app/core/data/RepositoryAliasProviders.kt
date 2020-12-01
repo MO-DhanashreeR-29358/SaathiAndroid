@@ -6,6 +6,7 @@ import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryI
 import com.mosl.app.core.data.calendar.CalendarRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.dashboardreport.DashboardReportRepositoryImpl
+import com.mosl.app.core.data.dashboardreport.LeadAssignRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl
 import com.mosl.app.core.data.leadviewdetail.history.MappingHistoryRepositoryImpl
@@ -23,6 +24,7 @@ import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.calendar.CalendarRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
+import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.lead.report.LeadsReportRepository
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
@@ -84,15 +86,18 @@ interface RepositoryAliasProviders {
   @Binds
   fun bindpendingApprovalRepository(repository: PendingApprovalRepositoryImpl): PendingApprovalRepository
 
-  @Binds
-  fun bindPendingForApprovalRepository(repository: PendingForApprovalRepositoryImpl): PendingForApprovalRepository
+    @Binds
+    fun bindPendingForApprovalRepository(repository: PendingForApprovalRepositoryImpl): PendingForApprovalRepository
 
-  @Binds
-  fun provideHierarchyReportRepository(repository: HierarchyReportRepositoryImpl): HierarchyReportRepository
+    @Binds
+    fun provideHierarchyReportRepository(repository: HierarchyReportRepositoryImpl): HierarchyReportRepository
 
-  @Binds
-  fun provideDashboardHierarchyReportRepository(repository: DashboardReportRepositoryImpl): DashboardReportRepository
+    @Binds
+    fun provideDashboardHierarchyReportRepository(repository: DashboardReportRepositoryImpl): DashboardReportRepository
 
-  @Binds
-  fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
+    @Binds
+    fun provideLeadAssignRepository(repository: LeadAssignRepositoryImpl): LeadAssignRepository
+
+    @Binds
+    fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
 }

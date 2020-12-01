@@ -4,6 +4,7 @@ import com.mosl.annotations.ActivityScoped
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonActivityModule
 import com.mosl.tabapp.core.MainActivityModule
+import com.mosl.tabapp.settings.SettingActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
