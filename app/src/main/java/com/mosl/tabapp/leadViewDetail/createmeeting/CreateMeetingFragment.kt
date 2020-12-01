@@ -29,6 +29,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.pdf.OTPFragment
+import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE11
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
 import com.mosl.shared.util.getFormatedDate
@@ -259,8 +260,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
         cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType()!!.lookUpName.equals("Personal Meeting", ignoreCase = true)
-            && userManager.getUser()!!.isRM()
+        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
+            && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         } else {
@@ -772,26 +773,26 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun validateFormData(): Boolean {
         errorDisabled()
-        val status: Boolean = if (userManager.getUser()!!.isRM() && !isSendOTPSuccesssful &&
-            getSelectedActivityType()!!.isPersonalMeeting()
+        val status: Boolean = if (userManager.user.isRM() && !isSendOTPSuccesssful &&
+            getSelectedActivityType()?.isPersonalMeeting() == true
         ) {
             alert("Please verify OTP to create meeting")
             false
-        } else if (getSelectedActivityType()!! == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
+        } else if (getSelectedActivityType() == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
             binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
             false
-        } else if (getSelectedSpinnerValue(binding.spProduct)!! == SELECT_PRODUCT && meetingProductAdapter.listProduct.size == 0) {
+        } else if (getSelectedSpinnerValue(binding.spProduct) == SELECT_PRODUCT && meetingProductAdapter.listProduct.size == 0) {
             binding.tilProduct.setErrorMessages(MSG_SELECT_PRODUCT)
             false
-        } else if (getSelectedSpinnerValue(binding.spMeetingDuration)!! == SELECT_MEETING_DURATION
+        } else if (getSelectedSpinnerValue(binding.spMeetingDuration) == SELECT_MEETING_DURATION
         ) {
             binding.tilMeetingDuration.setErrorMessages(MSG_SELECT_MEETING_DURATION)
             false
-        } else if (getSelectedSpinnerValue(binding.spMeetingObjective)!! == SELECT_MEETING_OBJECTIVE
+        } else if (getSelectedSpinnerValue(binding.spMeetingObjective) == SELECT_MEETING_OBJECTIVE
         ) {
             binding.tilMeetingObjective.setErrorMessages(MSG_SELECT_MEETING_OBJECTIVE)
             false
-        } else if (getSelectedSpinnerValue(binding.spMeetingReason)!! == SELECT_MEETING_REASON) {
+        } else if (getSelectedSpinnerValue(binding.spMeetingReason) == SELECT_MEETING_REASON) {
             binding.tilMeetingReason.setErrorMessages(MSG_SELECT_MEETING_REASON)
             false
         } else if (binding.etMeetingDescription.text!!.trim().isEmpty()) {
@@ -802,11 +803,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (binding.etMeetingDescription.text!!.length < 50) {
             binding.tilMeetingDescription.setErrorMessages(MSG_ATLEAST_FIFTY_CHARACTERS)
             false
-        } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation)!! == SELECT_MEETING_LOCATION
+        } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spMeetingLocation) == SELECT_MEETING_LOCATION
         ) {
             binding.tilMeetingLocation.setErrorMessages(MSG_SELECT_MEETING_LOCATION)
             false
-        } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode)!! == SELECT_TRAVELLING_MODE && travellingAdapter.travellingList.size == 0
+        } else if (enableLocationGroup && getSelectedSpinnerValue(binding.spTravellingMode) == SELECT_TRAVELLING_MODE && travellingAdapter.travellingList.size == 0
         ) {
             binding.tilTravellingMode.setErrorMessages(MSG_SELECT_TRAVELLING_MODE)
             false
@@ -821,13 +822,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spActionables
-            )!! == SELECT_ACTIONABLE
+            ) == SELECT_ACTIONABLE
         ) {
             binding.tilActionables.setErrorMessages(MSG_SELECT_ACTIONABLE)
             false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spCategory
-            )!! == SELECT_CATEGORY
+            ) == SELECT_CATEGORY
         ) {
             binding.tilCategory.setErrorMessages(MSG_SELECT_CATEGORY)
             false
@@ -836,7 +837,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spSubCategory
-            )!! == SELECT_SUB_CATEGORY
+            ) == SELECT_SUB_CATEGORY
         ) {
             binding.tilSubCategory.setErrorMessages(MSG_SELECT_SUB_CATEGORY)
             false
@@ -985,17 +986,16 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun toggleOTPVisibility(show: Boolean) {
-        val isRm = userManager.getUser()!!.isRM()
-        if (show) {
-            if (isRm)
+        if (userManager.user.isRM()) {
+            if (show) {
                 binding.btnSendOtp.visibility = View.VISIBLE
-            enableLocationGroup = true
-            enableField(binding.llLocationGroup)
-        } else {
-            if (isRm)
+                enableLocationGroup = true
+                enableField(binding.llLocationGroup)
+            } else {
                 binding.btnSendOtp.visibility = View.GONE
-            enableLocationGroup = false
-            disableField(binding.llLocationGroup)
+                enableLocationGroup = false
+                disableField(binding.llLocationGroup)
+            }
         }
     }
 
@@ -1069,7 +1069,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun onLatLongChanged(location: Location?) {
-        this.location = location!!
+        this.location = location
     }
 
     override fun showToast() {
