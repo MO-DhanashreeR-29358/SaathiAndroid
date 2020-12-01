@@ -2,8 +2,6 @@ package com.mosl.tabapp.banner;
 
 import android.os.Bundle;
 
-import com.mosl.tabapp.navigation.ScreenNavigatorImpl;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -23,6 +21,5 @@ public abstract class BannerModule {
     @Binds
     abstract BannerView provideBannerView(BannerFragment fragment);
 
-    @Binds
-    abstract BannerNavigator provideBannerNavigator(ScreenNavigatorImpl navigator);
+
 }

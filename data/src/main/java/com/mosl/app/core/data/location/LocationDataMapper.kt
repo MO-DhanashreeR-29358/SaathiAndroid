@@ -6,36 +6,37 @@ import com.mosl.saathi.api.model.location.LocationDataItemModel
 import com.mosl.saathi.api.model.location.LocationDataResponse
 
 fun List<LocationDataModel>.transformLocationData(): List<LocationDataItemModel> {
-  return mapNotNull {
-    try {
-      com.mosl.saathi.api.model.location.LocationDataItemModel(
-        employeeCode = it.employeeCode,
-        geoArea = it.geoArea,
-        geoLongitude = it.geoLongitude,
-        geoLatitude = it.geoLatitude,
-        time = it.time,
-        deviceId = it.deviceId,
-        accuracy = it.accuracy,
-        geoPinCode = it.geoPinCode,
-        id = "0"
+    return mapNotNull {
+        try {
+            com.mosl.saathi.api.model.location.LocationDataItemModel(
+                employeeCode = it.employeeCode,
+                geoArea = it.geoArea,
+                geoLongitude = it.geoLongitude,
+                geoLatitude = it.geoLatitude,
+                time = it.time,
+                deviceId = it.deviceId,
+                accuracy = it.accuracy,
+                geoPinCode = it.geoPinCode,
+                id = "0",
+                version = it.version
 
-      )
-    } catch (_: Exception) {
-      null
+            )
+        } catch (_: Exception) {
+            null
+        }
+
     }
-
-  }
 }
 
 fun LocationDataResponse.transform(): LocationResponse {
-  return LocationResponse(
-      response = response,
-      status = status,
-      type = type,
-      message = message,
-      errors = errors
+    return LocationResponse(
+        response = response,
+        status = status,
+        type = type,
+        message = message,
+        errors = errors
 
-  )
+    )
 }
 
 

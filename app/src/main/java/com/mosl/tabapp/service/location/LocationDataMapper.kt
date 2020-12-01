@@ -15,7 +15,8 @@ fun List<LocationData>.transformLocationData(): List<LocationDataModel> {
           deviceId = it.deviceId,
           accuracy = it.accuracy,
           geoPinCode = it.geoPincode,
-          id = "0"
+          id = "0",
+          version = it.version
 
       )
     } catch (_: Exception) {

@@ -9,13 +9,8 @@ import com.mosl.tabapp.banner.BannerModule
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryModule
 import com.mosl.tabapp.calendar.CalendarFragment
-import com.mosl.tabapp.calendar.CalendarFragmentOld
 import com.mosl.tabapp.calendar.CalendarModule
 import com.mosl.tabapp.calendar.calendarappoinslist.CalendarAppointsListFragment
-import com.mosl.tabapp.createMeeting.CreateMeetingModule
-import com.mosl.tabapp.dashboard.DashboardFragmentOld
-import com.mosl.tabapp.dashboard.DashboardHierarchyFragmentOld
-import com.mosl.tabapp.dashboard.DashboardSecondLevelFragmentOld
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightModule
 import com.mosl.tabapp.dashboard.base.DashboardFragment
@@ -30,6 +25,8 @@ import com.mosl.tabapp.dashboard.productivity.ProductivityFragment
 import com.mosl.tabapp.dashboard.productivity.ProductivityModule
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportModule
+import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment
+import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule
 import com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment
@@ -44,12 +41,11 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragmentNew
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
@@ -69,7 +65,8 @@ import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
-import com.mosl.tabapp.ui.WebViewFragment
+import com.mosl.tabapp.webview.WebViewModule
+import com.mosl.tabapp.webview.WebviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -84,12 +81,6 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector
   fun provideLeadViewDetailFactory(): LeadViewDetailFragment
-
-  @ContributesAndroidInjector
-  fun provideDashboardFragmentFactory(): DashboardFragmentOld
-
-  @ContributesAndroidInjector
-  fun provideCalendarFragmentFactory(): CalendarFragmentOld
 
   @ContributesAndroidInjector(modules = [CalendarModule::class])
   fun provideCalendarFragmentNewFactory(): CalendarFragment
@@ -106,8 +97,8 @@ interface FragmentProvider {
   @ContributesAndroidInjector(modules = [QueryModule::class])
   fun provideQueryFragmentFactory(): QueryFragment
 
-  @ContributesAndroidInjector
-  fun provideWebviewFragmentFactory(): WebViewFragment
+    @ContributesAndroidInjector(modules = [WebViewModule::class])
+  fun provideWebviewFragmentFactory(): WebviewFragment
 
   @ContributesAndroidInjector(modules = [LeadsModule::class])
   fun provideLeadsFragmentFactory(): LeadsFragment
@@ -130,23 +121,21 @@ interface FragmentProvider {
   @ContributesAndroidInjector(modules = [MappingHistoryModule::class])
   fun provideMappingHistoryFragment(): MappingHistoryFragment
 
-  @ContributesAndroidInjector
-  fun provideDashboardHierarchyFragmentFactory(): DashboardHierarchyFragmentOld
-
   @ContributesAndroidInjector(modules = [DashboardHierarchyReportModule::class])
-  fun provideDashboardHierarchyReportFragment(): DashboardHierarchyReportFragment
+    fun provideDashboardHierarchyReportFragment(): DashboardHierarchyReportFragment
 
-  @ContributesAndroidInjector(modules = [DashboardReportModule::class])
-  fun provideDashboardReportFragment(): DashboardReportFragment
+    @ContributesAndroidInjector(modules = [DashboardReportModule::class])
+    fun provideDashboardReportFragment(): DashboardReportFragment
 
-  @ContributesAndroidInjector
-  fun provideDashboardSecondLevelFragmentFactory(): DashboardSecondLevelFragmentOld
+    @ContributesAndroidInjector(modules = [DashboardReportAssignModule::class])
+    fun provideDashboardReportAssignFragment(): DashboardReportAssignFragment
 
-  @ContributesAndroidInjector(modules = [LeadsReportModule::class])
-  fun provideClientLeadFragmentFactory(): LeadsReportFragment
 
-  @ContributesAndroidInjector(modules = [ProductivityModule::class])
-  fun provideProductivityFragmentFactory(): ProductivityFragment
+    @ContributesAndroidInjector(modules = [LeadsReportModule::class])
+    fun provideClientLeadFragmentFactory(): LeadsReportFragment
+
+    @ContributesAndroidInjector(modules = [ProductivityModule::class])
+    fun provideProductivityFragmentFactory(): ProductivityFragment
 
   @ContributesAndroidInjector(modules = [NotificationModule::class])
   fun provideNotificationFragmentKttFactory(): NotificationFragment
@@ -166,7 +155,7 @@ interface FragmentProvider {
   @ContributesAndroidInjector(modules = [SetAppointmentModule::class])
   fun provideSetAppointmentFactory(): SetAppointmentFragment
 
-  @ContributesAndroidInjector(modules = [CreateMeetingModule::class])
+  @ContributesAndroidInjector(modules = [com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingModule::class])
   fun provideCreateMeetingFactory(): CreateMeetingFragment
 
   @ContributesAndroidInjector
@@ -195,9 +184,4 @@ interface FragmentProvider {
 
   @ContributesAndroidInjector(modules = [DashboardModule::class])
   fun provideNewDashboardFragmentFactory(): DashboardFragment
-
-  @ContributesAndroidInjector(
-      modules = [com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingModule::class]
-  )
-  fun provideCreateMeetingFragmentfactory(): CreateMeetingFragmentNew
 }

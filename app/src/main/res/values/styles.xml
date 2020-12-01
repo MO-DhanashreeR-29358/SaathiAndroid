@@ -19,6 +19,10 @@
         <item name="colorAccent">#FF959595</item>
     </style>
 
+    <style name="MOSLTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="MOSLTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
     <style name="CRMAppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:buttonStyle">@style/CRMButtonSelector</item>
         <item name="android:spinnerStyle">@style/CRMSpinnerSelector</item>

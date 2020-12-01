@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/margin_medium"
             android:button="@drawable/checkbox"
             android:checked="false"
             />
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/_3sdp"
+            android:layout_marginStart="@dimen/margin_medium"
             android:textColor="#808080"
             android:textSize="@dimen/txt_size"
             />

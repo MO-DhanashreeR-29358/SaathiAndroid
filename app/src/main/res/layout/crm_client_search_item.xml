@@ -5,30 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerVertical="true"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llExpand"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dashboard_background"
-        >
+        android:background="@color/dashboard_background">
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/linaerLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="@dimen/_10sdp"
-                >
+                android:layout_marginStart="@dimen/_10sdp">
 
 
                 <TextView
@@ -39,8 +35,7 @@
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp"
-                    />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -50,8 +45,7 @@
                 android:layout_below="@+id/linaerLayout"
                 android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginTop="@dimen/_3sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                >
+                android:layout_marginBottom="@dimen/_10sdp">
 
                 <TextView
                     android:id="@+id/tvClientname"
@@ -63,8 +57,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/_10sdp"
                     android:textStyle="bold"
-                    tool:text="PRAMOD KUMAR"
-                    />
+                    tool:text="PRAMOD KUMAR" />
 
                 <TextView
                     android:id="@+id/tvUCID"
@@ -74,8 +67,7 @@
                     android:layout_weight="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_10sdp"
-                    />
+                    android:textSize="@dimen/_10sdp" />
 
 
             </LinearLayout>
@@ -87,8 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="@color/black"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
         </RelativeLayout>
 
 
@@ -96,16 +87,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.2"
-            >
+            android:layout_weight="0.2">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivDropDownArrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_5sdp"
-                app:srcCompat="@drawable/ic_new_drop_down"
-                />
+                app:srcCompat="@drawable/ic_new_drop_down" />
         </LinearLayout>
 
     </LinearLayout>
@@ -117,21 +106,18 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:visibility="visible"
-        >
+        android:visibility="visible">
 
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="match_parent"
-                android:src="@drawable/line_circle"
-                />
+                android:src="@drawable/line_circle" />
 
         </LinearLayout>
 
@@ -139,23 +125,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/rlSetAppointment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                >
+                android:layout_marginTop="@dimen/_5sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivSetAppointment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_set_appointment_search"
-                    />
+                    app:srcCompat="@drawable/ic_set_appointment_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -164,8 +147,7 @@
                     android:layout_toEndOf="@+id/ivSetAppointment"
                     android:text="@string/MOSL_MENU_SET_APPOINTMENT"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -173,16 +155,14 @@
                 android:id="@+id/rlCrateMeeting"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                >
+                android:layout_marginTop="@dimen/_5sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivCreateMeeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_new_update_create_meeting_search"
-                    />
+                    app:srcCompat="@drawable/ic_new_update_create_meeting_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -191,8 +171,7 @@
                     android:layout_toEndOf="@+id/ivCreateMeeting"
                     android:text="@string/txt_lable_create_meeting"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -200,16 +179,14 @@
                 android:id="@+id/rlViewDetail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                >
+                android:layout_marginTop="@dimen/_5sdp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivViewDetail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_new_view_detail_search"
-                    />
+                    app:srcCompat="@drawable/ic_new_view_detail_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -218,8 +195,7 @@
                     android:layout_toEndOf="@+id/ivViewDetail"
                     android:text="@string/txt_lable_view_detail"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -229,16 +205,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgOpenAccountView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_open_account_search"
-                    />
+                    app:srcCompat="@drawable/ic_open_account_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -247,8 +221,7 @@
                     android:layout_toEndOf="@+id/imgOpenAccountView"
                     android:text="@string/txt_lable_open_account"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -258,16 +231,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgOAOFormView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_open_account_search"
-                    />
+                    app:srcCompat="@drawable/ic_open_account_search" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -276,8 +247,7 @@
                     android:layout_toEndOf="@+id/imgOAOFormView"
                     android:text="@string/txt_lable_oao_form"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -286,16 +256,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/ivDiyLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    app:srcCompat="@drawable/ic_share_24x24"
-                    />
+                    app:srcCompat="@drawable/ic_share_24x24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -304,8 +272,7 @@
                     android:layout_toEndOf="@+id/ivDiyLink"
                     android:text="@string/txt_lable_diy_link"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
             </RelativeLayout>
 
@@ -318,6 +285,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="@color/contest_list_background"
-        />
+        android:background="@color/contest_list_background" />
 </LinearLayout>

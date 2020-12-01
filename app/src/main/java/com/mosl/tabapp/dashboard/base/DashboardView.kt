@@ -5,10 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.Dashboard
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import io.reactivex.Observable
 
 interface DashboardView : BaseView {
@@ -55,4 +52,6 @@ interface DashboardView : BaseView {
   fun getBusinessProfileID(): String
   fun getProductID(): String
   fun getEmpCode(): String
+  fun renderFreshRegistration()
+  fun renderExistingApplication()
 }

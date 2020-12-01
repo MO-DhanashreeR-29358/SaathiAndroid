@@ -4,9 +4,18 @@
     <string name="SS_SEARCH">Search</string>
     <string name="ATTENDEE_SEARCH_HINT_TXT"><font size="14">Select Employee Name/Code</font></string>
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
+    <string name="MOSL_MENU_INCENTIVE_REPORT_TXT">Incentive Report</string>
+    <string name="MOSL_MENU_CHECK_APPROVAL_TXT">Check Approval</string>
+    <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
+    <string name="MOSL_MENU_RETRIEVE_OTP_TXT">Retrieve OTP</string>
     <string name="MOSL_MENU_EKYC_TXT">Open an Account</string>
+    <string name="MOSL_MENU_LAS_TXT">LAS Account</string>
+    <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
+    <string name="MOSL_MENU_SIP_TXT">SIP</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
+    <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>
+    <string name="MOSL_MENU_RESUME_APPLICATIONS_TXT">Resume Application</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
     <string name="MOSL_MENU_SUGGEST_ME_TXT">Suggest Me Tool</string>
     <string name="MOSL_MENU_MY_REPORTS_TXT">My Reports</string>
@@ -17,6 +26,15 @@
     <string name="MOSL_MENU_KNOWLEDGE_CENTRE_TXT">Sales Brochure</string>
     <string name="MOSL_MENU_SALES_STADIUM_PITCH_TXT">Sales Stadium Pitch</string>
     <string name="MOSL_MENU_PENDING_APPROVALS_TXT">My Pending Approvals</string>
+    <string name="MOSL_MENU_SETTING">Setting</string>
+    <string name="preference_location_summary">Location tracking needed for Conveyance</string>
+    <string name="preference_location_title">24x7 Location Tracking</string>
+    <string name="preff_24_7_key">checkTwentyFourSeven</string>
+    <string name="preference_location_key">preference_key_location</string>
+    <string name="preference_latitude_key">preference_key_latitude</string>
+    <string name="preference_distance_key">preference_key_distance</string>
+    <string name="preference_loc_key">preference_key_loc</string>
+    <string name="preference_longitude_key">preference_key_longitude</string>
     <string name="MOSL_MENU_LOGOUT_TXT">Logout</string>
     <string name="MOSL">Motilal Oswal</string>
     <string name="MOSL_LOGOUT_ALERT_MSG">Do you want to logout?</string>
@@ -29,6 +47,7 @@
     <string name="YTD">YTD</string>
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
+    <string name="MOSL_MENU_SIP">SIP</string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>
@@ -364,7 +383,9 @@
     <string name="txt_label_current_quarter_status">Current Quarter Status</string>
     <string name="error_lable_no_records_found">No records found</string>
     <string name="txt_lable_approve">Approve</string>
+    <string name="txt_label_assign">Assign</string>
     <string name="txt_lable_reject">Reject</string>
+    <string name="txt_label_reset">Reset</string>
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>
@@ -392,6 +413,30 @@
     <string name="hint_lable_enter_category_description">Enter Category Description*</string>
     <string name="txt_lable_category">Category*</string>
     <string name="txt_lable_actionables">Actionables*</string>
+    <string name="dialog_ok">OK</string>
+    <string name="consent_value">consent_check</string>
+    <string name="alert_dialog_location_message">We Motilal Oswal Financial Services Limited (herein after referred to as \'MOFSL\' for short) care about data privacy and security. Please review our Privacy Policy \n<b>[<a href="https://myzonehr.motilaloswal.com/apps/privpolicy.html">https://myzonehr.motilaloswal.com/apps/privpolicy.html</a>]</b>.\n By using Saathi App, you agree to have read, understood and bound by our Privacy Policy, link to which is already given above. Please be advised that by proceeding further you expressly consent to have your GPS (satellite navigation system) data collected, transmitted, transferred, stored and processed by MOFSL.</string>
+    <string name="alert_dialog_discloser_message">Saathi app collects location data to Claim Travelling Expense even when app is in background</string>
+    <string name="consent_check">ConsentCheck</string>
+    <string name="terms_condition_msg">Please Agree with Terms &amp; Conditions to Access your account</string>
+    <string name="enable_gps">To Continue, turn on device location, which uses Google\'s location service</string>
+
+    <string name="dialog_app_name">Searchable Spinner</string>
+    <string name="search_dialog_close">Close</string>
+    <string name="search_dialog_title">Search State</string>
+
+    <declare-styleable name="SearchableSpinner">
+        <attr name="closeText" format="string" />
+        <attr name="dialogTitle" format="string" />
+    </declare-styleable>
+
+
+
+    <!--Permissions Text-->
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core
+        functionality.</string>
+    <string name="settings">Settings</string>
+    <string name="mock_location_label">Please Disable Mock Location!</string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
     <string name="lbl_lead_creation_category">Category*</string>
     <string name="hint_lead_creation_name">Name*</string>
