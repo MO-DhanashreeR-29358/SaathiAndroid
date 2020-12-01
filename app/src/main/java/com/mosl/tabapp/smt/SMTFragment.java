@@ -17,10 +17,9 @@ import android.widget.ProgressBar;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
+import com.mosl.tabapp.webview.WebviewFragment;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 import static android.content.Context.DOWNLOAD_SERVICE;
 
@@ -75,16 +74,8 @@ public class SMTFragment extends CommonFragment implements MOSLConstants, SMTCal
 	}
 
 	@Override public void openEkyc(String OAOUserId) {
-		HashMap<String, String> map = new HashMap();
-		map.put(NEW_USERID, OAOUserId);
-		map.put(BRANCHEMPCODE, userManager.getUser().employeeCode);
-		map.put(COMMANDTYPE, "RESUME");
-		map.put(APPLICATIONTYPE, "CRM");
-		map.put(OSTYPE, "ANDROID");
-		map.put(APPLOGINID, userManager.getUser().employeeCode);
-		map.put(TOKENKEY, userManager.getUser().token);
-		//gotoNewEkyc(getInputBody(map));
-	}
+        gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, OAOUserId);
+    }
 
 	public class WebViewClient extends android.webkit.WebViewClient {
 		@Override

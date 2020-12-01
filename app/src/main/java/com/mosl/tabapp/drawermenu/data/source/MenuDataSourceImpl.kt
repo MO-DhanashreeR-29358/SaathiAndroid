@@ -11,243 +11,433 @@ import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class MenuDataSourceImpl @Inject constructor(
+open class MenuDataSourceImpl @Inject constructor(
 ) : MenuDataSource {
-  override fun getMenuItems(
-    userManager: UserManager,
-    menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>
-  ): Observable<List<BaseMenu>> {
-    return Observable.fromCallable {
-      val user = userManager.user
-      if (user.isAufsb()) {
-        getAufsbUserMenu()
-      } else if (user.isAuBankSalesSupport()) {
-        getAuSalesBank()
-      } else if (user.isSMTEnabled()) {
-        getSMTUserMenu(menuItems)
-      } else if (user.isEkycEnable()) {
-        getEkycUserMenu(menuItems)
-      } else {
-        getUserMenu(menuItems)
-      }
+    override fun getMenuItems(
+        userManager: UserManager,
+        menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>
+    ): Observable<List<BaseMenu>> {
+        return Observable.fromCallable {
+            val user = userManager.user
+            when {
+                user.isAufsb() -> {
+                    getAufsbUserMenu()
+                }
+                user.isAuBankSalesSupport() -> {
+                    getAuSalesBank(user.isCheckApprovalEnable())
+                }
+                user.isSMTEnabled() -> {
+                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable())
+                }
+                user.isEkycEnable() -> {
+                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable())
+                }
+                else -> {
+                    getUserMenu(menuItems, user.isCheckApprovalEnable())
+                }
+            }
+        }
+            .subscribeOn(Schedulers.io())
     }
-      .subscribeOn(Schedulers.io())
-  }
 
-  protected fun getEkycUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getOpenAccount(),
-      getReports(list),
-      getIncentiveReport(),
-      getCalendar(),
-      getPendingApproval(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getBirthdayAnniversary(),
-      getQuery(),
-      getLogout()
-    )
-  }
+    protected fun getEkycUserMenu(
+        list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        isCheckApproval: Boolean
+    ): List<BaseMenu> {
+        return if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        } else {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        }
+    }
 
-  protected fun getUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getReports(list),
-      getIncentiveReport(),
-      getCalendar(),
-      getPendingApproval(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getBirthdayAnniversary(),
-      getQuery(),
-      getLogout()
-    )
-  }
+    protected fun getUserMenu(
+        list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        isCheckApproval: Boolean
+    ): List<BaseMenu> {
+        return if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        } else {
+            listOf(
+                getDashboard(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        }
+    }
 
-  protected fun getSMTUserMenu(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getOpenAccount(),
-      getReports(list),
-      getIncentiveReport(),
-      getCalendar(),
-      getPendingApproval(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getBirthdayAnniversary(),
-      getSuggestMe(),
-      getQuery(),
-      getLogout()
-    )
-  }
+    protected fun getSMTUserMenu(
+        list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        isCheckApproval: Boolean
+    ): List<BaseMenu> {
+        return if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getSuggestMe(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        } else {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getReports(list),
+                getIncentiveReport(),
+                getCalendar(),
+                getPendingApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getBirthdayAnniversary(),
+                getSuggestMe(),
+                getMostGuide(),
+                getQuery(),
+                getSetting(),
+                getLogout()
+            )
+        }
+    }
 
-  protected fun getAufsbUserMenu(): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getOpenAccount(),
-      getLogout()
-    )
-  }
-
-  protected fun getAuSalesBank(): List<BaseMenu> {
-    return listOf(
-      getDashboard(),
-      getOpenAccount(),
-      getAUBankMeeting(),
-      getAUBankMeetingReport(),
-      getIncentiveReport(),
-      getSalesBrochure(),
-      getSalesStadium(),
-      getLogout()
-    )
-  }
-
-  internal fun getDashboard(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_dashboard,
-      label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
-    )
-  }
-
-  internal fun getIncentiveReport(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_incentive_reports,
-      label = R.string.MOSL_MENU_INCENTIVE_REPORT_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT
-    )
-  }
-
-  internal fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_my_reports,
-      label = R.string.MOSL_MENU_MY_REPORTS_TXT,
-      enabled = true,
-      children = list.map {
-        ChildMenu(
-          label = 0,
-          labelStr = it.name,
-          enabled = true,
-          pageId = NavigationConstants.NAVIGATE_TO_REPORTS,
-          navigateKey = it.systemName
+    protected fun getAufsbUserMenu(): List<BaseMenu> {
+        return listOf(
+            getDashboard(),
+            getOpenAccount(),
+            getSetting(),
+            getLogout()
         )
+    }
 
-      }
-    )
-  }
+    protected fun getAuSalesBank(
+        isCheckApproval: Boolean
+    ): List<BaseMenu> {
+        return if (isCheckApproval) {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getAUBankMeeting(),
+                getAUBankMeetingReport(),
+                getIncentiveReport(),
+                getCheckApproval(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getMostGuide(),
+                getSetting(),
+                getLogout()
+            )
+        } else {
+            listOf(
+                getDashboard(),
+                getOpenAccount(),
+                getLASAccount(),
+                getSip(),
+                getEModification(),
+                getAUBankMeeting(),
+                getAUBankMeetingReport(),
+                getIncentiveReport(),
+                getSalesBrochure(),
+                getSalesStadium(),
+                getMostGuide(),
+                getSetting(),
+                getLogout()
+            )
+        }
+    }
 
-  internal fun getAUBankMeeting(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_suggest_me_tool,
-      label = R.string.MOSL_MENU_AU_BANK_MEETING_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING
-    )
-  }
-
-  internal fun getAUBankMeetingReport(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_suggest_me_tool,
-      label = R.string.MOSL_MENU_AU_BANK_MEETING_REPORT_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT
-    )
-  }
-
-  internal fun getOpenAccount(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_update_ekyc,
-      label = R.string.MOSL_MENU_EKYC_TXT,
-      enabled = true,
-      children = listOf(
-        ChildMenu(
-          label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
-          enabled = true,
-          pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
-          navigateKey = ""
-        ),
-        ChildMenu(
-          label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
-          enabled = true,
-          pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
-          navigateKey = ""
+    internal fun getDashboard(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dashboard,
+            label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
         )
-      )
-    )
-  }
+    }
 
-  internal fun getSalesBrochure(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_sales_brochure,
-      label = R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
-    )
-  }
+    internal fun getIncentiveReport(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_incentive_reports,
+            label = R.string.MOSL_MENU_INCENTIVE_REPORT_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_INCENTIVE_REPORT
+        )
+    }
 
-  internal fun getSalesStadium(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_sales_stadium,
-      label = R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_SALES_STADIUM
-    )
-  }
+    internal fun getCheckApproval(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_cheque_approval,
+            label = R.string.MOSL_MENU_CHECK_APPROVAL_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL
+        )
+    }
 
-  internal fun getCalendar(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_calendar,
-      label = R.string.MOSL_MENU_CALENDAR_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_CALENDAR
-    )
-  }
+    internal fun getMostGuide(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_most_guide,
+            label = R.string.MOSL_MENU_MOST_GUIDE_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_MOST_GUIDE
+        )
+    }
 
-  internal fun getPendingApproval(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_my_pending_approvals,
-      label = R.string.MOSL_MENU_PENDING_APPROVALS_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
-    )
-  }
 
-  internal fun getBirthdayAnniversary(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_birthday_aniversary,
-      label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
-    )
-  }
+    internal fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_my_reports,
+            label = R.string.MOSL_MENU_MY_REPORTS_TXT,
+            enabled = true,
+            children = list.map {
+                ChildMenu(
+                    label = 0,
+                    labelStr = it.name,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_REPORTS,
+                    navigateKey = it.systemName
+                )
 
-  internal fun getQuery(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_query,
-      label = R.string.MOSL_MENU_QUERY_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_QUERY
-    )
-  }
+            }
+        )
+    }
 
-  internal fun getSuggestMe(enabled: Boolean = true): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_menu_suggest_me_tool,
-      label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
-      enabled = enabled,
-      pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
-    )
-  }
+    internal fun getAUBankMeeting(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_suggest_me_tool,
+            label = R.string.MOSL_MENU_AU_BANK_MEETING_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING
+        )
+    }
 
-  internal fun getLogout(): BaseMenu {
-    return BaseMenu(
-      icon = R.drawable.ic_logout,
-      label = R.string.MOSL_MENU_LOGOUT_TXT,
-      enabled = true,
-      pageId = NavigationConstants.NAVIGATE_TO_LOGOUT
-    )
-  }
+    internal fun getAUBankMeetingReport(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_suggest_me_tool,
+            label = R.string.MOSL_MENU_AU_BANK_MEETING_REPORT_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT
+        )
+    }
+
+    internal fun getOpenAccount(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_update_ekyc,
+            label = R.string.MOSL_MENU_EKYC_TXT,
+            enabled = true,
+            children = listOf(
+                ChildMenu(
+                    label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+                    navigateKey = ""
+                )
+            )
+        )
+    }
+
+    internal fun getLASAccount(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_las,
+            label = R.string.MOSL_MENU_LAS_TXT,
+            enabled = true,
+            children = listOf(
+                ChildMenu(
+                    label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label = R.string.MOSL_MENU_RESUME_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
+                    navigateKey = ""
+                )
+            )
+        )
+    }
+
+
+    internal fun getEModification(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_emodification,
+            label = R.string.MOSL_MENU_E_MODIFICATION_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_E_MODIFICATION
+        )
+    }
+
+    internal fun getSip(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_sip,
+            label = R.string.MOSL_MENU_SIP_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_SIP
+        )
+    }
+
+    internal fun getSalesBrochure(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_sales_brochure,
+            label = R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
+        )
+    }
+
+    internal fun getSalesStadium(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_sales_stadium,
+            label = R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_SALES_STADIUM
+        )
+    }
+
+    internal fun getCalendar(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_calendar,
+            label = R.string.MOSL_MENU_CALENDAR_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_CALENDAR
+        )
+    }
+
+    internal fun getPendingApproval(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_my_pending_approvals,
+            label = R.string.MOSL_MENU_PENDING_APPROVALS_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
+        )
+    }
+
+    internal fun getBirthdayAnniversary(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_birthday_aniversary,
+            label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
+        )
+    }
+
+    internal fun getQuery(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_query,
+            label = R.string.MOSL_MENU_QUERY_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_QUERY
+        )
+    }
+
+    internal fun getSuggestMe(enabled: Boolean = true): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_suggest_me_tool,
+            label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
+            enabled = enabled,
+            pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
+        )
+    }
+
+    internal fun getSetting(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_setting,
+            label = R.string.MOSL_MENU_SETTING,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_SETTING
+        )
+    }
+
+    internal fun getLogout(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_logout,
+            label = R.string.MOSL_MENU_LOGOUT_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_LOGOUT
+        )
+    }
 }

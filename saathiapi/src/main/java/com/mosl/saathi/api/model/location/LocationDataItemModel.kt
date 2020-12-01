@@ -11,6 +11,7 @@ data class LocationDataItemModel(
   @JvmField @SerializedName("DeviceId") val deviceId: String,
   @JvmField @SerializedName("Accuracy") val accuracy: String,
   @JvmField @SerializedName("GeoPinCode") val geoPinCode: String,
+  @JvmField @SerializedName("Version") val version: String,
   @JvmField @SerializedName("Id") val id: String
 
 )

@@ -1,11 +1,14 @@
 package com.mosl.tabapp;
 
 import android.content.Context;
+
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper;
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelperKt;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
 
 @Module public abstract class CommonUiModel {
 
@@ -15,4 +18,5 @@ import javax.inject.Singleton;
 
 		return ShortcutHelperKt.getShortcutHelper(context);
 	}
+
 }

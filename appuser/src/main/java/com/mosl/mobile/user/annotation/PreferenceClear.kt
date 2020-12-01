@@ -1,8 +1,8 @@
-package com.mosl.app.core.data.annotation
+package com.mosl.mobile.user.annotation
 
 import javax.inject.Qualifier
 import kotlin.annotation.AnnotationRetention.RUNTIME
 
 @Retention(RUNTIME)
 @Qualifier
-annotation class ForcePreferenceClear
+annotation class PreferenceClear

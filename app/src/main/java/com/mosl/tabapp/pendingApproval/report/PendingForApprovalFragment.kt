@@ -43,335 +43,338 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Date
-import java.util.LinkedHashMap
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 class PendingForApprovalFragment : CommonFragment(),
-  OnClickListener, MOSLConstants, PendingForApprovalView {
-  lateinit var binding: FragPendingForApprovalBinding
-  private lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
-  private lateinit var mainFromDate: String
-  private lateinit var mainToDate: String
-  private lateinit var fromDat: Date
-  private lateinit var toDate: Date
-  private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
-  private lateinit var profileAdapter: ArrayAdapter<RowData>
-  private val datePickerEvent = PublishSubject.create<Int>()
-  private val subject = PublishSubject.create<PendingForApprovalUIEvent>()
-  private var selectedApprovalList = mutableListOf<String>()
+    OnClickListener, MOSLConstants, PendingForApprovalView {
+    lateinit var binding: FragPendingForApprovalBinding
+    private lateinit var pendingApprovalTableAdapter: PendingApprovalTableAdapter
+    private lateinit var mainFromDate: String
+    private lateinit var mainToDate: String
+    private lateinit var fromDat: Date
+    private lateinit var toDate: Date
+    private lateinit var employeeAdapter: ArrayAdapter<EmployeeModel>
+    private lateinit var profileAdapter: ArrayAdapter<RowData>
+    private val datePickerEvent = PublishSubject.create<Int>()
+    private val subject = PublishSubject.create<PendingForApprovalUIEvent>()
+    private var selectedApprovalList = mutableListOf<String>()
 
-  @Inject
-  lateinit var presenter: PendingForApprovalPresenter
+    @Inject
+    lateinit var presenter: PendingForApprovalPresenter
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
-    binding = FragPendingForApprovalBinding.bind(view)
-    setAppTitle("Pending For Approvals")
-    setUpView()
-    setUpDate()
-    presenter.start()
-    dataActionSubject.onNext(DataAction.Fetch)
-    datePickerEvent.onNext(0)
-  }
-
-  override fun getLayout(): Int {
-    return layout.frag_pending_for_approval
-  }
-
-  private fun setUpView() {
-
-    binding.btnApprove.setOnClickListener(this)
-    binding.btnReject.setOnClickListener(this)
-    employeeAdapter = getDefaultAdapter(requireContext())
-    binding.spSelectEmployee.adapter = employeeAdapter
-    profileAdapter = getDefaultAdapter(requireContext())
-    binding.spProfileChange.adapter = profileAdapter
-    pendingApprovalTableAdapter = PendingApprovalTableAdapter(requireActivity(), subject)
-    binding.table.adapter = pendingApprovalTableAdapter
-  }
-
-  private fun setUpDate() {
-    mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(date6)
-    fromDat = CRMAppUtil.getDate(mainFromDate, date6)
-    mainToDate = CRMAppUtil.getDate(Date(), date6)
-    toDate = CRMAppUtil.getDate(mainToDate, date6)
-
-    binding.tvStartDate.text =
-      AppDateFormats.DF_JSON_DATE6.format(fromDat)
-
-    binding.llEndDate.setOnClickListener {
-      selectDate()
-    }
-    binding.tvEndDate.text =
-      AppDateFormats.DF_JSON_DATE6.format(toDate)
-
-    binding.llStartDate.setOnClickListener {
-      selectDate()
-    }
-
-  }
-
-  private fun selectDate() {
-    val dialog = Dialog(requireContext())
-    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-    dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-    dialog.setContentView(layout.date_picker_from_to)
-    dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
-    val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
-    val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
-    dpToDate.maxDate = System.currentTimeMillis() - 1000
-    dpFromDate.maxDate = System.currentTimeMillis() - 1000
-    val close: ImageView =
-      dialog.findViewById(R.id.ibtnClose)
-    val btnSubmit: Button =
-      dialog.findViewById(R.id.btnSubmit)
-
-    try {
-      val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
-      dpFromDate.init(
-        dateSplit[0].toInt(),
-        dateSplit[1].toInt() - 1,
-        dateSplit[2].toInt()
-      ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-        mainFromDate =
-          year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-      }
-    } catch (e: Exception) {
-      Timber.d(e)
-    }
-
-    try {
-      val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
-      dpToDate.init(
-        dateSplit[0].toInt(),
-        dateSplit[1].toInt() - 1,
-        dateSplit[2].toInt()
-      ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-        mainToDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
-      }
-    } catch (e: Exception) {
-      Timber.d(e)
-    }
-
-    close.setOnClickListener { dialog.dismiss() }
-    btnSubmit.setOnClickListener {
-      fromDat = CRMAppUtil.getDate(mainFromDate, date6)
-      toDate = CRMAppUtil.getDate(mainToDate, date6)
-      if (fromDat.after(toDate)) {
-        MSFDialog.alertDialog(
-          requireContext(), 0, "Motilal Oswal", MOSLConstants.INVALID_DATE_RANGE,
-          "OK", true, null
-        )
-      } else {
-        mainFromDate.apply {
-          fromDat = CRMAppUtil.getDate(this, date6)
-          binding.tvStartDate.text = AppDateFormats.DF_JSON_DATE6.format(fromDat)
-        }
-        mainToDate.apply {
-          toDate = CRMAppUtil.getDate(this, date6)
-          binding.tvEndDate.text = AppDateFormats.DF_JSON_DATE6.format(toDate)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragPendingForApprovalBinding.bind(view)
+        setAppTitle("Pending For Approvals")
+        setUpView()
+        setUpDate()
+        presenter.start()
+        dataActionSubject.onNext(DataAction.Fetch)
         datePickerEvent.onNext(0)
-        dialog.dismiss()
-      }
-
     }
-    dialog.show()
-  }
 
-  fun prefix(input: Int): String {
-    return if (Integer.toString(input).length == 1) {
-      "0$input"
-    } else input.toString() + ""
-  }
+    override fun getLayout(): Int {
+        return layout.frag_pending_for_approval
+    }
 
-  override fun onClick(v: View) {
-    when (v.id) {
-      R.id.btnApprove -> if (getSelectedAppovalList().size > 0) {
-        MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal),
-          "Are you sure, you want to approve selected request?", "Yes", "No", true
-        ) { action: Action, _ ->
-          if (action == OK) {
-            subject.onNext(PendingForApprovalUIEvent.BtnEvent("2"))
-          }
+    private fun setUpView() {
+
+        binding.btnApprove.setOnClickListener(this)
+        binding.btnReject.setOnClickListener(this)
+        employeeAdapter = getDefaultAdapter(requireContext())
+        binding.spSelectEmployee.adapter = employeeAdapter
+        profileAdapter = getDefaultAdapter(requireContext())
+        binding.spProfileChange.adapter = profileAdapter
+        pendingApprovalTableAdapter = PendingApprovalTableAdapter(requireActivity(), subject)
+        binding.table.adapter = pendingApprovalTableAdapter
+    }
+
+    private fun setUpDate() {
+        mainFromDate = CRMAppUtil.getFirstDateOfCurrentMonth(date6)
+        fromDat = CRMAppUtil.getDate(mainFromDate, date6)
+        mainToDate = CRMAppUtil.getDate(Date(), date6)
+        toDate = CRMAppUtil.getDate(mainToDate, date6)
+
+        binding.tvStartDate.text =
+            AppDateFormats.DF_JSON_DATE6.format(fromDat)
+
+        binding.llEndDate.setOnClickListener {
+            selectDate()
         }
-      } else {
-        MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal),
-          "Please select at least one record", "OK", true, null
-        )
-      }
-      R.id.btnReject -> if (getSelectedAppovalList().size > 0) {
-        MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal),
-          "Are you sure, you want to reject selected request?", "Yes", "No", true
-        ) { action: Action, _ ->
-          if (action == OK) {
-            subject.onNext(PendingForApprovalUIEvent.BtnEvent("3"))
-          }
-        }
-      } else {
-        MSFDialog.alertDialog(
-          requireContext(), 0,
-          resources.getString(string.motilal_oswal),
-          "Please select at least one record", "OK", true, null
-        )
-      }
-      R.id.llStartDate -> selectDate()
-      R.id.llEndDate -> selectDate()
-    }
-  }
+        binding.tvEndDate.text =
+            AppDateFormats.DF_JSON_DATE6.format(toDate)
 
-  override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
-    uiModel.onFailure {
-      showOnFailurePopup(it)
-    }
-    uiModel.onSuccess {
-      employeeAdapter.setSpinnerData(binding.spSelectEmployee, it.listOfEmployee)
-      val arrRepeatMode = ArrayList<RowData>()
-      it.listOfProfile.safeMap { item ->
-        arrRepeatMode.add(
-          RowData(+1, item.entityField, item.referenceName)
-        )
-      }
-      profileAdapter.setSpinnerData(binding.spProfileChange, arrRepeatMode)
-      val productData =
-        RowData.getSpinnerRowDataById(
-          arguments?.getString(MOSLConstants.ENTITY_FIELD),
-          profileAdapter
-        )
-      if (productData != null) {
-        binding.spProfileChange.setSelection(productData.position)
-      }
-    }
-  }
-
-  override fun renderApprovalList(uiModel: UiModel<List<PendingForApprovalItem>>) {
-    toggleProgress(uiModel.inProgress)
-    uiModel.onFailure {
-      binding.table.visibility = View.GONE
-      binding.tvNochart.visibility = View.VISIBLE
-      binding.llButton.visibility = View.GONE
-      showOnFailurePopup(it)
-    }
-
-    uiModel.onSuccess {
-      if (it.isNotEmpty()) {
-        it.map {
-          val requestDate = getFormatedDate(it.updationDate, DF_JSON_DATE10, DF_JSON_DATE4)
-          val approvedDate = if (it.approver2StatusUpdateDate.isNotEmpty()) {
-            getFormatedDate(it.approver2StatusUpdateDate, DF_JSON_DATE10, DF_JSON_DATE4)
-          } else {
-            it.approver2StatusUpdateDate
-          }
-          val hm =
-            LinkedHashMap<String, String>()
-          hm[MOSLConstants.EMPLOYEE_CODE_APP] = it.updatedBy
-          hm[MOSLConstants.EMP_NAME] = it.employeeName
-          hm[MOSLConstants.LEAD_ID_APP] = it.leadID
-          hm[MOSLConstants.CLIENT_CODE] = it.clientCode
-          hm[MOSLConstants.UCID] = it.ucid
-          hm[MOSLConstants.NEW_CLIENT_NAME] = it.clientName
-          hm[MOSLConstants.MODULE_NAME] = it.entity
-          hm[MOSLConstants.FIELD_NAME] = it.referenceName
-          hm[MOSLConstants.SUB_OPTION] = it.approvalFieldValue
-          hm[MOSLConstants.STATUS] = it.getStatus()
-          hm[MOSLConstants.REQUEST_DATE] = requestDate
-          hm[MOSLConstants.APPROVED_DATE] = approvedDate
-          hm[MOSLConstants.APPROVAL_REQUEST_ID] = it.approvalRequestId
-          pendingApprovalTableAdapter.add(hm)
-        }
-        binding.table.visibility = View.VISIBLE
-        binding.tvNochart.visibility = View.GONE
-        binding.llButton.visibility = View.VISIBLE
-        pendingApprovalTableAdapter.notifyDataSetChanged()
-      } else {
-        binding.table.visibility = View.GONE
-        binding.tvNochart.visibility = View.VISIBLE
-        binding.llButton.visibility = View.GONE
-      }
-
-    }
-
-  }
-
-  override fun onEmployeeChange(): Observable<Int> {
-    return binding.spSelectEmployee.itemSelections()
-  }
-
-  override fun onProfileChange(): Observable<Int> {
-    return binding.spProfileChange.itemSelections()
-  }
-
-  override fun getEmployee(): EmployeeModel {
-    return binding.spSelectEmployee.selectedItem as EmployeeModel
-  }
-
-  override fun getProfile(): RowData {
-    return binding.spProfileChange.selectedItem as RowData
-  }
-
-  override fun fromDate(): String {
-    return binding.tvStartDate.text.toString() + " 00:00:00"
-  }
-
-  override fun toDate(): String {
-    return binding.tvEndDate.text.toString() + " 00:00:00"
-  }
-
-  override fun onDatePickerEvent(): Observable<Int> {
-    return datePickerEvent.ofType()
-  }
-
-  override fun onBtnEvent(): Observable<PendingForApprovalUIEvent.BtnEvent> {
-    return subject.ofType()
-  }
-
-  override fun onSelectedApprovalList(): Observable<PendingForApprovalUIEvent.CheckBoxSelectedArrayList> {
-    return subject.ofType()
-  }
-
-  override fun selectedApprovalList(arrayList: java.util.ArrayList<String>) {
-    selectedApprovalList = arrayList
-  }
-
-  override fun multiUpdateApproval(uiModel: UiModel<MultiUpdateApprovalResponse>) {
-    toggleProgressBar(uiModel.inProgress)
-
-    uiModel.onFailure { error ->
-      showOnFailurePopup(error)
-    }
-
-    uiModel.onSuccess { data ->
-      if (data.response != null) {
-        MSFDialog.alertDialog(
-          requireContext(),
-          0,
-          resources.getString(string.motilal_oswal),
-          data.message,
-          "OK",
-          true
-        ) { action: Action, _ ->
-          if (action == OK) {
-            datePickerEvent.onNext(0)
-          }
+        binding.llStartDate.setOnClickListener {
+            selectDate()
         }
 
-      }
     }
 
-  }
+    private fun selectDate() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(layout.date_picker_from_to)
+        dialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+        val dpFromDate: DatePicker = dialog.findViewById(R.id.datePickerFromDate)
+        val dpToDate: DatePicker = dialog.findViewById(R.id.datePickerToDate)
+        dpToDate.maxDate = System.currentTimeMillis() - 1000
+        dpFromDate.maxDate = System.currentTimeMillis() - 1000
+        val close: ImageView =
+            dialog.findViewById(R.id.ibtnClose)
+        val btnSubmit: Button =
+            dialog.findViewById(R.id.btnSubmit)
 
-  override fun getSelectedAppovalList(): MutableList<String> {
-    return selectedApprovalList
-  }
+        try {
+            val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
+            dpFromDate.init(
+                dateSplit[0].toInt(),
+                dateSplit[1].toInt() - 1,
+                dateSplit[2].toInt()
+            ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                mainFromDate =
+                    year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+            }
+        } catch (e: Exception) {
+            Timber.d(e)
+        }
 
-  companion object {
-    const val date6 = "yyyy-MM-dd"
-  }
+        try {
+            val dateSplit: Array<String> = mainToDate.split("-").toTypedArray()
+            dpToDate.init(
+                dateSplit[0].toInt(),
+                dateSplit[1].toInt() - 1,
+                dateSplit[2].toInt()
+            ) { _, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+                mainToDate =
+                    year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+            }
+        } catch (e: Exception) {
+            Timber.d(e)
+        }
+
+        close.setOnClickListener { dialog.dismiss() }
+        btnSubmit.setOnClickListener {
+            fromDat = CRMAppUtil.getDate(mainFromDate, date6)
+            toDate = CRMAppUtil.getDate(mainToDate, date6)
+            if (fromDat.after(toDate)) {
+                MSFDialog.alertDialog(
+                    requireContext(), 0, "Motilal Oswal", MOSLConstants.INVALID_DATE_RANGE,
+                    "OK", true, null
+                )
+            } else {
+                mainFromDate.apply {
+                    fromDat = CRMAppUtil.getDate(this, date6)
+                    binding.tvStartDate.text = AppDateFormats.DF_JSON_DATE6.format(fromDat)
+                }
+                mainToDate.apply {
+                    toDate = CRMAppUtil.getDate(this, date6)
+                    binding.tvEndDate.text = AppDateFormats.DF_JSON_DATE6.format(toDate)
+                }
+                datePickerEvent.onNext(0)
+                dialog.dismiss()
+            }
+
+        }
+        dialog.show()
+    }
+
+    fun prefix(input: Int): String {
+        return if (input.toString().length == 1) {
+            "0$input"
+        } else input.toString() + ""
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btnApprove -> if (getSelectedAppovalList().size > 0) {
+                MSFDialog.alertDialog(
+                    requireContext(), 0,
+                    resources.getString(string.motilal_oswal),
+                    "Are you sure, you want to approve selected request?", "Yes", "No", true
+                ) { action: Action, _ ->
+                    if (action == OK) {
+                        subject.onNext(PendingForApprovalUIEvent.BtnEvent("2"))
+                    }
+                }
+            } else {
+                MSFDialog.alertDialog(
+                    requireContext(), 0,
+                    resources.getString(string.motilal_oswal),
+                    "Please select at least one record", "OK", true, null
+                )
+            }
+            R.id.btnReject -> if (getSelectedAppovalList().size > 0) {
+                MSFDialog.alertDialog(
+                    requireContext(), 0,
+                    resources.getString(string.motilal_oswal),
+                    "Are you sure, you want to reject selected request?", "Yes", "No", true
+                ) { action: Action, _ ->
+                    if (action == OK) {
+                        subject.onNext(PendingForApprovalUIEvent.BtnEvent("3"))
+                    }
+                }
+            } else {
+                MSFDialog.alertDialog(
+                    requireContext(), 0,
+                    resources.getString(string.motilal_oswal),
+                    "Please select at least one record", "OK", true, null
+                )
+            }
+            R.id.llStartDate -> selectDate()
+            R.id.llEndDate -> selectDate()
+        }
+    }
+
+    override fun render(uiModel: UiModel<PendingForApprovalDropdownData>) {
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            employeeAdapter.setSpinnerData(binding.spSelectEmployee, it.listOfEmployee)
+            val arrRepeatMode = ArrayList<RowData>()
+            it.listOfProfile.safeMap { item ->
+                arrRepeatMode.add(
+                    RowData(+1, item.entityField, item.referenceName)
+                )
+            }
+            profileAdapter.setSpinnerData(binding.spProfileChange, arrRepeatMode)
+            val productData =
+                RowData.getSpinnerRowDataById(
+                    arguments?.getString(MOSLConstants.ENTITY_FIELD),
+                    profileAdapter
+                )
+            if (productData != null) {
+                binding.spProfileChange.setSelection(productData.position)
+            }
+        }
+    }
+
+    override fun renderApprovalList(uiModel: UiModel<List<PendingForApprovalItem>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            binding.table.visibility = View.GONE
+            binding.tvNochart.visibility = View.VISIBLE
+            binding.llButton.visibility = View.GONE
+            showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            if (it.isNotEmpty()) {
+                it.map {
+                    val requestDate =
+                        getFormatedDate(it.updationDate, DF_JSON_DATE10, DF_JSON_DATE4)
+                    val approvedDate = if (it.approver2StatusUpdateDate.isNotEmpty()) {
+                        getFormatedDate(it.approver2StatusUpdateDate, DF_JSON_DATE10, DF_JSON_DATE4)
+                    } else {
+                        it.approver2StatusUpdateDate
+                    }
+                    val hm =
+                        LinkedHashMap<String, String>()
+                    hm[MOSLConstants.EMPLOYEE_CODE_APP] = it.updatedBy
+                    hm[MOSLConstants.EMP_NAME] = it.employeeName
+                    hm[MOSLConstants.LEAD_ID_APP] = it.leadID
+                    hm[MOSLConstants.CLIENT_CODE] = it.clientCode
+                    hm[MOSLConstants.UCID] = it.ucid
+                    hm[MOSLConstants.NEW_CLIENT_NAME] = it.clientName
+                    hm[MOSLConstants.MODULE_NAME] = it.entity
+                    hm[MOSLConstants.FIELD_NAME] = it.referenceName
+                    hm[MOSLConstants.SUB_OPTION] = it.approvalFieldValue
+                    hm[MOSLConstants.STATUS] = it.getStatus()
+                    hm[MOSLConstants.REQUEST_DATE] = requestDate
+                    hm[MOSLConstants.APPROVED_DATE] = approvedDate
+                    hm[MOSLConstants.APPROVAL_REQUEST_ID] = it.approvalRequestId
+                    pendingApprovalTableAdapter.add(hm)
+                }
+                binding.table.visibility = View.VISIBLE
+                binding.tvNochart.visibility = View.GONE
+                binding.llButton.visibility = View.VISIBLE
+                pendingApprovalTableAdapter.notifyDataSetChanged()
+            } else {
+                binding.table.visibility = View.GONE
+                binding.tvNochart.visibility = View.VISIBLE
+                binding.llButton.visibility = View.GONE
+            }
+
+        }
+
+    }
+
+    override fun onEmployeeChange(): Observable<Int> {
+        return binding.spSelectEmployee.itemSelections()
+    }
+
+    override fun onProfileChange(): Observable<Int> {
+        return binding.spProfileChange.itemSelections()
+    }
+
+    override fun getEmployee(): EmployeeModel {
+        return binding.spSelectEmployee.selectedItem as EmployeeModel
+    }
+
+    override fun getProfile(): RowData {
+        return binding.spProfileChange.selectedItem as RowData
+    }
+
+    override fun fromDate(): String {
+        return binding.tvStartDate.text.toString() + " 00:00:00"
+    }
+
+    override fun toDate(): String {
+        return binding.tvEndDate.text.toString() + " 00:00:00"
+    }
+
+    override fun onDatePickerEvent(): Observable<Int> {
+        return datePickerEvent.ofType()
+    }
+
+    override fun onBtnEvent(): Observable<PendingForApprovalUIEvent.BtnEvent> {
+        return subject.ofType()
+    }
+
+    override fun onSelectedApprovalList(): Observable<PendingForApprovalUIEvent.CheckBoxSelectedArrayList> {
+        return subject.ofType()
+    }
+
+    override fun selectedApprovalList(arrayList: java.util.ArrayList<String>) {
+        selectedApprovalList = arrayList
+    }
+
+    override fun multiUpdateApproval(uiModel: UiModel<MultiUpdateApprovalResponse>) {
+        toggleProgressBar(uiModel.inProgress)
+
+        uiModel.onFailure { error ->
+            showOnFailurePopup(error)
+        }
+
+        uiModel.onSuccess { data ->
+            if (data.response != null) {
+                MSFDialog.alertDialog(
+                    requireContext(),
+                    0,
+                    resources.getString(string.motilal_oswal),
+                    data.message,
+                    "OK",
+                    true
+                ) { action: Action, _ ->
+                    if (action == OK) {
+                        datePickerEvent.onNext(0)
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    override fun getSelectedAppovalList(): MutableList<String> {
+        return selectedApprovalList
+    }
+
+    companion object {
+        const val date6 = "yyyy-MM-dd"
+    }
 }
