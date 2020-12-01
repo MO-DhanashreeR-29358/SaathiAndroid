@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-abstract class CreateMeetingModule {
+abstract class CreateMeetingModuleOld {
 
   @Module
   companion object {

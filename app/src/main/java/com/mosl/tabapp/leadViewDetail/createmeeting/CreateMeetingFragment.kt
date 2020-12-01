@@ -91,10 +91,6 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.emptyList
-import kotlin.collections.isNotEmpty
-import kotlin.collections.toTypedArray
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
   FusedLocation.LatLongDispatcher, AddedAttendeeAdapter.ClickListenerHandler {
@@ -242,11 +238,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     val dialog = Dialog(requireContext()).apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
-      window
-        .setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(layout.date_picker)
-      window
-        .setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+      window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
     }
 
     val dpFromDate = dialog.findViewById<DatePicker>(R.id.datePickerFromDate)
@@ -424,9 +418,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     attendeeDialog = Dialog(requireContext())
     attendeeDialog.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
-      window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(layout.dialog_attendee_list)
-      window.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+      window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
       setCanceledOnTouchOutside(true)
     }
     etSearchAttendeeText = attendeeDialog.findViewById(R.id.etSearchAttendee)
@@ -466,9 +460,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     splAttendeeDialog = Dialog(requireContext())
     splAttendeeDialog.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
-      window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(layout.dialog_attendee_list)
-      window.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+      window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
       setCanceledOnTouchOutside(true)
     }
     etSearchSplAttendeeText = splAttendeeDialog.findViewById(R.id.etSearchAttendee)
@@ -628,9 +622,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     val dialogAddedAttendee = Dialog(requireContext())
     dialogAddedAttendee.apply {
       requestWindowFeature(Window.FEATURE_NO_TITLE)
-      window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+      window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
       setContentView(layout.dialog_addedd_attendee_list)
-      window.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+      window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
       setCanceledOnTouchOutside(true)
     }
     val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
