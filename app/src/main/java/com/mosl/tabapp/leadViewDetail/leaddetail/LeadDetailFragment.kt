@@ -7,9 +7,19 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
-import android.view.*
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
-import android.widget.*
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
@@ -35,27 +45,57 @@ import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
-import com.mosl.tabapp.common.*
+import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.CRMMOSLCommon
+import com.mosl.tabapp.common.CRMValidationRule
+import com.mosl.tabapp.common.CustomDatePickerDialog
+import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.StringStuff
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
-import com.mosl.tabapp.leadViewDetail.*
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLLimitsAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.AddProductData
+import com.mosl.tabapp.leaddetail.ClientDetail
+import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.ClientPortfolio
+import com.mosl.tabapp.leaddetail.ClientProfitLoss
+import com.mosl.tabapp.leaddetail.Contact
+import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadEmployees
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
-import com.mosl.tabapp.util.*
+import com.mosl.tabapp.ui.MSFDialog.Action.OK
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.disableErrorMessages
+import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.gone
+import com.mosl.tabapp.util.setErrorMessages
+import com.mosl.tabapp.util.setSpinnerData
+import com.mosl.tabapp.util.string
+import com.mosl.tabapp.util.visible
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import java.util.ArrayList
+import java.util.HashMap
 import javax.inject.Inject
 
 class LeadDetailFragment : CommonFragment(), LeadDetailView {
@@ -82,6 +122,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private val profileAdapter: ArrayAdapter<RowData> by lazy {
+
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
@@ -335,8 +376,69 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onSuccess {
             Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG)
                 .show()
+
+            if ("0".equals(leadId, ignoreCase = true)) {
+
+                val leadID = it[0].leadId
+                val uCID = it[0].ucId
+                MSFDialog.alertDialog(
+                    requireActivity(), 0,
+                    resources.getString(
+                        R.string.motilal_oswal
+                    ), "Product Added Successfully with leadId "
+                    + leadID, "OK", true
+                ) { action: Action, data1: Array<Any?>? ->
+                    if (action == OK) {
+                        val bundle = Bundle()
+                        bundle.putString(MOSLConstants.LEAD_ID, leadID)
+                        bundle.putString(MOSLConstants.UCID, uCID)
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                            false
+                        )
+                    }
+                }
+            } else {
+                if (it.isNotEmpty()) {
+                    for (datum in it) {
+                        val potentialPMSProduct = stringOrEmpty(datum.potentialPmsProduct)
+                        isPotentialPMSProduct = potentialPMSProduct.isEmpty()
+                        pmsProductAdapter.setSpinnerDataWithSelection(
+                            binding.spPmsProduct, pmsProductArray.toList(), potentialPMSProduct
+                        )
+                        leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
+                    }
+                    leadDetailAddProductAdapter =
+                        LeadDetailAddProductAdapter(
+                            saathiApi,
+                            requireContext(),
+                            leadDetailAddProductList,
+                            binding.lvAddProduct,
+                            leadId,
+                            isLeadEditable,
+                            statusDatas,
+                            statusAdapter,
+                            userManager.getUser()?.employeeCode,
+                            status,
+                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                            (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+                        )
+                    binding.lvAddProduct.setAdapter(leadDetailAddProductAdapter)
+                    CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+                }
+                MSFDialog.alertDialog(
+                    requireActivity(), 0,
+                    resources.getString(R.string.motilal_oswal),
+                    "Product Added Successfully", "OK",
+                    true
+                ) { _: Action?, _: Array<Any?>? ->
+                    //leadSection()
+                }
+            }
         }
     }
+
+    private val pmsProductArray = arrayOf("Select Potential Product", "YES", "NO")
 
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
         if (uiModel.inProgress) {
@@ -384,7 +486,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return subject.ofType()
     }
 
-    private val isPotentialPMSProduct = false
+    private var isPotentialPMSProduct = false
 
     override fun openAddProductDialog() {
         Dialog(requireContext()).apply {
@@ -550,6 +652,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 if (leadDetailAddProductList.size == 0) {
                     leadDetailAddProductAdapter =
                         LeadDetailAddProductAdapter(
+                            saathiApi,
                             requireContext(),
                             leadDetailAddProductList,
                             binding.lvAddProduct,
@@ -563,7 +666,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
                         )
                 }
-                if (leadDetailAddProductAdapter!!.checkProduct(interestedInKey)) {
+                if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) ?: false) {
                     MSFDialog.alertDialog(
                         requireContext(), 0,
                         resources.getString(R.string.motilal_oswal),
@@ -1742,7 +1845,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
         leadDetailAddProductAdapter =
-            LeadDetailAddProductAdapter(requireContext(), leadDetailAddProductList)
+            LeadDetailAddProductAdapter(
+                saathiApi,
+                requireContext(),
+                leadDetailAddProductList,
+                binding.lvAddProduct,
+                leadId,
+                isLeadEditable,
+                statusDatas,
+                statusAdapter,
+                userManager.getUser()?.employeeCode,
+                status,
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+            )
+
     }
 
     private fun getLeadDetailAddProductModel(
@@ -1766,6 +1883,30 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             stringOrEmpty(item.isProductSpecialistEditDisabled),
             stringOrEmpty(item.isProductDisabled),
             stringOrEmpty(item.productSpecialist)
+        )
+    }
+
+    private fun getLeadDetailAddProductModel(
+        item: AddProductData
+    ): LeadDetailAddProductModel {
+        val crossSellingProducts: List<CrossSellingProductsModel> =
+            getCrossSellingProductsModel(item.crossSellingProducts)
+        return LeadDetailAddProductModel(
+            item.stageId,
+            stringOrEmpty(item.stageName), item.statusId,
+            stringOrEmpty(item.statusName), item.interestedIn,
+            stringOrEmpty(item.prodName),
+            stringOrEmpty(item.primRMName),
+            stringOrEmpty(item.productSpecialistName),
+            stringOrEmpty(item.assignedBy),
+            stringOrEmpty(item.assignedByDate),
+            stringOrEmpty(item.clientCode), item.leadProductMappingId,
+            item.isDefault,
+            crossSellingProducts,
+            item.isCrossSellingProduct,
+            stringOrEmpty(item.isProdSpecEditDisabled),
+            stringOrEmpty(item.isProdDisabled),
+            stringOrEmpty(item.prodSpecialist)
         )
     }
 

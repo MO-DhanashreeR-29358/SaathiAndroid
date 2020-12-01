@@ -326,7 +326,6 @@ class LeadDetailPresenter @Inject constructor(
 
     view.onProductSpecialEventFired()
         .filter { it.selectedProduct.isNotEmpty() }
-        .distinctUntilChanged()
         .switchMap {
           detailRepository.getLeadEmpForProduct(
               search = it.selectedProduct,
