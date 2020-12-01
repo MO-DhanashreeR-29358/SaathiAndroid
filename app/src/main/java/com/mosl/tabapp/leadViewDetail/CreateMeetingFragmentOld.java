@@ -160,10 +160,10 @@ import static java.lang.String.format;
  * Created by raju on 3/7/2017.
  */
 
-public class CreateMeetingFragment extends CommonFragment
-    implements View.OnClickListener, TextView.OnEditorActionListener,
-    FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
-  final public static String TAG = CreateMeetingFragment.class.getSimpleName();
+public class CreateMeetingFragmentOld extends CommonFragment
+        implements View.OnClickListener, TextView.OnEditorActionListener,
+        FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
+  final public static String TAG = CreateMeetingFragmentOld.class.getSimpleName();
   private final ArrayList<RowData> arrCategory = new ArrayList<>();
   private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
   private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
@@ -811,7 +811,7 @@ public class CreateMeetingFragment extends CommonFragment
                 requireActivity().getSupportFragmentManager().beginTransaction();
 
             OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
-            dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+            dialogFragment.setTargetFragment(CreateMeetingFragmentOld.this, 1);
             dialogFragment.setListener(this);
             dialogFragment.show(ft, "");
           }

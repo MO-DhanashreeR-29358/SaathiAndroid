@@ -1,17 +1,18 @@
 package com.mosl.tabapp.createMeeting
 
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
+import com.mosl.tabapp.leadViewDetail.CreateMeetingFragmentOld
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import dagger.Module
 import dagger.Provides
 
 @Module
-abstract class CreateMeetingModule {
+abstract class CreateMeetingModuleOld {
 
   @Module
   companion object {
-    @Provides @JvmStatic
-    fun providePermissionHelper(fragment: CreateMeetingFragment): PermissionCheckHelperFragment {
+    @Provides
+    @JvmStatic
+    fun providePermissionHelper(fragment: CreateMeetingFragmentOld): PermissionCheckHelperFragment {
       return PermissionCheckHelperFragment(fragment)
     }
   }
