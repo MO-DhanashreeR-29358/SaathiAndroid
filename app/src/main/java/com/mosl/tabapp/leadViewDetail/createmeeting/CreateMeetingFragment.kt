@@ -985,16 +985,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.etSubCategory.text.toString()
     }
 
-    override fun toggleOTPVisibility(show: Boolean) {
+    override fun toggleOTPVisibility(status: Boolean) {
+        enableLocationGroup = status
+        enableDisableField(binding.llLocationGroup, status)
         if (userManager.user.isRM()) {
-            if (show) {
+            if (status) {
                 binding.btnSendOtp.visibility = View.VISIBLE
-                enableLocationGroup = true
-                enableField(binding.llLocationGroup)
             } else {
                 binding.btnSendOtp.visibility = View.GONE
-                enableLocationGroup = false
-                disableField(binding.llLocationGroup)
             }
         }
     }
