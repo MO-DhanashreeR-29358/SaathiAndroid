@@ -119,8 +119,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
     private lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
-    private lateinit var outstationAdapter: ArrayAdapter<LookUp>
-    private lateinit var baClientAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
@@ -237,8 +235,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun showSelectDateDialog() {
-        var hour: Int = 0
-        var minute: Int = 0
+        var hour: Int
+        var minute: Int
 
         val dialog = Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -283,7 +281,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             Timber.d(e)
         }
 
-
         if (VERSION.SDK_INT >= VERSION_CODES.M) {
             timePicker.hour = hour
             timePicker.minute = minute
@@ -292,7 +289,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             timePicker.currentMinute = minute
         }
 
-        timePicker.setOnTimeChangedListener { arg0: TimePicker?, arg1: Int, arg2: Int ->
+        timePicker.setOnTimeChangedListener { _: TimePicker?, arg1: Int, arg2: Int ->
             hour = arg1
             minute = arg2
         }
@@ -985,11 +982,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.etSubCategory.text.toString()
     }
 
-    override fun toggleOTPVisibility(status: Boolean) {
-        enableLocationGroup = status
-        enableDisableField(binding.llLocationGroup, status)
+    override fun toggleOTPVisibility(show: Boolean) {
+        enableLocationGroup = show
+        enableDisableField(binding.llLocationGroup, show)
         if (userManager.user.isRM()) {
-            if (status) {
+            if (show) {
                 binding.btnSendOtp.visibility = View.VISIBLE
             } else {
                 binding.btnSendOtp.visibility = View.GONE
@@ -1083,7 +1080,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onSuccess {
             Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
                 .show()
-            binding.btnSendOtp.setText(R.string.btn_label_verify_otp)
+            binding.btnSendOtp.setText(string.btn_label_verify_otp)
         }
     }
 
