@@ -6,6 +6,7 @@ import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
+import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.AppProvider
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
@@ -37,7 +38,7 @@ abstract class SaathiAppNew : DaggerApplication() {
     appDatabase = Room.databaseBuilder(
         applicationContext,
         AppDatabase::class.java, DATABASE_NAME
-    )
+    ).addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE = this
   }

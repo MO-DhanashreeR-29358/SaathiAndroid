@@ -44,13 +44,11 @@ fun isLocationFromMockProvider(
   context: Context,
   location: Location
 ): Boolean {
-  val isMock: Boolean
-  if (Build.VERSION.SDK_INT >= 18) {
-    isMock = location.isFromMockProvider
+  return if (Build.VERSION.SDK_INT >= 18) {
+    location.isFromMockProvider
   } else {
-    isMock = isMockSettingsON(context)
+    isMockSettingsON(context)
   }
-  return isMock
 }
 
 fun formatMonth(month: String): String {
@@ -73,4 +71,15 @@ fun getFormatedDate(
 ): String {
   val time = inputFormatedDate.parse(date) ?: "0000-00-00'T'00:00:00"
   return outputFormatedDate.format(time)
+}
+
+fun isEmulator(): Boolean {
+  return (Build.FINGERPRINT.startsWith("generic")
+          || Build.FINGERPRINT.startsWith("unknown")
+          || Build.MODEL.contains("google_sdk")
+          || Build.MODEL.contains("Emulator")
+          || Build.MODEL.contains("Android SDK built for x86")
+          || Build.MANUFACTURER.contains("Genymotion")
+          || Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")
+          || "google_sdk" == Build.PRODUCT)
 }

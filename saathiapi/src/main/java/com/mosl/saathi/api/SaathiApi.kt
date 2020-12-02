@@ -5,15 +5,7 @@ import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
-import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeRequest
-import com.mosl.saathi.api.model.aubankmeeting.BankEmployeeResponse
-import com.mosl.saathi.api.model.aubankmeeting.BankListResponse
-import com.mosl.saathi.api.model.aubankmeeting.BankRequest
-import com.mosl.saathi.api.model.aubankmeeting.BranchListResponse
-import com.mosl.saathi.api.model.aubankmeeting.MeetingSaveRequest
-import com.mosl.saathi.api.model.aubankmeeting.MeetingTypeResponse
-import com.mosl.saathi.api.model.aubankmeeting.SubBrokerRequest
-import com.mosl.saathi.api.model.aubankmeeting.SubBrokerResponse
+import com.mosl.saathi.api.model.aubankmeeting.*
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
@@ -28,33 +20,15 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
-import com.mosl.saathi.api.model.createlead.CreateLeadRequest
-import com.mosl.saathi.api.model.createlead.CreateLeadResponse
-import com.mosl.saathi.api.model.createlead.LeadSourceItem
-import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
-import com.mosl.saathi.api.model.createlead.SearchRefereeModel
-import com.mosl.saathi.api.model.createlead.SearchRefereeResponse
-import com.mosl.saathi.api.model.createlead.SourceListItem
-import com.mosl.saathi.api.model.createlead.SourceListRequest
-import com.mosl.saathi.api.model.createlead.TransferLeadRequest
-import com.mosl.saathi.api.model.createlead.TransferLeadResponse
-import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
-import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
-import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
-import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
-import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
-import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
+import com.mosl.saathi.api.model.createlead.*
+import com.mosl.saathi.api.model.createmeeting.*
 import com.mosl.saathi.api.model.crosssellingproduct.CrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest
 import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountItem
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
-import com.mosl.saathi.api.model.dashboard.bank.BankCodeResponse
-import com.mosl.saathi.api.model.dashboard.bank.BranchCodeRequest
-import com.mosl.saathi.api.model.dashboard.bank.BranchCodeResponse
-import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeRequest
-import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeResponse
+import com.mosl.saathi.api.model.dashboard.bank.*
 import com.mosl.saathi.api.model.dashboard.client.ClientItemResponse
 import com.mosl.saathi.api.model.dashboard.client.ClientsRequest
 import com.mosl.saathi.api.model.dashboard.clienttradedyesterday.ClientTradeYesterdayRequest
@@ -69,6 +43,9 @@ import com.mosl.saathi.api.model.dashboard.lead.LeadRequest
 import com.mosl.saathi.api.model.dashboard.lead.LeadResponse
 import com.mosl.saathi.api.model.dashboard.lead.report.LeadsReportRequest
 import com.mosl.saathi.api.model.dashboard.productivity.ProductivityRequest
+import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpItemResponse
+import com.mosl.saathi.api.model.dashboard.reportassgin.GetLeadAssignStpRequest
+import com.mosl.saathi.api.model.dashboard.reportassgin.STPLeadTransferRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.BusinessSnapshotRequest
 import com.mosl.saathi.api.model.dashboard.snapshot.SnapshotItem
 import com.mosl.saathi.api.model.dashboard.target.TargetAchievementItem
@@ -78,40 +55,11 @@ import com.mosl.saathi.api.model.dashboard.targetteam.TargetAchievementTeamItem
 import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetRequest
 import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetResponse
 import com.mosl.saathi.api.model.dashboard.trends.TrendsRequest
-import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
-import com.mosl.saathi.api.model.documents.DocumentsRequest
-import com.mosl.saathi.api.model.documents.LeadDocumentsItem
-import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
-import com.mosl.saathi.api.model.documents.UploadDocumentItem
-import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
+import com.mosl.saathi.api.model.documents.*
 import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenResponse
-import com.mosl.saathi.api.model.lead.BusinessProfile
-import com.mosl.saathi.api.model.lead.CityItem
-import com.mosl.saathi.api.model.lead.CityListRequest
-import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
-import com.mosl.saathi.api.model.lead.ClientSummaryResponse
-import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest
-import com.mosl.saathi.api.model.lead.CountryItem
-import com.mosl.saathi.api.model.lead.CrossSellingProduct
-import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.*
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem
-import com.mosl.saathi.api.model.lead.LeadViewItem
-import com.mosl.saathi.api.model.lead.LeadViewRequest
-import com.mosl.saathi.api.model.lead.LookupItem
-import com.mosl.saathi.api.model.lead.LookupRequest
-import com.mosl.saathi.api.model.lead.StageItem
-import com.mosl.saathi.api.model.lead.StageMobileItem
-import com.mosl.saathi.api.model.lead.StageMobileRequest
-import com.mosl.saathi.api.model.lead.StageRequest
-import com.mosl.saathi.api.model.lead.StageWiseConfiguration
-import com.mosl.saathi.api.model.lead.StateProvinceItem
-import com.mosl.saathi.api.model.lead.StateProvinceRequest
-import com.mosl.saathi.api.model.lead.StatusItem
-import com.mosl.saathi.api.model.lead.StatusRequest
-import com.mosl.saathi.api.model.lead.SubmitOTPResponse
-import com.mosl.saathi.api.model.lead.UpdateLeadRequest
-import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.saathi.api.model.lead.request.SearchRequest
@@ -120,11 +68,7 @@ import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
 import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
-import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
-import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
-import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
-import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
-import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
+import com.mosl.saathi.api.model.leadviewactivities.*
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
@@ -139,12 +83,7 @@ import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalFieldItem
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalListItem
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalListRequest
-import com.mosl.saathi.api.model.pendingforapproval.ApprovalUserItem
-import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
-import com.mosl.saathi.api.model.pendingforapproval.MultiUpdateApprovalRequest
+import com.mosl.saathi.api.model.pendingforapproval.*
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
 import com.mosl.saathi.api.model.prospect.ProspectRequest
@@ -161,15 +100,12 @@ import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
+import com.mosl.saathi.api.model.webview.CommonURLRequest
+import com.mosl.saathi.api.model.webview.CommonURLResponse
+import com.mosl.saathi.api.model.webview.IncentiveReportRequest
 import io.reactivex.Observable
 import okhttp3.RequestBody
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.Url
+import retrofit2.http.*
 
 interface SaathiApi {
 
@@ -450,14 +386,20 @@ interface SaathiApi {
 
   @POST("ApprovalRequest/ApprovalRequestList")
   fun getApprovalRequestListOld(
-    @Body request: ApprovalListRequest
+      @Body request: ApprovalListRequest
   ): Observable<String>
 
-  @ExtraDataWrapper
-  @POST("ApprovalRequest/ApprovalRequestList")
-  fun getApprovalRequestList(
-    @Body request: ApprovalListRequest
-  ): Observable<List<ApprovalListItem>>
+    @ExtraDataWrapper
+    @POST("ApprovalRequest/ApprovalRequestList")
+    fun getApprovalRequestList(
+        @Body request: ApprovalListRequest
+    ): Observable<List<ApprovalListItem>>
+
+    @ExtraDataWrapper
+    @POST("Lead/GetLeadAssign_StpList_API")
+    fun getLeadAssignStpList(
+        @Body request: GetLeadAssignStpRequest
+    ): Observable<List<GetLeadAssignStpItemResponse>>
 
   @POST("ApprovalRequest/MultiUpdateApprovalRequest")
   fun postMultiUpdateApprovalOld(
@@ -467,6 +409,11 @@ interface SaathiApi {
   @POST("ApprovalRequest/MultiUpdateApprovalRequest")
   fun postMultiUpdateApproval(
     @Body request: MultiUpdateApprovalRequest
+  ): Observable<SaathiCommonResponse<String>>
+
+  @POST("Lead/STPAssignedLead")
+  fun getSTPLeadTransfer(
+    @Body request: STPLeadTransferRequest
   ): Observable<SaathiCommonResponse<String>>
   //====================== Dashboard =====================
 
@@ -736,11 +683,16 @@ interface SaathiApi {
     @Body request: MeetingReportRequest
   ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("GeoLocation/SaveGeoLocation")
-  fun saveGeoLocation(
-    @Body request: LocationRequest
-  ): Observable<LocationDataResponse>
+    @ExcludeWrapper
+    @POST("GeoLocation/SaveGeoLocation")
+    fun saveGeoLocation(
+        @Body request: LocationRequest
+    ): Observable<LocationDataResponse>
+
+    @POST("report/IncentiveReport")
+    fun getIncentiveReport(
+      @Body request: IncentiveReportRequest
+    ): Observable<SaathiCommonResponse<String>>
 
   /*==================================================*/
   @POST("Auth/$LoginEndPoint")
@@ -755,5 +707,11 @@ interface SaathiApi {
       "macaddress"
     ) macAddress: String, @Body versionRequest: VersionRequest
   ): Observable<List<VersionResponse>>
+
+    @POST("Lead/GetCommonURLforMobileApp")
+    fun getEkycExpressUrl(
+        @Body request: CommonURLRequest
+    ): Observable<CommonURLResponse>
+
 
 }

@@ -6,25 +6,22 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
-import com.mosl.app.core.data.annotation.ForcePreferenceClear
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
-import com.mosl.app.core.prefs.BooleanPreference
+import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.showConfirmation
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManagerImpl
-import com.mosl.mobile.user.model.LoginInfo
-import com.mosl.mobile.user.model.ReportType
-import com.mosl.mobile.user.model.User
-import com.mosl.mobile.user.model.VersionInfo
-import com.mosl.mobile.user.model.VersionResponse
+import com.mosl.mobile.user.model.*
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.Utility
+import com.mosl.shared.util.isEmulator
 import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonActivity
@@ -35,7 +32,7 @@ import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class SplashActivity : LeanBaseActivity() {
@@ -52,11 +49,11 @@ class SplashActivity : LeanBaseActivity() {
     lateinit var shortcutHelper: ShortcutHelper
 
     @Inject
-    @field:ForcePreferenceClear
-    lateinit var forcePreferenceClear: BooleanPreference
+    @field:PreferenceClear
+    lateinit var forcePreference: IntegerPreference
 
-  @Inject
-  lateinit var firebaseHelper: FirebaseHelper
+    @Inject
+    lateinit var firebaseHelper: FirebaseHelper
     private val handler = Handler()
     private var count = 0
 
@@ -69,7 +66,7 @@ class SplashActivity : LeanBaseActivity() {
         binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
         disposables = CompositeDisposable()
         setupView()
-      forcePreferenceClear()
+        forcePreferenceClear()
         handler.postDelayed({
             checkNetwork()
         }, 2000)
@@ -79,7 +76,7 @@ class SplashActivity : LeanBaseActivity() {
         return false
     }
 
-  private fun setupView() {
+    private fun setupView() {
         binding.txtAppInfo.text = java.lang.String.format(
             Locale.ENGLISH, "App Version : %s(%d)", BuildConfig.VERSION_NAME,
             BuildConfig.VERSION_CODE
@@ -87,12 +84,12 @@ class SplashActivity : LeanBaseActivity() {
 
     }
 
-  private fun forcePreferenceClear() {
-    if (!forcePreferenceClear.get() && BuildConfig.LOGOUT_ON_UPDATE && userManager.isLoggedIn()) {
-      userManager.logout()
-      forcePreferenceClear.set(true)
+    private fun forcePreferenceClear() {
+        if (forcePreference.get() == Utility.getAppVersionCode(applicationContext)) {
+            userManager.logout()
+            forcePreference.set(100)
+        }
     }
-  }
 
     private fun checkNetwork() {
         if (this.isNetworkConnected()) {
@@ -155,7 +152,7 @@ class SplashActivity : LeanBaseActivity() {
 
         uiModel.onSuccess {
 
-          val msg = it.msg
+            val msg = it.msg
             when (it.statusCode) {
                 0 -> MSFDialog.alertDialog(
                     this@SplashActivity, 0,
@@ -166,9 +163,9 @@ class SplashActivity : LeanBaseActivity() {
                             vararg data: Any
                         ) {
                             if (action == MSFDialog.Action.OK) {
-                              if (BuildConfig.LOGOUT_ON_UPDATE) {
-                                userManager.logout()
-                              }
+                                if (BuildConfig.LOGOUT_ON_UPDATE) {
+                                    userManager.logout()
+                                }
                                 val i = Intent(
                                     Intent.ACTION_VIEW
                                 )
@@ -183,20 +180,20 @@ class SplashActivity : LeanBaseActivity() {
                     resources.getString(R.string.MOSL), msg,
                     UPDATE, CONTINUE, false
                 ) { action, _ ->
-                            if (action == MSFDialog.Action.OK) {
-                              if (BuildConfig.LOGOUT_ON_UPDATE) {
-                                userManager.logout()
-                              }
-                                val i = Intent(
-                                    Intent.ACTION_VIEW
-                                )
-                                i.data = Uri.parse(GOOGLE_PLAY_URL)
-                                startActivity(i)
-                                finish()
-                            } else if (action === MSFDialog.Action.CANCEL) {
-                                handleStartup()
-                            }
+                    if (action == MSFDialog.Action.OK) {
+                        if (BuildConfig.LOGOUT_ON_UPDATE) {
+                            userManager.logout()
                         }
+                        val i = Intent(
+                            Intent.ACTION_VIEW
+                        )
+                        i.data = Uri.parse(GOOGLE_PLAY_URL)
+                        startActivity(i)
+                        finish()
+                    } else if (action === MSFDialog.Action.CANCEL) {
+                        handleStartup()
+                    }
+                }
                 2 -> MSFDialog.alertDialog(
                     this@SplashActivity, 0,
                     resources.getString(R.string.MOSL), msg,
@@ -233,7 +230,7 @@ class SplashActivity : LeanBaseActivity() {
 
     private fun renderFetchReportData(uiModel: UiModel<List<ReportType>>) {
         uiModel.onSuccess {
-          if (it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 for (reportTypeResponse in it) {
                     if (reportTypeResponse.isPreDefinedReports()) {
                         val childMenuList = reportTypeResponse.childMenuList
@@ -255,7 +252,7 @@ class SplashActivity : LeanBaseActivity() {
 
     }
 
-  private fun handleStartup() {
+    private fun handleStartup() {
         if (userManager.isLoggedIn()) {
             shortcutHelper.setLoggedInUserShortcuts()
             login()
@@ -280,10 +277,12 @@ class SplashActivity : LeanBaseActivity() {
         )
     }
 
-  private fun renderLoginData(uimodel: UiModel<User>) {
+    private fun renderLoginData(uimodel: UiModel<User>) {
 
         uimodel.onSuccess {
-          // firebaseHelper.setUserProperty(it.employeeCode)
+            if (!isEmulator()) {
+                firebaseHelper.setUserProperty(it.employeeCode)
+            }
             setUserPreferenceData(it)
         }
 
@@ -294,7 +293,7 @@ class SplashActivity : LeanBaseActivity() {
 
     }
 
-  private fun setUserPreferenceData(user: User) {
+    private fun setUserPreferenceData(user: User) {
         if (user.isAufsb()) {
             openCommonActivity()
         } else {
@@ -303,11 +302,11 @@ class SplashActivity : LeanBaseActivity() {
 
     }
 
-  private fun infoDialog(t: Throwable) {
-    val errorMessage: String = if (t is ServiceFailureException) {
-      (t).errorMessage
+    private fun infoDialog(t: Throwable) {
+        val errorMessage: String = if (t is ServiceFailureException) {
+            (t).errorMessage
         } else {
-      SERVER_ERROR_OCCURRED
+            SERVER_ERROR_OCCURRED
         }
         actionableAlert(errorMessage, false) {
             finish()
@@ -315,7 +314,7 @@ class SplashActivity : LeanBaseActivity() {
         }
     }
 
-  private fun openLogin() {
+    private fun openLogin() {
         val login = Intent(this@SplashActivity, LoginActivity::class.java)
         startActivityForResult(login, 1001)
     }
@@ -341,9 +340,10 @@ class SplashActivity : LeanBaseActivity() {
     }
 
     companion object {
-      const val UPDATE = "Update"
-      const val CONTINUE = "Continue"
-      const val GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.mosl.tabapp"
+        const val UPDATE = "Update"
+        const val CONTINUE = "Continue"
+        const val GOOGLE_PLAY_URL =
+            "https://play.google.com/store/apps/details?id=com.mosl.tabapp"
     }
 }
 

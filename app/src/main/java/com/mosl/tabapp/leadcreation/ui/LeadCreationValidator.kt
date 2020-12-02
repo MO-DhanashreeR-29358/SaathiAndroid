@@ -22,40 +22,35 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
       input.etCategoryName.isBlank() -> {
         identifier = 2
         R.string.error_message_cat_name
-      } // "Select ${input.selectedCategory.value} name"
+      }
 
       input.etCategoryName.invalidAlphaNumbric() -> {
         identifier = 3
         R.string.error_message_alphabets
-      }  //ERROR_ALPHABETS
+      }
 
       !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
           input.etContactPerson.isBlank() -> {
         identifier = 4
         R.string.error_message_contact
-      } //ERROR_CONTACT_PERSON
+      }
 
       !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
           input.etContactPerson.invalidAlphaNumbric() -> {
         identifier = 5
         R.string.error_message_alphabets
-      } //ERROR_ALPHABETS
-
-      input.selectedProfession.value == SELECT -> {
-        identifier = 27
-        R.string.error_message_profession
       }
 
       input.selectedInterestIn.value == SELECT -> {
         identifier = 6
         R.string.error_message_interest
-      } //"Select Interest In"
+      }
 
       input.selectedInterestIn.value.equals("PMS", true) &&
           input.selectedProductType.value == SELECT -> {
         identifier = 7
         R.string.error_message_product_type
-      } //"Select ProductType"
+      }
 
       input.emailId.isNotBlank() &&
           input.emailId.invalidEmail() -> {
@@ -67,83 +62,82 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
           input.alternateEmailId.invalidEmail() -> {
         identifier = 9
         R.string.error_message_invalid_email
-      } //MOSLConstants.INVALID_EMAIL_ID
+      }
 
       input.alternateEmailId.isNotBlank() &&
           input.emailId == input.alternateEmailId -> {
         identifier = 10
         R.string.error_message_same_email
-      } // MOSLConstants.SAME_EMAILMESSAGE
+      }
 
       input.mobileNo.isBlank() -> {
         identifier = 11
         R.string.error_message_enter_mobile
-      } //MOSLConstants.ENTER_MOBILE_NUMBER
+      }
 
       input.mobileNo.invalidMobileNo() -> {
         identifier = 12
         R.string.error_message_invalid_mobile
-      } //MOSLConstants.INVALID_MOBILE_NO
+      }
 
       input.alternateMobileNo.isNotBlank() &&
           input.alternateMobileNo.invalidMobileNo() -> {
         identifier = 13
         R.string.error_message_invalid_mobile
-      } //MOSLConstants.INVALID_MOBILE_NO
-
+      }
       input.alternateMobileNo.isNotBlank() &&
           input.mobileNo == input.alternateMobileNo -> {
         identifier = 14
         R.string.error_message_same_mobile
-      } //MOSLConstants.SAME_MOBILEMESSAGE
+      }
 
       input.landlineNo.isNotBlank() &&
           input.landlineNo.invalidLandLine() -> {
         identifier = 15
         R.string.error_message_invalid_landline
-      } // MOSLConstants.INVALID_LAND_LINE
+      }
 
       input.ekycMobileNo.isNotBlank() &&
           input.ekycMobileNo.invalidMobileNo() -> {
         identifier = 16
         R.string.error_message_invalid_mobile
-      } //MOSLConstants.INVALID_MOBILE_NO
+      }
 
       input.panNo.isNotBlank() &&
           input.panNo.invalidPan() -> {
         identifier = 17
         R.string.error_message_invalid_pan
-      } //MOSLConstants.INVALID_PAN
+      }
 
       input.aadharNo.isNotBlank() &&
           input.aadharNo.invalidAadhar() -> {
         identifier = 18
         R.string.error_message_invalid_aadhar
-      } //MOSLConstants.INVALID_AADHAR
+      }
 
       input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
           input.referCode.length < 4 -> {
         identifier = 19
         R.string.error_message_referee_code
-      } //ERROR_REFEREE_CODE
+      }
 
       input.referName.isNotBlank() &&
           input.referName.invalidAlphaNumbric() -> {
         identifier = 20
         R.string.error_message_alphabets
-      } //ERROR_ALPHABETS
+      }
 
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
           input.referName.isBlank() -> {
         identifier = 21
         R.string.error_message_prospect_referee
-      } //MOSLConstants.ENTER_PROSPECT_REFEREE_NAME
+      }
 
       input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
           input.referMobile.isBlank() -> {
         identifier = 22
         R.string.error_message_enter_mobile
-      } //MOSLConstants.ENTER_MOBILE_NUMBER
+      }
 
       input.referMobile.isNotBlank() &&
           input.referMobile.invalidMobileNo() -> {

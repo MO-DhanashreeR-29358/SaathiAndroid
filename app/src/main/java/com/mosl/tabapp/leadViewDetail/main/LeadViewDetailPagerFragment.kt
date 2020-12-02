@@ -275,8 +275,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
   override fun renderOpenAccountClick() {
     gotoEkycPage(
         EkycModule(
-            mobile, email, leadOwner, sourceName, prospectSourceName,
-            prospectSourceDetail, interestedIn
+          mobile, email, leadOwner, sourceName, prospectSourceName,
+          prospectSourceDetail, interestedIn, oaoUserId
         )
     )
   }
@@ -310,9 +310,9 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
           Context.CLIPBOARD_SERVICE
       ) as ClipboardManager
       val clip = ClipData.newPlainText("label", diyLink)
-      clipboard.primaryClip = clip
+      clipboard.setPrimaryClip(clip)
       Toast.makeText(requireContext(), string.txt_lable_link_msg, Toast.LENGTH_LONG)
-          .show()
+        .show()
 
     }
   }

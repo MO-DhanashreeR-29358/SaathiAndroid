@@ -2,12 +2,13 @@ package com.mosl.tabapp.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
 import org.jetbrains.annotations.NotNull;
 
 @Entity
 public class LocationData {
 
-	@PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     public int id;
     private String latitude;
     private String longitude;
@@ -17,6 +18,25 @@ public class LocationData {
     private String accuracy;
     private String geoArea;
     private String geoPincode;
+    private String version;
+
+    public LocationData(String latitude, String longitude, String deviceId,
+                        String empCode, String time, String accuracy, String geoArea, String geoPincode, String version) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.deviceId = deviceId;
+        this.empCode = empCode;
+        this.time = time;
+        this.accuracy = accuracy;
+        this.geoArea = geoArea;
+        this.geoPincode = geoPincode;
+        this.version = version;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
 
     public String getLatitude() {
         return latitude;
@@ -82,30 +102,24 @@ public class LocationData {
         this.geoPincode = geoPincode;
     }
 
-	public LocationData(String latitude, String longitude, String deviceId,
-		String empCode, String time, String accuracy, String geoArea, String geoPincode) {
-		this.latitude = latitude;
-		this.longitude = longitude;
-		this.deviceId = deviceId;
-		this.empCode = empCode;
-		this.time = time;
-		this.accuracy = accuracy;
-		this.geoArea = geoArea;
-		this.geoPincode = geoPincode;
+    public void setVersion(String version) {
+        this.version = version;
     }
 
-    @NotNull @Override
+    @NotNull
+    @Override
     public String toString() {
         return "LocationData{" +
-            "id=" + id +
-            ", lat='" + latitude + '\'' +
-            ", Long='" + longitude + '\'' +
-            ", deviceId='" + deviceId + '\'' +
-            ", empCode='" + empCode + '\'' +
-            ", time='" + time + '\'' +
-            ", accuracy='" + accuracy + '\'' +
-            ", geoArea='" + geoArea + '\'' +
-            ", geoPincode='" + geoPincode + '\'' +
-            '}';
+                "id=" + id +
+                ", lat='" + latitude + '\'' +
+                ", Long='" + longitude + '\'' +
+                ", deviceId='" + deviceId + '\'' +
+                ", empCode='" + empCode + '\'' +
+                ", time='" + time + '\'' +
+                ", accuracy='" + accuracy + '\'' +
+                ", geoArea='" + geoArea + '\'' +
+                ", version='" + version + '\'' +
+                ", geoPincode='" + geoPincode + '\'' +
+                '}';
     }
 }

@@ -1,6 +1,6 @@
 buildscript {
   ext.google_services_version = '4.2.0'
-  ext.android_plugin_version = '4.1.0'
+  ext.android_plugin_version = '4.0.1'
   ext.kotlin_version = '1.3.30'
   repositories {
     google()
@@ -14,18 +14,18 @@ buildscript {
     classpath "com.android.tools.build:gradle:${android_plugin_version}"
     classpath "com.google.gms:google-services:$google_services_version"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath 'io.fabric.tools:gradle:1.29.0'
+      classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'//Firebase Performance
     classpath 'com.google.firebase:perf-plugin:1.3.1' //Firebase Performance
   }
 }
 
-ext.versions = ["compileSdkVersion": 28,
-                "targetSdkVersion": 28,
+ext.versions = ["compileSdkVersion": 29,
+                "targetSdkVersion": 29,
                 "buildToolsVersion": "28.0.3",
                 'multidex': '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',
                 'sdp': '1.0.6',
-                'dagger': '2.26',//'2.22.1',
+                'dagger': '2.22.1',
                 'leakCanary': '1.6.3',
                 'okHttp': '3.12.2',
                 'circleimageview': '2.2.0',
@@ -34,7 +34,7 @@ ext.versions = ["compileSdkVersion": 28,
                 'asyncHttp': '1.4.9',
                 'smoothprogressbar': '1.1.0',
                 'floatingbutton': '1.10.1',
-                'firebase': '20.1.0',
+                'firebase': '20.2.0',
                 'espresso': '3.0.2',
                 'timber': '4.7.1',
                 'imageLoader': '1.9.5',
@@ -46,8 +46,6 @@ ext.versions = ["compileSdkVersion": 28,
                 'groupie': '2.3.0',
                 'room': '2.1.0',
                 'picasso': '2.5.2',
-                'androidx': '1.0.0',
-                'material': '1.2.0-alpha04',
                  'stdLib':'1.3.50'
 
 ]
@@ -55,15 +53,15 @@ ext.versions = ["compileSdkVersion": 28,
 ext.deps = [
     'androidx': [
                 'annotation': "androidx.annotation:annotation:1.1.0",
-                'material': "com.google.android.material:material:${versions.material}",
-                'appcompat': "androidx.appcompat:appcompat:1.1.0-rc01",
+                'material': 'com.google.android.material:material:1.3.0-alpha04',
+                'appcompat': "androidx.appcompat:appcompat:1.3.0-alpha01",
                 'constraintlayout': 'androidx.constraintlayout:constraintlayout:1.1.3',
                 'fragment': 'androidx.fragment:fragment:1.1.0-alpha02',
                 'cardview': "androidx.cardview:cardview:1.0.0",
-                'pager2': "androidx.viewpager2:viewpager2:${versions.androidx}",
-                'browser': "androidx.browser:browser:${versions.androidx}",
-                'legacy': "androidx.legacy:legacy-support-core-ui:${versions.androidx}",
-                'vectordrawable': "androidx.vectordrawable:vectordrawable:${versions.androidx}",
+                'pager2': "androidx.viewpager2:viewpager2:1.1.0-alpha01",
+                'browser': "androidx.browser:browser:1.2.0",
+                'legacy': "androidx.legacy:legacy-support-core-ui:1.0.0",
+                'vectordrawable': "androidx.vectordrawable:vectordrawable:1.1.0",
                 'recylerview': "androidx.recyclerview:recyclerview:1.1.0-beta01",
                 'support': 'androidx.legacy:legacy-support-v4:1.0.0-rc01',
                 'multidex': "androidx.multidex:multidex:${versions.multidex}",
@@ -108,7 +106,6 @@ ext.deps = [
         'runner': 'com.android.support.test:runner:1.0.2'],
     'stetho': ['stetho': "com.facebook.stetho:stetho:${versions.stetho}",
         'okhttp': "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"],
-    'crashlytics': 'com.crashlytics.sdk.android:crashlytics:2.9.4@aar',
     'multidex': "androidx.multidex:multidex:${versions.multidex}",
     'pagerslidingtabstrip': "com.astuetz:pagerslidingtabstrip:${versions.pagerslidingtabstrip}",
     'sdpAndroid': "com.intuit.sdp:sdp-android:${versions.sdp}",
@@ -124,9 +121,12 @@ ext.deps = [
     'imageLoader': "com.nostra13.universalimageloader:universal-image-loader:${versions.imageLoader}",
     'firebase': [
         'core': "com.google.firebase:firebase-core:17.1.0",
-        'remoteConfig': "com.google.firebase:firebase-config:19.1.0",
+        'remoteConfig': "com.google.firebase:firebase-config:19.1.4",
         'messaging': "com.google.firebase:firebase-messaging:${versions.firebase}",
-        'preformance': 'com.google.firebase:firebase-perf:19.0.5'
+        'preformance': 'com.google.firebase:firebase-perf:19.0.7',
+        'crashlytics_sdk': 'com.crashlytics.sdk.android:crashlytics:2.10.1',
+        'crashlytics': 'com.google.firebase:firebase-crashlytics:17.0.1',
+        'analytics'  : 'com.google.firebase:firebase-analytics:17.4.3'
     ],
     'retrofit': ['core': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
         'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",

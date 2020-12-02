@@ -593,8 +593,16 @@ class LeadCreationFragment : CommonFragment(),
 
   override fun renderOnCategoryChange(category: String) {
     when (category) {
-      "INDIVIDUAL" -> binding.etContactPerson.gone()
-      else -> binding.etContactPerson.visible()
+      "INDIVIDUAL" -> {
+        binding.etContactPerson.gone()
+        binding.tilContactPerson.gone()
+      }
+      else -> {
+        binding.etContactPerson.visible()
+        binding.tilContactPerson.disableErrorMessages()
+        binding.tilContactPerson.visible()
+
+      }
     }
   }
 
@@ -809,10 +817,6 @@ class LeadCreationFragment : CommonFragment(),
         26 -> {
           binding.tilOffPin.setErrorMessages(getString(it))
         }
-        27 -> {
-          binding.tlProfession.setErrorMessages(getString(it))
-        }
-
         else -> {
         }
 
@@ -969,6 +973,7 @@ class LeadCreationFragment : CommonFragment(),
       }
 
     }
+        .show()
   }
 
   override fun onTransferLeadEventFired(): Observable<TransferLeadEvent> {
@@ -1022,8 +1027,10 @@ class LeadCreationFragment : CommonFragment(),
         binding.etAdd2.text.toString(),
         binding.etAdd3.text.toString(),
         (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spState.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spState.selectedItem as? RowData)?.key
+            ?: "",
+        (binding.spCity.selectedItem as? RowData)?.key
+            ?: "",
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked,
         userManager.getUser()?.currentBusinessProfile?.businessUnitId
@@ -1037,8 +1044,9 @@ class LeadCreationFragment : CommonFragment(),
         (binding.spOffCountry.selectedItem as? RowData)?.key
             ?: LeadCreationView.INVALID_SELECTION_KEY,
         (binding.spOffState.selectedItem as? RowData)?.key
-            ?: LeadCreationView.INVALID_SELECTION_KEY,
-        (binding.spOffCity.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+            ?: "",
+        (binding.spOffCity.selectedItem as? RowData)?.key
+            ?: "",
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked,
         userManager.getUser()?.currentBusinessProfile?.businessUnitId
