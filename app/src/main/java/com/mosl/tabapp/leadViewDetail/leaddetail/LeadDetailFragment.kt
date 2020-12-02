@@ -626,7 +626,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
 
 
-            dialogBinding?.btnSave?.setOnClickListener {
+            dialogBinding.btnSave.setOnClickListener {
 
                 //Mandatory check
                 if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
@@ -635,13 +635,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
                 }
                 /*if (dialogBinding.spStage.selectedItemPosition < 1) {
-                  dialogBinding.tvspStageError.visibility = View.VISIBLE
-                  dialogBinding.tvspStageError.text = "Select Stage"
-                }
-                if (dialogBinding.spStatus.selectedItemPosition < 1) {
-                  dialogBinding.tvspStatusError.visibility = View.VISIBLE
-                  dialogBinding.tvspStatusError.text = "Select Status"
-                }*/
+                          dialogBinding.tvspStageError.visibility = View.VISIBLE
+                          dialogBinding.tvspStageError.text = "Select Stage"
+                        }
+                        if (dialogBinding.spStatus.selectedItemPosition < 1) {
+                          dialogBinding.tvspStatusError.visibility = View.VISIBLE
+                          dialogBinding.tvspStatusError.text = "Select Status"
+                        }*/
                 ///////////
 
                 //Mandatory chec end
@@ -730,9 +730,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             ucId,
             interestedIn,
             interestedIn,
-            primaryRm!!,
-            specialistAdd!!,
-            userManager.getUser()!!.employeeCode,
+            primaryRm ?: "",
+            specialistAdd ?: "",
+            userManager.getUser()?.employeeCode.toString(),
             CRMAppUtil.getDBDate(),
             stage,
             status,
