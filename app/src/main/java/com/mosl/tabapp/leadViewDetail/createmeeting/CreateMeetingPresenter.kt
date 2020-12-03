@@ -242,9 +242,9 @@ class CreateMeetingPresenter @Inject constructor(
       .switchMap {
         repository.sendOTP(
           OTPRequestData(
-            latitude = view.getLatitude()!!,
-            longitude = view.getLongitude()!!,
-            geoArea = view.getGeoArea()!!,
+            latitude = view.getLatitude(),
+            longitude = view.getLongitude(),
+            geoArea = view.getGeoArea(),
             ucid = createMeetingData.ucid,
             leadid = createMeetingData.leadId
           )

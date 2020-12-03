@@ -2,21 +2,10 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
-import com.mosl.mobile.domain.createmeeting.AddedAttendee
-import com.mosl.mobile.domain.createmeeting.Attendee
-import com.mosl.mobile.domain.createmeeting.ClientData
-import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.AttendeeItemClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveConfirmClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SaveRequestData
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChange
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SearchTextChangeSplAttendee
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SendOtpRequest
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.SplAttendeeItemClick
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.ValidationStatus
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
 import com.mosl.tabapp.model.MeetingApptModel
 import io.reactivex.Observable
 
@@ -61,13 +50,13 @@ interface CreateMeetingView : BaseView {
   fun getDate(): String
   fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee>
   fun getOTPButtonText(): String
-  fun getLatitude(): String?
-  fun getLongitude(): String?
+  fun getLatitude(): String
+  fun getLongitude(): String
   fun getAttendeeList(): List<AddedAttendee>
   fun getSplAttendeeList(): List<AddedAttendee>
   fun getTravellingmodeList(): List<CreateMeetingTravellingModel>
   fun getproductList(): List<CreateMeetingProductModel>
-  fun getGeoArea(): String?
+  fun getGeoArea(): String
   fun renderDatePicker()
   fun onDatePicker(): Observable<Unit>
 
