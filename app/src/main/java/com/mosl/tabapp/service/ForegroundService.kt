@@ -73,7 +73,7 @@ class ForegroundService : Service() {
             if (userManager.isLoggedIn() && hasGPSDevice(applicationContext)) {
                 startLocationUpdates()
             }
-            refreshHandler.postDelayed(this, 5 * 60 * 1000.toLong())
+            refreshHandler.postDelayed(this, /*5*/ 2 * 60 * 1000.toLong())
         }
     }
 
@@ -92,6 +92,9 @@ class ForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        refreshHandler.postDelayed(runnableCode, 1000)
+        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
+
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -111,8 +114,6 @@ class ForegroundService : Service() {
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification())
         }
-        refreshHandler.postDelayed(runnableCode, 1000)
-        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
         return START_STICKY
     }
 
@@ -207,10 +208,10 @@ class ForegroundService : Service() {
         mLocationRequest = LocationRequest()
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         /* 60 secs */
-        val UPDATE_INTERVAL = (5 * 60 * 1000).toLong()
+        val UPDATE_INTERVAL = (/*5*/2 * 60 * 1000).toLong()
         mLocationRequest?.interval = UPDATE_INTERVAL
         /* 60 sec */
-        val FASTEST_INTERVAL: Long = 5 * 60 * 1000
+        val FASTEST_INTERVAL: Long = /*5*/2 * 60 * 1000
         mLocationRequest?.fastestInterval = FASTEST_INTERVAL
 
         val builder = LocationSettingsRequest.Builder()
@@ -242,7 +243,7 @@ class ForegroundService : Service() {
                     )
             }
         }
-        mainHandler.postDelayed(myRunnable, 5 * 60 * 1000)
+        mainHandler.postDelayed(myRunnable, /*5*/2 * 60 * 1000)
     }
 
     fun onLocationChanged(location: Location) {
@@ -268,7 +269,7 @@ class ForegroundService : Service() {
             )
             if ((lastLocationTime.get().isEmpty() || Utility.isTimeInterval(
                     lastLocationTime.get(),
-                    4/*12*/
+                    2/*4*/
                 )) && !isLocationFromMockProvider(applicationContext, location)
             ) {
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
