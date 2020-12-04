@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log.i
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -45,6 +46,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
@@ -67,6 +69,8 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
+import java.util.logging.Logger
 import javax.inject.Inject
 
 class LeadCreationFragment : CommonFragment(),
@@ -106,6 +110,10 @@ class LeadCreationFragment : CommonFragment(),
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val countryAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val stateAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
@@ -122,6 +130,9 @@ class LeadCreationFragment : CommonFragment(),
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val selectedList = ArrayList<RowData>()
+
+
     override fun getLayout(): Int = R.layout.frag_lead_creation
 
     override fun onViewCreated(
@@ -130,10 +141,15 @@ class LeadCreationFragment : CommonFragment(),
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragLeadCreationBinding.bind(view)
+        createDefaultSelectList()
         setAppTitle(R.string.page_title_lead_creation)
         setupView()
         presenter.start()
         dataActionSubject.onNext(Fetch)
+    }
+
+    private fun createDefaultSelectList() {
+        selectedList.add(LeadCreationRepositoryImpl.SELECT_ROW_DATA)
     }
 
     private var primaryRM: String? = null
@@ -627,7 +643,7 @@ class LeadCreationFragment : CommonFragment(),
             binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
-            binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+            binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
         }
     }
 
@@ -685,6 +701,7 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
+            binding.spCity.setSpinnerData(cityAdapter, selectedList)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
             }
@@ -695,7 +712,9 @@ class LeadCreationFragment : CommonFragment(),
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            binding.spOffState.setSpinnerData(stateAdapter, it)
+            Timber.i("RenderStateOffice=>>Called")
+            binding.spOffState.setSpinnerData(stateAdapterOff, it)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
         }
     }
 
