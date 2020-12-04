@@ -1,6 +1,5 @@
 package com.mosl.tabapp.leadcreation.ui
 
-import android.util.Log.e
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
@@ -9,7 +8,6 @@ import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECT
 import io.reactivex.Observable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
-import java.util.logging.Logger
 import javax.inject.Inject
 
 class LeadCreationPresenter @Inject constructor(
@@ -203,8 +201,7 @@ class LeadCreationPresenter @Inject constructor(
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .map { view.getSelectedOfficeState() }
-            .filter { !view.isSameAsAboveChecked() }
-            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+            .filter { !view.isSameAsAboveChecked() && it.key != INVALID_SELECTION_KEY }
             .switchMap {
                 repository.getCityRowDatas(it.key)
                     .compose(applyUiModel())
