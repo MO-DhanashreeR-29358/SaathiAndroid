@@ -27,6 +27,7 @@ class LeadCreationPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onPrimaryCheckboxChanged()
+            .skip(1)
             .subscribe(view::renderOnPrimaryCheckboxChanges, Timber::e)
             .addTo(disposable)
 
