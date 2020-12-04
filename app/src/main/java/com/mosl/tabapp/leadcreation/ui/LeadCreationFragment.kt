@@ -684,6 +684,7 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
+            binding.spOffState.setSpinnerData(stateAdapterOff, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
             }
