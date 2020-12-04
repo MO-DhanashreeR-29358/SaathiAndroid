@@ -33,7 +33,7 @@ class LeadDetailPresenter @Inject constructor(
 
         screenLoadObs
             .filter { //data.leadId == "0" &&
-                data.ucId.toInt() != 0 && data.ucId.isNotEmpty()
+                data.ucId.toInt() != 0
             }
             .switchMap {
                 detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)

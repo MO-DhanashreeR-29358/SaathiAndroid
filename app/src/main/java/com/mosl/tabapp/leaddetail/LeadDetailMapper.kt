@@ -65,12 +65,14 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       isProductSpecialist = isProductSpecialist ?: emptyString(),
       prospectReferEmail = prospectRefereEmail ?: emptyString(),
       prospectReferName = prospectRefereName ?: emptyString(),
-      //contact = contact,
+      contact = contact,
       leadProductMapping = leadProductMapping,
       isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true)
 
   )
 }
+
+
 
 fun List<LeadProductMappingItem>.leadProductMappingItemsToAddProductDatas(): List<AddProductData> {
   return mapNotNull {
