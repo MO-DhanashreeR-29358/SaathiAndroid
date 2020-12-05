@@ -314,6 +314,7 @@ class LeadDetailPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onStateSelected()
+            .skip(1)
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedState() }
             .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
