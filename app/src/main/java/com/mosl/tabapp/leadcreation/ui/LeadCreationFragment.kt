@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log.i
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -70,7 +69,7 @@ import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.logging.Logger
+import java.util.Locale
 import javax.inject.Inject
 
 class LeadCreationFragment : CommonFragment(),
@@ -1105,7 +1104,8 @@ class LeadCreationFragment : CommonFragment(),
             alternateMobileNo = binding.etAlternateMobno.text.toString(),
             landlineNo = binding.etLandLine.text.toString(),
             ekycMobileNo = binding.etEkycMobile.text.toString(),
-            panNo = binding.etPanNum.text.toString(),
+            panNo = binding.etPanNum.text.toString()
+                .toUpperCase(Locale.ROOT),
             aadharNo = binding.etAadharNum.text.toString(),
             sourceName = binding.spProspectSource.selectedItem.toString(),
             referCode = binding.etRefereeCode.text.toString(),

@@ -66,7 +66,7 @@ public class CRMValidationRule {
 
     //Pancard number Format
     public static boolean isValidPannumber(String pan) {
-        String PAN_PATTEN = ("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+        String PAN_PATTEN = ("[A-Z a-z]{5}[0-9]{4}[A-Z a-z]{1}");
         Pattern pattern = Pattern.compile(PAN_PATTEN);
         Matcher matcher = pattern.matcher(pan);
         return matcher.matches();
