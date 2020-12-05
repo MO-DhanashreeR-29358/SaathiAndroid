@@ -395,7 +395,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
   override fun onDestroyView() {
     presenter.stop()
-    binding.vpLeadView.adapter = null
+//    binding.vpLeadView.adapter = null
     super.onDestroyView()
   }
 
