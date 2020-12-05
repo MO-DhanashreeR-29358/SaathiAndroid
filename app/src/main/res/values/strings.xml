@@ -467,7 +467,7 @@
     <string name="hint_lead_creation_contact_person">Contact Person*</string>
     <string name="lbl_lead_creation_profession">Profession</string>
     <string name="lbl_lead_creation_interested_in">Interested In*</string>
-    <string name="lbl_lead_creation_product_type">Product Type*</string>
+    <string name="lbl_lead_creation_product_type">Product Type</string>
     <string name="lbl_lead_creation_country">Country</string>
     <string name="lbl_lead_creation_state">State</string>
     <string name="lbl_lead_creation_city">City</string>
