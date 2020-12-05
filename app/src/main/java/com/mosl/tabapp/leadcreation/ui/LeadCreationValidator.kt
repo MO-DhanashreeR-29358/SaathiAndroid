@@ -75,7 +75,9 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
         R.string.error_message_enter_mobile
       }
 
-      input.mobileNo.invalidMobileNo() -> {
+      input.mobileNo.length <= 10 && !input.mobileNo.matches(
+          "^[6789]\\d{9}$".toRegex()
+      ) -> {
         identifier = 12
         R.string.error_message_invalid_mobile
       }
