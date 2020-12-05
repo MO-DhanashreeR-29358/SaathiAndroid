@@ -78,6 +78,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var statusDatas = emptyList<RowData>()
     private var stageDatas = emptyList<RowData>()
 
+    var pmsList: List<String> = emptyList()
+
+
     private val professionAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
@@ -107,10 +110,23 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val countryAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val stateAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
+
+    private val stateAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val cityAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
+    private val cityAdapterOff: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
@@ -131,13 +147,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private fun setupView() {
         with(binding) {
-            lvAddProduct.adapter = leadDetailAddProductAdapter
-            CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
-            nestedScrollView.apply {
-                descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
-                isFocusable = true
-                isFocusableInTouchMode = true
-            }
+            val arrayPmsProduct =
+                requireActivity().resources.getStringArray(R.array.selectPmsProduct)
+            pmsList =
+                ArrayList(Arrays.asList(*arrayPmsProduct))
             setIcon(llClientDetail, tvClientDetail)
             setIcon(llLeadDetail, tvLeadDetail)
             setIcon(llClientPortfolio, tvClientPortfolioDetails)
@@ -712,7 +725,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return binding.llEditLeadDetail.clicks()
     }
 
-    private var editableFlag = true
+    private var editableFlag = false
 
     override fun renderEditLeadDetailClick() {
         if (leadId != "0" && isLeadEditable) {
@@ -1662,7 +1675,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             interestedAdapter.addAll(data.interestInRowDatas)
             // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
-            binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+            binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
         }
     }
 
@@ -1674,8 +1687,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             data.detail.renderLeadDetail()
         }
     }
-
-    var pmsList: List<String> = emptyList()
 
     private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
 
@@ -1848,7 +1859,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
             )
-
+        binding.lvAddProduct.adapter = leadDetailAddProductAdapter
+        CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+        binding.nestedScrollView.apply {
+            descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+            isFocusable = true
+            isFocusableInTouchMode = true
+        }
     }
 
     private fun getLeadDetailAddProductModel(
@@ -1970,7 +1987,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
-            binding.spOffState.setSpinnerData(stateAdapter, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
             }
@@ -1981,7 +1997,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            binding.spOffState.setSpinnerData(stateAdapter, it)
+            binding.spOffState.setSpinnerData(stateAdapterOff, it)
         }
     }
 
@@ -1990,7 +2006,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            binding.spOffCity.setSpinnerData(cityAdapter, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
             }
@@ -2001,7 +2016,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
-            binding.spOffCity.setSpinnerData(cityAdapter, it)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, it)
         }
     }
 

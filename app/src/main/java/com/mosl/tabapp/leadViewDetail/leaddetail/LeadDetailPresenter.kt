@@ -1,6 +1,5 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
-import android.text.TextUtils
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
@@ -350,7 +349,7 @@ class LeadDetailPresenter @Inject constructor(
         view.onOfficeStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedOfficeState() }
-            .filter { !view.isSameAsAboveChecked() }
+            .filter { !view.isSameAsAboveChecked() && it.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
                 repository.getCityRowDatas(it.key)
                     .compose(applyUiModel())
