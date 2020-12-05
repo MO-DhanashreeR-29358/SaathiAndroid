@@ -38,9 +38,7 @@ import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
-import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
-import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
@@ -49,28 +47,23 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadPayment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.*
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
-import com.mosl.tabapp.util.SpinnerAdapterFactory
-import com.mosl.tabapp.util.disableErrorMessages
-import com.mosl.tabapp.util.emptyString
-import com.mosl.tabapp.util.gone
-import com.mosl.tabapp.util.setErrorMessages
-import com.mosl.tabapp.util.visible
+import com.mosl.tabapp.util.*
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.listOf
 
 class LeadCreationFragment : CommonFragment(),
     LeadCreationView {
@@ -599,7 +592,12 @@ class LeadCreationFragment : CommonFragment(),
     override fun onSourceSelected(): Observable<Int> = binding.spSource.itemSelections()
     override fun onStageSelected(): Observable<Int> = binding.spStage.itemSelections()
     override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
-    override fun onOfficeStateSelected(): Observable<Int> = binding.spOffState.itemSelections()
+    override fun onOfficeStateSelected(): Observable<Int> =
+        binding.spOffState.itemSelections().map {
+            toast("Hi")
+            it
+        }
+
     override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
     override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
