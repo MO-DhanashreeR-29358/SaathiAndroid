@@ -73,7 +73,7 @@ class ForegroundService : Service() {
             if (userManager.isLoggedIn() && hasGPSDevice(applicationContext)) {
                 startLocationUpdates()
             }
-            refreshHandler.postDelayed(this, /*5*/ 2 * 60 * 1000.toLong())
+            refreshHandler.postDelayed(this, 5  * 60 * 1000.toLong())
         }
     }
 
@@ -208,10 +208,10 @@ class ForegroundService : Service() {
         mLocationRequest = LocationRequest()
         mLocationRequest?.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         /* 60 secs */
-        val UPDATE_INTERVAL = (/*5*/2 * 60 * 1000).toLong()
+        val UPDATE_INTERVAL = (5 * 60 * 1000).toLong()
         mLocationRequest?.interval = UPDATE_INTERVAL
         /* 60 sec */
-        val FASTEST_INTERVAL: Long = /*5*/2 * 60 * 1000
+        val FASTEST_INTERVAL: Long = 5 * 60 * 1000
         mLocationRequest?.fastestInterval = FASTEST_INTERVAL
 
         val builder = LocationSettingsRequest.Builder()
@@ -229,6 +229,9 @@ class ForegroundService : Service() {
             if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) else {
                 LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -243,7 +246,7 @@ class ForegroundService : Service() {
                     )
             }
         }
-        mainHandler.postDelayed(myRunnable, /*5*/2 * 60 * 1000)
+        mainHandler.postDelayed(myRunnable, 5 * 60 * 1000)
     }
 
     fun onLocationChanged(location: Location) {
@@ -269,7 +272,7 @@ class ForegroundService : Service() {
             )
             if ((lastLocationTime.get().isEmpty() || Utility.isTimeInterval(
                     lastLocationTime.get(),
-                    2/*4*/
+                    4
                 )) && !isLocationFromMockProvider(applicationContext, location)
             ) {
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
