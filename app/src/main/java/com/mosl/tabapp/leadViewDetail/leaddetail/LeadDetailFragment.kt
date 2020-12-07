@@ -8,7 +8,6 @@ import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
 import android.view.*
-import android.view.ViewGroup.LayoutParams
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
@@ -79,6 +78,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var statusDatas = emptyList<RowData>()
     private var stageDatas = emptyList<RowData>()
 
+    var pmsList: List<String> = emptyList()
+
+
     private val professionAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
@@ -108,10 +110,23 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val countryAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val stateAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
+
+    private val stateAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val cityAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
+    private val cityAdapterOff: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
@@ -132,13 +147,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private fun setupView() {
         with(binding) {
-            lvAddProduct.adapter = leadDetailAddProductAdapter
-            CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
-            nestedScrollView.apply {
-                descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
-                isFocusable = true
-                isFocusableInTouchMode = true
-            }
+            val arrayPmsProduct =
+                requireActivity().resources.getStringArray(R.array.selectPmsProduct)
+            pmsList =
+                ArrayList(Arrays.asList(*arrayPmsProduct))
             setIcon(llClientDetail, tvClientDetail)
             setIcon(llLeadDetail, tvLeadDetail)
             setIcon(llClientPortfolio, tvClientPortfolioDetails)
@@ -308,7 +320,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
 
         uiModel.onSuccess {
-            var list = emptyList<EmployeeModel>()
+            val list = emptyList<EmployeeModel>()
             if (it.isNotEmpty()) {
                 it.filter {
                     it.code == userManager.user.employeeCode
@@ -354,14 +366,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         R.string.motilal_oswal
                     ), "Product Added Successfully with leadId "
                             + leadID, "OK", true
-                ) { action: Action, data1: Array<Any?>? ->
+                ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
                         val bundle = Bundle()
                         bundle.putString(MOSLConstants.LEAD_ID, leadID)
                         bundle.putString(MOSLConstants.UCID, uCID)
                         navigator.openPage(
                             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
-                            false
+                            forceReload = false
                         )
                     }
                 }
@@ -390,7 +402,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                             (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
                         )
-                    binding.lvAddProduct.setAdapter(leadDetailAddProductAdapter)
+                    binding.lvAddProduct.adapter = leadDetailAddProductAdapter
                     CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
                 }
                 MSFDialog.alertDialog(
@@ -427,7 +439,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
 
         uiModel.onSuccess {
-            var list = if (it.isNotEmpty()) {
+            val list = if (it.isNotEmpty()) {
                 it.filter {
                     it.code != userManager.user.employeeCode
                 }
@@ -713,7 +725,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return binding.llEditLeadDetail.clicks()
     }
 
-    private var editableFlag = true
+    private var editableFlag = false
 
     override fun renderEditLeadDetailClick() {
         if (leadId != "0" && isLeadEditable) {
@@ -1663,7 +1675,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             interestedAdapter.addAll(data.interestInRowDatas)
             // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
-            binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+            binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
         }
     }
 
@@ -1675,8 +1687,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             data.detail.renderLeadDetail()
         }
     }
-
-    var pmsList: List<String> = emptyList()
 
     private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
 
@@ -1792,7 +1802,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             }
         binding.etLeadID.setText(leadId) //Himanshu
         binding.etLeadName.setText(contact?.name) //Himanshu
-        binding.etCreationDate.setText(createdDate) //Himanshu
+        try {//Jeet
+            binding.etCreationDate.setText(
+                CRMAppUtil.getDateFromString(
+                    createdDate,
+                    "yyyy-MM-dd'T'kk:mm:ss", MOSLConstants.DATE_FORMAT_TO_DISPLAY
+                )
+            )
+        } catch (e: Exception) {
+            binding.etCreationDate.setText(createdDate.replace("T", " "))
+        }//Jeet
         binding.etSource.setText(sourceName) //Himanshu
 
         binding.etMobileNumber.setText(contact?.mobile) //Himanshu
@@ -1840,7 +1859,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
             )
-
+        binding.lvAddProduct.adapter = leadDetailAddProductAdapter
+        CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+        binding.nestedScrollView.apply {
+            descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+            isFocusable = true
+            isFocusableInTouchMode = true
+        }
     }
 
     private fun getLeadDetailAddProductModel(
@@ -1962,7 +1987,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
-            binding.spOffState.setSpinnerData(stateAdapter, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
             }
@@ -1973,7 +1997,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            binding.spOffState.setSpinnerData(stateAdapter, it)
+            binding.spOffState.setSpinnerData(stateAdapterOff, it)
         }
     }
 
@@ -1982,7 +2006,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            binding.spOffCity.setSpinnerData(cityAdapter, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
             }
@@ -1993,7 +2016,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
-            binding.spOffCity.setSpinnerData(cityAdapter, it)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, it)
         }
     }
 
