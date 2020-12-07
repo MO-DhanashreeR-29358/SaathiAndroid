@@ -25,6 +25,8 @@ interface LeadDetailView : BaseView {
   fun openAddProductDialog()
   fun onEditLeadDetailClicked(): Observable<Unit>
   fun renderEditLeadDetailClick()
+  fun renderPrimaryAddCheckBoxClicked()
+  fun renderOffPrimaryAddCheckBoxClicked()
   fun onClientDetailClicked(): Observable<Unit>
   fun onClientPortfolioDetailClicked(): Observable<Unit>
   fun onLeadDetailClicked(): Observable<Unit>
@@ -145,7 +147,6 @@ interface LeadDetailView : BaseView {
   fun renderStage(uiModel: UiModel<List<RowData>>)
   fun renderStatus(uiModel: UiModel<List<RowData>>)
   fun selectedStage(): Observable<SelectStageEvent>
-  fun toggleAddressFields()
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

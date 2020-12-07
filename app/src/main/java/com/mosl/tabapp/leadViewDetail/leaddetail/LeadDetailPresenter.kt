@@ -99,8 +99,16 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { view.renderEditLeadDetailClick() }
             .addTo(disposable)
 
-        Observable.merge(view.onPrimaryAddCheckboxClicked(),view.onOfficePrimaryAddCheckboxClicked())
-            .subscribe { view.toggleAddressFields() }
+        view.onPrimaryAddCheckboxClicked()
+            .subscribe { (view.renderPrimaryAddCheckBoxClicked()) }
+            .addTo(disposable)
+
+        view.onOfficePrimaryAddCheckboxClicked()
+            .subscribe { (view.renderOffPrimaryAddCheckBoxClicked()) }
+            .addTo(disposable)
+
+        view.onDOBClicked()
+            .subscribe { view.renderDOBClick() }
             .addTo(disposable)
 
         view.onAnniversaryClicked()

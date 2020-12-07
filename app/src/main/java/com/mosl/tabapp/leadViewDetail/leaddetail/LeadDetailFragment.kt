@@ -739,6 +739,34 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
+    override fun renderPrimaryAddCheckBoxClicked() {
+        binding.run {
+            if (cbPrimaryAddress.isChecked) {
+                enableField(llResAdd)
+                enableField(llOffAdd)
+                cbOffPrimaryAddress.gone()
+                cbSameAs.visible()
+            } else {
+                cbOffPrimaryAddress.visible()
+                cbSameAs.gone()
+                disableField(llResAdd)
+                disableField(llOffAdd)
+            }
+        }
+    }
+
+    override fun renderOffPrimaryAddCheckBoxClicked() {
+        binding.run {
+            if (cbOffPrimaryAddress.isChecked) {
+                enableField(llResAdd)
+                enableField(llOffAdd)
+            } else {
+                disableField(llResAdd)
+                disableField(llOffAdd)
+            }
+        }
+    }
+
     override fun onClientDetailClicked(): Observable<Unit> {
         return binding.tvClientDetail.clicks()
     }
@@ -1981,21 +2009,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
     override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
     override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
-
-    override fun toggleAddressFields() {
-        binding.run {
-            when {
-                cbPrimaryAddress.isChecked -> {
-                    enableField(llResAdd)
-                    enableField(llOffAdd)
-                }
-                cbOffPrimaryAddress.isChecked -> {
-                    enableField(llOffAdd)
-                    enableField(llResAdd)
-                }
-            }
-        }
-    }
 
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
