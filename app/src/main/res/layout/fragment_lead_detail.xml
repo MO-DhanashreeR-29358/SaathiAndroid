@@ -1569,7 +1569,7 @@
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/Select" />
+                                />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1593,7 +1593,7 @@
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:entries="@array/Select" />
+                                />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
