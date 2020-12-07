@@ -107,6 +107,10 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { (view.renderOffPrimaryAddCheckBoxClicked()) }
             .addTo(disposable)
 
+        view.onSameAsCheckboxClicked()
+            .subscribe { (view.renderSameAsAboveClicked()) }
+            .addTo(disposable)
+
         view.onDOBClicked()
             .subscribe { view.renderDOBClick() }
             .addTo(disposable)

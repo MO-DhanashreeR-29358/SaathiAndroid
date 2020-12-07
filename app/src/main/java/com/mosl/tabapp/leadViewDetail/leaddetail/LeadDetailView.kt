@@ -27,6 +27,7 @@ interface LeadDetailView : BaseView {
   fun renderEditLeadDetailClick()
   fun renderPrimaryAddCheckBoxClicked()
   fun renderOffPrimaryAddCheckBoxClicked()
+  fun renderSameAsAboveClicked()
   fun onClientDetailClicked(): Observable<Unit>
   fun onClientPortfolioDetailClicked(): Observable<Unit>
   fun onLeadDetailClicked(): Observable<Unit>
