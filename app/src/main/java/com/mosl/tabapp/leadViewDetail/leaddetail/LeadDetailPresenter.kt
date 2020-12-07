@@ -195,6 +195,14 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
             .addTo(disposable)
 
+        view.onSubmitButtonClicked()
+            .subscribe{view.renderOnUpdateButtonClick()}
+            .addTo(disposable)
+
+        view.updateDialogBtnEventFired()
+            .subscribe{view.renderUpdateDetail()}
+            .addTo(disposable)
+
         view.onProsRefereeEmailTextChanged()
             .subscribe { view.renderOnProsRefereeEmailTextChange(it) }
             .addTo(disposable)

@@ -360,6 +360,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
                 val leadID = it[0].leadId
                 val uCID = it[0].ucId
+
                 MSFDialog.alertDialog(
                     requireActivity(), 0,
                     resources.getString(
@@ -1563,6 +1564,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun isCbSameAsChecked(): Boolean {
         return binding.cbSameAs.isChecked
+    }
+
+    override fun renderOnUpdateButtonClick() {
+        MSFDialog.alertDialog(
+            requireActivity(), 0,
+            resources.getString(
+                R.string.motilal_oswal
+            ), resources.getString(R.string.CONFIRM_LEAD_UPDATE), "YES", "NO", true
+        ) { action: Action, _: Array<Any?>? ->
+            if (action == OK) {
+                subject.onNext(LeadDetailUiEvent.UpdateBtnEvent)
+            }
+        }
+    }
+
+    override fun updateDialogBtnEventFired(): Observable<LeadDetailUiEvent.UpdateBtnEvent> {
+        return subject.ofType()
+    }
+
+    override fun renderUpdateDetail() {
+        println("Himanshu Lead Updated")
     }
 
     override fun onAdd1AfterTextChanged(): Observable<String> {

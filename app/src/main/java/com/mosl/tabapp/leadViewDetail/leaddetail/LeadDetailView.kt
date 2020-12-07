@@ -74,6 +74,9 @@ interface LeadDetailView : BaseView {
   fun onAdd3AfterTextChanged(): Observable<String>
   fun renderOnAdd3AfterTextChange(text: String)
   fun isCbSameAsChecked(): Boolean
+  fun renderOnUpdateButtonClick()
+  fun updateDialogBtnEventFired(): Observable<LeadDetailUiEvent.UpdateBtnEvent>
+  fun renderUpdateDetail()
 
   fun onClientDetailSectionClicked(): Observable<Unit>
   fun onClientPortfolioSectionClicked(): Observable<Unit>
