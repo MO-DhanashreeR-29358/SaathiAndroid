@@ -7,11 +7,7 @@ import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadD
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.AddProductData
-import com.mosl.tabapp.leaddetail.ClientDetail
-import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
-import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
-import com.mosl.tabapp.leaddetail.LeadEmployees
+import com.mosl.tabapp.leaddetail.*
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -149,6 +145,7 @@ interface LeadDetailView : BaseView {
   fun renderStage(uiModel: UiModel<List<RowData>>)
   fun renderStatus(uiModel: UiModel<List<RowData>>)
   fun selectedStage(): Observable<SelectStageEvent>
+  fun toggleAddressFields()
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

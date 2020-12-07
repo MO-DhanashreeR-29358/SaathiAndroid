@@ -1982,6 +1982,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
     override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
 
+    override fun toggleAddressFields() {
+        binding.run {
+            when {
+                cbPrimaryAddress.isChecked -> {
+                    enableField(llResAdd)
+                    enableField(llOffAdd)
+                }
+                cbOffPrimaryAddress.isChecked -> {
+                    enableField(llOffAdd)
+                    enableField(llResAdd)
+                }
+            }
+        }
+    }
+
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
