@@ -7,7 +7,6 @@ import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadD
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.leaddetail.*
 import io.reactivex.Observable
 
@@ -18,7 +17,6 @@ interface LeadDetailView : BaseView {
   fun onPrimaryAddCheckboxClicked(): Observable<Unit>
   fun onOfficePrimaryAddCheckboxClicked(): Observable<Unit>
   fun onSameAsCheckboxClicked(): Observable<Unit>
-  fun getLeadCreationUserInput(): LeadCreationUserInput
   fun onSubmitButtonClicked(): Observable<Unit>
   fun onProfileLayoutClicked(): Observable<Unit>
   fun renderProfileClick()
@@ -38,7 +36,6 @@ interface LeadDetailView : BaseView {
   fun renderDOBClick()
   fun onAnniversaryClicked(): Observable<Unit>
   fun renderAnniversaryClick()
-  fun renderOnCreateButtonClick()
   fun onRefereeCodeFocusChanged(): Observable<Boolean>
   fun renderOnRefereeCodeFocusChange()
   fun onRefereeNameFocusChanged(): Observable<Boolean>

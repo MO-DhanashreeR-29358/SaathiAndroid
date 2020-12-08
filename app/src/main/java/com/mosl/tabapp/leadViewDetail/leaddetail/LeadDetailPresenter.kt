@@ -24,7 +24,6 @@ class LeadDetailPresenter @Inject constructor(
         val data: LeadDetailArgument,
         val repository: LeadCreationRepository,
         val detailRepository: LeadDetailRepository,
-        val validator: LeadCreationValidator
         val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadDetailView>(view) {
     override fun start() {
@@ -111,16 +110,6 @@ class LeadDetailPresenter @Inject constructor(
         view.onSameAsCheckboxClicked()
                 .subscribe { (view.renderSameAsAboveClicked()) }
                 .addTo(disposable)
-
-        view.onSubmitButtonClicked()
-                .map { view.getLeadCreationUserInput() }
-                .switchMap {
-                    validator.validate(it)
-                            .compose(applyUiModel())
-                }
-                .subscribe(view::renderOnCreateButtonClick, Timber::e)
-                .addTo(disposable)
-
 
         view.onDOBClicked()
                 .subscribe { view.renderDOBClick() }

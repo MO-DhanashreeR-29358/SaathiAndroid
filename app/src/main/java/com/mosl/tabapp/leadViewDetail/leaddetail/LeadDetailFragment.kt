@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
@@ -29,9 +30,7 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
-import com.mosl.saathi.api.model.lead.CrossSellingProduct
-import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
-import com.mosl.saathi.api.model.lead.LeadProductMappingItem
+import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
@@ -46,15 +45,18 @@ import com.mosl.tabapp.leadViewDetail.*
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
+import com.mosl.tabapp.model.leaddetail.LeadDetailModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.*
+import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
@@ -227,84 +229,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun onSameAsCheckboxClicked(): Observable<Unit> {
         return binding.cbSameAs.clicks()
     }
-
-    override fun getLeadCreationUserInput(): LeadCreationUserInput {
-
-        val resAdd = AddressDetailModel(
-                RESIDENCEADDRESS,
-                binding.etAdd1.text.toString(),
-                binding.etAdd2.text.toString(),
-                binding.etAdd3.text.toString(),
-                (binding.spCountry.selectedItem as? RowData)?.key
-                        ?: LeadCreationView.INVALID_SELECTION_KEY,
-                (binding.spState.selectedItem as? RowData)?.key
-                        ?: "",
-                (binding.spCity.selectedItem as? RowData)?.key
-                        ?: "",
-                binding.etPincode.text.toString(),
-                binding.cbPrimaryAddress.isChecked,
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId
-        )
-
-        val offAdd = AddressDetailModel(
-                OFFICEADDRESS,
-                binding.etOffAdd1.text.toString(),
-                binding.etOffAdd2.text.toString(),
-                binding.etOffAdd3.text.toString(),
-                (binding.spOffCountry.selectedItem as? RowData)?.key
-                        ?: LeadCreationView.INVALID_SELECTION_KEY,
-                (binding.spOffState.selectedItem as? RowData)?.key
-                        ?: "",
-                (binding.spOffCity.selectedItem as? RowData)?.key
-                        ?: "",
-                binding.etOffPincode.text.toString(),
-                binding.cbOffPrimaryAddress.isChecked,
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId
-        )
-
-        return LeadCreationUserInput(
-                selectedCategory = binding.spCategory.selectedItem as RowData,
-                etCategoryName = binding.etName.text.toString(),
-                etContactPerson = binding.etContactPerson.text.toString(),
-                selectedProfession = binding.spProfession.selectedItem as RowData,
-                selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
-                selectedProductType = binding.spProductType.selectedItem as? RowData
-                        ?: LeadCreationView.SELECT_ROW_DATA,
-                emailId = binding.etEmailId.text.toString(),
-                alternateEmailId = binding.etAlternateEmailId.text.toString(),
-                mobileNo = binding.etMobile.text.toString(),
-                alternateMobileNo = binding.etAlternateMobno.text.toString(),
-                landlineNo = binding.etLandLine.text.toString(),
-                ekycMobileNo = binding.etEkycMobile.text.toString(),
-                panNo = binding.etPanNum.text.toString()
-                        .toUpperCase(Locale.ROOT),
-                aadharNo = binding.etAadharNum.text.toString(),
-                sourceName = binding.spProspectSource.selectedItem.toString(),
-                referCode = binding.etRefereeCode.text.toString(),
-                referEmail = binding.etRefereeEmail.text.toString(),
-                referName = binding.etRefereeName.text.toString(),
-                referMobile = binding.etRefereeMobile.text.toString(),
-                isRefereeCode = isReferee,
-                pinCode = binding.etPincode.text.toString(),
-                officePinCode = binding.etOffPincode.text.toString(),
-                name = binding.etName.text.toString(),
-                isSameAsChecked = binding.cbSameAs.isChecked,
-                selectedSource = binding.spSource.selectedItem as RowData,
-                selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
-                prospectSourceDetail = binding.etProspectSourceDetails.text.toString(),
-                proReferName = binding.etProspectRefereeName.text.toString(),
-                proReferEmail = binding.etProspectRefereerEmail.text.toString(),
-                proReferMob = binding.etProspectRefereerMobile.text.toString(),
-                comment = getJsonSafeString(binding.etComments.text.toString()),
-                professionalId = binding.spProfession.selectedItem as RowData,
-                primRM = primaryRM,
-                stageId = binding.spStage.selectedItem as RowData,
-                statusId = binding.spStatus.selectedItem as RowData,
-                residenceAdd = resAdd,
-                officeAdd = offAdd
-        )
-    }
-
 
     override fun onSubmitButtonClicked(): Observable<Unit> {
         return binding.btnSubmit.clicks()
@@ -934,10 +858,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             binding.etAnniversary.setText(date)
             binding.etAnniversary.setClearIconVisible(true)
         }.show()
-    }
-
-    override fun renderOnCreateButtonClick() {
-
     }
 
     override fun onAnniversaryClicked(): Observable<Unit> {
@@ -1829,6 +1749,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+            binding.llEditLeadDetail.performClick()
         }
     }
 
