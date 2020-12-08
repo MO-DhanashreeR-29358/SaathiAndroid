@@ -786,6 +786,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private fun handlingWhenSameAsCheckboxClickedAndUnChecked() {
         binding.run {
+            enableField(llOffAdd)
             etOffAdd1.setText("")
             etOffAdd2.setText("")
             etOffAdd3.setText("")
@@ -797,7 +798,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
 
-    private fun LeadDetailFragment.handlingWhenSameAsCheckboxClickedAndChecked() {
+    private fun handlingWhenSameAsCheckboxClickedAndChecked() {
         binding.run {
             disableField(llOffAdd)
             etOffAdd1.text = etAdd1.text
