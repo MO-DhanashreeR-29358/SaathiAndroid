@@ -124,6 +124,7 @@ class LeadDetailPresenter @Inject constructor(
             }
             .subscribe(view::renderStatus)
             .addTo(disposable)
+        //Himanshu
 
         view.onAddProductClicked()
             .filter { view.isLeadEditable() }
@@ -196,12 +197,17 @@ class LeadDetailPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onSubmitButtonClicked()
-            .subscribe{view.renderOnUpdateButtonClick()}
+            .subscribe { view.renderOnUpdateButtonClick() }
             .addTo(disposable)
 
         view.updateDialogBtnEventFired()
-            .subscribe{view.renderUpdateDetail()}
+            .switchMap {
+                detailRepository.updateProduct(it.updateLeadRequest)
+                    .compose(applyUiModel())
+            }
+            .subscribe (view::renderUpdateDetail)
             .addTo(disposable)
+        //Himanshu
 
         view.onProsRefereeEmailTextChanged()
             .subscribe { view.renderOnProsRefereeEmailTextChange(it) }

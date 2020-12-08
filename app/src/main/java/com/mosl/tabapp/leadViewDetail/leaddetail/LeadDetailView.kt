@@ -4,6 +4,7 @@ import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
@@ -76,7 +77,7 @@ interface LeadDetailView : BaseView {
   fun isCbSameAsChecked(): Boolean
   fun renderOnUpdateButtonClick()
   fun updateDialogBtnEventFired(): Observable<LeadDetailUiEvent.UpdateBtnEvent>
-  fun renderUpdateDetail()
+  fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>)
 
   fun onClientDetailSectionClicked(): Observable<Unit>
   fun onClientPortfolioSectionClicked(): Observable<Unit>

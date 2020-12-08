@@ -1033,7 +1033,7 @@ class LeadCreationFragment : CommonFragment(),
             ?: "",
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked,
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
     )
 
     val offAdd = AddressDetailModel(
@@ -1049,7 +1049,7 @@ class LeadCreationFragment : CommonFragment(),
             ?: "",
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked,
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
     )
 
     return LeadCreationUserInput(
