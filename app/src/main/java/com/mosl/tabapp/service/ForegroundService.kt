@@ -73,7 +73,7 @@ class ForegroundService : Service() {
             if (userManager.isLoggedIn() && hasGPSDevice(applicationContext)) {
                 startLocationUpdates()
             }
-            refreshHandler.postDelayed(this, 5 * 60 * 1000.toLong())
+            refreshHandler.postDelayed(this, 5  * 60 * 1000.toLong())
         }
     }
 
@@ -92,6 +92,9 @@ class ForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        refreshHandler.postDelayed(runnableCode, 1000)
+        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
+
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -111,8 +114,6 @@ class ForegroundService : Service() {
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification())
         }
-        refreshHandler.postDelayed(runnableCode, 1000)
-        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
         return START_STICKY
     }
 
@@ -228,6 +229,9 @@ class ForegroundService : Service() {
             if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) else {
                 LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -268,7 +272,7 @@ class ForegroundService : Service() {
             )
             if ((lastLocationTime.get().isEmpty() || Utility.isTimeInterval(
                     lastLocationTime.get(),
-                    4/*12*/
+                    4
                 )) && !isLocationFromMockProvider(applicationContext, location)
             ) {
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))

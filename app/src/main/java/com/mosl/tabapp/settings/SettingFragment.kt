@@ -14,7 +14,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
+import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.shared.util.isLocationFromMockProvider
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
@@ -33,19 +35,14 @@ class SettingFragment : PreferenceFragmentCompat() {
 
     var mService: ForegroundService? = null
 
-    lateinit var sharedPreferences: SharedPreferences
-    var editor: SharedPreferences.Editor? = null
-
     @Inject
     internal lateinit var fusedLocation: FusedLocation
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        sharedPreferences = requireActivity().getSharedPreferences(
-            getString(R.string.preff_24_7_key),
-            Context.MODE_PRIVATE
-        )
-        editor = sharedPreferences.edit()
+    @field:TwentyFourSevenCheck
+    @Inject
+    lateinit var twentyFourSevenCheck: BooleanPreference
 
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
         setPreferencesFromResource(R.xml.preference, rootKey)
         preference =
@@ -54,7 +51,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         getLastKnownLocation()
 
-        preference.isChecked = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        preference.isChecked = twentyFourSevenCheck.get()
         if (!isGpsEnabled())
             disableToggleButton()
         preference.setOnPreferenceChangeListener { _: Preference, newValue: Any ->
@@ -84,8 +81,7 @@ class SettingFragment : PreferenceFragmentCompat() {
             Toast.LENGTH_SHORT
         ).show()
 
-        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
-        editor?.commit()
+        twentyFourSevenCheck.set(false)
         stopService()
         preference.isChecked = false
     }
@@ -95,8 +91,7 @@ class SettingFragment : PreferenceFragmentCompat() {
             requireContext(), "Location tracking started", Toast.LENGTH_SHORT
         )
             .show()
-        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, true)
-        editor?.commit()
+        twentyFourSevenCheck.set(true)
         startService()
     }
 
@@ -112,6 +107,9 @@ class SettingFragment : PreferenceFragmentCompat() {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             Toast.makeText(
