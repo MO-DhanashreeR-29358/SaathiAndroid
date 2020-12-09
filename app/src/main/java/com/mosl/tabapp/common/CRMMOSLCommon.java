@@ -86,6 +86,11 @@ public class CRMMOSLCommon {
 
         }
 
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionArrayList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
+
+        }
+
         String[] permissionString = new String[permissionArrayList.size()];
         permissionString = permissionArrayList.toArray(permissionString);
         if (permissionString.length != 0) {

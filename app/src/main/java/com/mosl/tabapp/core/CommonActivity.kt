@@ -23,6 +23,7 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
@@ -33,6 +34,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
+import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -97,9 +99,9 @@ class CommonActivity : BaseActivity(),
     @field:FcmToken
     lateinit var tokenPref: Preference<String>
 
-    /*@field:TwentyFourSevenCheck
+    @field:TwentyFourSevenCheck
     @Inject
-    lateinit var twentyFourSevenCheck: BooleanPreference*/
+    lateinit var twentyFourSevenCheck: BooleanPreference
 
     @Inject
     @field:PreferenceClear
@@ -130,9 +132,9 @@ class CommonActivity : BaseActivity(),
     var mService: ForegroundService? = null
 
     /**/
-    lateinit var sharedPreferences: SharedPreferences
+   /* lateinit var sharedPreferences: SharedPreferences
     var editor: SharedPreferences.Editor? = null
-    var twentyFourSevenCheck = false
+    var twentyFourSevenCheck = false*/
     /**/
 
     override fun getLayout(): Int {
@@ -172,22 +174,24 @@ class CommonActivity : BaseActivity(),
                 savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
         }
 
-        sharedPreferences =
+        /*sharedPreferences =
             getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
-        twentyFourSevenCheck = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+        twentyFourSevenCheck = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)*/
 
         locationWorkManager = WorkManager.getInstance(this)
         dataSyncWorkManager = WorkManager.getInstance(this)
 
-        userManager.getUser()?.apply {
+        /*userManager.getUser()?.apply {
             if (!this.isAufsb()) {
-                if (twentyFourSevenCheck) {
-                    initBackgroundState()
+                if (twentyFourSevenCheck.get()) {
                     startService(Intent(this@CommonActivity, ForegroundService::class.java))
                 }
                 // startWorkManager()
             }
+        }*/
+        if (twentyFourSevenCheck.get()) {
+            startService(Intent(this@CommonActivity, ForegroundService::class.java))
         }
         setupObservables()
         setBanner()
@@ -266,7 +270,7 @@ class CommonActivity : BaseActivity(),
 
     override fun onResume() {
         super.onResume()
-        if (twentyFourSevenCheck && !isForegroundServiceRunning(ForegroundService::class.java)) {
+        if (twentyFourSevenCheck.get() && !isForegroundServiceRunning(ForegroundService::class.java)) {
             bindService(
                 Intent(this, ForegroundService::class.java),
                 mServiceConnection,
@@ -525,9 +529,9 @@ class CommonActivity : BaseActivity(),
                         Timber.d("Logout Successfully")
                         forcePreference.set(100)
                         stopService()
-//                        twentyFourSevenCheck.set(false)
-                        editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
-                        editor?.commit()
+                        twentyFourSevenCheck.set(false)
+                        /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+                        editor?.commit()*/
                         openLogin()
                     }
 
