@@ -208,6 +208,7 @@
     <string name="motilal_oswal">Saathi</string>
     <string name="show_login">Login</string>
     <string name="CONFIRM_LEAD_UPDATE">"Are you sure want to update lead ?"</string>
+    <string name="lead_updated">Lead Updated Successfully</string>
 
     <string name="network_connection_slow">Delay in loading is due to slow network connection.</string>
     <string name="button_label_ok">OK</string>
