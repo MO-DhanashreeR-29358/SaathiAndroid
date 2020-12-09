@@ -8,11 +8,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.AddProductData
-import com.mosl.tabapp.leaddetail.ClientDetail
-import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
-import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
-import com.mosl.tabapp.leaddetail.LeadEmployees
+import com.mosl.tabapp.leaddetail.*
 import io.reactivex.Observable
 
 interface LeadDetailView : BaseView {
@@ -30,6 +26,9 @@ interface LeadDetailView : BaseView {
   fun openAddProductDialog()
   fun onEditLeadDetailClicked(): Observable<Unit>
   fun renderEditLeadDetailClick()
+  fun renderPrimaryAddCheckBoxClicked()
+  fun renderOffPrimaryAddCheckBoxClicked()
+  fun renderSameAsAboveClicked()
   fun onClientDetailClicked(): Observable<Unit>
   fun onClientPortfolioDetailClicked(): Observable<Unit>
   fun onLeadDetailClicked(): Observable<Unit>

@@ -18,6 +18,8 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
@@ -50,6 +52,9 @@ import com.mosl.tabapp.leaddetail.*
 import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.model.*
+import com.mosl.tabapp.leaddetail.Contact
+import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.model.LeadFieldSectionModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
@@ -58,8 +63,10 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.*
+import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import kotlinx.android.synthetic.main.frag_lead_creation.*
 import java.util.*
 import javax.inject.Inject
@@ -745,6 +752,74 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 setEnableDisable(false)
                 editableFlag = true
             }
+        }
+    }
+
+    override fun renderPrimaryAddCheckBoxClicked() {
+        binding.run {
+            if (cbPrimaryAddress.isChecked) {
+                enableField(llResAdd)
+                enableField(llOffAdd)
+                cbOffPrimaryAddress.gone()
+                cbSameAs.visible()
+            } else {
+                cbOffPrimaryAddress.visible()
+                cbSameAs.gone()
+                disableField(llResAdd)
+                disableField(llOffAdd)
+                cbOffPrimaryAddress.isChecked = false
+                cbSameAs.isChecked = false
+            }
+        }
+    }
+
+    override fun renderOffPrimaryAddCheckBoxClicked() {
+        binding.run {
+            if (cbOffPrimaryAddress.isChecked) {
+                enableField(llResAdd)
+                enableField(llOffAdd)
+            } else {
+                disableField(llResAdd)
+                disableField(llOffAdd)
+            }
+        }
+    }
+
+    override fun renderSameAsAboveClicked() {
+        binding.run {
+            when {
+                cbSameAs.isChecked -> handlingWhenSameAsCheckboxClickedAndChecked()
+                else -> handlingWhenSameAsCheckboxClickedAndUnChecked()
+            }
+        }
+    }
+
+    private fun handlingWhenSameAsCheckboxClickedAndUnChecked() {
+        binding.run {
+            enableField(llOffAdd)
+            etOffAdd1.setText("")
+            etOffAdd2.setText("")
+            etOffAdd3.setText("")
+            etOffPincode.setText("")
+            spOffCountry.setSelection(0)
+            spOffState.setSelection(0)
+            spOffCity.setSelection(0)
+        }
+    }
+
+
+    private fun handlingWhenSameAsCheckboxClickedAndChecked() {
+        binding.run {
+            disableField(llOffAdd)
+            etOffAdd1.text = etAdd1.text
+            etOffAdd2.text = etAdd2.text
+            etOffAdd3.text = etAdd3.text
+            etOffPincode.text = etPincode.text
+            spOffCountry.setSelection(spCountry.selectedItemPosition)
+            spOffState.setSpinnerData(stateAdapterOff, stateAdapter.getItems())
+            spOffState.setSelection(spState.selectedItemPosition)
+            spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
+            spOffCity.setSelection(spCity.selectedItemPosition)
         }
     }
 
@@ -1877,7 +1952,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             interestedDatas.toMutableList()
-                .clear()
+                    .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -1888,6 +1963,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+            binding.llEditLeadDetail.performClick()
         }
     }
 
@@ -1979,7 +2055,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
 
         pmsProductAdapter.setSpinnerDataWithSelection(
-            binding.spPmsProduct, pmsList, isPotentialPMSProduct
+                binding.spPmsProduct, pmsList, isPotentialPMSProduct
         )
         binding.etProspectRefereerEmail.setText(prospectReferEmail)
         binding.etProspectRefereeName.setText(prospectReferName)
@@ -2005,13 +2081,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.etProspectSourceDetail.setText(leadSourceDetails)
         binding.etComments.setText(comments)
         binding.etContactPerson.visibility =
-            if (leadCategoryText.equals("Individual", ignoreCase = true)) {
-                isIndividualsFlag = true
-                View.GONE
-            } else {
-                isIndividualsFlag = false
-                View.VISIBLE
-            }
+                if (leadCategoryText.equals("Individual", ignoreCase = true)) {
+                    isIndividualsFlag = true
+                    View.GONE
+                } else {
+                    isIndividualsFlag = false
+                    View.VISIBLE
+                }
         binding.etLeadID.setText(leadId) //Himanshu
         binding.etLeadName.setText(contact?.name) //Himanshu
         try {//Jeet
@@ -2057,20 +2133,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
         leadDetailAddProductAdapter =
-            LeadDetailAddProductAdapter(
-                saathiApi,
-                requireContext(),
-                leadDetailAddProductList,
-                binding.lvAddProduct,
-                leadId,
-                isLeadEditable,
-                statusDatas,
-                statusAdapter,
-                userManager.getUser()?.employeeCode,
-                status,
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
-            )
+                LeadDetailAddProductAdapter(
+                        saathiApi,
+                        requireContext(),
+                        leadDetailAddProductList,
+                        binding.lvAddProduct,
+                        leadId,
+                        isLeadEditable,
+                        statusDatas,
+                        statusAdapter,
+                        userManager.getUser()?.employeeCode,
+                        status,
+                        userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                        (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+                )
         binding.lvAddProduct.adapter = leadDetailAddProductAdapter
         CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
         binding.nestedScrollView.apply {
@@ -2081,50 +2157,50 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun getLeadDetailAddProductModel(
-        item: LeadProductMappingItem
+            item: LeadProductMappingItem
     ): LeadDetailAddProductModel {
         val crossSellingProducts: List<CrossSellingProductsModel> =
-            getCrossSellingProductsModel(item.crossSellingProducts)
+                getCrossSellingProductsModel(item.crossSellingProducts)
         return LeadDetailAddProductModel(
-            item.stageID.toString(),
-            stringOrEmpty(item.stageName), item.statusID.toString(),
-            stringOrEmpty(item.statusName), item.interestedIn.toString(),
-            stringOrEmpty(item.productName),
-            stringOrEmpty(item.primaryRMName),
-            stringOrEmpty(item.productSpecialistName),
-            stringOrEmpty(item.assignedBy),
-            stringOrEmpty(item.assignedByDate),
-            stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
-            item.isDefault,
-            crossSellingProducts,
-            item.isCrossSellingProduct,
-            stringOrEmpty(item.isProductSpecialistEditDisabled),
-            stringOrEmpty(item.isProductDisabled),
-            stringOrEmpty(item.productSpecialist)
+                item.stageID.toString(),
+                stringOrEmpty(item.stageName), item.statusID.toString(),
+                stringOrEmpty(item.statusName), item.interestedIn.toString(),
+                stringOrEmpty(item.productName),
+                stringOrEmpty(item.primaryRMName),
+                stringOrEmpty(item.productSpecialistName),
+                stringOrEmpty(item.assignedBy),
+                stringOrEmpty(item.assignedByDate),
+                stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
+                item.isDefault,
+                crossSellingProducts,
+                item.isCrossSellingProduct,
+                stringOrEmpty(item.isProductSpecialistEditDisabled),
+                stringOrEmpty(item.isProductDisabled),
+                stringOrEmpty(item.productSpecialist)
         )
     }
 
     private fun getLeadDetailAddProductModel(
-        item: AddProductData
+            item: AddProductData
     ): LeadDetailAddProductModel {
         val crossSellingProducts: List<CrossSellingProductsModel> =
-            getCrossSellingProductsModel(item.crossSellingProducts)
+                getCrossSellingProductsModel(item.crossSellingProducts)
         return LeadDetailAddProductModel(
-            item.stageId,
-            stringOrEmpty(item.stageName), item.statusId,
-            stringOrEmpty(item.statusName), item.interestedIn,
-            stringOrEmpty(item.prodName),
-            stringOrEmpty(item.primRMName),
-            stringOrEmpty(item.productSpecialistName),
-            stringOrEmpty(item.assignedBy),
-            stringOrEmpty(item.assignedByDate),
-            stringOrEmpty(item.clientCode), item.leadProductMappingId,
-            item.isDefault,
-            crossSellingProducts,
-            item.isCrossSellingProduct,
-            stringOrEmpty(item.isProdSpecEditDisabled),
-            stringOrEmpty(item.isProdDisabled),
-            stringOrEmpty(item.prodSpecialist)
+                item.stageId,
+                stringOrEmpty(item.stageName), item.statusId,
+                stringOrEmpty(item.statusName), item.interestedIn,
+                stringOrEmpty(item.prodName),
+                stringOrEmpty(item.primRMName),
+                stringOrEmpty(item.productSpecialistName),
+                stringOrEmpty(item.assignedBy),
+                stringOrEmpty(item.assignedByDate),
+                stringOrEmpty(item.clientCode), item.leadProductMappingId,
+                item.isDefault,
+                crossSellingProducts,
+                item.isCrossSellingProduct,
+                stringOrEmpty(item.isProdSpecEditDisabled),
+                stringOrEmpty(item.isProdDisabled),
+                stringOrEmpty(item.prodSpecialist)
         )
     }
 
@@ -2136,13 +2212,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         if (products != null && products.size > 0) {
             for ((leadProductId, productId, statusId, productName, statusName) in products) {
                 crossSellingProducts.add(
-                    CrossSellingProductsModel(
-                        leadProductId,
-                        productId,
-                        statusId,
-                        productName,
-                        statusName
-                    )
+                        CrossSellingProductsModel(
+                                leadProductId,
+                                productId,
+                                statusId,
+                                productName,
+                                statusName
+                        )
                 )
             }
         }
@@ -2191,7 +2267,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
     override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
-    override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
+    override fun getSelectedState(): RowData {
+        Timber.i("SelectedState=>>>>%s", binding.spState.selectedItem)
+        return binding.spState.selectedItem as RowData
+    }
+
     override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
 
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
@@ -2244,12 +2324,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             stageDatas.toMutableList()
-                .clear()
+                    .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             stageDatas.toMutableList()
-                .clear()
+                    .clear()
             stageDatas = it
             stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageDatas)
         }
@@ -2259,16 +2339,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             statusDatas.toMutableList()
-                .clear()
+                    .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             statusDatas.toMutableList()
-                .clear()
+                    .clear()
             statusDatas = it
             statusAdapter.setSpinnerData(
-                requireNotNull(addProductDialogBinding).spStatus,
-                statusDatas
+                    requireNotNull(addProductDialogBinding).spStatus,
+                    statusDatas
             )
         }
     }
@@ -2289,10 +2369,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     companion object {
         @JvmStatic
         fun newInstance(
-            position: Int,
-            type: String,
-            leadID: String,
-            ucId: String
+                position: Int,
+                type: String,
+                leadID: String,
+                ucId: String
         ): LeadDetailFragment {
             return LeadDetailFragment().apply {
                 val args = Bundle().apply {

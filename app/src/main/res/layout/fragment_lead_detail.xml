@@ -24,8 +24,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/tvClientDetail"
@@ -51,8 +51,8 @@
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:padding="@dimen/_5sdp"
-                    tools:visibility="visible"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -535,8 +535,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilDob"
@@ -578,8 +578,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAnniversary"
@@ -880,8 +880,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -903,8 +903,8 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
-                            tools:visibility="visible"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:visibility="visible" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tl_contact_person"
@@ -924,8 +924,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobileNumber"
@@ -993,8 +993,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1120,8 +1120,8 @@
                         android:focusableInTouchMode="true"
                         android:textColor="@color/error_red"
                         android:textSize="@dimen/_10sdp"
-                        tools:visibility="visible"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -1219,8 +1219,8 @@
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginEnd="5dp"
                             android:paddingStart="@dimen/_15sdp"
-                            tools:visibility="visible"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:visibility="visible" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -1265,8 +1265,8 @@
                             android:layout_marginTop="@dimen/_22sdp"
                             android:layout_marginEnd="5dp"
                             android:paddingStart="@dimen/_15sdp"
-                            tools:visibility="visible"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:visibility="visible" />
                     </RelativeLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1568,8 +1568,7 @@
                                 android:id="@+id/spState"
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:entries="@array/Select" />
+                                android:layout_height="wrap_content" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <TextView
@@ -1594,6 +1593,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/Select" />
+                            />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1654,8 +1654,8 @@
                             android:text="@string/lead_detail_same_as_above"
                             android:textColor="@color/secondaryTextColor"
                             android:textSize="@dimen/_12sdp"
-                            tools:visibility="visible"
-                            android:visibility="gone" />
+                            android:visibility="gone"
+                            tools:visibility="visible" />
 
                         <CheckBox
                             android:id="@+id/cbOffPrimaryAddress"
@@ -1967,8 +1967,8 @@
                 android:layout_marginTop="@dimen/_6sdp"
                 android:background="@drawable/list_bacground"
                 android:orientation="vertical"
-                tools:visibility="visible"
-                android:visibility="gone">
+                android:visibility="gone"
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/tvClientPortfolioDetails"
@@ -1993,8 +1993,8 @@
                     android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    tools:visibility="visible"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <include
                         android:id="@+id/include_portfolio"
