@@ -1667,9 +1667,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 getJsonSafeString(binding.etAdd1.text.toString().trim()),
                 getJsonSafeString(binding.etAdd2.text.toString().trim()),
                 getJsonSafeString(binding.etAdd3.text.toString().trim()),
-                /*countryCodeStr*/(binding.spCountry.selectedItem as RowData).key,
-                /*stateCodeStr*/(binding.spState.selectedItem as RowData).key,
-                /*cityCodeStr*/(binding.spCity.selectedItem as RowData).key,
+                (binding.spCountry.selectedItem as RowData).key,
+                (binding.spState.selectedItem as RowData).key,
+                (binding.spCity.selectedItem as RowData).key,
                 binding.etPincode.text.toString().trim(),
                 binding.cbPrimaryAddress.isChecked,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
@@ -1681,9 +1681,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 getJsonSafeString(binding.etOffAdd1.text.toString().trim()),
                 getJsonSafeString(binding.etOffAdd2.text.toString().trim()),
                 getJsonSafeString(binding.etOffAdd3.text.toString().trim()),
-                /*offCountryCodeStr*/(binding.spOffCountry.selectedItem as RowData).key,
-                /*offStateCodeStr*/(binding.spOffState.selectedItem as RowData).key,
-                /*offCityCodeStr*/(binding.spOffCity.selectedItem as RowData).key,
+                (binding.spOffCountry.selectedItem as RowData).key,
+                (binding.spOffState.selectedItem as RowData).key,
+                (binding.spOffCity.selectedItem as RowData).key,
                 binding.etOffPincode.text.toString().trim(),
                 binding.cbOffPrimaryAddress.isChecked,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
@@ -1746,10 +1746,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         leadDetailModel.refereeEmail = binding.etRefereeEmail.text.toString().trim()
         leadDetailModel.refereeMobile = binding.etRefereeNumber.text.toString().trim()
         leadDetailModel.comments = getJsonSafeString(binding.etComments.text.toString().trim())
-        leadDetailModel.profileID = /*profileCodeStr*/
-            (binding.spProfile.selectedItem as RowData).key
-        leadDetailModel.professionID = /*professionCodeStr*/
-            (binding.spProfession.selectedItem as RowData).key
+        leadDetailModel.profileID = (binding.spProfile.selectedItem as RowData).key
+        leadDetailModel.professionID = (binding.spProfession.selectedItem as RowData).key
         leadDetailModel.createdBy = binding.etCreatedBy.text.toString().trim()
         leadDetailModel.createdThrough = "0"
         leadDetailModel.creationDate = binding.etCreationDate.text.toString().trim()
@@ -2103,8 +2101,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
         sourceIdstr = sourceId
         leadProspetSourceIdstr = leadSourceId.toString()
-        binding.etLeadID.setText(leadId) //Himanshu
-        binding.etLeadName.setText(contact?.name) //Himanshu
+        binding.etLeadID.setText(leadId) 
+        binding.etLeadName.setText(contact?.name)
         try {//Jeet
             binding.etCreationDate.setText(
                 CRMAppUtil.getDateFromString(
@@ -2115,12 +2113,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         } catch (e: Exception) {
             binding.etCreationDate.setText(createdDate.replace("T", " "))
         }//Jeet
-        binding.etSource.setText(sourceName) //Himanshu
+        binding.etSource.setText(sourceName) 
 
-        binding.etMobileNumber.setText(contact?.mobile) //Himanshu
-        binding.etAlternateMobileNumber.setText(contact?.alternateMobileNo) //Himanshu
-        binding.etEmail.setText(contact?.emailId) //Himanshu
-        binding.etAlternateEmail.setText(contact?.alternateEmailId) //Himanshu
+        binding.etMobileNumber.setText(contact?.mobile) 
+        binding.etAlternateMobileNumber.setText(contact?.alternateMobileNo) 
+        binding.etEmail.setText(contact?.emailId) 
+        binding.etAlternateEmail.setText(contact?.alternateEmailId) 
 
         binding.etLeadCategory.setText(leadCategoryText)
 
