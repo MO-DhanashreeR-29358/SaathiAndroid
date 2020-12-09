@@ -74,8 +74,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private lateinit var binding: FragmentLeadDetailBinding
     private var isReferee = false
 
-    private var leadId = "0"
-    private var ucId = "0"
+    private var leadId = "-1"
+    private var ucId = "-1"
     private var sourceIdstr = ""
     private var leadProspetSourceIdstr = ""
 
