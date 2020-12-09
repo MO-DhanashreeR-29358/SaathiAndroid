@@ -73,6 +73,10 @@ class LeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(professionRequest)
     }
 
+    override fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
+        return saathiApi.updateLead(request)
+    }
+
     override fun getInterestInRowDatas(): Observable<List<RowData>> {
         val interestInRequest = LookupRequest(
                 businessUnitId = requireNotNull(
@@ -196,19 +200,19 @@ class LeadCreationRepositoryImpl @Inject constructor(
         return getReferee(type = TYPE_REFEREE_NAME, text = text)
     }
 
-  override fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead> {
-    val request = TransferLeadRequest(
-        mobile = leadIdMobilePair.second,
-        currentUser = userManager.user.employeeCode
-    )
-    return saathiApi.transferLead(request)
-        .map {
-          if (it.status) {
-            TransferLead(
-                leadIdForTransfer = leadIdMobilePair.first,
-                isPaymentDone = it.response?.isPaymentDone ?: false,
-                message = it.message
-            )
+    override fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead> {
+        val request = TransferLeadRequest(
+                mobile = leadIdMobilePair.second,
+                currentUser = userManager.user.employeeCode
+        )
+        return saathiApi.transferLead(request)
+                .map {
+                    if (it.status) {
+                        TransferLead(
+                                leadIdForTransfer = leadIdMobilePair.first,
+                                isPaymentDone = it.response?.isPaymentDone ?: false,
+                                message = it.message
+                        )
 
                     } else {
                         throw ServiceFailureException(it.message)

@@ -2,6 +2,7 @@ package com.mosl.tabapp.leadcreation.domain
 
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
@@ -24,11 +25,13 @@ interface LeadCreationRepository {
 
     fun getProfessionRowDatas(): Observable<List<RowData>>
 
-  fun getInterestInRowDatas(): Observable<List<RowData>>
-  fun getCountryRowDatas(): Observable<List<RowData>>
-  fun getProfileRowDatas(): Observable<List<RowData>>
-  fun updateProfile(
-    profile: RowData,
-    ucId: String
-  ): Observable<Pair<String, String>>
+    fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse>
+
+    fun getInterestInRowDatas(): Observable<List<RowData>>
+    fun getCountryRowDatas(): Observable<List<RowData>>
+    fun getProfileRowDatas(): Observable<List<RowData>>
+    fun updateProfile(
+            profile: RowData,
+            ucId: String
+    ): Observable<Pair<String, String>>
 }

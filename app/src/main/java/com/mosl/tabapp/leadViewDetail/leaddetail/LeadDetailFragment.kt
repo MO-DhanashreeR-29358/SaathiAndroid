@@ -48,12 +48,9 @@ import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailUiEvent.UpdateBtnEven
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.Contact
-import com.mosl.tabapp.model.AddressDetailModel
-import com.mosl.tabapp.model.ContactDetailModel
-import com.mosl.tabapp.model.EmployeeModel
-import com.mosl.tabapp.model.LeadFieldSectionModel
-import com.mosl.tabapp.model.LeadFieldValueModel
+import com.mosl.tabapp.model.*
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
@@ -62,6 +59,8 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.*
+import com.mosl.validator.data.ValidationError
+import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_lead_creation.*
@@ -148,8 +147,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
+            view: View,
+            savedInstanceState: Bundle?
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentLeadDetailBinding.bind(view)
@@ -161,17 +160,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private fun setupView() {
         with(binding) {
             val arrayPmsProduct =
-                requireActivity().resources.getStringArray(R.array.selectPmsProduct)
+                    requireActivity().resources.getStringArray(R.array.selectPmsProduct)
             pmsList =
-                ArrayList(Arrays.asList(*arrayPmsProduct))
+                    ArrayList(Arrays.asList(*arrayPmsProduct))
             setIcon(llClientDetail, tvClientDetail)
             setIcon(llLeadDetail, tvLeadDetail)
             setIcon(llClientPortfolio, tvClientPortfolioDetails)
             etDob.inputType = InputType.TYPE_NULL
             etAnniversary.inputType = InputType.TYPE_NULL
             etPanNumber.filters = arrayOf(
-                InputFilter.LengthFilter(10),
-                InputFilter.AllCaps()
+                    InputFilter.LengthFilter(10),
+                    InputFilter.AllCaps()
             )
             includePortfolio.apply {
                 btnBrokPortfolio.gone()
@@ -195,9 +194,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun setIcon(
-        parent: View,
-        icon: TextView,
-        Section: String
+            parent: View,
+            icon: TextView,
+            Section: String
     ) {
         if (Section.equals("OUTER", ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
@@ -259,13 +258,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 binding.tvProfile.text = it.second
             else
                 MSFDialog.alertDialog(
-                    requireContext(),
-                    0,
-                    getString(R.string.motilal_oswal),
-                    it.first,
-                    "OK",
-                    true,
-                    null
+                        requireContext(),
+                        0,
+                        getString(R.string.motilal_oswal),
+                        it.first,
+                        "OK",
+                        true,
+                        null
                 )
         }
     }
@@ -278,8 +277,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             setContentView(dialogBinding.root)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             window?.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             )
             dialogBinding.spProfile.apply {
                 adapter = profileAdapter
@@ -292,7 +291,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             }
 
         }
-            .show()
+                .show()
     }
 
     override fun onAddProductClicked(): Observable<Unit> {
@@ -322,13 +321,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
         uiModel.onFailure {
             val model = listOf(
-                EmployeeModel.getNoData(getErrorOnFailureNew(it))
+                    EmployeeModel.getNoData(getErrorOnFailureNew(it))
             )
             assignToDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(),
-                    model
-                )
+                    AttendeeAdapter(
+                            requireContext(),
+                            model
+                    )
             )
         }
 
@@ -338,19 +337,19 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 it.filter {
                     it.code == userManager.user.employeeCode
                 }
-                    .map {
-                        EmployeeModel(
-                            it.name, it.code, it.branchCode, false
-                        )
-                    }
+                        .map {
+                            EmployeeModel(
+                                    it.name, it.code, it.branchCode, false
+                            )
+                        }
             } else {
                 EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE)
             }
 
             assignToDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(), list
-                )
+                    AttendeeAdapter(
+                            requireContext(), list
+                    )
             )
         }
 
@@ -367,7 +366,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
         uiModel.onSuccess {
             Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG)
-                .show()
+                    .show()
 
             if ("0".equals(leadId, ignoreCase = true)) {
 
@@ -375,19 +374,19 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 val uCID = it[0].ucId
 
                 MSFDialog.alertDialog(
-                    requireActivity(), 0,
-                    resources.getString(
-                        R.string.motilal_oswal
-                    ), "Product Added Successfully with leadId "
-                            + leadID, "OK", true
+                        requireActivity(), 0,
+                        resources.getString(
+                                R.string.motilal_oswal
+                        ), "Product Added Successfully with leadId "
+                        + leadID, "OK", true
                 ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
                         val bundle = Bundle()
                         bundle.putString(LEAD_ID, leadID)
                         bundle.putString(MOSLConstants.UCID, uCID)
                         navigator.openPage(
-                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
-                            forceReload = false
+                                NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                                forceReload = false
                         )
                     }
                 }
@@ -397,33 +396,34 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         val potentialPMSProduct = stringOrEmpty(datum.potentialPmsProduct)
                         isPotentialPMSProduct = potentialPMSProduct.isEmpty()
                         pmsProductAdapter.setSpinnerDataWithSelection(
-                            binding.spPmsProduct, pmsProductArray.toList(), potentialPMSProduct
+                                binding.spPmsProduct, pmsProductArray.toList(), potentialPMSProduct
                         )
                         leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
                     }
                     leadDetailAddProductAdapter =
-                        LeadDetailAddProductAdapter(
-                            saathiApi,
-                            requireContext(),
-                            leadDetailAddProductList,
-                            binding.lvAddProduct,
-                            leadId,
-                            isLeadEditable,
-                            statusDatas,
-                            statusAdapter,
-                            userManager.getUser()?.employeeCode,
-                            status,
-                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                            (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
-                        )
+                            LeadDetailAddProductAdapter(
+                                    saathiApi,
+                                    requireContext(),
+                                    leadDetailAddProductList,
+                                    binding.lvAddProduct,
+                                    leadId,
+                                    isLeadEditable,
+                                    statusDatas,
+                                    statusAdapter,
+                                    userManager.getUser()?.employeeCode,
+                                    status,
+                                    userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                                    (binding.spPmsProduct.selectedItem as? RowData)?.value
+                                            ?: emptyString()
+                            )
                     binding.lvAddProduct.adapter = leadDetailAddProductAdapter
                     CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
                 }
                 MSFDialog.alertDialog(
-                    requireActivity(), 0,
-                    resources.getString(R.string.motilal_oswal),
-                    "Product Added Successfully", "OK",
-                    true
+                        requireActivity(), 0,
+                        resources.getString(R.string.motilal_oswal),
+                        "Product Added Successfully", "OK",
+                        true
                 ) { _: Action?, _: Array<Any?>? ->
                     //leadSection()
                 }
@@ -442,13 +442,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
         uiModel.onFailure {
             val model = listOf(
-                EmployeeModel.getNoData(getErrorOnFailureNew(it))
+                    EmployeeModel.getNoData(getErrorOnFailureNew(it))
             )
             productSpecialDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(),
-                    model
-                )
+                    AttendeeAdapter(
+                            requireContext(),
+                            model
+                    )
             )
         }
 
@@ -457,19 +457,19 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 it.filter {
                     it.code != userManager.user.employeeCode
                 }
-                    .map {
-                        EmployeeModel(
-                            it.name, it.code, it.branchCode, false
-                        )
-                    }
+                        .map {
+                            EmployeeModel(
+                                    it.name, it.code, it.branchCode, false
+                            )
+                        }
             } else {
                 listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
             }
 
             productSpecialDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(), list
-                )
+                    AttendeeAdapter(
+                            requireContext(), list
+                    )
             )
         }
 
@@ -490,8 +490,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             setContentView(dialogBinding.root)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             window?.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
             )
             dialogBinding.dacProductSpecialist.hint = resources.getString(R.string.str_prod_spl)
             dialogBinding.actAssignTo.hint = resources.getString(R.string.str_assing)
@@ -501,55 +501,55 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             dialogBinding.dacProductSpecialist.setOnClickListener {
 
                 requireActivity().window
-                    .setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                    )
+                        .setSoftInputMode(
+                                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                                        or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                        )
 
                 val searchListProductSpecialist =
-                    CustomListPickerDialog(requireContext())
+                        CustomListPickerDialog(requireContext())
 
                 searchListProductSpecialist.threshold = SEARCH_LENTH
 
                 searchListProductSpecialist.show()
                 searchListProductSpecialist.setCustomTitle(
-                    resources.getString(R.string.str_prod_spl)
+                        resources.getString(R.string.str_prod_spl)
                 )
                 val productSpecialistViewListner: ListPickerListneable =
-                    object : ListPickerListneable {
-                        override fun onListItemSelect(data: Parcelable) {
-                            val clientModel =
-                                data as EmployeeModel
-                            if (clientModel.isNoData) {
-                                return
-                            }
-                            dialogBinding.dacProductSpecialist.setText(clientModel.attendeeName)
-                            specialistAdd = clientModel.attendeeCode
-                            dialogBinding.dacProductSpecialist.setClearIconVisible(true)
-                            searchListProductSpecialist.dismiss()
-                        }
-
-                        override fun onSearchTextChanged(constraint: CharSequence?) {
-                            if (constraint != null) {
-
-                                primaryRm = if (CRMAppUtil.isBlank(leadOwne.trim())) {
-                                    advisoryCode
-                                } else {
-                                    leadOwne
+                        object : ListPickerListneable {
+                            override fun onListItemSelect(data: Parcelable) {
+                                val clientModel =
+                                        data as EmployeeModel
+                                if (clientModel.isNoData) {
+                                    return
                                 }
-                                val rm = primaryRm!!
-                                productSpecialDialog = searchListProductSpecialist
-                                subject.onNext(
-                                    ProductSpecialistEvent(
-                                        selectedProduct = constraint.toString(),
-                                        primaryRM = rm
-                                    )
-                                )
+                                dialogBinding.dacProductSpecialist.setText(clientModel.attendeeName)
+                                specialistAdd = clientModel.attendeeCode
+                                dialogBinding.dacProductSpecialist.setClearIconVisible(true)
+                                searchListProductSpecialist.dismiss()
+                            }
 
-                                //searchProductSpecialist(constraint, searchListProductSpecialist)
+                            override fun onSearchTextChanged(constraint: CharSequence?) {
+                                if (constraint != null) {
+
+                                    primaryRm = if (CRMAppUtil.isBlank(leadOwne.trim())) {
+                                        advisoryCode
+                                    } else {
+                                        leadOwne
+                                    }
+                                    val rm = primaryRm!!
+                                    productSpecialDialog = searchListProductSpecialist
+                                    subject.onNext(
+                                            ProductSpecialistEvent(
+                                                    selectedProduct = constraint.toString(),
+                                                    primaryRM = rm
+                                            )
+                                    )
+
+                                    //searchProductSpecialist(constraint, searchListProductSpecialist)
+                                }
                             }
                         }
-                    }
                 searchListProductSpecialist.setmListner(productSpecialistViewListner)
 
             }
@@ -558,10 +558,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             }
             dialogBinding.actAssignTo.setOnClickListener {
                 requireActivity().window
-                    .setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                    )
+                        .setSoftInputMode(
+                                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                                        or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                        )
                 val searchList = CustomListPickerDialog(requireContext())
                 searchList.show()
                 searchList.threshold = SEARCH_LENTH
@@ -569,7 +569,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 val assingViewListner: ListPickerListneable = object : ListPickerListneable {
                     override fun onListItemSelect(data: Parcelable) {
                         val clientModel =
-                            data as EmployeeModel
+                                data as EmployeeModel
                         if (clientModel.isNoData) {
                             return
                         }
@@ -599,22 +599,22 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedDatas)
 
             dialogBinding.spInterestedIn.itemSelections()
-                .filter(InvalidSelectionPredicate)
-                .map { dialogBinding.spInterestedIn.selectedItem as RowData }
-                .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
-                .subscribe {
-                    subject.onNext(SelectInterestedProductEvent(it))
-                }
-                .addTo(disposable)
+                    .filter(InvalidSelectionPredicate)
+                    .map { dialogBinding.spInterestedIn.selectedItem as RowData }
+                    .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
+                    .subscribe {
+                        subject.onNext(SelectInterestedProductEvent(it))
+                    }
+                    .addTo(disposable)
 
             dialogBinding.spStage.itemSelections()
-                .filter(InvalidSelectionPredicate)
-                .map { dialogBinding.spStage.selectedItem as RowData }
-                .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
-                .subscribe {
-                    subject.onNext(SelectStageEvent(it))
-                }
-                .addTo(disposable)
+                    .filter(InvalidSelectionPredicate)
+                    .map { dialogBinding.spStage.selectedItem as RowData }
+                    .filter { it.key != LeadDetailView.INVALID_SELECTION_KEY }
+                    .subscribe {
+                        subject.onNext(SelectStageEvent(it))
+                    }
+                    .addTo(disposable)
 
 
 
@@ -639,64 +639,65 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
                 //Mandatory chec end
                 val interestedInKey =
-                    (dialogBinding.spInterestedIn.selectedItem as RowData).key
+                        (dialogBinding.spInterestedIn.selectedItem as RowData).key
                 val interestedInDisplayText =
-                    (dialogBinding.spInterestedIn.selectedItem as RowData).value
+                        (dialogBinding.spInterestedIn.selectedItem as RowData).value
                 if (leadDetailAddProductList.size == 0) {
                     leadDetailAddProductAdapter =
-                        LeadDetailAddProductAdapter(
-                            saathiApi,
-                            requireContext(),
-                            leadDetailAddProductList,
-                            binding.lvAddProduct,
-                            leadId,
-                            isLeadEditable,
-                            statusDatas,
-                            statusAdapter,
-                            userManager.getUser()?.employeeCode,
-                            status,
-                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                            (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
-                        )
+                            LeadDetailAddProductAdapter(
+                                    saathiApi,
+                                    requireContext(),
+                                    leadDetailAddProductList,
+                                    binding.lvAddProduct,
+                                    leadId,
+                                    isLeadEditable,
+                                    statusDatas,
+                                    statusAdapter,
+                                    userManager.getUser()?.employeeCode,
+                                    status,
+                                    userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                                    (binding.spPmsProduct.selectedItem as? RowData)?.value
+                                            ?: emptyString()
+                            )
                 }
                 if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true) {
                     MSFDialog.alertDialog(
-                        requireContext(), 0,
-                        resources.getString(R.string.motilal_oswal),
-                        "$interestedInDisplayText is already selected", "OK", true, null
+                            requireContext(), 0,
+                            resources.getString(R.string.motilal_oswal),
+                            "$interestedInDisplayText is already selected", "OK", true, null
                     )
                 } else {
                     if (isPotentialPMSProduct) {
                         MSFDialog.alertDialog(
-                            requireActivity(),
-                            0,
-                            resources.getString(R.string.motilal_oswal),
-                            POTENTIAL_INVEST_IN_PRODUCT,
-                            YES,
-                            NO,
-                            true
+                                requireActivity(),
+                                0,
+                                resources.getString(R.string.motilal_oswal),
+                                POTENTIAL_INVEST_IN_PRODUCT,
+                                YES,
+                                NO,
+                                true
                         ) { action: Action, data: Array<Any?>? ->
                             if (action == Action.OK) {
                                 addProduct(
-                                    (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                                    (dialogBinding.spStage.selectedItem as RowData).key,
-                                    (dialogBinding.spStatus.selectedItem as RowData).key,
-                                    YES
+                                        (dialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                        (dialogBinding.spStage.selectedItem as RowData).key,
+                                        (dialogBinding.spStatus.selectedItem as RowData).key,
+                                        YES
                                 )
                             } else {
                                 addProduct(
-                                    (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                                    (dialogBinding.spStage.selectedItem as RowData).key,
-                                    (dialogBinding.spStatus.selectedItem as RowData).key,
-                                    NO
+                                        (dialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                        (dialogBinding.spStage.selectedItem as RowData).key,
+                                        (dialogBinding.spStatus.selectedItem as RowData).key,
+                                        NO
                                 )
                             }
                         }
                     } else {
                         addProduct(
-                            (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                            (dialogBinding.spStage.selectedItem as RowData).key,
-                            (dialogBinding.spStatus.selectedItem as RowData).key, ""
+                                (dialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                (dialogBinding.spStage.selectedItem as RowData).key,
+                                (dialogBinding.spStatus.selectedItem as RowData).key, ""
                         )
                     }
                 }
@@ -708,28 +709,28 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 dismiss()
             }
         }
-            .show()
+                .show()
     }
 
     private fun addProduct(
-        interestedIn: String,
-        stage: String,
-        status: String,
-        productMapping: String
+            interestedIn: String,
+            stage: String,
+            status: String,
+            productMapping: String
     ) {
         //data
         val data = InsertLeadProductRequest(
-            leadId,
-            ucId,
-            interestedIn,
-            interestedIn,
-            primaryRm ?: "",
-            specialistAdd ?: "",
-            userManager.getUser()?.employeeCode.toString(),
-            CRMAppUtil.getDBDate(),
-            stage,
-            status,
-            productMapping
+                leadId,
+                ucId,
+                interestedIn,
+                interestedIn,
+                primaryRm ?: "",
+                specialistAdd ?: "",
+                userManager.getUser()?.employeeCode.toString(),
+                CRMAppUtil.getDBDate(),
+                stage,
+                status,
+                productMapping
         )
         //event
         subject.onNext(AddProductEvent(data))
@@ -843,10 +844,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun renderDOBClick() {
         CustomDatePickerDialog(
-            requireContext(),
-            false,
-            binding.etDob.text.toString(),
-            true
+                requireContext(),
+                false,
+                binding.etDob.text.toString(),
+                true
         )
         { date ->
             binding.tvAnniversaryError.visibility = View.GONE
@@ -857,10 +858,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun renderAnniversaryClick() {
         CustomDatePickerDialog(
-            requireContext(),
-            false,
-            binding.etAnniversary.text.toString(),
-            true
+                requireContext(),
+                false,
+                binding.etAnniversary.text.toString(),
+                true
         )
         { date ->
             binding.tvAnniversaryError.visibility = View.GONE
@@ -907,9 +908,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun togglePortfolio() {
         toggleSectionExpansion(
-            binding.includePortfolio.llPortfolio,
-            binding.includePortfolio.txtPortfolioSnapshot,
-            OUTER
+                binding.includePortfolio.llPortfolio,
+                binding.includePortfolio.txtPortfolioSnapshot,
+                OUTER
         )
     }
 
@@ -923,17 +924,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleProfitLoss() {
         toggleSectionExpansion(
-            binding.includePortfolio.llProfitLoss,
-            binding.includePortfolio.txtPorfitLoss,
-            OUTER
+                binding.includePortfolio.llProfitLoss,
+                binding.includePortfolio.txtPorfitLoss,
+                OUTER
         )
     }
 
     override fun toggleAvailableLimit() {
         toggleSectionExpansion(
-            binding.includePortfolio.llAvailableLimits,
-            binding.includePortfolio.txtAvailableLimits,
-            OUTER
+                binding.includePortfolio.llAvailableLimits,
+                binding.includePortfolio.txtAvailableLimits,
+                OUTER
         )
     }
 
@@ -943,9 +944,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleBrokingPortfolio() {
         toggleSectionExpansion(
-            binding.includePortfolio.llBorkingPortfolio,
-            binding.includePortfolio.txtBrokingPortfolio,
-            INNER
+                binding.includePortfolio.llBorkingPortfolio,
+                binding.includePortfolio.txtBrokingPortfolio,
+                INNER
         )
     }
 
@@ -956,9 +957,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleAssetPortfolio() {
         toggleSectionExpansion(
-            binding.includePortfolio.llAssestPortfolio,
-            binding.includePortfolio.txtAssestPortfolio,
-            INNER
+                binding.includePortfolio.llAssestPortfolio,
+                binding.includePortfolio.txtAssestPortfolio,
+                INNER
         )
     }
 
@@ -968,9 +969,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleLedger() {
         toggleSectionExpansion(
-            binding.includePortfolio.llCash,
-            binding.includePortfolio.txtCash,
-            INNER
+                binding.includePortfolio.llCash,
+                binding.includePortfolio.txtCash,
+                INNER
         )
     }
 
@@ -980,9 +981,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleBrokingProduct() {
         toggleSectionExpansion(
-            binding.includePortfolio.llBorkingProducts,
-            binding.includePortfolio.txtBrokingProducts,
-            INNER
+                binding.includePortfolio.llBorkingProducts,
+                binding.includePortfolio.txtBrokingProducts,
+                INNER
         )
     }
 
@@ -992,9 +993,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun toggleAssetProduct() {
         toggleSectionExpansion(
-            binding.includePortfolio.llAssestProducts,
-            binding.includePortfolio.txtAssestProducts,
-            INNER
+                binding.includePortfolio.llAssestProducts,
+                binding.includePortfolio.txtAssestProducts,
+                INNER
         )
     }
 
@@ -1020,7 +1021,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onLeadNameAfterTextChanged(): Observable<String> {
         return binding.etLeadName.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun renderOnLeadNameAfterTextChange(text: String) {
@@ -1028,7 +1029,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        text
+                            text
                     ) -> binding.tlLeadName.disableErrorMessages()
                     else -> {
                         binding.tlLeadName.setErrorMessages(ErrorMsgName)
@@ -1043,7 +1044,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onProsRefereeNameAfterTextChanged(): Observable<String> {
         return binding.etProspectRefereeName.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun renderOnProsRefereeNameAfterTextChange(text: String) {
@@ -1051,7 +1052,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        text
+                            text
                     ) -> binding.tlProspectRefereeName.disableErrorMessages()
                     else -> {
                         binding.tlProspectRefereeName.setErrorMessages(ErrorMsgName)
@@ -1066,7 +1067,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onProsRefereeMobileTextChanged(): Observable<String> {
         return binding.etProspectRefereerMobile.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnProsRefereeMobileTextChange(text: String) {
@@ -1074,7 +1075,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        text
+                            text
                     ) -> binding.tlProspectRefereeMob.disableErrorMessages()
                     else -> {
                         binding.tlProspectRefereeMob.setErrorMessages(ErrorMsgName)
@@ -1089,7 +1090,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onProsRefereeEmailTextChanged(): Observable<String> {
         return binding.etProspectRefereerEmail.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnProsRefereeEmailTextChange(text: String) {
@@ -1097,7 +1098,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMValidationRule.isValidEmail(
-                        text
+                            text
                     ) -> binding.tlProspectRefereeEmail.disableErrorMessages()
                     else -> {
                         binding.tlProspectRefereeEmail.setErrorMessages(INVALID_EMAIL_ID)
@@ -1112,7 +1113,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onContactPersonAfterTextChanged(): Observable<String> {
         return binding.etContactPerson.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun renderOnContactPersonAfterTextChange(text: String) {
@@ -1120,7 +1121,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                        text
+                            text
                     ) -> binding.tlContactPerson.disableErrorMessages()
                     else -> {
                         binding.tlContactPerson.setErrorMessages(ErrorMsgName)
@@ -1135,7 +1136,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onLandLineAfterTextChanged(): Observable<String> {
         return binding.etLandlineNumber.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun renderOnLandLineAfterTextChange(text: String) {
@@ -1144,7 +1145,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 text.isNotBlank() -> {
                     when {
                         CRMValidationRule.validateTel(
-                            text
+                                text
                         ) -> binding.tlLand.disableErrorMessages()
                         else -> {
                             binding.tlLand.setErrorMessages(INVALID_LAND_LINE)
@@ -1160,7 +1161,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAlterMobileTextChanged(): Observable<String> {
         return binding.etAlternateMobileNumber.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnAlterMobileTextChange(text: String) {
@@ -1169,7 +1170,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 text.isNotBlank() -> {
                     when {
                         CRMValidationRule.validateMobile(
-                            text
+                                text
                         ) -> binding.tlAlternateMobile.disableErrorMessages()
                         else -> {
                             binding.tlAlternateMobile.setErrorMessages(INVALID_MOBILE_NO)
@@ -1185,7 +1186,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAlterEmailTextChanged(): Observable<String> {
         return binding.etAlternateEmail.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnAlterEmailTextChange(text: String) {
@@ -1194,7 +1195,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 text.isNotBlank() -> {
                     when {
                         CRMValidationRule.isValidEmail(
-                            text
+                                text
                         ) -> binding.tlAlternateEmail.disableErrorMessages()
                         else -> {
                             binding.tlAlternateEmail.setErrorMessages(INVALID_EMAIL_ID)
@@ -1210,7 +1211,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onEmailTextChanged(): Observable<String> {
         return binding.etEmail.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnEmailTextChange(text: String) {
@@ -1219,7 +1220,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 text.isNotBlank() -> {
                     when {
                         CRMValidationRule.isValidEmail(
-                            text
+                                text
                         ) -> binding.tlEmail.disableErrorMessages()
                         else -> {
                             binding.tlEmail.setErrorMessages(INVALID_EMAIL_ID)
@@ -1235,7 +1236,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onPanTextChanged(): Observable<String> {
         return binding.etPanNumber.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnPanTextChange(text: String) {
@@ -1243,7 +1244,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMValidationRule.isValidPannumber(
-                        text
+                            text
                     ) -> binding.tlPan.disableErrorMessages()
                     else -> {
                         binding.tlPan.setErrorMessages(INVALID_PAN)
@@ -1356,10 +1357,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 color.action_bar_positive
             }
             overallchgamt.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    bgColorOverall
-                )
+                    ContextCompat.getColor(
+                            requireContext(),
+                            bgColorOverall
+                    )
             )
 
             val bgColorOverallPer = if (overallChangePer.startsWith("-")) {
@@ -1368,7 +1369,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 color.action_bar_positive
             }
             overallchgperst.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), bgColorOverallPer)
+                    ContextCompat.getColor(requireContext(), bgColorOverallPer)
             )
 
             ///////////broking portfolio
@@ -1376,20 +1377,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val brokingMapList = mutableListOf<HashMap<String, String>>()
             brokingPortfolios.forEach {
                 val map = hashMapOf(
-                    PRODUCT to it.productName,
-                    INVEST_AMT to StringStuff.commaDecorator(it.investmentValue),
-                    PURCHASE_VALUE to StringStuff.commaDecorator(it.marketValue),
-                    OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
-                    PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
-                        "${it.percentageGainLoss} %"
-                    ),
-                    MOSLConstants.PRODUCT_ID to it.productId
+                        PRODUCT to it.productName,
+                        INVEST_AMT to StringStuff.commaDecorator(it.investmentValue),
+                        PURCHASE_VALUE to StringStuff.commaDecorator(it.marketValue),
+                        OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
+                        PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
+                                "${it.percentageGainLoss} %"
+                        ),
+                        MOSLConstants.PRODUCT_ID to it.productId
                 )
                 brokingMapList.add(map)
             }
 
             val brokingAdapter =
-                PortfolioSnapshotBrokAdapter(requireContext(), brokingMapList as ArrayList)
+                    PortfolioSnapshotBrokAdapter(requireContext(), brokingMapList as ArrayList)
             listBrokingPortfolio.adapter = brokingAdapter
             brokingAdapter.notifyDataSetChanged()
             setListViewHeightBasedOnChildren(listBrokingPortfolio)
@@ -1399,21 +1400,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val assetMapList = mutableListOf<HashMap<String, String>>()
             assetPortfolios.forEach {
                 val map = hashMapOf(
-                    PRODUCT to it.productName,
-                    INVEST_AMT to StringStuff.commaDecorator(it.marketValue),
-                    PURCHASE_VALUE to StringStuff.commaDecorator(it.purchaseValue),
-                    OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
-                    PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
-                        "${it.percentageGainLoss} %"
-                    ),
-                    MOSLConstants.PRODUCT_ID to it.productId,
-                    PRODUCT_TYPE to it.productType
+                        PRODUCT to it.productName,
+                        INVEST_AMT to StringStuff.commaDecorator(it.marketValue),
+                        PURCHASE_VALUE to StringStuff.commaDecorator(it.purchaseValue),
+                        OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
+                        PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
+                                "${it.percentageGainLoss} %"
+                        ),
+                        MOSLConstants.PRODUCT_ID to it.productId,
+                        PRODUCT_TYPE to it.productType
                 )
                 assetMapList.add(map)
             }
 
             val assetAdapter =
-                PortfolioSnapshotAssetAdapter(requireContext(), assetMapList as ArrayList)
+                    PortfolioSnapshotAssetAdapter(requireContext(), assetMapList as ArrayList)
             listAssestPortfolio.adapter = assetAdapter
             assetAdapter.notifyDataSetChanged()
             setListViewHeightBasedOnChildren(listAssestPortfolio)
@@ -1423,14 +1424,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val ledgerMapList = mutableListOf<HashMap<String, String>>()
             availableLedgers.forEach {
                 val map = hashMapOf(
-                    PRODUCT to it.productName,
-                    TOTAL to StringStuff.commaDecorator(it.balanceLedger)
+                        PRODUCT to it.productName,
+                        TOTAL to StringStuff.commaDecorator(it.balanceLedger)
                 )
                 ledgerMapList.add(map)
             }
 
             val ledgerAdapter =
-                PortfolioSnapshotCashAdapter(requireContext(), ledgerMapList as ArrayList)
+                    PortfolioSnapshotCashAdapter(requireContext(), ledgerMapList as ArrayList)
             listAssestPortfolio.adapter = ledgerAdapter
             ledgerAdapter.notifyDataSetChanged()
             setListViewHeightBasedOnChildren(listAssestPortfolio)
@@ -1489,10 +1490,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 color.action_bar_positive
             }
             tvSTGainLossPer.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    bgColorPerSt
-                )
+                    ContextCompat.getColor(
+                            requireContext(),
+                            bgColorPerSt
+                    )
             )
 
             ///////////broking product
@@ -1500,17 +1501,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val brokingMapList = mutableListOf<HashMap<String, String>>()
             brokingProducts.forEach {
                 val map = hashMapOf(
-                    MOSLConstants.PRODUCT_ID to it.productId,
-                    PRODUCT to it.productName,
-                    STGL to StringStuff.commaDecorator(it.stGainLoss),
-                    LTGL to StringStuff.commaDecorator(it.ltGainLoss),
-                    TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
+                        MOSLConstants.PRODUCT_ID to it.productId,
+                        PRODUCT to it.productName,
+                        STGL to StringStuff.commaDecorator(it.stGainLoss),
+                        LTGL to StringStuff.commaDecorator(it.ltGainLoss),
+                        TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
                 )
                 brokingMapList.add(map)
             }
 
             val brokingAdapter =
-                PortfolioPLBrokingAdapter(requireContext(), brokingMapList as ArrayList)
+                    PortfolioPLBrokingAdapter(requireContext(), brokingMapList as ArrayList)
             lvPLBrok.adapter = brokingAdapter
             brokingAdapter.notifyDataSetChanged()
             setListViewHeightBasedOnChildren(lvPLBrok)
@@ -1520,11 +1521,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val assetMapList = mutableListOf<HashMap<String, String>>()
             assetProducts.forEach {
                 val map = hashMapOf(
-                    MOSLConstants.PRODUCT_ID to it.productId,
-                    PRODUCT to it.productName,
-                    STGL to StringStuff.commaDecorator(it.stGainLoss),
-                    LTGL to StringStuff.commaDecorator(it.ltGainLoss),
-                    TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
+                        MOSLConstants.PRODUCT_ID to it.productId,
+                        PRODUCT to it.productName,
+                        STGL to StringStuff.commaDecorator(it.stGainLoss),
+                        LTGL to StringStuff.commaDecorator(it.ltGainLoss),
+                        TOTAL_GAIN_LOSS to StringStuff.commaDecorator(it.totalGainLoss)
                 )
                 assetMapList.add(map)
             }
@@ -1539,8 +1540,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val limitMapList = mutableListOf<HashMap<String, String>>()
             availableLimits.forEach {
                 val map = hashMapOf(
-                    CASH to it.cashType,
-                    AMOUNT to StringStuff.commaDecorator(it.amount)
+                        CASH to it.cashType,
+                        AMOUNT to StringStuff.commaDecorator(it.amount)
                 )
                 limitMapList.add(map)
             }
@@ -1554,9 +1555,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun toggleSectionExpansion(
-        parent: View,
-        icon: TextView,
-        expansion: String
+            parent: View,
+            icon: TextView,
+            expansion: String
     ) {
         if (expansion.equals("OuterSectionExpansion", ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
@@ -1579,7 +1580,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAadharAfterTextChanged(): Observable<String> {
         return binding.etAadharNumber.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun renderOnAadharAfterTextChange(text: String) {
@@ -1587,7 +1588,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             text.isNotBlank() -> {
                 when {
                     CRMValidationRule.validateAadhar(
-                        text
+                            text
                     ) -> binding.tlAadhar.disableErrorMessages()
                     else -> {
                         binding.tlAadhar.setErrorMessages(INVALID_AADHAR)
@@ -1602,7 +1603,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onPinTextChanged(): Observable<String> {
         return binding.etPincode.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnPinTextChange(text: String) {
@@ -1625,7 +1626,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onOfficePinTextChanged(): Observable<String> {
         return binding.etOffPincode.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnOfficePinTextChange(text: String) {
@@ -1648,51 +1649,114 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     override fun renderOnUpdateButtonClick() {
-        MSFDialog.alertDialog(
-            requireActivity(), 0,
-            resources.getString(
-                R.string.motilal_oswal
-            ), resources.getString(R.string.CONFIRM_LEAD_UPDATE), "YES", "NO", true
-        ) { action: Action, _: Array<Any?>? ->
-            if (action == OK) {
-                updateLead()
+        TODO("Not yet implemented")
+    }
+
+    private fun showErrorWithFocus(error: ValidationError) {
+        error.error?.let {
+            when (error.identifier as Int) {
+                1 -> {
+                    binding.tlLeadName.setErrorMessages(getString(it, binding.etLeadCategory.text))
+                }
+                2 -> {
+                    binding.tlLeadName.setErrorMessages(getString(it))
+                }
+
+                3 -> {
+                    binding.tlEmail.setErrorMessages(getString(it))
+                }
+                4 -> {
+                    binding.tlAlternateMobile.setErrorMessages(getString(it))
+                }
+                5, 6 -> {
+                    binding.tlAlternateEmail.setErrorMessages(getString(it))
+                }
+                7 -> {
+                    binding.tlLand.setErrorMessages(getString(it))
+                }
+                8 -> {
+                    binding.tlPan.setErrorMessages(getString(it))
+                }
+                9 -> {
+                    binding.tlAadhar.setErrorMessages(getString(it))
+                }
+                10 -> {
+                    binding.tlRefereeName.setErrorMessages(getString(it))
+                }
+                11, 12 -> {
+                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                }
+                13 -> {
+                    binding.tlRefereeEmail.setErrorMessages(getString(it))
+                }
+                /*25 -> {
+                    binding.tlPin.setErrorMessages(getString(it))
+                }
+                26 -> {
+                    binding.tlOffPin.setErrorMessages(getString(it))
+                }*/
+                else -> {
+                }
+
             }
         }
     }
 
-    private fun updateLead() {
+    private fun removeErrorMessage() {
+        binding.apply {
+            tlLeadName.disableErrorMessages()
+            tlContactPerson.disableErrorMessages()
+            tlEmail.disableErrorMessages()
+            tlAlternateEmail.disableErrorMessages()
+            tlAlternateMobile.disableErrorMessages()
+            tlMobile.disableErrorMessages()
+            tlLand.disableErrorMessages()
+            tlPan.disableErrorMessages()
+            tlAadhar.disableErrorMessages()
+            tlRefereeCode.disableErrorMessages()
+            tlRefereeName.disableErrorMessages()
+            tlRefereeName.disableErrorMessages()
+            tlRefereeNumber.disableErrorMessages()
+            tlPin.disableErrorMessages()
+            tlOffPin.disableErrorMessages()
+
+        }
+    }
+
+
+    private fun getUpdateLead(): UpdateLeadRequest {
         addressDetailList.clear()
         addressDetailList.add(
-            AddressDetailModel(
-                RESIDENCEADDRESS,
-                getJsonSafeString(binding.etAdd1.text.toString().trim()),
-                getJsonSafeString(binding.etAdd2.text.toString().trim()),
-                getJsonSafeString(binding.etAdd3.text.toString().trim()), /*countryCodeStr*/
-                "",
-                /*stateCodeStr*/
-                "",
-                /*cityCodeStr*/
-                "",
-                binding.etPincode.text.toString().trim(),
-                binding.cbPrimaryAddress.isChecked,
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
-            )
+                AddressDetailModel(
+                        RESIDENCEADDRESS,
+                        getJsonSafeString(binding.etAdd1.text.toString().trim()),
+                        getJsonSafeString(binding.etAdd2.text.toString().trim()),
+                        getJsonSafeString(binding.etAdd3.text.toString().trim()), /*countryCodeStr*/
+                        "",
+                        /*stateCodeStr*/
+                        "",
+                        /*cityCodeStr*/
+                        "",
+                        binding.etPincode.text.toString().trim(),
+                        binding.cbPrimaryAddress.isChecked,
+                        userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+                )
         )
         addressDetailList.add(
-            AddressDetailModel(
-                OFFICEADDRESS,
-                getJsonSafeString(binding.etOffAdd1.text.toString().trim()),
-                getJsonSafeString(binding.etOffAdd2.text.toString().trim()),
-                getJsonSafeString(binding.etOffAdd3.text.toString().trim()), /*offCountryCodeStr*/
-                "",
-                /*offStateCodeStr*/
-                "",
-                /*offCityCodeStr*/
-                "",
-                binding.etOffPincode.text.toString().trim(),
-                binding.cbOffPrimaryAddress.isChecked,
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
-            )
+                AddressDetailModel(
+                        OFFICEADDRESS,
+                        getJsonSafeString(binding.etOffAdd1.text.toString().trim()),
+                        getJsonSafeString(binding.etOffAdd2.text.toString().trim()),
+                        getJsonSafeString(binding.etOffAdd3.text.toString().trim()), /*offCountryCodeStr*/
+                        "",
+                        /*offStateCodeStr*/
+                        "",
+                        /*offCityCodeStr*/
+                        "",
+                        binding.etOffPincode.text.toString().trim(),
+                        binding.cbOffPrimaryAddress.isChecked,
+                        userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+                )
         )
 
         val leadDetailModel = LeadDetailModel()
@@ -1714,8 +1778,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             if (!isBlank(binding.etDob.text.toString())) {
                 val strDob: String = binding.etDob.text.toString().trim()
                 leadDetailModel.dob = CRMAppUtil.getDateFromString(
-                    strDob, CAL_DATE_FORMAT,
-                    DATE_FORMAT_TO_SERVER_MEETING_SEND
+                        strDob, CAL_DATE_FORMAT,
+                        DATE_FORMAT_TO_SERVER_MEETING_SEND
                 ) + "T00:00:00"
             } else {
                 leadDetailModel.dob = ""
@@ -1723,8 +1787,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             if (!isBlank(binding.etAnniversary.text.toString())) {
                 val strANN: String = binding.etAnniversary.text.toString().trim()
                 leadDetailModel.anniversary = CRMAppUtil.getDateFromString(
-                    strANN, CAL_DATE_FORMAT,
-                    DATE_FORMAT_TO_SERVER_MEETING_SEND
+                        strANN, CAL_DATE_FORMAT,
+                        DATE_FORMAT_TO_SERVER_MEETING_SEND
                 ) + "T00:00:00"
             } else {
                 leadDetailModel.anniversary = ""
@@ -1735,7 +1799,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
         leadDetailModel.leadID = binding.etLeadID.text.toString().trim()
         leadDetailModel.businessUnitID =
-            userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
         leadDetailModel.contactPerson = binding.etContactPerson.text.toString().trim()
         leadDetailModel.sourceID = ""/*sourceID*/
         leadDetailModel.leadSourceID = ""/*leadProspetSourceID*/
@@ -1756,65 +1820,64 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         leadDetailModel.createdBy = binding.etCreatedBy.text.toString().trim()
         leadDetailModel.createdThrough = "0"
         leadDetailModel.creationDate = binding.etCreationDate.text.toString().trim()
-            .replace("p.m.", "PM")
-            .replace("a.m", "AM")
+                .replace("p.m.", "PM")
+                .replace("a.m", "AM")
         leadDetailModel.contactDetailModels = contactDetailList
         leadDetailModel.addressDetailModels = addressDetailList
         leadDetailModel.secondaryRM = null
         leadDetailModel.leadDetailAddProductModels = leadDetailAddProductList
         leadDetailModel.leadFieldValueModels = getLeadFieldValues(mLeadFieldSectionModelList)
 
-        updateLead(leadDetailModel)
+        return updateLead(leadDetailModel)
     }
 
-    private fun updateLead(model: LeadDetailModel) {
+    private fun updateLead(model: LeadDetailModel): UpdateLeadRequest {
         val contactAddresses: MutableList<ContactAddressRequest> = ArrayList()
         val detailModels: List<AddressDetailModel> = model.getAddressDetailModels()
         for (detailModel in detailModels) {
             contactAddresses.add(
-                ContactAddressRequest(
-                    detailModel.addressTypeID.toString(),
-                    detailModel.address1,
-                    detailModel.address2,
-                    detailModel.address3,
-                    detailModel.stateID,
-                    detailModel.countryID,
-                    detailModel.cityID,
-                    detailModel.pincode,
-                    detailModel.isPrimary,
-                    detailModel.businessUnitID
-                )
+                    ContactAddressRequest(
+                            detailModel.addressTypeID.toString(),
+                            detailModel.address1,
+                            detailModel.address2,
+                            detailModel.address3,
+                            detailModel.stateID,
+                            detailModel.countryID,
+                            detailModel.cityID,
+                            detailModel.pincode,
+                            detailModel.isPrimary,
+                            detailModel.businessUnitID
+                    )
             )
         }
         val contactRequest = ContactRequest(
-            model.name,
-            model.geteMail(),
-            model.alternateEmail,
-            model.mobileNo,
-            model.ekycMobileNo,
-            model.landLineNo,
-            model.alternateMobileNo,
-            model.aadharNum,
-            model.panNum,
-            model.dob,
-            model.anniversary,
-            model.isSameAsAbove,
-            contactAddresses
+                model.name,
+                model.geteMail(),
+                model.alternateEmail,
+                model.mobileNo,
+                model.ekycMobileNo,
+                model.landLineNo,
+                model.alternateMobileNo,
+                model.aadharNum,
+                model.panNum,
+                model.dob,
+                model.anniversary,
+                model.isSameAsAbove,
+                contactAddresses
         )
-        val updateLeadRequest = UpdateLeadRequest(
-            model.leadID, model.businessUnitID, model.isPotentialPMSProduct,
-            model.leadCategoryID, model.contactPerson, model.sourceID,
-            model.leadSourceID, model.leadSourceDetailsID,
-            model.leadSourceDetails, model.refereeCode, model.refereeName,
-            model.refereeEmail, model.refereeMobile, model.comments,
-            model.profileID,
-            model.professionID, model.createdBy, model.prospectRefereName,
-            model.prospectRefereMobile, model.prospectRefereEmail,
-            model.createdThrough, model.creationDate,
-            contactRequest,
-            model.leadFieldValueModels
+        return UpdateLeadRequest(
+                model.leadID, model.businessUnitID, model.isPotentialPMSProduct,
+                model.leadCategoryID, model.contactPerson, model.sourceID,
+                model.leadSourceID, model.leadSourceDetailsID,
+                model.leadSourceDetails, model.refereeCode, model.refereeName,
+                model.refereeEmail, model.refereeMobile, model.comments,
+                model.profileID,
+                model.professionID, model.createdBy, model.prospectRefereName,
+                model.prospectRefereMobile, model.prospectRefereEmail,
+                model.createdThrough, model.creationDate,
+                contactRequest,
+                model.leadFieldValueModels
         )
-        subject.onNext(UpdateBtnEvent(updateLeadRequest))
     }
 
     override fun updateDialogBtnEventFired(): Observable<UpdateBtnEvent> {
@@ -1828,7 +1891,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun getLeadFieldValues(
-        fieldSectionModels: List<LeadFieldSectionModel>?
+            fieldSectionModels: List<LeadFieldSectionModel>?
     ): List<LeadFieldValueRequest?> {
         val requests: MutableList<LeadFieldValueRequest?> = ArrayList()
         if (fieldSectionModels == null) {
@@ -1838,12 +1901,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val selectionList = mSection.selectionList ?: continue
             for (modal in selectionList) {
                 requests.add(
-                    LeadFieldValueRequest(
-                        modal.lF_SysName,
-                        modal.uiValue,
-                        modal.leadFieldId,
-                        LeadFieldValueModel.getLeadid()
-                    )
+                        LeadFieldValueRequest(
+                                modal.lF_SysName,
+                                modal.uiValue,
+                                modal.leadFieldId,
+                                LeadFieldValueModel.getLeadid()
+                        )
                 )
             }
         }
@@ -1852,7 +1915,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAdd1AfterTextChanged(): Observable<String> {
         return binding.etAdd1.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnAdd1AfterTextChange(text: String) {
@@ -1861,7 +1924,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAdd2AfterTextChanged(): Observable<String> {
         return binding.etAdd2.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnAdd2AfterTextChange(text: String) {
@@ -1870,7 +1933,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onAdd3AfterTextChanged(): Observable<String> {
         return binding.etAdd3.textChanges()
-            .map { it.toString() }
+                .map { it.toString() }
     }
 
     override fun renderOnAdd3AfterTextChange(text: String) {
@@ -1879,7 +1942,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onRefereeCodeChanged(): Observable<String> {
         return binding.etRefereeCode.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: emptyString() }
+                .map { it.editable?.toString() ?: emptyString() }
     }
 
     override fun getRefereeCode(): String {
@@ -1896,7 +1959,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onRefereeNameChanged(): Observable<String> {
         return binding.etRefereeName.afterTextChangeEvents()
-            .map { it.editable?.toString() ?: "" }
+                .map { it.editable?.toString() ?: "" }
     }
 
     override fun resetRefereeOnNameChange() {
@@ -2066,10 +2129,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.etLastModifiedBy.setText(lastModifiedBy)
         try {
             binding.etLastModifiedDate.setText(
-                CRMAppUtil.getDateFromString(
-                    lastModifiedDate,
-                    "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
-                )
+                    CRMAppUtil.getDateFromString(
+                            lastModifiedDate,
+                            "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
+                    )
             )
         } catch (e: Exception) {
             binding.etLastModifiedDate.setText(lastModifiedDate.replace("T", " "))
@@ -2090,10 +2153,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.etLeadName.setText(contact?.name) //Himanshu
         try {//Jeet
             binding.etCreationDate.setText(
-                CRMAppUtil.getDateFromString(
-                    createdDate,
-                    "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
-                )
+                    CRMAppUtil.getDateFromString(
+                            createdDate,
+                            "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
+                    )
             )
         } catch (e: Exception) {
             binding.etCreationDate.setText(createdDate.replace("T", " "))
@@ -2203,10 +2266,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun getCrossSellingProductsModel(
-        products: List<CrossSellingProduct>?
+            products: List<CrossSellingProduct>?
     ): List<CrossSellingProductsModel> {
         val crossSellingProducts: MutableList<CrossSellingProductsModel> =
-            ArrayList()
+                ArrayList()
         if (products != null && products.size > 0) {
             for ((leadProductId, productId, statusId, productName, statusName) in products) {
                 crossSellingProducts.add(
