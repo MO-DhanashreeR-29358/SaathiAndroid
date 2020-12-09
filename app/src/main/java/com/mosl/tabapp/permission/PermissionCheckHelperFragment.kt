@@ -26,10 +26,10 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
     }
 
     fun locationPermission(): Boolean {
-        val value =
-            ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
+        val value = ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
+        val backgroundPermission = ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_BACKGROUND_LOCATION)
 
-        return value == PackageManager.PERMISSION_GRANTED
+        return value == PackageManager.PERMISSION_GRANTED && backgroundPermission == PackageManager.PERMISSION_GRANTED
     }
 
     private fun storagePermission(): Boolean {
@@ -54,7 +54,7 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
 
     fun requestAllPermissions() {
         fragment.requestPermissions(
-            arrayOf(CAMERA, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE),
+            arrayOf(CAMERA, ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION, WRITE_EXTERNAL_STORAGE),
             PERMISSION_ALL_CODE
         )
     }
@@ -64,7 +64,7 @@ class PermissionCheckHelperFragment(val fragment: Fragment) {
     }
 
     private fun requestLocationPermission() {
-        fragment.requestPermissions(arrayOf(ACCESS_FINE_LOCATION), PERMISSION_CAMERA_CODE)
+        fragment.requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION), PERMISSION_CAMERA_CODE)
     }
 
     private fun requestStoragePermission() {
