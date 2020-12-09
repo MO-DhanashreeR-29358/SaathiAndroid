@@ -1,5 +1,6 @@
 package com.mosl.tabapp.common;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -44,7 +45,7 @@ import java.util.List;
 public class CRMMOSLCommon {
 
     final static int REQUEST_LOCATION = 199;
-	private static final int REQUEST_CHECK_SETTINGS = 100;
+    private static final int REQUEST_CHECK_SETTINGS = 100;
 
     public static void setPermisson(Activity activity, Context context) {
 
@@ -84,8 +85,9 @@ public class CRMMOSLCommon {
             permissionArrayList.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
 
         }
-        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            permissionArrayList.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionArrayList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 
         }
 
@@ -96,51 +98,51 @@ public class CRMMOSLCommon {
                 activity.requestPermissions(permissionString, 100);
             }
         }
-		enableLocationSetting(activity);
-	}
+        enableLocationSetting(activity);
+    }
 
-	public static void enableLocationSetting(Activity activity) {
-		LocationRequest mLocationRequest = LocationRequest.create();
-		mLocationRequest.setInterval(10000);
-		mLocationRequest.setFastestInterval(5000);
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    public static void enableLocationSetting(Activity activity) {
+        LocationRequest mLocationRequest = LocationRequest.create();
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-			.addLocationRequest(mLocationRequest);
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
 
-		SettingsClient client = LocationServices.getSettingsClient(activity);
-		Task<LocationSettingsResponse> result = client.checkLocationSettings(builder.build());
-		result.addOnCompleteListener(task -> {
-			try {
-				LocationSettingsResponse response = task.getResult(ApiException.class);
-				// All location settings are satisfied. The client can initialize location
-				// requests here.
-			} catch (ApiException exception) {
-				switch (exception.getStatusCode()) {
-					case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-						// Location settings are not satisfied. But could be fixed by showing the
-						// user a dialog.
-						try {
-							// Cast to a resolvable exception.
-							ResolvableApiException resolvable = (ResolvableApiException) exception;
-							// Show the dialog by calling startResolutionForResult(),
-							// and check the result in onActivityResult().
-							resolvable.startResolutionForResult(
-								activity,
-								REQUEST_CHECK_SETTINGS);
-						} catch (IntentSender.SendIntentException e) {
-							// Ignore the error.
-						} catch (ClassCastException e) {
-							// Ignore, should be an impossible error.
-						}
-						break;
-					case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-						// Location settings are not satisfied. However, we have no way to fix the
-						// settings so we won't show the dialog.
-						break;
-				}
-			}
-		});
+        SettingsClient client = LocationServices.getSettingsClient(activity);
+        Task<LocationSettingsResponse> result = client.checkLocationSettings(builder.build());
+        result.addOnCompleteListener(task -> {
+            try {
+                LocationSettingsResponse response = task.getResult(ApiException.class);
+                // All location settings are satisfied. The client can initialize location
+                // requests here.
+            } catch (ApiException exception) {
+                switch (exception.getStatusCode()) {
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Location settings are not satisfied. But could be fixed by showing the
+                        // user a dialog.
+                        try {
+                            // Cast to a resolvable exception.
+                            ResolvableApiException resolvable = (ResolvableApiException) exception;
+                            // Show the dialog by calling startResolutionForResult(),
+                            // and check the result in onActivityResult().
+                            resolvable.startResolutionForResult(
+                                    activity,
+                                    REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException e) {
+                            // Ignore the error.
+                        } catch (ClassCastException e) {
+                            // Ignore, should be an impossible error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        // Location settings are not satisfied. However, we have no way to fix the
+                        // settings so we won't show the dialog.
+                        break;
+                }
+            }
+        });
     }
 
     public static boolean hasGPSDevice(Context context) {

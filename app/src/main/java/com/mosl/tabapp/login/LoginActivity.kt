@@ -1,12 +1,21 @@
 package com.mosl.tabapp.login
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.editorActions
@@ -57,6 +66,9 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   @Inject
   lateinit var fusedLocation: FusedLocation
 
+  lateinit var sharedPreferences: SharedPreferences
+  lateinit var editor: SharedPreferences.Editor
+
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
   override fun getLayout(): Int {
@@ -66,12 +78,22 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
-    if (VERSION.SDK_INT >= VERSION_CODES.M) {
-      permissionCheckHelper.requestAllPermissions()
-    }
+    setUpView()
     fusedLocation.initDispatcher(this)
     binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
     presenter.start()
+  }
+
+  private fun setUpView() {
+    sharedPreferences = this.getSharedPreferences(
+      resources.getString(R.string.consent_check),
+      MODE_PRIVATE
+    )
+    editor = sharedPreferences.edit()
+
+    if (!sharedPreferences.getBoolean(getString(R.string.consent_value), false)) {
+      showDiscloserDilog()
+    }
   }
 
   override fun onLoginClicked(): Observable<Unit> {
@@ -102,6 +124,56 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
         error.showOnFailurePopup()
       }
     }
+  }
+
+  private fun showDiscloserDilog() {
+    val alertDialog = AlertDialog.Builder(this)
+    alertDialog.setTitle(resources.getString(R.string.alert_dialog_title))
+    alertDialog.setMessage(resources.getString(R.string.alert_dialog_discloser_message))
+    alertDialog.setCancelable(false)
+    alertDialog.setPositiveButton("GOT IT") { dialog: DialogInterface, which: Int ->
+      dialog.dismiss()
+      showConsentDialog()
+    }
+    alertDialog.show()
+  }
+
+  private fun showConsentDialog() {
+    val lp = LinearLayout.LayoutParams(
+      LinearLayout.LayoutParams.WRAP_CONTENT,
+      LinearLayout.LayoutParams.WRAP_CONTENT
+    )
+    lp.setMargins(10, 0, 10, 0)
+    val message = TextView(this)
+    val s = SpannableString(this.getText(R.string.alert_dialog_location_message))
+    Linkify.addLinks(s, Linkify.WEB_URLS)
+    message.text = s
+    message.setTextColor(resources.getColor(R.color.black))
+    message.textSize = 18f
+    message.setPadding(26, 10, 10, 0)
+    message.movementMethod = LinkMovementMethod.getInstance()
+    message.layoutParams = lp
+    val alertDialog = AlertDialog.Builder(this)
+    alertDialog.setTitle(resources.getString(R.string.alert_dialog_title))
+    //        alertDialog.setMessage(getResources().getString(R.string.alert_dialog_location_message));
+    alertDialog.setCancelable(false)
+    alertDialog.setPositiveButton("I Agree") { dialog: DialogInterface, which: Int ->
+      editor.putBoolean(resources.getString(R.string.consent_value), true)
+      editor.commit()
+      dialog.dismiss()
+      if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        permissionCheckHelper.requestAllPermissions()
+      }
+    }
+    alertDialog.setNegativeButton(
+      "Cancel"
+    ) { dialog: DialogInterface?, which: Int ->
+      Toast.makeText(this, getString(R.string.terms_condition_msg), Toast.LENGTH_LONG).show()
+      finish()
+    }
+    alertDialog.setView(message)
+    alertDialog.create()
+    alertDialog.show()
   }
 
   override fun setUserProperty(user: User?) {

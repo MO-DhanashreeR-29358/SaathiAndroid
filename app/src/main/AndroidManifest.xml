@@ -11,24 +11,25 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
 
     <application
-        android:name="com.mosl.tabapp.SaathiAppImpl"
+        android:name=".SaathiAppImpl"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".settings.SettingActivity"></activity>
         <activity
             android:name=".slider.SliderActivity"
             android:clearTaskOnLaunch="true"
@@ -39,6 +40,7 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
@@ -51,7 +53,6 @@
                     android:host="com.mosl.tabapp"
                     android:scheme="app" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".splash.SplashActivity"
@@ -68,8 +69,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
-
         <activity
             android:name=".core.CommonActivity"
             android:screenOrientation="portrait"
@@ -87,7 +86,7 @@
         </provider>
 
         <service
-            android:name="com.mosl.tabapp.service.MessageReceiverIntentService"
+            android:name=".service.MessageReceiverIntentService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -98,4 +97,5 @@
             android:name=".service.ForegroundService"
             android:enabled="true" />
     </application>
+
 </manifest>

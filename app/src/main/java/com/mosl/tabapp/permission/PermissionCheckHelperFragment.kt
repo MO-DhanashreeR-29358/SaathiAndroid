@@ -1,78 +1,77 @@
 package com.mosl.tabapp.permission
 
-import android.Manifest.permission
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.Manifest.permission.CAMERA
-import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.Manifest.permission.*
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 
 class PermissionCheckHelperFragment(val fragment: Fragment) {
 
-  private val PERMISSION_CAMERA_CODE = 1001
-  private val PERMISSION_WRITE_STORAGE_CODE = 1002
-  private val PERMISSION_ALL_CODE = 1003
-  lateinit var listener: OnPermissionChangeListener
+    private val PERMISSION_CAMERA_CODE = 1001
+    private val PERMISSION_WRITE_STORAGE_CODE = 1002
+    private val PERMISSION_ALL_CODE = 1003
+    lateinit var listener: OnPermissionChangeListener
 
-  fun setPermissionHelper(listener: OnPermissionChangeListener) {
-    this.listener = listener
-  }
+    fun setPermissionHelper(listener: OnPermissionChangeListener) {
+        this.listener = listener
+    }
 
-  fun checkAll(): Boolean {
-    return cameraPermission() && storagePermission()
-  }
+    fun checkAll(): Boolean {
+        return cameraPermission() && storagePermission()
+    }
 
-  private fun cameraPermission(): Boolean {
-    val value = ActivityCompat.checkSelfPermission(fragment.requireContext(), CAMERA)
-    return value == PackageManager.PERMISSION_GRANTED
-  }
+    private fun cameraPermission(): Boolean {
+        val value = ActivityCompat.checkSelfPermission(fragment.requireContext(), CAMERA)
+        return value == PackageManager.PERMISSION_GRANTED
+    }
 
-  fun locationPermission(): Boolean {
-    val value = ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
-    return value == PackageManager.PERMISSION_GRANTED
-  }
+    fun locationPermission(): Boolean {
+        val value = ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_FINE_LOCATION)
+        val backgroundPermission = ActivityCompat.checkSelfPermission(fragment.requireContext(), ACCESS_BACKGROUND_LOCATION)
 
-  private fun storagePermission(): Boolean {
-    val value =
-      ActivityCompat.checkSelfPermission(fragment.requireContext(), WRITE_EXTERNAL_STORAGE)
-    return value == PackageManager.PERMISSION_GRANTED
-  }
+        return value == PackageManager.PERMISSION_GRANTED && backgroundPermission == PackageManager.PERMISSION_GRANTED
+    }
 
-  fun requestCamera() {
-    requestCameraPermission()
-  }
+    private fun storagePermission(): Boolean {
+        val value =
+            ActivityCompat.checkSelfPermission(fragment.requireContext(), WRITE_EXTERNAL_STORAGE)
+        return value == PackageManager.PERMISSION_GRANTED
+    }
 
-  fun requestLocation() {
-    requestLocationPermission()
+    fun requestCamera() {
+        requestCameraPermission()
+    }
 
-  }
+    fun requestLocation() {
+        requestLocationPermission()
 
-  fun requestStorage() {
+    }
 
-    requestStoragePermission()
-  }
+    fun requestStorage() {
 
-  fun requestAllPermissions() {
-    fragment.requestPermissions(
-        arrayOf(CAMERA, permission.ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE),
-        PERMISSION_ALL_CODE
-    )
-  }
+        requestStoragePermission()
+    }
 
-  private fun requestCameraPermission() {
-    fragment.requestPermissions(arrayOf(CAMERA), PERMISSION_CAMERA_CODE)
-  }
+    fun requestAllPermissions() {
+        fragment.requestPermissions(
+            arrayOf(CAMERA, ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION, WRITE_EXTERNAL_STORAGE),
+            PERMISSION_ALL_CODE
+        )
+    }
 
-  private fun requestLocationPermission() {
-    fragment.requestPermissions(arrayOf(ACCESS_FINE_LOCATION), PERMISSION_CAMERA_CODE)
-  }
+    private fun requestCameraPermission() {
+        fragment.requestPermissions(arrayOf(CAMERA), PERMISSION_CAMERA_CODE)
+    }
 
-  private fun requestStoragePermission() {
-    fragment.requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSION_WRITE_STORAGE_CODE)
-  }
+    private fun requestLocationPermission() {
+        fragment.requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION), PERMISSION_CAMERA_CODE)
+    }
 
-  interface OnPermissionChangeListener {
-    fun OnPermissionGranted()
-  }
+    private fun requestStoragePermission() {
+        fragment.requestPermissions(arrayOf(WRITE_EXTERNAL_STORAGE), PERMISSION_WRITE_STORAGE_CODE)
+    }
+
+    interface OnPermissionChangeListener {
+        fun OnPermissionGranted()
+    }
 }

@@ -25,13 +25,13 @@ import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
+import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
-import com.mosl.tabapp.webview.WebviewFragment.Companion.RETRIEVE_OTP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
@@ -66,10 +66,6 @@ object MenuGetterNew {
                 arguments = args
             }
 
-            NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP -> WebviewFragment().apply {
-                args.putString(WebviewFragment.PAGE_ID, RETRIEVE_OTP_ID)
-                arguments = args
-            }
             NavigationConstants.NAVIGATE_TO_SIP -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, SIP_ID)
                 arguments = args
@@ -95,6 +91,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> BankMeetingFragment()
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
+            NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
             else -> null
         }
     }
@@ -136,8 +133,10 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL -> true
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> true
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
-            NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP -> true
             NavigationConstants.NAVIGATE_TO_SIP -> true
+            NavigationConstants.NAVIGATE_TO_SETTING -> true
+            NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION -> true
+            NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
             else -> return false
         }
     }

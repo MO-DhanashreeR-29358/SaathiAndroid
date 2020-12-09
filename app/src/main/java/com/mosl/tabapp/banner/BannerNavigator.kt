@@ -5,4 +5,5 @@ interface BannerNavigator {
     fun openUrlInWebView(url: String)
     fun openUrlInAppCrome(url: String)
     fun openUrlInBrowser(url: String)
+    fun openSettingActivity()
 }

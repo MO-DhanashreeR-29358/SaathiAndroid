@@ -60,7 +60,7 @@ class WebviewFragment : CommonFragment() {
         binding = FragWebviewBinding.bind(view)
         setupView()
         start()
-        parseArguments(arguments!!)
+        parseArguments(requireArguments())
     }
 
     private fun parseArguments(args: Bundle) {
@@ -68,7 +68,7 @@ class WebviewFragment : CommonFragment() {
         val pageId = args.getString(PAGE_ID)
         val url = args.getString(URL)
         if (args.containsKey(OAO_USER_ID)) {
-            oaoUserID = args.getString(OAO_USER_ID)
+            oaoUserID = args.getString(OAO_USER_ID).toString()
         }
         when {
             url != null -> subject.onNext(WebViewRequest.Url(url))
@@ -166,8 +166,7 @@ class WebviewFragment : CommonFragment() {
                 val imageStorageDir = File(
                     Environment.getExternalStoragePublicDirectory(
                         Environment.DIRECTORY_PICTURES
-                    )
-                    , "AndroidExampleFolder"
+                    ), "AndroidExampleFolder"
                 )
                 if (!imageStorageDir.exists()) {
                     // Create AndroidExampleFolder at sdcard
@@ -191,8 +190,7 @@ class WebviewFragment : CommonFragment() {
 
                 // Set camera intent to file chooser
                 chooserIntent.putExtra(
-                    Intent.EXTRA_INITIAL_INTENTS
-                    , arrayOf<Parcelable>(captureIntent)
+                    Intent.EXTRA_INITIAL_INTENTS, arrayOf<Parcelable>(captureIntent)
                 )
 
                 // On select image call onActivityResult method of activity
@@ -375,6 +373,16 @@ class WebviewFragment : CommonFragment() {
                     CommonURLRequest(E_MODIFICATION_KEY, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
+            NEW_LAS_APPLICATION_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(NEW_LAS_APPLICATION_KEY, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
+            RESUME_LAS_APPLICATION_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(RESUME_LAS_APPLICATION_KEY, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
             RESUME_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId, null)
@@ -399,13 +407,6 @@ class WebviewFragment : CommonFragment() {
             MOST_GUIDE_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(MOST_GUIDE_KEY, webViewRequest.oaoUserId, null)
-                ).map {
-                    Pair(it.url, webViewRequest.id)
-                }
-            }
-            RETRIEVE_OTP_ID -> {
-                return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(RETRIEVE_OTP_KEY, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
@@ -458,9 +459,11 @@ class WebviewFragment : CommonFragment() {
         const val CHECK_APPROVAL_KEY = "ChequeApproval"
         const val E_MODIFICATION_ID = "9"
         const val E_MODIFICATION_KEY = "EModification"
-        const val RETRIEVE_OTP_ID = "10"
-        const val RETRIEVE_OTP_KEY = "RetriveOTP"
         const val SIP_ID = "11"
         const val SIP_KEY = "SIP"
+        const val NEW_LAS_APPLICATION_ID = "12"
+        const val NEW_LAS_APPLICATION_KEY = "LASaccount"
+        const val RESUME_LAS_APPLICATION_ID = "13"
+        const val RESUME_LAS_APPLICATION_KEY = "ExistingLASaccount"
     }
 }

@@ -73,7 +73,7 @@ class ForegroundService : Service() {
             if (userManager.isLoggedIn() && hasGPSDevice(applicationContext)) {
                 startLocationUpdates()
             }
-            refreshHandler.postDelayed(this, 15 * 60 * 1000.toLong())
+            refreshHandler.postDelayed(this, 5  * 60 * 1000.toLong())
         }
     }
 
@@ -82,7 +82,7 @@ class ForegroundService : Service() {
             if (isNetworkConnected() && userManager.isLoggedIn()) {
                 initLocationApi()
             }
-            refreshHandlerAPI.postDelayed(this, 32 * 60 * 1000.toLong())
+            refreshHandlerAPI.postDelayed(this, 15 * 60 * 1000.toLong())
         }
     }
 
@@ -92,6 +92,9 @@ class ForegroundService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        refreshHandler.postDelayed(runnableCode, 1000)
+        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
+
         val mNotificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -111,8 +114,6 @@ class ForegroundService : Service() {
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification())
         }
-        refreshHandler.postDelayed(runnableCode, 1000)
-        refreshHandlerAPI.postDelayed(runnableCodeAPI, 1000 * 10.toLong())
         return START_STICKY
     }
 
@@ -173,7 +174,7 @@ class ForegroundService : Service() {
     fun initLocationApi() {
 
         if ((lastLocationAPITime.get().isEmpty() ||
-                    Utility.isTimeInterval(lastLocationAPITime.get(), 27))
+                    Utility.isTimeInterval(lastLocationAPITime.get(), /*27*/13))
         ) {
             val db1 = get()
                 .getDB()
@@ -191,7 +192,7 @@ class ForegroundService : Service() {
 
     private fun locationUpdate() {
         val locationResponse = repository.getGeoLocation(
-            get().getDB()?.daoAccess()?.getLocationList()!!.transformLocationData()
+            get().getDB()?.daoAccess()?.locationList!!.transformLocationData()
         ).blockingFirst()
         renderLocation(locationResponse)
     }
@@ -230,7 +231,7 @@ class ForegroundService : Service() {
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                     this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) else {
                 LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -271,7 +272,7 @@ class ForegroundService : Service() {
             )
             if ((lastLocationTime.get().isEmpty() || Utility.isTimeInterval(
                     lastLocationTime.get(),
-                    12
+                    4
                 )) && !isLocationFromMockProvider(applicationContext, location)
             ) {
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
@@ -289,6 +290,7 @@ class ForegroundService : Service() {
                     .d(locationData.toString())
             }
         } catch (e: IOException) {
+            Timber.tag("LocatnChange Exception").d(e)
             e.printStackTrace()
         }
     }

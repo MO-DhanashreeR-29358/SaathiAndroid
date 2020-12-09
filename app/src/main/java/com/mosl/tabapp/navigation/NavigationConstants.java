@@ -42,8 +42,10 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_CHECK_APPROVAL,
         NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP,
         NavigationConstants.NAVIGATE_TO_MOST_GUIDE,
-        NavigationConstants.NAVIGATE_TO_RETRIEVE_OTP,
-        NavigationConstants.NAVIGATE_TO_SIP
+        NavigationConstants.NAVIGATE_TO_SIP,
+        NavigationConstants.NAVIGATE_TO_SETTING,
+        NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
+        NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION
 
 })
 public @interface NavigationConstants {
@@ -83,6 +85,8 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_LEAD_ASSIGN_STP = 34;
     int NAVIGATE_TO_MOST_GUIDE = 35;
     int NAVIGATE_TO_E_MODIFICATION = 36;
-    int NAVIGATE_TO_RETRIEVE_OTP = 37;
-    int NAVIGATE_TO_SIP = 38;
+    int NAVIGATE_TO_SIP = 37;
+    int NAVIGATE_TO_SETTING = 38;
+    int NAVIGATE_TO_LAS_NEW_APPLICATION = 39;
+    int NAVIGATE_TO_LAS_RESUME_APPLICATION = 40;
 }

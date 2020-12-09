@@ -1,11 +1,9 @@
 package com.mosl.tabapp.core
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
@@ -25,6 +23,7 @@ import com.mosl.app.core.data.MOSLResponseWrapper
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
@@ -32,8 +31,10 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
+import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -60,6 +61,7 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
+import java.nio.channels.WritableByteChannel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
@@ -97,6 +99,10 @@ class CommonActivity : BaseActivity(),
     @field:FcmToken
     lateinit var tokenPref: Preference<String>
 
+    @field:TwentyFourSevenCheck
+    @Inject
+    lateinit var twentyFourSevenCheck: BooleanPreference
+
     @Inject
     @field:PreferenceClear
     lateinit var forcePreference: IntegerPreference
@@ -124,6 +130,12 @@ class CommonActivity : BaseActivity(),
     lateinit var gson: Gson
     lateinit var remoteConfigModel: RemoteConfigModel
     var mService: ForegroundService? = null
+
+    /**/
+   /* lateinit var sharedPreferences: SharedPreferences
+    var editor: SharedPreferences.Editor? = null
+    var twentyFourSevenCheck = false*/
+    /**/
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -162,19 +174,38 @@ class CommonActivity : BaseActivity(),
                 savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
         }
 
+        /*sharedPreferences =
+            getSharedPreferences(getString(R.string.preff_24_7_key), Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+        twentyFourSevenCheck = sharedPreferences.getBoolean(TWENTY_FOUR_SEVEN_CHECK, false)*/
+
         locationWorkManager = WorkManager.getInstance(this)
         dataSyncWorkManager = WorkManager.getInstance(this)
 
-        userManager.getUser()?.apply {
+        /*userManager.getUser()?.apply {
             if (!this.isAufsb()) {
-                initBackgroundState()
-                startService(Intent(this@CommonActivity, ForegroundService::class.java))
+                if (twentyFourSevenCheck.get()) {
+                    startService(Intent(this@CommonActivity, ForegroundService::class.java))
+                }
                 // startWorkManager()
             }
+        }*/
+        if (twentyFourSevenCheck.get()) {
+            startService(Intent(this@CommonActivity, ForegroundService::class.java))
         }
         setupObservables()
         setBanner()
 
+    }
+
+    private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
+        val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.name == service.service.className) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun stopService() {
@@ -225,7 +256,7 @@ class CommonActivity : BaseActivity(),
         }
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         userManager.getUser()?.apply {
             if (!this.isAufsb()) {
@@ -235,16 +266,27 @@ class CommonActivity : BaseActivity(),
                 )
             }
         }
-    }
+    }*/
 
-    override fun onStop() {
-        super.onStop()
-        userManager.getUser()?.apply {
-            if (!this.isAufsb()) {
-                unbindService(mServiceConnection)
-            }
+    override fun onResume() {
+        super.onResume()
+        if (twentyFourSevenCheck.get() && !isForegroundServiceRunning(ForegroundService::class.java)) {
+            bindService(
+                Intent(this, ForegroundService::class.java),
+                mServiceConnection,
+                Context.BIND_AUTO_CREATE
+            )
         }
     }
+
+    /* override fun onStop() {
+         super.onStop()
+         userManager.getUser()?.apply {
+             if (!this.isAufsb()) {
+                 unbindService(mServiceConnection)
+             }
+         }
+     }*/
 
     private fun setBanner() {
         val remoteConfig = FirebaseRemoteConfig.getInstance()
@@ -433,6 +475,14 @@ class CommonActivity : BaseActivity(),
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_E_MODIFICATION) {
                     gotoEkycExpressPage(true, WebviewFragment.E_MODIFICATION_ID)
                     binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SETTING) {
+                    screenNavigator.openSettingActivity()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION) {
+                    gotoEkycExpressPage(true, WebviewFragment.NEW_LAS_APPLICATION_ID)
+                    binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION) {
+                    gotoEkycExpressPage(true, WebviewFragment.RESUME_LAS_APPLICATION_ID)
+                    binding.drawerLayout.closeDrawers()
                 }
 
                 activityNavHelper.onMenuClicked(menu)
@@ -479,6 +529,9 @@ class CommonActivity : BaseActivity(),
                         Timber.d("Logout Successfully")
                         forcePreference.set(100)
                         stopService()
+                        twentyFourSevenCheck.set(false)
+                        /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
+                        editor?.commit()*/
                         openLogin()
                     }
 
@@ -631,7 +684,7 @@ class CommonActivity : BaseActivity(),
     }
 
     override fun gotoEkycExpressPage(isExistingOrNewUser: Boolean, id: String, oaoUserID: String) {
-        if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID) {
+        if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID || id == WebviewFragment.NEW_LAS_APPLICATION_ID || id == WebviewFragment.RESUME_LAS_APPLICATION_ID) {
             activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
         } else {
             activityNavHelper.openEkycApp(isExistingOrNewUser, oaoUserID)

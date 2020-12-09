@@ -50,8 +50,8 @@ class PermissionCheckHelper(val activityCompat: AppCompatActivity) {
   @RequiresApi(VERSION_CODES.M) fun requestAllPermissions() {
     activityCompat.requestPermissions(
       arrayOf(
-        CAMERA, ACCESS_FINE_LOCATION,
-        Manifest.permission.READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+        CAMERA, ACCESS_FINE_LOCATION, ACCESS_BACKGROUND_LOCATION,
+        READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
       ), PERMISSION_ALL_CODE
     )
   }
