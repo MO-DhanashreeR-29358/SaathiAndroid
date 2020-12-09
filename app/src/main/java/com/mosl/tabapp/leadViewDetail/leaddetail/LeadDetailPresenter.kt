@@ -1,6 +1,5 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
-import android.text.TextUtils
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
@@ -125,6 +124,7 @@ class LeadDetailPresenter @Inject constructor(
             }
             .subscribe(view::renderStatus)
             .addTo(disposable)
+        //Himanshu
 
         view.onAddProductClicked()
             .filter { view.isLeadEditable() }
@@ -195,6 +195,19 @@ class LeadDetailPresenter @Inject constructor(
         view.onProsRefereeMobileTextChanged()
             .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
             .addTo(disposable)
+
+        view.onSubmitButtonClicked()
+            .subscribe { view.renderOnUpdateButtonClick() }
+            .addTo(disposable)
+
+        view.updateDialogBtnEventFired()
+            .switchMap {
+                detailRepository.updateProduct(it.updateLeadRequest)
+                    .compose(applyUiModel())
+            }
+            .subscribe (view::renderUpdateDetail)
+            .addTo(disposable)
+        //Himanshu
 
         view.onProsRefereeEmailTextChanged()
             .subscribe { view.renderOnProsRefereeEmailTextChange(it) }
@@ -315,6 +328,7 @@ class LeadDetailPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onStateSelected()
+            .skip(1)
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedState() }
             .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
@@ -350,7 +364,7 @@ class LeadDetailPresenter @Inject constructor(
         view.onOfficeStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedOfficeState() }
-            .filter { !view.isSameAsAboveChecked() }
+            .filter { !view.isSameAsAboveChecked() && it.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
                 repository.getCityRowDatas(it.key)
                     .compose(applyUiModel())

@@ -1136,7 +1136,7 @@
                             android:layout_height="wrap_content"
                             android:enabled="false"
                             android:hint="@string/lead_detail_pan_number"
-                            android:inputType="text"
+                            android:inputType="textCapCharacters"
                             android:maxLength="10"
                             android:maxLines="1"
                             android:singleLine="true"

@@ -2,6 +2,7 @@ package com.mosl.tabapp.common;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -65,10 +66,20 @@ public class SearchableSpinner extends AppCompatSpinner implements View.OnTouchL
                 SearchableListDialog searchableListDialog = SearchableListDialog.newInstance
                         (_items);
                 searchableListDialog.setOnSearchableItemClickListener(this);
-                searchableListDialog.show(((Activity) _context).getFragmentManager(), "TAG");
+                searchableListDialog.show(getActivity(_context).getFragmentManager(), "TAG");
             }
         }
         return true;
+    }
+
+    private Activity getActivity(Context context) {
+        if (context == null)
+            return null;
+        else if (context instanceof Activity)
+            return (Activity)context;
+        else if (context instanceof ContextWrapper)
+            return getActivity(((ContextWrapper)context).getBaseContext());
+        return null;
     }
 
     @Override

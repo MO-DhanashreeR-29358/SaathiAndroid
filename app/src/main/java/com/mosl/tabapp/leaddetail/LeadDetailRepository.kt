@@ -1,6 +1,9 @@
 package com.mosl.tabapp.leaddetail
 
+import androidx.room.Update
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import io.reactivex.Observable
 
 interface LeadDetailRepository {
@@ -14,5 +17,6 @@ interface LeadDetailRepository {
   fun getLeadEmpForAssign(search: String): Observable<List<LeadEmployees>>
   fun getClientDetailWithPortfolioAndProfitLoss(ucId: String): Observable<ClientDetailWithPortfolioAndProfitLoss>
   fun addProduct(request: InsertLeadProductRequest): Observable<List<AddProductData>>
+  fun updateProduct(request: UpdateLeadRequest): Observable<UpdateLeadResponse>
 
 }
