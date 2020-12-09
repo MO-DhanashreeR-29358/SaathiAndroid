@@ -18,7 +18,6 @@ import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
@@ -49,12 +48,12 @@ import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailUiEvent.UpdateBtnEven
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.*
-import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.Contact
-import com.mosl.tabapp.model.*
-import com.mosl.tabapp.leaddetail.Contact
+import com.mosl.tabapp.model.AddressDetailModel
+import com.mosl.tabapp.model.ContactDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.model.LeadFieldSectionModel
+import com.mosl.tabapp.model.LeadFieldValueModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
@@ -63,11 +62,10 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.*
-import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import timber.log.Timber
 import kotlinx.android.synthetic.main.frag_lead_creation.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
