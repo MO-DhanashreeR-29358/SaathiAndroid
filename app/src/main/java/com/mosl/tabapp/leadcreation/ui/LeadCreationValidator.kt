@@ -75,13 +75,17 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
         R.string.error_message_enter_mobile
       }
 
-      input.mobileNo.invalidMobileNo() -> {
+      input.mobileNo.length <= 10 && !input.mobileNo.matches(
+          "^[6789]\\d{9}$".toRegex()
+      ) -> {
         identifier = 12
         R.string.error_message_invalid_mobile
       }
 
       input.alternateMobileNo.isNotBlank() &&
-          input.alternateMobileNo.invalidMobileNo() -> {
+          input.alternateMobileNo.length <= 10 && !input.alternateMobileNo.matches(
+          "^[6789]\\d{9}$".toRegex()
+      ) -> {
         identifier = 13
         R.string.error_message_invalid_mobile
       }
@@ -98,7 +102,9 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
       }
 
       input.ekycMobileNo.isNotBlank() &&
-          input.ekycMobileNo.invalidMobileNo() -> {
+          input.ekycMobileNo.length <= 10 && !input.ekycMobileNo.matches(
+          "^[6789]\\d{9}$".toRegex()
+      ) -> {
         identifier = 16
         R.string.error_message_invalid_mobile
       }
