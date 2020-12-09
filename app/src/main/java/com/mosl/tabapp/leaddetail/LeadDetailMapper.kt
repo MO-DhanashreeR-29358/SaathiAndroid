@@ -67,6 +67,7 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       prospectReferName = prospectRefereName ?: emptyString(),
       contact = contact,
       leadProductMapping = leadProductMapping,
+      leadSourceId = leadSourceID,
       isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true)
 
   )

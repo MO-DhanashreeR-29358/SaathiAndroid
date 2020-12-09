@@ -48,12 +48,9 @@ import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailUiEvent.UpdateBtnEven
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.leaddetail.Contact
-import com.mosl.tabapp.model.AddressDetailModel
-import com.mosl.tabapp.model.ContactDetailModel
-import com.mosl.tabapp.model.EmployeeModel
-import com.mosl.tabapp.model.LeadFieldSectionModel
-import com.mosl.tabapp.model.LeadFieldValueModel
+import com.mosl.tabapp.model.*
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
@@ -79,6 +76,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private var leadId = "0"
     private var ucId = "0"
+    private var sourceIdstr = ""
+    private var leadProspetSourceIdstr = ""
 
     private var stage: String? = null
     private var status: String? = null
@@ -1667,12 +1666,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 RESIDENCEADDRESS,
                 getJsonSafeString(binding.etAdd1.text.toString().trim()),
                 getJsonSafeString(binding.etAdd2.text.toString().trim()),
-                getJsonSafeString(binding.etAdd3.text.toString().trim()), /*countryCodeStr*/
-                "",
-                /*stateCodeStr*/
-                "",
-                /*cityCodeStr*/
-                "",
+                getJsonSafeString(binding.etAdd3.text.toString().trim()),
+                /*countryCodeStr*/(binding.spCountry.selectedItem as RowData).key,
+                /*stateCodeStr*/(binding.spState.selectedItem as RowData).key,
+                /*cityCodeStr*/(binding.spCity.selectedItem as RowData).key,
                 binding.etPincode.text.toString().trim(),
                 binding.cbPrimaryAddress.isChecked,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
@@ -1683,12 +1680,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 OFFICEADDRESS,
                 getJsonSafeString(binding.etOffAdd1.text.toString().trim()),
                 getJsonSafeString(binding.etOffAdd2.text.toString().trim()),
-                getJsonSafeString(binding.etOffAdd3.text.toString().trim()), /*offCountryCodeStr*/
-                "",
-                /*offStateCodeStr*/
-                "",
-                /*offCityCodeStr*/
-                "",
+                getJsonSafeString(binding.etOffAdd3.text.toString().trim()),
+                /*offCountryCodeStr*/(binding.spOffCountry.selectedItem as RowData).key,
+                /*offStateCodeStr*/(binding.spOffState.selectedItem as RowData).key,
+                /*offCityCodeStr*/(binding.spOffCity.selectedItem as RowData).key,
                 binding.etOffPincode.text.toString().trim(),
                 binding.cbOffPrimaryAddress.isChecked,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
@@ -1737,8 +1732,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         leadDetailModel.businessUnitID =
             userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
         leadDetailModel.contactPerson = binding.etContactPerson.text.toString().trim()
-        leadDetailModel.sourceID = ""/*sourceID*/
-        leadDetailModel.leadSourceID = ""/*leadProspetSourceID*/
+        leadDetailModel.sourceID = sourceIdstr
+        leadDetailModel.leadSourceID = leadProspetSourceIdstr
         leadDetailModel.leadSourceDetailsID = "0"
         leadDetailModel.leadSourceDetails = binding.etProspectSourceDetail.text.toString()
         leadDetailModel.name = binding.etLeadName.text.toString().trim()
@@ -1751,8 +1746,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         leadDetailModel.refereeEmail = binding.etRefereeEmail.text.toString().trim()
         leadDetailModel.refereeMobile = binding.etRefereeNumber.text.toString().trim()
         leadDetailModel.comments = getJsonSafeString(binding.etComments.text.toString().trim())
-        leadDetailModel.profileID = ""/*profileCodeStr*/
-        leadDetailModel.professionID = ""/*professionCodeStr*/
+        leadDetailModel.profileID = /*profileCodeStr*/
+            (binding.spProfile.selectedItem as RowData).key
+        leadDetailModel.professionID = /*professionCodeStr*/
+            (binding.spProfession.selectedItem as RowData).key
         leadDetailModel.createdBy = binding.etCreatedBy.text.toString().trim()
         leadDetailModel.createdThrough = "0"
         leadDetailModel.creationDate = binding.etCreationDate.text.toString().trim()
@@ -1769,7 +1766,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private fun updateLead(model: LeadDetailModel) {
         val contactAddresses: MutableList<ContactAddressRequest> = ArrayList()
-        val detailModels: List<AddressDetailModel> = model.getAddressDetailModels()
+        val detailModels: List<AddressDetailModel> = model.addressDetailModels
         for (detailModel in detailModels) {
             contactAddresses.add(
                 ContactAddressRequest(
@@ -1824,7 +1821,25 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess { println("Himanshu Updated Successfully : $it") }
+        uiModel.onSuccess {
+            val data = uiModel.data
+            if (data != null) {
+                leadUpdatedDialog()
+            }
+        }
+    }
+
+    private fun leadUpdatedDialog() {
+        MSFDialog.alertDialog(
+            requireActivity(), 0,
+            resources.getString(
+                R.string.motilal_oswal
+            ), resources.getString(R.string.lead_updated), "OK", true
+        ) { action: Action, _: Array<Any?>? ->
+            if (action == OK) {
+                
+            }
+        }
     }
 
     private fun getLeadFieldValues(
@@ -1950,7 +1965,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             interestedDatas.toMutableList()
-                    .clear()
+                .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -2051,9 +2066,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
         leadOwne = leadOwner
 
-
         pmsProductAdapter.setSpinnerDataWithSelection(
-                binding.spPmsProduct, pmsList, isPotentialPMSProduct
+            binding.spPmsProduct, pmsList, isPotentialPMSProduct
         )
         binding.etProspectRefereerEmail.setText(prospectReferEmail)
         binding.etProspectRefereeName.setText(prospectReferName)
@@ -2079,13 +2093,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.etProspectSourceDetail.setText(leadSourceDetails)
         binding.etComments.setText(comments)
         binding.etContactPerson.visibility =
-                if (leadCategoryText.equals("Individual", ignoreCase = true)) {
-                    isIndividualsFlag = true
-                    View.GONE
-                } else {
-                    isIndividualsFlag = false
-                    View.VISIBLE
-                }
+            if (leadCategoryText.equals("Individual", ignoreCase = true)) {
+                isIndividualsFlag = true
+                View.GONE
+            } else {
+                isIndividualsFlag = false
+                View.VISIBLE
+            }
+
+        sourceIdstr = sourceId
+        leadProspetSourceIdstr = leadSourceId.toString()
         binding.etLeadID.setText(leadId) //Himanshu
         binding.etLeadName.setText(contact?.name) //Himanshu
         try {//Jeet
@@ -2131,20 +2148,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
         leadDetailAddProductAdapter =
-                LeadDetailAddProductAdapter(
-                        saathiApi,
-                        requireContext(),
-                        leadDetailAddProductList,
-                        binding.lvAddProduct,
-                        leadId,
-                        isLeadEditable,
-                        statusDatas,
-                        statusAdapter,
-                        userManager.getUser()?.employeeCode,
-                        status,
-                        userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                        (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
-                )
+            LeadDetailAddProductAdapter(
+                saathiApi,
+                requireContext(),
+                leadDetailAddProductList,
+                binding.lvAddProduct,
+                leadId,
+                isLeadEditable,
+                statusDatas,
+                statusAdapter,
+                userManager.getUser()?.employeeCode,
+                status,
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+            )
         binding.lvAddProduct.adapter = leadDetailAddProductAdapter
         CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
         binding.nestedScrollView.apply {
@@ -2155,50 +2172,50 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun getLeadDetailAddProductModel(
-            item: LeadProductMappingItem
+        item: LeadProductMappingItem
     ): LeadDetailAddProductModel {
         val crossSellingProducts: List<CrossSellingProductsModel> =
-                getCrossSellingProductsModel(item.crossSellingProducts)
+            getCrossSellingProductsModel(item.crossSellingProducts)
         return LeadDetailAddProductModel(
-                item.stageID.toString(),
-                stringOrEmpty(item.stageName), item.statusID.toString(),
-                stringOrEmpty(item.statusName), item.interestedIn.toString(),
-                stringOrEmpty(item.productName),
-                stringOrEmpty(item.primaryRMName),
-                stringOrEmpty(item.productSpecialistName),
-                stringOrEmpty(item.assignedBy),
-                stringOrEmpty(item.assignedByDate),
-                stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
-                item.isDefault,
-                crossSellingProducts,
-                item.isCrossSellingProduct,
-                stringOrEmpty(item.isProductSpecialistEditDisabled),
-                stringOrEmpty(item.isProductDisabled),
-                stringOrEmpty(item.productSpecialist)
+            item.stageID.toString(),
+            stringOrEmpty(item.stageName), item.statusID.toString(),
+            stringOrEmpty(item.statusName), item.interestedIn.toString(),
+            stringOrEmpty(item.productName),
+            stringOrEmpty(item.primaryRMName),
+            stringOrEmpty(item.productSpecialistName),
+            stringOrEmpty(item.assignedBy),
+            stringOrEmpty(item.assignedByDate),
+            stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
+            item.isDefault,
+            crossSellingProducts,
+            item.isCrossSellingProduct,
+            stringOrEmpty(item.isProductSpecialistEditDisabled),
+            stringOrEmpty(item.isProductDisabled),
+            stringOrEmpty(item.productSpecialist)
         )
     }
 
     private fun getLeadDetailAddProductModel(
-            item: AddProductData
+        item: AddProductData
     ): LeadDetailAddProductModel {
         val crossSellingProducts: List<CrossSellingProductsModel> =
-                getCrossSellingProductsModel(item.crossSellingProducts)
+            getCrossSellingProductsModel(item.crossSellingProducts)
         return LeadDetailAddProductModel(
-                item.stageId,
-                stringOrEmpty(item.stageName), item.statusId,
-                stringOrEmpty(item.statusName), item.interestedIn,
-                stringOrEmpty(item.prodName),
-                stringOrEmpty(item.primRMName),
-                stringOrEmpty(item.productSpecialistName),
-                stringOrEmpty(item.assignedBy),
-                stringOrEmpty(item.assignedByDate),
-                stringOrEmpty(item.clientCode), item.leadProductMappingId,
-                item.isDefault,
-                crossSellingProducts,
-                item.isCrossSellingProduct,
-                stringOrEmpty(item.isProdSpecEditDisabled),
-                stringOrEmpty(item.isProdDisabled),
-                stringOrEmpty(item.prodSpecialist)
+            item.stageId,
+            stringOrEmpty(item.stageName), item.statusId,
+            stringOrEmpty(item.statusName), item.interestedIn,
+            stringOrEmpty(item.prodName),
+            stringOrEmpty(item.primRMName),
+            stringOrEmpty(item.productSpecialistName),
+            stringOrEmpty(item.assignedBy),
+            stringOrEmpty(item.assignedByDate),
+            stringOrEmpty(item.clientCode), item.leadProductMappingId,
+            item.isDefault,
+            crossSellingProducts,
+            item.isCrossSellingProduct,
+            stringOrEmpty(item.isProdSpecEditDisabled),
+            stringOrEmpty(item.isProdDisabled),
+            stringOrEmpty(item.prodSpecialist)
         )
     }
 
@@ -2210,13 +2227,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         if (products != null && products.size > 0) {
             for ((leadProductId, productId, statusId, productName, statusName) in products) {
                 crossSellingProducts.add(
-                        CrossSellingProductsModel(
-                                leadProductId,
-                                productId,
-                                statusId,
-                                productName,
-                                statusName
-                        )
+                    CrossSellingProductsModel(
+                        leadProductId,
+                        productId,
+                        statusId,
+                        productName,
+                        statusName
+                    )
                 )
             }
         }
@@ -2322,12 +2339,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             stageDatas.toMutableList()
-                    .clear()
+                .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             stageDatas.toMutableList()
-                    .clear()
+                .clear()
             stageDatas = it
             stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageDatas)
         }
@@ -2337,16 +2354,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             statusDatas.toMutableList()
-                    .clear()
+                .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             statusDatas.toMutableList()
-                    .clear()
+                .clear()
             statusDatas = it
             statusAdapter.setSpinnerData(
-                    requireNotNull(addProductDialogBinding).spStatus,
-                    statusDatas
+                requireNotNull(addProductDialogBinding).spStatus,
+                statusDatas
             )
         }
     }
@@ -2367,10 +2384,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     companion object {
         @JvmStatic
         fun newInstance(
-                position: Int,
-                type: String,
-                leadID: String,
-                ucId: String
+            position: Int,
+            type: String,
+            leadID: String,
+            ucId: String
         ): LeadDetailFragment {
             return LeadDetailFragment().apply {
                 val args = Bundle().apply {
