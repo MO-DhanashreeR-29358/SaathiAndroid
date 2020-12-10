@@ -12,11 +12,8 @@ fun EditText.string(): String {
     return text.toString()
 }
 
-fun String?.nullSafe(): String {
-    if (this == null)
-        return emptyString()
-    else
-        return this
+fun String?.nullSafe(defaultValue: String = emptyString()): String {
+    return this ?: defaultValue
 }
 
 fun Spinner.setSpinnerData(

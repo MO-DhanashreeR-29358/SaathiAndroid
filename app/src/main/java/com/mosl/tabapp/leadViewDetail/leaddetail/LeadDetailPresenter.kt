@@ -197,7 +197,7 @@ class LeadDetailPresenter @Inject constructor(
                 .subscribe { view.renderOnRefereeNameFocusChange() }
                 .addTo(disposable)
 
-        view.onLeadNameAfterTextChanged()
+       /* view.onLeadNameAfterTextChanged()
                 .subscribe { view.renderOnLeadNameAfterTextChange(it) }
                 .addTo(disposable)
 
@@ -211,7 +211,7 @@ class LeadDetailPresenter @Inject constructor(
 
         view.onProsRefereeMobileTextChanged()
                 .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
-                .addTo(disposable)
+                .addTo(disposable)*/
 
         view.onSubmitButtonClicked()
                 .map { view.getUpdateLeadUSerInput() }
@@ -232,19 +232,19 @@ class LeadDetailPresenter @Inject constructor(
                 .addTo(disposable)
 
 
-        view.onProsRefereeEmailTextChanged()
+    /*    view.onProsRefereeEmailTextChanged()
                 .subscribe { view.renderOnProsRefereeEmailTextChange(it) }
                 .addTo(disposable)
 
         view.onContactPersonAfterTextChanged()
                 .subscribe { view.renderOnContactPersonAfterTextChange(it) }
-                .addTo(disposable)
+                .addTo(disposable)*/
 
-        view.onLandLineAfterTextChanged()
+       /* view.onLandLineAfterTextChanged()
                 .subscribe { view.renderOnLandLineAfterTextChange(it) }
-                .addTo(disposable)
+                .addTo(disposable)*/
 
-        view.onAlterMobileTextChanged()
+       /* view.onAlterMobileTextChanged()
                 .subscribe { view.renderOnAlterMobileTextChange(it) }
                 .addTo(disposable)
 
@@ -266,7 +266,7 @@ class LeadDetailPresenter @Inject constructor(
 
         view.onOfficePinTextChanged()
                 .subscribe { view.renderOnOfficePinTextChange(it) }
-                .addTo(disposable)
+                .addTo(disposable)*/
 
         view.onAdd1AfterTextChanged()
                 .filter { view.isCbSameAsChecked() }

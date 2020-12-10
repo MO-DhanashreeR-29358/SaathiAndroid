@@ -44,7 +44,7 @@ interface LeadDetailView : BaseView {
     fun renderOnRefereeCodeFocusChange()
     fun onRefereeNameFocusChanged(): Observable<Boolean>
     fun renderOnRefereeNameFocusChange()
-    fun onLeadNameAfterTextChanged(): Observable<String>
+   /* fun onLeadNameAfterTextChanged(): Observable<String>
     fun renderOnLeadNameAfterTextChange(text: String)
     fun onProsRefereeNameAfterTextChanged(): Observable<String>
     fun renderOnProsRefereeNameAfterTextChange(text: String)
@@ -53,10 +53,10 @@ interface LeadDetailView : BaseView {
     fun onProsRefereeEmailTextChanged(): Observable<String>
     fun renderOnProsRefereeEmailTextChange(text: String)
     fun onContactPersonAfterTextChanged(): Observable<String>
-    fun renderOnContactPersonAfterTextChange(text: String)
-    fun onLandLineAfterTextChanged(): Observable<String>
-    fun renderOnLandLineAfterTextChange(text: String)
-    fun onAlterMobileTextChanged(): Observable<String>
+    fun renderOnContactPersonAfterTextChange(text: String)*/
+//    fun onLandLineAfterTextChanged(): Observable<String>
+//    fun renderOnLandLineAfterTextChange(text: String)
+    /*fun onAlterMobileTextChanged(): Observable<String>
     fun renderOnAlterMobileTextChange(text: String)
     fun onAlterEmailTextChanged(): Observable<String>
     fun renderOnAlterEmailTextChange(text: String)
@@ -69,7 +69,7 @@ interface LeadDetailView : BaseView {
     fun onPinTextChanged(): Observable<String>
     fun renderOnPinTextChange(text: String)
     fun onOfficePinTextChanged(): Observable<String>
-    fun renderOnOfficePinTextChange(text: String)
+    fun renderOnOfficePinTextChange(text: String)*/
     fun onAdd1AfterTextChanged(): Observable<String>
     fun renderOnAdd1AfterTextChange(text: String)
     fun onAdd2AfterTextChanged(): Observable<String>

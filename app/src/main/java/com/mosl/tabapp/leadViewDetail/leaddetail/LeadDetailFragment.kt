@@ -44,13 +44,11 @@ import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.*
-import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailUiEvent.UpdateBtnEvent
+import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
 import com.mosl.tabapp.leaddetail.ClientDetail
-import com.mosl.tabapp.leaddetail.Contact
 import com.mosl.tabapp.model.*
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
@@ -65,7 +63,6 @@ import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_lead_creation.*
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -145,6 +142,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val defaultSelectionList = ArrayList<RowData>()
+
     override fun getLayout(): Int {
         return R.layout.fragment_lead_detail
     }
@@ -161,6 +160,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private fun setupView() {
+        defaultSelectionList.add(0, SELECT_ROW_DATA)
         with(binding) {
             val arrayPmsProduct =
                     requireActivity().resources.getStringArray(R.array.selectPmsProduct)
@@ -1022,244 +1022,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onLeadNameAfterTextChanged(): Observable<String> {
-        return binding.etLeadName.afterTextChangeEvents()
-                .map { it.editable?.toString() ?: emptyString() }
-    }
-
-    override fun renderOnLeadNameAfterTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            text
-                    ) -> binding.tlLeadName.disableErrorMessages()
-                    else -> {
-                        binding.tlLeadName.setErrorMessages(ErrorMsgName)
-                    }
-                }
-            }
-            else -> {
-                binding.tlLeadName.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onProsRefereeNameAfterTextChanged(): Observable<String> {
-        return binding.etProspectRefereeName.afterTextChangeEvents()
-                .map { it.editable?.toString() ?: emptyString() }
-    }
-
-    override fun renderOnProsRefereeNameAfterTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            text
-                    ) -> binding.tlProspectRefereeName.disableErrorMessages()
-                    else -> {
-                        binding.tlProspectRefereeName.setErrorMessages(ErrorMsgName)
-                    }
-                }
-            }
-            else -> {
-                binding.tlProspectRefereeName.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onProsRefereeMobileTextChanged(): Observable<String> {
-        return binding.etProspectRefereerMobile.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnProsRefereeMobileTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            text
-                    ) -> binding.tlProspectRefereeMob.disableErrorMessages()
-                    else -> {
-                        binding.tlProspectRefereeMob.setErrorMessages(ErrorMsgName)
-                    }
-                }
-            }
-            else -> {
-                binding.tlProspectRefereeMob.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onProsRefereeEmailTextChanged(): Observable<String> {
-        return binding.etProspectRefereerEmail.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnProsRefereeEmailTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMValidationRule.isValidEmail(
-                            text
-                    ) -> binding.tlProspectRefereeEmail.disableErrorMessages()
-                    else -> {
-                        binding.tlProspectRefereeEmail.setErrorMessages(INVALID_EMAIL_ID)
-                    }
-                }
-            }
-            else -> {
-                binding.tlProspectRefereeEmail.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onContactPersonAfterTextChanged(): Observable<String> {
-        return binding.etContactPerson.afterTextChangeEvents()
-                .map { it.editable?.toString() ?: emptyString() }
-    }
-
-    override fun renderOnContactPersonAfterTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            text
-                    ) -> binding.tlContactPerson.disableErrorMessages()
-                    else -> {
-                        binding.tlContactPerson.setErrorMessages(ErrorMsgName)
-                    }
-                }
-            }
-            else -> {
-                binding.tlContactPerson.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onLandLineAfterTextChanged(): Observable<String> {
-        return binding.etLandlineNumber.afterTextChangeEvents()
-                .map { it.editable?.toString() ?: emptyString() }
-    }
-
-    override fun renderOnLandLineAfterTextChange(text: String) {
-        if (binding.etLandlineNumber.isEnabled) {
-            when {
-                text.isNotBlank() -> {
-                    when {
-                        CRMValidationRule.validateTel(
-                                text
-                        ) -> binding.tlLand.disableErrorMessages()
-                        else -> {
-                            binding.tlLand.setErrorMessages(INVALID_LAND_LINE)
-                        }
-                    }
-                }
-                else -> {
-                    binding.tlLand.disableErrorMessages()
-                }
-            }
-        }
-    }
-
-    override fun onAlterMobileTextChanged(): Observable<String> {
-        return binding.etAlternateMobileNumber.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnAlterMobileTextChange(text: String) {
-        if (binding.etAlternateMobileNumber.isEnabled) {
-            when {
-                text.isNotBlank() -> {
-                    when {
-                        CRMValidationRule.validateMobile(
-                                text
-                        ) -> binding.tlAlternateMobile.disableErrorMessages()
-                        else -> {
-                            binding.tlAlternateMobile.setErrorMessages(INVALID_MOBILE_NO)
-                        }
-                    }
-                }
-                else -> {
-                    binding.tlAlternateMobile.disableErrorMessages()
-                }
-            }
-        }
-    }
-
-    override fun onAlterEmailTextChanged(): Observable<String> {
-        return binding.etAlternateEmail.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnAlterEmailTextChange(text: String) {
-        if (binding.llEditLeadDetail.isEnabled) {
-            when {
-                text.isNotBlank() -> {
-                    when {
-                        CRMValidationRule.isValidEmail(
-                                text
-                        ) -> binding.tlAlternateEmail.disableErrorMessages()
-                        else -> {
-                            binding.tlAlternateEmail.setErrorMessages(INVALID_EMAIL_ID)
-                        }
-                    }
-                }
-                else -> {
-                    binding.tlAlternateEmail.disableErrorMessages()
-                }
-            }
-        }
-    }
-
-    override fun onEmailTextChanged(): Observable<String> {
-        return binding.etEmail.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnEmailTextChange(text: String) {
-        if (binding.llEditLeadDetail.isEnabled) {
-            when {
-                text.isNotBlank() -> {
-                    when {
-                        CRMValidationRule.isValidEmail(
-                                text
-                        ) -> binding.tlEmail.disableErrorMessages()
-                        else -> {
-                            binding.tlEmail.setErrorMessages(INVALID_EMAIL_ID)
-                        }
-                    }
-                }
-                else -> {
-                    binding.tlEmail.disableErrorMessages()
-                }
-            }
-        }
-    }
-
-    override fun onPanTextChanged(): Observable<String> {
-        return binding.etPanNumber.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnPanTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMValidationRule.isValidPannumber(
-                            text
-                    ) -> binding.tlPan.disableErrorMessages()
-                    else -> {
-                        binding.tlPan.setErrorMessages(INVALID_PAN)
-                    }
-                }
-            }
-            else -> {
-                binding.tlPan.disableErrorMessages()
-            }
-        }
-    }
-
     private var advisoryCode = ""
 
     override fun renderClientDetail(uiModel: UiModel<ClientDetail>) {
@@ -1581,72 +1343,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onAadharAfterTextChanged(): Observable<String> {
-        return binding.etAadharNumber.afterTextChangeEvents()
-                .map { it.editable?.toString() ?: emptyString() }
-    }
-
-    override fun renderOnAadharAfterTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    CRMValidationRule.validateAadhar(
-                            text
-                    ) -> binding.tlAadhar.disableErrorMessages()
-                    else -> {
-                        binding.tlAadhar.setErrorMessages(INVALID_AADHAR)
-                    }
-                }
-            }
-            else -> {
-                binding.tlAadhar.disableErrorMessages()
-            }
-        }
-    }
-
-    override fun onPinTextChanged(): Observable<String> {
-        return binding.etPincode.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnPinTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    text.length < 6 -> binding.tlPin.setErrorMessages(INVALID_PINCODE_NUMBER)
-                    else -> binding.tlPin.disableErrorMessages()
-                }
-            }
-            else -> {
-                binding.tlPin.disableErrorMessages()
-            }
-
-        }
-        if (binding.cbSameAs.isChecked) {
-            binding.etOffPincode.setText(text)
-        }
-    }
-
-    override fun onOfficePinTextChanged(): Observable<String> {
-        return binding.etOffPincode.textChanges()
-                .map { it.toString() }
-    }
-
-    override fun renderOnOfficePinTextChange(text: String) {
-        when {
-            text.isNotBlank() -> {
-                when {
-                    text.length < 6 -> binding.tlOffPin.setErrorMessages(INVALID_PINCODE_NUMBER)
-                    else -> binding.tlOffPin.disableErrorMessages()
-                }
-            }
-            else -> {
-                binding.tlOffPin.disableErrorMessages()
-            }
-
-        }
-    }
-
     override fun isCbSameAsChecked(): Boolean {
         return binding.cbSameAs.isChecked
     }
@@ -1962,7 +1658,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     override fun renderOnAdd2AfterTextChange(text: String) {
-        binding.etAdd2.setText(text)
+        binding.etOffAdd2.setText(text)
     }
 
     override fun onAdd3AfterTextChanged(): Observable<String> {
@@ -1971,7 +1667,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     override fun renderOnAdd3AfterTextChange(text: String) {
-        binding.etAdd3.setText(text)
+        binding.etOffAdd3.setText(text)
     }
 
     override fun onRefereeCodeChanged(): Observable<String> {
@@ -2199,25 +1895,106 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }//Jeet
         binding.etSource.setText(sourceName)
 
-        binding.etMobileNumber.setText(contact?.mobile)
-        binding.etAlternateMobileNumber.setText(contact?.alternateMobileNo)
-        binding.etEmail.setText(contact?.emailId)
-        binding.etAlternateEmail.setText(contact?.alternateEmailId)
-
+        /* binding.etMobileNumber.setText(contact?.mobile)
+         binding.etAlternateMobileNumber.setText(contact?.alternateMobileNo)
+         binding.etEmail.setText(contact?.emailId)
+         binding.etAlternateEmail.setText(contact?.alternateEmailId)
+ */
         binding.etLeadCategory.setText(leadCategoryText)
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()
         }
 
-        /*contact?.run {
-          renderContact(leadCategoryText)
-        }*/
+        contact?.renderContact()
 
     }
 
-    private fun Contact.renderContact(category: String) {
+    private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
+        binding.run {
+            etPanNumber.setText(panNumber)
+            etAadharNumber.setText(aadharNumber)
+            etEkycMobileNumber.setText(eKYCMobileNo)
+            etMobileNumber.setText(mobile)
+            etEmail.setText(emailId)
+            etAlternateEmail.setText(alternateEmailId)
+            etLandlineNumber.setText(landlineNo)
+            etAlternateMobileNumber.setText(alternateMobileNo)
 
+
+            try {
+                val newDoa = stringOrEmpty(dOA).split("T").toTypedArray()
+                val newDob = stringOrEmpty(dOB).split("T").toTypedArray()
+                if (!newDob[0].isEmpty()) {
+                    val Dob = CRMAppUtil.getDate(newDob[0], "yyyy-MM-dd")
+                    etDob.setText(CRMAppUtil.getDateStr(Dob, "dd-MM-yyyy"))
+                }
+                if (!newDoa[0].isEmpty()) {
+                    val Doa = CRMAppUtil.getDate(newDoa[0], "yyyy-MM-dd")
+                    etAnniversary.setText(CRMAppUtil.getDateStr(Doa, "dd-MM-yyyy"))
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+
+            tvPanCard.setText(panNumber)
+            tvAadharCard.setText(aadharNumber)
+            contactAddress.renderContactAddresses()
+        }
+    }
+
+    private fun List<ContactAddressItem>.renderContactAddresses() {
+        forEach {
+            it.run {
+                when (addressTypeID) {
+                    RESIDENCEADDRESS -> {
+                        cbPrimaryAddress.isChecked = isPrimary
+                        etAdd1.setText(address1)
+                        etAdd2.setText(address2)
+                        etAdd3.setText(address3)
+                        etPincode.setText(pincode)
+                        val dataCountry = RowData.getSpinnerRowDataById(
+                                countryID.toString().nullSafe("-1")
+                                ,
+                                countryAdapter)
+                        dataCountry?.run {
+                            binding.spCountry.setSelection(position)
+                        }
+                        val dataState = RowData.getSpinnerRowDataById(
+                                stateID.toString().nullSafe("-1")
+                                ,
+                                stateAdapter)
+                        dataState?.run {
+                            binding.spState.setSelection(position)
+                        }
+
+                    }
+                    OFFICEADDRESS -> {
+                        cbOffPrimaryAddress.isChecked = isPrimary
+                        etOffAdd1.setText(address1)
+                        etOffAdd2.setText(address2)
+                        etOffAdd3.setText(address3)
+                        etOffPincode.setText(pincode)
+                        val dataCountry = RowData.getSpinnerRowDataById(
+                                countryID.toString().nullSafe("-1")
+                                ,
+                                countryAdapterOff)
+                        dataCountry?.run {
+                            binding.spOffCountry.setSelection(position)
+                        }
+                        val dataState = RowData.getSpinnerRowDataById(
+                                stateID.toString().nullSafe("-1")
+                                ,
+                                stateAdapterOff)
+                        dataState?.run {
+                            binding.spOffState.setSelection(position)
+                        }
+                    }
+                    else -> {}
+                }
+
+            }
+        }
     }
 
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
@@ -2364,10 +2141,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun getSelectedCountry(): RowData = binding.spCountry.selectedItem as RowData
     override fun getSelectedOfficeCountry(): RowData = binding.spOffCountry.selectedItem as RowData
-    override fun getSelectedState(): RowData {
-        Timber.i("SelectedState=>>>>%s", binding.spState.selectedItem)
-        return binding.spState.selectedItem as RowData
-    }
+    override fun getSelectedState(): RowData = binding.spState.selectedItem as RowData
 
     override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
 
@@ -2376,6 +2150,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
+            binding.spCity.setSpinnerData(cityAdapter, defaultSelectionList)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
             }
@@ -2387,6 +2162,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, defaultSelectionList)
         }
     }
 
