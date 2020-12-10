@@ -20,80 +20,81 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 class LeadDetailPresenter @Inject constructor(
-    view: LeadDetailView,
-    val data: LeadDetailArgument,
-    val repository: LeadCreationRepository,
-    val detailRepository: LeadDetailRepository,
-    val navigator: LeadViewDetailNavigator
+        view: LeadDetailView,
+        val data: LeadDetailArgument,
+        val repository: LeadCreationRepository,
+        val detailRepository: LeadDetailRepository,
+        val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadDetailView>(view) {
+    private val validator = UpdateLeadValidator()
     override fun start() {
         val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
-            .share()
+                .share()
 
         screenLoadObs
-            .filter { //data.leadId == "0" &&
-                data.ucId.toInt() != 0
-            }
-            .switchMap {
-                detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
-                    //detailRepository.getClientDetail(data.ucId)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss, Timber::e)
-            // .subscribe(view::renderClientDetail, Timber::e)
-            .addTo(disposable)
+                .filter { //data.leadId == "0" &&
+                    data.ucId.toInt() != 0
+                }
+                .switchMap {
+                    detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
+                            //detailRepository.getClientDetail(data.ucId)
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss, Timber::e)
+                // .subscribe(view::renderClientDetail, Timber::e)
+                .addTo(disposable)
 
         view.addProductEventFired()
-            .switchMap {
-                detailRepository.addProduct(it.addProduct)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderAddProduct)
-            .addTo(disposable)
+                .switchMap {
+                    detailRepository.addProduct(it.addProduct)
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::renderAddProduct)
+                .addTo(disposable)
 
         screenLoadObs
-            .map { data.leadId }
-            .filter { it != "0" }
-            .switchMap {
-                Observable.zip(
-                    repository.getProfessionRowDatas(),
-                    detailRepository.getLeadDetail(it),
-                    BiFunction { rows: List<RowData>, detail: LeadDetail ->
-                        LeadDetailAndProfession(rows, detail)
-                    }
-                )
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderLeadDetailAndProfession, Timber::e)
-            .addTo(disposable)
+                .map { data.leadId }
+                .filter { it != "0" }
+                .switchMap {
+                    Observable.zip(
+                            repository.getProfessionRowDatas(),
+                            detailRepository.getLeadDetail(it),
+                            BiFunction { rows: List<RowData>, detail: LeadDetail ->
+                                LeadDetailAndProfession(rows, detail)
+                            }
+                    )
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::renderLeadDetailAndProfession, Timber::e)
+                .addTo(disposable)
 
 
         screenLoadObs
-            .subscribe { view.renderArguments(data) }
-            .addTo(disposable)
+                .subscribe { view.renderArguments(data) }
+                .addTo(disposable)
 
         screenLoadObs
-            .switchMap {
-                Observable.zip(
-                    repository.getProfileRowDatas(),
-                    repository.getInterestInRowDatas(),
-                    repository.getCountryRowDatas(),
-                    Function3 { listOfProfile: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
-                        LeadDetailPageData(listOfProfile, listOfInterest, listOfCountry)
-                    }
-                )
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::render, Timber::e)
-            .addTo(disposable)
+                .switchMap {
+                    Observable.zip(
+                            repository.getProfileRowDatas(),
+                            repository.getInterestInRowDatas(),
+                            repository.getCountryRowDatas(),
+                            Function3 { listOfProfile: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
+                                LeadDetailPageData(listOfProfile, listOfInterest, listOfCountry)
+                            }
+                    )
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::render, Timber::e)
+                .addTo(disposable)
 
         view.onUpdateProfileEventFired()
-            .switchMap {
-                repository.updateProfile(it.selectedProfile, data.ucId)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderUpdateProfile, Timber::e)
-            .addTo(disposable)
+                .switchMap {
+                    repository.updateProfile(it.selectedProfile, data.ucId)
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::renderUpdateProfile, Timber::e)
+                .addTo(disposable)
 
         view.onEditLeadDetailClicked()
                 .subscribe { view.renderEditLeadDetailClick() }
@@ -213,17 +214,23 @@ class LeadDetailPresenter @Inject constructor(
                 .addTo(disposable)
 
         view.onSubmitButtonClicked()
-            .subscribe { view.renderOnUpdateButtonClick() }
-            .addTo(disposable)
+                .map { view.getUpdateLeadUSerInput() }
+                .switchMap {
+                    validator.validate(it)
+                            .compose(applyUiModel())
+                }
+                .subscribe { view.renderOnUpdateButtonClick(it) }
+                .addTo(disposable)
 
-        view.updateDialogBtnEventFired()
-            .switchMap {
-                detailRepository.updateProduct(it.updateLeadRequest)
-                    .compose(applyUiModel())
-            }
-            .subscribe (view::renderUpdateDetail)
-            .addTo(disposable)
-        
+        view.onUpdateLeadEventFired()
+                .map { view.getUpdateLeadUSerInput() }
+                .switchMap {
+                    repository.updateLead(it)
+                            .compose(applyUiModel())
+                }
+                .subscribe(view::renderUpdateDetail)
+                .addTo(disposable)
+
 
         view.onProsRefereeEmailTextChanged()
                 .subscribe { view.renderOnProsRefereeEmailTextChange(it) }

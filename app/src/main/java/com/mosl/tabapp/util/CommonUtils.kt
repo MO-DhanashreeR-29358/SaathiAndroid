@@ -9,13 +9,20 @@ import com.mosl.tabapp.common.RowData
 fun emptyString() = ""
 
 fun EditText.string(): String {
-  return text.toString()
+    return text.toString()
+}
+
+fun String?.nullSafe(): String {
+    if (this == null)
+        return emptyString()
+    else
+        return this
 }
 
 fun Spinner.setSpinnerData(
-  arrayAdapter: ArrayAdapter<RowData>,
-  rowData: List<RowData>
+        arrayAdapter: ArrayAdapter<RowData>,
+        rowData: List<RowData>
 ) {
-  adapter = arrayAdapter
-  arrayAdapter.setSpinnerData(this, rowData)
+    adapter = arrayAdapter
+    arrayAdapter.setSpinnerData(this, rowData)
 }
