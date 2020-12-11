@@ -88,6 +88,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var statusDatas = emptyList<RowData>()
     private var stageDatas = emptyList<RowData>()
 
+    private var isAddressBinded = false
+    private var isAddressOffBinded = false
+
+    private var selectedCityId = "-1"
+    private var selectedCityOffId = "-1"
     var pmsList: List<String> = emptyList()
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
@@ -760,18 +765,31 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun renderPrimaryAddCheckBoxClicked() {
         binding.run {
             if (cbPrimaryAddress.isChecked) {
-                enableField(llResAdd)
-                enableField(llOffAdd)
-                cbOffPrimaryAddress.gone()
-                cbSameAs.visible()
+                handleWhenPrimaryAddChecked(true)
             } else {
-                cbOffPrimaryAddress.visible()
-                cbSameAs.gone()
-                disableField(llResAdd)
-                disableField(llOffAdd)
-                cbOffPrimaryAddress.isChecked = false
-                cbSameAs.isChecked = false
+                handleWhenPrimaryAddUnckecked(true)
             }
+        }
+    }
+
+    private fun FragmentLeadDetailBinding.handleWhenPrimaryAddChecked(isEnabledRequired: Boolean = false) {
+        cbOffPrimaryAddress.gone()
+        cbSameAs.visible()
+        cbOffPrimaryAddress.isChecked = false
+        if (isEnabledRequired) {
+            enableField(llResAdd)
+            enableField(llOffAdd)
+        }
+    }
+
+    private fun FragmentLeadDetailBinding.handleWhenPrimaryAddUnckecked(isDisabledRequired: Boolean = false) {
+        cbOffPrimaryAddress.visible()
+        cbSameAs.gone()
+        cbOffPrimaryAddress.isChecked = false
+        cbSameAs.isChecked = false
+        if (isDisabledRequired) {
+            disableField(llResAdd)
+            disableField(llOffAdd)
         }
     }
 
@@ -1615,7 +1633,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 ), resources.getString(R.string.lead_updated), "OK", true
         ) { action: Action, _: Array<Any?>? ->
             if (action == OK) {
-
+                binding.llEditLeadDetail.performClick()
             }
         }
     }
@@ -1954,20 +1972,22 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         etAdd3.setText(address3)
                         etPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
-                                countryID.toString().nullSafe("-1")
-                                ,
+                                countryID.toString().nullSafe("-1"),
                                 countryAdapter)
                         dataCountry?.run {
                             binding.spCountry.setSelection(position)
                         }
                         val dataState = RowData.getSpinnerRowDataById(
-                                stateID.toString().nullSafe("-1")
-                                ,
+                                stateID.toString().nullSafe("-1"),
                                 stateAdapter)
                         dataState?.run {
                             binding.spState.setSelection(position)
                         }
-
+                        selectedCityId = cityID.toString().nullSafe("-1")
+                        if (isPrimary)
+                            binding.handleWhenPrimaryAddChecked()
+                        else
+                            binding.handleWhenPrimaryAddUnckecked()
                     }
                     OFFICEADDRESS -> {
                         cbOffPrimaryAddress.isChecked = isPrimary
@@ -1976,21 +1996,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         etOffAdd3.setText(address3)
                         etOffPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
-                                countryID.toString().nullSafe("-1")
-                                ,
+                                countryID.toString().nullSafe("-1"),
                                 countryAdapterOff)
                         dataCountry?.run {
                             binding.spOffCountry.setSelection(position)
                         }
                         val dataState = RowData.getSpinnerRowDataById(
-                                stateID.toString().nullSafe("-1")
-                                ,
+                                stateID.toString().nullSafe("-1"),
                                 stateAdapterOff)
                         dataState?.run {
                             binding.spOffState.setSelection(position)
                         }
+                        selectedCityOffId = cityID.toString().nullSafe("-1")
                     }
-                    else -> {}
+                    else -> {
+                    }
                 }
 
             }
@@ -2171,6 +2191,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
+            if (!isAddressBinded) {
+                val dataCity = RowData.getSpinnerRowDataById(
+                        selectedCityId,
+                        cityAdapter)
+                dataCity?.run {
+                    binding.spCity.setSelection(position)
+                    isAddressBinded = true
+                }
+            }
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
             }
@@ -2182,6 +2211,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
             binding.spOffCity.setSpinnerData(cityAdapterOff, it)
+            if (!isAddressOffBinded) {
+                val dataCity = RowData.getSpinnerRowDataById(
+                        selectedCityOffId,
+                        cityAdapterOff)
+                dataCity?.run {
+                    binding.spOffCity.setSelection(position)
+                    isAddressOffBinded = true
+                }
+            }
         }
     }
 
