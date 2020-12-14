@@ -108,8 +108,7 @@
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_28sdp"
                 android:layout_weight=".6"
-                android:background="@drawable/spinner"
-                android:entries="@array/Select" />
+                android:background="@drawable/spinner" />
         </LinearLayout>
 
         <TextView

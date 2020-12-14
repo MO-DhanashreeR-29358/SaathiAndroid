@@ -813,10 +813,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow()
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setCanceledOnTouchOutside(false);/*
-        DialogLeadviewAddProductBinding dialogBinding =
-            DialogLeadviewAddProductBinding.inflate(inflater);
-        dialog.setContentView(R.layout.dialog_leadview_add_product);*/
+        dialog.setCanceledOnTouchOutside(false);
         DialogLeadviewAddProductBinding dialogBinding = DialogLeadviewAddProductBinding.bind(
                 dialog.getLayoutInflater().inflate(
                         R.layout.dialog_leadview_add_product,
@@ -845,11 +842,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         specialistEdit = productSpecialistId;
         dialogBinding.dacProductSpecialist.setClearIconVisible(true);
         dialogBinding.dacProductSpecialist.setHint(mContext.getString(R.string.str_prod_spl));
-        if (isProductSpecEnabled.equals("1")) {
-            dialogBinding.dacProductSpecialist.setEnabled(false);
-        } else {
-            dialogBinding.dacProductSpecialist.setEnabled(true);
-        }
+        dialogBinding.dacProductSpecialist.setEnabled(isProductSpecEnabled.equals("1"));
         dialogBinding.dacProductSpecialist.setListener(() -> specialistEdit = "");
         dialogBinding.dacProductSpecialist.setOnClickListener(v -> {
 
@@ -884,13 +877,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     };
             searchListProductSpecialist.setmListner(productSpecialistViewListner);
         });
-        final ClearableEditText actAssignTo =
-                dialog.findViewById(R.id.actAssignTo);
-        actAssignTo.setText(asignedTo);
-        actAssignTo.setClearIconVisible(true);
-        actAssignTo.setHint(mContext.getString(R.string.str_assing));
+        dialogBinding.actAssignTo.setText(asignedTo);
+        dialogBinding.actAssignTo.setClearIconVisible(true);
+        dialogBinding.actAssignTo.setHint(mContext.getString(R.string.str_assing));
 
-        actAssignTo.setOnClickListener(v -> {
+        dialogBinding.actAssignTo.setOnClickListener(v -> {
             dialog.getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                             | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -908,8 +899,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                             if (clientModel.isNoData()) {
                                 return;
                             }
-                            actAssignTo.setText(clientModel.getAttendeeName());
-                            actAssignTo.setClearIconVisible(true);
+                            dialogBinding.actAssignTo.setText(clientModel.getAttendeeName());
+                            dialogBinding.actAssignTo.setClearIconVisible(true);
                             searchList.dismiss();
                         }
 
@@ -927,9 +918,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 itemSelections(dialogBinding.spStage)
                         .filter(InvalidSelectionPredicate)
                         .subscribe(position -> {
-                            if (dialogBinding.tvspStageError != null) {
-                                dialogBinding.tvspStageError.setVisibility(View.GONE);
-                            }
+                            dialogBinding.tvspStageError.setVisibility(View.GONE);
                             dialogBinding.lowMarginAdd.removeAllViews();
                             lowMarginList.clear();
                             newStageCodeStr = ((RowData) dialogBinding.spStage.getSelectedItem()).getKey();
@@ -952,9 +941,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 itemSelections(dialogBinding.spStatus)
                         .filter(InvalidSelectionPredicate)
                         .subscribe(position -> {
-                            if (dialogBinding.tvspStatusError != null) {
-                                dialogBinding.tvspStatusError.setVisibility(View.GONE);
-                            }
+                            dialogBinding.tvspStatusError.setVisibility(View.GONE);
                             dialogBinding.lowMarginAdd.removeAllViews();
                             lowMarginList.clear();
                             if (position != 0) {
@@ -968,11 +955,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             if (dialogBinding.spStage.getSelectedItemPosition() < 1) {
                 dialogBinding.tvspStageError.setVisibility(View.VISIBLE);
                 dialogBinding.tvspStageError.setText("Select Stage");
-                //TODO Show Error
                 return;
             }
             if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
-                //TODO Show Error
                 dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
                 dialogBinding.tvspStatusError.setText("Select Status");
                 return;
@@ -998,7 +983,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                         specialistEdit,
                                         newStageCodeStr,
                                         selectedStatus.getKey(),
-                                        selectedStatus.getValue(), actAssignTo.getText().toString(),
+                                        selectedStatus.getValue(), dialogBinding.actAssignTo.getText().toString(),
                                         YES, dataMap
                                 );
                             } else {
@@ -1010,7 +995,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                         newStageCodeStr,
                                         selectedStatus.getKey(),
                                         selectedStatus.getValue(),
-                                        actAssignTo.getText()
+                                        dialogBinding.actAssignTo.getText()
                                                 .toString(), NO, dataMap
                                 );
                             }
@@ -1024,7 +1009,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         newStageCodeStr,
                         selectedStatus.getKey(),
                         selectedStatus.getValue(),
-                        actAssignTo.getText().toString(), "", dataMap
+                        dialogBinding.actAssignTo.getText().toString(), "", dataMap
                 );
             }
             dialog.dismiss();

@@ -32,6 +32,8 @@ interface LeadDetailView : BaseView {
     fun renderPrimaryAddCheckBoxClicked()
     fun renderOffPrimaryAddCheckBoxClicked()
     fun renderSameAsAboveClicked()
+    fun onRenderCityEventFired(): Observable<RenderCityAndSelectCity>
+    fun onRenderCityOffEventFired(): Observable<RenderOffCityAndSelectOffCity>
     fun onClientDetailClicked(): Observable<Unit>
     fun onClientPortfolioDetailClicked(): Observable<Unit>
     fun onLeadDetailClicked(): Observable<Unit>
@@ -44,16 +46,17 @@ interface LeadDetailView : BaseView {
     fun renderOnRefereeCodeFocusChange()
     fun onRefereeNameFocusChanged(): Observable<Boolean>
     fun renderOnRefereeNameFocusChange()
-   /* fun onLeadNameAfterTextChanged(): Observable<String>
-    fun renderOnLeadNameAfterTextChange(text: String)
-    fun onProsRefereeNameAfterTextChanged(): Observable<String>
-    fun renderOnProsRefereeNameAfterTextChange(text: String)
-    fun onProsRefereeMobileTextChanged(): Observable<String>
-    fun renderOnProsRefereeMobileTextChange(text: String)
-    fun onProsRefereeEmailTextChanged(): Observable<String>
-    fun renderOnProsRefereeEmailTextChange(text: String)
-    fun onContactPersonAfterTextChanged(): Observable<String>
-    fun renderOnContactPersonAfterTextChange(text: String)*/
+
+    /* fun onLeadNameAfterTextChanged(): Observable<String>
+     fun renderOnLeadNameAfterTextChange(text: String)
+     fun onProsRefereeNameAfterTextChanged(): Observable<String>
+     fun renderOnProsRefereeNameAfterTextChange(text: String)
+     fun onProsRefereeMobileTextChanged(): Observable<String>
+     fun renderOnProsRefereeMobileTextChange(text: String)
+     fun onProsRefereeEmailTextChanged(): Observable<String>
+     fun renderOnProsRefereeEmailTextChange(text: String)
+     fun onContactPersonAfterTextChanged(): Observable<String>
+     fun renderOnContactPersonAfterTextChange(text: String)*/
 //    fun onLandLineAfterTextChanged(): Observable<String>
 //    fun renderOnLandLineAfterTextChange(text: String)
     /*fun onAlterMobileTextChanged(): Observable<String>
@@ -137,6 +140,8 @@ interface LeadDetailView : BaseView {
     fun onStateSelected(): Observable<Int>
     fun getSelectedState(): RowData
     fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
+    fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>)
+    fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>)
 
     fun onCitySelected(): Observable<Int>
     fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
