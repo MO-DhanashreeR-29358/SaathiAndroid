@@ -112,26 +112,6 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { (view.renderSameAsAboveClicked()) }
             .addTo(disposable)
 
-        view.onRenderCityEventFired()
-            .map { view.getSelectedState() }
-            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
-            .switchMap {
-                repository.getCityRowDatas(it.key)
-                    .compose(applyUiModel())
-            }
-            .subscribe({ view.renderCityForCitySelection(it) }, Timber::e)
-            .addTo(disposable)
-
-        view.onRenderCityOffEventFired()
-            .map { view.getSelectedOfficeState() }
-            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
-            .switchMap {
-                repository.getCityRowDatas(it.key)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderOffCityForOffCitySelection, Timber::e)
-            .addTo(disposable)
-
         view.onDOBClicked()
             .subscribe { view.renderDOBClick() }
             .addTo(disposable)
@@ -373,12 +353,9 @@ class LeadDetailPresenter @Inject constructor(
         view.onStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedState() }
-            .skip(2)
             .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
-                repository.getCityRowDatas(it.key).map {
-                    it to 0
-                }
+                repository.getCityRowDatas(it.key)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderCityOnStateSelection, Timber::e)
@@ -409,7 +386,6 @@ class LeadDetailPresenter @Inject constructor(
         view.onOfficeStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedOfficeState() }
-            .skip(2)
             .filter { !view.isSameAsAboveChecked() && it.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
                 repository.getCityRowDatas(it.key)

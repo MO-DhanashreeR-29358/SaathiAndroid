@@ -828,11 +828,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onRenderCityEventFired(): Observable<RenderCityAndSelectCity> = subject.ofType()
-
-    override fun onRenderCityOffEventFired(): Observable<RenderOffCityAndSelectOffCity> =
-        subject.ofType()
-
     private fun handlingWhenSameAsCheckboxClickedAndUnChecked() {
         binding.run {
             enableField(llOffAdd)
@@ -1996,13 +1991,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             binding.spCountry.setSelection(position)
                         }
                         val dataState = RowData.getSpinnerRowDataById(
-                            stateID.toString().nullSafe("-1"),
+                            stateID.toString(),
                             stateAdapter
                         )
                         dataState?.run {
                             binding.spState.setSelection(position)
-                            selectedCityId = cityID.toString().nullSafe("-1")
-                            subject.onNext(RenderCityAndSelectCity)
+                            selectedCityId = cityID.toString()
                         }
                         if (isPrimary)
                             binding.handleWhenPrimaryAddChecked()
@@ -2029,7 +2023,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         dataState?.run {
                             binding.spOffState.setSelection(position)
                             selectedCityOffId = cityID.toString().nullSafe("-1")
-                            subject.onNext(RenderOffCityAndSelectOffCity)
                         }
                     }
                     else -> {
@@ -2210,30 +2203,24 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess {
-            binding.spCity.setSpinnerData(cityAdapter, it.first)
-            if (binding.cbSameAs.isChecked) {
-                binding.spOffState.setSelection(binding.spState.selectedItemPosition)
-            }
-        }
-    }
-
-    override fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>) {
+    override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            val dataCity = RowData.getSpinnerRowDataById(
-                selectedCityId,
-                cityAdapter
-            )
-            dataCity?.run {
-                binding.spCity.setSelection(position)
+            if (selectedCityId != "-1") {
+                val dataCity = RowData.getSpinnerRowDataById(
+                    selectedCityId,
+                    cityAdapter
+                )
+                dataCity?.run {
+                    binding.spCity.setSelection(position)
+                    selectedCityId = "-1"
+                }
             }
-
+            if (binding.cbSameAs.isChecked) {
+                binding.spOffState.setSelection(binding.spState.selectedItemPosition)
+            }
         }
     }
 
@@ -2242,22 +2229,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
             binding.spOffCity.setSpinnerData(cityAdapterOff, it)
-        }
-    }
-
-    override fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
-        uiModel.onSuccess {
-            binding.spOffCity.setSpinnerData(cityAdapterOff, it)
-            val dataCity = RowData.getSpinnerRowDataById(
-                selectedCityOffId,
-                cityAdapterOff
-            )
-            dataCity?.run {
-                binding.spOffCity.setSelection(position)
+            if (selectedCityOffId != "-1") {
+                val dataCity = RowData.getSpinnerRowDataById(
+                    selectedCityOffId,
+                    cityAdapterOff
+                )
+                dataCity?.run {
+                    binding.spOffCity.setSelection(position)
+                    selectedCityOffId = "-1"
+                }
             }
-
         }
     }
 
@@ -2342,7 +2323,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     }
 
-    /*internal fun ArrayList<RowData>.addSelectRowData(): ArrayList<RowData> {
-        return add(0, SELECT_ROW_DATA)
-    }*/
+/*internal fun ArrayList<RowData>.addSelectRowData(): ArrayList<RowData> {
+    return add(0, SELECT_ROW_DATA)
+}*/
 }

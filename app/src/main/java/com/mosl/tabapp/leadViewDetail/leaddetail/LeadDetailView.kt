@@ -31,8 +31,6 @@ interface LeadDetailView : BaseView {
     fun renderPrimaryAddCheckBoxClicked()
     fun renderOffPrimaryAddCheckBoxClicked()
     fun renderSameAsAboveClicked()
-    fun onRenderCityEventFired(): Observable<RenderCityAndSelectCity>
-    fun onRenderCityOffEventFired(): Observable<RenderOffCityAndSelectOffCity>
     fun onClientDetailClicked(): Observable<Unit>
     fun onClientPortfolioDetailClicked(): Observable<Unit>
     fun onLeadDetailClicked(): Observable<Unit>
@@ -138,9 +136,7 @@ interface LeadDetailView : BaseView {
 
     fun onStateSelected(): Observable<Int>
     fun getSelectedState(): RowData
-    fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>)
-    fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>)
-    fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>)
+    fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
 
     fun onCitySelected(): Observable<Int>
     fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
