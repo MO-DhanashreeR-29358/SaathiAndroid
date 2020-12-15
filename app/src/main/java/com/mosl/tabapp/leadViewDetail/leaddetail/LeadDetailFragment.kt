@@ -2210,11 +2210,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
+    override fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            binding.spCity.setSpinnerData(cityAdapter, it)
+            binding.spCity.setSpinnerData(cityAdapter, it.first)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
             }

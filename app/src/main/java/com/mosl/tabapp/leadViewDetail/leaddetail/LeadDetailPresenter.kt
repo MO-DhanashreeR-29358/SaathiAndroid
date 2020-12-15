@@ -376,7 +376,9 @@ class LeadDetailPresenter @Inject constructor(
             .skip(2)
             .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
-                repository.getCityRowDatas(it.key)
+                repository.getCityRowDatas(it.key).map {
+                    it to 0
+                }
                     .compose(applyUiModel())
             }
             .subscribe(view::renderCityOnStateSelection, Timber::e)

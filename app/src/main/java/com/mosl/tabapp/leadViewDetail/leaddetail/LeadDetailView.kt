@@ -9,7 +9,6 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
 import io.reactivex.Observable
 
@@ -139,7 +138,7 @@ interface LeadDetailView : BaseView {
 
     fun onStateSelected(): Observable<Int>
     fun getSelectedState(): RowData
-    fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
+    fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>)
     fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>)
     fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>)
 
