@@ -29,6 +29,8 @@ import com.mosl.saathi.api.model.lead.CrossSellingProduct;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
+import com.mosl.saathi.api.model.lead.StageItem;
+import com.mosl.saathi.api.model.lead.StageRequest;
 import com.mosl.saathi.api.model.lead.StageWiseConfiguration;
 import com.mosl.saathi.api.model.lead.StatusItem;
 import com.mosl.saathi.api.model.lead.StatusRequest;
@@ -54,8 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.droidparts.widget.ClearableEditText;
-
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
@@ -73,13 +73,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private final LayoutInflater inflater;
     Context mContext;
-    private SaathiApi saathiApi;
-    private List<RowData> arrStatus;
+    private final SaathiApi saathiApi;
+    private List<RowData> arrStatus, arrStage;
     private List<RowData> arrCrossSellingProductId;
     private String employeeCode;
     private ListView lvAddProduct;
     private String etLeadId;
-    private ArrayAdapter<RowData> arrAdapStatus;
+    private ArrayAdapter<RowData> arrAdapStatus, arrSatgeAdapter;
     private boolean isLowMargin;
     private List<LowMargin> lowMarginList = new ArrayList<>();
     private Boolean isLeadEditable = true;
@@ -89,7 +89,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     private String statusId;
     private String pmsProductSpinnerValue = "";
     private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
-    private CompositeDisposable disposable = new CompositeDisposable();
+    private final CompositeDisposable disposable = new CompositeDisposable();
     private String specialistEdit = "";
 
     @Override
@@ -137,6 +137,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 Boolean isLeadEditable,
                                 List<RowData> arrStatus,
                                 ArrayAdapter<RowData> arrAdapStatus,
+                                ArrayAdapter<RowData> arrSatgeAdapter,
                                 String employeeCode,
                                 String statusId,
                                 String userBusinessUnitId,
@@ -150,6 +151,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         this.pmsProductSpinnerValue = pmsProductSpinnerValue;
         this.isLeadEditable = isLeadEditable;
         this.arrStatus = arrStatus;
+        this.arrSatgeAdapter = arrSatgeAdapter;
         this.employeeCode = employeeCode;
         this.arrAdapStatus = arrAdapStatus;
         this.userBusinessUnitId = userBusinessUnitId;
@@ -556,13 +558,58 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return view;
     }
 
-    private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
-                              final LinearLayout progressLayout) {
+    private void getStage(final Spinner spStage/*,
+                              final LinearLayout progressLayout*/) {
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
+            disposable.add(
+                    saathiApi.getStageList(new StageRequest(userBusinessUnitId))
+                            .compose(applyUiModel())
+                            .subscribe(uiModel -> renderStageItems(uiModel, spStage/*,progressLayout*/)));
+        }
+    }
+
+    private void renderStageItems(UiModel<List<StageItem>> uiModel, Spinner spStage/*, LinearLayout progressLayout*/) {
+        /*if (uiModel.inProgress) {
+            progressLayout.setVisibility(View.VISIBLE);
+        } else {
+            progressLayout.setVisibility(View.GONE);
+        }
+*/
+        Throwable error = uiModel.error;
+        if (error != null) {
+            arrStage = new ArrayList<>();
+            //=======    showOnFailurePopup(error);
+        }
+
+        List<StageItem> data = uiModel.data;
+        if (data != null) {
+            arrStage = new ArrayList<>();
+            arrStage.add(new RowData(0, "-1", "Select"));
+            for (int i = 0; i < data.size(); i++) {
+                StageItem stageItem = data.get(i);
+                arrStage.add(
+                        new RowData(i + 1,
+                                String.valueOf(stageItem.stageID),
+                                stringOrEmpty(stageItem.stageName)
+                        ));
+            }
+            spStage.setAdapter(arrSatgeAdapter);
+            AdapterUtils.setSpinnerData(arrSatgeAdapter, spStage, arrStage);
+            RowData stageData = getSpinnerRowDataById(statusId, arrSatgeAdapter);
+            /*if (stageData != null) */
+            {
+                spStage.setSelection(2);
+            }
+        }
+    }
+
+    private void newGetStatus(String productId, final Spinner spStatus, final String statusId/*,
+                              final LinearLayout progressLayout*/) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
             disposable.add(
                     saathiApi.getStatusList(new StatusRequest(productId, "1"))
                             .compose(applyUiModel())
-                            .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
+                            .subscribe(uiModel -> renderNewStatus(uiModel, spStatus/*, progressLayout*/,
                                     statusId)));
         } else {
             //========   noInternetConnectionDialog();
@@ -570,12 +617,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     }
 
     private void renderNewStatus(UiModel<List<StatusItem>> uiModel,
-                                 Spinner spStatus, final LinearLayout progressLayout, String statusId) {
-        if (uiModel.inProgress) {
+                                 Spinner spStatus, /*final LinearLayout progressLayout,*/ String statusId) {
+        /*if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
             progressLayout.setVisibility(View.GONE);
-        }
+        }*/
 
         Throwable error = uiModel.error;
         if (error != null) {
@@ -913,9 +960,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         });
         dialogBinding.llInterestedIn.setVisibility(View.GONE);
         //======== GetStageSelectList(spStageDialog, stageId, progressLayout);
+        getStage(dialogBinding.spStage/*,progressLayout*/);
 
         disposable.add(
                 itemSelections(dialogBinding.spStage)
+                        .skip(1)
                         .filter(InvalidSelectionPredicate)
                         .subscribe(position -> {
                             dialogBinding.tvspStageError.setVisibility(View.GONE);
@@ -933,7 +982,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 isPMSProductStageStatus = false;
                             }
                             if (!newStageCodeStr.equalsIgnoreCase("-1")) {
-                                //========newGetStatus(newStageCodeStr, dialogBinding.spStatus, statusId, customProgress);
+                                newGetStatus(newStageCodeStr, dialogBinding.spStatus, statusId/*, customProgress*/);
                             }
                         }));
 
