@@ -63,7 +63,6 @@ import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_lead_creation.*
-import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -78,21 +77,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private var leadId = "-1"
     private var ucId = "-1"
-    private var sourceIdstr = ""
-    private var leadProspetSourceIdstr = ""
+    private var sourceIdStr = ""
+    private var leadProspectSourceIdStr = ""
 
     private var stage: String? = null
     private var status: String? = null
 
     private val subject = PublishSubject.create<LeadDetailUiEvent>()
 
-    private var interestedDatas = emptyList<RowData>()
-    private var statusDatas = ArrayList<RowData>()
-    private var stageDatas = ArrayList<RowData>()
+    private var interestedData = emptyList<RowData>()
+    private var statusData = ArrayList<RowData>()
+    private var stageData = ArrayList<RowData>()
 
     private var selectedCityId = "-1"
     private var selectedCityOffId = "-1"
-    var pmsList: List<String> = emptyList()
+    private var pmsList: List<String> = emptyList()
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
@@ -168,8 +167,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         with(binding) {
             val arrayPmsProduct =
                 requireActivity().resources.getStringArray(R.array.selectPmsProduct)
-            pmsList =
-                ArrayList(Arrays.asList(*arrayPmsProduct))
+            pmsList = ArrayList(listOf(*arrayPmsProduct))
             setIcon(llClientDetail, tvClientDetail)
             setIcon(llLeadDetail, tvLeadDetail)
             setIcon(llClientPortfolio, tvClientPortfolioDetails)
@@ -200,11 +198,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    private fun setIcon(
-        parent: View,
-        icon: TextView,
-        Section: String
-    ) {
+    private fun setIcon(parent: View, icon: TextView, Section: String) {
         if (Section.equals("OUTER", ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
@@ -225,37 +219,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         ucId = data.ucId
     }
 
-    override fun onNestedScrollViewTouched(): Observable<MotionEvent> {
-        return binding.nestedScrollView.touches { false }
-    }
+    override fun onNestedScrollViewTouched(): Observable<MotionEvent> =
+        binding.nestedScrollView.touches { false }
 
     override fun renderOnNestedScrollViewTouch() {
         binding.nestedScrollView.requestFocusFromTouch()
     }
 
-    override fun onPrimaryAddCheckboxClicked(): Observable<Unit> {
-        return binding.cbPrimaryAddress.clicks()
-    }
+    override fun onPrimaryAddCheckboxClicked(): Observable<Unit> = binding.cbPrimaryAddress.clicks()
 
-    override fun onOfficePrimaryAddCheckboxClicked(): Observable<Unit> {
-        return binding.cbOffPrimaryAddress.clicks()
-    }
+    override fun onOfficePrimaryAddCheckboxClicked(): Observable<Unit> =
+        binding.cbOffPrimaryAddress.clicks()
 
-    override fun onSameAsCheckboxClicked(): Observable<Unit> {
-        return binding.cbSameAs.clicks()
-    }
+    override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
 
     override fun getUpdateLeadUSerInput(): UpdateLeadRequest = getUpdateLead()
 
     override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
 
-    override fun onProfileLayoutClicked(): Observable<Unit> {
-        return binding.llProfile.clicks()
-    }
+    override fun onProfileLayoutClicked(): Observable<Unit> = binding.llProfile.clicks()
 
-    override fun onUpdateProfileEventFired(): Observable<UpdateProfile> {
-        return subject.ofType()
-    }
+    override fun onUpdateProfileEventFired(): Observable<UpdateProfile> = subject.ofType()
 
     override fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>) {
         toggleProgressBar(uiModel.inProgress)
@@ -301,9 +285,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             .show()
     }
 
-    override fun onAddProductClicked(): Observable<Unit> {
-        return binding.rlAddProduct.clicks()
-    }
+    override fun onAddProductClicked(): Observable<Unit> = binding.rlAddProduct.clicks()
 
     override fun isLeadEditable(): Boolean = isLeadEditable
 
@@ -315,17 +297,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var productSpecialDialog: CustomListPickerDialog? = null
     private var assignToDialog: CustomListPickerDialog? = null
 
-    override fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent> {
-        return subject.ofType()
-    }
+    override fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent> = subject.ofType()
 
     override fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>) {
-        if (uiModel.inProgress) {
-            assignToDialog?.showProgress(View.VISIBLE)
-        } else {
-            assignToDialog?.showProgress(View.GONE)
-        }
-
+        toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             val model = listOf(
                 EmployeeModel.getNoData(getErrorOnFailureNew(it))
@@ -343,12 +318,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             if (it.isNotEmpty()) {
                 it.filter {
                     it.code == userManager.user.employeeCode
+                }.map {
+                    EmployeeModel(
+                        it.name, it.code, it.branchCode, false
+                    )
                 }
-                    .map {
-                        EmployeeModel(
-                            it.name, it.code, it.branchCode, false
-                        )
-                    }
             } else {
                 EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE)
             }
@@ -362,9 +336,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     }
 
-    override fun addProductEventFired(): Observable<AddProductEvent> {
-        return subject.ofType()
-    }
+    override fun addProductEventFired(): Observable<AddProductEvent> = subject.ofType()
 
     override fun renderAddProduct(uiModel: UiModel<List<AddProductData>>) {
         toggleProgressBar(uiModel.inProgress)
@@ -403,7 +375,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         val potentialPMSProduct = stringOrEmpty(datum.potentialPmsProduct)
                         isPotentialPMSProduct = potentialPMSProduct.isEmpty()
                         pmsProductAdapter.setSpinnerDataWithSelection(
-                            binding.spPmsProduct, pmsProductArray.toList(), potentialPMSProduct
+                            binding.spPmsProduct, pmsList, potentialPMSProduct
                         )
                         leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
                     }
@@ -415,8 +387,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             binding.lvAddProduct,
                             leadId,
                             isLeadEditable,
-                            statusDatas,
+                            statusData,
                             statusAdapter,
+                            stageAdapter,
                             userManager.getUser()?.employeeCode,
                             status,
                             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -432,21 +405,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     "Product Added Successfully", "OK",
                     true
                 ) { _: Action?, _: Array<Any?>? ->
-                    //leadSection()
                 }
             }
         }
     }
 
-    private val pmsProductArray = arrayOf("Select Potential Product", "YES", "NO")
-
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
-        if (uiModel.inProgress) {
-            productSpecialDialog?.showProgress(View.VISIBLE)
-        } else {
-            productSpecialDialog?.showProgress(View.GONE)
-        }
-
+        toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             val model = listOf(
                 EmployeeModel.getNoData(getErrorOnFailureNew(it))
@@ -458,7 +423,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 )
             )
         }
-
         uiModel.onSuccess {
             val list = if (it.isNotEmpty()) {
                 it.filter {
@@ -482,15 +446,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     }
 
-    override fun onAssignToEventFired(): Observable<AssignToEvent> {
-        return subject.ofType()
-    }
+    override fun onAssignToEventFired(): Observable<AssignToEvent> = subject.ofType()
 
     private var isPotentialPMSProduct = false
 
     override fun openAddProductDialog() {
         Dialog(requireContext()).apply {
-//            addProductDialogBinding = DialogLeadviewAddProductBinding.inflate(layoutInflater)
             addProductDialogBinding = DialogLeadviewAddProductBinding.bind(
                 getLayoutInflater().inflate(
                     R.layout.dialog_leadview_add_product,
@@ -558,8 +519,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                                         primaryRM = rm
                                     )
                                 )
-
-                                //searchProductSpecialist(constraint, searchListProductSpecialist)
                             }
                         }
                     }
@@ -598,8 +557,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         if (constraint != null) {
                             assignToDialog = searchList
                             subject.onNext(AssignToEvent(constraint.toString()))
-
-                            //searchUserBusinessProfile(constraint, searchList)
                         }
                     }
                 }
@@ -609,7 +566,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             dialogBinding.spInterestedIn.adapter = interestedAdapter
             dialogBinding.spStage.adapter = stageAdapter
             dialogBinding.spStatus.adapter = statusAdapter
-            interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedDatas)
+            interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedData)
 
             dialogBinding.spInterestedIn.itemSelections()
                 .filter(InvalidSelectionPredicate)
@@ -666,8 +623,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             binding.lvAddProduct,
                             leadId,
                             isLeadEditable,
-                            statusDatas,
+                            statusData,
                             statusAdapter,
+                            stageAdapter,
                             userManager.getUser()?.employeeCode,
                             status,
                             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -725,13 +683,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             }
         }
             .show()
-        stageDatas.clear()
-        stageDatas.add(0, SELECT_ROW_DATA)
-        stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageDatas)
+        stageData.clear()
+        stageData.add(0, SELECT_ROW_DATA)
+        stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageData)
 
-        statusDatas.clear()
-        statusDatas.add(0, SELECT_ROW_DATA)
-        statusAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStatus, statusDatas)
+        statusData.clear()
+        statusData.add(0, SELECT_ROW_DATA)
+        statusAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStatus, statusData)
     }
 
     private fun addProduct(
@@ -766,12 +724,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun renderEditLeadDetailClick() {
         if (leadId != "0" && isLeadEditable) {
-            if (editableFlag) {
+            editableFlag = if (editableFlag) {
                 setEnableDisable(true)
-                editableFlag = false
+                false
             } else {
                 setEnableDisable(false)
-                editableFlag = true
+                true
             }
         }
     }
@@ -828,11 +786,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onRenderCityEventFired(): Observable<RenderCityAndSelectCity> = subject.ofType()
-
-    override fun onRenderCityOffEventFired(): Observable<RenderOffCityAndSelectOffCity> =
-        subject.ofType()
-
     private fun handlingWhenSameAsCheckboxClickedAndUnChecked() {
         binding.run {
             enableField(llOffAdd)
@@ -862,25 +815,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onClientDetailClicked(): Observable<Unit> {
-        return binding.tvClientDetail.clicks()
-    }
+    override fun onClientDetailClicked(): Observable<Unit> = binding.tvClientDetail.clicks()
 
-    override fun onClientPortfolioDetailClicked(): Observable<Unit> {
-        return binding.tvClientPortfolioDetails.clicks()
-    }
+    override fun onClientPortfolioDetailClicked(): Observable<Unit> =
+        binding.tvClientPortfolioDetails.clicks()
 
-    override fun onLeadDetailClicked(): Observable<Unit> {
-        return binding.tvLeadDetail.clicks()
-    }
+    override fun onLeadDetailClicked(): Observable<Unit> = binding.tvLeadDetail.clicks()
 
-    override fun onDocumentClicked(): Observable<Unit> {
-        return binding.tvDocuments.clicks()
-    }
+    override fun onDocumentClicked(): Observable<Unit> = binding.tvDocuments.clicks()
 
-    override fun onDOBClicked(): Observable<Unit> {
-        return binding.etDob.clicks()
-    }
+    override fun onDOBClicked(): Observable<Unit> = binding.etDob.clicks()
 
     override fun renderDOBClick() {
         CustomDatePickerDialog(
@@ -910,25 +854,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }.show()
     }
 
-    override fun onAnniversaryClicked(): Observable<Unit> {
-        return binding.etAnniversary.clicks()
-    }
+    override fun onAnniversaryClicked(): Observable<Unit> = binding.etAnniversary.clicks()
 
-    override fun onRefereeCodeFocusChanged(): Observable<Boolean> {
-        return binding.etRefereeCode.focusChanges()
-    }
+    override fun onRefereeCodeFocusChanged(): Observable<Boolean> =
+        binding.etRefereeCode.focusChanges()
 
-    override fun onClientDetailSectionClicked(): Observable<Unit> {
-        return binding.tvClientDetail.clicks()
-    }
+    override fun onClientDetailSectionClicked(): Observable<Unit> = binding.tvClientDetail.clicks()
 
-    override fun onClientPortfolioSectionClicked(): Observable<Unit> {
-        return binding.tvClientPortfolioDetails.clicks()
-    }
+    override fun onClientPortfolioSectionClicked(): Observable<Unit> =
+        binding.tvClientPortfolioDetails.clicks()
 
-    override fun onLeadDetailSectionClicked(): Observable<Unit> {
-        return binding.tvLeadDetail.clicks()
-    }
+    override fun onLeadDetailSectionClicked(): Observable<Unit> = binding.tvLeadDetail.clicks()
 
     override fun toggleClientDetailSection() {
         toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
@@ -954,13 +890,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onProfitLossSnapshotClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtPorfitLoss.clicks()
-    }
+    override fun onProfitLossSnapshotClicked(): Observable<Unit> =
+        binding.includePortfolio.txtPorfitLoss.clicks()
 
-    override fun onAvailableLimitSnapshotClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtAvailableLimits.clicks()
-    }
+    override fun onAvailableLimitSnapshotClicked(): Observable<Unit> =
+        binding.includePortfolio.txtAvailableLimits.clicks()
 
     override fun toggleProfitLoss() {
         toggleSectionExpansion(
@@ -978,9 +912,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onBrokingPortfolioClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtBrokingPortfolio.clicks()
-    }
+    override fun onBrokingPortfolioClicked(): Observable<Unit> =
+        binding.includePortfolio.txtBrokingPortfolio.clicks()
 
     override fun toggleBrokingPortfolio() {
         toggleSectionExpansion(
@@ -990,10 +923,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onAssetPortfolioClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtAssestPortfolio.clicks()
-
-    }
+    override fun onAssetPortfolioClicked(): Observable<Unit> =
+        binding.includePortfolio.txtAssestPortfolio.clicks()
 
     override fun toggleAssetPortfolio() {
         toggleSectionExpansion(
@@ -1003,9 +934,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onLedgerClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtCash.clicks()
-    }
+    override fun onLedgerClicked(): Observable<Unit> = binding.includePortfolio.txtCash.clicks()
 
     override fun toggleLedger() {
         toggleSectionExpansion(
@@ -1015,9 +944,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onBrokingProductClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtBrokingProducts.clicks()
-    }
+    override fun onBrokingProductClicked(): Observable<Unit> =
+        binding.includePortfolio.txtBrokingProducts.clicks()
 
     override fun toggleBrokingProduct() {
         toggleSectionExpansion(
@@ -1027,9 +955,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         )
     }
 
-    override fun onAssetProductClicked(): Observable<Unit> {
-        return binding.includePortfolio.txtAssestProducts.clicks()
-    }
+    override fun onAssetProductClicked(): Observable<Unit> =
+        binding.includePortfolio.txtAssestProducts.clicks()
 
     override fun toggleAssetProduct() {
         toggleSectionExpansion(
@@ -1047,9 +974,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onRefereeNameFocusChanged(): Observable<Boolean> {
-        return binding.etRefereeName.focusChanges()
-    }
+    override fun onRefereeNameFocusChanged(): Observable<Boolean> =
+        binding.etRefereeName.focusChanges()
 
     override fun renderOnRefereeNameFocusChange() {
         if (binding.etRefereeName.string().length < 3) {
@@ -1120,7 +1046,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
         toggleProgressBar(uiModel.inProgress)
-
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             data.detail.renderClient()
@@ -1380,20 +1305,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun isCbSameAsChecked(): Boolean {
-        return binding.cbSameAs.isChecked
-    }
+    override fun isCbSameAsChecked(): Boolean = binding.cbSameAs.isChecked
 
     override fun renderOnUpdateButtonClick(uiModel: UiModel<String>) {
         toggleProgressBar(uiModel.inProgress)
         removeErrorMessage()
         uiModel.onFailure {
-            //showOnFailurePopup(it)
             if (it is ValidationException) {
                 showErrorWithFocus(it.error)
             }
         }
-
         uiModel.onSuccess {
             MSFDialog.alertDialog(
                 requireContext(), 0,
@@ -1412,49 +1333,30 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private fun showErrorWithFocus(error: ValidationError) {
         error.error?.let {
             when (error.identifier as Int) {
-                1 -> {
+                1 ->
                     binding.tlLeadName.setErrorMessages(getString(it, binding.etLeadCategory.text))
-                }
-                2 -> {
+                2 ->
                     binding.tlLeadName.setErrorMessages(getString(it))
-                }
-
-                3 -> {
+                3 ->
                     binding.tlEmail.setErrorMessages(getString(it))
-                }
-                4 -> {
+                4 ->
                     binding.tlAlternateMobile.setErrorMessages(getString(it))
-                }
-                5, 6 -> {
+                5, 6 ->
                     binding.tlAlternateEmail.setErrorMessages(getString(it))
-                }
-                7 -> {
+                7 ->
                     binding.tlLand.setErrorMessages(getString(it))
-                }
-                8 -> {
+                8 ->
                     binding.tlPan.setErrorMessages(getString(it))
-                }
-                9 -> {
+                9 ->
                     binding.tlAadhar.setErrorMessages(getString(it))
-                }
-                10 -> {
+                10 ->
                     binding.tlRefereeName.setErrorMessages(getString(it))
-                }
-                11, 12 -> {
+                11, 12 ->
                     binding.tlRefereeNumber.setErrorMessages(getString(it))
-                }
-                13 -> {
+                13 ->
                     binding.tlRefereeEmail.setErrorMessages(getString(it))
-                }
-                /*25 -> {
-                    binding.tlPin.setErrorMessages(getString(it))
-                }
-                26 -> {
-                    binding.tlOffPin.setErrorMessages(getString(it))
-                }*/
                 else -> {
                 }
-
             }
         }
     }
@@ -1554,8 +1456,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         leadDetailModel.businessUnitID =
             userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
         leadDetailModel.contactPerson = binding.etContactPerson.text.toString().trim()
-        leadDetailModel.sourceID = sourceIdstr
-        leadDetailModel.leadSourceID = leadProspetSourceIdstr
+        leadDetailModel.sourceID = sourceIdStr
+        leadDetailModel.leadSourceID = leadProspectSourceIdStr
         leadDetailModel.leadSourceDetailsID = "0"
         leadDetailModel.leadSourceDetails = binding.etProspectSourceDetail.text.toString()
         leadDetailModel.name = binding.etLeadName.text.toString().trim()
@@ -1680,41 +1582,32 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return requests
     }
 
-    override fun onAdd1AfterTextChanged(): Observable<String> {
-        return binding.etAdd1.textChanges()
-            .map { it.toString() }
-    }
+    override fun onAdd1AfterTextChanged(): Observable<String> = binding.etAdd1.textChanges()
+        .map { it.toString() }
 
     override fun renderOnAdd1AfterTextChange(text: String) {
         binding.etOffAdd1.setText(text)
     }
 
-    override fun onAdd2AfterTextChanged(): Observable<String> {
-        return binding.etAdd2.textChanges()
-            .map { it.toString() }
-    }
+    override fun onAdd2AfterTextChanged(): Observable<String> = binding.etAdd2.textChanges()
+        .map { it.toString() }
 
     override fun renderOnAdd2AfterTextChange(text: String) {
         binding.etOffAdd2.setText(text)
     }
 
-    override fun onAdd3AfterTextChanged(): Observable<String> {
-        return binding.etAdd3.textChanges()
-            .map { it.toString() }
-    }
+    override fun onAdd3AfterTextChanged(): Observable<String> = binding.etAdd3.textChanges()
+        .map { it.toString() }
 
     override fun renderOnAdd3AfterTextChange(text: String) {
         binding.etOffAdd3.setText(text)
     }
 
-    override fun onRefereeCodeChanged(): Observable<String> {
-        return binding.etRefereeCode.afterTextChangeEvents()
+    override fun onRefereeCodeChanged(): Observable<String> =
+        binding.etRefereeCode.afterTextChangeEvents()
             .map { it.editable?.toString() ?: emptyString() }
-    }
 
-    override fun getRefereeCode(): String {
-        return binding.etRefereeCode.text?.toString() ?: emptyString()
-    }
+    override fun getRefereeCode(): String = binding.etRefereeCode.text?.toString().nullSafe()
 
     override fun resetRefereeOnCodeChange() {
         binding.apply {
@@ -1724,10 +1617,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun onRefereeNameChanged(): Observable<String> {
-        return binding.etRefereeName.afterTextChangeEvents()
+    override fun onRefereeNameChanged(): Observable<String> =
+        binding.etRefereeName.afterTextChangeEvents()
             .map { it.editable?.toString() ?: "" }
-    }
 
     override fun resetRefereeOnNameChange() {
         binding.apply {
@@ -1768,27 +1660,22 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         if (inProgress) visible() else gone()
     }
 
-    override fun isRefereeCodeFocused(): Boolean {
-        return binding.etRefereeCode.isFocused
-    }
+    override fun isRefereeCodeFocused(): Boolean = binding.etRefereeCode.isFocused
 
-    override fun isRefereeNameFocused(): Boolean {
-        return binding.etRefereeName.isFocused
-    }
+    override fun isRefereeNameFocused(): Boolean = binding.etRefereeName.isFocused
 
     override fun render(uiModel: UiModel<LeadDetailPageData>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
-            interestedDatas.toMutableList()
+            interestedData.toMutableList()
                 .clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
             profileAdapter.addAll(data.profileRowDatas)
             binding.spProfile.setSpinnerData(profileAdapter, data.profileRowDatas)
-            interestedDatas = data.interestInRowDatas
+            interestedData = data.interestInRowDatas
             interestedAdapter.addAll(data.interestInRowDatas)
-            // binding.sp.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
             binding.llEditLeadDetail.performClick()
@@ -1916,8 +1803,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 View.VISIBLE
             }
 
-        sourceIdstr = sourceId
-        leadProspetSourceIdstr = leadSourceId.toString()
+        sourceIdStr = sourceId
+        leadProspectSourceIdStr = leadSourceId.toString()
         binding.etLeadID.setText(leadId)
         binding.etLeadName.setText(contact?.name)
         try {//Jeet
@@ -1932,11 +1819,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }//Jeet
         binding.etSource.setText(sourceName)
 
-        /* binding.etMobileNumber.setText(contact?.mobile)
-         binding.etAlternateMobileNumber.setText(contact?.alternateMobileNo)
-         binding.etEmail.setText(contact?.emailId)
-         binding.etAlternateEmail.setText(contact?.alternateEmailId)
- */
         binding.etLeadCategory.setText(leadCategoryText)
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
@@ -1996,13 +1878,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             binding.spCountry.setSelection(position)
                         }
                         val dataState = RowData.getSpinnerRowDataById(
-                            stateID.toString().nullSafe("-1"),
+                            stateID.toString(),
                             stateAdapter
                         )
                         dataState?.run {
                             binding.spState.setSelection(position)
-                            selectedCityId = cityID.toString().nullSafe("-1")
-                            subject.onNext(RenderCityAndSelectCity)
+                            selectedCityId = cityID.toString()
                         }
                         if (isPrimary)
                             binding.handleWhenPrimaryAddChecked()
@@ -2029,7 +1910,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         dataState?.run {
                             binding.spOffState.setSelection(position)
                             selectedCityOffId = cityID.toString().nullSafe("-1")
-                            subject.onNext(RenderOffCityAndSelectOffCity)
                         }
                     }
                     else -> {
@@ -2058,8 +1938,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 binding.lvAddProduct,
                 leadId,
                 isLeadEditable,
-                statusDatas,
+                statusData,
                 statusAdapter,
+                stageAdapter,
                 userManager.getUser()?.employeeCode,
                 status,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -2143,31 +2024,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         return crossSellingProducts
     }
 
-/*
-  private fun getLeadDetailAddProductModel(
-    item: LeadProductMappingItem
-  ): LeadDetailAddProductModel? {
-    val crossSellingProducts: List<CrossSellingProductsModel> =
-      getCrossSellingProductsModel(item.crossSellingProducts)
-    return LeadDetailAddProductModel(
-        item.stageID.toString(),
-        stringOrEmpty(item.stageName), item.statusID.toString(),
-        stringOrEmpty(item.statusName), item.interestedIn.toString(),
-        stringOrEmpty(item.productName),
-        stringOrEmpty(item.primaryRMName),
-        stringOrEmpty(item.productSpecialistName),
-        stringOrEmpty(item.assignedBy),
-        stringOrEmpty(item.assignedByDate),
-        stringOrEmpty(item.clientCode), item.leadProductMappingID.toString(),
-        item.isDefault,
-        crossSellingProducts,
-        item.isCrossSellingProduct,
-        stringOrEmpty(item.isProductSpecialistEditDisabled),
-        stringOrEmpty(item.isProductDisabled),
-        stringOrEmpty(item.productSpecialist)
-    )
-  }*/
-
     private var isLeadEditable = true
     var isIndividualsFlag = false
 
@@ -2210,30 +2066,24 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess {
-            binding.spCity.setSpinnerData(cityAdapter, it.first)
-            if (binding.cbSameAs.isChecked) {
-                binding.spOffState.setSelection(binding.spState.selectedItemPosition)
-            }
-        }
-    }
-
-    override fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>) {
+    override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            val dataCity = RowData.getSpinnerRowDataById(
-                selectedCityId,
-                cityAdapter
-            )
-            dataCity?.run {
-                binding.spCity.setSelection(position)
+            if (selectedCityId != "-1") {
+                val dataCity = RowData.getSpinnerRowDataById(
+                    selectedCityId,
+                    cityAdapter
+                )
+                dataCity?.run {
+                    binding.spCity.setSelection(position)
+                    selectedCityId = "-1"
+                }
             }
-
+            if (binding.cbSameAs.isChecked) {
+                binding.spOffState.setSelection(binding.spState.selectedItemPosition)
+            }
         }
     }
 
@@ -2242,65 +2092,50 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
             binding.spOffCity.setSpinnerData(cityAdapterOff, it)
-        }
-    }
-
-    override fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
-        uiModel.onSuccess {
-            binding.spOffCity.setSpinnerData(cityAdapterOff, it)
-            val dataCity = RowData.getSpinnerRowDataById(
-                selectedCityOffId,
-                cityAdapterOff
-            )
-            dataCity?.run {
-                binding.spOffCity.setSelection(position)
+            if (selectedCityOffId != "-1") {
+                val dataCity = RowData.getSpinnerRowDataById(
+                    selectedCityOffId,
+                    cityAdapterOff
+                )
+                dataCity?.run {
+                    binding.spOffCity.setSelection(position)
+                    selectedCityOffId = "-1"
+                }
             }
-
         }
     }
 
-    override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> {
-        return subject.ofType()
-    }
+    override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> = subject.ofType()
 
-    override fun selectedStage(): Observable<SelectStageEvent> {
-        return subject.ofType()
-    }
+    override fun selectedStage(): Observable<SelectStageEvent> = subject.ofType()
 
     override fun renderStage(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
-            stageDatas.toMutableList()
-                .clear()
+            stageData.clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
-            Timber.i("onSuccessCalled=>>")
-            stageDatas.toMutableList()
-                .clear()
-            stageDatas.addAll(it)
-            stageDatas.add(0, SELECT_ROW_DATA)
-            stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageDatas)
+            stageData.clear()
+            stageData.addAll(it)
+            stageData.add(0, SELECT_ROW_DATA)
+            stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageData)
         }
     }
 
     override fun renderStatus(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
-            statusDatas.toMutableList()
-                .clear()
+            statusData.clear()
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
-            statusDatas.toMutableList()
-                .clear()
-            statusDatas.addAll(it)
-            stageDatas.add(0, SELECT_ROW_DATA)
+            statusData.clear()
+            statusData.addAll(it)
+            stageData.add(0, SELECT_ROW_DATA)
             statusAdapter.setSpinnerData(
                 requireNotNull(addProductDialogBinding).spStatus,
-                statusDatas
+                statusData
             )
         }
     }
@@ -2311,11 +2146,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         productSpecialDialog = null
         assignToDialog = null
         super.onDestroyView()
-    }
-
-    private var pager: ViewPager? = null
-    fun setViewPager(viewPager: ViewPager) {
-        pager = viewPager
     }
 
     companion object {
@@ -2342,7 +2172,4 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     }
 
-    /*internal fun ArrayList<RowData>.addSelectRowData(): ArrayList<RowData> {
-        return add(0, SELECT_ROW_DATA)
-    }*/
 }

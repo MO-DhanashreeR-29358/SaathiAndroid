@@ -37,11 +37,9 @@ class LeadDetailPresenter @Inject constructor(
             }
             .switchMap {
                 detailRepository.getClientDetailWithPortfolioAndProfitLoss(data.ucId)
-                    //detailRepository.getClientDetail(data.ucId)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderClientDetailWithPortfolioAndProfitLoss, Timber::e)
-            // .subscribe(view::renderClientDetail, Timber::e)
             .addTo(disposable)
 
         view.addProductEventFired()
@@ -110,26 +108,6 @@ class LeadDetailPresenter @Inject constructor(
 
         view.onSameAsCheckboxClicked()
             .subscribe { (view.renderSameAsAboveClicked()) }
-            .addTo(disposable)
-
-        view.onRenderCityEventFired()
-            .map { view.getSelectedState() }
-            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
-            .switchMap {
-                repository.getCityRowDatas(it.key)
-                    .compose(applyUiModel())
-            }
-            .subscribe({ view.renderCityForCitySelection(it) }, Timber::e)
-            .addTo(disposable)
-
-        view.onRenderCityOffEventFired()
-            .map { view.getSelectedOfficeState() }
-            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
-            .switchMap {
-                repository.getCityRowDatas(it.key)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderOffCityForOffCitySelection, Timber::e)
             .addTo(disposable)
 
         view.onDOBClicked()
@@ -217,22 +195,6 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { view.renderOnRefereeNameFocusChange() }
             .addTo(disposable)
 
-        /* view.onLeadNameAfterTextChanged()
-                 .subscribe { view.renderOnLeadNameAfterTextChange(it) }
-                 .addTo(disposable)
-
-         view.onProfileLayoutClicked()
-                 .subscribe { view.renderProfileClick() }
-                 .addTo(disposable)
-
-         view.onProsRefereeNameAfterTextChanged()
-                 .subscribe { view.renderOnProsRefereeNameAfterTextChange(it) }
-                 .addTo(disposable)
-
-         view.onProsRefereeMobileTextChanged()
-                 .subscribe { view.renderOnProsRefereeMobileTextChange(it) }
-                 .addTo(disposable)*/
-
         view.onSubmitButtonClicked()
             .map { view.getUpdateLeadUSerInput() }
             .switchMap {
@@ -250,43 +212,6 @@ class LeadDetailPresenter @Inject constructor(
             }
             .subscribe(view::renderUpdateDetail)
             .addTo(disposable)
-
-
-        /*    view.onProsRefereeEmailTextChanged()
-                    .subscribe { view.renderOnProsRefereeEmailTextChange(it) }
-                    .addTo(disposable)
-
-            view.onContactPersonAfterTextChanged()
-                    .subscribe { view.renderOnContactPersonAfterTextChange(it) }
-                    .addTo(disposable)*/
-
-        /* view.onLandLineAfterTextChanged()
-                 .subscribe { view.renderOnLandLineAfterTextChange(it) }
-                 .addTo(disposable)*/
-
-        /* view.onAlterMobileTextChanged()
-                 .subscribe { view.renderOnAlterMobileTextChange(it) }
-                 .addTo(disposable)
-
-         view.onAlterEmailTextChanged()
-                 .subscribe { view.renderOnAlterEmailTextChange(it) }
-                 .addTo(disposable)
-         view.onEmailTextChanged()
-                 .subscribe { view.renderOnEmailTextChange(it) }
-                 .addTo(disposable)
-         view.onPanTextChanged()
-                 .subscribe { view.renderOnPanTextChange(it) }
-                 .addTo(disposable)
-         view.onAadharAfterTextChanged()
-                 .subscribe { view.renderOnAadharAfterTextChange(it) }
-                 .addTo(disposable)
-         view.onPinTextChanged()
-                 .subscribe { view.renderOnPinTextChange(it) }
-                 .addTo(disposable)
-
-         view.onOfficePinTextChanged()
-                 .subscribe { view.renderOnOfficePinTextChange(it) }
-                 .addTo(disposable)*/
 
         view.onAdd1AfterTextChanged()
             .filter { view.isCbSameAsChecked() }
@@ -373,12 +298,9 @@ class LeadDetailPresenter @Inject constructor(
         view.onStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedState() }
-            .skip(2)
             .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
-                repository.getCityRowDatas(it.key).map {
-                    it to 0
-                }
+                repository.getCityRowDatas(it.key)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderCityOnStateSelection, Timber::e)
@@ -409,7 +331,6 @@ class LeadDetailPresenter @Inject constructor(
         view.onOfficeStateSelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedOfficeState() }
-            .skip(2)
             .filter { !view.isSameAsAboveChecked() && it.key != LeadCreationView.INVALID_SELECTION_KEY }
             .switchMap {
                 repository.getCityRowDatas(it.key)

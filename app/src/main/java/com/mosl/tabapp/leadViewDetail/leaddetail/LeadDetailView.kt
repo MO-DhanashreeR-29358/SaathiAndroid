@@ -31,8 +31,6 @@ interface LeadDetailView : BaseView {
     fun renderPrimaryAddCheckBoxClicked()
     fun renderOffPrimaryAddCheckBoxClicked()
     fun renderSameAsAboveClicked()
-    fun onRenderCityEventFired(): Observable<RenderCityAndSelectCity>
-    fun onRenderCityOffEventFired(): Observable<RenderOffCityAndSelectOffCity>
     fun onClientDetailClicked(): Observable<Unit>
     fun onClientPortfolioDetailClicked(): Observable<Unit>
     fun onLeadDetailClicked(): Observable<Unit>
@@ -45,33 +43,6 @@ interface LeadDetailView : BaseView {
     fun renderOnRefereeCodeFocusChange()
     fun onRefereeNameFocusChanged(): Observable<Boolean>
     fun renderOnRefereeNameFocusChange()
-
-    /* fun onLeadNameAfterTextChanged(): Observable<String>
-     fun renderOnLeadNameAfterTextChange(text: String)
-     fun onProsRefereeNameAfterTextChanged(): Observable<String>
-     fun renderOnProsRefereeNameAfterTextChange(text: String)
-     fun onProsRefereeMobileTextChanged(): Observable<String>
-     fun renderOnProsRefereeMobileTextChange(text: String)
-     fun onProsRefereeEmailTextChanged(): Observable<String>
-     fun renderOnProsRefereeEmailTextChange(text: String)
-     fun onContactPersonAfterTextChanged(): Observable<String>
-     fun renderOnContactPersonAfterTextChange(text: String)*/
-//    fun onLandLineAfterTextChanged(): Observable<String>
-//    fun renderOnLandLineAfterTextChange(text: String)
-    /*fun onAlterMobileTextChanged(): Observable<String>
-    fun renderOnAlterMobileTextChange(text: String)
-    fun onAlterEmailTextChanged(): Observable<String>
-    fun renderOnAlterEmailTextChange(text: String)
-    fun onEmailTextChanged(): Observable<String>
-    fun renderOnEmailTextChange(text: String)
-    fun onPanTextChanged(): Observable<String>
-    fun renderOnPanTextChange(text: String)
-    fun onAadharAfterTextChanged(): Observable<String>
-    fun renderOnAadharAfterTextChange(text: String)
-    fun onPinTextChanged(): Observable<String>
-    fun renderOnPinTextChange(text: String)
-    fun onOfficePinTextChanged(): Observable<String>
-    fun renderOnOfficePinTextChange(text: String)*/
     fun onAdd1AfterTextChanged(): Observable<String>
     fun renderOnAdd1AfterTextChange(text: String)
     fun onAdd2AfterTextChanged(): Observable<String>
@@ -138,9 +109,7 @@ interface LeadDetailView : BaseView {
 
     fun onStateSelected(): Observable<Int>
     fun getSelectedState(): RowData
-    fun renderCityOnStateSelection(uiModel: UiModel<Pair<List<RowData>, Int>>)
-    fun renderCityForCitySelection(uiModel: UiModel<List<RowData>>)
-    fun renderOffCityForOffCitySelection(uiModel: UiModel<List<RowData>>)
+    fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>)
 
     fun onCitySelected(): Observable<Int>
     fun renderOnCitySelectAndSameAsAboveChecked(position: Int)
