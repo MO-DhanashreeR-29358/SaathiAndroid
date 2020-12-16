@@ -13,12 +13,16 @@ import android.view.Window
 import android.view.WindowManager.LayoutParams
 import android.widget.ArrayAdapter
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.coreui.spinner.getItems
+import com.mosl.app.coreui.spinner.setSpinnerData
+import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -42,6 +46,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
@@ -59,18 +64,20 @@ import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
-import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tabapp.util.visible
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
+import java.util.Locale
 import javax.inject.Inject
 
 class LeadCreationFragment : CommonFragment(),
     LeadCreationView {
 
-  @Inject internal lateinit var presenter: LeadCreationPresenter
+  @Inject
+  internal lateinit var presenter: LeadCreationPresenter
   private lateinit var binding: FragLeadCreationBinding
   private val subject = PublishSubject.create<LeadCreationUiEvent>()
   private var isReferee = false
@@ -103,13 +110,27 @@ class LeadCreationFragment : CommonFragment(),
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
+  private val countryAdapterOff: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
   private val stateAdapter: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val stateAdapterOff: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
 
   private val cityAdapter: ArrayAdapter<RowData> by lazy {
     SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
   }
+
+  private val cityAdapterOff: ArrayAdapter<RowData> by lazy {
+    SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+  }
+
+  private val selectedList = ArrayList<RowData>()
 
   override fun getLayout(): Int = R.layout.frag_lead_creation
 
@@ -119,10 +140,15 @@ class LeadCreationFragment : CommonFragment(),
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadCreationBinding.bind(view)
+    createDefaultSelectList()
     setAppTitle(R.string.page_title_lead_creation)
     setupView()
     presenter.start()
     dataActionSubject.onNext(Fetch)
+  }
+
+  private fun createDefaultSelectList() {
+    selectedList.add(LeadCreationRepositoryImpl.SELECT_ROW_DATA)
   }
 
   private var primaryRM: String? = null
@@ -573,7 +599,18 @@ class LeadCreationFragment : CommonFragment(),
   override fun onSourceSelected(): Observable<Int> = binding.spSource.itemSelections()
   override fun onStageSelected(): Observable<Int> = binding.spStage.itemSelections()
   override fun onStateSelected(): Observable<Int> = binding.spState.itemSelections()
-  override fun onOfficeStateSelected(): Observable<Int> = binding.spOffState.itemSelections()
+      .map {
+        binding.spCity.setSpinnerData(cityAdapter, selectedList)
+        it
+      }
+
+  override fun onOfficeStateSelected(): Observable<Int> =
+    binding.spOffState.itemSelections()
+        .map {
+          binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
+          it
+        }
+
   override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
   override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
@@ -616,7 +653,7 @@ class LeadCreationFragment : CommonFragment(),
       binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
       binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
       binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
-      binding.spOffCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+      binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
     }
   }
 
@@ -673,18 +710,21 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spState.setSpinnerData(stateAdapter, it)
-      binding.spOffState.setSpinnerData(stateAdapter, it)
+      binding.spOffState.setSpinnerData(stateAdapterOff, it)
+      binding.spCity.setSpinnerData(cityAdapter, selectedList)
       if (binding.cbSameAs.isChecked) {
         binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
-      }
+            }
+        }
     }
-  }
 
   override fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
-      binding.spOffState.setSpinnerData(stateAdapter, it)
+      Timber.i("RenderStateOffice=>>Called")
+      binding.spOffState.setSpinnerData(stateAdapterOff, it)
+      binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
     }
   }
 
@@ -693,7 +733,6 @@ class LeadCreationFragment : CommonFragment(),
     uiModel.onFailure { showOnFailurePopup(it) }
     uiModel.onSuccess {
       binding.spCity.setSpinnerData(cityAdapter, it)
-      binding.spOffCity.setSpinnerData(cityAdapter, it)
       if (binding.cbSameAs.isChecked) {
         binding.spOffState.setSelection(binding.spState.selectedItemPosition)
       }
@@ -704,8 +743,25 @@ class LeadCreationFragment : CommonFragment(),
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
     uiModel.onSuccess {
-      binding.spOffCity.setSpinnerData(cityAdapter, it)
+      binding.spOffCity.setSpinnerData(cityAdapterOff, it)
     }
+  }
+
+  private fun Spinner.setSpinnerData(
+    arrayAdapter: ArrayAdapter<RowData>,
+    rowData: List<RowData>
+  ) {
+    adapter = arrayAdapter
+    arrayAdapter.setSpinnerData(this, rowData)
+  }
+
+  private fun Spinner.setSpinnerDataWithSelection(
+    arrayAdapter: ArrayAdapter<RowData>,
+    rowData: List<RowData>,
+    data: RowData
+  ) {
+    adapter = arrayAdapter
+    arrayAdapter.setSpinnerDataWithSelection(this, rowData, data)
   }
 
   override fun renderOnOfficePrimaryCheckboxChanges(isChecked: Boolean) {
@@ -729,9 +785,10 @@ class LeadCreationFragment : CommonFragment(),
     etOffAdd3.text = etAdd3.text
     etOffPincode.text = etPincode.text
     spOffCountry.setSelection(spCountry.selectedItemPosition)
+    spOffState.setSpinnerData(stateAdapterOff, stateAdapter.getItems())
     spOffState.setSelection(spState.selectedItemPosition)
+    spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
     spOffCity.setSelection(spCity.selectedItemPosition)
-
   }
 
   private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
@@ -1026,14 +1083,15 @@ class LeadCreationFragment : CommonFragment(),
         binding.etAdd1.text.toString(),
         binding.etAdd2.text.toString(),
         binding.etAdd3.text.toString(),
-        (binding.spCountry.selectedItem as? RowData)?.key ?: LeadCreationView.INVALID_SELECTION_KEY,
+        (binding.spCountry.selectedItem as? RowData)?.key
+            ?: LeadCreationView.INVALID_SELECTION_KEY,
         (binding.spState.selectedItem as? RowData)?.key
             ?: "",
         (binding.spCity.selectedItem as? RowData)?.key
             ?: "",
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked,
-      userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+        userManager.getUser()?.currentBusinessProfile?.businessUnitId
     )
 
     val offAdd = AddressDetailModel(
@@ -1049,7 +1107,7 @@ class LeadCreationFragment : CommonFragment(),
             ?: "",
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked,
-      userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+        userManager.getUser()?.currentBusinessProfile?.businessUnitId
     )
 
     return LeadCreationUserInput(
@@ -1066,7 +1124,8 @@ class LeadCreationFragment : CommonFragment(),
         alternateMobileNo = binding.etAlternateMobno.text.toString(),
         landlineNo = binding.etLandLine.text.toString(),
         ekycMobileNo = binding.etEkycMobile.text.toString(),
-        panNo = binding.etPanNum.text.toString(),
+        panNo = binding.etPanNum.text.toString()
+            .toUpperCase(Locale.ROOT),
         aadharNo = binding.etAadharNum.text.toString(),
         sourceName = binding.spProspectSource.selectedItem.toString(),
         referCode = binding.etRefereeCode.text.toString(),

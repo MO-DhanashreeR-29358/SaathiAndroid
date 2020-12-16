@@ -180,7 +180,6 @@ open class MenuDataSourceImpl @Inject constructor(
         return listOf(
             getDashboard(),
             getOpenAccount(),
-            getSetting(),
             getLogout()
         )
     }
