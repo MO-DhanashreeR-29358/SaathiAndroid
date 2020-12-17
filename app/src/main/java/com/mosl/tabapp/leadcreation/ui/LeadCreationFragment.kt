@@ -39,9 +39,7 @@ import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
-import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
-import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragLeadCreationBinding
@@ -50,10 +48,7 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadPayment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.*
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
@@ -70,8 +65,11 @@ import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.listOf
 
 class LeadCreationFragment : CommonFragment(),
     LeadCreationView {
@@ -1091,7 +1089,7 @@ class LeadCreationFragment : CommonFragment(),
             ?: "",
         binding.etPincode.text.toString(),
         binding.cbPrimaryAddress.isChecked,
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: ""
     )
 
     val offAdd = AddressDetailModel(
@@ -1107,7 +1105,7 @@ class LeadCreationFragment : CommonFragment(),
             ?: "",
         binding.etOffPincode.text.toString(),
         binding.cbOffPrimaryAddress.isChecked,
-        userManager.getUser()?.currentBusinessProfile?.businessUnitId
+      userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: ""
     )
 
     return LeadCreationUserInput(

@@ -1,13 +1,6 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
-import com.mosl.mobile.domain.createmeeting.Attendee
-import com.mosl.mobile.domain.createmeeting.ClientData
-import com.mosl.mobile.domain.createmeeting.ClientDetail
-import com.mosl.mobile.domain.createmeeting.CreateMeetingData
-import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
-import com.mosl.mobile.domain.createmeeting.LookUp
-import com.mosl.mobile.domain.createmeeting.OTPRequestData
+import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
@@ -66,11 +59,11 @@ class CreateMeetingRepositoryImpl @Inject constructor(
   }
 
   override fun getInitialPageData(createMeetingData: CreateMeetingData): Observable<ClientData> {
-    if (!createMeetingData.ucid.equals("0")) {
-      return getClientData(createMeetingData.ucid)
-    } else {
-      return getLeadData(createMeetingData.leadId)
-    }
+      if (createMeetingData.ucid.isNotEmpty() && createMeetingData.ucid != "0") {
+          return getClientData(createMeetingData.ucid)
+      } else {
+          return getLeadData(createMeetingData.leadId)
+      }
   }
 
   fun getClientData(ucid: String): Observable<ClientData> {

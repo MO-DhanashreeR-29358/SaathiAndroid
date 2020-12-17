@@ -9,89 +9,92 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LeadViewDetailPagerPresenter @Inject constructor(
-  view: LeadViewDetailPagerView,
-  val data: LeadViewDetailArgument,
-  val repository: LeadViewDetailPagerRepository,
-  val navigator: LeadViewDetailNavigator
+    view: LeadViewDetailPagerView,
+    val repository: LeadViewDetailPagerRepository,
+    val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadViewDetailPagerView>(view) {
 
-  override fun start() {
-    val fetchRetryObs = Observable.merge(onFetchCalled(), onRetryCalled())
-        .map { data.ucId }
 
-    fetchRetryObs
-        .filter { it != "0" }
-        .switchMap {
-          repository.getClientDetailAndImage(it)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::renderClientDetailAndImage, Timber::e)
-        .addTo(disposable)
+    override fun start() {
+        val fetchRetryObs = Observable.merge(onFetchCalled(), view.onRetryClick())
+            .map { view.getUcid() }
 
-    fetchRetryObs
-        .filter { it == "0" }
-        .map { data.leadId }
-        .switchMap {
-          repository.getLeadDetailForId(it)
-              .compose(applyUiModel())
-        }
-        .subscribe(view::renderLeadDetail, Timber::e)
-        .addTo(disposable)
+        fetchRetryObs
+            .filter { it != "0" }
+            .switchMap {
+                repository.getClientDetailAndImage(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderClientDetailAndImage, Timber::e)
+            .addTo(disposable)
 
-    view.onThreeVerticalDotsClicked()
-        .subscribe { view.showLeadViewDialog() }
-        .addTo(disposable)
+        fetchRetryObs
+            .filter { it == "0" }
+            .map { view.getLeadId() }
+            .switchMap {
+                repository.getLeadDetailForId(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderLeadDetail, Timber::e)
+            .addTo(disposable)
 
-    view.onShareLinkClicked()
-        .subscribe { view.renderOnShareLinkClick(data.leadId) }
-        .addTo(disposable)
+        view.onThreeVerticalDotsClicked()
+            .subscribe { view.showLeadViewDialog() }
+            .addTo(disposable)
 
-    view.onSuggestMeClicked()
-        .map { data }
-        .switchMap {
-          repository.getUrlForProspectOnline(data.leadId, data.ucId)
-              .compose(applyUiModel())
-        }
-        .subscribe { uiModel ->
-          view.renderOnSuggestMeClick(uiModel)
-          uiModel.onSuccess {
-            navigator.navigateToSuggestMe(it)
-          }
-        }
-        .addTo(disposable)
+        view.onCopyLinkClicked()
+            .subscribe { view.renderOnCopyLinkClick() }
+            .addTo(disposable)
 
-    view.onOaoFormClicked()
-        .subscribe { navigator.navigateToSuggestMe(it.oaoId) }
-        .addTo(disposable)
+        view.onShareLinkClicked()
+            .subscribe { view.renderOnShareLinkClick(view.getLeadId()) }
+            .addTo(disposable)
 
-    view.onOpenAccountClicked()
-        .subscribe { view.renderOpenAccountClick() }
-        .addTo(disposable)
+        view.onSuggestMeClicked()
+            .switchMap {
+                repository.getUrlForProspectOnline(view.getLeadId(), view.getUcid())
+                    .compose(applyUiModel())
+            }
+            .subscribe { uiModel ->
+                view.renderOnSuggestMeClick(uiModel)
+                uiModel.onSuccess {
+                    navigator.navigateToSuggestMe(it)
+                }
+            }
+            .addTo(disposable)
 
-    val createMeetingObs = view.onCreateMeetingClicked()
-        .map { it.id }
-        .share()
+        view.onOaoFormClicked()
+            .subscribe { view.renderOpenAccountClick() }
+            .addTo(disposable)
 
-    createMeetingObs
-        .filter { it == "0" }
-        .subscribe { navigator.navigateToCreateMeeting(data) }
-        .addTo(disposable)
+        view.onOpenAccountClicked()
+            .subscribe { view.renderOpenAccountClick() }
+            .addTo(disposable)
 
-    createMeetingObs
-        .filter { it != "0" }
-        .subscribe(view::renderCreateMeetingClick)
-        .addTo(disposable)
+        val createMeetingObs = view.onCreateMeetingClicked()
+            .map { it.id }
+            .share()
 
-    view.onSetAppointmentClick()
-        .subscribe { navigator.navigateToSetAppointment(data) }
-        .addTo(disposable)
+        createMeetingObs
+            .filter { it == 0 }
+            .subscribe { navigator.navigateToCreateMeeting(view.getLeadId(), view.getUcid()) }
+            .addTo(disposable)
 
-    view.onCallClicked()
-        .subscribe { view.renderCallClick() }
-        .addTo(disposable)
+        createMeetingObs
+            .filter { it > 0 }
+            .subscribe(view::renderCreateMeetingClick)
+            .addTo(disposable)
 
-    view.onSMSClicked()
-        .subscribe { view.renderSMSClick() }
-        .addTo(disposable)
-  }
+        view.onSetAppointmentClick()
+            .subscribe { navigator.navigateToSetAppointment(view.getLeadId(), view.getUcid()) }
+            .addTo(disposable)
+
+        view.onCallClicked()
+            .subscribe { view.renderCallClick() }
+            .addTo(disposable)
+
+        view.onSMSClicked()
+            .subscribe { view.renderSMSClick() }
+            .addTo(disposable)
+    }
 }

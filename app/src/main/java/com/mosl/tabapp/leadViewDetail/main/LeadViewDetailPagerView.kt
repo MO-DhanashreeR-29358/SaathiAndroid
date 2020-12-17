@@ -24,11 +24,14 @@ interface LeadViewDetailPagerView : BaseView {
   fun onOpenAccountClicked(): Observable<OpenAccountClick>
   fun renderOpenAccountClick()
   fun onCreateMeetingClicked(): Observable<CreateMeetingClick>
-  fun renderCreateMeetingClick(id: String)
+  fun renderCreateMeetingClick(id: Int)
   fun onSetAppointmentClick(): Observable<SetAppointmentClick>
   fun onCallClicked(): Observable<CallClick>
   fun renderCallClick()
+  fun getUcid(): String
+  fun getLeadId(): String
   fun onSMSClicked(): Observable<SMSClick>
+  fun onRetryClick(): Observable<RetryClick>
   fun renderSMSClick()
 
 
