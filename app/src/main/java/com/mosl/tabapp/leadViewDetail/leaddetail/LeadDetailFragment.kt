@@ -341,8 +341,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
-            Toast.makeText(requireContext(), "Success", Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.text_message_success),
+                Toast.LENGTH_LONG
+            ).show()
 
             if ("0".equals(leadId, ignoreCase = true)) {
 
@@ -353,8 +356,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     requireActivity(), 0,
                     resources.getString(
                         R.string.motilal_oswal
-                    ), "Product Added Successfully with leadId "
-                            + leadID, "OK", true
+                    ), "${getString(R.string.text_msg_success_add_product)}$leadID",
+                    "OK", true
                 ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
                         val bundle = Bundle()
@@ -589,20 +592,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             dialogBinding.btnSave.setOnClickListener {
 
                 if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
-                    dialogBinding.tvspIntrestError.visibility = View.VISIBLE
+                    dialogBinding.tvspIntrestError.visible()
                     dialogBinding.tvspIntrestError.text =
                         getString(R.string.error_message_select_interest)
                     return@setOnClickListener
                 }
                 if (dialogBinding.spStage.selectedItemPosition < 1) {
-                    dialogBinding.tvspStageError.visibility = View.VISIBLE
+                    dialogBinding.tvspStageError.visible()
                     dialogBinding.tvspStageError.text =
                         getString(R.string.error_message_select_stage)
                     return@setOnClickListener
                 }
                 if (dialogBinding.spStatus.selectedItemPosition < 1) {
-                    dialogBinding.tvspStatusError.visibility = View.VISIBLE
-                    dialogBinding.tvspStatusError.text = getString(R.string.error_message_select_status)
+                    dialogBinding.tvspStatusError.visible()
+                    dialogBinding.tvspStatusError.text =
+                        getString(R.string.error_message_select_status)
                     return@setOnClickListener
                 }
 
@@ -647,29 +651,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             NO,
                             true
                         ) { action: Action, _: Array<Any?>? ->
-                            if (action == OK) {
-                                addProduct(
-                                    (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                                    (dialogBinding.spStage.selectedItem as RowData).key,
-                                    (dialogBinding.spStatus.selectedItem as RowData).key,
-                                    YES
-                                )
-                            } else {
-                                addProduct(
-                                    (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                                    (dialogBinding.spStage.selectedItem as RowData).key,
-                                    (dialogBinding.spStatus.selectedItem as RowData).key,
-                                    NO
-                                )
-                            }
+                            val productMapping = if (action == OK) YES else NO
+                            callAddProduct(productMapping)
                         }
-                    } else {
-                        addProduct(
-                            (dialogBinding.spInterestedIn.selectedItem as RowData).key,
-                            (dialogBinding.spStage.selectedItem as RowData).key,
-                            (dialogBinding.spStatus.selectedItem as RowData).key, ""
-                        )
-                    }
+                    } else
+                        callAddProduct()
                 }
                 dismiss()
             }
@@ -687,6 +673,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         statusData.clear()
         statusData.add(0, SELECT_ROW_DATA)
         statusAdapter.setSpinnerData(addProductDialogBinding.spStatus, statusData)
+    }
+
+    private fun callAddProduct(productMapping: String = "") {
+        addProduct(
+            (addProductDialogBinding.spInterestedIn.selectedItem as RowData).key,
+            (addProductDialogBinding.spStage.selectedItem as RowData).key,
+            (addProductDialogBinding.spStatus.selectedItem as RowData).key,
+            productMapping
+        )
     }
 
     private fun addProduct(
@@ -713,9 +708,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         subject.onNext(AddProductEvent(data))
     }
 
-    override fun onEditLeadDetailClicked(): Observable<Unit> {
-        return binding.llEditLeadDetail.clicks()
-    }
+    override fun onEditLeadDetailClicked(): Observable<Unit> = binding.llEditLeadDetail.clicks()
 
     private var editableFlag = false
 
@@ -831,7 +824,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             true
         )
         { date ->
-            binding.tvAnniversaryError.visibility = View.GONE
+            binding.tvAnniversaryError.gone()
             binding.etDob.setText(date)
             binding.etDob.setClearIconVisible(true)
         }.show()
@@ -845,7 +838,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             true
         )
         { date ->
-            binding.tvAnniversaryError.visibility = View.GONE
+            binding.tvAnniversaryError.gone()
             binding.etAnniversary.setText(date)
             binding.etAnniversary.setClearIconVisible(true)
         }.show()
@@ -1009,8 +1002,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             binding.tvProfile.text = data.profile
             binding.tvDefaultBank.text = data.defaultBank
 
-            binding.llClient.visibility = View.VISIBLE
-            binding.llClientPortfolioDetails.visibility = View.VISIBLE
+            binding.llClient.visible()
+            binding.llClientPortfolioDetails.gone()
             toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
         }
     }
@@ -1018,27 +1011,31 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private fun ClientDetail.renderClient() {
         if (products.isNotEmpty()) {
             val product = products[0]
-            binding.tvClientCode.text = product.clientCode
-            binding.tvUCID.text = product.ucId
-            binding.tvBranchCode.text = product.branchCode
-            binding.tvChannel.text = product.channel
-            advisoryCode = product.advisorCode
+            binding.run {
+                tvClientCode.text = product.clientCode
+                tvUCID.text = product.ucId
+                tvBranchCode.text = product.branchCode
+                tvChannel.text = product.channel
+                advisoryCode = product.advisorCode
+            }
         }
 
-        binding.tvClientAddress.text = address
-        binding.tvClientName.text = name
-        binding.tvPanCard.text = pan
-        binding.tvAccountType.text = accountType
-        binding.tvFamilyUCID.text = familyUcid
-        binding.tvAdvisoryType.text = advisoryType
-        binding.tvAadharCard.text = aadhar
-        binding.tvAccountNumber.text = account
-        binding.tvProfile.text = profile
-        binding.tvDefaultBank.text = defaultBank
+        binding.run {
+            tvClientAddress.text = address
+            tvClientName.text = name
+            tvPanCard.text = pan
+            tvAccountType.text = accountType
+            tvFamilyUCID.text = familyUcid
+            tvAdvisoryType.text = advisoryType
+            tvAadharCard.text = aadhar
+            tvAccountNumber.text = account
+            tvProfile.text = profile
+            tvDefaultBank.text = defaultBank
 
-        binding.llClient.visibility = View.VISIBLE
-        binding.llClientPortfolioDetails.visibility = View.VISIBLE
-        toggleSectionExpansion(binding.llClientDetail, binding.tvClientDetail)
+            llClient.visible()
+            llClientPortfolioDetails.visible()
+            toggleSectionExpansion(llClientDetail, tvClientDetail)
+        }
     }
 
     override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
@@ -1297,18 +1294,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     ) {
         if (expansion.equals("OuterSectionExpansion", ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
-                parent.visibility = View.GONE
+                parent.gone()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
             } else {
-                parent.visibility = View.VISIBLE
+                parent.visible()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
             }
         } else if (expansion.equals("InnerSectionExpansion", ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
-                parent.visibility = View.GONE
+                parent.gone()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.down_button, 0)
             } else {
-                parent.visibility = View.VISIBLE
+                parent.visible()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
             }
         }
@@ -2169,7 +2166,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 val args = Bundle().apply {
                     putInt(POSITION, position)
                     putString(TYPE, type)
-                    putString(  MOSLConstants.LEADID, leadID)
+                    putString(MOSLConstants.LEADID, leadID)
                     putString(MOSLConstants.UCID, ucId)
                 }
                 arguments = args
