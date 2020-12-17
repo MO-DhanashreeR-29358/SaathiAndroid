@@ -10,7 +10,6 @@ import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
 import com.jakewharton.rxbinding3.view.touches
@@ -147,9 +146,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     private val defaultSelectionList = ArrayList<RowData>()
 
-    override fun getLayout(): Int {
-        return R.layout.fragment_lead_detail
-    }
+    override fun getLayout(): Int = R.layout.fragment_lead_detail
 
     override fun onViewCreated(
         view: View,
@@ -292,7 +289,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var specialistAdd: String? = null
     private var primaryRm: String? = null
 
-    private var addProductDialogBinding: DialogLeadviewAddProductBinding? = null
+    private lateinit var addProductDialogBinding: DialogLeadviewAddProductBinding
 
     private var productSpecialDialog: CustomListPickerDialog? = null
     private var assignToDialog: CustomListPickerDialog? = null
@@ -316,11 +313,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onSuccess {
             val list = emptyList<EmployeeModel>()
             if (it.isNotEmpty()) {
-                it.filter {
-                    it.code == userManager.user.employeeCode
-                }.map {
+                it.filter { it1 ->
+                    it1.code == userManager.user.employeeCode
+                }.map { leadEmployees ->
                     EmployeeModel(
-                        it.name, it.code, it.branchCode, false
+                        leadEmployees.name, leadEmployees.code, leadEmployees.branchCode, false
                     )
                 }
             } else {
@@ -425,12 +422,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
         uiModel.onSuccess {
             val list = if (it.isNotEmpty()) {
-                it.filter {
-                    it.code != userManager.user.employeeCode
+                it.filter { it1 ->
+                    it1.code != userManager.user.employeeCode
                 }
-                    .map {
+                    .map { it1 ->
                         EmployeeModel(
-                            it.name, it.code, it.branchCode, false
+                            it1.name, it1.code, it1.branchCode, false
                         )
                     }
             } else {
@@ -453,12 +450,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun openAddProductDialog() {
         Dialog(requireContext()).apply {
             addProductDialogBinding = DialogLeadviewAddProductBinding.bind(
-                getLayoutInflater().inflate(
+                layoutInflater.inflate(
                     R.layout.dialog_leadview_add_product,
                     null
                 )
             )
-            val dialogBinding = addProductDialogBinding!!
+            val dialogBinding = addProductDialogBinding
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setCanceledOnTouchOutside(false)
             setContentView(dialogBinding.root)
@@ -506,7 +503,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                         override fun onSearchTextChanged(constraint: CharSequence?) {
                             if (constraint != null) {
 
-                                primaryRm = if (CRMAppUtil.isBlank(leadOwne.trim())) {
+                                primaryRm = if (isBlank(leadOwne.trim())) {
                                     advisoryCode
                                 } else {
                                     leadOwne
@@ -591,25 +588,25 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
             dialogBinding.btnSave.setOnClickListener {
 
-                //Mandatory check
                 if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
                     dialogBinding.tvspIntrestError.visibility = View.VISIBLE
-                    dialogBinding.tvspIntrestError.text = "Select Interested Product"
+                    dialogBinding.tvspIntrestError.text =
+                        getString(R.string.error_message_select_interest)
                     return@setOnClickListener
                 }
                 if (dialogBinding.spStage.selectedItemPosition < 1) {
                     dialogBinding.tvspStageError.visibility = View.VISIBLE
-                    dialogBinding.tvspStageError.text = "Select Stage"
+                    dialogBinding.tvspStageError.text =
+                        getString(R.string.error_message_select_stage)
                     return@setOnClickListener
                 }
                 if (dialogBinding.spStatus.selectedItemPosition < 1) {
                     dialogBinding.tvspStatusError.visibility = View.VISIBLE
-                    dialogBinding.tvspStatusError.text = "Select Status"
+                    dialogBinding.tvspStatusError.text = getString(R.string.error_message_select_status)
                     return@setOnClickListener
                 }
-                ///////////
 
-                //Mandatory chec end
+
                 val interestedInKey =
                     (dialogBinding.spInterestedIn.selectedItem as RowData).key
                 val interestedInDisplayText =
@@ -649,8 +646,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             YES,
                             NO,
                             true
-                        ) { action: Action, data: Array<Any?>? ->
-                            if (action == Action.OK) {
+                        ) { action: Action, _: Array<Any?>? ->
+                            if (action == OK) {
                                 addProduct(
                                     (dialogBinding.spInterestedIn.selectedItem as RowData).key,
                                     (dialogBinding.spStage.selectedItem as RowData).key,
@@ -685,11 +682,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             .show()
         stageData.clear()
         stageData.add(0, SELECT_ROW_DATA)
-        stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageData)
+        stageAdapter.setSpinnerData(addProductDialogBinding.spStage, stageData)
 
         statusData.clear()
         statusData.add(0, SELECT_ROW_DATA)
-        statusAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStatus, statusData)
+        statusAdapter.setSpinnerData(addProductDialogBinding.spStatus, statusData)
     }
 
     private fun addProduct(
@@ -1059,10 +1056,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         binding.includePortfolio.apply {
             networth.text = StringStuff.commaDecorator(netWorth)
             daychgamt.text = StringStuff.commaDecorator(dayChangeAmount)
-            daychgperst.text = "${StringStuff.commaDecorator(dayChangePer)} %"
+            daychgperst.text = getString(
+                R.string.text_common_with_percentile,
+                StringStuff.commaDecorator(dayChangePer)
+            )
 
             overallchgamt.text = StringStuff.commaDecorator(overallChangeAmt)
-            overallchgperst.text = "${StringStuff.commaDecorator(overallChangePer)} %"
+            overallchgperst.text = getString(
+                R.string.text_common_with_percentile,
+                StringStuff.commaDecorator(overallChangePer)
+            )
 
             val bgColor = if (dayChangeAmount.startsWith("-")) {
                 color.action_bar_negative
@@ -1185,7 +1188,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             tvTotalGainLoss.text = StringStuff.commaDecorator(totalGainLoss)
 
             tvLTGainLoss.text = StringStuff.commaDecorator(ltGainLoss)
-            tvLTGainLossPer.text = "${StringStuff.commaDecorator(ltGainLossPer)} %"
+            tvSTGainLossPer.text = getString(
+                R.string.text_common_with_percentile,
+                StringStuff.commaDecorator(ltGainLossPer)
+            )
 
             val bgColor = if (ltGainLoss.startsWith("-")) {
                 color.action_bar_negative
@@ -1202,7 +1208,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             tvLTGainLossPer.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorPer))
 
             tvSTGainLoss.text = StringStuff.commaDecorator(stGainLoss)
-            tvSTGainLossPer.text = "${StringStuff.commaDecorator(stGainLossPer)} %"
+            tvSTGainLossPer.text = getString(
+                R.string.text_common_with_percentile,
+                StringStuff.commaDecorator(stGainLossPer)
+            )
 
             val bgColorSt = if (stGainLoss.startsWith("-")) {
                 color.action_bar_negative
@@ -1312,13 +1321,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         removeErrorMessage()
         uiModel.onFailure {
             if (it is ValidationException) {
+                if (binding.llLeadDetail.visibility == View.GONE)
+                    openSectionExpansion(binding.llLeadDetail, binding.tvLeadDetail)
                 showErrorWithFocus(it.error)
             }
         }
         uiModel.onSuccess {
             MSFDialog.alertDialog(
                 requireContext(), 0,
-                resources.getString(R.string.motilal_oswal), MOSLConstants.CONFIRM_LEAD, "YES",
+                resources.getString(R.string.motilal_oswal), CONFIRM_LEAD, "YES",
                 "NO", true
             ) { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
@@ -1339,18 +1350,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     binding.tlLeadName.setErrorMessages(getString(it))
                 3 ->
                     binding.tlEmail.setErrorMessages(getString(it))
-                4 ->
-                    binding.tlAlternateMobile.setErrorMessages(getString(it))
-                5, 6 ->
+                4, 5 ->
                     binding.tlAlternateEmail.setErrorMessages(getString(it))
+                6 ->
+                    binding.tlAlternateMobile.setErrorMessages(getString(it))
                 7 ->
-                    binding.tlLand.setErrorMessages(getString(it))
+                    binding.tlAlternateMobile.setErrorMessages(getString(it))
                 8 ->
-                    binding.tlPan.setErrorMessages(getString(it))
+                    binding.tlLand.setErrorMessages(getString(it))
                 9 ->
-                    binding.tlAadhar.setErrorMessages(getString(it))
+                    binding.tlPan.setErrorMessages(getString(it))
                 10 ->
-                    binding.tlRefereeName.setErrorMessages(getString(it))
+                    binding.tlAadhar.setErrorMessages(getString(it))
                 11, 12 ->
                     binding.tlRefereeNumber.setErrorMessages(getString(it))
                 13 ->
@@ -1539,10 +1550,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            val data = uiModel.data
-            if (data != null) {
-                leadUpdatedDialog()
-            }
+            leadUpdatedDialog()
         }
     }
 
@@ -1647,8 +1655,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
         uiModel.onSuccess {
             when (it.type) {
-                "ByCode" -> binding.etRefereeName.setText(it.name)
-                else -> binding.etRefereeCode.setText(it.code)
+                "ByCode" -> binding.etRefereeName.setText(it.name.trim())
+                else -> binding.etRefereeCode.setText(it.code.trim())
             }
             binding.etRefereeEmail.setText(it.email)
             binding.etRefereeNumber.setText(it.mobile)
@@ -1844,13 +1852,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             try {
                 val newDoa = stringOrEmpty(dOA).split("T").toTypedArray()
                 val newDob = stringOrEmpty(dOB).split("T").toTypedArray()
-                if (!newDob[0].isEmpty()) {
-                    val Dob = CRMAppUtil.getDate(newDob[0], "yyyy-MM-dd")
-                    etDob.setText(CRMAppUtil.getDateStr(Dob, "dd-MM-yyyy"))
+                if (newDob[0].isNotEmpty()) {
+                    val dob = CRMAppUtil.getDate(newDob[0], "yyyy-MM-dd")
+                    etDob.setText(CRMAppUtil.getDateStr(dob, "dd-MM-yyyy"))
                 }
-                if (!newDoa[0].isEmpty()) {
-                    val Doa = CRMAppUtil.getDate(newDoa[0], "yyyy-MM-dd")
-                    etAnniversary.setText(CRMAppUtil.getDateStr(Doa, "dd-MM-yyyy"))
+                if (newDoa[0].isNotEmpty()) {
+                    val doa = CRMAppUtil.getDate(newDoa[0], "yyyy-MM-dd")
+                    etAnniversary.setText(CRMAppUtil.getDateStr(doa, "dd-MM-yyyy"))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -2008,7 +2016,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     ): List<CrossSellingProductsModel> {
         val crossSellingProducts: MutableList<CrossSellingProductsModel> =
             ArrayList()
-        if (products != null && products.size > 0) {
+        if (products != null && products.isNotEmpty()) {
             for ((leadProductId, productId, statusId, productName, statusName) in products) {
                 crossSellingProducts.add(
                     CrossSellingProductsModel(
@@ -2025,7 +2033,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     }
 
     private var isLeadEditable = true
-    var isIndividualsFlag = false
+    private var isIndividualsFlag = false
 
     override fun isSameAsAboveChecked(): Boolean = binding.cbSameAs.isChecked
     override fun onCountrySelected(): Observable<Int> = binding.spCountry.itemSelections()
@@ -2105,7 +2113,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> = subject.ofType()
+    override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> =
+        subject.ofType()
 
     override fun selectedStage(): Observable<SelectStageEvent> = subject.ofType()
 
@@ -2119,7 +2128,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             stageData.clear()
             stageData.addAll(it)
             stageData.add(0, SELECT_ROW_DATA)
-            stageAdapter.setSpinnerData(requireNotNull(addProductDialogBinding).spStage, stageData)
+            stageAdapter.setSpinnerData(addProductDialogBinding.spStage, stageData)
         }
     }
 
@@ -2134,7 +2143,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             statusData.addAll(it)
             stageData.add(0, SELECT_ROW_DATA)
             statusAdapter.setSpinnerData(
-                requireNotNull(addProductDialogBinding).spStatus,
+                addProductDialogBinding.spStatus,
                 statusData
             )
         }
@@ -2142,7 +2151,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
 
     override fun onDestroyView() {
         presenter.stop()
-        addProductDialogBinding = null
+//        addProductDialogBinding = null
         productSpecialDialog = null
         assignToDialog = null
         super.onDestroyView()
@@ -2160,7 +2169,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 val args = Bundle().apply {
                     putInt(POSITION, position)
                     putString(TYPE, type)
-                    putString(MOSLConstants.LEADID, leadID)
+                    putString(  MOSLConstants.LEADID, leadID)
                     putString(MOSLConstants.UCID, ucId)
                 }
                 arguments = args

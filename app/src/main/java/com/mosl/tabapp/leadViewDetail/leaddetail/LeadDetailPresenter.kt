@@ -21,9 +21,9 @@ import javax.inject.Inject
 
 class LeadDetailPresenter @Inject constructor(
     view: LeadDetailView,
-    val data: LeadDetailArgument,
-    val repository: LeadCreationRepository,
-    val detailRepository: LeadDetailRepository,
+    private val data: LeadDetailArgument,
+    private val repository: LeadCreationRepository,
+    private val detailRepository: LeadDetailRepository,
     val navigator: LeadViewDetailNavigator
 ) : BasePresenter<LeadDetailView>(view) {
     private val validator = UpdateLeadValidator()

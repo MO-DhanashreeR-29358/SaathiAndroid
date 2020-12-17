@@ -509,7 +509,7 @@
                             style="@style/CRMEdittextLeadSelector"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
                             android:enabled="false"
                             android:hint="@string/lead_detail_lead_name"
                             android:inputType="textNoSuggestions"

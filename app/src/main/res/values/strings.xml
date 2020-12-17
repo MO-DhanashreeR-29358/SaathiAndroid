@@ -448,6 +448,7 @@
     <string name="text_lead_creation_source">Source*</string>
     <string name="text_lead_creation_stage">Stage*</string>
     <string name="text_lead_creation_status">Status</string>
+    <string name="text_common_with_percentile">%s \%</string>
     <string name="text_lead_creation_additional_info">Additional Info</string>
     <string name="text_lead_creation_residence_address">Residence Address</string>
     <string name="text_lead_creation_primary_address"> Primary Address</string>
@@ -501,6 +502,9 @@
     <string name="error_message_invalid_aadhar">Invalid Aadhar number.</string>
     <string name="error_message_same_mobile">Alternate mobile No. cannot be same</string>
     <string name="error_message_prospect_referee">Enter Prospect Referee Name</string>
+    <string name="error_message_select_interest">Select Interested Product</string>
+    <string name="error_message_select_stage">Select Stage</string>
+    <string name="error_message_select_status">Select Status</string>
     <string name="lead_detail_client_detail">Client Detail</string>
     <string name="lead_detail_client_code">Client Code</string>
     <string name="lead_detail_client_name">Client Name</string>
@@ -520,7 +524,7 @@
     <string name="lead_detail_lead_id">Lead Id</string>
     <string name="lead_detail_lead_category">Lead Category</string>
     <string name="lead_detail_profession">Profession</string>
-    <string name="lead_detail_lead_name">Individualx Name</string>
+    <string name="lead_detail_lead_name">Individual Name</string>
     <string name="lead_detail_date_of_birth">Date of Birth</string>
     <string name="lead_detail_anniversary">Anniversary</string>
     <string name="lead_detail_creation_date">Creation Date</string>

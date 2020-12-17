@@ -29,8 +29,8 @@ import com.mosl.saathi.api.model.lead.CrossSellingProduct;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
-import com.mosl.saathi.api.model.lead.StageItem;
-import com.mosl.saathi.api.model.lead.StageRequest;
+import com.mosl.saathi.api.model.lead.StageMobileItem;
+import com.mosl.saathi.api.model.lead.StageMobileRequest;
 import com.mosl.saathi.api.model.lead.StageWiseConfiguration;
 import com.mosl.saathi.api.model.lead.StatusItem;
 import com.mosl.saathi.api.model.lead.StatusRequest;
@@ -60,6 +60,7 @@ import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.shared.util.Utility.stringOrEmpty;
+import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
@@ -74,7 +75,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     Context mContext;
     private final SaathiApi saathiApi;
-    private List<RowData> arrStatus, arrStage;
+    private List<RowData> arrStatus, arrStage = new ArrayList<>();
     private List<RowData> arrCrossSellingProductId;
     private String employeeCode;
     private ListView lvAddProduct;
@@ -256,20 +257,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                             ViewGroup.LayoutParams.WRAP_CONTENT);
                             dialog.getWindow()
                                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                    /*final Spinner spProductIdDialog =
-                        dialog.findViewById(R.id.spProductId);
-                    final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-                    final LinearLayout progressLayout =
-                        dialog.findViewById(R.id.customProgress);*/
                             dialogBinding.spProductId.setEnabled(false);
-                            //Text errors
-                    /*tvCrossSellingProductIdError =
-                        dialog.findViewById(R.id.tvspProductIdError);
-                    tvCrossSellingStatusError =
-                        dialog.findViewById(R.id.tvspStatusError);
-
-                    Button btnSave = dialog.findViewById(R.id.btnSave);
-                    Button btnClose = dialog.findViewById(R.id.btnClose);*/
 
                             newGetCrossSellingStatus(dialogBinding.spStatus,
                                     mSection.getCrossSellingStatusId(),
@@ -289,7 +277,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                             dialogBinding.btnSave.setOnClickListener(view14 -> {
                                 if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
-                                    //TODO Show Error
                                     dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
                                     dialogBinding.tvspStatusError.setText("Select Status");
                                     return;
@@ -361,20 +348,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         ViewGroup.LayoutParams.WRAP_CONTENT);
                 dialog.getWindow()
                         .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-               /* final Spinner spProductIdDialog =
-                    dialog.findViewById(R.id.spProductId);
-                final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-                final LinearLayout progressLayout =
-                    dialog.findViewById(R.id.customProgress);
-                //Text errors
-                tvCrossSellingProductIdError =
-                    dialog.findViewById(R.id.tvspProductIdError);
-                tvCrossSellingStatusError =
-                    dialog.findViewById(R.id.tvspStatusError);
-
-                Button btnSave = dialog.findViewById(R.id.btnSave);
-                Button btnClose = dialog.findViewById(R.id.btnClose);*/
-
                 newGetCrossSellingStatus(dialogBinding.spStatus, "",
                         dialogBinding.includeCustomProgress.customProgress);
                 newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
@@ -402,12 +375,10 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                 dialogBinding.btnSave.setOnClickListener(view15 -> {
                     if (dialogBinding.spProductId.getSelectedItemPosition() < 1) {
-                        //TODO Show Error
                         dialogBinding.tvspProductIdError.setVisibility(View.VISIBLE);
                         dialogBinding.tvspProductIdError.setText("Select Product Id");
                         return;
                     } else if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
-                        //TODO Show Error
                         dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
                         dialogBinding.tvspStatusError.setText("Select Status");
                         return;
@@ -425,16 +396,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 saathiApi.saveLeadCrossSellingProduct(productRequest)
                                         .compose(applyUiModel())
                                         .subscribe(uiModel -> {
-                                            //========= toggleProgress(uiModel.inProgress);
-                                            if (uiModel.inProgress) {
-                                                //========   hideKeyboard(leadViewDetailView);
-                                            }
-
-                                            Throwable error = uiModel.error;
-                                            if (error != null) {
-                                                //=====  showOnFailurePopup(error);
-                                            }
-
                                             Object data = uiModel.data;
                                             if (data != null) {
                                                 alertDialog(mContext, 0,
@@ -449,15 +410,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                         });
                                             }
                                         }));
-                    } else {
-                        //============ noInternetConnectionDialog();
                     }
-
                     dialog.dismiss();
                 });
 
                 dialogBinding.btnClose.setOnClickListener(view12 -> {
-                    //========= hideKeyboard(leadViewDetailView);
                     dialog.dismiss();
                 });
                 dialog.show();
@@ -502,8 +459,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                                 .compose(applyUiModel())
                                                                 .subscribe(
                                                                         this::renderDeleteCrossSellingProduct));
-                                            } else {
-                                                //========== noInternetConnectionDialog();
                                             }
                                         }
                                     }
@@ -558,81 +513,82 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return view;
     }
 
-    private void getStage(final Spinner spStage/*,
-                              final LinearLayout progressLayout*/) {
+    private void getStageSelectList(final Spinner spStageDialog, final String stageId,
+                                    final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
-            disposable.add(
-                    saathiApi.getStageList(new StageRequest(userBusinessUnitId))
-                            .compose(applyUiModel())
-                            .subscribe(uiModel -> renderStageItems(uiModel, spStage/*,progressLayout*/)));
+            String stageID = isBlank(stageId) ? null : stageId;
+            StageMobileRequest mobileRequest =
+                    new StageMobileRequest(userBusinessUnitId, stageID);
+            disposable.add(saathiApi.getStageMobileList(mobileRequest)
+                    .compose(applyUiModel())
+                    .subscribe(
+                            uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout, stageID)));
         }
     }
 
-    private void renderStageItems(UiModel<List<StageItem>> uiModel, Spinner spStage/*, LinearLayout progressLayout*/) {
-        /*if (uiModel.inProgress) {
+    private void renderStageMobile(UiModel<List<StageMobileItem>> uiModel,
+                                   final Spinner spStageDialog, final LinearLayout progressLayout, String stageId) {
+        if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
             progressLayout.setVisibility(View.GONE);
         }
-*/
+
         Throwable error = uiModel.error;
         if (error != null) {
-            arrStage = new ArrayList<>();
-            //=======    showOnFailurePopup(error);
+            arrStage.clear();
+//            showOnFailurePopup(error);
         }
 
-        List<StageItem> data = uiModel.data;
+        List<StageMobileItem> data = uiModel.data;
         if (data != null) {
-            arrStage = new ArrayList<>();
-            arrStage.add(new RowData(0, "-1", "Select"));
+            arrStage.clear();
+            arrStage.add(new RowData(0, "-1", "Select", ""));
             for (int i = 0; i < data.size(); i++) {
-                StageItem stageItem = data.get(i);
-                arrStage.add(
-                        new RowData(i + 1,
-                                String.valueOf(stageItem.stageID),
-                                stringOrEmpty(stageItem.stageName)
-                        ));
+                StageMobileItem item = data.get(i);
+                arrStage.add(new RowData(i + 1,
+                        String.valueOf(item.stageID),
+                        stringOrEmpty(item.stageName),
+                        stringOrEmpty(item.showPotentialPopup)
+                ));
             }
-            spStage.setAdapter(arrSatgeAdapter);
-            AdapterUtils.setSpinnerData(arrSatgeAdapter, spStage, arrStage);
-            RowData stageData = getSpinnerRowDataById(statusId, arrSatgeAdapter);
-            /*if (stageData != null) */
-            {
-                spStage.setSelection(2);
+            spStageDialog.setAdapter(arrSatgeAdapter);
+            AdapterUtils.setSpinnerData(arrSatgeAdapter, spStageDialog, arrStage);
+            RowData stageData = getSpinnerRowDataById(stageId, arrSatgeAdapter);
+            if (stageData != null) {
+                spStageDialog.setSelection(stageData.getPosition());
             }
         }
     }
 
-    private void newGetStatus(String productId, final Spinner spStatus, final String statusId/*,
-                              final LinearLayout progressLayout*/) {
+    private void newGetStatus(String productId, final Spinner spStatus, final String statusId,
+                              final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
             disposable.add(
                     saathiApi.getStatusList(new StatusRequest(productId, "1"))
                             .compose(applyUiModel())
-                            .subscribe(uiModel -> renderNewStatus(uiModel, spStatus/*, progressLayout*/,
+                            .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
                                     statusId)));
-        } else {
-            //========   noInternetConnectionDialog();
         }
     }
 
     private void renderNewStatus(UiModel<List<StatusItem>> uiModel,
-                                 Spinner spStatus, /*final LinearLayout progressLayout,*/ String statusId) {
-        /*if (uiModel.inProgress) {
+                                 Spinner spStatus, final LinearLayout progressLayout, String statusId) {
+        if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
         } else {
             progressLayout.setVisibility(View.GONE);
-        }*/
+        }
 
         Throwable error = uiModel.error;
         if (error != null) {
-            arrStatus = new ArrayList<>();
+            arrStatus.clear();
             //=======    showOnFailurePopup(error);
         }
 
         List<StatusItem> data = uiModel.data;
         if (data != null) {
-            arrStatus = new ArrayList<>();
+            arrStatus.clear();
             arrStatus.add(new RowData(0, "-1", "Select"));
             for (int i = 0; i < data.size(); i++) {
                 StatusItem statusItem = data.get(i);
@@ -798,7 +754,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
         Throwable error = uiModel.error;
         if (error != null) {
-            arrStatus = new ArrayList<>();
+            arrStatus.clear();
             llLowMarginAdd.removeAllViews();
             lowMarginList.clear();
             isLowMargin = false;
@@ -807,7 +763,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
         List<StageWiseConfiguration> data = uiModel.data;
         if (data != null) {
-            arrStatus = new ArrayList<>();
+            arrStatus.clear();
             lowMarginList.clear();
             if (data.size() > 0) {
                 isLowMargin = true;
@@ -827,9 +783,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         isLowMargin = true;
                         IncludeEdittextLowmarginBinding childBinding =
                                 IncludeEdittextLowmarginBinding.inflate(inflater);
-
-                        /*TextView tvHead = childValue.findViewById(R.id.tvHead);
-                        EditText edHead = childValue.findViewById(R.id.etSection);*/
                         if (lowMargin.isMandatory) {
                             childBinding.tvHead.setText(String.format("%s*", lowMargin.viewName));
                             childBinding.etSection.setHint("At least enter 3 digits");
@@ -872,19 +825,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        //        final Spinner spStatusDialog = dialog.findViewById(R.id.spStatus);
-        // final LinearLayout llLowMarginAdd =
-        //   dialog.findViewById(R.id.lowMarginAdd);
-        /*tvspIntrestError = dialog.findViewById(R.id.tvspIntrestError);
-        tvspStatusError = dialog.findViewById(R.id.tvspStatusError);
-        tvspStageError = dialog.findViewById(R.id.tvspStageError);*/
-        /*final LinearLayout progressLayout =
-            dialog.findViewById(R.id.customProgress);
-        LinearLayout llInterestedIn = dialog.findViewById(R.id.llInterestedIn);
-        Button btnSave = dialog.findViewById(R.id.btnSave);
-        Button btnClose = dialog.findViewById(R.id.btnClose);*/
-        /*final ClearableEditText productSpecialistEdit =
-            dialog.findViewById(R.id.dacProductSpecialist);*/
         dialogBinding.dacProductSpecialist.setText(productSpecialist);
         specialistEdit = productSpecialistId;
         dialogBinding.dacProductSpecialist.setClearIconVisible(true);
@@ -959,8 +899,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             searchList.setmListner(assingViewListner);
         });
         dialogBinding.llInterestedIn.setVisibility(View.GONE);
-        //======== GetStageSelectList(spStageDialog, stageId, progressLayout);
-        getStage(dialogBinding.spStage/*,progressLayout*/);
+        getStageSelectList(dialogBinding.spStage, stageId, dialogBinding.includeCustomProgress.customProgress);
 
         disposable.add(
                 itemSelections(dialogBinding.spStage)
@@ -973,7 +912,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                             newStageCodeStr = ((RowData) dialogBinding.spStage.getSelectedItem()).getKey();
                             newStageNameStr =
                                     ((RowData) dialogBinding.spStage.getSelectedItem()).getValue();
-                            if (((RowData) dialogBinding.spStage.getSelectedItem()).getSchmeID()
+                            if (((RowData) dialogBinding.spStage.getSelectedItem()).getShowPotentialPopup()
                                     .equalsIgnoreCase(YES)) {
                                 if (pmsProductSpinnerValue.equals(NO)) {
                                     isPMSProductStageStatus = true;
@@ -982,7 +921,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 isPMSProductStageStatus = false;
                             }
                             if (!newStageCodeStr.equalsIgnoreCase("-1")) {
-                                newGetStatus(newStageCodeStr, dialogBinding.spStatus, statusId/*, customProgress*/);
+                                newGetStatus(newStageCodeStr, dialogBinding.spStatus, statusId, dialogBinding.includeCustomProgress.customProgress);
                             }
                         }));
 
@@ -1033,7 +972,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                         newStageCodeStr,
                                         selectedStatus.getKey(),
                                         selectedStatus.getValue(), dialogBinding.actAssignTo.getText().toString(),
-                                        YES, dataMap
+                                        YES, dataMap,
+                                        dialogBinding.includeCustomProgress.customProgress
                                 );
                             } else {
                                 updateProduct(
@@ -1045,12 +985,14 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                         selectedStatus.getKey(),
                                         selectedStatus.getValue(),
                                         dialogBinding.actAssignTo.getText()
-                                                .toString(), NO, dataMap
+                                                .toString(), NO, dataMap,
+                                        dialogBinding.includeCustomProgress.customProgress
                                 );
                             }
                         });
             } else {
                 updateProduct(
+
                         interestIn,
                         leadMappingId,
                         primaryRM,
@@ -1058,14 +1000,14 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         newStageCodeStr,
                         selectedStatus.getKey(),
                         selectedStatus.getValue(),
-                        dialogBinding.actAssignTo.getText().toString(), "", dataMap
+                        dialogBinding.actAssignTo.getText().toString(), "", dataMap,
+                        dialogBinding.includeCustomProgress.customProgress
                 );
             }
             dialog.dismiss();
         });
 
         dialogBinding.btnClose.setOnClickListener(view -> {
-            //=== hideKeyboard(leadViewDetailView);
             dialog.dismiss();
         });
         dialog.show();
@@ -1090,9 +1032,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     void updateProduct(String interestIn, String leadMappingId,
                        String primaryRM, String productSpecialistId, String newStageCodeStr,
                        String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
-                       Map dataMap) {
+                       Map dataMap,
+                       final LinearLayout progressLayout) {
         if (CRMAppUtil.isNetworkEnabled(mContext)) {
-            //====== showProgress();
             UpdateLeadMappingRequest mappingRequest = new UpdateLeadMappingRequest(
                     etLeadId,
                     interestIn,
@@ -1112,19 +1054,17 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             );
             disposable.add(saathiApi.updateLeadProductMapping(mappingRequest)
                     .compose(applyUiModel())
-                    .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest)));
-        } else {
-            //======= noInternetConnectionDialog();
+                    .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest, progressLayout)));
         }
     }
 
     private void renderUpdateLeadProductMapping(UiModel<List<LeadProductMappingItem>> uiModel,
-                                                UpdateLeadMappingRequest mappingRequest) {
-        //=====  toggleProgress(uiModel.inProgress);
+                                                UpdateLeadMappingRequest mappingRequest, LinearLayout progressLayout) {
         if (uiModel.inProgress) {
-            //========       hideKeyboard(leadViewDetailView);
+            progressLayout.setVisibility(View.VISIBLE);
+        } else {
+            progressLayout.setVisibility(View.GONE);
         }
-
         Throwable error = uiModel.error;
         if (error != null) {
             //======     showOnFailurePopup(error);

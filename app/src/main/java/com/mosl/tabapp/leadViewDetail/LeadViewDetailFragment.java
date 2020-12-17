@@ -4446,7 +4446,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                 lowMarginList.clear();
                                 newStageCodeStr = ((RowData) spStageDialog.getSelectedItem()).getKey();
                                 newStageNameStr = ((RowData) spStageDialog.getSelectedItem()).getValue();
-                                if (((RowData) spStageDialog.getSelectedItem()).getSchmeID()
+                                if (((RowData) spStageDialog.getSelectedItem()).getShowPotentialPopup()
                                         .equalsIgnoreCase(YES)) {
                                     if (spPmsProduct.getSelectedItem().toString().equals(NO)) {
                                         isPMSProductStageStatus = true;
