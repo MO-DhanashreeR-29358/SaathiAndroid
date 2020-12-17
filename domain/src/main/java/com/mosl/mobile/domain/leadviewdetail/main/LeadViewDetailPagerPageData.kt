@@ -4,13 +4,13 @@ data class LeadDetail(
   @JvmField val id: String,
   @JvmField val branchCode: String,
   @JvmField val personalDetail: PersonalDetail,
-  @JvmField val createMeetingId: String,
+  @JvmField val createMeetingId: Int,
   @JvmField val leadOwner: String,
   @JvmField val source: String,
   @JvmField val prospectSource: String,
   @JvmField val prospectSourceDetail: String,
-  @JvmField val oaoUserId: String,
-  @JvmField val diyCode: String,
+  @JvmField val oaoUserId: Int,
+  @JvmField val diyCode: Int,
   @JvmField val diyLink: String,
   @JvmField val leadProducts: List<LeadProduct>
 )
@@ -38,7 +38,7 @@ data class ClientDetail(
   @JvmField val clientCode: String,
   @JvmField val branchCode: String,
   @JvmField val mobile: String,
-  @JvmField val oaoUserId: String
+  @JvmField val oaoUserId: Int
 )
 
 data class ClientDetailAndImage(

@@ -29,13 +29,13 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       id = leadID.toString(),
       branchCode = branchcode ?: emptyString,
       personalDetail = personalDetail,
-      createMeetingId = createMeetingId.toString(),
+      createMeetingId = createMeetingId,
       leadOwner = leadOwner ?: emptyString,
       source = sourceName ?: emptyString,
       prospectSource = prospectSource ?: emptyString,
       prospectSourceDetail = leadSourceDetailsID.toString(),
-      oaoUserId = oAOUserid.toString(),
-      diyCode = diyCode.toString(),
+      oaoUserId = oAOUserid,
+      diyCode = diyCode,
       diyLink = diyLink.toString(),
       leadProducts = leadProducts
   )
@@ -45,7 +45,7 @@ internal fun ClientDetailItem.toClientDetail(): ClientDetail {
   return ClientDetail(
       name = clientName ?: "",
       id = leadID.toString(),
-      oaoUserId = oAOUserid.toString(),
+      oaoUserId = oAOUserid,
       currentStage = stageName ?: "",
       currentStageSince = pendingDays ?: "",
       branchCode = branchCode ?: "",
