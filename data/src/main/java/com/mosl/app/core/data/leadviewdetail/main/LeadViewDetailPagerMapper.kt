@@ -8,48 +8,48 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 
 fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
-  val emptyString = ""
-  val personalDetail = PersonalDetail(
-      name = contact?.name ?: emptyString,
-      ucId = contact?.uCID ?: emptyString,
-      mobile = contact?.mobile ?: emptyString,
-      email = contact?.emailId ?: emptyString
-  )
-  val leadProducts = leadProductMapping?.map {
-    LeadProduct(
-        clientCode = it.clientCode ?: emptyString,
-        stageName = it.stageName ?: emptyString,
-        isDefault = it.isDefault,
-        interestedIn = it.interestedIn.toString(),
-        pendingDays = it.pendingDays.toString()
+    val emptyString = ""
+    val personalDetail = PersonalDetail(
+        name = contact?.name ?: emptyString,
+        ucId = contact?.uCID ?: emptyString,
+        mobile = contact?.mobile ?: emptyString,
+        email = contact?.emailId ?: emptyString
     )
-  } ?: emptyList()
+    val leadProducts = leadProductMapping?.map {
+        LeadProduct(
+            clientCode = it.clientCode ?: emptyString,
+            stageName = it.stageName ?: emptyString,
+            isDefault = it.isDefault,
+            interestedIn = it.interestedIn.toString(),
+            pendingDays = it.pendingDays.toString()
+        )
+    } ?: emptyList()
 
-  return LeadDetail(
-      id = leadID.toString(),
-      branchCode = branchcode ?: emptyString,
-      personalDetail = personalDetail,
-      createMeetingId = createMeetingId,
-      leadOwner = leadOwner ?: emptyString,
-      source = sourceName ?: emptyString,
-      prospectSource = prospectSource ?: emptyString,
-      prospectSourceDetail = leadSourceDetailsID.toString(),
-      oaoUserId = oAOUserid,
-      diyCode = diyCode,
-      diyLink = diyLink.toString(),
-      leadProducts = leadProducts
-  )
+    return LeadDetail(
+        id = leadID.toString(),
+        branchCode = branchcode ?: emptyString,
+        personalDetail = personalDetail,
+        createMeetingId = createMeetingId,
+        leadOwner = leadOwner ?: emptyString,
+        source = sourceName ?: emptyString,
+        prospectSource = prospectSource ?: emptyString,
+        prospectSourceDetail = leadSourceDetailsID.toString(),
+        oaoUserId = oAOUserid,
+        diyCode = diyCode,
+        diyLink = diyLink ?: "",
+        leadProducts = leadProducts
+    )
 }
 
 internal fun ClientDetailItem.toClientDetail(): ClientDetail {
-  return ClientDetail(
-      name = clientName ?: "",
-      id = leadID.toString(),
-      oaoUserId = oAOUserid,
-      currentStage = stageName ?: "",
-      currentStageSince = pendingDays ?: "",
-      branchCode = branchCode ?: "",
-      clientCode = clientCode ?: "",
-      mobile = mobile ?: ""
-  )
+    return ClientDetail(
+        name = clientName ?: "",
+        id = leadID.toString(),
+        oaoUserId = oAOUserid,
+        currentStage = stageName ?: "",
+        currentStageSince = pendingDays ?: "",
+        branchCode = branchCode ?: "",
+        clientCode = clientCode ?: "",
+        mobile = mobile ?: ""
+    )
 }

@@ -52,7 +52,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var mobile: String? = null
     private var oaoUserId: Int = 0
     private var diyCode: Int = 0
-    private var diyLink: String? = null
+    private var diyLink: String = ""
     private var createMeetingId: Int = 0
     private var interestedIn: String? = null
     private var ucId: String = "0"
@@ -95,6 +95,9 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     }
 
     private fun setupPager() {
+        if (!leadId.equals("0", ignoreCase = true)) {
+            CRMAppUtil.setImage(ByteArray(0), binding.includeClient.detail.ivLead, requireContext())
+        }
         val newAdapter =
             LeadViewDetailFragmentStateAdapter(activity as AppCompatActivity, leadId, ucId)
         binding.vpLeadView.adapter = newAdapter
@@ -161,14 +164,14 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
             }
 
             if (diyCode > 0) {
-                if (diyLink!!.isNotEmpty()) {
+                if (diyLink.isNotEmpty()) {
                     dialogBinding.view3.visibility = View.VISIBLE
                 }
                 dialogBinding.ivShareLink.visibility = View.VISIBLE
             } else {
                 dialogBinding.ivShareLink.visibility = View.GONE
             }
-            if (diyLink!!.isEmpty() || diyCode == 0) {
+            if (diyLink.isEmpty() || diyCode == 0) {
                 dialogBinding.ivCopyLink.visibility = View.GONE
             } else {
                 dialogBinding.ivCopyLink.visibility = View.VISIBLE
@@ -318,7 +321,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     }
 
     override fun renderOnCopyLinkClick() {
-        if (diyLink.isNullOrEmpty()) {
+        if (diyLink.isEmpty()) {
             Toast.makeText(
                 requireContext(), string.txt_lable_link_error_msg,
                 Toast.LENGTH_LONG

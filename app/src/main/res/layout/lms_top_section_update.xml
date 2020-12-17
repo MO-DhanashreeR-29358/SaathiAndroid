@@ -31,7 +31,7 @@
             android:id="@+id/ivLead"
             android:layout_width="@dimen/_60sdp"
             android:layout_height="@dimen/_60sdp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
