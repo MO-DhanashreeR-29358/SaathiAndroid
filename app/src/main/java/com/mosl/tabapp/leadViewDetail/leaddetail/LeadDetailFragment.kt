@@ -2138,7 +2138,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         uiModel.onSuccess {
             statusData.clear()
             statusData.addAll(it)
-            stageData.add(0, SELECT_ROW_DATA)
+            statusData.add(0, SELECT_ROW_DATA)
             statusAdapter.setSpinnerData(
                 addProductDialogBinding.spStatus,
                 statusData
