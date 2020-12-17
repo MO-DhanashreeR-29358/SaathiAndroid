@@ -49,12 +49,12 @@ import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
-import io.reactivex.disposables.CompositeDisposable;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -76,7 +76,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     Context mContext;
     private final SaathiApi saathiApi;
     private List<RowData> arrStatus, arrStage = new ArrayList<>();
-    private List<RowData> arrCrossSellingProductId;
+    private List<RowData> arrCrossSellingProductId = new ArrayList<>();
     private String employeeCode;
     private ListView lvAddProduct;
     private String etLeadId;
@@ -89,7 +89,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private String statusId;
     private String pmsProductSpinnerValue = "";
-    private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
+    private List<LeadDetailAddProductModel> leadDetailAddProductModelList = new ArrayList<>();
     private final CompositeDisposable disposable = new CompositeDisposable();
     private String specialistEdit = "";
 
