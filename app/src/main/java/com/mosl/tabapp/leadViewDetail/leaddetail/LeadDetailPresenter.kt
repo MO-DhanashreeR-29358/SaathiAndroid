@@ -204,6 +204,10 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { view.renderOnUpdateButtonClick(it) }
             .addTo(disposable)
 
+        view.onProfileLayoutClicked()
+            .subscribe { view.renderProfileClick() }
+            .addTo(disposable)
+
         view.onUpdateLeadEventFired()
             .map { view.getUpdateLeadUSerInput() }
             .switchMap {

@@ -36,7 +36,6 @@ import com.mosl.tabapp.common.*
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.CRMAppUtil.isBlank
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
@@ -67,7 +66,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-class LeadDetailFragment : CommonFragment(), LeadDetailView {
+class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProductCallBack {
 
     @Inject
     internal lateinit var presenter: LeadDetailPresenter
@@ -278,8 +277,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 dismiss()
             }
 
-        }
-            .show()
+        }.show()
     }
 
     override fun onAddProductClicked(): Observable<Unit> = binding.rlAddProduct.clicks()
@@ -362,7 +360,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     if (action == OK) {
                         val bundle = Bundle()
                         bundle.putString(LEAD_ID, leadID)
-                        bundle.putString(MOSLConstants.UCID, uCID)
+                        bundle.putString(UCID, uCID)
                         navigator.openPage(
                             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
                             forceReload = false
@@ -391,10 +389,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             statusAdapter,
                             stageAdapter,
                             userManager.getUser()?.employeeCode,
-                            status,
                             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                             (binding.spPmsProduct.selectedItem as? RowData)?.value
-                                ?: emptyString()
+                                ?: emptyString(),
+                            this
                         )
                     binding.lvAddProduct.adapter = leadDetailAddProductAdapter
                     CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
@@ -453,7 +451,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     override fun openAddProductDialog() {
         Dialog(requireContext()).apply {
             addProductDialogBinding = DialogLeadviewAddProductBinding.bind(
-                layoutInflater.inflate(
+                View.inflate(
+                    requireContext(),
                     R.layout.dialog_leadview_add_product,
                     null
                 )
@@ -628,10 +627,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                             statusAdapter,
                             stageAdapter,
                             userManager.getUser()?.employeeCode,
-                            status,
                             userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                             (binding.spPmsProduct.selectedItem as? RowData)?.value
-                                ?: emptyString()
+                                ?: emptyString(),
+                            this@LeadDetailFragment
                         )
                 }
                 if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true) {
@@ -1111,7 +1110,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
                         "${it.percentageGainLoss} %"
                     ),
-                    MOSLConstants.PRODUCT_ID to it.productId
+                    PRODUCT_ID to it.productId
                 )
                 brokingMapList.add(map)
             }
@@ -1134,7 +1133,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                     PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
                         "${it.percentageGainLoss} %"
                     ),
-                    MOSLConstants.PRODUCT_ID to it.productId,
+                    PRODUCT_ID to it.productId,
                     PRODUCT_TYPE to it.productType
                 )
                 assetMapList.add(map)
@@ -1234,7 +1233,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val brokingMapList = mutableListOf<HashMap<String, String>>()
             brokingProducts.forEach {
                 val map = hashMapOf(
-                    MOSLConstants.PRODUCT_ID to it.productId,
+                    PRODUCT_ID to it.productId,
                     PRODUCT to it.productName,
                     STGL to StringStuff.commaDecorator(it.stGainLoss),
                     LTGL to StringStuff.commaDecorator(it.ltGainLoss),
@@ -1254,7 +1253,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
             val assetMapList = mutableListOf<HashMap<String, String>>()
             assetProducts.forEach {
                 val map = hashMapOf(
-                    MOSLConstants.PRODUCT_ID to it.productId,
+                    PRODUCT_ID to it.productId,
                     PRODUCT to it.productName,
                     STGL to StringStuff.commaDecorator(it.stGainLoss),
                     LTGL to StringStuff.commaDecorator(it.ltGainLoss),
@@ -1696,7 +1695,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         }
     }
 
-    private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+    private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
 
     private fun setEnableDisable(status: Boolean) {
         binding.apply {
@@ -1929,6 +1928,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
 
     private fun List<LeadProductMappingItem>.renderMapping() {
+        leadDetailAddProductList.clear()
         mapNotNull {
             stage = it.stageID?.toString() ?: emptyString()
             status = it.statusID?.toString() ?: emptyString()
@@ -1947,9 +1947,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 statusAdapter,
                 stageAdapter,
                 userManager.getUser()?.employeeCode,
-                status,
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString()
+                (binding.spPmsProduct.selectedItem as? RowData)?.value ?: emptyString(),
+                this@LeadDetailFragment
             )
         binding.lvAddProduct.adapter = leadDetailAddProductAdapter
         CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
@@ -2166,8 +2166,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
                 val args = Bundle().apply {
                     putInt(POSITION, position)
                     putString(TYPE, type)
-                    putString(MOSLConstants.LEADID, leadID)
-                    putString(MOSLConstants.UCID, ucId)
+                    putString(LEADID, leadID)
+                    putString(UCID, ucId)
                 }
                 arguments = args
             }
@@ -2176,6 +2176,51 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView {
         const val OUTER = "OuterSectionExpansion"
         const val INNER = "InnerSectionExpansion"
 
+    }
+
+    override fun newInvestmentProductAdded(
+        position: Int,
+        crossSellingProductsModel: CrossSellingProductsModel
+    ) {
+        val selectedProduct =
+            leadDetailAddProductAdapter?.getItem(position) as LeadDetailAddProductModel
+        crossSellingProductsModel.run {
+            selectedProduct.crossSellingProductsModelList.add(this)
+        }
+        leadDetailAddProductAdapter?.notifyDataSetChanged()
+    }
+
+    override fun updateInvestmentProduct(
+        position: Int,
+        selectedRowData: RowData,
+        productId: String
+    ) {
+        val selectedProduct =
+            leadDetailAddProductAdapter?.getItem(position) as LeadDetailAddProductModel
+        selectedProduct.crossSellingProductsModelList.find { it.crossSellingProductId == productId }
+            ?.run {
+                crossSellingStatusId = selectedRowData.key
+                crossSellingStatusName = selectedRowData.value
+            }
+        leadDetailAddProductAdapter?.notifyDataSetChanged()
+
+    }
+
+    override fun showFailureDialog(error: Throwable) {
+        showOnFailurePopup(error)
+        noInternetConnectionDialog()
+    }
+
+    override fun showNoInternetDialog() {
+        noInternetConnectionDialog()
+    }
+
+    override fun toggleProgressDialog(inProgress: Boolean) {
+        toggleProgressBar(inProgress)
+    }
+
+    override fun hideKeyBoard(view: View) {
+        hideKeyboard(view)
     }
 
 }

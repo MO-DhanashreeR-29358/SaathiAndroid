@@ -26,6 +26,7 @@ import com.mosl.saathi.api.model.crosssellingproduct.DeleteLeadCrossSellingProdu
 import com.mosl.saathi.api.model.crosssellingproduct.SaveLeadCrossSellingProductRequest;
 import com.mosl.saathi.api.model.lead.ConfigurationByStatusRequest;
 import com.mosl.saathi.api.model.lead.CrossSellingProduct;
+import com.mosl.saathi.api.model.lead.CrossSellingProductResponse;
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem;
 import com.mosl.saathi.api.model.lead.LookupItem;
 import com.mosl.saathi.api.model.lead.LookupRequest;
@@ -62,8 +63,9 @@ import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.shared.util.Utility.stringOrEmpty;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildren;
-import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.constants.MOSLConstants.EQUITY;
+import static com.mosl.tabapp.constants.MOSLConstants.MF;
 import static com.mosl.tabapp.constants.MOSLConstants.NO;
 import static com.mosl.tabapp.constants.MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT;
 import static com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH;
@@ -75,23 +77,23 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     Context mContext;
     private final SaathiApi saathiApi;
-    private List<RowData> arrStatus, arrStage = new ArrayList<>();
-    private List<RowData> arrCrossSellingProductId = new ArrayList<>();
-    private String employeeCode;
-    private ListView lvAddProduct;
-    private String etLeadId;
-    private ArrayAdapter<RowData> arrAdapStatus, arrSatgeAdapter;
+    private final List<RowData> arrStatus, arrStage = new ArrayList<>();
+    private final List<RowData> arrCrossSellingProductId = new ArrayList<>();
+    private final String employeeCode;
+    private final ListView lvAddProduct;
+    private final String etLeadId;
+    private final ArrayAdapter<RowData> arrAdapStatus, arrSatgeAdapter;
     private boolean isLowMargin;
-    private List<LowMargin> lowMarginList = new ArrayList<>();
-    private Boolean isLeadEditable = true;
+    private final List<LowMargin> lowMarginList = new ArrayList<>();
+    private final Boolean isLeadEditable;
     private Boolean isPMSProductStageStatus = false;
-    private String userBusinessUnitId;
-
-    private String statusId;
-    private String pmsProductSpinnerValue = "";
-    private List<LeadDetailAddProductModel> leadDetailAddProductModelList = new ArrayList<>();
+    private final String userBusinessUnitId;
+    private final String pmsProductSpinnerValue;
+    private final List<LeadDetailAddProductModel> leadDetailAddProductModelList;
     private final CompositeDisposable disposable = new CompositeDisposable();
     private String specialistEdit = "";
+    private final LeadDetailAddProductCallBack callBack;
+    private final static RowData SELECT_ROW_DATA = new RowData(0, "-1", "Select", "");
 
     @Override
     public int getCount() {
@@ -106,17 +108,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     @Override
     public long getItemId(int i) {
         return i;
-    }
-
-    private void addProduct(LeadDetailAddProductModel addProduct) {
-        if (this.leadDetailAddProductModelList == null) {
-            this.leadDetailAddProductModelList = new ArrayList<>();
-        }
-
-        this.leadDetailAddProductModelList.add(addProduct);
-        notifyDataSetChanged();
-        setListViewHeightBasedOnChildrenDetail(
-                lvAddProduct);
     }
 
     private String newStageCodeStr = "";
@@ -140,9 +131,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 ArrayAdapter<RowData> arrAdapStatus,
                                 ArrayAdapter<RowData> arrSatgeAdapter,
                                 String employeeCode,
-                                String statusId,
                                 String userBusinessUnitId,
-                                String pmsProductSpinnerValue
+                                String pmsProductSpinnerValue,
+                                LeadDetailAddProductCallBack leadDetailAddProductCallBack
     ) {
         inflater = LayoutInflater.from(c);
         saathiApi = api;
@@ -157,6 +148,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         this.arrAdapStatus = arrAdapStatus;
         this.userBusinessUnitId = userBusinessUnitId;
         this.leadDetailAddProductModelList = leadDetailAddProductModelList;
+        callBack = leadDetailAddProductCallBack;
     }
 
     private void updateProductData(String interestIn, String stageId, String stageValue,
@@ -192,11 +184,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         final LeadDetailAddProductModel leadDetailAddProductModel =
                 leadDetailAddProductModelList.get(i);
-        //ItemListAddProductBinding holderBinding = ItemListAddProductBinding.inflate(inflater);
-
         view = inflater.inflate(R.layout.item_list_add_product, viewGroup, false);
         final LeadDetailAddProductAdapter.Holder
-                holder = new LeadDetailAddProductAdapter.Holder();
+                holder = new Holder();
         holder.tvProduct = view.findViewById(R.id.tvProduct);
         holder.tvProductSpecialist = view.findViewById(R.id.tvProductSpecialist);
         holder.tvPrimaryRM = view.findViewById(R.id.tvPrimaryRM);
@@ -218,8 +208,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         holder.tvStage.setText(leadDetailAddProductModel.getStageValue());
         holder.tvProductID.setText(leadDetailAddProductModel.getInterestedInValue());
         holder.tvStatus.setText(leadDetailAddProductModel.getStatusValue());
-        if (leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("Equity")
-                || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase("MF")) {
+        if (leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase(EQUITY)
+                || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase(MF)) {
             holder.llCrossSellingProducts.setVisibility(View.VISIBLE);
         } else {
             holder.llCrossSellingProducts.setVisibility(View.GONE);
@@ -235,102 +225,97 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             LinearLayout llCrossSellingUpdateProduct =
                     childSection.findViewById(R.id.llCrossSellingUpdateProduct);
 
-            //ChildCrossSellingProductBinding childSectionBinding =
-            //  ChildCrossSellingProductBinding.inflate(inflater);
             tvCrosellingStatus.setText(mSection.getCrossSellingStatusName());
             tvCrossSellingProduct.setText(
                     mSection.getCrossSellingProductName());
             llCrossSellingUpdateProduct.setOnClickListener(
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Dialog dialog = new Dialog(mContext);
-                            DialogLeadviewUpdateCrossSellingProductBinding dialogBinding =
-                                    DialogLeadviewUpdateCrossSellingProductBinding.inflate(inflater);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.getWindow()
-                                    .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.setCanceledOnTouchOutside(false);
-                            dialog.setContentView(dialogBinding.getRoot());
-                            dialog.getWindow()
-                                    .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-                                            ViewGroup.LayoutParams.WRAP_CONTENT);
-                            dialog.getWindow()
-                                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-                            dialogBinding.spProductId.setEnabled(false);
+                    v -> {
+                        final Dialog dialog = new Dialog(mContext);
+                        DialogLeadviewUpdateCrossSellingProductBinding dialogBinding =
+                                DialogLeadviewUpdateCrossSellingProductBinding.inflate(inflater);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.getWindow()
+                                .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setContentView(dialogBinding.getRoot());
+                        dialog.getWindow()
+                                .setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                        dialog.getWindow()
+                                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+                        dialogBinding.spProductId.setEnabled(false);
 
-                            newGetCrossSellingStatus(dialogBinding.spStatus,
-                                    mSection.getCrossSellingStatusId(),
-                                    dialogBinding.includeCustomProgress.customProgress);
-                            newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
-                                    dialogBinding.spProductId, mSection.getCrossSellingProductId(),
-                                    dialogBinding.includeCustomProgress.customProgress);
+                        newGetCrossSellingStatus(dialogBinding.spStatus,
+                                mSection.getCrossSellingStatusId(),
+                                dialogBinding.includeCustomProgress.customProgress);
+                        newGetCrossSellingProductId(leadDetailAddProductModel.getInterestedIn(),
+                                dialogBinding.spProductId, mSection.getCrossSellingProductId(),
+                                dialogBinding.includeCustomProgress.customProgress);
 
-                            disposable.add(
-                                    itemSelections(dialogBinding.spStatus)
-                                            .filter(InvalidSelectionPredicate)
-                                            .subscribe(position -> {
-                                                if (position > 0) {
-                                                    dialogBinding.tvspStatusError.setVisibility(View.GONE);
-                                                }
-                                            }));
+                        disposable.add(
+                                itemSelections(dialogBinding.spStatus)
+                                        .filter(InvalidSelectionPredicate)
+                                        .subscribe(position -> {
+                                            if (position > 0) {
+                                                dialogBinding.tvspStatusError.setVisibility(View.GONE);
+                                            }
+                                        }));
 
-                            dialogBinding.btnSave.setOnClickListener(view14 -> {
-                                if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
-                                    dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
-                                    dialogBinding.tvspStatusError.setText("Select Status");
-                                    return;
-                                }
+                        dialogBinding.btnSave.setOnClickListener(view14 -> {
+                            if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
+                                dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
+                                dialogBinding.tvspStatusError.setText(mContext.getString(R.string.error_message_select_status));
+                                return;
+                            }
 
-                                if (CRMAppUtil.isNetworkEnabled(mContext)) {
-                                    SaveLeadCrossSellingProductRequest productRequest =
-                                            new SaveLeadCrossSellingProductRequest(
-                                                    etLeadId,
-                                                    leadDetailAddProductModel.getInterestedIn(),
-                                                    ((RowData) dialogBinding.spStatus.getSelectedItem()).getKey(),
-                                                    ((RowData) dialogBinding.spProductId.getSelectedItem()).getKey(),
-                                                    mSection.getLeadCrossSellingProductId()
-                                            );
+                            if (CRMAppUtil.isNetworkEnabled(mContext)) {
+                                SaveLeadCrossSellingProductRequest productRequest =
+                                        new SaveLeadCrossSellingProductRequest(
+                                                etLeadId,
+                                                leadDetailAddProductModel.getInterestedIn(),
+                                                ((RowData) dialogBinding.spStatus.getSelectedItem()).getKey(),
+                                                ((RowData) dialogBinding.spProductId.getSelectedItem()).getKey(),
+                                                mSection.getLeadCrossSellingProductId()
+                                        );
 
-                                    disposable.add(
-                                            saathiApi.saveLeadCrossSellingProduct(productRequest)
-                                                    .compose(applyUiModel())
-                                                    .subscribe(uiModel -> {
-                                                        //======  toggleProgress(uiModel.inProgress);
+                                disposable.add(
+                                        saathiApi.saveLeadCrossSellingProduct(productRequest)
+                                                .compose(applyUiModel())
+                                                .subscribe(uiModel -> {
+                                                    callBack.toggleProgressDialog(uiModel.inProgress);
+                                                    Throwable error = uiModel.error;
+                                                    if (error != null)
+                                                        callBack.showFailureDialog(error);
+                                                    Object data = uiModel.data;
+                                                    if (data != null) {
+                                                        alertDialog(mContext, 0,
+                                                                mContext.getString(
+                                                                        R.string.motilal_oswal),
+                                                                mContext.getString(
+                                                                        R.string.text_msg_cross_product_saved),
+                                                                mContext.getString(R.string.button_label_ok),
+                                                                true,
+                                                                (action, data1) -> {
+                                                                    if (action == MSFDialog.Action.OK) {
+                                                                        callBack.updateInvestmentProduct(i,
+                                                                                ((RowData) dialogBinding.spStatus.getSelectedItem()),
+                                                                                mSection.getCrossSellingProductId());
+                                                                    }
+                                                                });
+                                                    }
+                                                }));
+                            } else {
+                                callBack.showNoInternetDialog();
+                            }
 
-                                                        Throwable error = uiModel.error;
-                                                        if (error != null) {
-                                                            //=======    showOnFailurePopup(error);
-                                                        }
+                            dialog.dismiss();
+                        });
 
-                                                        Object data = uiModel.data;
-                                                        if (data != null) {
-                                                            alertDialog(mContext, 0,
-                                                                    mContext.getString(
-                                                                            R.string.motilal_oswal),
-                                                                    "Cross Selling Product Saved successfully",
-                                                                    "Ok",
-                                                                    true,
-                                                                    (action, data1) -> {
-                                                                        if (action == MSFDialog.Action.OK) {
-                                                                            //========    leadSection();
-                                                                        }
-                                                                    });
-                                                        }
-                                                    }));
-                                } else {
-                                    //=========  noInternetConnectionDialog();
-                                }
-
-                                dialog.dismiss();
-                            });
-
-                            dialogBinding.btnClose.setOnClickListener(view13 -> {
-                                //======= hideKeyboard(leadViewDetailView);
-                                dialog.dismiss();
-                            });
-                            dialog.show();
-                        }
+                        dialogBinding.btnClose.setOnClickListener(view13 -> {
+                            callBack.hideKeyBoard(view13);
+                            dialog.dismiss();
+                        });
+                        dialog.show();
                     });
             holder.llChildCrossSellingProduct.addView(childSection);
         }
@@ -376,11 +361,11 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 dialogBinding.btnSave.setOnClickListener(view15 -> {
                     if (dialogBinding.spProductId.getSelectedItemPosition() < 1) {
                         dialogBinding.tvspProductIdError.setVisibility(View.VISIBLE);
-                        dialogBinding.tvspProductIdError.setText("Select Product Id");
+                        dialogBinding.tvspProductIdError.setText(mContext.getString(R.string.error_message_product_id));
                         return;
                     } else if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
                         dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
-                        dialogBinding.tvspStatusError.setText("Select Status");
+                        dialogBinding.tvspStatusError.setText(mContext.getString(R.string.error_message_select_status));
                         return;
                     }
 
@@ -396,27 +381,38 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 saathiApi.saveLeadCrossSellingProduct(productRequest)
                                         .compose(applyUiModel())
                                         .subscribe(uiModel -> {
-                                            Object data = uiModel.data;
+                                            callBack.toggleProgressDialog(uiModel.inProgress);
+                                            Throwable error = uiModel.error;
+                                            if (error != null)
+                                                callBack.showFailureDialog(error);
+                                            CrossSellingProductResponse data = uiModel.data;
                                             if (data != null) {
-                                                alertDialog(mContext, 0,
-                                                        mContext.getString(
-                                                                R.string.motilal_oswal),
-                                                        "Cross Selling Product Saved Successfully",
-                                                        "Ok", true,
-                                                        (action, data12) -> {
-                                                            if (action == MSFDialog.Action.OK) {
-                                                                //======= leadSection();
-                                                            }
-                                                        });
+                                                CrossSellingProductsModel crossSellingProductsModel = new CrossSellingProductsModel(data.getLeadCrossSellingProductId(),
+                                                        data.getCrossSellingProductId(),
+                                                        data.getCrossSellingStatusId(),
+                                                        ((RowData) dialogBinding.spProductId.getSelectedItem()).getValue(),
+                                                        ((RowData) dialogBinding.spStatus.getSelectedItem()).getValue());
+                                                if (crossSellingProductsModel != null) {
+                                                    alertDialog(mContext, 0,
+                                                            mContext.getString(
+                                                                    R.string.motilal_oswal),
+                                                            mContext.getString(R.string.text_msg_cross_product_saved),
+                                                            mContext.getString(R.string.button_label_ok), true,
+                                                            (action, data12) -> {
+                                                                if (action == MSFDialog.Action.OK) {
+                                                                    callBack.newInvestmentProductAdded(i,
+                                                                            crossSellingProductsModel);
+                                                                }
+                                                            });
+                                                }
+
                                             }
                                         }));
                     }
                     dialog.dismiss();
                 });
 
-                dialogBinding.btnClose.setOnClickListener(view12 -> {
-                    dialog.dismiss();
-                });
+                dialogBinding.btnClose.setOnClickListener(view12 -> dialog.dismiss());
                 dialog.show();
             }
         });
@@ -459,25 +455,25 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                                 .compose(applyUiModel())
                                                                 .subscribe(
                                                                         this::renderDeleteCrossSellingProduct));
-                                            }
+                                            } else
+                                                callBack.showNoInternetDialog();
                                         }
                                     }
 
                                     private void renderDeleteCrossSellingProduct(
                                             UiModel<Object> uiModel) {
-                                        //=========== toggleProgress(uiModel.inProgress);
-
+                                        callBack.toggleProgressDialog(uiModel.inProgress);
                                         Throwable error = uiModel.error;
                                         if (error != null) {
-                                            //=====   showOnFailurePopup(error);
+                                            callBack.showFailureDialog(error);
                                         }
 
                                         Object data = uiModel.data;
                                         if (data != null) {
                                             alertDialog(mContext, 0,
                                                     mContext.getString(R.string.motilal_oswal),
-                                                    "Products Deleted Successfully",
-                                                    "Ok", true, null);
+                                                    mContext.getString(R.string.text_msg_product_delete),
+                                                    mContext.getString(R.string.button_label_ok), true, null);
                                             LeadDetailAddProductModel
                                                     model = getProduct(
                                                     leadDetailAddProductModel.getInterestedIn());
@@ -490,7 +486,10 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     } else {
                         alertDialog(mContext, 0,
                                 mContext.getString(R.string.motilal_oswal),
-                                "Can't Delete All Products", "OK", true, null);
+                                mContext.getString(
+                                        R.string.error_message_delete_all_products),
+                                mContext.getString(
+                                        R.string.button_label_ok), true, null);
                     }
                 }
             }
@@ -523,7 +522,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     .compose(applyUiModel())
                     .subscribe(
                             uiModel -> renderStageMobile(uiModel, spStageDialog, progressLayout, stageID)));
-        }
+        } else
+            callBack.showNoInternetDialog();
     }
 
     private void renderStageMobile(UiModel<List<StageMobileItem>> uiModel,
@@ -537,13 +537,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         if (error != null) {
             arrStage.clear();
-//            showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<StageMobileItem> data = uiModel.data;
         if (data != null) {
             arrStage.clear();
-            arrStage.add(new RowData(0, "-1", "Select", ""));
+            arrStage.add(SELECT_ROW_DATA);
             for (int i = 0; i < data.size(); i++) {
                 StageMobileItem item = data.get(i);
                 arrStage.add(new RowData(i + 1,
@@ -569,7 +569,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                             .compose(applyUiModel())
                             .subscribe(uiModel -> renderNewStatus(uiModel, spStatus, progressLayout,
                                     statusId)));
-        }
+        } else
+            callBack.showNoInternetDialog();
     }
 
     private void renderNewStatus(UiModel<List<StatusItem>> uiModel,
@@ -583,13 +584,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         if (error != null) {
             arrStatus.clear();
-            //=======    showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<StatusItem> data = uiModel.data;
         if (data != null) {
             arrStatus.clear();
-            arrStatus.add(new RowData(0, "-1", "Select"));
+            arrStatus.add(SELECT_ROW_DATA);
             for (int i = 0; i < data.size(); i++) {
                 StatusItem statusItem = data.get(i);
                 arrStatus.add(
@@ -619,7 +620,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     .subscribe(uiModel ->
                             renderNewCrossSellingProduct(uiModel, statusId, spStatus, progressLayout)));
         } else {
-            //====== noInternetConnectionDialog();
+            callBack.showNoInternetDialog();
         }
     }
 
@@ -634,13 +635,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         if (error != null) {
             arrCrossSellingProductId.clear();
-            //showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<CrossSellingProduct> data = uiModel.data;
         if (data != null) {
             arrCrossSellingProductId.clear();
-            arrCrossSellingProductId.add(new RowData(0, "-1", "Select"));
+            arrCrossSellingProductId.add(SELECT_ROW_DATA);
 
             for (int i = 0; i < data.size(); i++) {
                 CrossSellingProduct sellingProduct = data.get(i);
@@ -673,13 +674,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             disposable.add(saathiApi.getAllLookup(lookupRequest)
                     .compose(applyUiModel())
                     .subscribe(
-                            uiModel -> renderCrossSellingStatus(uiModel, spStatus, progressLayout)));
+                            uiModel -> renderCrossSellingStatus(uiModel, statusId, spStatus, progressLayout)));
         } else {
-            //======== noInternetConnectionDialog();
+            callBack.showNoInternetDialog();
         }
     }
 
-    private void renderCrossSellingStatus(UiModel<List<LookupItem>> uiModel,
+    private void renderCrossSellingStatus(UiModel<List<LookupItem>> uiModel, final String statusId,
                                           final Spinner spStatus, final LinearLayout progressLayout) {
         if (uiModel.inProgress) {
             progressLayout.setVisibility(View.VISIBLE);
@@ -690,13 +691,13 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         Throwable error = uiModel.error;
         ArrayList<RowData> arrCrossSellingStatus;
         if (error != null) {
-            //======  showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<LookupItem> data = uiModel.data;
         if (data != null) {
             arrCrossSellingStatus = new ArrayList<>();
-            arrCrossSellingStatus.add(new RowData(0, "-1", "Select"));
+            arrCrossSellingStatus.add(SELECT_ROW_DATA);
             for (int i = 0; i < data.size(); i++) {
                 LookupItem item = data.get(i);
                 arrCrossSellingStatus.add(
@@ -728,13 +729,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                             .subscribe(uiModel -> renderStageWiseConfiguration(uiModel, progressLayout,
                                     llLowMarginAdd, isDefault)));
         } else {
-            //=========== noInternetConnectionDialog();
+            callBack.showNoInternetDialog();
         }
     }
 
     String stringOrDefault(
-            String input,
-            String defaultVal
+            String input
     ) {
         if (input != null && !input.isEmpty() && input.equalsIgnoreCase("null")) {
             return input;
@@ -758,7 +758,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             llLowMarginAdd.removeAllViews();
             lowMarginList.clear();
             isLowMargin = false;
-            //======== showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<StageWiseConfiguration> data = uiModel.data;
@@ -770,7 +770,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 for (StageWiseConfiguration configuration : data) {
                     lowMarginList.add(
                             new LowMargin(
-                                    stringOrDefault(configuration.fieldDisplayName, "Low Margin"),
+                                    stringOrDefault(configuration.fieldDisplayName),
                                     stringOrEmpty(configuration.fieldSystemName),
                                     configuration.isMandatory,
                                     configuration.forDefaultProductOnly
@@ -785,7 +785,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 IncludeEdittextLowmarginBinding.inflate(inflater);
                         if (lowMargin.isMandatory) {
                             childBinding.tvHead.setText(String.format("%s*", lowMargin.viewName));
-                            childBinding.etSection.setHint("At least enter 3 digits");
+                            childBinding.etSection.setHint(mContext.getString(R.string.error_message_enter_three_digits));
                         } else {
                             childBinding.tvHead.setText(lowMargin.viewName);
                         }
@@ -815,7 +815,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 .setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setCanceledOnTouchOutside(false);
         DialogLeadviewAddProductBinding dialogBinding = DialogLeadviewAddProductBinding.bind(
-                dialog.getLayoutInflater().inflate(
+                View.inflate(mContext,
                         R.layout.dialog_leadview_add_product,
                         null
                 )
@@ -942,20 +942,18 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         dialogBinding.btnSave.setOnClickListener(view -> {
             if (dialogBinding.spStage.getSelectedItemPosition() < 1) {
                 dialogBinding.tvspStageError.setVisibility(View.VISIBLE);
-                dialogBinding.tvspStageError.setText("Select Stage");
+                dialogBinding.tvspStageError.setText(mContext.getString(R.string.error_message_select_stage));
                 return;
             }
             if (dialogBinding.spStatus.getSelectedItemPosition() < 1) {
                 dialogBinding.tvspStatusError.setVisibility(View.VISIBLE);
-                dialogBinding.tvspStatusError.setText("Select Status");
+                dialogBinding.tvspStatusError.setText(mContext.getString(R.string.error_message_select_status));
                 return;
             }
             Map dataMap = lowMarginSubmit(lowMarginList);
             if (isLowMargin && dataMap.size() == 0) {
                 return;
             }
-            final String primaryRM =
-                    ""; // CRMAppUtil.isBlank(leadOwner.trim()) ? advisorCode : leadOwner.trim();
 
             RowData selectedStatus = (RowData) dialogBinding.spStatus.getSelectedItem();
             if (isPotentialPMSProduct || isPMSProductStageStatus) {
@@ -967,7 +965,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 updateProduct(
                                         interestIn,
                                         leadMappingId,
-                                        primaryRM,
                                         specialistEdit,
                                         newStageCodeStr,
                                         selectedStatus.getKey(),
@@ -979,7 +976,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 updateProduct(
                                         interestIn,
                                         leadMappingId,
-                                        primaryRM,
                                         specialistEdit,
                                         newStageCodeStr,
                                         selectedStatus.getKey(),
@@ -995,7 +991,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                         interestIn,
                         leadMappingId,
-                        primaryRM,
                         specialistEdit,
                         newStageCodeStr,
                         selectedStatus.getKey(),
@@ -1007,9 +1002,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             dialog.dismiss();
         });
 
-        dialogBinding.btnClose.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
+        dialogBinding.btnClose.setOnClickListener(view -> dialog.dismiss());
         dialog.show();
     }
 
@@ -1019,7 +1012,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             if (model.isMandatory) {
                 if (model.getEditText().getText().toString().trim().length() < 3) {
                     model.getEditText().requestFocus();
-                    model.getEditText().setError("Atleast enter 3 digits");
+                    model.getEditText().setError(mContext.getString(R.string.error_message_enter_three_digits));
                     inputMap.clear();
                     return inputMap;
                 }
@@ -1030,7 +1023,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     }
 
     void updateProduct(String interestIn, String leadMappingId,
-                       String primaryRM, String productSpecialistId, String newStageCodeStr,
+                       String productSpecialistId, String newStageCodeStr,
                        String statusID, String statusValue, String actAssignTo, String pmsProductStatus,
                        Map dataMap,
                        final LinearLayout progressLayout) {
@@ -1040,7 +1033,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     interestIn,
                     leadMappingId,
                     interestIn,
-                    primaryRM,
+                    "",
                     productSpecialistId,
                     employeeCode,
                     CRMAppUtil.getDBDate(),
@@ -1055,7 +1048,8 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
             disposable.add(saathiApi.updateLeadProductMapping(mappingRequest)
                     .compose(applyUiModel())
                     .subscribe(uiModel -> renderUpdateLeadProductMapping(uiModel, mappingRequest, progressLayout)));
-        }
+        } else
+            callBack.showNoInternetDialog();
     }
 
     private void renderUpdateLeadProductMapping(UiModel<List<LeadProductMappingItem>> uiModel,
@@ -1067,7 +1061,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         }
         Throwable error = uiModel.error;
         if (error != null) {
-            //======     showOnFailurePopup(error);
+            callBack.showFailureDialog(error);
         }
 
         List<LeadProductMappingItem> data = uiModel.data;
@@ -1078,7 +1072,6 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 for (LeadProductMappingItem datum : data) {
                     String potentialPMSProduct = stringOrEmpty(datum.isPotentialPMSProduct);
                     isPotentialPMSProduct = potentialPMSProduct.isEmpty();
-                    //=====   spPmsProduct.setSelection(getSpinnerPosition(potentialPMSProduct, arrPmsProduct));
 
                     if (String.valueOf(datum.interestedIn)
                             .equals(mappingRequest.interestedIn)) {
@@ -1091,19 +1084,18 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 mappingRequest.productSpecialist,
                                 mappingRequest.actAssignTo
                         );
-                    } else {
-                        //====== leadDetailAddProductAdapter.addProduct(getLeadDetailAddProductModel(datum));
                     }
                 }
 
                 alertDialog(mContext, 0,
                         mContext.getString(R.string.motilal_oswal),
-                        "Products Updated Successfully", "Ok", true, null);
+                        mContext.getString(R.string.text_msg_product_update),
+                        mContext.getString(R.string.button_label_ok), true, null);
             }
         }
     }
 
-    public class Holder {
+    public static class Holder {
         TextView tvProduct, tvProductSpecialist, tvPrimaryRM, tvStage, tvProductID, tvStatus,
                 tvAddInvestmentProduct;
         LinearLayout llDeleteLeadDetail, llAddProduct, llCrossSellingProducts,

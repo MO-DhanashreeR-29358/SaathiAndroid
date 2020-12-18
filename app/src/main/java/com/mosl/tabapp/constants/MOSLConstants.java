@@ -131,6 +131,8 @@ public interface MOSLConstants extends LabelConfig {
   String STATUS = "Status";
   String MESSAGE = "Message";
   String RESPONSE = "Response";
+  String EQUITY = "Equity";
+  String MF = "MF";
 
   //Login
   String PROFILE_ID = "ProfileID";

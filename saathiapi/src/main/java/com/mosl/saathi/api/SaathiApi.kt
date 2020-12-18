@@ -216,7 +216,7 @@ interface SaathiApi {
   @POST("Lead/SaveLeadCrossSellingProduct")
   fun saveLeadCrossSellingProduct(
     @Body request: SaveLeadCrossSellingProductRequest
-  ): Observable<Any>
+  ): Observable<CrossSellingProductResponse>
 
   @POST("Lead/DeleteLeadProductMapping")
   fun deleteLeadCrossSellingProduct(

@@ -484,6 +484,9 @@
     <string name="page_title_lead_creation">Lead Creation</string>
 
     <string name="text_msg_success_add_product">Product Added Successfully with leadId </string>
+    <string name="text_msg_cross_product_saved">Cross Selling Product Saved successfully</string>
+    <string name="text_msg_product_delete">Products Deleted Successfully</string>
+    <string name="text_msg_product_update">Products Updated Successfully</string>
 
     <string name="error_message_category">Select Category</string>
     <string name="error_message_cat_name">Select %s name</string>
@@ -507,6 +510,9 @@
     <string name="error_message_select_interest">Select Interested Product</string>
     <string name="error_message_select_stage">Select Stage</string>
     <string name="error_message_select_status">Select Status</string>
+    <string name="error_message_product_id">Select Product Id</string>
+    <string name="error_message_delete_all_products">Can\'t Delete All Products</string>
+    <string name="error_message_enter_three_digits">At least enter 3 digits</string>
     <string name="lead_detail_client_detail">Client Detail</string>
     <string name="lead_detail_client_code">Client Code</string>
     <string name="lead_detail_client_name">Client Name</string>

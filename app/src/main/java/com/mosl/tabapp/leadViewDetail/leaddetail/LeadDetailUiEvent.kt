@@ -17,3 +17,5 @@ data class AddProductEvent(val addProduct: InsertLeadProductRequest) : LeadDetai
 data class AssignToEvent(val search: String) : LeadDetailUiEvent()
 
 object UpdateLeadDetail : LeadDetailUiEvent()
+
+object UpdateLeadSection : LeadDetailUiEvent()
