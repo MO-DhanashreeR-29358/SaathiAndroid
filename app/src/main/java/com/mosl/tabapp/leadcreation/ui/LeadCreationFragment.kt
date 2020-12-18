@@ -44,7 +44,7 @@ import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
 import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
-import com.mosl.tabapp.databinding.FragLeadCreationBinding
+import com.mosl.tabapp.databinding.FragmentLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
@@ -78,7 +78,7 @@ class LeadCreationFragment : CommonFragment(),
 
   @Inject
   internal lateinit var presenter: LeadCreationPresenter
-  private lateinit var binding: FragLeadCreationBinding
+  private lateinit var binding: FragmentLeadCreationBinding
   private val subject = PublishSubject.create<LeadCreationUiEvent>()
   private var isReferee = false
   private val categoryAdapter: ArrayAdapter<RowData> by lazy {
@@ -132,14 +132,14 @@ class LeadCreationFragment : CommonFragment(),
 
   private val selectedList = ArrayList<RowData>()
 
-  override fun getLayout(): Int = R.layout.frag_lead_creation
+  override fun getLayout(): Int = R.layout.fragment_lead_creation
 
   override fun onViewCreated(
     view: View,
     savedInstanceState: Bundle?
   ) {
     super.onViewCreated(view, savedInstanceState)
-    binding = FragLeadCreationBinding.bind(view)
+    binding = FragmentLeadCreationBinding.bind(view)
     createDefaultSelectList()
     setAppTitle(R.string.page_title_lead_creation)
     setupView()
@@ -439,13 +439,13 @@ class LeadCreationFragment : CommonFragment(),
     }
   }
 
-  private fun FragLeadCreationBinding.handlingWhenPrimaryIsChecked() {
+  private fun FragmentLeadCreationBinding.handlingWhenPrimaryIsChecked() {
     enableField()
     cbOffPrimaryAddress.gone()
     cbSameAs.visible()
   }
 
-  private fun FragLeadCreationBinding.handlingWhenPrimaryIsNotChecked() {
+  private fun FragmentLeadCreationBinding.handlingWhenPrimaryIsNotChecked() {
     disableField()
     cbOffPrimaryAddress.visible()
     cbSameAs.gone()
@@ -454,7 +454,7 @@ class LeadCreationFragment : CommonFragment(),
     unCheckedSameAsAbove()
   }
 
-  private fun FragLeadCreationBinding.unCheckedSameAsAbove() {
+  private fun FragmentLeadCreationBinding.unCheckedSameAsAbove() {
     etOffAdd1.setText("")
     etOffAdd2.setText("")
     etOffAdd3.setText("")
@@ -778,7 +778,7 @@ class LeadCreationFragment : CommonFragment(),
     }
   }
 
-  private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndChecked() {
+  private fun FragmentLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndChecked() {
     disableField(llOffAdd)
     etOffAdd1.text = etAdd1.text
     etOffAdd2.text = etAdd2.text
@@ -791,7 +791,7 @@ class LeadCreationFragment : CommonFragment(),
     spOffCity.setSelection(spCity.selectedItemPosition)
   }
 
-  private fun FragLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
+  private fun FragmentLeadCreationBinding.handlingWhenSameAsCheckboxClickedAndUnChecked() {
     enableField(llOffAdd)
     unCheckedSameAsAbove()
   }
