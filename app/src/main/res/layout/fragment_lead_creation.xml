@@ -680,7 +680,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toStartOf="@+id/pbLoadingIndicatorRefreeCode"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
@@ -712,10 +711,9 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="@dimen/_22sdp"
                         android:layout_marginEnd="5dp"
-                        android:paddingStart="@dimen/_15sdp"
                         android:visibility="gone"
+                        android:paddingStart="@dimen/_15sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/ilRefereeCode"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -724,7 +722,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintStart_toEndOf="@id/pbLoadingIndicatorRefreeName"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ilRefereeCode">
 
@@ -759,7 +756,6 @@
                         android:paddingStart="@dimen/_15sdp"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/ilRefereeName"
                         app:layout_constraintTop_toBottomOf="@+id/ilRefereeCode" />
 
                     <com.google.android.material.textfield.TextInputLayout
