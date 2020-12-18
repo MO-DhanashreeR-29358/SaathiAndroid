@@ -28,7 +28,6 @@ class UserCacheImpl @Inject internal constructor(
 
     override fun getUser(): User? {
         return when {
-            forcePreference.get() == 199 -> null
             userStore.userInfo.isSet -> gson.fromJson(userStore.userInfo.get(), User::class.java)
             else -> null
         }
