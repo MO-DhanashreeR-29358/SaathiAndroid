@@ -38,7 +38,7 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
 
   @Inject
   lateinit var dashboardModel: DashboardModel
-  private lateinit var model: WidgetModel
+  private var model: WidgetModel = WidgetModel()
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<BusinessSnapshotTableRow>
   private val navigateEvent = PublishSubject.create<MutableMap<String, String>>()
