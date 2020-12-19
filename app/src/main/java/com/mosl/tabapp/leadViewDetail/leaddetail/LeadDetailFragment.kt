@@ -179,28 +179,28 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 llBorkingPortfolio.visible()
                 llCash.visible()
                 llAssestPortfolio.visible()
-                setIcon(llPortfolio, txtPortfolioSnapshot, CONST_OUTER_SECTION_EXPANSION)
-                setIcon(llProfitLoss, txtPorfitLoss, CONST_OUTER_SECTION_EXPANSION)
-                setIcon(llAvailableLimits, txtAvailableLimits, CONST_OUTER_SECTION_EXPANSION)
+                setIcon(llPortfolio, txtPortfolioSnapshot, CONST_OUTER)
+                setIcon(llProfitLoss, txtPorfitLoss, CONST_OUTER)
+                setIcon(llAvailableLimits, txtAvailableLimits, CONST_OUTER)
 
-                setIcon(llBorkingPortfolio, txtBrokingPortfolio, CONST_INNER_SECTION_EXPANSION)
-                setIcon(llAssestPortfolio, txtAssestPortfolio, CONST_INNER_SECTION_EXPANSION)
-                setIcon(llCash, txtCash, CONST_INNER_SECTION_EXPANSION)
+                setIcon(llBorkingPortfolio, txtBrokingPortfolio, CONST_INNER)
+                setIcon(llAssestPortfolio, txtAssestPortfolio, CONST_INNER)
+                setIcon(llCash, txtCash, CONST_INNER)
 
-                setIcon(llBorkingProducts, txtBrokingProducts, CONST_INNER_SECTION_EXPANSION)
-                setIcon(llAssestProducts, txtAssestProducts, CONST_INNER_SECTION_EXPANSION)
+                setIcon(llBorkingProducts, txtBrokingProducts, CONST_INNER)
+                setIcon(llAssestProducts, txtAssestProducts, CONST_INNER)
             }
         }
     }
 
     private fun setIcon(parent: View, icon: TextView, Section: String) {
-        if (Section.equals(CONST_OUTER_SECTION_EXPANSION, ignoreCase = true)) {
+        if (Section.equals(CONST_OUTER, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
             } else {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
             }
-        } else if (Section.equals(CONST_INNER_SECTION_EXPANSION, ignoreCase = true)) {
+        } else if (Section.equals(CONST_INNER, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
             } else {
@@ -2185,6 +2185,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         const val CONST_OUTER_SECTION_EXPANSION = "OuterSectionExpansion"
         const val CONST_INNER_SECTION_EXPANSION = "InnerSectionExpansion"
+        const val CONST_OUTER = "Inner"
+        const val CONST_INNER = "Outer"
         const val DEFAULT_SELECTION_ID = "-1"
         const val CONST_HYPHEN_PREFIX = "-"
 
