@@ -99,7 +99,7 @@ import com.mosl.tabapp.common.CustomDatePickerDialog;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
-import com.mosl.tabapp.common.SearchableSpinner;
+import com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;

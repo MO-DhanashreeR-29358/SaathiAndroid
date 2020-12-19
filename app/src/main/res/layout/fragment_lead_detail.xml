@@ -1564,7 +1564,7 @@
                             app:errorTextAppearance="@style/error_appearance"
                             app:hintEnabled="false">
 
-                            <com.mosl.tabapp.common.SearchableSpinner
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                                 android:id="@+id/spState"
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
@@ -1587,13 +1587,13 @@
                             app:errorTextAppearance="@style/error_appearance"
                             app:hintEnabled="false">
 
-                            <com.mosl.tabapp.common.SearchableSpinner
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                                 android:id="@+id/spCity"
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:entries="@array/Select" />
-                            />
+
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1793,7 +1793,7 @@
                             app:errorTextAppearance="@style/error_appearance"
                             app:hintEnabled="false">
 
-                            <com.mosl.tabapp.common.SearchableSpinner
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                                 android:id="@+id/spOffState"
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
@@ -1817,7 +1817,7 @@
                             app:errorTextAppearance="@style/error_appearance"
                             app:hintEnabled="false">
 
-                            <com.mosl.tabapp.common.SearchableSpinner
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                                 android:id="@+id/spOffCity"
                                 style="@style/CRMSpinnerSelector_leadView"
                                 android:layout_width="match_parent"
