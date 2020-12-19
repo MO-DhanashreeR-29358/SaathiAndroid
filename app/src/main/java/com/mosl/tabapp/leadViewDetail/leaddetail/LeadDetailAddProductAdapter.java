@@ -77,23 +77,23 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     private final LayoutInflater inflater;
     Context mContext;
     private final SaathiApi saathiApi;
-    private final List<RowData> arrStatus, arrStage = new ArrayList<>();
-    private final List<RowData> arrCrossSellingProductId = new ArrayList<>();
-    private final String employeeCode;
-    private final ListView lvAddProduct;
-    private final String etLeadId;
-    private final ArrayAdapter<RowData> arrAdapStatus, arrSatgeAdapter;
+    private static RowData SELECT_ROW_DATA = new RowData(0, "-1", "Select", "");
+    private List<RowData> arrStatus, arrStage = new ArrayList<>();
+    private List<RowData> arrCrossSellingProductId = new ArrayList<>();
+    private String employeeCode;
+    private ListView lvAddProduct;
+    private String etLeadId;
     private boolean isLowMargin;
-    private final List<LowMargin> lowMarginList = new ArrayList<>();
-    private final Boolean isLeadEditable;
+    private ArrayAdapter<RowData> arrAdapStatus, arrSatgeAdapter;
+    private List<LowMargin> lowMarginList = new ArrayList<>();
     private Boolean isPMSProductStageStatus = false;
-    private final String userBusinessUnitId;
-    private final String pmsProductSpinnerValue;
-    private final List<LeadDetailAddProductModel> leadDetailAddProductModelList;
-    private final CompositeDisposable disposable = new CompositeDisposable();
+    private Boolean isLeadEditable;
+    private String userBusinessUnitId;
+    private String pmsProductSpinnerValue;
+    private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
     private String specialistEdit = "";
-    private final LeadDetailAddProductCallBack callBack;
-    private final static RowData SELECT_ROW_DATA = new RowData(0, "-1", "Select", "");
+    private CompositeDisposable disposable = new CompositeDisposable();
+    private LeadDetailAddProductCallBack callBack;
 
     @Override
     public int getCount() {
