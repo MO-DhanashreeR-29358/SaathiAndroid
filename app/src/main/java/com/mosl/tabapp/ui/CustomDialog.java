@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.mosl.tabapp.R;
 
 /**
@@ -40,56 +41,6 @@ public class CustomDialog extends Dialog {
         this.txtForYesBtn = txtForYesBtn;
         this.txtForNoBtn = txtForNoBtn;
     }
-
-    public CustomDialog(Context context, String msg, boolean showYesBtn, boolean showNoBtn,
-        boolean dismissYesBtn, boolean dismissNoBtn, boolean showHeading, String txtForHeading,
-        String txtForYesBtn, String txtForNoBtn, CustomDialogListener customDialogListener) {
-        super(context);
-        this.mContext = context;
-        this.customDialogListener = customDialogListener;
-        this.msg = msg;
-        this.showYesBtn = showYesBtn;
-        this.showHeading = showHeading;
-        this.showNoBtn = showNoBtn;
-        this.dismissYesBtn = dismissYesBtn;
-        this.dismissNoBtn = dismissNoBtn;
-        this.txtForHeading = txtForHeading;
-        this.txtForYesBtn = txtForYesBtn;
-        this.txtForNoBtn = txtForNoBtn;
-    }
-
-    public CustomDialog(Context context, String msg, boolean showYesBtn, boolean showNoBtn,
-        boolean dismissYesBtn, boolean dismissNoBtn, boolean showHeading, boolean showBoldHeading1,
-        String txtForYesBtn, String txtForNoBtn, String txtForHeading, String txtForBoldHeading1,
-        String dialogFor, CustomDialogListener customDialogListener) {
-        super(context);
-        this.mContext = context;
-        this.customDialogListener = customDialogListener;
-        this.msg = msg;
-        this.showYesBtn = showYesBtn;
-        this.showNoBtn = showNoBtn;
-        this.dismissYesBtn = dismissYesBtn;
-        this.dismissNoBtn = dismissNoBtn;
-        this.showHeading = showHeading;
-        this.showBoldHeading1 = showBoldHeading1;
-        this.txtForYesBtn = txtForYesBtn;
-        this.txtForNoBtn = txtForNoBtn;
-        this.txtForHeading = txtForHeading;
-        this.txtForBoldHeading1 = txtForBoldHeading1;
-        this.dialogFor = dialogFor;
-    }
-
-    /*public CustomDialog(Context context, String msg1, String msg2, String msg3, boolean showYesBtn, boolean showNoBtn, String txtForYesBtn, String txtForNoBtn, CustomDialogListener customDialogListener) {
-        super(context);
-        this.customDialogListener = customDialogListener;
-        this.msg1 = msg1;
-        this.msg2 = msg2;
-        this.msg3 = msg3;
-        this.showYesBtn = showYesBtn;
-        this.showNoBtn = showNoBtn;
-        this.txtForYesBtn = txtForYesBtn;
-        this.txtForNoBtn = txtForNoBtn;
-    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,11 +119,6 @@ public class CustomDialog extends Dialog {
     }
 
     public interface CustomDialogListener {
-        /* void onYesButtonClick();
-
-         void onNoButtonClick();
-
-         void onCloseButtonClick();*/
         public void dialogAction(MSFDialog.Action action, Object... data);
     }
 }

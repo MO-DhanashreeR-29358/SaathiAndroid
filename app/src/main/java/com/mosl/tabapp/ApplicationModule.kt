@@ -9,7 +9,7 @@ import dagger.Binds
 import dagger.Module
 
 @Module(
-    includes = [UiModule::class, BaseApiModule::class, CommonDataModule::class, DataModule::class, CommonUiModel::class]
+    includes = [BaseApiModule::class, CommonDataModule::class, DataModule::class, CommonUiModel::class]
 )
 abstract class ApplicationModule {
   @Binds

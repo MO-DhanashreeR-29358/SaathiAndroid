@@ -7,7 +7,6 @@ import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
-import com.mosl.tabapp.ws.AppProvider
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
 
@@ -33,7 +32,6 @@ abstract class SaathiAppNew : DaggerApplication() {
     super.onCreate()
     init()
     CRMWebServiceHandler.initSaathiApi(this)
-    AppProvider.initSaathiApi(this)
 
     appDatabase = Room.databaseBuilder(
         applicationContext,

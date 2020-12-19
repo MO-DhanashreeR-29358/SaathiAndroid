@@ -65,7 +65,6 @@ import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
-import com.mosl.tabapp.webview.WebViewModule
 import com.mosl.tabapp.webview.WebviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -97,7 +96,7 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [QueryModule::class])
     fun provideQueryFragmentFactory(): QueryFragment
 
-    @ContributesAndroidInjector(modules = [WebViewModule::class])
+    @ContributesAndroidInjector()
     fun provideWebviewFragmentFactory(): WebviewFragment
 
     @ContributesAndroidInjector(modules = [LeadsModule::class])
