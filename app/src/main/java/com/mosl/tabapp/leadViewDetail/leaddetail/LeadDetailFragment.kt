@@ -60,7 +60,6 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_lead_creation.*
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -1422,7 +1421,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         )
 
         val leadDetailModel = LeadDetailModel()
-        leadDetailModel.isSameAsAbove = cbSameAs.isChecked
+        leadDetailModel.isSameAsAbove = binding.cbSameAs.isChecked
         leadDetailModel.seteMail(binding.etEmail.text.toString().trim())
         leadDetailModel.alternateEmail = binding.etAlternateEmail.text.toString().trim()
         leadDetailModel.alternateMobileNo = binding.etAlternateMobileNumber.text.toString().trim()
@@ -1432,9 +1431,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.aadharNum = binding.etAadharNumber.text.toString().trim()
         leadDetailModel.panNum = binding.etPanNumber.text.toString().trim()
         leadDetailModel.isPotentialPMSProduct = binding.spPmsProduct.selectedItem.toString()
-        leadDetailModel.prospectRefereName = etProspectRefereeName.text.toString().trim()
-        leadDetailModel.prospectRefereMobile = etProspectRefereerMobile.text.toString().trim()
-        leadDetailModel.prospectRefereEmail = etProspectRefereerEmail.text.toString().trim()
+        leadDetailModel.prospectRefereName = binding.etProspectRefereeName.text.toString().trim()
+        leadDetailModel.prospectRefereMobile =
+            binding.etProspectRefereerMobile.text.toString().trim()
+        leadDetailModel.prospectRefereEmail = binding.etProspectRefereerEmail.text.toString().trim()
 
         try {
             if (!isBlank(binding.etDob.text.toString())) {
@@ -1468,10 +1468,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.leadSourceDetailsID = "0"
         leadDetailModel.leadSourceDetails = binding.etProspectSourceDetail.text.toString()
         leadDetailModel.name = binding.etLeadName.text.toString().trim()
-        if (etRefereeCode.text.toString().trim().length >= 3 /*&& isRefreeCode*/) {
+        if (binding.etRefereeCode.text.toString().trim().length >= 3 /*&& isRefreeCode*/) {
             leadDetailModel.refereeCode = binding.etRefereeCode.text.toString().trim()
         }
-        if (etRefereeName.text.toString().trim().length >= 3 /*&& isRefreeCode*/) {
+        if (binding.etRefereeName.text.toString().trim().length >= 3 /*&& isRefreeCode*/) {
             leadDetailModel.refereeName = binding.etRefereeName.text.toString().trim()
         }
         leadDetailModel.refereeEmail = binding.etRefereeEmail.text.toString().trim()
@@ -1869,11 +1869,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             it.run {
                 when (addressTypeID) {
                     RESIDENCEADDRESS -> {
-                        cbPrimaryAddress.isChecked = isPrimary
-                        etAdd1.setText(address1)
-                        etAdd2.setText(address2)
-                        etAdd3.setText(address3)
-                        etPincode.setText(pincode)
+                        binding.cbPrimaryAddress.isChecked = isPrimary
+                        binding.etAdd1.setText(address1)
+                        binding.etAdd2.setText(address2)
+                        binding.etAdd3.setText(address3)
+                        binding.etPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString().nullSafe("-1"),
                             countryAdapter
@@ -1895,11 +1895,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             binding.handleWhenPrimaryAddUnckecked()
                     }
                     OFFICEADDRESS -> {
-                        cbOffPrimaryAddress.isChecked = isPrimary
-                        etOffAdd1.setText(address1)
-                        etOffAdd2.setText(address2)
-                        etOffAdd3.setText(address3)
-                        etOffPincode.setText(pincode)
+                        binding.cbOffPrimaryAddress.isChecked = isPrimary
+                        binding.etOffAdd1.setText(address1)
+                        binding.etOffAdd2.setText(address2)
+                        binding.etOffAdd3.setText(address3)
+                        binding.etOffPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString().nullSafe("-1"),
                             countryAdapterOff
