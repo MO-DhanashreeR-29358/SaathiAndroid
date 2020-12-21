@@ -41,18 +41,18 @@ class CreateMeetingPresenter @Inject constructor(
 
     val activityTypeSelectedObs = view.onActivityTypeSelected()
         .filter(InvalidSelectionPredicate)
-        .map { _ -> view.getSelectedActivityType() }
+        .map { view.getSelectedActivityType() }
         .share()
 
     val productSelectedObs = view.onProductSelected()
         .filter(InvalidSelectionPredicate)
-        .map { _ -> view.getSelectedProduct() }
+        .map { view.getSelectedProduct() }
         .share()
 
     val travellingModeSelectedObs = view.onTravellingModeSelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)
-        .map { _ -> view.getSelectedTravellingMode() }
+        .map { view.getSelectedTravellingMode() }
         .share()
 
     activityTypeSelectedObs.map {
@@ -112,7 +112,7 @@ class CreateMeetingPresenter @Inject constructor(
     val meetingReasonObs = view.onMeetingReasonSelected()
         .filter(InvalidSelectionPredicate)
         .skip(1)
-        .map { _ -> view.getSelectedMeetingReason() }
+        .map { view.getSelectedMeetingReason() }
         .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
         .share()
 
@@ -246,9 +246,9 @@ class CreateMeetingPresenter @Inject constructor(
         .switchMap {
           repository.sendOTP(
               OTPRequestData(
-                  latitude = view.getLatitude()!!,
-                  longitude = view.getLongitude()!!,
-                  geoArea = view.getGeoArea()!!,
+                  latitude = view.getLatitude(),
+                  longitude = view.getLongitude(),
+                  geoArea = view.getGeoArea(),
                   ucid = createMeetingData.ucid,
                   leadid = createMeetingData.leadId
               )
