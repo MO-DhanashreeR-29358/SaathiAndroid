@@ -490,6 +490,7 @@
 
     <string name="error_message_category">Select Category</string>
     <string name="error_message_cat_name">Select %s name</string>
+    <string name="error_message_already_added">%s is already selected</string>
     <string name="error_message_alphabets">Only alphabets are allowed</string>
     <string name="error_message_contact">Enter contact person</string>
     <string name="error_message_referee_code">Enter referee code</string>

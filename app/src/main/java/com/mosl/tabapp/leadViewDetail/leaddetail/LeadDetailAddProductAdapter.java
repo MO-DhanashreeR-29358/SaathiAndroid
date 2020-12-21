@@ -400,7 +400,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                                             mContext.getString(R.string.button_label_ok), true,
                                                             (action, data12) -> {
                                                                 if (action == MSFDialog.Action.OK) {
-                                                                    holder.llDeleteLeadDetail.setVisibility(View.GONE);
+                                                                    leadDetailAddProductModel.setCrossSellingProduct(true);
                                                                     callBack.newInvestmentProductAdded(i,
                                                                             crossSellingProductsModel);
                                                                 }

@@ -72,8 +72,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private lateinit var binding: FragmentLeadDetailBinding
     private var isReferee = false
 
-    private var leadId = "-1"
-    private var ucId = "-1"
+    private var leadId = DEFAULT_SELECTION_ID
+    private var ucId = DEFAULT_SELECTION_ID
     private var sourceIdStr = ""
     private var leadProspectSourceIdStr = ""
 
@@ -86,8 +86,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var statusData = ArrayList<RowData>()
     private var stageData = ArrayList<RowData>()
 
-    private var selectedCityId = "-1"
-    private var selectedCityOffId = "-1"
+    private var selectedCityId = DEFAULT_SELECTION_ID
+    private var selectedCityOffId = DEFAULT_SELECTION_ID
     private var pmsList: List<String> = emptyList()
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
@@ -179,28 +179,28 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 llBorkingPortfolio.visible()
                 llCash.visible()
                 llAssestPortfolio.visible()
-                setIcon(llPortfolio, txtPortfolioSnapshot, "OUTER")
-                setIcon(llProfitLoss, txtPorfitLoss, "OUTER")
-                setIcon(llAvailableLimits, txtAvailableLimits, "OUTER")
+                setIcon(llPortfolio, txtPortfolioSnapshot, CONST_OUTER)
+                setIcon(llProfitLoss, txtPorfitLoss, CONST_OUTER)
+                setIcon(llAvailableLimits, txtAvailableLimits, CONST_OUTER)
 
-                setIcon(llBorkingPortfolio, txtBrokingPortfolio, "INNER")
-                setIcon(llAssestPortfolio, txtAssestPortfolio, "INNER")
-                setIcon(llCash, txtCash, "INNER")
+                setIcon(llBorkingPortfolio, txtBrokingPortfolio, CONST_INNER)
+                setIcon(llAssestPortfolio, txtAssestPortfolio, CONST_INNER)
+                setIcon(llCash, txtCash, CONST_INNER)
 
-                setIcon(llBorkingProducts, txtBrokingProducts, "INNER")
-                setIcon(llAssestProducts, txtAssestProducts, "INNER")
+                setIcon(llBorkingProducts, txtBrokingProducts, CONST_INNER)
+                setIcon(llAssestProducts, txtAssestProducts, CONST_INNER)
             }
         }
     }
 
     private fun setIcon(parent: View, icon: TextView, Section: String) {
-        if (Section.equals("OUTER", ignoreCase = true)) {
+        if (Section.equals(CONST_OUTER, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
             } else {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
             }
-        } else if (Section.equals("INNER", ignoreCase = true)) {
+        } else if (Section.equals(CONST_INNER, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
             } else {
@@ -248,7 +248,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     0,
                     getString(R.string.motilal_oswal),
                     it.first,
-                    "OK",
+                    getString(R.string.button_label_ok),
                     true,
                     null
                 )
@@ -354,7 +354,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     resources.getString(
                         R.string.motilal_oswal
                     ), "${getString(R.string.text_msg_success_add_product)}$leadID",
-                    "OK", true
+                    getString(R.string.button_label_ok), true
                 ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
                         val bundle = Bundle()
@@ -397,9 +397,11 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
                 }
                 MSFDialog.alertDialog(
-                    requireActivity(), 0,
+                    requireActivity(),
+                    0,
                     resources.getString(R.string.motilal_oswal),
-                    "Product Added Successfully", "OK",
+                    getString(R.string.text_msg_success_add_product),
+                    getString(R.string.button_label_ok),
                     true
                 ) { _: Action?, _: Array<Any?>? ->
                 }
@@ -634,9 +636,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 }
                 if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true) {
                     MSFDialog.alertDialog(
-                        requireContext(), 0,
+                        requireContext(),
+                        0,
                         resources.getString(R.string.motilal_oswal),
-                        "$interestedInDisplayText is already selected", "OK", true, null
+                        getString(R.string.error_message_already_added, interestedInDisplayText),
+                        getString(R.string.button_label_ok),
+                        true,
+                        null
                     )
                 } else {
                     if (isPotentialPMSProduct) {
@@ -874,7 +880,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llPortfolio,
             binding.includePortfolio.txtPortfolioSnapshot,
-            OUTER
+            CONST_OUTER_SECTION_EXPANSION
         )
     }
 
@@ -888,7 +894,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llProfitLoss,
             binding.includePortfolio.txtPorfitLoss,
-            OUTER
+            CONST_OUTER_SECTION_EXPANSION
         )
     }
 
@@ -896,7 +902,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llAvailableLimits,
             binding.includePortfolio.txtAvailableLimits,
-            OUTER
+            CONST_OUTER_SECTION_EXPANSION
         )
     }
 
@@ -907,7 +913,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llBorkingPortfolio,
             binding.includePortfolio.txtBrokingPortfolio,
-            INNER
+            CONST_INNER_SECTION_EXPANSION
         )
     }
 
@@ -918,7 +924,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llAssestPortfolio,
             binding.includePortfolio.txtAssestPortfolio,
-            INNER
+            CONST_INNER_SECTION_EXPANSION
         )
     }
 
@@ -928,7 +934,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llCash,
             binding.includePortfolio.txtCash,
-            INNER
+            CONST_INNER_SECTION_EXPANSION
         )
     }
 
@@ -939,7 +945,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llBorkingProducts,
             binding.includePortfolio.txtBrokingProducts,
-            INNER
+            CONST_INNER_SECTION_EXPANSION
         )
     }
 
@@ -950,7 +956,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleSectionExpansion(
             binding.includePortfolio.llAssestProducts,
             binding.includePortfolio.txtAssestProducts,
-            INNER
+            CONST_INNER_SECTION_EXPANSION
         )
     }
 
@@ -1062,21 +1068,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 StringStuff.commaDecorator(overallChangePer)
             )
 
-            val bgColor = if (dayChangeAmount.startsWith("-")) {
+            val bgColor = if (dayChangeAmount.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
             }
             daychgamt.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColor))
 
-            val bgColorPer = if (dayChangePer.startsWith("-")) {
+            val bgColorPer = if (dayChangePer.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
             }
             daychgperst.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorPer))
 
-            val bgColorOverall = if (overallChangeAmt.startsWith("-")) {
+            val bgColorOverall = if (overallChangeAmt.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
@@ -1088,7 +1094,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 )
             )
 
-            val bgColorOverallPer = if (overallChangePer.startsWith("-")) {
+            val bgColorOverallPer = if (overallChangePer.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
@@ -1107,7 +1113,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     PURCHASE_VALUE to StringStuff.commaDecorator(it.marketValue),
                     OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
                     PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
-                        "${it.percentageGainLoss} %"
+                        getString(R.string.text_common_with_percentile, it.percentageGainLoss)
                     ),
                     PRODUCT_ID to it.productId
                 )
@@ -1130,7 +1136,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     PURCHASE_VALUE to StringStuff.commaDecorator(it.purchaseValue),
                     OVERALL_GAIN_LOSS to StringStuff.commaDecorator(it.overallGainLoss),
                     PERCENTAGE_GAIN_LOSS to StringStuff.commaDecorator(
-                        "${it.percentageGainLoss} %"
+                        getString(R.string.text_common_with_percentile, it.percentageGainLoss)
                     ),
                     PRODUCT_ID to it.productId,
                     PRODUCT_TYPE to it.productType
@@ -1188,14 +1194,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 StringStuff.commaDecorator(ltGainLossPer)
             )
 
-            val bgColor = if (ltGainLoss.startsWith("-")) {
+            val bgColor = if (ltGainLoss.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
             }
             tvLTGainLoss.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColor))
 
-            val bgColorPer = if (ltGainLossPer.startsWith("-")) {
+            val bgColorPer = if (ltGainLossPer.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
@@ -1208,14 +1214,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 StringStuff.commaDecorator(stGainLossPer)
             )
 
-            val bgColorSt = if (stGainLoss.startsWith("-")) {
+            val bgColorSt = if (stGainLoss.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
             }
             tvSTGainLoss.setBackgroundColor(ContextCompat.getColor(requireContext(), bgColorSt))
 
-            val bgColorPerSt = if (stGainLossPer.startsWith("-")) {
+            val bgColorPerSt = if (stGainLossPer.startsWith(CONST_HYPHEN_PREFIX)) {
                 color.action_bar_negative
             } else {
                 color.action_bar_positive
@@ -1290,7 +1296,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         icon: TextView,
         expansion: String
     ) {
-        if (expansion.equals("OuterSectionExpansion", ignoreCase = true)) {
+        if (expansion.equals(CONST_OUTER_SECTION_EXPANSION, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 parent.gone()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
@@ -1298,7 +1304,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 parent.visible()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
             }
-        } else if (expansion.equals("InnerSectionExpansion", ignoreCase = true)) {
+        } else if (expansion.equals(CONST_INNER_SECTION_EXPANSION, ignoreCase = true)) {
             if (parent.visibility == View.VISIBLE) {
                 parent.gone()
                 icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.down_button, 0)
@@ -1323,9 +1329,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
         uiModel.onSuccess {
             MSFDialog.alertDialog(
-                requireContext(), 0,
-                resources.getString(R.string.motilal_oswal), CONFIRM_LEAD, "YES",
-                "NO", true
+                requireContext(),
+                0,
+                resources.getString(R.string.motilal_oswal),
+                CONFIRM_LEAD,
+                getString(R.string.text_label_yes),
+                getString(R.string.text_label_no),
+                true
             ) { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     subject.onNext(UpdateLeadDetail)
@@ -1555,7 +1565,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             requireActivity(), 0,
             resources.getString(
                 R.string.motilal_oswal
-            ), resources.getString(R.string.lead_updated), "OK", true
+            ), resources.getString(R.string.lead_updated), getString(R.string.button_label_ok), true
         ) { action: Action, _: Array<Any?>? ->
             if (action == OK) {
                 binding.llEditLeadDetail.performClick()
@@ -1788,7 +1798,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.etLastModifiedDate.setText(
                 CRMAppUtil.getDateFromString(
                     lastModifiedDate,
-                    "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
+                    mFormat, DATE_FORMAT_TO_DISPLAY
                 )
             )
         } catch (e: Exception) {
@@ -1815,7 +1825,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.etCreationDate.setText(
                 CRMAppUtil.getDateFromString(
                     createdDate,
-                    "yyyy-MM-dd'T'kk:mm:ss", DATE_FORMAT_TO_DISPLAY
+                    mFormat, DATE_FORMAT_TO_DISPLAY
                 )
             )
         } catch (e: Exception) {
@@ -1849,12 +1859,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 val newDoa = stringOrEmpty(dOA).split("T").toTypedArray()
                 val newDob = stringOrEmpty(dOB).split("T").toTypedArray()
                 if (newDob[0].isNotEmpty()) {
-                    val dob = CRMAppUtil.getDate(newDob[0], "yyyy-MM-dd")
-                    etDob.setText(CRMAppUtil.getDateStr(dob, "dd-MM-yyyy"))
+                    val dob = CRMAppUtil.getDate(newDob[0], DATE_FORMAT_TO_SERVER_MEETING_SEND)
+                    etDob.setText(CRMAppUtil.getDateStr(dob, CAL_DATE_FORMAT))
                 }
                 if (newDoa[0].isNotEmpty()) {
-                    val doa = CRMAppUtil.getDate(newDoa[0], "yyyy-MM-dd")
-                    etAnniversary.setText(CRMAppUtil.getDateStr(doa, "dd-MM-yyyy"))
+                    val doa = CRMAppUtil.getDate(newDoa[0], DATE_FORMAT_TO_SERVER_MEETING_SEND)
+                    etAnniversary.setText(CRMAppUtil.getDateStr(doa, CAL_DATE_FORMAT))
                 }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -1875,7 +1885,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etAdd3.setText(address3)
                         binding.etPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
-                            countryID.toString().nullSafe("-1"),
+                            countryID.toString(),
                             countryAdapter
                         )
                         dataCountry?.run {
@@ -1901,19 +1911,19 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etOffAdd3.setText(address3)
                         binding.etOffPincode.setText(pincode)
                         val dataCountry = RowData.getSpinnerRowDataById(
-                            countryID.toString().nullSafe("-1"),
+                            countryID.toString(),
                             countryAdapterOff
                         )
                         dataCountry?.run {
                             binding.spOffCountry.setSelection(position)
                         }
                         val dataState = RowData.getSpinnerRowDataById(
-                            stateID.toString().nullSafe("-1"),
+                            stateID.toString(),
                             stateAdapterOff
                         )
                         dataState?.run {
                             binding.spOffState.setSelection(position)
-                            selectedCityOffId = cityID.toString().nullSafe("-1")
+                            selectedCityOffId = cityID.toString()
                         }
                     }
                     else -> {
@@ -2076,14 +2086,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            if (selectedCityId != "-1") {
+            if (selectedCityId != DEFAULT_SELECTION_ID) {
                 val dataCity = RowData.getSpinnerRowDataById(
                     selectedCityId,
                     cityAdapter
                 )
                 dataCity?.run {
                     binding.spCity.setSelection(position)
-                    selectedCityId = "-1"
+                    selectedCityId = DEFAULT_SELECTION_ID
                 }
             }
             if (binding.cbSameAs.isChecked) {
@@ -2097,14 +2107,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
         uiModel.onSuccess {
             binding.spOffCity.setSpinnerData(cityAdapterOff, it)
-            if (selectedCityOffId != "-1") {
+            if (selectedCityOffId != DEFAULT_SELECTION_ID) {
                 val dataCity = RowData.getSpinnerRowDataById(
                     selectedCityOffId,
                     cityAdapterOff
                 )
                 dataCity?.run {
                     binding.spOffCity.setSelection(position)
-                    selectedCityOffId = "-1"
+                    selectedCityOffId = DEFAULT_SELECTION_ID
                 }
             }
         }
@@ -2173,8 +2183,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
 
-        const val OUTER = "OuterSectionExpansion"
-        const val INNER = "InnerSectionExpansion"
+        const val CONST_OUTER_SECTION_EXPANSION = "OuterSectionExpansion"
+        const val CONST_INNER_SECTION_EXPANSION = "InnerSectionExpansion"
+        const val CONST_OUTER = "Inner"
+        const val CONST_INNER = "Outer"
+        const val DEFAULT_SELECTION_ID = "-1"
+        const val CONST_HYPHEN_PREFIX = "-"
 
     }
 
