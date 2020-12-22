@@ -78,6 +78,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELEC
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
+import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.ui.MSFDialog
@@ -177,6 +178,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvTravellingList.adapter = travellingAdapter
+        AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()?.employeeCode)
 
     }
 
@@ -1089,6 +1091,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun setInputData(meetingApptModel: MeetingApptModel) {
+        Timber.i("Meeting JSon %s", meetingApptModel.json)
         if (enableLocationGroup) {
             if (checkPermission()) {
                 if (location != null) {
