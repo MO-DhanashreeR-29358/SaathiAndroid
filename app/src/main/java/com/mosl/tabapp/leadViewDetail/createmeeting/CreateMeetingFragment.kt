@@ -772,6 +772,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.tilPinCode.disableErrorMessages()
         binding.tilEtCategory.disableErrorMessages()
         binding.tilEtSubCategory.disableErrorMessages()
+        binding.tilMeetingLocation.disableErrorMessages()
     }
 
     override fun validateFormData(): Boolean {
