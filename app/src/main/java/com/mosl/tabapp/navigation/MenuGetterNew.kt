@@ -11,13 +11,13 @@ import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
-import com.mosl.tabapp.leadViewDetail.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
-import com.mosl.tabapp.leadcreation.LeadCreationFragment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment

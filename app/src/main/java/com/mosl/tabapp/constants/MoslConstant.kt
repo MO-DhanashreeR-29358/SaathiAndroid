@@ -13,5 +13,7 @@ object MoslConstant {
   const val Employee_Code = "EMPLOYEE CODE"
   const val EMPLOYEE_CODE = "EMPLOYEE_CODE"
   const val yyyy_MM_dd = "yyyy-MM-dd"
+  const val dd_MM_yyyy = "dd-MM-yyyy"
   const val dd_MMM_yyyy = "dd MMM yyyy"
+  const val dd_MMM_yyyy_hh_mm = "dd-MM-yyyy hh:mm"
 }

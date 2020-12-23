@@ -7,7 +7,7 @@ data class LookupRequest(
 
   @JvmField @SerializedName("LookupTypeId") val lookupTypeId: Int,
 
-  @JvmField @SerializedName("ParentId") val parentId: String?,
+  @JvmField @SerializedName("ParentId") val parentId: String? = null,
 
-  @JvmField @SerializedName("IgnoreBusinessUnit") val IgnoreBusinessUnit: Boolean?
+  @JvmField @SerializedName("IgnoreBusinessUnit") val IgnoreBusinessUnit: Boolean? = null
 )

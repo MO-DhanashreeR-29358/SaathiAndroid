@@ -3,6 +3,8 @@ package com.mosl.tabapp.navigation
 import com.mosl.navigator.BaseNavigator
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.ekyc.EkycNavigator
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigator
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigatorImpl
 import dagger.Binds
 import dagger.Module
 
@@ -16,4 +18,6 @@ abstract class NavigatorAliasProviders {
 
     @Binds
     abstract fun provideBannerNavigator(navigator: ScreenNavigatorImpl?): BannerNavigator?
+  @Binds
+  abstract fun provideLeadCreationNavigator(navigator: LeadCreationNavigatorImpl): LeadCreationNavigator
 }

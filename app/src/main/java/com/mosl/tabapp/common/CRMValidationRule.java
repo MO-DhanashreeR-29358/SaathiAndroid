@@ -1,9 +1,7 @@
 package com.mosl.tabapp.common;
 
 import android.widget.EditText;
-
 import com.google.android.material.textfield.TextInputLayout;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,8 +66,7 @@ public class CRMValidationRule {
 
     //Pancard number Format
     public static boolean isValidPannumber(String pan) {
-
-        String PAN_PATTEN = ("[A-Z]{5}[0-9]{4}[A-Z]{1}");
+        String PAN_PATTEN = ("[A-Z a-z]{5}[0-9]{4}[A-Z a-z]{1}");
         Pattern pattern = Pattern.compile(PAN_PATTEN);
         Matcher matcher = pattern.matcher(pan);
         return matcher.matches();

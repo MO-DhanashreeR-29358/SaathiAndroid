@@ -271,6 +271,11 @@ interface SaathiApi {
     @Body request: CreateLeadRequest
   ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
+  @POST("Common/GetRefereeCode")
+  fun getRefereeCode(
+    @Body request: SearchRefereeModel
+  ): Observable<SearchRefereeResponse>
+
   // ==================== Query ===========================
 
   @POST("Common/RequetQuery")

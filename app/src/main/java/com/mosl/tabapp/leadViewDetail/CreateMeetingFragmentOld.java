@@ -107,7 +107,6 @@ import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
-import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIONABLES;
 import static com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE;
@@ -161,10 +160,10 @@ import static java.lang.String.format;
  * Created by raju on 3/7/2017.
  */
 
-public class CreateMeetingFragment extends CommonFragment
-    implements View.OnClickListener, TextView.OnEditorActionListener,
-    FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
-  final public static String TAG = CreateMeetingFragment.class.getSimpleName();
+public class CreateMeetingFragmentOld extends CommonFragment
+        implements View.OnClickListener, TextView.OnEditorActionListener,
+        FusedLocation.LatLongDispatcher, OTPFragment.OTPDialogListener {
+  final public static String TAG = CreateMeetingFragmentOld.class.getSimpleName();
   private final ArrayList<RowData> arrCategory = new ArrayList<>();
   private final ArrayList<RowData> arrMeetingObjective = new ArrayList<>();
   private final ArrayList<RowData> arrSelectProduct = new ArrayList<>();
@@ -235,7 +234,7 @@ public class CreateMeetingFragment extends CommonFragment
 
   @Override
   protected int getLayout() {
-    return R.layout.frag_create_meeting;
+    return R.layout.frag_create_meeting_old;
   }
 
   public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
@@ -367,13 +366,11 @@ public class CreateMeetingFragment extends CommonFragment
         createMeetingView.findViewById(R.id.rvProductList);
     RecyclerView rvTravellingList =
         createMeetingView.findViewById(R.id.rvTravellingList);
-    productList = new ArrayList<>();
-    productAdapter = new CreateMeetingProductAdapter(productList, requireContext());
+    productAdapter = new CreateMeetingProductAdapter(requireContext());
     rvProductList.setLayoutManager(new GridLayoutManager(requireContext(), 1));
     rvProductList.setAdapter(productAdapter);
-    travellingList = new ArrayList<>();
     travellingAdapter =
-        new CreateMeetingTravellingModeAdapter(travellingList, requireContext());
+        new CreateMeetingTravellingModeAdapter(requireContext());
     rvTravellingList.setLayoutManager(new GridLayoutManager(requireContext(), 1));
     rvTravellingList.setAdapter(travellingAdapter);
     btnSave.setOnClickListener(this);
@@ -814,7 +811,7 @@ public class CreateMeetingFragment extends CommonFragment
                 requireActivity().getSupportFragmentManager().beginTransaction();
 
             OTPFragment dialogFragment = OTPFragment.newInstance(leadId, mUCID);
-            dialogFragment.setTargetFragment(CreateMeetingFragment.this, 1);
+            dialogFragment.setTargetFragment(CreateMeetingFragmentOld.this, 1);
             dialogFragment.setListener(this);
             dialogFragment.show(ft, "");
           }

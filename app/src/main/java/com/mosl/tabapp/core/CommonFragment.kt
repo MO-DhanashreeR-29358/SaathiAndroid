@@ -83,6 +83,30 @@ open class CommonFragment : BaseFragment() {
     }
   }
 
+  protected fun disableField(layout: ViewGroup) {
+    layout.isEnabled = false
+    for (i in 0 until layout.childCount) {
+      val child = layout.getChildAt(i)
+      if (child is ViewGroup) {
+        disableField(child)
+      } else {
+        child.isEnabled = false
+      }
+    }
+  }
+
+  protected fun enableDisableField(layout: ViewGroup, status: Boolean) {
+    layout.isEnabled = status
+    for (i in 0 until layout.childCount) {
+      val child = layout.getChildAt(i)
+      if (child is ViewGroup) {
+        enableDisableField(child, status)
+      } else {
+        child.isEnabled = status
+      }
+    }
+  }
+
   fun stringOrDefault(
     input: String?,
     defaultVal: String
