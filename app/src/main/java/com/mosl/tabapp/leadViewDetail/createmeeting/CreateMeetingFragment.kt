@@ -78,6 +78,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELEC
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
+import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.ui.MSFDialog
@@ -177,6 +178,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvTravellingList.adapter = travellingAdapter
+        AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()?.employeeCode)
 
     }
 
@@ -358,6 +360,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
+            enableLocationGroup =
+                binding.spActivityType.selectedItem.toString().equals("Personal Meeting", true)
             meetingReasonAdapter.clear()
             meetingReasonAdapter.setSpinnerData(binding.spMeetingReason, it)
         }
@@ -683,11 +687,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getLatitude(): String {
-        return location?.latitude.toString()
+        return if (enableLocationGroup) location?.latitude.toString() else ""
     }
 
     override fun getLongitude(): String {
-        return location?.longitude.toString()
+        return if (enableLocationGroup) location?.longitude.toString() else ""
     }
 
     override fun getAttendeeList(): List<AddedAttendee> {
@@ -708,11 +712,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun getGeoArea(): String {
         var geoArea = ""
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        location?.apply {
-            val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
-            if (addressLine.size > 0) {
-                geoArea = addressLine[0].getAddressLine(0)
+        if (enableLocationGroup) {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            location?.apply {
+                val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
+                if (addressLine.size > 0) {
+                    geoArea = addressLine[0].getAddressLine(0)
+                }
             }
         }
 
@@ -766,6 +772,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.tilPinCode.disableErrorMessages()
         binding.tilEtCategory.disableErrorMessages()
         binding.tilEtSubCategory.disableErrorMessages()
+        binding.tilMeetingLocation.disableErrorMessages()
     }
 
     override fun validateFormData(): Boolean {
@@ -983,7 +990,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun toggleOTPVisibility(show: Boolean) {
-        enableLocationGroup = show
         enableDisableField(binding.llLocationGroup, show)
         if (userManager.user.isRM()) {
             if (show) {
@@ -1089,6 +1095,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun setInputData(meetingApptModel: MeetingApptModel) {
+        Timber.i("Meeting JSon %s", meetingApptModel.json)
         if (enableLocationGroup) {
             if (checkPermission()) {
                 if (location != null) {
