@@ -69,7 +69,6 @@ public class AttendeeAdapter extends BaseAdapter {
             holderView.tvAttendeeName.setText(clientModel.getAttendeeName());
         } else {
             holderView.tvAttendeeName.setText(clientModel.getAttendeeCode() + "-" + clientModel.getAttendeeName() + "-" + clientModel.getBranchcode());
-
         }
         return convertView;
     }

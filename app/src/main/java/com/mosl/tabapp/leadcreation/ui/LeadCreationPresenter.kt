@@ -92,7 +92,7 @@ class LeadCreationPresenter @Inject constructor(
             .skip(1)
             .map { view.getSelectedCategory() }
             .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
-            .map { it.schmeID }
+            .map { it.showPotentialPopup }
             .subscribe(view::renderOnCategoryChange, Timber::e)
             .addTo(disposable)
 

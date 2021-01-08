@@ -28,7 +28,7 @@ import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.R
-import com.mosl.tabapp.constants.MOSLConstants.CREATE_MEETING_ID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_CLIENT_HINT
 import com.mosl.tabapp.core.CommonActivity.Companion.SEARCH_TYPE_LEAD_HINT
 import com.mosl.tabapp.model.SearchModelNew
@@ -38,18 +38,15 @@ import com.mosl.tabapp.util.DIY_CODE
 import com.mosl.tabapp.util.EMAIL
 import com.mosl.tabapp.util.EMPLOYEE_CODE
 import com.mosl.tabapp.util.INTERESTEDIN
-import com.mosl.tabapp.util.LEADID
 import com.mosl.tabapp.util.LEAD_OWNER
 import com.mosl.tabapp.util.MOBILE
 import com.mosl.tabapp.util.NAME
 import com.mosl.tabapp.util.OAOUSERID
-import com.mosl.tabapp.util.PRODUCT_ID
 import com.mosl.tabapp.util.PROFILE_ID
 import com.mosl.tabapp.util.PROSPECTSOURCEDETAILS
 import com.mosl.tabapp.util.PROSPECTSOURCENAME
 import com.mosl.tabapp.util.SEARCH_TYPE_DASHBOARD_HINT
 import com.mosl.tabapp.util.SOURCENAME
-import com.mosl.tabapp.util.UCID
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.SearchResultClickListener

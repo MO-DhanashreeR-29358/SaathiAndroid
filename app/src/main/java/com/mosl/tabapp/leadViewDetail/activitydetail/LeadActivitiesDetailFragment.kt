@@ -48,7 +48,6 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvActionable.text = it.actionable
           tvCategory.text = it.category
           tvQueryDesc.text = it.queryDescription
-          //tvCSR.text = it.customerServiceRemark
           tvComments.text = it.comment
           tvLocation.text = it.location
           tvMeetingAddress.text = it.meetingAddress

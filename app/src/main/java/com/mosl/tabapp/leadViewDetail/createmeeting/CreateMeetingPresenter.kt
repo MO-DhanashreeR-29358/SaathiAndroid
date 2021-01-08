@@ -32,277 +32,287 @@ class CreateMeetingPresenter @Inject constructor(
 ) : BasePresenter<CreateMeetingView>(view) {
   override fun start() {
     Observable.merge(onFetchCalled(), onRetryCalled())
-      .switchMap {
-        repository.getInitialPageData(createMeetingData)
-          .compose(applyUiModel())
-      }
-      .subscribe(view::render)
-      .addTo(disposable)
+        .switchMap {
+          repository.getInitialPageData(createMeetingData)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::render)
+        .addTo(disposable)
 
     val activityTypeSelectedObs = view.onActivityTypeSelected()
-      .filter(InvalidSelectionPredicate)
-      .map { _ -> view.getSelectedActivityType() }
-      .share()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedActivityType() }
+        .share()
 
     val productSelectedObs = view.onProductSelected()
-      .filter(InvalidSelectionPredicate)
-      .map { _ -> view.getSelectedProduct() }
-      .share()
+        .filter(InvalidSelectionPredicate)
+        .map { view.getSelectedProduct() }
+        .share()
 
     val travellingModeSelectedObs = view.onTravellingModeSelected()
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
-      .map { _ -> view.getSelectedTravellingMode() }
-      .share()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedTravellingMode() }
+        .share()
 
     activityTypeSelectedObs.map {
       Timber.d("activity type")
       it.isPersonalMeeting()
     }
-      .startWith(false)
-      .subscribe(view::toggleOTPVisibility)
-      .addTo(disposable)
+        .startWith(false)
+        .subscribe(view::toggleOTPVisibility)
+        .addTo(disposable)
 
     activityTypeSelectedObs
-      .filter { it != CreateMeetingConstants.SELECT_ACTIVITY_TYPE }
-      .switchMap {
-        repository.getLookup(
-          MEETINGREASON, null, view.getSelectedActivityType()?.lookUpID.toString()
-        )
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderMeetingReason)
-      .addTo(disposable)
+        .filter { it != CreateMeetingConstants.SELECT_ACTIVITY_TYPE }
+        .switchMap {
+          repository.getLookup(
+              MEETINGREASON, null, view.getSelectedActivityType()?.lookUpID.toString()
+          )
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderMeetingReason)
+        .addTo(disposable)
 
     productSelectedObs.filter { it != CreateMeetingConstants.SELECT_PRODUCT }
-      .subscribe { view.getSelectedProduct()?.let { it1 -> view.renderOnProductClick(it1) } }
-      .addTo(disposable)
+        .subscribe {
+          view.getSelectedProduct()
+              ?.let { it1 -> view.renderOnProductClick(it1) }
+        }
+        .addTo(disposable)
 
     travellingModeSelectedObs.filter { it != CreateMeetingConstants.SELECT_TRAVELLING_MODE }
-      .subscribe {
-        view.getSelectedTravellingMode()?.let { it1 -> view.renderOnTravellingModeClick(it1) }
-      }
-      .addTo(disposable)
+        .subscribe {
+          view.getSelectedTravellingMode()
+              ?.let { it1 -> view.renderOnTravellingModeClick(it1) }
+        }
+        .addTo(disposable)
 
     view.onDatePicker()
-      .subscribe {
-        view.renderDatePicker()
-      }
-      .addTo(disposable)
+        .subscribe {
+          view.renderDatePicker()
+        }
+        .addTo(disposable)
 
     view.onMeetingLocationSelected()
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
-      .map { view.getSelectedMeetingLocation() }
-      .filter {
-        it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
-            it.isLocationProper()
-      }
-      .switchMap {
-        repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderAddress)
-      .addTo(disposable)
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedMeetingLocation() }
+        .filter {
+          it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
+              it.isLocationProper()
+        }
+        .switchMap {
+          repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderAddress)
+        .addTo(disposable)
 
     val meetingReasonObs = view.onMeetingReasonSelected()
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
-      .map { _ -> view.getSelectedMeetingReason() }
-      .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
-      .share()
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedMeetingReason() }
+        .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
+        .share()
 
     meetingReasonObs.map {
       it.isCustomerService()
     }
-      .startWith(false)
-      .subscribe(view::toggleActionableVisibility)
-      .addTo(disposable)
+        .startWith(false)
+        .subscribe(view::toggleActionableVisibility)
+        .addTo(disposable)
 
     meetingReasonObs.filter { it.isCustomerService() }
-      .switchMap {
-        repository.getCustomerServiceData()
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderCustomerServiceData)
-      .addTo(disposable)
+        .switchMap {
+          repository.getCustomerServiceData()
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderCustomerServiceData)
+        .addTo(disposable)
 
     view.onCategorySelected()
-      .filter(InvalidSelectionPredicate)
-      .skip(1)
-      .map { view.getSelectedCategory() }
-      .switchMap {
-        repository.getLookup(SUBCATEGORY, null, it.lookUpID.toString())
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderSubCategory)
-      .addTo(disposable)
+        .filter(InvalidSelectionPredicate)
+        .skip(1)
+        .map { view.getSelectedCategory() }
+        .switchMap {
+          repository.getLookup(SUBCATEGORY, null, it.lookUpID.toString())
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderSubCategory)
+        .addTo(disposable)
 
     view.onAttendeeClicked()
-      .subscribe {
-        view.showAttendeDialog()
-      }
-      .addTo(disposable)
+        .subscribe {
+          view.showAttendeDialog()
+        }
+        .addTo(disposable)
 
     view.onSplAttendeeClicked()
-      .subscribe {
-        view.showSplAttendeDialog()
-      }
-      .addTo(disposable)
+        .subscribe {
+          view.showSplAttendeDialog()
+        }
+        .addTo(disposable)
 
     val searchObs = view.getAttendeeSearchText()
-      .filter { it.text.isNotEmpty() }
-      .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
-      .map { it.text }
-      .distinctUntilChanged()
-      .share()
+        .filter { it.text.isNotEmpty() }
+        .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
+        .map { it.text }
+        .distinctUntilChanged()
+        .share()
 
     searchObs?.map(MapStringIsBlank)
-      ?.subscribe {
-        view.toggleSearchState(it, true)
-      }
-      ?.addTo(disposable)
+        ?.subscribe {
+          view.toggleSearchState(it, true)
+        }
+        ?.addTo(disposable)
 
     searchObs?.filter { it.length > 2 }
-      ?.switchMap {
-        repository.getAttendeeData(it)
-          .compose(applyUiModel())
-      }
-      ?.subscribe { view.renderSearchResult(it, true) }
-      ?.addTo(disposable)
+        ?.switchMap {
+          repository.getAttendeeData(it)
+              .compose(applyUiModel())
+        }
+        ?.subscribe { view.renderSearchResult(it, true) }
+        ?.addTo(disposable)
 
     val searchSplAttendeeObs = view.getSplAttendeeSearchText()
-      .filter { it.text.isNotEmpty() }
-      .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
-      .map { it.text }
-      .distinctUntilChanged()
-      .share()
+        .filter { it.text.isNotEmpty() }
+        .debounce(500, MILLISECONDS, AndroidSchedulers.mainThread())
+        .map { it.text }
+        .distinctUntilChanged()
+        .share()
 
     searchSplAttendeeObs?.map(MapStringIsBlank)
-      ?.subscribe {
-        view.toggleSearchState(it, false)
-      }
-      ?.addTo(disposable)
+        ?.subscribe {
+          view.toggleSearchState(it, false)
+        }
+        ?.addTo(disposable)
 
     searchSplAttendeeObs?.filter { it.length > 2 }
-      ?.switchMap {
-        repository.getSplAttendeeData(it)
-          .compose(applyUiModel())
-      }
-      ?.subscribe { view.renderSearchResult(it, false) }
-      ?.addTo(disposable)
+        ?.switchMap {
+          repository.getSplAttendeeData(it)
+              .compose(applyUiModel())
+        }
+        ?.subscribe { view.renderSearchResult(it, false) }
+        ?.addTo(disposable)
 
     view.onAttendeeAddedClicked()
-      .subscribe { view.showAttendeAddedDialog() }
-      .addTo(disposable)
+        .subscribe { view.showAttendeAddedDialog() }
+        .addTo(disposable)
 
     view.onSplAttendeeAddedClicked()
-      .subscribe { view.showSplAttendeAddedDialog() }
-      .addTo(disposable)
+        .subscribe { view.showSplAttendeAddedDialog() }
+        .addTo(disposable)
 
     val isOTPSentSuccessful = view.onSendOTPClicked()
-      .map {
-        view.isOTPSuccessful()
-      }
-      .share()
+        .map {
+          view.isOTPSuccessful()
+        }
+        .share()
 
     isOTPSentSuccessful.filter { t: Boolean ->
       t
     }
-      .subscribe { view.showToast() }
-      .addTo(disposable)
+        .subscribe { view.showToast() }
+        .addTo(disposable)
 
     isOTPSentSuccessful.filter { t: Boolean -> !t }
-      .map { view.getOTPButtonText() }
-      .filter { t -> t == SEND_OTP_LABEL }
-      .subscribe { view.checkPermissionAndProceed() }
-      .addTo(disposable)
+        .map { view.getOTPButtonText() }
+        .filter { t -> t == SEND_OTP_LABEL }
+        .subscribe { view.checkPermissionAndProceed() }
+        .addTo(disposable)
 
     isOTPSentSuccessful.filter { t: Boolean -> !t }
-      .map { view.getOTPButtonText() }
-      .filter { t -> t == VERIFY_OTP_LABEL }
-      .subscribe { view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId) }
-      .addTo(disposable)
+        .map { view.getOTPButtonText() }
+        .filter { t -> t == VERIFY_OTP_LABEL }
+        .subscribe { view.showOTPDialog(createMeetingData.ucid, createMeetingData.leadId) }
+        .addTo(disposable)
 
     view.onAttendeeItemClickEventFired()
-      .map {
-        it.position
-      }
-      .subscribe(view::renderOnAttendeeItemClick)
-      .addTo(disposable)
+        .map {
+          it.position
+        }
+        .subscribe(view::renderOnAttendeeItemClick)
+        .addTo(disposable)
 
     view.onSplAttendeeItemClickEventFired()
-      .map {
-        it.position
-      }
-      .subscribe(view::renderOnSplAttendeeItemClick)
-      .addTo(disposable)
+        .map {
+          it.position
+        }
+        .subscribe(view::renderOnSplAttendeeItemClick)
+        .addTo(disposable)
 
     view.sendOTP()
-      .switchMap {
-        repository.sendOTP(
-          OTPRequestData(
-            latitude = view.getLatitude(),
-            longitude = view.getLongitude(),
-            geoArea = view.getGeoArea(),
-            ucid = createMeetingData.ucid,
-            leadid = createMeetingData.leadId
+        .switchMap {
+          repository.sendOTP(
+              OTPRequestData(
+                  latitude = view.getLatitude(),
+                  longitude = view.getLongitude(),
+                  geoArea = view.getGeoArea(),
+                  ucid = createMeetingData.ucid,
+                  leadid = createMeetingData.leadId
+              )
           )
-        )
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderOTP)
-      .addTo(disposable)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderOTP)
+        .addTo(disposable)
 
     view.onResetClicked()
-      .subscribe { view.resetData() }
-      .addTo(disposable)
+        .subscribe { view.resetData() }
+        .addTo(disposable)
 
     view.onSaveClicked()
-      .subscribe { view.validateFormData() }
-      .addTo(disposable)
+        .subscribe { view.validateFormData() }
+        .addTo(disposable)
 
     view.onDataValidated()
-      .filter { it.boolean }
-      .map { getInputData() }
-      .subscribe { view.setInputData(it) }
-      .addTo(disposable)
+        .filter { it.boolean }
+        .map { getInputData() }
+        .subscribe { view.setInputData(it) }
+        .addTo(disposable)
 
     view.onDataSaved()
-      .switchMap {
-        repository.saveRequest(it.data)
-          .compose(applyUiModel())
-      }
-      .subscribe(view::renderSaveRequest)
-      .addTo(disposable)
+        .switchMap {
+          repository.saveRequest(it.data)
+              .compose(applyUiModel())
+        }
+        .subscribe(view::renderSaveRequest)
+        .addTo(disposable)
 
     view.onSaveConfirmClick()
-      .subscribe {
-        val bundle = Bundle()
-        bundle.putString(ARG_LEAD_ID, createMeetingData.leadId)
-        bundle.putString(ARG_UCID, createMeetingData.ucid)
-        screenNavigator.openPage(
-          NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle,
-          addToStack = true,
-          forceReload = false
-        )
-      }
-      .addTo(disposable)
+        .subscribe {
+          val bundle = Bundle()
+          bundle.putString(ARG_LEAD_ID, createMeetingData.leadId)
+          bundle.putString(ARG_UCID, createMeetingData.ucid)
+          screenNavigator.openPage(
+              NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle,
+              addToStack = true,
+              forceReload = false
+          )
+        }
+        .addTo(disposable)
   }
 
   private fun getInputData(): MeetingApptModel {
-    val attendeeList = if (view.getSplAttendeeList().isEmpty()) {
+    val attendeeList = if (view.getSplAttendeeList()
+            .isEmpty()
+    ) {
       emptyList()
-    } else view.getAttendeeList().map {
-      AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
-    }
+    } else view.getAttendeeList()
+        .map {
+          AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+        }
 
-    val splAttendeeList = if (view.getSplAttendeeList().isEmpty()) {
+    val splAttendeeList = if (view.getSplAttendeeList()
+            .isEmpty()
+    ) {
       emptyList()
     } else
-      view.getSplAttendeeList().map {
-        AddedSplAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
-      }
+      view.getSplAttendeeList()
+          .map {
+            AddedSplAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+          }
 
     val data = MeetingApptModel()
     data.meetingType = "M"

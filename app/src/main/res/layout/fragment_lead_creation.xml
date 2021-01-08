@@ -1017,7 +1017,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/spCountry" />
 
 
-                        <com.mosl.tabapp.common.SearchableSpinner
+                        <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                             android:id="@+id/spState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1038,7 +1038,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/spState" />
 
 
-                        <com.mosl.tabapp.common.SearchableSpinner
+                        <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                             android:id="@+id/spCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1237,7 +1237,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/spOffCountry" />
 
-                        <com.mosl.tabapp.common.SearchableSpinner
+                        <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                             android:id="@+id/spOffState"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -1258,7 +1258,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/spOffState" />
 
 
-                        <com.mosl.tabapp.common.SearchableSpinner
+                        <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
                             android:id="@+id/spOffCity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

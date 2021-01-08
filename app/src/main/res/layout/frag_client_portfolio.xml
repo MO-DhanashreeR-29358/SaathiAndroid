@@ -1,27 +1,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:fillViewport="true">
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    android:background="@color/white"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtPortfolioSnapshot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:background="#ff414143"
             android:gravity="center"
             android:padding="5dp"
             android:singleLine="true"
-            android:text="Portfolio Snapshot"
+            android:text="@string/lead_detail_portfolio_snapshot"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
@@ -47,10 +39,10 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="NETWORTH"
+                        android:gravity="end"
+                        android:text="@string/lead_detail_networth"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="normal" />
@@ -59,7 +51,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1"
-                        android:text="\u20B9"
+                        android:text="@string/lead_detail_rupee"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -97,7 +89,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Day's Chg.(%)"
+                            android:text="@string/lead_detail_day_chanage"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="normal" />
@@ -120,7 +112,7 @@
                                 android:id="@+id/daychgperst"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:text=""
                                 android:textColor="@color/green_textcolor"
                                 android:textSize="12sp"
@@ -132,8 +124,8 @@
                         android:id="@+id/viewClient1"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -146,7 +138,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Overall Chg.(%)"
+                            android:text="@string/lead_detail_overall_chg"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="normal" />
@@ -169,7 +161,7 @@
                                 android:id="@+id/overallchgperst"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:text=""
                                 android:textColor="@color/white"
                                 android:textSize="12sp"
@@ -183,14 +175,12 @@
                 android:id="@+id/txtBrokingPortfolio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:background="@color/separator"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:text="Broking Portfolio"
+                android:text="@string/lead_detail_broking_portfolio"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/margin_dark_bar" />
 
@@ -214,14 +204,14 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Products" />
+                        android:text="@string/lead_detail_products" />
 
                     <View
                         android:id="@+id/viewClient2"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -234,21 +224,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Investmet Value" />
+                            android:text="@string/lead_detail_investmet_value" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Market Value" />
+                            android:text="@string/lead_detail_market_value" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/viewClient3"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -261,13 +251,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Overall Gain/ Loss" />
+                            android:text="@string/lead_detail_overall_gain_loss" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="%Gain/Loss" />
+                            android:text="@string/lead_detail_gain_loss" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -295,23 +285,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="Restructure Portfolio" />
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/lead_detail_restructure_portfolio" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/txtAssestPortfolio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:background="@color/separator"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:text="Asset Portfolio"
+                android:text="@string/lead_detail_asset_portfolio"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/margin_dark_bar" />
 
@@ -335,14 +323,14 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Products" />
+                        android:text="@string/lead_detail_products" />
 
                     <View
                         android:id="@+id/viewClient21"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -355,21 +343,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Investmet Value" />
+                            android:text="@string/lead_detail_investmet_value" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Market Value" />
+                            android:text="@string/lead_detail_market_value" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/viewClient31"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -382,13 +370,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Overall Gain/ Loss" />
+                            android:text="@string/lead_detail_overall_gain_loss" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="%Gain/Loss" />
+                            android:text="@string/lead_detail_gain_loss" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -416,22 +404,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="Restructure Portfolio" />
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/lead_detail_restructure_portfolio" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/txtCash"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:background="@color/separator"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:text="Available Margin"
+                android:text="@string/lead_detail_available_margin"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/margin_dark_bar" />
 
@@ -470,15 +456,13 @@
             android:id="@+id/txtPorfitLoss"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:layout_marginTop="5dp"
             android:background="#ff414143"
             android:ellipsize="end"
             android:gravity="center"
             android:padding="5dp"
             android:singleLine="true"
-            android:text="Profit &amp; Loss Summary"
+            android:text="@string/lead_detail_profit_loss_summary"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
@@ -505,10 +489,10 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"
                         android:layout_weight="1"
-                        android:gravity="right"
-                        android:text="TOTAL GAIN/LOSS"
+                        android:gravity="end"
+                        android:text="@string/lead_detail_total_gain_loss"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="normal" />
@@ -517,9 +501,9 @@
                         android:id="@+id/tvTotalGainLoss"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:layout_weight="1"
-                        android:text=" - "
+                        android:text="@string/lead_detail_hyphen"
                         android:textColor="@color/black"
                         android:textSize="15sp"
                         android:textStyle="bold" />
@@ -547,7 +531,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="ST Gain/Loss(%)"
+                            android:text="@string/lead_detail_st_gain_loss"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="normal" />
@@ -570,7 +554,7 @@
                                 android:id="@+id/tvSTGainLossPer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:text=" "
                                 android:textSize="12sp"
                                 android:textStyle="normal" />
@@ -581,8 +565,8 @@
                         android:id="@+id/viewClient11"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -595,7 +579,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="LT Gain/Loss(%)"
+                            android:text="@string/lead_detail_lt_gain_loss"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             android:textStyle="normal" />
@@ -618,7 +602,7 @@
                                 android:id="@+id/tvLTGainLossPer"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
+                                android:layout_marginStart="5dp"
                                 android:text=" "
                                 android:textSize="12sp"
                                 android:textStyle="normal" />
@@ -631,14 +615,12 @@
                 android:id="@+id/txtBrokingProducts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:background="@color/separator"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:text="Broking Product"
+                android:text="@string/lead_detail_broking_product"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/margin_dark_bar" />
 
@@ -662,14 +644,14 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Products" />
+                        android:text="@string/lead_detail_products" />
 
                     <View
                         android:id="@+id/viewClient24"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -682,21 +664,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="ST Gain/Loss" />
+                            android:text="@string/lead_detail_st_gain_losss" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="LT Gain/Loss" />
+                            android:text="@string/lead_detail_lt_gain_losss" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/viewClient34"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <TextView
@@ -705,7 +687,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Total Gain/ Loss" />
+                        android:text="@string/lead_detail_total_gain_losss" />
                 </LinearLayout>
 
                 <View
@@ -733,14 +715,12 @@
                 android:id="@+id/txtAssestProducts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:background="@color/separator"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
-                android:text="Asset Product"
+                android:text="@string/lead_detail_asset_product"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/margin_dark_bar" />
 
@@ -764,14 +744,14 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Products" />
+                        android:text="@string/lead_detail_products" />
 
                     <View
                         android:id="@+id/viewClient25"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <LinearLayout
@@ -784,21 +764,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="ST Gain/Loss" />
+                            android:text="@string/lead_detail_st_gain_losss" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="LT Gain/Loss" />
+                            android:text="@string/lead_detail_lt_gain_losss" />
                     </LinearLayout>
 
                     <View
                         android:id="@+id/viewClient35"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
                         android:background="@color/calendar_gray" />
 
                     <TextView
@@ -807,7 +787,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Total Gain/ Loss" />
+                        android:text="@string/lead_detail_total_gain_losss" />
                 </LinearLayout>
 
                 <View
@@ -836,15 +816,13 @@
             android:id="@+id/txtAvailableLimits"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
             android:layout_marginTop="5dp"
             android:background="#ff414143"
             android:ellipsize="end"
             android:gravity="center"
             android:padding="5dp"
             android:singleLine="true"
-            android:text="Available Limits"
+            android:text="@string/lead_detail_available_limits"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/white" />
 
@@ -860,9 +838,7 @@
                 android:id="@+id/lvPLLimits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fillViewport="true"
-                tools:listitem="@layout/item_list_available_limits" />
+                android:fillViewport="true" />
 
-                   </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>

@@ -124,9 +124,9 @@ class SearchableSpinner : AppCompatSpinner, View.OnTouchListener, OnSearchableIt
 
     }
 
-    override fun getSelectedItem(): Any {
+    /*override fun getSelectedItem(): Any {
         return super.getSelectedItem()
-    }
+    }*/
 
     override fun setSelection(position: Int) {
         super.setSelection(position)

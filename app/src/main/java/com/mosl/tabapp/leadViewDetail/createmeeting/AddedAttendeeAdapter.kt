@@ -22,10 +22,10 @@ class AddedAttendeeAdapter(
     parent: ViewGroup?
   ): View {
     val convertView = oldView
-      ?: inflater.inflate(R.layout.item_list_added_attendee, parent, false)
-        .apply {
-          tag = HolderView(this)
-        }
+        ?: inflater.inflate(R.layout.item_list_added_attendee, parent, false)
+            .apply {
+              tag = HolderView(this)
+            }
     val holderView: HolderView = convertView.tag as HolderView
     val attendee = list[position]
     holderView.attendeeName.text =
