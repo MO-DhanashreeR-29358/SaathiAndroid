@@ -12,7 +12,7 @@ public class RowData implements Serializable {
     private int position;
     private String key;
     private String value;
-    private String schmeID, schename, schemeSelID, marDep;
+    private String showPotentialPopup, schename, schemeSelID, marDep;
 
     public RowData(String key, String value) {
         this.key = key;
@@ -30,29 +30,29 @@ public class RowData implements Serializable {
         this.value = value;
     }
 
-    public RowData(int position, String key, String value, String schmeID) {
+    public RowData(int position, String key, String value, String showPotentialPopup) {
         this.position = position;
         this.key = key;
         this.value = value;
-        this.schmeID = schmeID;
+        this.showPotentialPopup = showPotentialPopup;
     }
 
-    public RowData(int position, String key, String value, String schmeID, String schename, String schemeSelID, String marDep) {
+    public RowData(int position, String key, String value, String showPotentialPopup, String schename, String schemeSelID, String marDep) {
         this.position = position;
         this.key = key;
         this.value = value;
-        this.schmeID = schmeID;
+        this.showPotentialPopup = showPotentialPopup;
         this.schename = schename;
         this.schemeSelID = schemeSelID;
         this.marDep = marDep;
     }
 
-    public String getSchmeID() {
-        return schmeID;
+    public String getShowPotentialPopup() {
+        return showPotentialPopup;
     }
 
-    public void setSchmeID(String schmeID) {
-        this.schmeID = schmeID;
+    public void setShowPotentialPopup(String showPotentialPopup) {
+        this.showPotentialPopup = showPotentialPopup;
     }
 
     public String getSchename() {

@@ -5,6 +5,10 @@ import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesModule
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentModule
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailModule
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerModule
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
@@ -16,7 +20,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector(modules = [LeadViewActivitiesModule::class])
-  abstract fun LeadViewActivitiesFragmentFactory(): LeadViewActivitiesFragment
+  abstract fun leadViewActivitiesFragmentFactory(): LeadViewActivitiesFragment
 
   @ContributesAndroidInjector
   abstract fun provideLeadActivitiesDetailFactory(): LeadActivitiesDetailFragment
@@ -29,5 +33,11 @@ abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector(modules = [DocumentModule::class])
   abstract fun provideDocumentFragmentNewFactory(): DocumentFragment
+
+  @ContributesAndroidInjector(modules = [LeadViewDetailPagerModule::class])
+  abstract fun provideLeadViewDetailPagerFragmentFactory(): LeadViewDetailPagerFragment
+
+  @ContributesAndroidInjector(modules = [LeadDetailModule::class])
+  abstract fun provideLeadDetailFragmentFactory(): LeadDetailFragment
 
 }

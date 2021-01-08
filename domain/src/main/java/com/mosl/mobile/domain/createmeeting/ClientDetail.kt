@@ -50,7 +50,6 @@ data class AddedAttendee(
   }
 }
 
-
 data class ClientData(
   @JvmField val clientDetail: ClientDetail,
   @JvmField val imageUrl: String,

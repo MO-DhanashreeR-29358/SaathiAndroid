@@ -37,7 +37,6 @@ interface LeadCreationView : BaseView {
   fun getSelectedCategory(): RowData
   fun renderOnCategoryChange(category: String)
 
-
   fun onInterestedProductSelected(): Observable<Int>
   fun getSelectedInterestedProduct(): RowData
   fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>)
@@ -109,7 +108,6 @@ interface LeadCreationView : BaseView {
   fun onTransferLeadPaymentFired(): Observable<TransferLeadPayment>
   fun getMobile(): String
   fun renderTransferLead(uiModel: UiModel<TransferLead>)
-
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

@@ -13,7 +13,7 @@ fun TextInputLayout.disableErrorMessages() {
 
 fun TextInputLayout.setErrorMessages(msg: String) {
   error = msg
-  isFocusableInTouchMode = true;
+  isFocusableInTouchMode = true
   requestFocus()
 }
 

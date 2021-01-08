@@ -71,11 +71,13 @@ public class AppDateFormats {
   private static final String JSON_DATE10 = "yyyy-MM-dd'T'kk:mm:ss";
   public static final DateFormat DF_JSON_DATE10 = new SimpleDateFormat(JSON_DATE10, Locale.ENGLISH);
 
-	private static final String JSON_DATE11 = "yyyy-MM-dd'T'kk:mm:ssZZZ";
-	public static final DateFormat DF_JSON_DATE11 = new SimpleDateFormat(JSON_DATE11, Locale.ENGLISH);
+    private static final String JSON_DATE11 = "yyyy-MM-dd'T'kk:mm:ssZZZ";
+    public static final DateFormat DF_JSON_DATE11 =
+        new SimpleDateFormat(JSON_DATE11, Locale.ENGLISH);
 
-	private static final String JSON_DATE12 = "dd MMM yyyy hh:mm a";
-	public static final DateFormat DF_JSON_DATE12 = new SimpleDateFormat(JSON_DATE12, Locale.ENGLISH);
+    private static final String JSON_DATE12 = "dd MMM yyyy hh:mm a";
+    public static final DateFormat DF_JSON_DATE12 =
+        new SimpleDateFormat(JSON_DATE12, Locale.ENGLISH);
 
   private static final String date10 = "MM/dd/yyyy";
   public static final DateFormat df_date10 = new SimpleDateFormat(date10, Locale.ENGLISH);

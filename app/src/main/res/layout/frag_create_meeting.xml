@@ -16,8 +16,7 @@
 
         <include
             android:id="@+id/layoutTopSection"
-            layout="@layout/lms_top_section_update"
-            />
+            layout="@layout/lms_top_section_update" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_activity_type"
@@ -25,22 +24,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_activity_type"
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_activity_type"
-                />
+                android:hint="@string/txt_lable_activity_type" />
 
             <Spinner
                 android:id="@+id/spActivityType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -111,14 +107,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <Spinner
                 android:id="@+id/spProduct"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -143,14 +137,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <Spinner
                 android:id="@+id/spMeetingDuration"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,15 +161,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <Spinner
                 android:id="@+id/spMeetingObjective"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
+                android:layout_marginTop="@dimen/_5sdp" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -195,16 +185,14 @@
             android:id="@+id/til_meeting_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:hintEnabled="false"
-            >
+            app:hintEnabled="false">
 
             <Spinner
                 android:id="@+id/spMeetingReason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:entries="@array/Select_Meeting_Reason"
-                />
+                android:entries="@array/Select_Meeting_Reason" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -232,8 +220,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false"
-            />
+            app:hintEnabled="false" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -376,16 +363,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                >
+                app:hintEnabled="false">
 
                 <Spinner
                     android:id="@+id/spMeetingLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:entries="@array/Select"
-                    />
+                    android:entries="@array/Select" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -402,16 +387,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                >
+                app:hintEnabled="false">
 
                 <Spinner
                     android:id="@+id/spTravellingMode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:entries="@array/Select"
-                    />
+                    android:entries="@array/Select" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -541,14 +524,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                >
+                app:hintEnabled="false">
 
                 <Spinner
                     android:id="@+id/spActionables"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
@@ -566,15 +547,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                >
+                app:hintEnabled="false">
 
                 <Spinner
                     android:id="@+id/spCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    />
+                    android:layout_marginTop="@dimen/_5sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -631,14 +610,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorTextAppearance="@style/error_appearance"
-                    app:hintEnabled="false"
-                    >
+                    app:hintEnabled="false">
 
                     <Spinner
                         android:id="@+id/spSubCategory"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 

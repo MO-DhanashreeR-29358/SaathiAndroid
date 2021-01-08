@@ -99,7 +99,7 @@ import com.mosl.tabapp.common.CustomDatePickerDialog;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
-import com.mosl.tabapp.common.SearchableSpinner;
+import com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
@@ -138,7 +138,6 @@ import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;
 import static com.mosl.tabapp.common.CRMAppUtil.getDateFromString;
 import static com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
-import static com.mosl.tabapp.common.CRMMOSLCommon.disableField;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail;
 import static com.mosl.tabapp.common.CRMValidationRule.isValidEmail;
 import static com.mosl.tabapp.common.CRMValidationRule.validateAadhar;
@@ -3128,7 +3127,6 @@ public class LeadViewDetailFragment extends CommonFragment
                 tvUCID.setText(String.valueOf(product.uCID));
                 tvBranchCode.setText(product.branchCode);
                 tvClientCode.setText(product.holdingNumber);
-
                 List<AdvisorsItem> advisors = product.advisors;
                 if (advisors != null && advisors.size() > 0) {
                     advisorCode = stringOrEmpty(advisors.get(0).advisorCode);
@@ -3669,7 +3667,7 @@ public class LeadViewDetailFragment extends CommonFragment
         private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
 
         private LeadDetailAddProductAdapter(Context c,
-                                            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
+            List<LeadDetailAddProductModel> leadDetailAddProductModelList) {
             inflater = LayoutInflater.from(c);
             mContext = c;
             this.leadDetailAddProductModelList = leadDetailAddProductModelList;
@@ -4448,7 +4446,7 @@ public class LeadViewDetailFragment extends CommonFragment
                                 lowMarginList.clear();
                                 newStageCodeStr = ((RowData) spStageDialog.getSelectedItem()).getKey();
                                 newStageNameStr = ((RowData) spStageDialog.getSelectedItem()).getValue();
-                                if (((RowData) spStageDialog.getSelectedItem()).getSchmeID()
+                                if (((RowData) spStageDialog.getSelectedItem()).getShowPotentialPopup()
                                         .equalsIgnoreCase(YES)) {
                                     if (spPmsProduct.getSelectedItem().toString().equals(NO)) {
                                         isPMSProductStageStatus = true;

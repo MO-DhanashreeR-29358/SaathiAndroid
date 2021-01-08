@@ -142,6 +142,7 @@ dependencies {
   implementation deps.androidx.material
   implementation deps.androidx.appcompat
   implementation deps.androidx.cardview
+  implementation deps.androidx.pager2
   implementation deps.androidx.browser
   implementation deps.androidx.fragment
   implementation deps.androidx.recylerview

@@ -63,29 +63,15 @@ import javax.inject.Inject
  * A simple [Fragment] subclass.
  */
 class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
-  lateinit var binding: FragmentDocumentNewBinding
-  @Inject lateinit var imageUploadHelper: ImageUploadHelper
+  private lateinit var binding: FragmentDocumentNewBinding
+  @Inject internal lateinit var imageUploadHelper: ImageUploadHelper
   private lateinit var section: DataManagerSection
   @Inject
   internal lateinit var presenter: DocumentPresenter
   private val subject = PublishSubject.create<DocumentUiEvent>()
-  private val MY_PERMISSIONS_REQUEST_STORAGE_ACCESS = 31
-  private val ALLOWED_FILE_TYPE = arrayOf(
-      "TXT",
-      "DOC",
-      "DOCX",
-      "XLS",
-      "PDF",
-      "CSV",
-      "XLSX",
-      "PNG",
-      "JPEG",
-      "JPG",
-      "GIF",
-      "PPT",
-      "PPTX"
-  )
-
+  private val fileTypeArray by lazy {
+    resources.getStringArray(R.array.allowedFileTypeArray)
+  }
   private lateinit var documentList: ArrayList<LeadDocumentsItemData>
   private val permissionsArr = arrayOf(
       Manifest.permission.CAMERA,
@@ -356,7 +342,7 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
         fileName.split("\\.(?=[^\\.]+$)".toRegex())
             .dropLastWhile { it.isEmpty() }
             .toTypedArray()
-      if (!isFileAllowed(tokens[1], ALLOWED_FILE_TYPE)) {
+      if (!isFileAllowed(tokens[1], fileTypeArray)) {
         alertDialog(
             requireContext(), 0,
             resources.getString(R.string.motilal_oswal),
@@ -384,7 +370,6 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
       return
     }
     subject.onNext(UploadImage(leadId, ucid, fileName.replace(":", "a"), strData))
-    //}
   }
 
   private fun isFileAllowed(
@@ -462,6 +447,10 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
     file: File
   ) {
     uploadFile(uri, file)
-
   }
+
+  companion object {
+    private const val MY_PERMISSIONS_REQUEST_STORAGE_ACCESS = 31
+  }
+
 }

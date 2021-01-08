@@ -10,6 +10,8 @@ import com.mosl.app.core.data.dashboardreport.LeadAssignRepositoryImpl
 import com.mosl.app.core.data.lead.LeadRepositoryImpl
 import com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl
 import com.mosl.app.core.data.leadviewdetail.history.MappingHistoryRepositoryImpl
+import com.mosl.app.core.data.leadviewdetail.leaddetail.LeadDetailRepositoryImpl
+import com.mosl.app.core.data.leadviewdetail.main.LeadViewDetailPagerRepositoryImpl
 import com.mosl.app.core.data.notification.NotificationRepositoryImpl
 import com.mosl.app.core.data.pendingapproval.PendingApprovalRepositoryImpl
 import com.mosl.app.core.data.pendingapproval.report.PendingForApprovalRepositoryImpl
@@ -28,6 +30,8 @@ import com.mosl.mobile.domain.dashboardreport.LeadAssignRepository
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.mobile.domain.lead.report.LeadsReportRepository
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
+import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailRepository
+import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
 import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.pendingapproval.PendingApprovalRepository
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
@@ -44,47 +48,47 @@ import dagger.Module
 @Module
 interface RepositoryAliasProviders {
 
-  @Binds
-  fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
+    @Binds
+    fun provideBankRepository(repository: BankRepositoryImpl): BankRepository
 
-  @Binds
-  fun provideAusfbLeadRepository(repository: LeadRepositoryImpl): LeadRepository
+    @Binds
+    fun provideAusfbLeadRepository(repository: LeadRepositoryImpl): LeadRepository
 
-  @Binds
-  fun provideLeadReportsRepository(repository: LeadsReportRepositoryImpl): LeadsReportRepository
+    @Binds
+    fun provideLeadReportsRepository(repository: LeadsReportRepositoryImpl): LeadsReportRepository
 
-  @Binds
-  fun provideClientsRepositoryRepository(repository: ClientsRepositoryImpl): ClientsRepository
+    @Binds
+    fun provideClientsRepositoryRepository(repository: ClientsRepositoryImpl): ClientsRepository
 
-  @Binds
-  fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
+    @Binds
+    fun provideBusinessSnapshotRepository(repository: BusinessSnapshotRepositoryImpl): BusinessSnapshotRepository
 
-  @Binds
-  fun provideProvideRepository(repository: ProductivityRepositoryImpl): ProductivityRepository
+    @Binds
+    fun provideProvideRepository(repository: ProductivityRepositoryImpl): ProductivityRepository
 
-  @Binds
-  fun provideMappingHistoryRepository(repository: MappingHistoryRepositoryImpl): MappingHistoryRepository
+    @Binds
+    fun provideMappingHistoryRepository(repository: MappingHistoryRepositoryImpl): MappingHistoryRepository
 
-  @Binds
-  fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
+    @Binds
+    fun provideTargetVsAchRepository(repository: TargetRepositoryImpl): TargetRepository
 
-  @Binds
-  fun provideTeamTargetVsAchRepository(repository: TeamTargetRepositoryImpl): TeamTargetRepository
+    @Binds
+    fun provideTeamTargetVsAchRepository(repository: TeamTargetRepositoryImpl): TeamTargetRepository
 
-  @Binds
-  fun provideClientTradeYesterdayRepository(repository: ClientTradeYesterdayRepositoryImpl): ClientTradeYesterdayRepository
+    @Binds
+    fun provideClientTradeYesterdayRepository(repository: ClientTradeYesterdayRepositoryImpl): ClientTradeYesterdayRepository
 
-  @Binds
-  fun provideTrendsRepositoryRepository(repository: TrendsRepositoryImpl): TrendsRepository
+    @Binds
+    fun provideTrendsRepositoryRepository(repository: TrendsRepositoryImpl): TrendsRepository
 
-  @Binds
-  fun bindsCalendarRepository(repository: CalendarRepositoryImpl): CalendarRepository
+    @Binds
+    fun bindsCalendarRepository(repository: CalendarRepositoryImpl): CalendarRepository
 
-  @Binds
-  fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository
+    @Binds
+    fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository
 
-  @Binds
-  fun bindpendingApprovalRepository(repository: PendingApprovalRepositoryImpl): PendingApprovalRepository
+    @Binds
+    fun bindpendingApprovalRepository(repository: PendingApprovalRepositoryImpl): PendingApprovalRepository
 
     @Binds
     fun bindPendingForApprovalRepository(repository: PendingForApprovalRepositoryImpl): PendingForApprovalRepository
@@ -100,4 +104,10 @@ interface RepositoryAliasProviders {
 
     @Binds
     fun bindBirthdayAnniversaryRepository(repository: BirthdayAnniversaryRepositoryImpl): BirthdayAnniversaryRepository
+
+    @Binds
+    fun provideLeadViewDetailPagerRepository(repository: LeadViewDetailPagerRepositoryImpl): LeadViewDetailPagerRepository
+
+    @Binds
+    fun bindLeadDetailRepository(repository: LeadDetailRepositoryImpl): LeadDetailRepository
 }

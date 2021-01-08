@@ -17,7 +17,6 @@ import com.mosl.mobile.domain.notification.NotificationResponseData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragNotificationBinding
-import com.mosl.tabapp.model.AccountDetails
 import com.mosl.tabapp.notification.NotificationUiEvent.ItemClick
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -54,9 +53,8 @@ class NotificationFragment : CommonFragment(), NotificationView {
   }
 
   private fun setUpView() {
-    if (AccountDetails.isAufsb()) {
       binding.spCategory.setVisibility(View.GONE)
-    }
+
   }
 
   private fun setUpRecyclerView() {

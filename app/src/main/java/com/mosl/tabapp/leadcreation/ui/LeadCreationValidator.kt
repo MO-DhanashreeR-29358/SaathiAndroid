@@ -182,7 +182,6 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
         actionOnSuccess = { withData("Input is correct") }
     )
 
-
   }
 
   private inline fun returnValidationResult(

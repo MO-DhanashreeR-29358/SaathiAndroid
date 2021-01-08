@@ -1,0 +1,42 @@
+package com.mosl.tabapp.leadViewDetail.main
+
+import com.mosl.app.core.base.BaseView
+import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.leadviewdetail.main.ClientDetailAndImage
+import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
+import io.reactivex.Observable
+
+interface LeadViewDetailPagerView : BaseView {
+
+  fun renderLeadDetail(uiModel: UiModel<LeadDetail>)
+  fun renderClientDetailAndImage(uiModel: UiModel<ClientDetailAndImage>)
+
+  fun onThreeVerticalDotsClicked(): Observable<Unit>
+  fun showLeadViewDialog()
+
+  fun onShareLinkClicked(): Observable<ShareLinkClick>
+  fun renderOnShareLinkClick(leadId: String)
+  fun onSuggestMeClicked(): Observable<SuggestMeClick>
+  fun renderOnSuggestMeClick(uiModel: UiModel<String>)
+  fun onCopyLinkClicked(): Observable<CopyLinkClick>
+  fun renderOnCopyLinkClick()
+  fun onOaoFormClicked(): Observable<OaoFormClick>
+  fun onOpenAccountClicked(): Observable<OpenAccountClick>
+  fun renderOpenAccountClick()
+  fun onCreateMeetingClicked(): Observable<CreateMeetingClick>
+  fun renderCreateMeetingClick(id: Int)
+  fun onSetAppointmentClick(): Observable<SetAppointmentClick>
+  fun onCallClicked(): Observable<CallClick>
+  fun renderCallClick()
+  fun getUcid(): String
+  fun getLeadId(): String
+  fun onSMSClicked(): Observable<SMSClick>
+  fun onRetryClick(): Observable<RetryClick>
+  fun renderSMSClick()
+
+
+  companion object {
+    const val ARG_LEAD_ID = "arg_lead_id"
+    const val ARG_UC_ID = "arg_uc_id"
+  }
+}

@@ -26,10 +26,10 @@ class AttendeeAdapter(
     parent: ViewGroup?
   ): View {
     val convertView = oldView
-      ?: inflater.inflate(R.layout.item_list_attendee, parent, false)
-        .apply {
-          tag = HolderView(this)
-        }
+        ?: inflater.inflate(R.layout.item_list_attendee, parent, false)
+            .apply {
+              tag = HolderView(this)
+            }
     val holderView: HolderView = convertView.tag as HolderView
     val attendee = resultList[position]
     viewColor(position, convertView)
@@ -85,12 +85,12 @@ class AttendeeAdapter(
   fun setErrorData(throwable: Throwable) {
     if (throwable is ServiceFailureException) {
       resultList.addAll(
-        listOf(
-          Attendee(
-            empName = throwable.errorMessage, empCode = " ",
-            branchCode = " ", hasData = false
+          listOf(
+              Attendee(
+                  empName = throwable.errorMessage, empCode = " ",
+                  branchCode = " ", hasData = false
+              )
           )
-        )
       )
       notifyDataSetChanged()
     }
