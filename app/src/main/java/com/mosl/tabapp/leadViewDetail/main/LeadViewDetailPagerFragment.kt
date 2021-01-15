@@ -255,9 +255,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         }
     }
 
-    override fun getUcid(): String {
-        return ucId
-    }
+    override fun getUcid(): String = if (ucId.isEmpty()) "0" else ucId
 
     override fun getLeadId(): String {
         return leadId
