@@ -746,6 +746,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.spMeetingObjective.setSelection(0)
         binding.spMeetingLocation.setSelection(0)
         binding.spTravellingMode.setSelection(0)
+        binding.spActionables.setSelection(0)
+        binding.spCategory.setSelection(0)
+        binding.spSubCategory.setSelection(0)
+        binding.etCategory.setText("")
+        binding.etSubCategory.setText("")
         binding.etLocation.setText("")
         binding.etPinCode.setText("")
         binding.etAmount.setText("")
@@ -769,6 +774,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.tilLocation.disableErrorMessages()
         binding.tilCategory.disableErrorMessages()
         binding.tilSubCategory.disableErrorMessages()
+        binding.tilActionables.disableErrorMessages()
         binding.tilPinCode.disableErrorMessages()
         binding.tilEtCategory.disableErrorMessages()
         binding.tilEtSubCategory.disableErrorMessages()
@@ -824,13 +830,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
             binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
             false
-        } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.spActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spActionables
             ) == SELECT_ACTIONABLE
         ) {
             binding.tilActionables.setErrorMessages(MSG_SELECT_ACTIONABLE)
             false
-        } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.spCategory.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spCategory
             ) == SELECT_CATEGORY
         ) {
@@ -839,13 +845,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (binding.llActionables.visibility == View.VISIBLE && binding.etCategory.text!!.length <= 10) {
             binding.tilEtCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
             false
-        } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.spSubCategory.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spSubCategory
             ) == SELECT_SUB_CATEGORY
         ) {
             binding.tilSubCategory.setErrorMessages(MSG_SELECT_SUB_CATEGORY)
             false
-        } else if (binding.llActionables.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
+        } else if (binding.etSubCategory.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
             binding.tilEtSubCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
             false
         } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
