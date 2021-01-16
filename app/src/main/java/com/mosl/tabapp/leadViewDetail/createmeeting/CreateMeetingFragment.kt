@@ -86,6 +86,7 @@ import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
+import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -374,6 +375,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             if (it.size > 1) {
+                Timber.i("VisiBilityVisible")
                 binding.llSubcategory.visibility = View.VISIBLE
                 subCategoryAdapter.clear()
                 subCategoryAdapter.setSpinnerData(binding.spSubCategory, it)
@@ -830,13 +832,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
             binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
             false
-        } else if (binding.spActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spActionables
             ) == SELECT_ACTIONABLE
         ) {
             binding.tilActionables.setErrorMessages(MSG_SELECT_ACTIONABLE)
             false
-        } else if (binding.spCategory.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spCategory
             ) == SELECT_CATEGORY
         ) {
@@ -845,13 +847,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (binding.llActionables.visibility == View.VISIBLE && binding.etCategory.text!!.length <= 10) {
             binding.tilEtCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
             false
-        } else if (binding.spSubCategory.visibility == View.VISIBLE && getSelectedSpinnerValue(
+        } else if (binding.llSubcategory.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spSubCategory
             ) == SELECT_SUB_CATEGORY
         ) {
             binding.tilSubCategory.setErrorMessages(MSG_SELECT_SUB_CATEGORY)
             false
-        } else if (binding.etSubCategory.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
+        } else if (binding.llSubcategory.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
             binding.tilEtSubCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
             false
         } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
@@ -1011,6 +1013,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             binding.llActionables.visibility = View.VISIBLE
         } else {
             binding.llActionables.visibility = View.GONE
+            binding.llSubcategory.gone()
         }
     }
 
