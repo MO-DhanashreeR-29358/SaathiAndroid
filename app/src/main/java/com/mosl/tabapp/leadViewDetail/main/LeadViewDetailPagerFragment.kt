@@ -371,7 +371,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                             }
                         }
                     }
-                ucId = it.personalDetail.ucId
+                ucId = stringOrZero(it.personalDetail.ucId)
                 email = it.personalDetail.email
                 mobile = it.personalDetail.mobile
                 includeClient.detail.tvName.text = it.personalDetail.name
