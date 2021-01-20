@@ -4,15 +4,13 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dashboard_background"
-    >
+    android:background="@color/dashboard_background">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <include
             android:id="@+id/layoutTopSection"
@@ -46,16 +44,14 @@
             android:layout_margin="@dimen/margin_small"
             android:text="@string/btn_label_send_otp"
             android:textColor="@color/black"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/rlDate"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginTop="@dimen/_5sdp"
-            android:background="@drawable/list_bacground"
-            >
+            android:background="@drawable/list_bacground">
 
             <TextView
                 android:id="@+id/tvMeetingDate"
@@ -66,8 +62,7 @@
                 android:layout_marginStart="@dimen/_3sdp"
                 android:text="@string/txt_lable_meeting_date"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
 
             <TextView
                 android:id="@+id/tvDate"
@@ -77,8 +72,7 @@
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_toEndOf="@+id/tvMeetingDate"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivDatePicker"
@@ -87,8 +81,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_10sdp"
-                app:srcCompat="@drawable/ic_calendar"
-                />
+                app:srcCompat="@drawable/ic_calendar" />
 
         </RelativeLayout>
 
@@ -99,8 +92,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/txt_lable_product"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11sdp"
-            />
+            android:textSize="@dimen/_11sdp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_product"
@@ -118,8 +110,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProductList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
 
         <TextView
@@ -129,8 +120,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/txt_lable_meeting_duration"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11sdp"
-            />
+            android:textSize="@dimen/_11sdp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_duration"
@@ -153,8 +143,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/txt_lable_meeting_objective"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11sdp"
-            />
+            android:textSize="@dimen/_11sdp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_objective"
@@ -178,8 +167,7 @@
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/txt_lable_meeting_reason"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11sdp"
-            />
+            android:textSize="@dimen/_11sdp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_reason"
@@ -200,8 +188,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
-            app:errorTextAppearance="@style/error_appearance"
-            >
+            app:errorTextAppearance="@style/error_appearance">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etMeetingDescription"
@@ -211,8 +198,7 @@
                 android:hint="@string/hint_lable_enter_meeting_description"
                 android:inputType="textMultiLine"
                 android:maxLength="500"
-                android:textCursorDrawable="@null"
-                />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -227,14 +213,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:background="@drawable/list_bacground"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/llAttendee"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/tvAttendee"
@@ -246,8 +230,7 @@
                     android:paddingBottom="@dimen/_10sdp"
                     android:text="@string/txt_lable_attendee"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/tvAttendeeCount"
@@ -258,8 +241,7 @@
                     android:paddingTop="@dimen/_10sdp"
                     android:paddingBottom="@dimen/_10sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/ibAttendee"
@@ -268,22 +250,19 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:background="@color/white"
-                    android:src="@drawable/ic_plus"
-                    />
+                    android:src="@drawable/ic_plus" />
 
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/calendar_gray"
-                />
+                android:background="@color/calendar_gray" />
 
             <RelativeLayout
                 android:id="@+id/llSplAttendee"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:id="@+id/tvSplAttendee"
@@ -295,8 +274,7 @@
                     android:paddingBottom="@dimen/_10sdp"
                     android:text="@string/txt_lable_spl_attendee"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <TextView
                     android:id="@+id/tvSplAttendeeCount"
@@ -307,8 +285,7 @@
                     android:paddingTop="@dimen/_10sdp"
                     android:paddingBottom="@dimen/_10sdp"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/_12sdp"
-                    />
+                    android:textSize="@dimen/_12sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/ibSplAttendee"
@@ -317,8 +294,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerInParent="true"
                     android:background="@color/white"
-                    android:src="@drawable/ic_plus"
-                    />
+                    android:src="@drawable/ic_plus" />
 
             </RelativeLayout>
 
@@ -328,8 +304,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_3sdp"
-            app:hintTextAppearance="@style/InputLayout"
-            >
+            app:hintTextAppearance="@style/InputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etCustomerComment"
@@ -338,16 +313,14 @@
                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                 android:hint="@string/hint_lable_enter_customer_comment"
                 android:inputType="textMultiLine"
-                android:textCursorDrawable="@null"
-                />
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:id="@+id/llLocationGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvMeetingLocation"
@@ -355,8 +328,7 @@
                 android:layout_height="wrap_content"
                 android:text="Meeting Location*"
                 android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp"
-                />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_meeting_location"
@@ -379,8 +351,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txt_lable_travelling_mode"
                 android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp"
-                />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_travelling_mode"
@@ -401,8 +372,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTravellingList"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -410,8 +380,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout"
-                >
+                app:hintTextAppearance="@style/InputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etAmount"
@@ -432,8 +401,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:errorTextAppearance="@style/error_appearance"
-                >
+                app:errorTextAppearance="@style/error_appearance">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etLocation"
@@ -443,8 +411,7 @@
                     android:hint="@string/txt_lable_meeting_address"
                     android:inputType="textMultiLine"
                     android:maxLength="500"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -452,15 +419,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                />
+                app:hintEnabled="false" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout"
-                >
+                app:hintTextAppearance="@style/InputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPinCode"
@@ -471,8 +436,7 @@
                     android:maxLength="6"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -480,8 +444,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                />
+                app:hintEnabled="false" />
         </LinearLayout>
 
         <TextView
@@ -496,8 +459,7 @@
             android:text="@string/txt_lable_actionables"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="@dimen/_14sdp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
         <LinearLayout
@@ -506,8 +468,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             android:orientation="vertical"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -516,8 +477,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/txt_lable_actionables"
                 android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp"
-                />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_actionables"
@@ -539,8 +499,7 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:text="@string/txt_lable_category"
                 android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp"
-                />
+                android:textSize="@dimen/_11sdp" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_category"
@@ -562,8 +521,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintTextAppearance="@style/InputLayout"
-                >
+                app:hintTextAppearance="@style/InputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etCategory"
@@ -576,8 +534,7 @@
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
-                    android:textCursorDrawable="@null"
-                    />
+                    android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -585,15 +542,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
-                app:hintEnabled="false"
-                />
+                app:hintEnabled="false" />
 
             <LinearLayout
                 android:id="@+id/llSubcategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                >
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -602,8 +558,7 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text="@string/txt_lable_sub_category"
                     android:textColor="@color/text_color_personal"
-                    android:textSize="@dimen/_11sdp"
-                    />
+                    android:textSize="@dimen/_11sdp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_sub_category"
@@ -624,8 +579,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_3sdp"
                     app:errorTextAppearance="@style/error_appearance"
-                    app:hintTextAppearance="@style/InputLayout"
-                    >
+                    app:hintTextAppearance="@style/InputLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSubCategory"
@@ -638,8 +592,7 @@
                         android:overScrollMode="always"
                         android:scrollbarStyle="insideInset"
                         android:scrollbars="vertical"
-                        android:textCursorDrawable="@null"
-                        />
+                        android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -647,8 +600,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:errorTextAppearance="@style/error_appearance"
-                    app:hintEnabled="false"
-                    />
+                    app:hintEnabled="false" />
             </LinearLayout>
         </LinearLayout>
 
@@ -657,16 +609,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginBottom="@dimen/_10sdp"
-            android:gravity="center_horizontal"
-            >
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:text="@string/btn_lable_save"
-                android:textColor="@color/black"
-                />
+                android:textColor="@color/black" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnReset"
@@ -675,8 +625,7 @@
                 android:layout_marginStart="@dimen/_10sdp"
                 android:background="@color/calendar_gray2"
                 android:text="@string/btn_lable_reset"
-                android:textColor="@color/black"
-                />
+                android:textColor="@color/black" />
         </LinearLayout>
 
     </LinearLayout>

@@ -255,9 +255,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         }
     }
 
-    override fun getUcid(): String {
-        return ucId
-    }
+    override fun getUcid(): String = if (ucId.isEmpty()) "0" else ucId
 
     override fun getLeadId(): String {
         return leadId
@@ -373,7 +371,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                             }
                         }
                     }
-                ucId = it.personalDetail.ucId
+                ucId = stringOrZero(it.personalDetail.ucId)
                 email = it.personalDetail.email
                 mobile = it.personalDetail.mobile
                 includeClient.detail.tvName.text = it.personalDetail.name

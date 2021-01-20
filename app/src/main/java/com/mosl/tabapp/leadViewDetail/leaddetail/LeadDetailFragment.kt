@@ -1332,7 +1332,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 requireContext(),
                 0,
                 resources.getString(R.string.motilal_oswal),
-                CONFIRM_LEAD,
+                CONFIRM_LEAD_UPDATE,
                 getString(R.string.text_label_yes),
                 getString(R.string.text_label_no),
                 true
