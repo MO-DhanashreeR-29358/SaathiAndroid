@@ -21,7 +21,9 @@ public abstract class CreateMeetingModule {
     static CreateMeetingData provideMeetingData(CreateMeetingFragment fragment) {
         Bundle arguments = fragment.getArguments();
         if (arguments != null) {
-            String ucid = arguments.getString(ARG_UCID);
+            String ucid = arguments.getString(ARG_UCID,"0");
+            if(ucid.isEmpty())
+                ucid="0";
             String leadID = arguments.getString(ARG_LEAD_ID);
             if (ucid != null && leadID != null) {
                 return new CreateMeetingData(leadID, ucid);
