@@ -1034,7 +1034,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     interestIn,
                     leadMappingId,
                     interestIn,
-                    "",
+                    employeeCode,
                     productSpecialistId,
                     employeeCode,
                     CRMAppUtil.getDBDate(),
