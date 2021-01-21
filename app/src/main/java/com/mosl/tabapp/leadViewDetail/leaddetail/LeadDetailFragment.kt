@@ -28,6 +28,7 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.clientdetail.AdvisorsItem
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
@@ -383,6 +384,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             leadDetailAddProductList,
                             binding.lvAddProduct,
                             leadId,
+                            getPrimaryRM(),
                             isLeadEditable,
                             statusData,
                             statusAdapter,
@@ -408,6 +410,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
     }
+
+    private fun getPrimaryRM(): String =
+        if (isBlank(leadOwner.trim())) advisoryCode else leadOwner.trim()
 
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
         toggleProgressBar(uiModel.inProgress)
@@ -506,12 +511,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         override fun onSearchTextChanged(constraint: CharSequence?) {
                             if (constraint != null) {
 
-                                primaryRm = if (isBlank(leadOwne.trim())) {
+                                primaryRm = if (isBlank(leadOwner.trim())) {
                                     advisoryCode
                                 } else {
-                                    leadOwne
+                                    leadOwner
                                 }
-                                val rm = primaryRm!!
+                                val rm = primaryRm.nullSafe()
                                 productSpecialDialog = searchListProductSpecialist
                                 subject.onNext(
                                     ProductSpecialistEvent(
@@ -623,6 +628,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             leadDetailAddProductList,
                             binding.lvAddProduct,
                             leadId,
+                            getPrimaryRM(),
                             isLeadEditable,
                             statusData,
                             statusAdapter,
@@ -1768,7 +1774,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private val mLeadFieldSectionModelList = emptyList<LeadFieldSectionModel>()
 
-    private var leadOwne = ""
+    private var leadOwner = ""
 
     private fun LeadDetail.renderLeadDetail() {
         isLeadEditable = when {
@@ -1780,7 +1786,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             adapter = pmsProductAdapter
         }
 
-        leadOwne = leadOwner
+        this@LeadDetailFragment.leadOwner = leadOwner
 
         pmsProductAdapter.setSpinnerDataWithSelection(
             binding.spPmsProduct, pmsList, isPotentialPMSProduct
@@ -1952,6 +1958,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 leadDetailAddProductList,
                 binding.lvAddProduct,
                 leadId,
+                getPrimaryRM(),
                 isLeadEditable,
                 statusData,
                 statusAdapter,
@@ -2222,11 +2229,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun showFailureDialog(error: Throwable) {
         showOnFailurePopup(error)
-        noInternetConnectionDialog()
     }
 
     override fun showNoInternetDialog() {
         noInternetConnectionDialog()
+    }
+
+    override fun getErrorFailure(error: Throwable): String {
+        return getErrorOnFailureNew(error)
     }
 
     override fun toggleProgressDialog(inProgress: Boolean) {

@@ -18,6 +18,8 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.SaathiApi;
@@ -36,6 +38,8 @@ import com.mosl.saathi.api.model.lead.StageWiseConfiguration;
 import com.mosl.saathi.api.model.lead.StatusItem;
 import com.mosl.saathi.api.model.lead.StatusRequest;
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest;
+import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem;
+import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.CustomListPickerDialog;
@@ -44,18 +48,21 @@ import com.mosl.tabapp.databinding.DialogLeadviewAddCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding;
 import com.mosl.tabapp.databinding.DialogLeadviewUpdateCrossSellingProductBinding;
 import com.mosl.tabapp.databinding.IncludeEdittextLowmarginBinding;
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter;
 import com.mosl.tabapp.model.EmployeeModel;
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel;
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -64,6 +71,7 @@ import static com.mosl.shared.util.Utility.stringOrEmpty;
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
 import static com.mosl.tabapp.common.CRMMOSLCommon.setListViewHeightBasedOnChildren;
 import static com.mosl.tabapp.common.RowData.getSpinnerRowDataById;
+import static com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE;
 import static com.mosl.tabapp.constants.MOSLConstants.EQUITY;
 import static com.mosl.tabapp.constants.MOSLConstants.MF;
 import static com.mosl.tabapp.constants.MOSLConstants.NO;
@@ -91,7 +99,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     private String userBusinessUnitId;
     private String pmsProductSpinnerValue;
     private List<LeadDetailAddProductModel> leadDetailAddProductModelList;
-    private String specialistEdit = "";
+    private String specialistEdit = "", primaryRM = "";
     private CompositeDisposable disposable = new CompositeDisposable();
     private LeadDetailAddProductCallBack callBack;
 
@@ -126,6 +134,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 List<LeadDetailAddProductModel> leadDetailAddProductModelList,
                                 ListView addProductView,
                                 String leadId,
+                                String primaryRM,
                                 Boolean isLeadEditable,
                                 List<RowData> arrStatus,
                                 ArrayAdapter<RowData> arrAdapStatus,
@@ -140,6 +149,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         mContext = c;
         lvAddProduct = addProductView;
         etLeadId = leadId;
+        this.primaryRM = primaryRM;
         this.pmsProductSpinnerValue = pmsProductSpinnerValue;
         this.isLeadEditable = isLeadEditable;
         this.arrStatus = arrStatus;
@@ -830,10 +840,9 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         specialistEdit = productSpecialistId;
         dialogBinding.dacProductSpecialist.setClearIconVisible(true);
         dialogBinding.dacProductSpecialist.setHint(mContext.getString(R.string.str_prod_spl));
-        dialogBinding.dacProductSpecialist.setEnabled(isProductSpecEnabled.equals("1"));
+        dialogBinding.dacProductSpecialist.setEnabled(!isProductSpecEnabled.equals("1"));
         dialogBinding.dacProductSpecialist.setListener(() -> specialistEdit = "");
         dialogBinding.dacProductSpecialist.setOnClickListener(v -> {
-
             dialog.getWindow()
                     .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                             | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -860,7 +869,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
                         @Override
                         public void onSearchTextChanged(final CharSequence constraint) {
-                            //========  searchProductSpecialist(constraint, searchListProductSpecialist);
+                            searchProductSpecialist(constraint, searchListProductSpecialist);
                         }
                     };
             searchListProductSpecialist.setmListner(productSpecialistViewListner);
@@ -1007,6 +1016,70 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         dialog.show();
     }
 
+    private void searchProductSpecialist(@Nullable CharSequence constraint,
+                                         CustomListPickerDialog productSpecialistDialog) {
+        if (constraint == null) return;
+        ProductSpecialistRequest specialistRequest;
+        try {
+            specialistRequest =
+                    new ProductSpecialistRequest(
+                            URLEncoder.encode(constraint.toString(), "utf-8"),
+                            URLEncoder.encode(constraint.toString(), "utf-8"),
+                            primaryRM
+                    );
+        } catch (Exception ex) {
+            return;
+        }
+
+        if (CRMAppUtil.isNetworkEnabled(mContext)) {
+            disposable.add(
+                    saathiApi.getProductSpecialist(specialistRequest)
+                            .compose(applyUiModel())
+                            .subscribe(uiModel -> {
+                                if (uiModel.inProgress) {
+                                    productSpecialistDialog.showProgress(View.VISIBLE);
+                                } else {
+                                    productSpecialistDialog.showProgress(View.GONE);
+                                }
+
+                                Throwable error = uiModel.error;
+                                if (error != null) {
+                                    final ArrayList<EmployeeModel> modelList = new ArrayList<>();
+                                    modelList.add(EmployeeModel.getNoData(callBack.getErrorFailure(error)));
+                                    final AttendeeAdapter mYAdapter =
+                                            new AttendeeAdapter(mContext, modelList);
+                                    productSpecialistDialog.setAdapter(
+                                            mYAdapter);
+                                }
+
+                                List<ProductSpecialistItem> data = uiModel.data;
+                                if (data != null) {
+                                    final ArrayList<EmployeeModel> modelList = new ArrayList<>();
+                                    for (ProductSpecialistItem datum : data) {
+                                        if (employeeCode
+                                                .equalsIgnoreCase(datum.employeeCode)) {
+                                            continue;
+                                        }
+                                        modelList.add(new EmployeeModel(
+                                                stringOrEmpty(datum.employeeName),
+                                                stringOrEmpty(datum.employeeCode),
+                                                stringOrEmpty(datum.branchCode),
+                                                false));
+                                    }
+                                    if (modelList.isEmpty()) {
+                                        modelList.add(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE));
+                                    }
+                                    final AttendeeAdapter mYAdapter =
+                                            new AttendeeAdapter(mContext, modelList);
+                                    productSpecialistDialog.setAdapter(mYAdapter);
+                                }
+                            }));
+        } else {
+            callBack.showNoInternetDialog();
+        }
+    }
+
+
     private Map lowMarginSubmit(List<LowMargin> lowMarginList) {
         Map inputMap = new HashMap();
         for (LowMargin model : lowMarginList) {
@@ -1034,7 +1107,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                     interestIn,
                     leadMappingId,
                     interestIn,
-                    employeeCode,
+                    primaryRM,
                     productSpecialistId,
                     employeeCode,
                     CRMAppUtil.getDBDate(),
