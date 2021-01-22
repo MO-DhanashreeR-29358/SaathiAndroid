@@ -28,7 +28,6 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
-import com.mosl.saathi.api.model.clientdetail.AdvisorsItem
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
@@ -1373,10 +1372,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tlPan.setErrorMessages(getString(it))
                 10 ->
                     binding.tlAadhar.setErrorMessages(getString(it))
-                11, 12 ->
-                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                11 ->
+                    binding.tlProspectRefereeName.setErrorMessages(getString(it))
+                12 ->
+                    binding.tlProspectRefereeMob.setErrorMessages(getString(it))
                 13 ->
-                    binding.tlRefereeEmail.setErrorMessages(getString(it))
+                    binding.tlProspectRefereeEmail.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1396,8 +1397,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlAadhar.disableErrorMessages()
             tlRefereeCode.disableErrorMessages()
             tlRefereeName.disableErrorMessages()
-            tlRefereeName.disableErrorMessages()
-            tlRefereeNumber.disableErrorMessages()
+            tlProspectRefereeEmail.disableErrorMessages()
+            tlProspectRefereeMob.disableErrorMessages()
+            tlProspectRefereeName.disableErrorMessages()
             tlPin.disableErrorMessages()
             tlOffPin.disableErrorMessages()
 
@@ -1792,6 +1794,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.spPmsProduct, pmsList, isPotentialPMSProduct
         )
         binding.etProspectRefereerEmail.setText(prospectReferEmail)
+        binding.etProspectRefereerMobile.setText(prospectRefereeMobile)
         binding.etProspectRefereeName.setText(prospectReferName)
         binding.etRefereeCode.setText(refereeCode)
         binding.etRefereeName.setText(refereeName)
@@ -1840,6 +1843,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etSource.setText(sourceName)
 
         binding.etLeadCategory.setText(leadCategoryText)
+        val dataProfession = RowData.getSpinnerRowDataByValue(profession, professionAdapter)
+        dataProfession?.let {
+            binding.spProfession.setSelection(it.position)
+        }
+
+        val dataProfile = RowData.getSpinnerRowDataByValue(profile, profileAdapter)
+        dataProfile?.let {
+            binding.spProfile.setSelection(it.position)
+        }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()
@@ -1851,6 +1863,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
         binding.run {
+            cbSameAs.isChecked = isSameAsAbove
             etPanNumber.setText(panNumber)
             etAadharNumber.setText(aadharNumber)
             etEkycMobileNumber.setText(eKYCMobileNo)
@@ -2245,6 +2258,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun hideKeyBoard(view: View) {
         hideKeyboard(view)
+    }
+
+    override fun openHome() {
+        navigator.openHome()
     }
 
 }

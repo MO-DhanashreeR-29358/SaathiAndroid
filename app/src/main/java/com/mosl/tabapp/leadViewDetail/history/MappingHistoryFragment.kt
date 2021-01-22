@@ -50,7 +50,7 @@ class MappingHistoryFragment : CommonFragment(), MappingHistoryView {
   }
 
   private fun setUpView() {
-    binding.nestedScrollView.apply {
+    /*binding.nestedScrollView.apply {
       descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
       isFocusable = true
       isFocusableInTouchMode = true
@@ -58,7 +58,7 @@ class MappingHistoryFragment : CommonFragment(), MappingHistoryView {
         v.requestFocusFromTouch()
         false
       }
-    }
+    }*/
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = MappingHistoryTableMapper.header(requireContext()) as DynamicHeaderRow
     val mfAdapter =

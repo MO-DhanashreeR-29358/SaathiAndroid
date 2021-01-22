@@ -62,7 +62,6 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.disposables.CompositeDisposable;
-import timber.log.Timber;
 
 import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -1128,11 +1127,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
 
     private void renderUpdateLeadProductMapping(UiModel<List<LeadProductMappingItem>> uiModel,
                                                 UpdateLeadMappingRequest mappingRequest, LinearLayout progressLayout) {
-        if (uiModel.inProgress) {
-            progressLayout.setVisibility(View.VISIBLE);
-        } else {
-            progressLayout.setVisibility(View.GONE);
-        }
+        callBack.toggleProgressDialog(uiModel.inProgress);
         Throwable error = uiModel.error;
         if (error != null) {
             callBack.showFailureDialog(error);
@@ -1141,7 +1136,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         List<LeadProductMappingItem> data = uiModel.data;
         if (data != null) {
             if (isLowMargin) {
-                //====     navigator.openHome();
+                callBack.openHome();
             } else {
                 for (LeadProductMappingItem datum : data) {
                     String potentialPMSProduct = stringOrEmpty(datum.isPotentialPMSProduct);
@@ -1155,7 +1150,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 mappingRequest.stageName,
                                 mappingRequest.statusID,
                                 mappingRequest.statusValue,
-                                mappingRequest.productSpecialist,
+                                datum.productSpecialistName,
                                 mappingRequest.actAssignTo
                         );
                     }

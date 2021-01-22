@@ -25,4 +25,6 @@ interface LeadDetailAddProductCallBack {
     fun toggleProgressDialog(inProgress: Boolean)
 
     fun hideKeyBoard(view: View)
+
+    fun openHome()
 }
