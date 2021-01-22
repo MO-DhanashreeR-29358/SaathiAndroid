@@ -60,6 +60,7 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -76,6 +77,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var ucId = DEFAULT_SELECTION_ID
     private var sourceIdStr = ""
     private var leadProspectSourceIdStr = ""
+    private var isSameAsAbove = false
 
     private var stage: String? = null
     private var status: String? = null
@@ -88,6 +90,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private var selectedCityId = DEFAULT_SELECTION_ID
     private var selectedCityOffId = DEFAULT_SELECTION_ID
+    private var selectedStateId = DEFAULT_SELECTION_ID
+    private var selectedStateOffId = DEFAULT_SELECTION_ID
     private var pmsList: List<String> = emptyList()
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
@@ -1367,16 +1371,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 7 ->
                     binding.tlAlternateMobile.setErrorMessages(getString(it))
                 8 ->
-                    binding.tlLand.setErrorMessages(getString(it))
+                    binding.tlEkycMobile.setErrorMessages(getString(it))
                 9 ->
-                    binding.tlPan.setErrorMessages(getString(it))
+                    binding.tlLand.setErrorMessages(getString(it))
                 10 ->
-                    binding.tlAadhar.setErrorMessages(getString(it))
+                    binding.tlPan.setErrorMessages(getString(it))
                 11 ->
-                    binding.tlProspectRefereeName.setErrorMessages(getString(it))
+                    binding.tlAadhar.setErrorMessages(getString(it))
                 12 ->
-                    binding.tlProspectRefereeMob.setErrorMessages(getString(it))
+                    binding.tlProspectRefereeName.setErrorMessages(getString(it))
                 13 ->
+                    binding.tlProspectRefereeMob.setErrorMessages(getString(it))
+                14 ->
                     binding.tlProspectRefereeEmail.setErrorMessages(getString(it))
                 else -> {
                 }
@@ -1731,6 +1737,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etDob.isEnabled = status
             etAnniversary.isEnabled = status
             etAlternateMobileNumber.isEnabled = status
+            etEkycMobileNumber.isEnabled = status
             etAlternateEmail.isEnabled = status
             etEmail.isEnabled = status
             etContactPerson.isEnabled = status
@@ -1863,7 +1870,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
         binding.run {
-            cbSameAs.isChecked = isSameAsAbove
+            this@LeadDetailFragment.isSameAsAbove = isSameAsAbove
             etPanNumber.setText(panNumber)
             etAadharNumber.setText(aadharNumber)
             etEkycMobileNumber.setText(eKYCMobileNo)
@@ -1903,20 +1910,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etAdd2.setText(address2)
                         binding.etAdd3.setText(address3)
                         binding.etPincode.setText(pincode)
+                        selectedStateId = stateID.toString()
+                        selectedCityId = cityID.toString()
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString(),
                             countryAdapter
                         )
                         dataCountry?.run {
                             binding.spCountry.setSelection(position)
-                        }
-                        val dataState = RowData.getSpinnerRowDataById(
-                            stateID.toString(),
-                            stateAdapter
-                        )
-                        dataState?.run {
-                            binding.spState.setSelection(position)
-                            selectedCityId = cityID.toString()
                         }
                         if (isPrimary)
                             binding.handleWhenPrimaryAddChecked()
@@ -1929,6 +1930,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etOffAdd2.setText(address2)
                         binding.etOffAdd3.setText(address3)
                         binding.etOffPincode.setText(pincode)
+                        selectedStateOffId = stateID.toString()
+                        selectedCityOffId = cityID.toString()
+
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString(),
                             countryAdapterOff
@@ -1942,7 +1946,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         )
                         dataState?.run {
                             binding.spOffState.setSelection(position)
-                            selectedCityOffId = cityID.toString()
                         }
                     }
                     else -> {
@@ -2085,6 +2088,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
+            /*val dataState = RowData.getSpinnerRowDataById(
+                10.toString(),
+                stateAdapter
+            )
+            dataState?.run {
+                binding.spState.setSelection(position)
+            }*/
+            Timber.i("%s SelectedStateId=>>>", selectedStateId)
+            if (selectedStateId != DEFAULT_SELECTION_ID) {
+                stateAdapter.getItems().single { it1 -> it1.key == selectedStateId }.apply {
+                    binding.spState.setSelection(position)
+                    selectedStateId = DEFAULT_SELECTION_ID
+                }
+            }
             binding.spCity.setSpinnerData(cityAdapter, defaultSelectionList)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
@@ -2097,6 +2114,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
+            Timber.i("%s SelectedStateId=>>>Off", selectedStateId)
+            if (selectedStateOffId != DEFAULT_SELECTION_ID) {
+                stateAdapterOff.getItems().single { it1 -> it1.key == selectedStateOffId }.apply {
+                    binding.spOffState.setSelection(position)
+                    selectedStateOffId = DEFAULT_SELECTION_ID
+                }
+            }
             binding.spOffCity.setSpinnerData(cityAdapterOff, defaultSelectionList)
         }
     }
@@ -2106,36 +2130,55 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
-            if (selectedCityId != DEFAULT_SELECTION_ID) {
-                val dataCity = RowData.getSpinnerRowDataById(
-                    selectedCityId,
-                    cityAdapter
-                )
-                dataCity?.run {
+            Timber.i("%s SelectedId=>>>", selectedCityId)
+            if (selectedCityOffId != DEFAULT_SELECTION_ID) {
+                cityAdapter.getItems().single { it1 -> it1.key == selectedCityId }.apply {
                     binding.spCity.setSelection(position)
                     selectedCityId = DEFAULT_SELECTION_ID
                 }
             }
+            /*if (selectedCityId != DEFAULT_SELECTION_ID) {
+                val dataCity = RowData.getSpinnerRowDataById(
+                    selectedCityId,
+                    cityAdapter
+                )
+                Timber.i("%s SelectedOffId=>>>",selectedCityId)
+                dataCity?.let{
+                    binding.spCity.setSelection(it.position)
+                    selectedCityId = DEFAULT_SELECTION_ID
+                }
+            }*/
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
-            }
+            }/*
+            if (isSameAsAbove) {
+                binding.cbSameAs.isChecked = isSameAsAbove
+                isSameAsAbove = false
+            }*/
         }
     }
 
     override fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { toggleProgressBar(uiModel.inProgress) }
-        uiModel.onSuccess {
+        uiModel.onSuccess { it ->
             binding.spOffCity.setSpinnerData(cityAdapterOff, it)
+            Timber.i("%s SelectedId=>>>Off", selectedCityOffId)
             if (selectedCityOffId != DEFAULT_SELECTION_ID) {
+                cityAdapterOff.getItems().single { it.key == selectedCityOffId }.let {
+                    binding.spOffCity.setSelection(it.position)
+                    selectedCityOffId = DEFAULT_SELECTION_ID
+                }
+//                binding.cbSameAs.isChecked = isSameAsAbove
+                /*
                 val dataCity = RowData.getSpinnerRowDataById(
                     selectedCityOffId,
                     cityAdapterOff
                 )
-                dataCity?.run {
-                    binding.spOffCity.setSelection(position)
+                dataCity?.let {
+                    binding.spOffCity.setSelection(it.position)
                     selectedCityOffId = DEFAULT_SELECTION_ID
-                }
+                }*/
             }
         }
     }

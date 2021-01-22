@@ -839,7 +839,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         specialistEdit = productSpecialistId;
         dialogBinding.dacProductSpecialist.setClearIconVisible(true);
         dialogBinding.dacProductSpecialist.setHint(mContext.getString(R.string.str_prod_spl));
-        dialogBinding.dacProductSpecialist.setEnabled(!isProductSpecEnabled.equals("1"));
+//        dialogBinding.dacProductSpecialist.setEnabled(!isProductSpecEnabled.equals("1"));
         dialogBinding.dacProductSpecialist.setListener(() -> specialistEdit = "");
         dialogBinding.dacProductSpecialist.setOnClickListener(v -> {
             dialog.getWindow()

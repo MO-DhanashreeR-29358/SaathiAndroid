@@ -291,7 +291,7 @@ class LeadDetailPresenter @Inject constructor(
         view.onOfficeCountrySelected()
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedOfficeCountry() }
-            .filter { !view.isSameAsAboveChecked() }
+            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY && !view.isSameAsAboveChecked() }
             .switchMap {
                 repository.getStateRowDatas(it.key)
                     .compose(applyUiModel())
