@@ -76,7 +76,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var ucId = DEFAULT_SELECTION_ID
     private var sourceIdStr = ""
     private var leadProspectSourceIdStr = ""
-    private var isSameAsAbove = false
 
     private var stage: String? = null
     private var status: String? = null
@@ -1722,10 +1721,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun setEnableDisable(status: Boolean) {
         binding.apply {
-            if (isSameAsAbove) {
-                binding.cbSameAs.isChecked = isSameAsAbove
-                isSameAsAbove = false
-            }
             etLeadName.isEnabled = status
             etPanNumber.isEnabled = status
             etAadharNumber.isEnabled = status
@@ -1873,7 +1868,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
         binding.run {
-            this@LeadDetailFragment.isSameAsAbove = isSameAsAbove
+            cbSameAs.isChecked = isSameAsAbove
             etPanNumber.setText(panNumber)
             etAadharNumber.setText(aadharNumber)
             etEkycMobileNumber.setText(eKYCMobileNo)
@@ -2096,6 +2091,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
     override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
+        if (cityAdapterOff.getItems().size == CONST_DEFAULT_SELECTION_SIZE)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
         binding.spOffCity.setSelection(position)
     }
 
@@ -2254,6 +2251,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         const val CONST_INNER = "Outer"
         const val DEFAULT_SELECTION_ID = "-1"
         const val CONST_HYPHEN_PREFIX = "-"
+        const val CONST_DEFAULT_SELECTION_SIZE = 1
 
     }
 
