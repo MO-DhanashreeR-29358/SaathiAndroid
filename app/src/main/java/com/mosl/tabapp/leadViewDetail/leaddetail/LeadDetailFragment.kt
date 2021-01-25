@@ -355,7 +355,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     requireActivity(), 0,
                     resources.getString(
                         R.string.motilal_oswal
-                    ), "${getString(R.string.text_msg_success_add_product)}$leadID",
+                    ), getString(R.string.text_msg_success_add_product),
                     getString(R.string.button_label_ok), true
                 ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
