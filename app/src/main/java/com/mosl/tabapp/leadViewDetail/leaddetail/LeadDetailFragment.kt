@@ -1756,10 +1756,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     enableField(llOffAdd)
                     enableField(llResAdd)
                 }
+                if (cbSameAs.isChecked)
+                    disableField(llOffAdd)
             } else {
                 disableField(llOffAdd)
                 disableField(llResAdd)
             }
+
             if (mLeadFieldSectionModelList.isNotEmpty()) {
                 for (mSection in mLeadFieldSectionModelList) {
                     if (mSection.selectionList != null) {
@@ -2091,8 +2094,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
     override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
-        if (cityAdapterOff.getItems().size == CONST_DEFAULT_SELECTION_SIZE)
-            binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
+        binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
         binding.spOffCity.setSelection(position)
     }
 
