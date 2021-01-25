@@ -1902,7 +1902,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     private fun List<ContactAddressItem>.renderContactAddresses() {
-        makeAddressinLoop(this)
         forEach {
             it.run {
                 when (addressTypeID) {
@@ -1966,16 +1965,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
     }
-
-    private fun makeAddressinLoop(list: List<ContactAddressItem>) {
-        list.apply {
-            if (size == 2) {
-                if (get(0).addressTypeID == OFFICEADDRESS)
-                    Collections.swap(this, 0, 1);
-            }
-        }
-    }
-
 
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
 
