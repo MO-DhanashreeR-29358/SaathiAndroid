@@ -294,6 +294,7 @@ public interface MOSLConstants extends LabelConfig {
   String mFormat = "yyyy-MM-dd'T'kk:mm:ss";
   //   String CAL_DATE_FORMAT="dd/MMM/yyyy";
   String CAL_DATE_FORMAT = "dd-MM-yyyy";
+  String CAL_DATE_FORMAT_WITH_TIME = "dd-MM-yyyy' 'kk:mm:ss";
   String mFormatWithSpace = "yyyy-MM-dd' 'kk:mm:ss";
   String mFormatWithDash = "yyyy-MM-dd'-'kk:mm:ss";
   String DATE_FORMAT_TO_DISPLAY = "dd MMM yyyy hh:mm a";

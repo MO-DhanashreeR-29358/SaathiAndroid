@@ -1,7 +1,7 @@
 package com.mosl.mobile.domain.leadviewdetail.history
 
 data class MappingHistoryData(
-  @JvmField val data: List<String>
+  @JvmField var data: List<String>
 )
 
 data class MappingHistoryCombo(
