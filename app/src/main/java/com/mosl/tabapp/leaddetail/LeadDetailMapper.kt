@@ -8,6 +8,7 @@ import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.nullSafe
 
 fun List<ProductSpecialistItem>.productItemsToLeadEmployees(): List<LeadEmployees> {
   return mapNotNull {
@@ -64,6 +65,7 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       canEditLead = canEditLead.toString(),
       isProductSpecialist = isProductSpecialist ?: emptyString(),
       prospectReferEmail = prospectRefereEmail ?: emptyString(),
+      prospectRefereeMobile = prospectRefereMobile.nullSafe(),
       prospectReferName = prospectRefereName ?: emptyString(),
       contact = contact,
       leadProductMapping = leadProductMapping,

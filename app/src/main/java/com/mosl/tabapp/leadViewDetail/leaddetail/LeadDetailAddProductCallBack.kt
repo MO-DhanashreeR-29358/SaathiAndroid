@@ -20,7 +20,11 @@ interface LeadDetailAddProductCallBack {
 
     fun showNoInternetDialog()
 
+    fun getErrorFailure(error: Throwable): String
+
     fun toggleProgressDialog(inProgress: Boolean)
 
     fun hideKeyBoard(view: View)
+
+    fun openHome()
 }

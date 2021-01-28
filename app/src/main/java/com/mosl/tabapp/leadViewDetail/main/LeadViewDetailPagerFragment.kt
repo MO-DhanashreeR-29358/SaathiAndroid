@@ -108,6 +108,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         ) { tab, position ->
             tab.text = tabArray[position]
         }.attach()
+        binding.vpLeadView.isUserInputEnabled = false
     }
 
     override fun extractArguments(bundle: Bundle) {
