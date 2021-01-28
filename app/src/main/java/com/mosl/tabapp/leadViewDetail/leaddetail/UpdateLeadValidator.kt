@@ -44,7 +44,7 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
             contact.alternateMobileNo.run {
                 isNotBlank() &&
                         length <= 10 && !matches(
-                        "^[6789]\\d{9}$".toRegex()
+                    "^[6789]\\d{9}$".toRegex()
                 )
             } -> {
                 identifier = 6
@@ -59,37 +59,47 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
                 R.string.error_message_same_mobile
             }
 
-            contact.landlineNo.run { isNotBlank() && invalidLandLine() } -> {
+            contact.eKYCMobileNo.run {
+                isNotBlank() &&
+                        length <= 10 && !matches(
+                    "^[6789]\\d{9}$".toRegex()
+                )
+            } -> {
                 identifier = 8
+                R.string.error_message_invalid_mobile
+            }
+
+            contact.landlineNo.run { isNotBlank() && invalidLandLine() } -> {
+                identifier = 9
                 R.string.error_message_invalid_landline
             }
 
             contact.panNumber.run { isNotBlank() && invalidPan() } -> {
-                identifier = 9
+                identifier = 10
                 R.string.error_message_invalid_pan
             }
 
             contact.aadharNumber.run { isNotBlank() && invalidAadhar() } -> {
-                identifier = 10
+                identifier = 11
                 R.string.error_message_invalid_aadhar
             }
 
             input.refereeName.run { isNotBlank() && invalidAlphaNumbric() } -> {
-                identifier = 11
+                identifier = 12
                 R.string.error_message_alphabets
             }
 
             input.prospectRefereMobile.run {
                 isNotBlank() && length <= 10 && !matches(
-                        "^[6789]\\d{9}$".toRegex()
+                    "^[6789]\\d{9}$".toRegex()
                 )
             } -> {
-                identifier = 12
+                identifier = 13
                 R.string.error_message_invalid_mobile
             }
 
             input.prospectRefereEmail.run { isNotBlank() && invalidEmail() } -> {
-                identifier = 13
+                identifier = 14
                 R.string.error_message_invalid_email
             }
 
@@ -100,19 +110,19 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
         }
 
         return returnValidationResult(
-                errorMessageRes,
-                actionOnError = {
-                    withError(error = requireNotNull(errorMessageRes), identifier = identifier)
-                },
-                actionOnSuccess = { withData("Input is correct") }
+            errorMessageRes,
+            actionOnError = {
+                withError(error = requireNotNull(errorMessageRes), identifier = identifier)
+            },
+            actionOnSuccess = { withData("Input is correct") }
         )
 
     }
 
     private inline fun returnValidationResult(
-            @StringRes errorMessageRes: Int?,
-            actionOnError: (Int) -> ValidationResult<String>,
-            actionOnSuccess: () -> ValidationResult<String>
+        @StringRes errorMessageRes: Int?,
+        actionOnError: (Int) -> ValidationResult<String>,
+        actionOnSuccess: () -> ValidationResult<String>
     ): ValidationResult<String> {
         return if (errorMessageRes != null)
             actionOnError(errorMessageRes)

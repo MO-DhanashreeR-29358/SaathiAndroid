@@ -33,6 +33,7 @@ data class LeadDetail(
     @JvmField val canEditLead: String,
     @JvmField val isProductSpecialist: String,
     @JvmField val prospectReferEmail: String,
+    @JvmField val prospectRefereeMobile: String,
     @JvmField val prospectReferName: String,
     @JvmField val leadProductMapping: List<LeadProductMappingItem>?,
     @JvmField val leadSourceId: Int, //Himanshu

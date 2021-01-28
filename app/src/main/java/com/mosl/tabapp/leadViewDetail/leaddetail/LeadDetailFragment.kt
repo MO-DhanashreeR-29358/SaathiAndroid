@@ -88,6 +88,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private var selectedCityId = DEFAULT_SELECTION_ID
     private var selectedCityOffId = DEFAULT_SELECTION_ID
+    private var selectedStateId = DEFAULT_SELECTION_ID
+    private var selectedStateOffId = DEFAULT_SELECTION_ID
     private var pmsList: List<String> = emptyList()
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
@@ -353,7 +355,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     requireActivity(), 0,
                     resources.getString(
                         R.string.motilal_oswal
-                    ), "${getString(R.string.text_msg_success_add_product)}$leadID",
+                    ), getString(R.string.text_msg_success_add_product),
                     getString(R.string.button_label_ok), true
                 ) { action: Action, _: Array<Any?>? ->
                     if (action == OK) {
@@ -383,6 +385,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             leadDetailAddProductList,
                             binding.lvAddProduct,
                             leadId,
+                            getPrimaryRM(),
                             isLeadEditable,
                             statusData,
                             statusAdapter,
@@ -408,6 +411,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
     }
+
+    private fun getPrimaryRM(): String =
+        if (isBlank(leadOwner.trim())) advisoryCode else leadOwner.trim()
 
     override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
         toggleProgressBar(uiModel.inProgress)
@@ -506,12 +512,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         override fun onSearchTextChanged(constraint: CharSequence?) {
                             if (constraint != null) {
 
-                                primaryRm = if (isBlank(leadOwne.trim())) {
+                                primaryRm = if (isBlank(leadOwner.trim())) {
                                     advisoryCode
                                 } else {
-                                    leadOwne
+                                    leadOwner
                                 }
-                                val rm = primaryRm!!
+                                val rm = primaryRm.nullSafe()
                                 productSpecialDialog = searchListProductSpecialist
                                 subject.onNext(
                                     ProductSpecialistEvent(
@@ -623,6 +629,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             leadDetailAddProductList,
                             binding.lvAddProduct,
                             leadId,
+                            getPrimaryRM(),
                             isLeadEditable,
                             statusData,
                             statusAdapter,
@@ -1362,15 +1369,19 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 7 ->
                     binding.tlAlternateMobile.setErrorMessages(getString(it))
                 8 ->
-                    binding.tlLand.setErrorMessages(getString(it))
+                    binding.tlEkycMobile.setErrorMessages(getString(it))
                 9 ->
-                    binding.tlPan.setErrorMessages(getString(it))
+                    binding.tlLand.setErrorMessages(getString(it))
                 10 ->
+                    binding.tlPan.setErrorMessages(getString(it))
+                11 ->
                     binding.tlAadhar.setErrorMessages(getString(it))
-                11, 12 ->
-                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                12 ->
+                    binding.tlProspectRefereeName.setErrorMessages(getString(it))
                 13 ->
-                    binding.tlRefereeEmail.setErrorMessages(getString(it))
+                    binding.tlProspectRefereeMob.setErrorMessages(getString(it))
+                14 ->
+                    binding.tlProspectRefereeEmail.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1390,8 +1401,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlAadhar.disableErrorMessages()
             tlRefereeCode.disableErrorMessages()
             tlRefereeName.disableErrorMessages()
-            tlRefereeName.disableErrorMessages()
-            tlRefereeNumber.disableErrorMessages()
+            tlProspectRefereeEmail.disableErrorMessages()
+            tlProspectRefereeMob.disableErrorMessages()
+            tlProspectRefereeName.disableErrorMessages()
             tlPin.disableErrorMessages()
             tlOffPin.disableErrorMessages()
 
@@ -1723,6 +1735,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etDob.isEnabled = status
             etAnniversary.isEnabled = status
             etAlternateMobileNumber.isEnabled = status
+            etEkycMobileNumber.isEnabled = status
             etAlternateEmail.isEnabled = status
             etEmail.isEnabled = status
             etContactPerson.isEnabled = status
@@ -1743,10 +1756,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     enableField(llOffAdd)
                     enableField(llResAdd)
                 }
+                if (cbSameAs.isChecked)
+                    disableField(llOffAdd)
             } else {
                 disableField(llOffAdd)
                 disableField(llResAdd)
             }
+
             if (mLeadFieldSectionModelList.isNotEmpty()) {
                 for (mSection in mLeadFieldSectionModelList) {
                     if (mSection.selectionList != null) {
@@ -1768,7 +1784,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private val mLeadFieldSectionModelList = emptyList<LeadFieldSectionModel>()
 
-    private var leadOwne = ""
+    private var leadOwner = ""
 
     private fun LeadDetail.renderLeadDetail() {
         isLeadEditable = when {
@@ -1780,12 +1796,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             adapter = pmsProductAdapter
         }
 
-        leadOwne = leadOwner
+        this@LeadDetailFragment.leadOwner = leadOwner
 
         pmsProductAdapter.setSpinnerDataWithSelection(
             binding.spPmsProduct, pmsList, isPotentialPMSProduct
         )
         binding.etProspectRefereerEmail.setText(prospectReferEmail)
+        binding.etProspectRefereerMobile.setText(prospectRefereeMobile)
         binding.etProspectRefereeName.setText(prospectReferName)
         binding.etRefereeCode.setText(refereeCode)
         binding.etRefereeName.setText(refereeName)
@@ -1834,6 +1851,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etSource.setText(sourceName)
 
         binding.etLeadCategory.setText(leadCategoryText)
+        val dataProfession = RowData.getSpinnerRowDataByValue(profession, professionAdapter)
+        dataProfession?.let {
+            binding.spProfession.setSelection(it.position)
+        }
+
+        val dataProfile = RowData.getSpinnerRowDataByValue(profile, profileAdapter)
+        dataProfile?.let {
+            binding.spProfile.setSelection(it.position)
+        }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()
@@ -1845,6 +1871,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
         binding.run {
+            cbSameAs.isChecked = isSameAsAbove
             etPanNumber.setText(panNumber)
             etAadharNumber.setText(aadharNumber)
             etEkycMobileNumber.setText(eKYCMobileNo)
@@ -1884,6 +1911,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etAdd2.setText(address2)
                         binding.etAdd3.setText(address3)
                         binding.etPincode.setText(pincode)
+                        selectedStateId = stateID.toString()
+                        selectedCityId = cityID.toString()
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString(),
                             countryAdapter
@@ -1910,6 +1939,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         binding.etOffAdd2.setText(address2)
                         binding.etOffAdd3.setText(address3)
                         binding.etOffPincode.setText(pincode)
+                        selectedStateOffId = stateID.toString()
+                        selectedCityOffId = cityID.toString()
+
                         val dataCountry = RowData.getSpinnerRowDataById(
                             countryID.toString(),
                             countryAdapterOff
@@ -1934,7 +1966,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
-
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
 
     private fun List<LeadProductMappingItem>.renderMapping() {
@@ -1952,6 +1983,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 leadDetailAddProductList,
                 binding.lvAddProduct,
                 leadId,
+                getPrimaryRM(),
                 isLeadEditable,
                 statusData,
                 statusAdapter,
@@ -2051,6 +2083,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
     override fun renderOnCitySelectAndSameAsAboveChecked(position: Int) {
+        binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
         binding.spOffCity.setSelection(position)
     }
 
@@ -2065,6 +2098,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
+            if (selectedStateId != DEFAULT_SELECTION_ID) {
+                val dataState = RowData.getSpinnerRowDataById(
+                    selectedStateId,
+                    stateAdapter
+                )
+                dataState?.let {
+                    binding.spState.setSelection(it.position)
+                    selectedStateId = DEFAULT_SELECTION_ID
+                }
+            }
             binding.spCity.setSpinnerData(cityAdapter, defaultSelectionList)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCountry.setSelection(binding.spCountry.selectedItemPosition)
@@ -2077,6 +2120,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
+            if (selectedStateOffId != DEFAULT_SELECTION_ID) {
+                val dataStateOff = RowData.getSpinnerRowDataById(
+                    selectedStateOffId,
+                    stateAdapterOff
+                )
+                dataStateOff?.let {
+                    binding.spOffState.setSelection(it.position)
+                    selectedStateOffId = DEFAULT_SELECTION_ID
+                }
+            }
             binding.spOffCity.setSpinnerData(cityAdapterOff, defaultSelectionList)
         }
     }
@@ -2091,8 +2144,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     selectedCityId,
                     cityAdapter
                 )
-                dataCity?.run {
-                    binding.spCity.setSelection(position)
+                dataCity?.let {
+                    binding.spCity.setSelection(it.position)
                     selectedCityId = DEFAULT_SELECTION_ID
                 }
             }
@@ -2189,6 +2242,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         const val CONST_INNER = "Outer"
         const val DEFAULT_SELECTION_ID = "-1"
         const val CONST_HYPHEN_PREFIX = "-"
+        const val CONST_DEFAULT_SELECTION_SIZE = 1
 
     }
 
@@ -2222,11 +2276,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun showFailureDialog(error: Throwable) {
         showOnFailurePopup(error)
-        noInternetConnectionDialog()
     }
 
     override fun showNoInternetDialog() {
         noInternetConnectionDialog()
+    }
+
+    override fun getErrorFailure(error: Throwable): String {
+        return getErrorOnFailureNew(error)
     }
 
     override fun toggleProgressDialog(inProgress: Boolean) {
@@ -2235,6 +2292,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun hideKeyBoard(view: View) {
         hideKeyboard(view)
+    }
+
+    override fun openHome() {
+        navigator.openHome()
     }
 
 }
