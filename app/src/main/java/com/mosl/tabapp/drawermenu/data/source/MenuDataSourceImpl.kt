@@ -27,7 +27,7 @@ open class MenuDataSourceImpl @Inject constructor(
                     getAuSalesBank(user.isCheckApprovalEnable())
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable())
+                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 user.isEkycEnable() -> {
                     getEkycUserMenu(menuItems, user.isCheckApprovalEnable())
@@ -130,10 +130,11 @@ open class MenuDataSourceImpl @Inject constructor(
 
     protected fun getSMTUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean,
+        isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -152,9 +153,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         } else {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -172,8 +175,17 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         }
+    }
+
+    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean): List<BaseMenu> {
+        if (isPrimeUser) {
+            add(3, getPrimeEntry())
+        }
+        return this
     }
 
     protected fun getAufsbUserMenu(): List<BaseMenu> {
@@ -356,6 +368,15 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_SIP_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_SIP
+        )
+    }
+
+    internal fun getPrimeEntry(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_sip,
+            label = R.string.MOSL_MENU_PRIME_ENTRY_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_PRIME_ENTRY
         )
     }
 

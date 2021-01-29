@@ -32,6 +32,8 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_KEY
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
@@ -68,6 +70,10 @@ object MenuGetterNew {
 
             NavigationConstants.NAVIGATE_TO_SIP -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, SIP_ID)
+                arguments = args
+            }
+            NavigationConstants.NAVIGATE_TO_PRIME_ENTRY -> WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, PRIME_ENTRY_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_RESUME_APPLICATION -> WebviewFragment()
@@ -134,6 +140,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> true
             NavigationConstants.NAVIGATE_TO_MOST_GUIDE -> true
             NavigationConstants.NAVIGATE_TO_SIP -> true
+            NavigationConstants.NAVIGATE_TO_PRIME_ENTRY -> true
             NavigationConstants.NAVIGATE_TO_SETTING -> true
             NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
