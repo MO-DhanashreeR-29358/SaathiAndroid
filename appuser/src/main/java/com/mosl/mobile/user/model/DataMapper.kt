@@ -18,7 +18,8 @@ fun LoginResponse.transform(
             isEkycEnable,
             isChequeApprovalEnable,
             isUseUrl,
-            isRetrieveOTPEnable
+            isRetrieveOTPEnable,
+            isPrimeUser == "1"
         ),
         smtEnabled = smtEnabled
     )
@@ -42,7 +43,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
     isEkycEnable: String?,
     isChequeApprovalEnable: String?,
     isUseUrl: String?,
-    isRetrieveOTPEnable: String?
+    isRetrieveOTPEnable: String?,
+    isPrimeUser: Boolean
 
 ): User {
     val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
@@ -54,6 +56,7 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         isChequeApprovalEnable = isChequeApprovalEnable ?: "0",
         isUseUrl = isUseUrl ?: "0",
         userId = userId ?: "0",
+        isPrimeUser = isPrimeUser,
         isRetrieveOTPEnable = isRetrieveOTPEnable ?: "0",
         employeeCode = employeeCode ?: "0",
         firstName = firstName ?: "",
