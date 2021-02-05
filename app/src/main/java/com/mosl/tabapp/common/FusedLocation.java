@@ -71,6 +71,10 @@ import timber.log.Timber;
         init();
     }
 
+    public FusedLocationProviderClient getFusedLocationClient(){
+        return mFusedLocationClient;
+    }
+
     public void init() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mSettingsClient = LocationServices.getSettingsClient(activity);

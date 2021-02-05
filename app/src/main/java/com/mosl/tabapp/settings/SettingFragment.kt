@@ -15,7 +15,6 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.app.core.prefs.BooleanPreference
-import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.shared.util.isLocationFromMockProvider
 import com.mosl.tabapp.R
@@ -197,10 +196,14 @@ class SettingFragment : PreferenceFragmentCompat() {
     ) {
         if (requestCode != FusedLocation.REQUEST_PERMISSIONS_REQUEST_CODE)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        else fusedLocation.onRequestPermissionsResult(
-            requestCode,
-            permissions as Array<String>, grantResults
-        )
+        else {
+            if (fusedLocation.fusedLocationClient == null)
+                fusedLocation.init()
+            fusedLocation.onRequestPermissionsResult(
+                requestCode,
+                permissions as Array<String>, grantResults
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
