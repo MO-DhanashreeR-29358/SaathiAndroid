@@ -20,8 +20,10 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.webview.CommonURLRequest
+import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.tabapp.R
 import com.mosl.tabapp.banner.BannerNavigator
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
 import io.reactivex.Observable
@@ -40,6 +42,10 @@ class WebviewFragment : CommonFragment() {
 
     @Inject
     lateinit var saathiApiNew: SaathiApi
+
+    @Inject
+    lateinit var encryptor: AESEncryptor
+
 
     @Inject
     lateinit var bannerNavigator: BannerNavigator
@@ -335,7 +341,8 @@ class WebviewFragment : CommonFragment() {
                 }
                 else -> it.first?.apply {
                     loadUrl(
-                        this.replace(" ", "%20")
+                        this.replace(" ", "%20"),
+                        it.second == PRIME_ENTRY_ID
                     )
                 }
             }
@@ -418,7 +425,7 @@ class WebviewFragment : CommonFragment() {
                     Pair(it.url, webViewRequest.id)
                 }
             }
-            PRIME_ENTRY_ID->{
+            PRIME_ENTRY_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(PRIME_ENTRY_KEY, null, null)
                 ).map {
@@ -435,8 +442,14 @@ class WebviewFragment : CommonFragment() {
         }
     }
 
-    private fun loadUrl(url: String) {
-        binding.webView.loadUrl(url)
+    private fun loadUrl(url: String, isForPrimeEntry: Boolean = false) {
+        if (isForPrimeEntry) {
+            val extraHeaders: MutableMap<String, String> =
+                HashMap()
+            extraHeaders["token"] = encryptor.encrypt(userManager.user.token)
+            binding.webView.loadUrl(url, extraHeaders)
+        } else
+            binding.webView.loadUrl(url)
         pageLoadStarted = true
     }
 
