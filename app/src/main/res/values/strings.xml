@@ -12,6 +12,7 @@
     <string name="MOSL_MENU_LAS_TXT">LAS Account</string>
     <string name="MOSL_MENU_E_MODIFICATION_TXT">E-Modification</string>
     <string name="MOSL_MENU_SIP_TXT">SIP</string>
+    <string name="MOSL_MENU_PRIME_ENTRY_TXT">Prime Entry</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
     <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>

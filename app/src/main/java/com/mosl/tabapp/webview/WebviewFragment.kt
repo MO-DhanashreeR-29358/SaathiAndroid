@@ -20,10 +20,13 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.webview.CommonURLRequest
+import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.tabapp.R
 import com.mosl.tabapp.banner.BannerNavigator
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
+import com.mosl.tabapp.util.nullSafe
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
@@ -42,6 +45,10 @@ class WebviewFragment : CommonFragment() {
     lateinit var saathiApiNew: SaathiApi
 
     @Inject
+    lateinit var encryptor: AESEncryptor
+
+
+    @Inject
     lateinit var bannerNavigator: BannerNavigator
 
     private var mUploadMessage: ValueCallback<Uri>? = null
@@ -51,7 +58,7 @@ class WebviewFragment : CommonFragment() {
     private val INPUT_FILE_REQUEST_CODE = 1
     private val FILECHOOSER_RESULTCODE = 1
     override fun getLayout() = R.layout.frag_webview
-
+    private var pageId = ""
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -59,13 +66,13 @@ class WebviewFragment : CommonFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragWebviewBinding.bind(view)
         setupView()
-        start()
         parseArguments(requireArguments())
+        start()
     }
 
     private fun parseArguments(args: Bundle) {
         var oaoUserID = ""
-        val pageId = args.getString(PAGE_ID)
+        pageId = args.getString(PAGE_ID).nullSafe()
         val url = args.getString(URL)
         if (args.containsKey(OAO_USER_ID)) {
             oaoUserID = args.getString(OAO_USER_ID).toString()
@@ -307,10 +314,11 @@ class WebviewFragment : CommonFragment() {
     }
 
     fun start() {
+        val isForPrimeEntry = pageId == PRIME_ENTRY_ID
         disposable.add(subject.filter { event -> event is WebViewRequest.Url }
             .map { request -> request as WebViewRequest.Url }
             .map { it.url }
-            .subscribe { this.loadUrl(it) })
+            .subscribe { this.loadUrl(it, isForPrimeEntry) })
 
         disposable.add(subject.filter { event -> event is WebViewRequest.Id }
             .map { request -> request as WebViewRequest.Id }
@@ -335,7 +343,8 @@ class WebviewFragment : CommonFragment() {
                 }
                 else -> it.first?.apply {
                     loadUrl(
-                        this.replace(" ", "%20")
+                        this.replace(" ", "%20"),
+                        it.second == PRIME_ENTRY_ID
                     )
                 }
             }
@@ -418,6 +427,13 @@ class WebviewFragment : CommonFragment() {
                     Pair(it.url, webViewRequest.id)
                 }
             }
+            PRIME_ENTRY_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(PRIME_ENTRY_KEY, null, null)
+                ).map {
+                    Pair(it.url, webViewRequest.id)
+                }
+            }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null)
@@ -428,8 +444,14 @@ class WebviewFragment : CommonFragment() {
         }
     }
 
-    private fun loadUrl(url: String) {
-        binding.webView.loadUrl(url)
+    private fun loadUrl(url: String, isForPrimeEntry: Boolean = false) {
+        if (isForPrimeEntry) {
+            val extraHeaders: MutableMap<String, String> =
+                HashMap()
+            extraHeaders["token"] = encryptor.encrypt(userManager.user.token)
+            binding.webView.loadUrl(url, extraHeaders)
+        } else
+            binding.webView.loadUrl(url)
         pageLoadStarted = true
     }
 
@@ -465,5 +487,7 @@ class WebviewFragment : CommonFragment() {
         const val NEW_LAS_APPLICATION_KEY = "LASaccount"
         const val RESUME_LAS_APPLICATION_ID = "13"
         const val RESUME_LAS_APPLICATION_KEY = "ExistingLASaccount"
+        const val PRIME_ENTRY_ID = "14"
+        const val PRIME_ENTRY_KEY = "PrimeEntry"
     }
 }
