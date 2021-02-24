@@ -17,6 +17,7 @@ data class User(
     @JvmField val mobile: String,
     @JvmField val email: String,
     @JvmField val token: String,
+    @JvmField val isPrimeUser: Boolean,
     @JvmField val userTypeSequence: String,
     @JvmField val defaultBusinessProfile: BusinessProfileRequest,
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,

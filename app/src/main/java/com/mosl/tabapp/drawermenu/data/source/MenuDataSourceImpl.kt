@@ -1,6 +1,5 @@
 package com.mosl.tabapp.drawermenu.data.source
 
-import com.google.android.gms.common.util.CollectionUtils.listOf
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
@@ -24,28 +23,29 @@ open class MenuDataSourceImpl @Inject constructor(
                     getAufsbUserMenu()
                 }
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable())
+                    getAuSalesBank(user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable())
+                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable())
+                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 else -> {
-                    getUserMenu(menuItems, user.isCheckApprovalEnable())
+                    getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
             }
         }
             .subscribeOn(Schedulers.io())
     }
 
-    protected fun getEkycUserMenu(
+    private fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean,
+        isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -63,9 +63,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         } else {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -82,16 +84,19 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         }
     }
 
-    protected fun getUserMenu(
+    private fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean,
+        isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getSip(),
                 getEModification(),
@@ -107,9 +112,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         } else {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getSip(),
                 getEModification(),
@@ -124,16 +131,19 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         }
     }
 
-    protected fun getSMTUserMenu(
+    private fun getSMTUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        isCheckApproval: Boolean
+        isCheckApproval: Boolean,
+        isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -152,9 +162,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         } else {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -172,23 +184,33 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuery(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         }
     }
 
-    protected fun getAufsbUserMenu(): List<BaseMenu> {
-        return listOf(
+    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean): List<BaseMenu> {
+        if (isPrimeUser) {
+            add(3, getPrimeEntry())
+        }
+        return this
+    }
+
+    private fun getAufsbUserMenu(): List<BaseMenu> {
+        return arrayListOf(
             getDashboard(),
             getOpenAccount(),
             getLogout()
         )
     }
 
-    protected fun getAuSalesBank(
-        isCheckApproval: Boolean
+    private fun getAuSalesBank(
+        isCheckApproval: Boolean,
+        isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -203,9 +225,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getMostGuide(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         } else {
-            listOf(
+            arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getLASAccount(),
@@ -219,11 +243,13 @@ open class MenuDataSourceImpl @Inject constructor(
                 getMostGuide(),
                 getSetting(),
                 getLogout()
-            )
+            ).apply {
+                checkForPrime(isPrimeUser)
+            }
         }
     }
 
-    internal fun getDashboard(): BaseMenu {
+    private fun getDashboard(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_dashboard,
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
@@ -232,7 +258,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getIncentiveReport(): BaseMenu {
+    private fun getIncentiveReport(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_incentive_reports,
             label = R.string.MOSL_MENU_INCENTIVE_REPORT_TXT,
@@ -241,7 +267,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getCheckApproval(): BaseMenu {
+    private fun getCheckApproval(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_cheque_approval,
             label = R.string.MOSL_MENU_CHECK_APPROVAL_TXT,
@@ -250,7 +276,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getMostGuide(): BaseMenu {
+    private fun getMostGuide(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_most_guide,
             label = R.string.MOSL_MENU_MOST_GUIDE_TXT,
@@ -260,7 +286,7 @@ open class MenuDataSourceImpl @Inject constructor(
     }
 
 
-    internal fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
+    private fun getReports(list: List<com.mosl.saathi.api.model.splash.ChildMenu>): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_my_reports,
             label = R.string.MOSL_MENU_MY_REPORTS_TXT,
@@ -278,7 +304,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getAUBankMeeting(): BaseMenu {
+    private fun getAUBankMeeting(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_suggest_me_tool,
             label = R.string.MOSL_MENU_AU_BANK_MEETING_TXT,
@@ -287,7 +313,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getAUBankMeetingReport(): BaseMenu {
+    private fun getAUBankMeetingReport(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_suggest_me_tool,
             label = R.string.MOSL_MENU_AU_BANK_MEETING_REPORT_TXT,
@@ -296,12 +322,12 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getOpenAccount(): BaseMenu {
+    private fun getOpenAccount(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_update_ekyc,
             label = R.string.MOSL_MENU_EKYC_TXT,
             enabled = true,
-            children = listOf(
+            children = arrayListOf(
                 ChildMenu(
                     label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
                     enabled = true,
@@ -318,12 +344,12 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getLASAccount(): BaseMenu {
+    private fun getLASAccount(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_las,
             label = R.string.MOSL_MENU_LAS_TXT,
             enabled = true,
-            children = listOf(
+            children = arrayListOf(
                 ChildMenu(
                     label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
                     enabled = true,
@@ -341,7 +367,7 @@ open class MenuDataSourceImpl @Inject constructor(
     }
 
 
-    internal fun getEModification(): BaseMenu {
+    private fun getEModification(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_emodification,
             label = R.string.MOSL_MENU_E_MODIFICATION_TXT,
@@ -350,7 +376,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getSip(): BaseMenu {
+    private fun getSip(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_sip,
             label = R.string.MOSL_MENU_SIP_TXT,
@@ -359,7 +385,16 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getSalesBrochure(): BaseMenu {
+    private fun getPrimeEntry(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_prime_entry,
+            label = R.string.MOSL_MENU_PRIME_ENTRY_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_PRIME_ENTRY
+        )
+    }
+
+    private fun getSalesBrochure(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_sales_brochure,
             label = R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT,
@@ -368,7 +403,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getSalesStadium(): BaseMenu {
+    private fun getSalesStadium(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_sales_stadium,
             label = R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT,
@@ -377,7 +412,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getCalendar(): BaseMenu {
+    private fun getCalendar(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_calendar,
             label = R.string.MOSL_MENU_CALENDAR_TXT,
@@ -386,7 +421,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getPendingApproval(): BaseMenu {
+    private fun getPendingApproval(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_my_pending_approvals,
             label = R.string.MOSL_MENU_PENDING_APPROVALS_TXT,
@@ -395,7 +430,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getBirthdayAnniversary(): BaseMenu {
+    private fun getBirthdayAnniversary(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_birthday_aniversary,
             label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
@@ -404,7 +439,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getQuery(): BaseMenu {
+    private fun getQuery(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_query,
             label = R.string.MOSL_MENU_QUERY_TXT,
@@ -413,7 +448,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getSuggestMe(enabled: Boolean = true): BaseMenu {
+    private fun getSuggestMe(enabled: Boolean = true): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_suggest_me_tool,
             label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
@@ -422,7 +457,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getSetting(): BaseMenu {
+    private fun getSetting(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_setting,
             label = R.string.MOSL_MENU_SETTING,
@@ -431,7 +466,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    internal fun getLogout(): BaseMenu {
+    private fun getLogout(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_logout,
             label = R.string.MOSL_MENU_LOGOUT_TXT,
