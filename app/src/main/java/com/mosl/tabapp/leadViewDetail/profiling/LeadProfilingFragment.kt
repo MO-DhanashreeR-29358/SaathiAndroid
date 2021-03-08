@@ -2,17 +2,10 @@ package com.mosl.tabapp.leadViewDetail.profiling
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
@@ -43,8 +36,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
@@ -521,6 +513,60 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
               questionMap[question.profileParameterID!!.toString()] =
                 llBasicProfileQuestionLayoutGroup
             }
+            NUMBER_TEXT_BOX -> {
+
+              val llBasicProfileQuestionLayoutGroup = LinearLayout(activity).apply {
+                layoutParams = LinearLayout.LayoutParams(
+                  LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                orientation = LinearLayout.VERTICAL
+                setPadding(padding, padding, padding, padding)
+              }
+
+
+              for (mOptions in question.profileOptionList) {
+                val tvHead = TextView(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
+                  setPadding(padding, 4, padding, 4)
+                  text = mOptions.questionSubText
+                  textSize = resources.getDimension(R.dimen.txt_size_profile)
+                }
+
+                val mEditTextOption = EditText(activity).apply {
+                  layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT
+                  )
+                  inputType =
+                    InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
+
+                  setBackgroundResource(R.drawable.textview_border)
+                  tag = (question.profileParameterID.toString()
+                          + "_"
+                          + mOptions.profileSubParameterID
+                          + "_E")
+                  animate()
+                  filters = arrayOf(CRMAppUtil.filterOnlyAlphabetAndNumbers)
+                  setText(mOptions.value)
+                  hint = mOptions.questionSubText
+                }
+
+                tvHead.text = mOptions.questionSubText
+                llBasicProfileQuestionLayoutGroup.addView(tvHead)
+                llBasicProfileQuestionLayoutGroup.addView(mEditTextOption)
+                formElementList.add(mEditTextOption)
+              }
+              llBasicProfileQuestionLayoutGroup.setBackgroundResource(
+                R.drawable.profiling_question_background_group
+              )
+              llBasicProfileQuestionLayoutInner.addView(
+                llBasicProfileQuestionLayoutGroup
+              )
+              questionMap[question.profileParameterID!!.toString()] =
+                llBasicProfileQuestionLayoutGroup
+            }
             RADIO_BUTTON -> {
               val rbGroup = RadioGroup(activity).apply {
                 layoutParams = LinearLayout.LayoutParams(
@@ -851,6 +897,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
   companion object {
     private const val TEXT_BOX = 1
+    private const val NUMBER_TEXT_BOX = 5
     private const val DROP_DOWN = 4
     private const val RADIO_BUTTON = 2
     private const val CHECK_BOX = 3
