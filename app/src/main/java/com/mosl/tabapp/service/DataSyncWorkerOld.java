@@ -10,7 +10,6 @@ import com.mosl.shared.Encryptor.AESEncryptor;
 import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
-import com.mosl.tabapp.urls.ServiceUrlsImpl;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,6 +26,7 @@ import timber.log.Timber;
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
 import static com.mosl.shared.util.CRMAppUtilsKt.getDeviceID;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.urls.ApiBaseUrlImpl.SAATHI_BASE_URL;
 
 public class DataSyncWorkerOld extends Worker {
   @Inject UserManager userManager;
@@ -65,13 +65,12 @@ public class DataSyncWorkerOld extends Worker {
     List<LocationData> locationDataList =
         SaathiAppNew.get().getDB().daoAccess().getLocationList();
     MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
-    String url = ServiceUrlsImpl.CRM_BASE_URL();
     String serviceMethod = "GeoLocation/SaveGeoLocation";
     RequestBody body = RequestBody.create(MEDIA_TYPE,
         encryptor.encrypt(getLocationMapping(locationDataList)));
 
     final Request request = new Request.Builder()
-        .url(url + serviceMethod)
+        .url(SAATHI_BASE_URL + serviceMethod)
         .post(body)
         .addHeader("Content-Type",
             encryptor.encrypt("application/json; charset=UTF-8"))

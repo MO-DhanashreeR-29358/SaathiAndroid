@@ -2,6 +2,7 @@ package com.mosl.app.core.data;
 
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
+import com.mosl.mobile.data.util.CommonBaseUrls;
 import com.mosl.saathi.api.SaathiApi;
 import dagger.Module;
 import dagger.Provides;
@@ -13,8 +14,8 @@ import retrofit2.Retrofit;
 
     @Provides @Singleton
     static SaathiApi provideSaathiApi(@InternalAPIClient OkHttpClient internalOkClient,
-		@InternalAPIRetrofit Retrofit.Builder builder, String apiBaseUrls) {
-		return builder.client(internalOkClient).baseUrl(apiBaseUrls)
+        @InternalAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+        return builder.client(internalOkClient).baseUrl(apiBaseUrls.getSaathiApiUrl())
             .build()
             .create(SaathiApi.class);
     }

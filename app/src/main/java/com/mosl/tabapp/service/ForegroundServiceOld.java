@@ -17,9 +17,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
-
 import androidx.core.app.NotificationCompat;
-
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -39,24 +37,19 @@ import com.mosl.tabapp.SaathiAppNew;
 import com.mosl.tabapp.common.CRMAppUtil;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.database.LocationData;
-import com.mosl.tabapp.urls.ServiceUrlsImpl;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import dagger.android.AndroidInjection;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-
 import javax.inject.Inject;
-
-import dagger.android.AndroidInjection;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.Buffer;
+import org.json.JSONException;
+import org.json.JSONObject;
 import timber.log.Timber;
 
 import static com.mosl.app.core.utils.Utils.getLocalIpAddress;
@@ -65,6 +58,7 @@ import static com.mosl.shared.util.Utility.isTimeInterval;
 import static com.mosl.tabapp.common.CRMAppUtil.isLocationFromMockProvider;
 import static com.mosl.tabapp.common.CRMMOSLCommon.hasGPSDevice;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
+import static com.mosl.tabapp.urls.ApiBaseUrlImpl.SAATHI_BASE_URL;
 
 public class ForegroundServiceOld extends Service {
 
@@ -270,13 +264,12 @@ public class ForegroundServiceOld extends Service {
     List<LocationData> locationDataList =
         SaathiAppNew.get().getDB().daoAccess().getLocationList();
     MediaType MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");
-    String url = ServiceUrlsImpl.CRM_BASE_URL();
     String serviceMethod = "GeoLocation/SaveGeoLocation";
     RequestBody body = RequestBody.create(MEDIA_TYPE,
         encryptor.encrypt(getLocationMapping(locationDataList)));
 
     final Request request = new Request.Builder()
-        .url(url + serviceMethod)
+        .url(SAATHI_BASE_URL + serviceMethod)
         .post(body)
         .addHeader("Content-Type",
             encryptor.encrypt("application/json; charset=UTF-8"))

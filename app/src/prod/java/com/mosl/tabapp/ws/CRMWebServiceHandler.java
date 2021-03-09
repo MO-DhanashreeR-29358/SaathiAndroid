@@ -1,9 +1,7 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
-
 import androidx.annotation.Nullable;
-
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -11,12 +9,9 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.CertPinProviderImpl;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
-import com.mosl.tabapp.urls.ServiceUrlsImpl;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -25,27 +20,26 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import static com.mosl.tabapp.urls.ApiBaseUrlImpl.SAATHI_BASE_URL;
+
 /**
  * Created by pramod on 23/03/17.
  */
 
 public class CRMWebServiceHandler {
     public static final String COLLATERAL_URL_UAT =
-            "http://web20.motilaloswal.com:8000/Brochure/index.html";
+        "http://web20.motilaloswal.com:8000/Brochure/index.html";
     public static final String COLLATERAL_URL_PROD =
-            "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
+        "https://www.motilaloswal.com/EKYCCONTROLLER/Brochure/index.html";
     public static final String INCENTIVE_PDF_URL =
-            "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
-    public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
+        "http://122.184.137.84:9876/Uploads/LeadDocuments/family%20Declaration%20-%20Annexure%201636293853847628119.pdf";
     private static final String BASE_IP_UAT_UPPERMOST = "http://122.184.137.89/";
     private static final String BASE_IP_PROD_UPPERMOST = "https://login.motilaloswal.com/";
     private static final String BASE_URL_UAT_UPPERMOST =
-            BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+        BASE_IP_UAT_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
     private static final String BASE_URL_PROD_UPPERMOST =
-            BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
-    public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
-    public static String COLLATERAL_URL = ServiceUrlsImpl.CRM_COLLATERAL_URL();
-    public static String SALES_STADIUM_PITCH_URL = ServiceUrlsImpl.SALES_STADIUM_PITCH_URL();
+        BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
+    public static String CALL_BASE_URL = SAATHI_BASE_URL;
     private static String TAG = CRMWebServiceHandler.class.getName();
     private static String UAT_BASE_URL = "http://122.184.137.226:83/api/";
     private static String STAGING_BASE_URL = "http://122.184.137.226:85/api/";

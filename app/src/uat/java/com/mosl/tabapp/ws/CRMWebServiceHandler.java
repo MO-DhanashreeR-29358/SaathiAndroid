@@ -1,7 +1,6 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
-
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -9,18 +8,17 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.CertPinProviderImpl;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
-import com.mosl.tabapp.urls.ServiceUrlsImpl;
-
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+
+import static com.mosl.tabapp.urls.ApiBaseUrlImpl.SAATHI_BASE_URL;
 
 /**
  * Created by pramod on 23/03/17.
@@ -47,10 +45,7 @@ public class CRMWebServiceHandler {
     private static final String BASE_URL_PROD_UPPERMOST =
             BASE_IP_PROD_UPPERMOST + "Partner/PartnerMobileWebServices.asmx/";
 
-    public static final String CALL_URL_UPPERMOST = ServiceUrlsImpl.UPPERMOST_URL();
-    public static String CALL_BASE_URL = ServiceUrlsImpl.CRM_BASE_URL();
-    public static String COLLATERAL_URL = ServiceUrlsImpl.CRM_COLLATERAL_URL();
-    public static String SALES_STADIUM_PITCH_URL = ServiceUrlsImpl.SALES_STADIUM_PITCH_URL();
+    public static String CALL_BASE_URL = SAATHI_BASE_URL;
 
     public static String getJsonString(Map param) {
         return getJsonString(param, false);
