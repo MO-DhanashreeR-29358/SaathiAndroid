@@ -1,2 +1,2 @@
 include ':app', ':saathiapi', ':data',
-    ':shared',':appuser',':domain'
+    ':shared',':appuser',':domain',':digio-esign2',':google-pay-client-api-1.0.1'

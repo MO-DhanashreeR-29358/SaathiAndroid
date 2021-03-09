@@ -6,4 +6,6 @@ interface EkycNavigator {
     userId: String
   )
 
+  fun openEkyc()
+
 }

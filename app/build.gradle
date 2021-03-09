@@ -30,6 +30,14 @@ def gitTimestamp() {
 }
 
 android {
+  packagingOptions {
+    exclude "META-INF/domain.kotlin_module"
+    exclude "META-INF/coreui_release.kotlin_module"
+    exclude "META-INF/core_release.kotlin_module"
+    exclude "META-INF/appuser_release.kotlin_module"
+    exclude "META-INF/loginui_release.kotlin_module"
+    exclude "META-INF/data_release.kotlin_module"
+  }
   compileSdkVersion rootProject.ext.versions.compileSdkVersion
   buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
@@ -46,7 +54,7 @@ android {
 
   defaultConfig {
     applicationId 'com.mosl.tabapp'
-    minSdkVersion 17
+    minSdkVersion 21
     targetSdkVersion rootProject.ext.versions.targetSdkVersion
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     buildConfigField 'String', 'GIT_SHA', "\"${gitSha()}\""
@@ -118,6 +126,12 @@ android {
       debuggable true
       ext.enableCrashlytics = false
       ext.alwaysUpdateBuildId = false
+    }
+  }
+
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+      jvmTarget = "1.8"
     }
   }
 
@@ -221,6 +235,32 @@ dependencies {
   implementation deps.groupie.dataBinding
 
   implementation deps.picasso
+  implementation deps.mofslArtifacts.conceal
+  implementation deps.mofslArtifacts.tokenmanager
+
+
+  implementation project(':digio-esign2')
+  implementation(deps.EkycArtifactDependencies.app){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.appUser){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.data){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.dataResolver){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.core){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.coreUi){
+    exclude group: 'MofslArtifacts'
+  }
+  implementation(deps.EkycArtifactDependencies.loginUi){
+    exclude group: 'MofslArtifacts'
+  }
 }
 kapt {
   javacOptions {

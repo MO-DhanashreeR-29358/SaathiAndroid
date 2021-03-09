@@ -51,5 +51,6 @@ dependencies {
   implementation project (':saathiapi')
   implementation project (':shared')
   api deps.mofslArtifacts.appcore
-
+  implementation deps.mofslArtifacts.conceal
+  implementation deps.mofslArtifacts.tokenmanager
 }

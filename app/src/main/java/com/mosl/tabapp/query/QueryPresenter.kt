@@ -2,6 +2,7 @@ package com.mosl.tabapp.query
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.query.QueryRepository
+import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_1
 import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_2
 import io.reactivex.Observable
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 class QueryPresenter @Inject constructor(
   view: QueryView,
-  val repository: QueryRepository
+  val repository: QueryRepository,
+  val navigator: EkycNavigator
 ) : BasePresenter<QueryView>(view) {
   protected val validator: QueryValidator = QueryValidator()
   override fun start() {
@@ -53,6 +55,10 @@ class QueryPresenter @Inject constructor(
         .subscribe {
           view.showAlertForCall(TELE_PHONE_2)
         }
+        .addTo(disposable)
+
+    view.onEsignClick()
+        .subscribe { navigator.openEkyc() }
         .addTo(disposable)
   }
 }

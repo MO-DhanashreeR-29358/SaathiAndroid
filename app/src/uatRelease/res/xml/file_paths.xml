@@ -3,4 +3,7 @@
     <external-path
         name="my_images"
         path="Android/data/com.mosl.tabapp.uat/files/Pictures" />
+    <external-path
+        name="external_path"
+        path="." />
 </paths>

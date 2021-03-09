@@ -228,8 +228,19 @@
                     android:textColor="@color/text_color_dark_orange"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/txt_tele_phone_1"
-                    app:layout_constraintTop_toBottomOf="@+id/txt_support_quotes"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/txt_support_quotes" />
+
+
+                <TextView
+                    android:id="@+id/tv_esign"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:gravity="center"
+                    android:text="Esign"
+                    android:textSize="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txt_tele_phone_2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
         <!--<com.mosl.partnersapp.views.InlineStateView

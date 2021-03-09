@@ -3,7 +3,10 @@ package com.mosl.tabapp.core
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationManager
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
@@ -12,7 +15,11 @@ import android.view.View.OnClickListener
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.f2prateek.rx.preferences2.Preference
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -31,14 +38,18 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
-import com.mosl.navigator.*
+import com.mosl.navigator.AppTitle
+import com.mosl.navigator.AuthorizationState
+import com.mosl.navigator.FragmentNavigationEntry
+import com.mosl.navigator.FragmentResolver
+import com.mosl.navigator.NavigationHelper
+import com.mosl.navigator.Navigator
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
@@ -56,13 +67,15 @@ import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
-import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.ConvertToEkyc
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
+import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.MsgDialog
 import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
-import java.nio.channels.WritableByteChannel
-import java.util.*
+import java.util.HashMap
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
@@ -205,23 +218,36 @@ class CommonActivity : BaseActivity(),
                 return true
             }
         }
-        return false
+      return false
     }
 
-    private fun stopService() {
-        val serviceIntent = Intent(this, ForegroundService::class.java)
-        stopService(serviceIntent)
-    }
+  private fun stopService() {
+    val serviceIntent = Intent(this, ForegroundService::class.java)
+    stopService(serviceIntent)
+  }
 
-    private fun initBackgroundState() {
-        val intent = Intent()
-        val manufacturer = android.os.Build.MANUFACTURER
-        when (manufacturer) {
-            "xiaomi" ->
-                intent.component =
-                    ComponentName(
-                        "com.miui.securitycenter",
-                        "com.miui.permcenter.autostart.AutoStartManagementActivity"
+  override fun onActivityResult(
+    requestCode: Int,
+    resultCode: Int,
+    data: Intent?
+  ) {
+    if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
+      val intent = Intent(this, CommonActivity::class.java)
+      intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
+      startActivity(intent)
+    }
+    super.onActivityResult(requestCode, resultCode, data)
+  }
+
+  private fun initBackgroundState() {
+    val intent = Intent()
+    val manufacturer = android.os.Build.MANUFACTURER
+    when (manufacturer) {
+      "xiaomi" ->
+        intent.component =
+          ComponentName(
+              "com.miui.securitycenter",
+              "com.miui.permcenter.autostart.AutoStartManagementActivity"
                     )
             "oppo" ->
                 intent.component =

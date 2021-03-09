@@ -61,6 +61,10 @@ class QueryFragment : CommonFragment(), QueryView {
     return binding.btnSubmit.clicks()
   }
 
+  override fun onEsignClick(): Observable<Unit> {
+    return binding.tvEsign.clicks()
+  }
+
   override fun onSubmitDialogOpen(uiModel: UiModel<String>) {
     uiModel.onFailure { error ->
       if (error is ValidationException) {

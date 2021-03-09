@@ -2,8 +2,8 @@ package com.mosl.tabapp.query
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.tabapp.R
+import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 import io.reactivex.Observable
@@ -12,6 +12,7 @@ interface QueryView : BaseView {
   fun getQueryMessgae(): String
 
   fun onSubmitBtnClick(): Observable<Unit>
+  fun onEsignClick(): Observable<Unit>
   fun onSubmitDialogOpen(uiModel: UiModel<String>)
   fun onSubmitConfirmClicked(): Observable<OnSubmitConfirmClick>
   fun onResetBtnClick(): Observable<Unit>

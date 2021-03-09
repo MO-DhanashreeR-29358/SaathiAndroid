@@ -40,7 +40,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import timber.log.Timber
-import java.util.*
+import java.util.Objects
 import javax.inject.Inject
 
 @ActivityScoped
@@ -62,8 +62,8 @@ class ActivityNavigationHelper @Inject constructor(
         Timber.d("extras %s", intent.extras?.toString())
 
         if (intent.isNotification()) {
-            val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
-            val target = NotificationData(category)
+          val category = intent.getStringExtra(ARG_NOTIFICATION_CATEGORY)
+          val target = NotificationData(category!!)
             if (target.page.equals(LEADVIEW)) {
                 screenNavigator.openPage(
                     NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER,

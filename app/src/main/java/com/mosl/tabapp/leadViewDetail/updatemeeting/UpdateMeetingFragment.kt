@@ -81,7 +81,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import timber.log.Timber
 import java.net.URLEncoder
@@ -604,7 +604,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
 
   private fun updateMeetingSave(meetingApptModel: MeetingApptModel) {
     if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-      val request = RequestBody.create(MediaType.parse("text/plain"), meetingApptModel.json)
+      val request = RequestBody.create("text/plain".toMediaTypeOrNull(), meetingApptModel.json)
       val subscribe = saathiApi.saveUpdateMeeting(request)
           .compose(applyUiModel())
           .subscribe { this.renderUpdateMeetingSave(it) }
