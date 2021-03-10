@@ -24,6 +24,6 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   companion object {
-    const val SAATHI_BASE_URL = "https://saathiuat.motilaloswal.com:1023/api/"
+    const val SAATHI_BASE_URL = "https://saathi.motilaloswal.com:84/api/"
   }
 }

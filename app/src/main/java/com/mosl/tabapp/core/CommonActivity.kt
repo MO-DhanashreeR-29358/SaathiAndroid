@@ -235,7 +235,7 @@ class CommonActivity : BaseActivity(),
     data: Intent?
   ) {
     if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
-      val intent = Intent(this, CommonActivity::class.java)
+      val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
       intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
       startActivity(intent)
     }
