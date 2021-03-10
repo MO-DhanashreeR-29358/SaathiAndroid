@@ -24,6 +24,8 @@ class LeadCreationNavigatorImpl @Inject constructor(
       putString(MOSLConstants.LEAD_ID, leadId)
       putString(MOSLConstants.UCID, "0")
     }
-    screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true)
+    screenNavigator.openPage(
+        NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle, true
+    )
   }
 }

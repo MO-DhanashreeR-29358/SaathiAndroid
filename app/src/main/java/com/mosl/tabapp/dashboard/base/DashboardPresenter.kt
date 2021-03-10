@@ -4,7 +4,9 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -63,7 +65,7 @@ class DashboardPresenter @Inject constructor(
         view.onLeadCreationClicked()
             .subscribe {
                 view.collapseActionsMenu()
-                navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_CREATION, true)
+                navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_CREATION.toString(), true)
             }
             .addTo(disposable)
 

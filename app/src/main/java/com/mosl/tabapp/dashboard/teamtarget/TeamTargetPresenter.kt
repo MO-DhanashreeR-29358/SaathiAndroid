@@ -111,8 +111,8 @@ class TeamTargetPresenter @Inject constructor(
     args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.name)
     args.putSerializable(MAP, addtionalParameterMap as Serializable?)
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true,
-      false
+        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args, true,
+        false
     )
   }
 

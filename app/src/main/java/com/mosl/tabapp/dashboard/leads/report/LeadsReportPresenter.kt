@@ -46,8 +46,8 @@ class LeadsReportPresenter @Inject constructor(
     args.putString(MOSLConstants.LABEL, MOSLConstants.LEAD)
     args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-      true, false
+        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args,
+        true, false
     )
   }
 

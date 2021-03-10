@@ -15,12 +15,12 @@ class LoginNavigatorImpl @Inject constructor(
   val navigator: Navigator
 ) : LoginNavigator {
   override fun openPage(
-    pageId: Int,
+    pageId: String,
     args: Bundle,
     addToStack: Boolean,
     forceReload: Boolean
   ) {
-    openPage(NavigationRequest(pageId, args, addToStack))
+    openPage(NavigationRequest(pageId, args, addToStack, forceReload))
   }
 
   override fun finish() {
@@ -69,7 +69,7 @@ class LoginNavigatorImpl @Inject constructor(
 
 
   override fun openPage(
-    pageId: Int,
+    pageId: String,
     addToStack: Boolean
   ) {
     openPage(NavigationRequest(pageId, Bundle.EMPTY, addToStack))

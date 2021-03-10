@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import androidx.annotation.StringRes;
-import com.mosl.shared.R;
 
 /**
  * @author Vivek Edited Sasikumar
@@ -71,10 +70,6 @@ public class MSFDialog {
     /**
      * @param message MSF_DIALOG_OK -
      */
-    public static AlertDialog alertDialogOnly(Context context, String title, String message) {
-        return alertDialogOnly(context, title, message,
-            context.getResources().getString(R.string.button_label_ok));
-    }
 
     /**
      * @param positiveBtnText Value of the positive button

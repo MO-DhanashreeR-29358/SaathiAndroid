@@ -93,10 +93,10 @@ class ReportPresenter @Inject constructor(
       navigationConstants = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT
     }
     navigator.openPage(
-      navigationConstants,
-      args,
-      addToStack = true,
-      forceReload = false
+        navigationConstants.toString(),
+        args,
+        addToStack = true,
+        forceReload = false
     )
   }
 

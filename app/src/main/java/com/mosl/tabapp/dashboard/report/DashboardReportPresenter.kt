@@ -136,10 +136,10 @@ class DashboardReportPresenter @Inject constructor(
       args.putString(MOSLConstants.LEAD_ID, leadID)
       args.putString(MOSLConstants.UCID, ucid)
       navigator.openPage(
-        navigationConstants,
-        args,
-        addToStack = true,
-        forceReload = false
+          navigationConstants.toString(),
+          args,
+          addToStack = true,
+          forceReload = false
       )
     } else if (rmName.isNotEmpty()) {
       val args = Bundle()
@@ -154,10 +154,10 @@ class DashboardReportPresenter @Inject constructor(
       args.putString(LABEL, data.label)
       args.putString(WidgetSystemName, systemsName)
       navigator.openPage(
-        navigationConstants,
-        args,
-        addToStack = true,
-        forceReload = false
+          navigationConstants.toString(),
+          args,
+          addToStack = true,
+          forceReload = false
       )
     }
 

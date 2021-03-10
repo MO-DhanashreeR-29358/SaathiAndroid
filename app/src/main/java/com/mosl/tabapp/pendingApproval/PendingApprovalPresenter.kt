@@ -37,10 +37,10 @@ class PendingApprovalPresenter @Inject constructor(
     val args = Bundle()
     args.putString(MOSLConstants.ENTITY_FIELD, entityField)
     screenNavigator.openPage(
-      NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL,
-      args,
-      true,
-      false
+        NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL.toString(),
+        args,
+        true,
+        false
     )
   }
 

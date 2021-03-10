@@ -16,9 +16,7 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.google.android.material.tabs.TabLayout;
 import com.mosl.commons.data.UiModel;
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem;
@@ -44,15 +42,11 @@ import com.mosl.tabapp.model.ClientDetail;
 import com.mosl.tabapp.model.NotificationData;
 import com.mosl.tabapp.ui.MSFDialog;
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter;
-
-import org.jetbrains.annotations.NotNull;
-
+import io.reactivex.disposables.Disposable;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.inject.Inject;
-
-import io.reactivex.disposables.Disposable;
+import org.jetbrains.annotations.NotNull;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -435,7 +429,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             bundle.putString(LEAD_ID, leadId);
             bundle.putString(UCID, mUCID);
             if (createMeetingId == 0) {
-                navigator.openPage(NAVIGATE_TO_CREATE_MEETING, bundle, true, false);
+                navigator.openPage(getString(NAVIGATE_TO_CREATE_MEETING), bundle, true, false);
             } else if (createMeetingId == 1) {
                 erroMsgDialog(getString(R.string.mgs_update_address));
             } else if (createMeetingId == 2) {
@@ -449,7 +443,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             Bundle bundle = new Bundle();
             bundle.putString(LEAD_ID, leadId);
             bundle.putString(UCID, mUCID);
-            navigator.openPage(NAVIGATE_TO_SET_APPOINTMENT, bundle, true, false);
+            navigator.openPage(getString(NAVIGATE_TO_SET_APPOINTMENT), bundle, true, false);
             dialog.dismiss();
         });
         ivCall.setOnClickListener(view -> {
@@ -550,7 +544,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             String encryptedUrl = stringOrEmpty(data.encryptedURL);
             Bundle bundle = new Bundle();
             bundle.putString(URL_PATH, encryptedUrl);
-            navigator.openPage(NAVIGATE_TO_SUGGEST_ME, bundle, true, false);
+            navigator.openPage(getString(NAVIGATE_TO_SUGGEST_ME), bundle, true, false);
         }
     }
 

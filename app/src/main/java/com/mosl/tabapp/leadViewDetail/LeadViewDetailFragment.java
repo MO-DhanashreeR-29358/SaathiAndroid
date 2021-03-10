@@ -99,8 +99,8 @@ import com.mosl.tabapp.common.CustomDatePickerDialog;
 import com.mosl.tabapp.common.CustomListPickerDialog;
 import com.mosl.tabapp.common.MSFStatistics;
 import com.mosl.tabapp.common.RowData;
-import com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner;
 import com.mosl.tabapp.common.StringStuff;
+import com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner;
 import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.core.CommonFragment;
 import com.mosl.tabapp.model.AddressDetailModel;
@@ -2414,7 +2414,8 @@ public class LeadViewDetailFragment extends CommonFragment
                                 Bundle bundle = new Bundle();
                                 bundle.putString(LEAD_ID, leadID);
                                 bundle.putString(UCID, uCID);
-                                navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false);
+                                navigator.openPage(getString(NAVIGATE_TO_LEAD_VIEW_PAGER), bundle,
+                                    true, false);
                             }
                         });
             } else {
@@ -2676,7 +2677,7 @@ public class LeadViewDetailFragment extends CommonFragment
                 args.putString(LEAD_ID,
                         this.getArguments().getString(LEAD_ID, "0"));
                 args.putString(UCID, this.getArguments().getString(UCID, "0"));
-                navigator.openPage(NAVIGATE_TO_DOCUMENT, args, true, false);
+                navigator.openPage(getString(NAVIGATE_TO_DOCUMENT), args, true, false);
                 break;
             case R.id.cbPrimaryAddress:
                 if (cbPrimaryAddress.isChecked()) {

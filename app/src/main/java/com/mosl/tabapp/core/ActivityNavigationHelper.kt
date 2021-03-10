@@ -66,7 +66,7 @@ class ActivityNavigationHelper @Inject constructor(
           val target = NotificationData(category!!)
             if (target.page.equals(LEADVIEW)) {
                 screenNavigator.openPage(
-                    NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER,
+                    NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(),
                     openLeadViewDetail(target),
                     false
                 )
@@ -76,7 +76,7 @@ class ActivityNavigationHelper @Inject constructor(
                 )
             }
         } else if (userManager.user.isAuBankSalesSupport()) {
-            screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, true)
+            screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), true)
         } else {
             val pageToOpen = intent.getIntExtra(ARG_PAGE_ID, NavigationConstants.NAVIGATE_TO_NONE)
             when {
@@ -92,7 +92,7 @@ class ActivityNavigationHelper @Inject constructor(
     }
 
     fun loadFragment(@NavigationConstants pageId: Int) {
-        screenNavigator.openPage(NavigationRequest(pageId, Bundle.EMPTY, false))
+        screenNavigator.openPage(NavigationRequest(pageId.toString(), Bundle.EMPTY, false))
     }
 
     fun onMenuClicked(appMenu: AppMenu) {
@@ -118,13 +118,13 @@ class ActivityNavigationHelper @Inject constructor(
         }
     }
 
-    fun notificationNavigation(category: String): Int {
+    fun notificationNavigation(category: String): String {
         val target = NotificationData(category)
         return when (target.page) {
-            PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
-            BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
-            DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD
-            else -> NavigationConstants.NAVIGATE_TO_DASHBOARD
+            PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL.toString()
+            BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY.toString()
+            DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD.toString()
+            else -> NavigationConstants.NAVIGATE_TO_DASHBOARD.toString()
         }
     }
 
@@ -174,7 +174,9 @@ class ActivityNavigationHelper @Inject constructor(
                 val encryptedUrl = Utility.stringOrEmpty(data.response!!.encryptedUrl)
                 val bundle = Bundle()
                 bundle.putString(MOSLConstants.URL_PATH, encryptedUrl)
-                screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_SUGGEST_ME, bundle, false)
+                screenNavigator.openPage(
+                    NavigationConstants.NAVIGATE_TO_SUGGEST_ME.toString(), bundle, false
+                )
 
             }
         }
@@ -354,7 +356,7 @@ class ActivityNavigationHelper @Inject constructor(
         val bundle = Bundle()
         bundle.putString(MOSLConstants.SYSTEM_NAME, appMenu.navigateKey)
         bundle.putString(MOSLConstants.NAME, appMenu.labelStr)
-        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_REPORTS, bundle, false)
+        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_REPORTS.toString(), bundle, false)
     }
 
     private fun noInternetConnectionDialog(context: Context) {

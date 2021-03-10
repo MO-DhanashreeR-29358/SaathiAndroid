@@ -237,6 +237,7 @@ dependencies {
   implementation deps.picasso
   implementation deps.mofslArtifacts.conceal
   implementation deps.mofslArtifacts.tokenmanager
+  implementation deps.mofslArtifacts.navigator
 
 
   implementation project(':digio-esign2')

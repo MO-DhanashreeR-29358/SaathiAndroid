@@ -53,4 +53,6 @@ dependencies {
   api deps.mofslArtifacts.appcore
   implementation deps.mofslArtifacts.conceal
   implementation deps.mofslArtifacts.tokenmanager
+  implementation deps.mofslArtifacts.moslcommons
+  implementation deps.mofslArtifacts.appcore
 }

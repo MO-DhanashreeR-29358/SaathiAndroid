@@ -62,9 +62,9 @@ class ClientsPresenter @Inject constructor(
     args.putString(MOSLConstants.LABEL, CLIENTS)
     args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
-      addToStack = true,
-      forceReload = false
+        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args,
+        addToStack = true,
+        forceReload = false
     )
   }
 

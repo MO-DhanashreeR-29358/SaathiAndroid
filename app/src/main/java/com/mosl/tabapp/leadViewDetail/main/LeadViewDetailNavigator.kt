@@ -36,7 +36,7 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.URL_PATH, url)
         }
         screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_SUGGEST_ME,
+            NavigationConstants.NAVIGATE_TO_SUGGEST_ME.toString(),
             bundle,
             true
         )
@@ -55,7 +55,7 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.UCID, ucId)
         }
         screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_CREATE_MEETING,
+            NavigationConstants.NAVIGATE_TO_CREATE_MEETING.toString(),
             bundle,
             true
         )
@@ -70,7 +70,7 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.UCID, ucId)
         }
         screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_DOCUMENT,
+            NavigationConstants.NAVIGATE_TO_DOCUMENT.toString(),
             bundle,
             true
         )
@@ -85,7 +85,7 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.UCID, ucId)
         }
         screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT,
+            NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT.toString(),
             bundle,
             true
         )

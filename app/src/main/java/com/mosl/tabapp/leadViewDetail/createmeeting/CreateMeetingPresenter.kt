@@ -286,7 +286,7 @@ class CreateMeetingPresenter @Inject constructor(
           bundle.putString(ARG_LEAD_ID, createMeetingData.leadId)
           bundle.putString(ARG_UCID, createMeetingData.ucid)
           screenNavigator.openPage(
-              NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle,
+              NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle,
               addToStack = true,
               forceReload = false
           )

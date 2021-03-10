@@ -8,11 +8,26 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
-import android.view.*
+import android.view.KeyEvent
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.OnClickListener
+import android.view.ViewGroup
+import android.view.Window
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ListView
+import android.widget.SpinnerAdapter
+import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import android.widget.TimePicker
+import android.widget.Toast
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -32,24 +47,75 @@ import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.common.RowData.getSpinnerRowDataById
-import com.mosl.tabapp.constants.MOSLConstants.*
+import com.mosl.tabapp.constants.MOSLConstants.ACTIVITYTYPE
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEE_ALREADY_ADDED
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
+import com.mosl.tabapp.constants.MOSLConstants.DAYS
+import com.mosl.tabapp.constants.MOSLConstants.END_TIME_EQUAL_ERROR
+import com.mosl.tabapp.constants.MOSLConstants.END_TIME_ERROR
+import com.mosl.tabapp.constants.MOSLConstants.INTERESTEDIN
+import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
+import com.mosl.tabapp.constants.MOSLConstants.MEETING_ID
+import com.mosl.tabapp.constants.MOSLConstants.REPEATMODE
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_ACTIVITY_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_APPT_DATE_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_PRODUCT
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_WEEK
+import com.mosl.tabapp.constants.MOSLConstants.SELECT_WEEK_DAYS
+import com.mosl.tabapp.constants.MOSLConstants.SET_APPOINTMENTS
+import com.mosl.tabapp.constants.MOSLConstants.SPL_ATTENDEE_ALREADY_ADDED
+import com.mosl.tabapp.constants.MOSLConstants.START_TIME_ERROR
+import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.UPDATE_APPOINTMENTS
+import com.mosl.tabapp.constants.MOSLConstants.WEEKS
+import com.mosl.tabapp.constants.MOSLConstants.mFormatWithDash
+import com.mosl.tabapp.constants.MOSLConstants.mFormatWithSpace
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentSetAppiontmentBinding
 import com.mosl.tabapp.databinding.ItemListAddedAttendeeBinding
 import com.mosl.tabapp.databinding.ItemListAddedSplAttendeeBinding
-import com.mosl.tabapp.model.*
+import com.mosl.tabapp.model.AddedAttendeeModel
+import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.model.MeetingApptModel
+import com.mosl.tabapp.model.SplAttendeeModel
 import com.mosl.tabapp.navigation.NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.*
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ActivityType
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.GetClientDetail
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.GetMeeting
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.LeadView
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Product
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ProfileImage
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.RepeatMode
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.SetAppointmentMeeting
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.WeekDays
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Weeks
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_set_appiontment.*
-import kotlinx.android.synthetic.main.lms_top_section_update.*
+import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateOn
+import kotlinx.android.synthetic.main.frag_set_appiontment.spRepeateWeek
+import kotlinx.android.synthetic.main.frag_set_appiontment.spSelectProduct
+import kotlinx.android.synthetic.main.frag_set_appiontment.spSelectWeekDay
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvAPPDateError
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvApppointmentDateTime
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvApppointmentDateTimeDisplay
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvEndDateError
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvEndDateTime
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvEndDateTimeDisplay
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatTypeSpError
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvRepeatWeekdayError
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateError
+import kotlinx.android.synthetic.main.frag_set_appiontment.tvStartDateTime
+import kotlinx.android.synthetic.main.lms_top_section_update.ivLead
 import timber.log.Timber
 import java.net.URLEncoder
-import java.util.*
+import java.util.ArrayList
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickListener,
@@ -856,10 +922,10 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
             requireArguments().getString(LEAD_ID)
           )
           bundle.putString(
-            UCID,
-            requireArguments().getString(UCID)
+              UCID,
+              requireArguments().getString(UCID)
           )
-          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle, true, false)
         }
 
       }

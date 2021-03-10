@@ -46,7 +46,8 @@ class NotificationPresenter @Inject constructor(
       screenNavigator.openHome()
     } else if (target.page.equals(LEADVIEW)) {
       screenNavigator.openPage(
-        NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, openLeadViewDetail(target), false
+          NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), openLeadViewDetail(target),
+          false
       )
     } else {
       screenNavigator.openPage(
@@ -69,13 +70,13 @@ class NotificationPresenter @Inject constructor(
     return bundle
   }
 
-  fun notificationNavigation(category: String): Int {
+  fun notificationNavigation(category: String): String {
     val target = NotificationData(category)
     return when (target.page) {
-      PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
-      BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
-      DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD
-      else -> NavigationConstants.NAVIGATE_TO_DASHBOARD
+      PENDINGAPPROVAL -> NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL.toString()
+      BIRTHDAY -> NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY.toString()
+      DASHBOARD -> NavigationConstants.NAVIGATE_TO_DASHBOARD.toString()
+      else -> NavigationConstants.NAVIGATE_TO_DASHBOARD.toString()
     }
   }
 

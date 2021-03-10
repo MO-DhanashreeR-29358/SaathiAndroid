@@ -630,7 +630,7 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
             putString(UCID, argumentData!!.ucid)
           }
 
-          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true, false)
+          navigator.openPage(NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle, true, false)
         }
       }
     }

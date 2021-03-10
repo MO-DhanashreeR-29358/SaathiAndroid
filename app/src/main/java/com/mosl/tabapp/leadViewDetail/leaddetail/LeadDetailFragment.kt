@@ -7,8 +7,18 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
-import android.view.*
-import android.widget.*
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ListView
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.view.focusChanges
@@ -28,26 +38,84 @@ import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
-import com.mosl.saathi.api.model.lead.*
+import com.mosl.saathi.api.model.lead.ContactAddressItem
+import com.mosl.saathi.api.model.lead.ContactAddressRequest
+import com.mosl.saathi.api.model.lead.ContactRequest
+import com.mosl.saathi.api.model.lead.CrossSellingProduct
+import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.LeadFieldValueRequest
+import com.mosl.saathi.api.model.lead.LeadProductMappingItem
+import com.mosl.saathi.api.model.lead.UpdateLeadRequest
+import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
-import com.mosl.tabapp.common.*
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.CRMAppUtil.isBlank
+import com.mosl.tabapp.common.CRMMOSLCommon
+import com.mosl.tabapp.common.CustomDatePickerDialog
+import com.mosl.tabapp.common.CustomListPickerDialog
 import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
-import com.mosl.tabapp.constants.MOSLConstants.*
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.common.StringStuff
+import com.mosl.tabapp.constants.MOSLConstants.AMOUNT
+import com.mosl.tabapp.constants.MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE
+import com.mosl.tabapp.constants.MOSLConstants.CAL_DATE_FORMAT
+import com.mosl.tabapp.constants.MOSLConstants.CASH
+import com.mosl.tabapp.constants.MOSLConstants.CONFIRM_LEAD_UPDATE
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER_MEETING_SEND
+import com.mosl.tabapp.constants.MOSLConstants.INVEST_AMT
+import com.mosl.tabapp.constants.MOSLConstants.LEADID
+import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
+import com.mosl.tabapp.constants.MOSLConstants.LTGL
+import com.mosl.tabapp.constants.MOSLConstants.NO
+import com.mosl.tabapp.constants.MOSLConstants.OFFICEADDRESS
+import com.mosl.tabapp.constants.MOSLConstants.OVERALL_GAIN_LOSS
+import com.mosl.tabapp.constants.MOSLConstants.PERCENTAGE_GAIN_LOSS
+import com.mosl.tabapp.constants.MOSLConstants.POSITION
+import com.mosl.tabapp.constants.MOSLConstants.POTENTIAL_INVEST_IN_PRODUCT
+import com.mosl.tabapp.constants.MOSLConstants.PRODUCT
+import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_ID
+import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.PURCHASE_VALUE
+import com.mosl.tabapp.constants.MOSLConstants.RESIDENCEADDRESS
+import com.mosl.tabapp.constants.MOSLConstants.SEARCH_LENTH
+import com.mosl.tabapp.constants.MOSLConstants.STGL
+import com.mosl.tabapp.constants.MOSLConstants.TOTAL
+import com.mosl.tabapp.constants.MOSLConstants.TOTAL_GAIN_LOSS
+import com.mosl.tabapp.constants.MOSLConstants.TYPE
+import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.YES
+import com.mosl.tabapp.constants.MOSLConstants.mFormat
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
-import com.mosl.tabapp.leadViewDetail.*
+import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLBrokingAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioPLLimitsAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotAssetAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotBrokAdapter
+import com.mosl.tabapp.leadViewDetail.PortfolioSnapshotCashAdapter
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.leaddetail.AddProductData
 import com.mosl.tabapp.leaddetail.ClientDetail
-import com.mosl.tabapp.model.*
+import com.mosl.tabapp.leaddetail.ClientDetailWithPortfolioAndProfitLoss
+import com.mosl.tabapp.leaddetail.ClientPortfolio
+import com.mosl.tabapp.leaddetail.ClientProfitLoss
+import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadEmployees
+import com.mosl.tabapp.model.AddressDetailModel
+import com.mosl.tabapp.model.ContactDetailModel
+import com.mosl.tabapp.model.EmployeeModel
+import com.mosl.tabapp.model.LeadFieldSectionModel
+import com.mosl.tabapp.model.LeadFieldValueModel
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
@@ -55,15 +123,21 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
-import com.mosl.tabapp.util.*
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import com.mosl.tabapp.util.disableErrorMessages
+import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.util.gone
+import com.mosl.tabapp.util.nullSafe
+import com.mosl.tabapp.util.setErrorMessages
+import com.mosl.tabapp.util.setSpinnerData
+import com.mosl.tabapp.util.string
+import com.mosl.tabapp.util.visible
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.*
+import java.util.HashMap
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-
 
 class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProductCallBack {
 
@@ -363,7 +437,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         bundle.putString(LEAD_ID, leadID)
                         bundle.putString(UCID, uCID)
                         navigator.openPage(
-                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle, true,
+                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle,
+                            true,
                             forceReload = false
                         )
                     }

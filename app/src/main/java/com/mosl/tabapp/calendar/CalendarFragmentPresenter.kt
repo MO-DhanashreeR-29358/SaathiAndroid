@@ -44,7 +44,7 @@ class CalendarFragmentPresenter @Inject constructor(
         bundle.putString(MOSLConstants.NAME, it.name)
         bundle.putString(MOSLConstants.TIME, it.meetingDate)
         bundle.putSerializable(DATA_LIST, view.getResponseList() as Serializable)
-        navigator.openPage(NavigationConstants.NAVIGATE_TO_CALENDER_LIST, bundle, true)
+        navigator.openPage(NavigationConstants.NAVIGATE_TO_CALENDER_LIST.toString(), bundle, true)
       }
       .addTo(disposable)
   }

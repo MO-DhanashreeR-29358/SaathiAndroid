@@ -91,13 +91,14 @@ ext.deps = [
         'validator': "MofslArtifacts:validator:1.1.1",
         'annotation': "MofslArtifacts:annotations:1.0.2",
         'appcore': "MofslArtifacts:appcore:1.1.0-alpha6",
-        'navigator': "MofslArtifacts:navigator:1.0.10-alpha01",
-        'appcoreui': "MofslArtifacts:appcoreui:1.1.0-alpha5",
+        'navigator': "MofslArtifacts:navigator:1.0.13",
+        'appcoreui': "MofslArtifacts:appcoreui:1.1.0-alphla6",
         'tableview'    : "MofslArtifacts:tableview:1.0.35",
         'tableviewx'   : "MofslArtifacts:tableview_extensions:1.0.18",
         'groupie': "MofslArtifacts:groupie_extensions:1.0.8",
         'conceal'      : "MofslArtifacts:conceal:1.0.0",
-        'tokenmanager': "MofslArtifacts:tokenmanager:1.1.0"
+        'tokenmanager': "MofslArtifacts:tokenmanager:1.1.0",
+        'moslcommons'  : "MofslArtifacts:moslcommons:1.1.0-alpha4"
     ],
     'groupie': ['core': "com.xwray:groupie:${versions.groupie}",
         'dataBinding': "com.xwray:groupie-databinding:${versions.groupie}"],

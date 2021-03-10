@@ -72,7 +72,7 @@ class ScreenNavigatorImpl @Inject constructor(
     LeadViewActivitiesNavigator, ActionableInsightNavigator {
 
   override fun openPage(
-    pageId: Int,
+    pageId: String,
     args: Bundle,
     addToStack: Boolean,
     forceReload: Boolean
@@ -114,7 +114,7 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun openHome() {
-    openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD, false)
+    openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
   }
 
   override fun openPage(entry: NavigationEntry) {
@@ -141,11 +141,13 @@ class ScreenNavigatorImpl @Inject constructor(
       /**
        * (pageId < -1) represents pages in debug variant.
        */
-      pageId < -1 -> processNavigation(request.asFragmentEntry())
+      pageId < "-1 " -> processNavigation(request.asFragmentEntry())
       /**
        * Handles case where work is in progress.
        */
-      pageId == NavigationConstants.NAVIGATE_TO_NONE -> activity.toast("Work In Progress")
+      pageId == NavigationConstants.NAVIGATE_TO_NONE.toString() -> activity.toast(
+          "Work In Progress"
+      )
       /**
        * Handles back navigation on fragments.
        */
@@ -196,7 +198,7 @@ class ScreenNavigatorImpl @Inject constructor(
     val bundle = Bundle().apply {
       putString(MOSLConstants.URL_PATH, url)
     }
-    openPage(NAVIGATE_TO_SALES_BROCHURE, bundle, true)
+    openPage(NAVIGATE_TO_SALES_BROCHURE.toString(), bundle, true)
   }
 
   override fun openUrlInAppCrome(url: String) {
@@ -236,7 +238,7 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun openPage(
-    pageId: Int,
+    pageId: String,
     addToStack: Boolean
   ) {
     openPage(FragmentNavigationEntry(pageId, Bundle.EMPTY, addToStack))
@@ -253,7 +255,7 @@ class ScreenNavigatorImpl @Inject constructor(
     val args = Bundle().apply {
       putParcelable(ARG_MEETING_DETAILS, meetingParcel)
     }
-    openPage(NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS, args, true)
+    openPage(NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS.toString(), args, true)
   }
 
   override fun openSetAppointmentScreen(data: Appointment) {
@@ -262,7 +264,7 @@ class ScreenNavigatorImpl @Inject constructor(
       putString(UCID, data.ucid)
       putString(MEETING_ID, data.meetingId)
     }
-    openPage(NAVIGATE_TO_SET_APPOINTMENT, args, true)
+    openPage(NAVIGATE_TO_SET_APPOINTMENT.toString(), args, true)
   }
 
   override fun openUpdateMeetingScreen(data: Appointment) {
@@ -279,7 +281,7 @@ class ScreenNavigatorImpl @Inject constructor(
       putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
     }
 
-    openPage(NAVIGATE_TO_UPDATE_MEETING, args, true)
+    openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
   }
 
   override fun navigateToSecondLevelDashboard(
@@ -301,10 +303,10 @@ class ScreenNavigatorImpl @Inject constructor(
       putSerializable(MAP, addtionalParameterMap as Serializable)
     }
     if (actionableInsightDetailData.data.systemName.equals(STB_ACTIONABLE_NA_NC)) {
-      openPage(NAVIGATE_TO_LEAD_ASSIGN_STP, args, true)
+      openPage(NAVIGATE_TO_LEAD_ASSIGN_STP.toString(), args, true)
 
     } else {
-      openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args, true)
+      openPage(NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args, true)
     }
   }
 

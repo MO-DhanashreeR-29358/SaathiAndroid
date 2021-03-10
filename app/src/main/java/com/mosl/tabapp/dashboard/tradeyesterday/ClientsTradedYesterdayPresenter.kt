@@ -44,10 +44,10 @@ class ClientsTradedYesterdayPresenter @Inject constructor(
     args.putString(MOSLConstants.LABEL, view.getGroupName())
     args.putSerializable(MOSLConstants.MAP, data as Serializable?)
     navigator.openPage(
-      NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD,
-      args,
-      addToStack = true,
-      forceReload = false
+        NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(),
+        args,
+        addToStack = true,
+        forceReload = false
     )
   }
 

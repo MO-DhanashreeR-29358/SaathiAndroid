@@ -46,7 +46,6 @@ import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import javax.inject.Inject
 
-
 class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   lateinit var binding: ActivityLoginNewBinding
@@ -86,8 +85,8 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   private fun setUpView() {
     sharedPreferences = this.getSharedPreferences(
-      resources.getString(R.string.consent_check),
-      MODE_PRIVATE
+        resources.getString(R.string.consent_check),
+        MODE_PRIVATE
     )
     editor = sharedPreferences.edit()
 
@@ -106,7 +105,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   override fun getEmpCode(): String {
     return binding.edEmpCode.text?.trim()
-      .toString()
+        .toString()
   }
 
   override fun getPassword(): String {
@@ -140,8 +139,8 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   private fun showConsentDialog() {
     val lp = LinearLayout.LayoutParams(
-      LinearLayout.LayoutParams.WRAP_CONTENT,
-      LinearLayout.LayoutParams.WRAP_CONTENT
+        LinearLayout.LayoutParams.WRAP_CONTENT,
+        LinearLayout.LayoutParams.WRAP_CONTENT
     )
     lp.setMargins(10, 0, 10, 0)
     val message = TextView(this)
@@ -166,9 +165,10 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       }
     }
     alertDialog.setNegativeButton(
-      "Cancel"
+        "Cancel"
     ) { dialog: DialogInterface?, which: Int ->
-      Toast.makeText(this, getString(R.string.terms_condition_msg), Toast.LENGTH_LONG).show()
+      Toast.makeText(this, getString(R.string.terms_condition_msg), Toast.LENGTH_LONG)
+          .show()
       finish()
     }
     alertDialog.setView(message)
@@ -228,25 +228,25 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   override fun isDataEmpty(): Boolean {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun onDataAction(): Observable<DataAction> {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun clearTitles() {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -254,21 +254,19 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     return 0
   }
 
-  override fun getFragment(pageId: Int): Fragment? {
-    TODO(
-      "not implemented"
-    ) //To change body of created functions use File | Settings | File Templates.
+  override fun getFragment(pageId: String): Fragment? {
+    TODO("Not yet implemented")
   }
 
   override fun gotoPage(fragmentEntry: FragmentNavigationEntry) {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun hideAppTitle() {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
@@ -281,12 +279,16 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     appTitle: AppTitle?
   ) {
     TODO(
-      "not implemented"
+        "not implemented"
     ) //To change body of created functions use File | Settings | File Templates.
   }
 
   override fun showProgress() {
     binding.progressBar.visibility = View.VISIBLE
+  }
+
+  override fun isConnected(): Boolean {
+    return true
   }
 
   override fun onLatLongChanged(location: Location?) {

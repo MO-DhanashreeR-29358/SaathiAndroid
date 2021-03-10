@@ -16,7 +16,7 @@ import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.addTo
 import java.io.Serializable
-import java.util.*
+import java.util.HashMap
 import javax.inject.Inject
 
 class LeadsPresenter @Inject constructor(
@@ -81,7 +81,7 @@ class LeadsPresenter @Inject constructor(
         args.putString(MOSLConstants.LABEL, MOSLConstants.LEAD)
         args.putSerializable(MOSLConstants.MAP, addtionalParameterMap as Serializable)
         navigator.openPage(
-            NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD, args,
+            NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args,
             true, false
         )
     }
