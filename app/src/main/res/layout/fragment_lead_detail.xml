@@ -845,8 +845,10 @@
 
 
                     <TextView
+                        android:id="@+id/tv_lead_detail_profile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:text="@string/lead_detail_profile"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp" />
@@ -871,17 +873,80 @@
 
 
                     <TextView
-                        android:id="@+id/tvProfileError"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tv_broking_profile"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:enabled="false"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:textColor="@color/error_red"
-                        android:textSize="@dimen/_10sdp"
-                        android:visibility="gone"
-                        tools:visibility="visible" />
+                        android:text="@string/lead_detail_broking_profile"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_broking_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/sp_broking_profile"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_ip_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_ip_profile"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_ip_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/sp_ip_profile"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/tv_final_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_final_profile"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_final_profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/sp_final_profile"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <com.google.android.material.textfield.TextInputLayout
