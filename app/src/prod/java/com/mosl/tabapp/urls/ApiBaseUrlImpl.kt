@@ -20,7 +20,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getEkycExpressApiUrl(): String {
-    TODO("Not yet implemented")
+    return "https://www.motilaloswal.com/open-demat-account/api/v1/"
   }
 
   companion object {
