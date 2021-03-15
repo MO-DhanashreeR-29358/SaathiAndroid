@@ -393,6 +393,7 @@
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>
+    <string name="txt_lable_mobile_number">Mobile Number*</string>
     <string name="txt_lable_meeting_date">Meeting Date</string>
     <string name="txt_lable_product">Product*</string>
     <string name="txt_lable_meeting_duration">Meeting Duration*</string>

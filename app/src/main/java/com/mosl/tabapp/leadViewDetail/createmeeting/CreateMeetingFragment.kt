@@ -64,6 +64,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MOBILE_NUMBER
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
@@ -116,6 +117,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
     private lateinit var actionableAdapter: ArrayAdapter<LookUp>
     private lateinit var activityAdapter: ArrayAdapter<LookUp>
+    private lateinit var mobileNumberAdapter: ArrayAdapter<MobileListData>
     private lateinit var meetingObjectiveAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
@@ -148,6 +150,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spActivityType.adapter = activityAdapter
+        mobileNumberAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spMobileNumber.adapter = mobileNumberAdapter
 
         meetingLocationAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spMeetingLocation.adapter = meetingLocationAdapter
@@ -221,6 +225,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             )
             meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
             activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
+            mobileNumberAdapter.setSpinnerData(binding.spMobileNumber, it.listMobileNumber)
             meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
             travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
             isOnlyClient = clientDetail.isOnlyClient
@@ -744,6 +749,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.spProduct.setSelection(0)
         binding.spMeetingDuration.setSelection(0)
         binding.spActivityType.setSelection(0)
+        binding.spMobileNumber.setSelection(0)
         binding.spMeetingReason.setSelection(0)
         binding.spMeetingObjective.setSelection(0)
         binding.spMeetingLocation.setSelection(0)
@@ -871,6 +877,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return status
     }
 
+    override fun validateMobileNumber(): Boolean {
+        binding.tilMobileNumber.disableErrorMessages()
+        return if (getMobileNumberType() == CreateMeetingConstants.SELECT_MOBILE_NUMBER) {
+            binding.tilMobileNumber.setErrorMessages(MSG_SELECT_MOBILE_NUMBER)
+            false
+        } else true
+    }
+
     override fun onAttendeeClicked(): Observable<Unit> {
         return binding.ibAttendee.clicks()
     }
@@ -958,6 +972,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return null
     }
 
+    override fun getMobileNumberType(): MobileListData? {
+        if (binding.spMobileNumber.selectedItem is MobileListData) {
+            return (binding.spMobileNumber.selectedItem as MobileListData)
+        }
+        return null
+    }
+
     override fun getSelectedProduct(): LookUp? {
         if (binding.spProduct.selectedItem is LookUp) {
             return (binding.spProduct.selectedItem as LookUp)
@@ -1002,8 +1023,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         if (userManager.user.isRM()) {
             if (show) {
                 binding.btnSendOtp.visibility = View.VISIBLE
+                binding.tilMobileNumber.visibility = View.VISIBLE
             } else {
                 binding.btnSendOtp.visibility = View.GONE
+                binding.tilMobileNumber.visibility = View.GONE
             }
         }
     }
@@ -1037,13 +1060,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun showOTPDialog(
         ucid: String,
-        leadId: String
+        leadId: String,
+        mobileNumber: String
     ) {
         val ft =
             requireActivity().supportFragmentManager
                 .beginTransaction()
 
-        val dialogFragment = OTPFragment.newInstance(leadId, ucid)
+        val dialogFragment = OTPFragment.newInstance(leadId, ucid, mobileNumber)
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.setListener(this)
         dialogFragment.show(ft, "")
@@ -1072,6 +1096,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private var enableLocationGroup = false
     override fun onSuccessResult(status: Boolean) {
         isSendOTPSuccesssful = status
+    }
+
+    override fun cancelClick() {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
     }
 
     override fun isOTPSuccessful(): Boolean {
