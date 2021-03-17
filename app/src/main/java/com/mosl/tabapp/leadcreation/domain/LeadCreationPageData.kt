@@ -12,9 +12,12 @@ data class LeadCreationPageData(
 )
 
 data class LeadDetailPageData(
-  @JvmField val profileRowDatas: List<RowData>,
-  @JvmField val interestInRowDatas: List<RowData>,
-  @JvmField val countryRowDatas: List<RowData>
+    @JvmField val profileRowDatas: List<RowData>,
+    @JvmField val brokingProfileRowDatas: List<RowData>,
+    @JvmField val ipProfileRowDatas: List<RowData>,
+    @JvmField val finalProfileRowDatas: List<RowData>,
+    @JvmField val interestInRowDatas: List<RowData>,
+    @JvmField val countryRowDatas: List<RowData>
 )
 
 data class SearchReferee(

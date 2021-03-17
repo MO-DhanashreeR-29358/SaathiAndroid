@@ -602,7 +602,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     val headerBinding = ItemTableRowBinding.inflate(inflater)
     headerBinding.tvParameters.text = resources.getString(string.txt_label_parameters)
     headerBinding.tvMTDCOUNT.text = value
-    headerBinding.tvYTDCOUNT.text = MOSLConstants.YTD
+    headerBinding.tvYTDCOUNT.text = YTD
     binding.layoutIncentives.tableMData.addView(headerBinding.root)
     //adding head end
     if (arrayListIncentive.size > 0) {
@@ -1025,4 +1025,5 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
       )
     }
   }
+
 }

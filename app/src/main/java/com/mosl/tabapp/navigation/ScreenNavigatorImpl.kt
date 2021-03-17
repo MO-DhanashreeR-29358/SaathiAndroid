@@ -276,6 +276,7 @@ class ScreenNavigatorImpl @Inject constructor(
 
     companion object {
         const val STB_ACTIONABLE_NA_NC = "STB_Actionable_NA_NC"
+        const val ACTIONABLE = "Actionable"
     }
 
 }

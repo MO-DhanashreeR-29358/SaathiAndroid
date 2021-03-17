@@ -1,12 +1,15 @@
 package com.mosl.tabapp.model.dashboard;
 
 import androidx.fragment.app.Fragment;
+
 import com.mosl.tabapp.common.CRMAppUtil;
-import com.mosl.tabapp.constants.MOSLConstants;
 import com.mosl.tabapp.model.TypeActionableFilterModel;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.mosl.tabapp.dashboard.base.DashboardFragment.ACTIONABLE;
 
 /**
  * Created by pramod on 19/04/17.
@@ -99,7 +102,7 @@ public class DashboardModel implements Serializable {
      * @param count
      */
     public void setActionableCount(String widgetSystemName, String count, ArrayList<TypeActionableFilterModel> typeList) {
-        DashboardGroupModel actionableGroup = getGroupModel(MOSLConstants.ACTIONABLE);
+        DashboardGroupModel actionableGroup = getGroupModel(ACTIONABLE);
         if (actionableGroup != null) {
             for (WidgetModel widgetModel : actionableGroup.getWidgetList()) {
                 if (widgetModel.getSystemName().equals(widgetSystemName)) {

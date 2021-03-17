@@ -227,6 +227,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         val message = when (id) {
             1 -> getString(string.mgs_update_address)
             2 -> getString(string.mgs_update_profile)
+            4 -> PROFILE_ADDRESS
+            5 -> PROFILE
             else -> getString(string.mgs_update_profile_address)
         }
         erroMsgDialog(message)
@@ -433,6 +435,13 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         ucId = args.getString(MOSLConstants.UCID, "0") ?: "0"
         setupView()
         subject.onNext(RetryClick)
+    }
+
+    companion object {
+        const val PROFILE_ADDRESS =
+            "Kindly update address and all Profile Fields(BrokingProfile, IPProfile, FinalProfile)"
+        const val PROFILE =
+            "Kindly update all Profile Fields (BrokingProfile, IPProfile, FinalProfile)"
     }
 
 }

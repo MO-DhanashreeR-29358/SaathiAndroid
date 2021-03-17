@@ -7,11 +7,7 @@ import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
-import com.mosl.saathi.api.model.createlead.CreateLeadResponse
-import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
-import com.mosl.saathi.api.model.createlead.SearchRefereeModel
-import com.mosl.saathi.api.model.createlead.SourceListRequest
-import com.mosl.saathi.api.model.createlead.TransferLeadRequest
+import com.mosl.saathi.api.model.createlead.*
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -153,23 +149,53 @@ class LeadCreationRepositoryImpl @Inject constructor(
 
     override fun getProfileRowDatas(): Observable<List<RowData>> {
         val request = LookupRequest(
-                businessUnitId = requireNotNull(
-                        userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                        { "businessUnitId in UserManager is not be null" }),
-                lookupTypeId = MOSLConstants.LEADPROFILE
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getBrokingProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADBROKINGPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getIpProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADIPPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getFinalProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADFINALPROFILE
         )
         return getRowDatas(request)
     }
 
     override fun updateProfile(
-            profile: RowData,
-            ucId: String
+        profile: RowData,
+        ucId: String
     ): Observable<Pair<String, String>> {
         val request = ClientProfileRequest(profile.value, false, ucId)
         return saathiApi.saveClientProfile(request)
-                .map {
-                    val approval = it.approvalMessage ?: emptyString()
-                    approval to it.clientPotential
+            .map {
+                val approval = it.approvalMessage ?: emptyString()
+                approval to it.clientPotential
                 }
     }
 

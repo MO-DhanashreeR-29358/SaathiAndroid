@@ -261,7 +261,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             dialog.findViewById<Button>(R.id.btnSubmit)
         val timePicker = dialog.findViewById<TimePicker>(R.id.timePicker)
         timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-
+        timePicker.setIs24HourView(true)
         val cal = Calendar.getInstance()
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
