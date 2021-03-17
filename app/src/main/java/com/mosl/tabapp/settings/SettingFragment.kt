@@ -15,8 +15,8 @@ import androidx.preference.SwitchPreference
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.mosl.app.core.prefs.BooleanPreference
-import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
+import com.mosl.navigator.NavigationHelper
 import com.mosl.shared.util.isLocationFromMockProvider
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
@@ -139,25 +139,31 @@ class SettingFragment : PreferenceFragmentCompat() {
         latitude: Double,
         location: Location
     ) {
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val addressList = geocoder.getFromLocation(latitude, longitude, 1)
+        try {
+            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+            val addressList = geocoder.getFromLocation(latitude, longitude, 1)
 
-        val prefLatitude = findPreference<Preference>(getString(R.string.preference_latitude_key))
-        val prefLongitude = findPreference<Preference>(getString(R.string.preference_longitude_key))
+            val prefLatitude =
+                findPreference<Preference>(getString(R.string.preference_latitude_key))
+            val prefLongitude =
+                findPreference<Preference>(getString(R.string.preference_longitude_key))
 
-        if (!isLocationFromMockProvider(requireContext(), location)) {
-            prefLatitude?.summary = latitude.toString()
-            prefLongitude?.summary = longitude.toString()
-        } else {
-            showToast(getString(R.string.mock_location_label))
+            if (!isLocationFromMockProvider(requireContext(), location)) {
+                prefLatitude?.summary = latitude.toString()
+                prefLongitude?.summary = longitude.toString()
+            } else {
+                showToast(getString(R.string.mock_location_label))
+            }
+
+            val prefLocation = findPreference<Preference>(getString(R.string.preference_loc_key))
+            if (addressList.size > 0 && !isLocationFromMockProvider(requireContext(), location)) {
+                prefLocation?.summary = addressList[0].getAddressLine(0)
+            }
+
+            Timber.d("lat n long %s%s", latitude, longitude)
+        } catch (e: Exception) {
+            Timber.d("UpdateLongLat Exception : $e")
         }
-
-        val prefLocation = findPreference<Preference>(getString(R.string.preference_loc_key))
-        if (addressList.size > 0 && !isLocationFromMockProvider(requireContext(), location)) {
-            prefLocation?.summary = addressList[0].getAddressLine(0)
-        }
-
-        Timber.d("lat n long %s%s", latitude, longitude)
     }
 
     private fun showToast(message: String) {
@@ -197,10 +203,14 @@ class SettingFragment : PreferenceFragmentCompat() {
     ) {
         if (requestCode != FusedLocation.REQUEST_PERMISSIONS_REQUEST_CODE)
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        else fusedLocation.onRequestPermissionsResult(
-            requestCode,
-            permissions as Array<String>, grantResults
-        )
+        else {
+            if (fusedLocation.fusedLocationClient == null)
+                fusedLocation.init()
+            fusedLocation.onRequestPermissionsResult(
+                requestCode,
+                permissions as Array<String>, grantResults
+            )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

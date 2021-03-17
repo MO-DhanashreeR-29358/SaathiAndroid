@@ -16,7 +16,7 @@ class SettingActivity : DaggerAppCompatActivity() {
         findViewById<Toolbar>(R.id.toolbar).apply {
             setNavigationIcon(R.drawable.ic_arrow_back)
             setNavigationOnClickListener {
-                startActivity(Intent(this@SettingActivity, CommonActivity::class.java))
+//                startActivity(Intent(this@SettingActivity, CommonActivity::class.java))
                 finish()
             }
             title = getString(R.string.MOSL_MENU_SETTING)
@@ -32,7 +32,7 @@ class SettingActivity : DaggerAppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this@SettingActivity, CommonActivity::class.java))
+//        startActivity(Intent(this@SettingActivity, CommonActivity::class.java))
         finish()
     }
 
