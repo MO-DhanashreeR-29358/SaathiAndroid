@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
             app:errorTextAppearance="@style/error_appearance"
             app:hintEnabled="false">
 
