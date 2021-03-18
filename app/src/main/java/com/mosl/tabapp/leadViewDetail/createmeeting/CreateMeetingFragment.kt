@@ -1019,6 +1019,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun toggleOTPVisibility(show: Boolean) {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
         enableDisableField(binding.llLocationGroup, show)
         if (userManager.user.isRM()) {
             if (show) {
