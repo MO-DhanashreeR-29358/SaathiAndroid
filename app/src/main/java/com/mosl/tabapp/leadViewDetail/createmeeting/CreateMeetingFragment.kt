@@ -765,6 +765,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.etMeetingDescription.setText("")
         binding.etCustomerComment.setText("")
         binding.btnSendOtp.text = SEND_OTP_LABEL
+        isSendOTPSuccesssful = false
         toggleOTPVisibility(false)
         meetingProductAdapter.deleteAllProduct()
         travellingAdapter.deleteAllProduct()
