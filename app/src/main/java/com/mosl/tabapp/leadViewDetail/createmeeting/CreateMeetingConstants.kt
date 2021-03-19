@@ -9,7 +9,7 @@ object CreateMeetingConstants {
   val SELECT_ACTIVITY_TYPE = LookUp(0, "Select Activity Type")
 
   @JvmField
-  val SELECT_MOBILE_NUMBER = MobileListData("Select Mobile Number", "0")
+  val SELECT_MOBILE_NUMBER = MobileListData("Select Mobile Number For OTP", "0")
 
   @JvmField
   val SELECT_PRODUCT = LookUp(0, "Select Product")
@@ -44,7 +44,7 @@ object CreateMeetingConstants {
   }
 
   const val MSG_SELECT_ACTIVITY_TYPE = "Select Activity Type"
-  const val MSG_SELECT_MOBILE_NUMBER = "Select Mobile Number"
+  const val MSG_SELECT_MOBILE_NUMBER = "Select Mobile Number For OTP"
   const val MSG_SELECT_PRODUCT = "Select Product"
   const val MSG_SELECT_ACTIONABLE = "Select Actionables"
   const val MSG_SELECT_CATEGORY = "Select Category"
