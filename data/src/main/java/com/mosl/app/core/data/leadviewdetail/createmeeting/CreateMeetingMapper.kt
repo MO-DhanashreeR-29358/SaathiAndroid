@@ -71,7 +71,7 @@ object CreateMeetingMapper {
         list: List<MobileListResponse>
     ): List<MobileListData> {
         return list.map { MobileListData(it.contactField, it.contactNumber) }
-            .addDefaultSelection(MobileListData("Select Mobile Number For OTP", "0"))
+            .addDefaultSelection(MobileListData("Select Mobile Number For Verification Code", "0"))
     }
 
     fun transformAddUpdateMeeting(addUpdateMeetingItem: AddUpdateMeetingItem): AddUpdateMeeting {
