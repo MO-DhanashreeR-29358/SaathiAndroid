@@ -116,6 +116,14 @@ class CreateMeetingPresenter @Inject constructor(
             .filter { it != CreateMeetingConstants.SELECT_MEETING_REASON }
             .share()
 
+        view.onMobileNumberSelected()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getMobileNumberType() }
+            .filter { it != CreateMeetingConstants.SELECT_MOBILE_NUMBER }
+            .subscribe { view.onMobileClick() }
+            .addTo(disposable)
+
         meetingReasonObs.map {
             it.isCustomerService()
         }

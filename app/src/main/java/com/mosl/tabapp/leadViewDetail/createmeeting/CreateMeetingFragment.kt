@@ -914,6 +914,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.spMeetingReason.itemSelections()
     }
 
+    override fun onMobileNumberSelected(): Observable<Int> {
+        return binding.spMobileNumber.itemSelections()
+    }
+
     override fun onActivityTypeSelected(): Observable<Int> {
         return binding.spActivityType.itemSelections()
     }
@@ -1020,7 +1024,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun toggleOTPVisibility(show: Boolean) {
-        binding.btnSendOtp.text = SEND_OTP_LABEL
         enableDisableField(binding.llLocationGroup, show)
         if (userManager.user.isRM()) {
             if (show) {
@@ -1031,6 +1034,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.tilMobileNumber.visibility = View.GONE
             }
         }
+    }
+
+    override fun onMobileClick() {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
     }
 
     override fun toggleActionableVisibility(show: Boolean) {

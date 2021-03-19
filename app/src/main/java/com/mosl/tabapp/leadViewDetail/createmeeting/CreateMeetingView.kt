@@ -25,6 +25,7 @@ interface CreateMeetingView : BaseView {
   fun onTravellingModeSelected(): Observable<Int>
   fun onMeetingLocationSelected(): Observable<Int>
   fun onMeetingReasonSelected(): Observable<Int>
+  fun onMobileNumberSelected(): Observable<Int>
   fun onActivityTypeSelected(): Observable<Int>
   fun onProductSelected(): Observable<Int>
   fun onCategorySelected(): Observable<Int>
@@ -87,6 +88,7 @@ interface CreateMeetingView : BaseView {
   fun renderOnTravellingModeClick(lookUp: LookUp)
 
   fun toggleOTPVisibility(show: Boolean)
+  fun onMobileClick()
   fun toggleActionableVisibility(show: Boolean)
   fun toggleSearchState(
     queryEmpty: Boolean,
