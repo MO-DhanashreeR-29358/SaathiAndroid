@@ -1773,7 +1773,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
-    private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+    private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+
+    private fun setPCGProfileEnableDisable(status: Boolean) {
+
+        if (userManager.getUser()?.currentBusinessProfile?.businessProfileId != "1102")
+            binding.apply {
+                spBrokingProfile.isEnabled = status
+                spFinalProfile.isEnabled = status
+                spIpProfile.isEnabled = status
+            }
+    }
 
     private fun setEnableDisable(status: Boolean) {
         binding.apply {
@@ -1838,6 +1848,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     }
                 }
             }
+            compareStageID(leadDetailAddProductList)
         }
     }
 
@@ -2041,6 +2052,25 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    private fun compareStageID(leadDetailAddProductList: List<LeadDetailAddProductModel>) {
+        for (leadDetailAddProductModel in leadDetailAddProductList) {
+            if (leadDetailAddProductModel.stageId == "41" || leadDetailAddProductModel.stageId == "42"
+                || leadDetailAddProductModel.stageId == "43" || leadDetailAddProductModel.stageId == "44"
+            ) {
+                setPCGProfileEnableDisable(false)
+                break
+            } else {
+                setPCGProfileEnableDisable(true)
+            }
+        }
+    }
+
+    override fun updateProduct(leadDetailAddProductList: List<LeadDetailAddProductModel>) {
+        compareStageID(leadDetailAddProductList)
+        this.leadDetailAddProductList =
+            leadDetailAddProductList as ArrayList<LeadDetailAddProductModel>
+    }
+
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
 
     private fun List<LeadProductMappingItem>.renderMapping() {
@@ -2051,6 +2081,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.tvClientCode.text = it.clientCode
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
+
         leadDetailAddProductAdapter =
             LeadDetailAddProductAdapter(
                 saathiApi,

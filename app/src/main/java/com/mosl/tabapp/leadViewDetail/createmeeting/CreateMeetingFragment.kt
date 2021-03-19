@@ -380,7 +380,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             if (it.size > 1) {
-                Timber.i("VisiBilityVisible")
                 binding.llSubcategory.visibility = View.VISIBLE
                 subCategoryAdapter.clear()
                 subCategoryAdapter.setSpinnerData(binding.spSubCategory, it)

@@ -173,6 +173,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 break;
             }
         }
+        callBack.updateProduct(leadDetailAddProductModelList);
         notifyDataSetChanged();
     }
 
@@ -519,6 +520,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                         leadDetailAddProductModel.getProductSpecialistId());
             }
         });
+
         return view;
     }
 
@@ -1154,6 +1156,12 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                                 mappingRequest.actAssignTo
                         );
                     }
+//
+//                    callBack.setPCGProfileEnableDisable(!mappingRequest.stageID.equals("41")
+//                            && !mappingRequest.stageID.equals("42")
+//                            && !mappingRequest.stageID.equals("43")
+//                            && !mappingRequest.stageID.equals("44"));
+
                 }
 
                 alertDialog(mContext, 0,
