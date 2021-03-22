@@ -32,9 +32,9 @@ public interface MOSLConstants extends LabelConfig {
     int CATEGORY = 21;
     int SUBCATEGORY = 22;
     int LEADPROFILE = 23;
-    int LEADBROKINGPROFILE = 150;
-    int LEADIPPROFILE = 151;
-    int LEADFINALPROFILE = 152;
+    int LEADBROKINGPROFILE = 129;
+    int LEADIPPROFILE = 130;
+    int LEADFINALPROFILE = 131;
     int BANKMEETINGTYPE = 128;
     int WEEKS = 24;
     int DAYS = 25;
