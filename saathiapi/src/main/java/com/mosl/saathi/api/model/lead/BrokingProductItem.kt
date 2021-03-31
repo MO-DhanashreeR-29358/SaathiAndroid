@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class BrokingProductItem(
 
   @JvmField @SerializedName("product") val product: String,
-  @JvmField @SerializedName("productType") val productType: String,
+  @JvmField @SerializedName("Producttype") val productType: String,
   @JvmField @SerializedName("MarketValue") val marketValue: String,
   @JvmField @SerializedName("PurchaseValue") val purchaseValue: String,
   @JvmField @SerializedName("OverallGainLoss") val overallGainLoss: String,

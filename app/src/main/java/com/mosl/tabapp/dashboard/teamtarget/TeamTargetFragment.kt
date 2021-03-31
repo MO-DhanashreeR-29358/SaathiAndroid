@@ -22,12 +22,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.bank.BankCodeModel
-import com.mosl.mobile.domain.bank.BranchCodeModel
-import com.mosl.mobile.domain.bank.SelectBank
-import com.mosl.mobile.domain.bank.SelectBranch
-import com.mosl.mobile.domain.bank.SelectSubBranch
-import com.mosl.mobile.domain.bank.SubBranchCodeModel
+import com.mosl.mobile.domain.bank.*
 import com.mosl.mobile.domain.teamtarget.TeamTableItem3Model
 import com.mosl.mobile.domain.teamtarget.TeamTableItemModel
 import com.mosl.mobile.domain.teamtarget.TeamTargetItemModel
@@ -48,8 +43,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListener {
@@ -103,7 +97,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     if (itemList.size > 0) {
       widgetUiEvent.onNext(
         TeamWidgetUiEvent.ItemClick(
-          itemList.get(0).widgetModel,
+          itemList[0].widgetModel,
           0
         )
       )
@@ -164,7 +158,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
       widgetModelList.add(WidgetModel())
     }
 
-    widgetModelList.mapIndexed { position: Int, model: WidgetModel ->
+    widgetModelList.mapIndexed { _: Int, model: WidgetModel ->
 
       itemList.add(HorinzatalTeamTargetWidgetItem(model, widgetUiEvent))
     }
@@ -194,17 +188,17 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
 
     binding.includeTargetChart.chart.apply {
       description.isEnabled = false
-      setRotationEnabled(false)
+      isRotationEnabled = false
       setEntryLabelTextSize(resources.getDimension(R.dimen.chart_text_size))
       setUsePercentValues(true)
       setExtraOffsets(5f, 10f, 5f, 5f)
-      setDragDecelerationFrictionCoef(0.85f)
-      getLegend().setEnabled(false)
-      setDrawHoleEnabled(true)
+      dragDecelerationFrictionCoef = 0.85f
+      legend.isEnabled = false
+      isDrawHoleEnabled = true
       setTransparentCircleColor(Color.WHITE)
       setTransparentCircleAlpha(100)
-      setHoleRadius(70f)
-      setTransparentCircleRadius(30f)
+      holeRadius = 70f
+      transparentCircleRadius = 30f
       setDrawCenterText(true)
       setDrawEntryLabels(false)
       setBackgroundColor(Color.WHITE)
@@ -311,7 +305,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     }
   }
 
-  fun setDefaultValues(dropdownTypes: Int) {
+  private fun setDefaultValues(dropdownTypes: Int) {
     val selectBank = mutableListOf<BankCodeModel>()
     selectBank.add(0, SelectBank)
     val selectBranch = mutableListOf<BranchCodeModel>()
@@ -363,7 +357,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     return addtionalParameterMap
   }
 
-  fun chartClear() {
+  private fun chartClear() {
     binding.includeTargetChart.chart.clear()
     lableItemList.clear()
     labelGroupAdapter.clear()
@@ -384,7 +378,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     uiModel.onSuccess {
       tableListdata = it.tableListData()
       it.table3.apply {
-        SummaryCountView(this)
+        summaryCountView(this)
       }
       it.table.apply {
         if (this.isEmpty()) {
@@ -402,7 +396,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
 
   private fun List<TeamTableItemModel>.renderUI() {
     setDataBroking(this)
-    LableView(this)
+    lableView(this)
     setTitle()
   }
 
@@ -415,7 +409,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     data.setValueTextSize(11f)
     data.setValueTextColor(Color.WHITE)
     data.setValueTypeface(Typeface.DEFAULT)
-    binding.includeTargetChart.chart.setData(data)
+    binding.includeTargetChart.chart.data = data
     binding.includeTargetChart.chart.setOnChartValueSelectedListener(object :
       OnChartValueSelectedListener {
       override fun onValueSelected(
@@ -461,13 +455,13 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     return PieData(dataSet)
   }
 
-  fun SummaryCountView(tableList: List<TeamTableItem3Model>) {
+  private fun summaryCountView(tableList: List<TeamTableItem3Model>) {
 
-    (binding.includeTargetChart.rvSummaryCount.getLayoutManager() as GridLayoutManager).spanCount =
+    (binding.includeTargetChart.rvSummaryCount.layoutManager as GridLayoutManager).spanCount =
       gridSpanCount(tableList.size)
 
     val sortedList = tableList.sortedWith(compareBy { it.ord })
-    sortedList.mapIndexed { index, tableItemModel ->
+    sortedList.mapIndexed { _, tableItemModel ->
       summaryCountItemList.add(
         TeamTargetSummaryCountItem(
           tableItemModel, summaryCountUiEvent, requireContext(),
@@ -482,18 +476,18 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
   fun setTitle() {
     getWidgetModel()?.apply {
       if (this.widgetTypeList.size > 0) {
-        binding.includeTargetChart.tvWidgetName.setText(this.widgetTypeList.get(count).getTitle())
+        binding.includeTargetChart.tvWidgetName.text = this.widgetTypeList[count].title
       }
     }
   }
 
-  fun LableView(tableList: List<TeamTableItemModel>) {
+  private fun lableView(tableList: List<TeamTableItemModel>) {
     labelGroupAdapter.clear()
     lableItemList.clear()
-    (binding.includeTargetChart.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
+    (binding.includeTargetChart.rvLable.layoutManager as GridLayoutManager).spanCount =
       gridSpanCount(tableList.size)
 
-    tableList.mapIndexed { index, tableItemModel ->
+    tableList.mapIndexed { _, tableItemModel ->
       lableItemList.add(
         TeamTargetLableItem(tableItemModel, requireContext(), this)
       )
@@ -504,15 +498,15 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
 
   override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
     if (currentPosition != previousPosition) {
-      itemList.get(currentPosition).updateItem(true)
-      itemList.get(previousPosition).updateItem(false)
+      itemList[currentPosition].updateItem(true)
+      itemList[previousPosition].updateItem(false)
       previousPosition = currentPosition
     }
     this.widgetModel = widgetModel
     count = 0
   }
 
-  fun gridSpanCount(listCount: Int): Int {
+  private fun gridSpanCount(listCount: Int): Int {
     return when {
       listCount >= 3 -> 3
       listCount == 2 -> 2
@@ -526,8 +520,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
       R.id.iv_left_arrow -> {
         count--
         if (count >= 0)
-          if (tableListdata.get(count).size > 0) {
-            tableListdata.get(count).renderUI()
+          if (tableListdata[count].isNotEmpty()) {
+            tableListdata[count].renderUI()
           } else {
             setTitle()
             chartClear()
@@ -538,8 +532,8 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
       R.id.iv_right_arrow -> {
         if (count < 2)
           count++
-        if (tableListdata.get(count).size > 0) {
-          tableListdata.get(count).renderUI()
+        if (tableListdata[count].isNotEmpty()) {
+          tableListdata[count].renderUI()
         } else {
           setTitle()
           chartClear()
