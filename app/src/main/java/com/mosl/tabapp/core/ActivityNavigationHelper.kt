@@ -223,7 +223,8 @@ class ActivityNavigationHelper @Inject constructor(
                 ekycModule.prospectSource,
                 ekycModule.prospectSourceDetails,
                 ekycModule.interestedIn,
-                ekycModule.oaoUserId
+                ekycModule.oaoUserId,
+                ekycModule.branchName
             )
 
             disposable.add(saathiApi

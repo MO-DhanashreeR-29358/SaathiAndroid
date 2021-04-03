@@ -160,7 +160,8 @@ class AutoCompleteAdapter(
           prospectSourceDetails = resultModel.prospectSourceDetails,
           prospectSource = resultModel.prospectSourceName,
           source = resultModel.sourceName,
-          oaoUserId = ""
+          oaoUserId = "",
+          branchName = ""
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
@@ -177,7 +178,8 @@ class AutoCompleteAdapter(
           prospectSourceDetails = resultModel.prospectSourceDetails,
           prospectSource = resultModel.prospectSourceName,
           source = resultModel.sourceName,
-          oaoUserId = resultModel.oaoUserId.toString()
+          oaoUserId = resultModel.oaoUserId.toString(),
+          branchName = ""
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()

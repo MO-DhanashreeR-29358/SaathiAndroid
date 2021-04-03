@@ -50,6 +50,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     internal lateinit var presenter: LeadViewDetailPagerPresenter
 
     private var mobile: String? = null
+    private var branchName: String? = null
     private var oaoUserId: Int = 0
     private var diyCode: Int = 0
     private var diyLink: String = ""
@@ -299,7 +300,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     override fun renderOpenAccountClick() {
         gotoEkycPage(
             EkycModule(
-                mobile, email, leadOwner, sourceName, prospectSourceName,
+                mobile, branchName, email, leadOwner, sourceName, prospectSourceName,
                 prospectSourceDetail, interestedIn, oaoUserId.toString()
             )
         )
@@ -377,6 +378,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 ucId = stringOrZero(it.personalDetail.ucId)
                 email = it.personalDetail.email
                 mobile = it.personalDetail.mobile
+                branchName = it.branchCode
                 includeClient.detail.tvName.text = it.personalDetail.name
                 hideAppTitle()
                 includeClient.detail.tvLeadId.text = it.id
