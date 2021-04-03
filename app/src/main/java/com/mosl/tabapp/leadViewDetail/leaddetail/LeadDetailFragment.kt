@@ -208,6 +208,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 setIcon(llAssestProducts, txtAssestProducts, CONST_INNER)
             }
         }
+
+        userManager.getUser()?.apply {
+            if (isBank) {
+                binding.ilBank.visibility = View.VISIBLE
+                binding.ilBranch.visibility = View.VISIBLE
+            } else {
+                binding.ilBank.visibility = View.GONE
+                binding.ilBranch.visibility = View.GONE
+            }
+        }
     }
 
     private fun setIcon(parent: View, icon: TextView, Section: String) {
@@ -1879,6 +1889,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etRefereeEmail.setText(referEmail)
         binding.etRefereeNumber.setText(referMobile)
         binding.etCreatedBy.setText(createdBy)
+        binding.etBank.setText(bankName)
+        binding.etBranch.setText(branchName)
         binding.etCreatedThrough.setText(createdThrough)
         binding.etLastModifiedBy.setText(lastModifiedBy)
         try {

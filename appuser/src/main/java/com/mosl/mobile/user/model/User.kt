@@ -22,12 +22,13 @@ data class User(
     @JvmField val defaultBusinessProfile: BusinessProfileRequest,
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,
     @JvmField var password: String,
-    @JvmField var isBank: Boolean = false
+    @JvmField var isBank: Boolean
 
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
     }
+
 
     fun isSMTEnabled(): Boolean {
         return smtEnabled == "1"

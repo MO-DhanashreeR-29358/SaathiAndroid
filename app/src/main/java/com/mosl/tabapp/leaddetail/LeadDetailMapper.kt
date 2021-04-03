@@ -55,6 +55,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       referEmail = refereeEmail ?: emptyString(),
       referMobile = refereeMobile ?: emptyString(),
       createdBy = createdBy ?: emptyString(),
+      bankName = bankName ?: emptyString(),
+      branchName = branchcode ?: emptyString(),
       createdThrough = createdThrough ?: emptyString(),
       prospectSource = prospectSource ?: emptyString(),
       lastModifiedBy = lastModifiedBy ?: emptyString(),

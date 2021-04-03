@@ -27,6 +27,8 @@ data class LeadDetail(
     @JvmField val referEmail: String,
     @JvmField val referMobile: String,
     @JvmField val createdBy: String,
+    @JvmField val bankName: String,
+    @JvmField val branchName: String,
     @JvmField val createdThrough: String,
     @JvmField val prospectSource: String,
     @JvmField val lastModifiedBy: String,

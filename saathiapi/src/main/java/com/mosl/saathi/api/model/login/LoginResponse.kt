@@ -9,6 +9,7 @@ data class LoginResponse(
     @SerializedName("IsRetriveOTPEnable") @JvmField val isRetrieveOTPEnable: String?,
     @SerializedName("IsChequeApprovalEnable") @JvmField val isChequeApprovalEnable: String?,
     @SerializedName("IsPrimeUser") @JvmField val isPrimeUser: String,
+    @SerializedName("IsBank") @JvmField val isBank: String,
     @SerializedName("User") @JvmField val user: User
 ) {
 

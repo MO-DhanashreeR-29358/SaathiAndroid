@@ -544,6 +544,8 @@
     <string name="lead_detail_anniversary">Anniversary</string>
     <string name="lead_detail_creation_date">Creation Date</string>
     <string name="lead_detail_created_by">Created By</string>
+    <string name="lead_detail_bank">Bank</string>
+    <string name="lead_detail_branch">Branch</string>
     <string name="lead_detail_last_modified_date">Last Modified Date</string>
     <string name="lead_detail_modified_by">Modified By</string>
     <string name="lead_detail_source">Source</string>

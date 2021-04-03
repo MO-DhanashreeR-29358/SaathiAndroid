@@ -23,6 +23,8 @@ data class LeadViewItem(
     @JvmField @SerializedName("LastReCycleTransferDate") val lastReCycleTransferDate: String?,
     @JvmField @SerializedName("Status") val status: Int,
     @JvmField @SerializedName("CreatedBy") val createdBy: String?,
+    // @JvmField @SerializedName("Branchcode") val branchName: String?,
+    @JvmField @SerializedName("BankName") val bankName: String?,
     @JvmField @SerializedName("RefereeEmail") val refereeEmail: String?,
     @JvmField @SerializedName("OAOUserid") val oAOUserid: Int,
     @JvmField @SerializedName("QueryId") val queryId: Int,
