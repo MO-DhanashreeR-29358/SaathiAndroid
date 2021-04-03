@@ -1,8 +1,9 @@
 package com.mosl.mobile.domain.clients
 
 data class APClientsInput(
-  @JvmField val fltPeriod: String,
-  @JvmField val fltHierarchy: String
+    @JvmField val fltBankName: String?,
+    @JvmField val fltPeriod: String,
+    @JvmField val fltHierarchy: String
 )
 
 data class BusinessSnapAdditionalParametersInput(

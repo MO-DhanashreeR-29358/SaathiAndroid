@@ -10,12 +10,24 @@
         android:padding="@dimen/margin_medium">
 
         <Spinner
+            android:id="@+id/sp_bank"
+            style="@style/DashbordSpinnerSelector"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@+id/sp_period"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/sp_period" />
+
+
+        <Spinner
             android:id="@+id/sp_period"
             style="@style/DashbordSpinnerSelector"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/sp_bank"
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
