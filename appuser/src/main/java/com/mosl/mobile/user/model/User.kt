@@ -21,7 +21,8 @@ data class User(
     @JvmField val userTypeSequence: String,
     @JvmField val defaultBusinessProfile: BusinessProfileRequest,
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,
-    @JvmField var password: String
+    @JvmField var password: String,
+    @JvmField var isBank: Boolean = false
 
 ) {
     fun isAufsb(): Boolean {

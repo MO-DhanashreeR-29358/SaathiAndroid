@@ -443,6 +443,8 @@
     <string name="mock_location_label">Please Disable Mock Location!</string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
     <string name="lbl_lead_creation_category">Category*</string>
+    <string name="lbl_lead_creation_branch">Branch*</string>
+    <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
     <string name="hint_lead_creation_land_line">Land Line</string>
     <string name="hint_lead_creation_ekyc_mobile">Ekyc Mobile No</string>
@@ -491,6 +493,8 @@
     <string name="text_msg_product_update">Products Updated Successfully</string>
 
     <string name="error_message_category">Select Category</string>
+    <string name="error_message_bank">Select Bank</string>
+    <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>
     <string name="error_message_already_added">%s is already selected</string>
     <string name="error_message_alphabets">Only alphabets are allowed</string>

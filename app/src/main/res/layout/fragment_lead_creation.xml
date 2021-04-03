@@ -79,6 +79,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
                         android:layout_width="match_parent"
@@ -139,6 +140,7 @@
                             app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <TextView
                         android:id="@+id/tvProfession"
                         android:layout_width="match_parent"
@@ -169,6 +171,72 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
+                        android:id="@+id/tvBank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_bank"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tl_profession" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_Bank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvBank">
+
+                        <Spinner
+                            android:id="@+id/spBank"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/tvBranch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_branch"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tl_Bank" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_Branch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvBranch">
+
+                        <Spinner
+                            android:id="@+id/spBranch"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_bank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="tvBank,tvBranch,tl_Bank,tl_Branch" />
+
+                    <TextView
                         android:id="@+id/tvInterestIn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -177,7 +245,7 @@
                         android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tl_profession" />
+                        app:layout_constraintTop_toBottomOf="@id/tl_Branch" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -711,8 +779,8 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginTop="@dimen/_22sdp"
                         android:layout_marginEnd="5dp"
-                        android:visibility="gone"
                         android:paddingStart="@dimen/_15sdp"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 

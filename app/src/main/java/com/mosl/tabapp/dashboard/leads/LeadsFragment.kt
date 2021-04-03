@@ -21,21 +21,13 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.bank.BankCodeModel
-import com.mosl.mobile.domain.bank.BranchCodeModel
-import com.mosl.mobile.domain.bank.SelectBank
-import com.mosl.mobile.domain.bank.SelectBranch
-import com.mosl.mobile.domain.bank.SelectSubBranch
-import com.mosl.mobile.domain.bank.SubBranchCodeModel
+import com.mosl.mobile.domain.bank.*
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMValueFormatter
 import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants.DASHBOARD_MODEL
-import com.mosl.tabapp.constants.MOSLConstants.MAP
-import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
-import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment
 import com.mosl.tabapp.databinding.FragmentLeadsBinding
@@ -47,9 +39,7 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.subjects.PublishSubject
 import java.io.Serializable
-import java.util.ArrayList
-import java.util.Collections
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
@@ -223,7 +213,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     }
 
     uiModel.onSuccess {
-      bankAdapter.setSpinnerData(binding.spBank, it)
+      bankAdapter.setSpinnerData(binding.spBranch, it)
 
     }
   }

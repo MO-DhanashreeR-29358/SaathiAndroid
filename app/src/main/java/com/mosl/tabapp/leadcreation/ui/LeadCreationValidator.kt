@@ -10,220 +10,230 @@ import com.mosl.validator.data.ValidationResult
 
 class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
 
-  override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
-    val identifier: Int
-    val errorMessageRes = when {
+    override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
+        val identifier: Int
+        val errorMessageRes = when {
 
-      input.selectedCategory.value == SELECT -> {
-        identifier = 1
-        R.string.error_message_category
-      }
+            input.selectedCategory.value == SELECT -> {
+                identifier = 1
+                R.string.error_message_category
+            }
 
-      input.etCategoryName.isBlank() -> {
-        identifier = 2
-        R.string.error_message_cat_name
-      }
+            input.isBank && input.selectedBank.bankId == -1 -> {
+                identifier = 27
+                R.string.error_message_bank
+            }
 
-      input.etCategoryName.invalidAlphaNumbric() -> {
-        identifier = 3
-        R.string.error_message_alphabets
-      }
+            input.isBank && input.selectedBranch.branchId == -1 -> {
+                identifier = 28
+                R.string.error_message_branch
+            }
 
-      !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
-          input.etContactPerson.isBlank() -> {
-        identifier = 4
-        R.string.error_message_contact
-      }
+            input.etCategoryName.isBlank() -> {
+                identifier = 2
+                R.string.error_message_cat_name
+            }
 
-      !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
-          input.etContactPerson.invalidAlphaNumbric() -> {
-        identifier = 5
-        R.string.error_message_alphabets
-      }
+            input.etCategoryName.invalidAlphaNumbric() -> {
+                identifier = 3
+                R.string.error_message_alphabets
+            }
 
-      input.selectedInterestIn.value == SELECT -> {
-        identifier = 6
-        R.string.error_message_interest
-      }
+            !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
+                    input.etContactPerson.isBlank() -> {
+                identifier = 4
+                R.string.error_message_contact
+            }
 
-      input.selectedInterestIn.value.equals("PMS", true) &&
-          input.selectedProductType.value == SELECT -> {
-        identifier = 7
-        R.string.error_message_product_type
-      }
+            !input.selectedCategory.value.equals("INDIVIDUAL", true) &&
+                    input.etContactPerson.invalidAlphaNumbric() -> {
+                identifier = 5
+                R.string.error_message_alphabets
+            }
 
-      input.emailId.isNotBlank() &&
-          input.emailId.invalidEmail() -> {
-        identifier = 8
-        R.string.error_message_invalid_email
-      } // MOSLConstants.INVALID_EMAIL_ID
+            input.selectedInterestIn.value == SELECT -> {
+                identifier = 6
+                R.string.error_message_interest
+            }
 
-      input.alternateEmailId.isNotBlank() &&
-          input.alternateEmailId.invalidEmail() -> {
-        identifier = 9
-        R.string.error_message_invalid_email
-      }
+            input.selectedInterestIn.value.equals("PMS", true) &&
+                    input.selectedProductType.value == SELECT -> {
+                identifier = 7
+                R.string.error_message_product_type
+            }
 
-      input.alternateEmailId.isNotBlank() &&
-          input.emailId == input.alternateEmailId -> {
-        identifier = 10
-        R.string.error_message_same_email
-      }
+            input.emailId.isNotBlank() &&
+                    input.emailId.invalidEmail() -> {
+                identifier = 8
+                R.string.error_message_invalid_email
+            } // MOSLConstants.INVALID_EMAIL_ID
 
-      input.mobileNo.isBlank() -> {
-        identifier = 11
-        R.string.error_message_enter_mobile
-      }
+            input.alternateEmailId.isNotBlank() &&
+                    input.alternateEmailId.invalidEmail() -> {
+                identifier = 9
+                R.string.error_message_invalid_email
+            }
 
-      input.mobileNo.length <= 10 && !input.mobileNo.matches(
-          "^[6789]\\d{9}$".toRegex()
-      ) -> {
-        identifier = 12
-        R.string.error_message_invalid_mobile
-      }
+            input.alternateEmailId.isNotBlank() &&
+                    input.emailId == input.alternateEmailId -> {
+                identifier = 10
+                R.string.error_message_same_email
+            }
 
-      input.alternateMobileNo.isNotBlank() &&
-          input.alternateMobileNo.length <= 10 && !input.alternateMobileNo.matches(
-          "^[6789]\\d{9}$".toRegex()
-      ) -> {
-        identifier = 13
-        R.string.error_message_invalid_mobile
-      }
-      input.alternateMobileNo.isNotBlank() &&
-          input.mobileNo == input.alternateMobileNo -> {
-        identifier = 14
-        R.string.error_message_same_mobile
-      }
+            input.mobileNo.isBlank() -> {
+                identifier = 11
+                R.string.error_message_enter_mobile
+            }
 
-      input.landlineNo.isNotBlank() &&
-          input.landlineNo.invalidLandLine() -> {
-        identifier = 15
-        R.string.error_message_invalid_landline
-      }
+            input.mobileNo.length <= 10 && !input.mobileNo.matches(
+                "^[6789]\\d{9}$".toRegex()
+            ) -> {
+                identifier = 12
+                R.string.error_message_invalid_mobile
+            }
 
-      input.ekycMobileNo.isNotBlank() &&
-          input.ekycMobileNo.length <= 10 && !input.ekycMobileNo.matches(
-          "^[6789]\\d{9}$".toRegex()
-      ) -> {
-        identifier = 16
-        R.string.error_message_invalid_mobile
-      }
+            input.alternateMobileNo.isNotBlank() &&
+                    input.alternateMobileNo.length <= 10 && !input.alternateMobileNo.matches(
+                "^[6789]\\d{9}$".toRegex()
+            ) -> {
+                identifier = 13
+                R.string.error_message_invalid_mobile
+            }
+            input.alternateMobileNo.isNotBlank() &&
+                    input.mobileNo == input.alternateMobileNo -> {
+                identifier = 14
+                R.string.error_message_same_mobile
+            }
 
-      input.panNo.isNotBlank() &&
-          input.panNo.invalidPan() -> {
-        identifier = 17
-        R.string.error_message_invalid_pan
-      }
+            input.landlineNo.isNotBlank() &&
+                    input.landlineNo.invalidLandLine() -> {
+                identifier = 15
+                R.string.error_message_invalid_landline
+            }
 
-      input.aadharNo.isNotBlank() &&
-          input.aadharNo.invalidAadhar() -> {
-        identifier = 18
-        R.string.error_message_invalid_aadhar
-      }
+            input.ekycMobileNo.isNotBlank() &&
+                    input.ekycMobileNo.length <= 10 && !input.ekycMobileNo.matches(
+                "^[6789]\\d{9}$".toRegex()
+            ) -> {
+                identifier = 16
+                R.string.error_message_invalid_mobile
+            }
 
-      input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
-          input.referCode.length < 4 -> {
-        identifier = 19
-        R.string.error_message_referee_code
-      }
+            input.panNo.isNotBlank() &&
+                    input.panNo.invalidPan() -> {
+                identifier = 17
+                R.string.error_message_invalid_pan
+            }
 
-      input.referName.isNotBlank() &&
-          input.referName.invalidAlphaNumbric() -> {
-        identifier = 20
-        R.string.error_message_alphabets
-      }
+            input.aadharNo.isNotBlank() &&
+                    input.aadharNo.invalidAadhar() -> {
+                identifier = 18
+                R.string.error_message_invalid_aadhar
+            }
 
-      input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referName.isBlank() -> {
-        identifier = 21
-        R.string.error_message_prospect_referee
-      }
+            input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
+                    input.referCode.length < 4 -> {
+                identifier = 19
+                R.string.error_message_referee_code
+            }
 
-      input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referMobile.isBlank() -> {
-        identifier = 22
-        R.string.error_message_enter_mobile
-      }
+            input.referName.isNotBlank() &&
+                    input.referName.invalidAlphaNumbric() -> {
+                identifier = 20
+                R.string.error_message_alphabets
+            }
 
-      input.referMobile.isNotBlank() &&
-          input.referMobile.invalidMobileNo() -> {
-        identifier = 23
-        R.string.error_message_invalid_mobile
-      }
+            input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
+                    input.referName.isBlank() -> {
+                identifier = 21
+                R.string.error_message_prospect_referee
+            }
 
-      input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
-          input.referEmail.isBlank() -> {
-        identifier = 24
-        R.string.error_message_enter_email
-      }
+            input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
+                    input.referMobile.isBlank() -> {
+                identifier = 22
+                R.string.error_message_enter_mobile
+            }
 
-      input.pinCode.isNotBlank() &&
-          input.pinCode.length < 6 -> {
-        identifier = 25
-        R.string.error_message_pincode
-      }
+            input.referMobile.isNotBlank() &&
+                    input.referMobile.invalidMobileNo() -> {
+                identifier = 23
+                R.string.error_message_invalid_mobile
+            }
 
-      input.officePinCode.isNotBlank() &&
-          input.officePinCode.length < 6 -> {
-        identifier = 26
-        R.string.error_message_pincode
-      }
-      else -> {
-        identifier = 0
-        null
-      }
+            input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
+                    input.referEmail.isBlank() -> {
+                identifier = 24
+                R.string.error_message_enter_email
+            }
+
+            input.pinCode.isNotBlank() &&
+                    input.pinCode.length < 6 -> {
+                identifier = 25
+                R.string.error_message_pincode
+            }
+
+            input.officePinCode.isNotBlank() &&
+                    input.officePinCode.length < 6 -> {
+                identifier = 26
+                R.string.error_message_pincode
+            }
+            else -> {
+                identifier = 0
+                null
+            }
+        }
+
+        return returnValidationResult(
+            errorMessageRes,
+            actionOnError = {
+                withError(error = requireNotNull(errorMessageRes), identifier = identifier)
+            },
+            actionOnSuccess = { withData("Input is correct") }
+        )
+
     }
 
-    return returnValidationResult(
-        errorMessageRes,
-        actionOnError = {
-          withError(error = requireNotNull(errorMessageRes), identifier = identifier)
-        },
-        actionOnSuccess = { withData("Input is correct") }
-    )
+    private inline fun returnValidationResult(
+        @StringRes errorMessageRes: Int?,
+        actionOnError: (Int) -> ValidationResult<String>,
+        actionOnSuccess: () -> ValidationResult<String>
+    ): ValidationResult<String> {
+        return if (errorMessageRes != null)
+            actionOnError(errorMessageRes)
+        else
+            actionOnSuccess()
+    }
 
-  }
+    private fun String.invalidAlphaNumbric(): Boolean {
+        return !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(this)
+    }
 
-  private inline fun returnValidationResult(
-    @StringRes errorMessageRes: Int?,
-    actionOnError: (Int) -> ValidationResult<String>,
-    actionOnSuccess: () -> ValidationResult<String>
-  ): ValidationResult<String> {
-    return if (errorMessageRes != null)
-      actionOnError(errorMessageRes)
-    else
-      actionOnSuccess()
-  }
+    private fun String.invalidEmail(): Boolean {
+        return !CRMValidationRule.isValidEmail(this)
+    }
 
-  private fun String.invalidAlphaNumbric(): Boolean {
-    return !CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(this)
-  }
+    private fun String.invalidMobileNo(): Boolean {
+        return !CRMValidationRule.validateMobile(this)
+    }
 
-  private fun String.invalidEmail(): Boolean {
-    return !CRMValidationRule.isValidEmail(this)
-  }
+    private fun String.invalidLandLine(): Boolean {
+        return !CRMValidationRule.validateTel(this)
+    }
 
-  private fun String.invalidMobileNo(): Boolean {
-    return !CRMValidationRule.validateMobile(this)
-  }
+    private fun String.invalidPan(): Boolean {
+        return !CRMValidationRule.isValidPannumber(this)
+    }
 
-  private fun String.invalidLandLine(): Boolean {
-    return !CRMValidationRule.validateTel(this)
-  }
+    private fun String.invalidAadhar(): Boolean {
+        return !CRMValidationRule.validateAadhar(this)
+    }
 
-  private fun String.invalidPan(): Boolean {
-    return !CRMValidationRule.isValidPannumber(this)
-  }
-
-  private fun String.invalidAadhar(): Boolean {
-    return !CRMValidationRule.validateAadhar(this)
-  }
-
-  companion object {
-    const val ERROR_ALPHABETS = "Only alphabets are allowed"
-    const val ERROR_CONTACT_PERSON = "Enter contact person"
-    const val ERROR_REFEREE_CODE = "Enter referee code"
-    const val SELECT = "Select"
-    const val ERROR_PINCODE = "Invalid Pincode"
-  }
+    companion object {
+        const val ERROR_ALPHABETS = "Only alphabets are allowed"
+        const val ERROR_CONTACT_PERSON = "Enter contact person"
+        const val ERROR_REFEREE_CODE = "Enter referee code"
+        const val SELECT = "Select"
+        const val ERROR_PINCODE = "Invalid Pincode"
+    }
 }
