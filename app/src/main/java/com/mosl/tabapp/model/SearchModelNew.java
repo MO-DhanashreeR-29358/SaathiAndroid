@@ -29,24 +29,14 @@ public class SearchModelNew implements Serializable {
   private String empCode;
   private String productId;
   private String searchType;
-  private String clientCode = "0";
-  private int createMeetingId = 0;
 
-  public SearchModelNew(String searchType, String empCode, String name, String businessProfileId,
-      String businessProfileName, String productId) {
-    this.searchType = searchType;
-    this.empCode = empCode;
-    this.name = name;
-    this.businessProfileId = businessProfileId;
-    this.businessProfileName = businessProfileName;
-    this.productId = productId;
-  }
+  private String branchCode;
 
   public SearchModelNew(String searchType, String leadId, String name, String mobileNo,
-      String email,
-      String UCID, String leadOwner, Integer oaoUserId, String sourceName,
-      String prospectSourceName, String prospectSourceDetails, String interestedIn,
-      String clientCode, int createMeetingId, int diyCode) {
+                        String email,
+                        String UCID, String leadOwner, Integer oaoUserId, String sourceName,
+                        String prospectSourceName, String prospectSourceDetails, String interestedIn,
+                        String clientCode, int createMeetingId, int diyCode, String branchCode) {
     this.searchType = searchType;
     this.leadId = leadId;
     this.name = name;
@@ -62,6 +52,28 @@ public class SearchModelNew implements Serializable {
     this.clientCode = clientCode;
     this.createMeetingId = createMeetingId;
     this.diyCode = diyCode;
+    this.branchCode = branchCode;
+  }
+
+  public String getBranchCode() {
+    return branchCode;
+  }
+
+  private String clientCode = "0";
+  private int createMeetingId = 0;
+
+  public SearchModelNew(String searchType, String empCode, String name, String businessProfileId,
+                        String businessProfileName, String productId) {
+    this.searchType = searchType;
+    this.empCode = empCode;
+    this.name = name;
+    this.businessProfileId = businessProfileId;
+    this.businessProfileName = businessProfileName;
+    this.productId = productId;
+  }
+
+  public void setBranchCode(String branchCode) {
+    this.branchCode = branchCode;
   }
 
   public String getLeadId() {
