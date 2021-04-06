@@ -129,13 +129,12 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null"
-                            android:visibility="gone" />
+                             />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/til_contact_person"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             app:errorTextAppearance="@style/error_appearance"
                             app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>

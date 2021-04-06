@@ -647,14 +647,12 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderOnCategoryChange(category: String) {
         when (category) {
-            "INDIVIDUAL" -> {
-                binding.etContactPerson.gone()
-                binding.tilContactPerson.gone()
+            "INDIVIDUAL", "Individual" -> {
+                binding.ilContactPerson.gone()
             }
             else -> {
-                binding.etContactPerson.visible()
                 binding.tilContactPerson.disableErrorMessages()
-                binding.tilContactPerson.visible()
+                binding.ilContactPerson.visible()
 
             }
         }
