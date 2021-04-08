@@ -11,6 +11,8 @@ data class TeamTargetResponse(
 
   @JvmField @SerializedName("Table2")
   val table2: List<TableItem>,
+  @JvmField @SerializedName("Table4")
+  val table4: List<TableItem>? = null,
 
   @JvmField @SerializedName("Table3")
   val table3: List<TeamTable3Item>

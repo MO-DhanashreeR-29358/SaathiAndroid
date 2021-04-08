@@ -1,15 +1,7 @@
 package com.mosl.app.core.data.teamtarget
 
-import com.mosl.mobile.domain.teamtarget.AditionalParametersTeamTarget
-import com.mosl.mobile.domain.teamtarget.TeamTableItem3Model
-import com.mosl.mobile.domain.teamtarget.TeamTableItemModel
-import com.mosl.mobile.domain.teamtarget.TeamTargetInput
-import com.mosl.mobile.domain.teamtarget.TeamTargetItemModel
-import com.mosl.saathi.api.model.dashboard.targetteam.APTeamTargetRequest
-import com.mosl.saathi.api.model.dashboard.targetteam.TableItem
-import com.mosl.saathi.api.model.dashboard.targetteam.TeamTable3Item
-import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetRequest
-import com.mosl.saathi.api.model.dashboard.targetteam.TeamTargetResponse
+import com.mosl.mobile.domain.teamtarget.*
+import com.mosl.saathi.api.model.dashboard.targetteam.*
 
 fun TeamTargetInput.requestTransform(): TeamTargetRequest {
   return TeamTargetRequest(
@@ -35,6 +27,7 @@ fun TeamTargetResponse.responseTransform(): TeamTargetItemModel {
     table = table.itemTransform1(),
     table1 = table1.itemTransform1(),
     table2 = table2.itemTransform1(),
+    table4 = table4?.itemTransform1() ?: emptyList(),
     table3 = table3.itemTransform()
 
   )
