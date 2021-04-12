@@ -30,8 +30,8 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.mobile.user.login.user
-import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE11
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
 import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -415,8 +415,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getDate(): String {
-        return getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE11)
-
+        return getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE9)
     }
 
     override fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee> {
