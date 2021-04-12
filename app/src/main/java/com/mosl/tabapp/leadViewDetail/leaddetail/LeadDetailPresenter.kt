@@ -14,7 +14,7 @@ import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadDetailRepository
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function3
+import io.reactivex.functions.Function6
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -75,10 +75,18 @@ class LeadDetailPresenter @Inject constructor(
             .switchMap {
                 Observable.zip(
                     repository.getProfileRowDatas(),
+                    repository.getBrokingProfileRowDatas(),
+                    repository.getIpProfileRowDatas(),
+                    repository.getFinalProfileRowDatas(),
                     repository.getInterestInRowDatas(),
                     repository.getCountryRowDatas(),
-                    Function3 { listOfProfile: List<RowData>, listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
-                        LeadDetailPageData(listOfProfile, listOfInterest, listOfCountry)
+                    Function6 { listOfProfile: List<RowData>, listOfBrokingProfile: List<RowData>,
+                                listOfIpProfile: List<RowData>, listOfFinalProfile: List<RowData>,
+                                listOfInterest: List<RowData>, listOfCountry: List<RowData> ->
+                        LeadDetailPageData(
+                            listOfProfile, listOfBrokingProfile,
+                            listOfIpProfile, listOfFinalProfile, listOfInterest, listOfCountry
+                        )
                     }
                 )
                     .compose(applyUiModel())

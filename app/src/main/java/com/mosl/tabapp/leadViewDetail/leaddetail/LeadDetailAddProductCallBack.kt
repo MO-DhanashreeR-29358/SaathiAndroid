@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadViewDetail.leaddetail
 import android.view.View
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
+import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 
 interface LeadDetailAddProductCallBack {
     fun newInvestmentProductAdded(
@@ -27,4 +28,5 @@ interface LeadDetailAddProductCallBack {
     fun hideKeyBoard(view: View)
 
     fun openHome()
+    fun updateProduct(leadDetailAddProductList: List<LeadDetailAddProductModel>)
 }

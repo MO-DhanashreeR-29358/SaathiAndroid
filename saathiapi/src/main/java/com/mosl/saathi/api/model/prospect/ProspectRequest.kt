@@ -10,5 +10,6 @@ data class ProspectRequest(
     @SerializedName("ProspectSourceName") @JvmField val prospectSource: String?,
     @SerializedName("ProspectSourceDetails") @JvmField val prospectSourceDetails: String?,
     @SerializedName("InterestedIn") @JvmField val interestedIn: String?,
-    @SerializedName("OAOUserId") @JvmField val oaoUserId: String?
+    @SerializedName("OAOUserId") @JvmField val oaoUserId: String?,
+    @SerializedName("BranchCode") @JvmField val BranchCode: String?
 )

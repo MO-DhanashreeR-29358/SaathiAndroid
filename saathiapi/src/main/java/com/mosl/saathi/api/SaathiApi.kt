@@ -60,6 +60,8 @@ import com.mosl.saathi.api.model.fcm_token.FcmTokenRequest
 import com.mosl.saathi.api.model.fcm_token.FcmTokenResponse
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem
+import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
+import com.mosl.saathi.api.model.lead.createmeeting.MobileListResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.saathi.api.model.lead.request.SearchRequest
@@ -109,285 +111,291 @@ import retrofit2.http.*
 
 interface SaathiApi {
 
-  //========================= My Reports ==============================
+    //========================= My Reports ==============================
 
-  @POST("UserApi/GetUserBusinessProfileBranchByHierarchy")
-  fun postAssignedLeadReport(
-    @Body request: AssignedLeadReportRequest
-  ): Observable<List<AssignedLeadReportItem>>
+    @POST("UserApi/GetUserBusinessProfileBranchByHierarchy")
+    fun postAssignedLeadReport(
+        @Body request: AssignedLeadReportRequest
+    ): Observable<List<AssignedLeadReportItem>>
 
-  @ExcludeWrapper
-  @POST("Report/LoadReportViewDataAsync")
-  fun postLeadReport(
-    @Body request: LeadReportRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Report/LoadReportViewDataAsync")
+    fun postLeadReport(
+        @Body request: LeadReportRequest
+    ): Observable<String>
 
-  //========================== Lead View Details ==========================
+    //========================== Lead View Details ==========================
 
-  @POST("Country/GetCountryList")
-  fun getCountries(): Observable<List<CountryItem>>
+    @POST("Country/GetCountryList")
+    fun getCountries(): Observable<List<CountryItem>>
 
-  @POST("StateProvince/GetStateProvinceList")
-  fun getStateProvinces(
-    @Body request: StateProvinceRequest
-  ): Observable<List<StateProvinceItem>>
+    @POST("StateProvince/GetStateProvinceList")
+    fun getStateProvinces(
+        @Body request: StateProvinceRequest
+    ): Observable<List<StateProvinceItem>>
 
-  @POST("City/GetCityList")
-  fun getCityList(
-    @Body request: CityListRequest
-  ): Observable<List<CityItem>>
+    @POST("City/GetCityList")
+    fun getCityList(
+        @Body request: CityListRequest
+    ): Observable<List<CityItem>>
 
-  @POST("Master/GetAllLookup")
-  fun getAllLookup(
-    @Body request: LookupRequest
-  ): Observable<List<LookupItem>>
+    @POST("Master/GetAllLookup")
+    fun getAllLookup(
+        @Body request: LookupRequest
+    ): Observable<List<LookupItem>>
 
-  @POST("Meeting/StartMeeting")
-  fun getStartMeeting(
-    @Body request: SendOTPRequest
-  ): Observable<String>
 
-  @POST("Meeting/StartMeetingOTP")
-  fun postOtpForMeeting(
-    @Body request: PostOTPForMeetingRequest
-  ): Observable<SubmitOTPResponse>
+    @POST("Meeting/StartMeeting")
+    fun getStartMeeting(
+        @Body request: SendOTPRequest
+    ): Observable<String>
 
-  @POST("LeadStatus/GetStatusList")
-  fun getStatusList(
-    @Body request: StatusRequest
-  ): Observable<List<StatusItem>>
+    @POST("Meeting/GetMobileList")
+    fun getMobileList(
+        @Body request: MobileListRequest
+    ): Observable<List<MobileListResponse>>
 
-  @POST("Lead/GetLeadView")
-  fun getLeadView(
-    @Body request: LeadViewRequest
-  ): Observable<LeadViewItem>
+    @POST("Meeting/StartMeetingOTP")
+    fun postOtpForMeeting(
+        @Body request: PostOTPForMeetingRequest
+    ): Observable<SubmitOTPResponse>
 
-  @POST("Lead/UpdateLead")
-  fun updateLead(
-    @Body request: UpdateLeadRequest
-  ): Observable<UpdateLeadResponse>
+    @POST("LeadStatus/GetStatusList")
+    fun getStatusList(
+        @Body request: StatusRequest
+    ): Observable<List<StatusItem>>
 
-  @POST("Lead/SearchCommonMetaData")
-  @ExtraDataWrapper
-  fun getSearchData(
-    @Body request: SearchRequest
-  ): Observable<List<SearchResponse>>
+    @POST("Lead/GetLeadView")
+    fun getLeadView(
+        @Body request: LeadViewRequest
+    ): Observable<LeadViewItem>
 
-  @POST("UserApi/AutoCompleteProductSpecialist")
-  fun getProductSpecialist(
-    @Body request: ProductSpecialistRequest
-  ): Observable<List<ProductSpecialistItem>>
+    @POST("Lead/UpdateLead")
+    fun updateLead(
+        @Body request: UpdateLeadRequest
+    ): Observable<UpdateLeadResponse>
 
-  @POST("UserApi/GetUserBusinesprofile")
-  fun getUserBusinessProfile(
-    @Body request: UserBusinessProfileRequest
-  ): Observable<List<BusinessProfile>>
+    @POST("Lead/SearchCommonMetaData")
+    @ExtraDataWrapper
+    fun getSearchData(
+        @Body request: SearchRequest
+    ): Observable<List<SearchResponse>>
 
-  @POST("CrossSellingProductMapping/GetCrossSellingProduct")
-  fun getCrossSellingProduct(
-    @Body request: CrossSellingProductRequest
-  ): Observable<List<CrossSellingProduct>>
+    @POST("UserApi/AutoCompleteProductSpecialist")
+    fun getProductSpecialist(
+        @Body request: ProductSpecialistRequest
+    ): Observable<List<ProductSpecialistItem>>
 
-  @POST("Lead/InsertLeadProductMapping")
-  fun insertLeadProductMapping(
-    @Body request: InsertLeadProductRequest
-  ): Observable<List<LeadProductMappingItem>>
+    @POST("UserApi/GetUserBusinesprofile")
+    fun getUserBusinessProfile(
+        @Body request: UserBusinessProfileRequest
+    ): Observable<List<BusinessProfile>>
 
-  @POST("Stage/GetStageList")
-  fun getStageList(
-    @Body request: StageRequest
-  ): Observable<List<StageItem>>
+    @POST("CrossSellingProductMapping/GetCrossSellingProduct")
+    fun getCrossSellingProduct(
+        @Body request: CrossSellingProductRequest
+    ): Observable<List<CrossSellingProduct>>
 
-  @POST("Stage/GetStageMobileSelectList")
-  fun getStageMobileList(
-    @Body request: StageMobileRequest
-  ): Observable<List<StageMobileItem>>
+    @POST("Lead/InsertLeadProductMapping")
+    fun insertLeadProductMapping(
+        @Body request: InsertLeadProductRequest
+    ): Observable<List<LeadProductMappingItem>>
 
-  @POST("Client/GetClientViewByCommand")
-  fun getClientDetail(
-    @Body request: ClientDetailRequest
-  ): Observable<ClientDetailItem>
+    @POST("Stage/GetStageList")
+    fun getStageList(
+        @Body request: StageRequest
+    ): Observable<List<StageItem>>
 
-  @POST("Client/SaveClientProfile")
-  fun saveClientProfile(
-    @Body request: ClientProfileRequest
-  ): Observable<ClientProfileResponse>
+    @POST("Stage/GetStageMobileSelectList")
+    fun getStageMobileList(
+        @Body request: StageMobileRequest
+    ): Observable<List<StageMobileItem>>
 
-  @POST("Lead/SaveLeadCrossSellingProduct")
-  fun saveLeadCrossSellingProduct(
-    @Body request: SaveLeadCrossSellingProductRequest
-  ): Observable<CrossSellingProductResponse>
+    @POST("Client/GetClientViewByCommand")
+    fun getClientDetail(
+        @Body request: ClientDetailRequest
+    ): Observable<ClientDetailItem>
 
-  @POST("Lead/DeleteLeadProductMapping")
-  fun deleteLeadCrossSellingProduct(
-    @Body request: DeleteLeadCrossSellingProductRequest
-  ): Observable<Any>
+    @POST("Client/SaveClientProfile")
+    fun saveClientProfile(
+        @Body request: ClientProfileRequest
+    ): Observable<ClientProfileResponse>
 
-  @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
-  fun getStageWiseConfigurationByStatus(
-    @Body request: ConfigurationByStatusRequest
-  ): Observable<List<StageWiseConfiguration>>
+    @POST("Lead/SaveLeadCrossSellingProduct")
+    fun saveLeadCrossSellingProduct(
+        @Body request: SaveLeadCrossSellingProductRequest
+    ): Observable<CrossSellingProductResponse>
 
-  @POST("Lead/UpdateLeadProductMapping")
-  fun updateLeadProductMapping(
-    @Body request: UpdateLeadMappingRequest
-  ): Observable<List<LeadProductMappingItem>>
+    @POST("Lead/DeleteLeadProductMapping")
+    fun deleteLeadCrossSellingProduct(
+        @Body request: DeleteLeadCrossSellingProductRequest
+    ): Observable<Any>
 
-  @GET
-  @ExcludeWrapper
-  fun getClientSummary(
-    @Url url: String,
-    @Query("Userid") userId: String,
-    @Query("ClientUCID") ucid: String
-  ): Observable<ClientSummaryResponse>
+    @POST("Lead/GetTbl_StageWiseFieldConfigurationByStatus")
+    fun getStageWiseConfigurationByStatus(
+        @Body request: ConfigurationByStatusRequest
+    ): Observable<List<StageWiseConfiguration>>
 
-  @GET
-  @ExcludeWrapper
-  fun getClientGainLossSummary(
-    @Url url: String,
-    @Query("Userid") userId: String,
-    @Query("ClientUCID") ucid: String
-  ): Observable<ClientGainLossSummaryResponse>
+    @POST("Lead/UpdateLeadProductMapping")
+    fun updateLeadProductMapping(
+        @Body request: UpdateLeadMappingRequest
+    ): Observable<List<LeadProductMappingItem>>
 
-  //===================== Create Lead=========================
+    @GET
+    @ExcludeWrapper
+    fun getClientSummary(
+        @Url url: String,
+        @Query("Userid") userId: String,
+        @Query("ClientUCID") ucid: String
+    ): Observable<ClientSummaryResponse>
 
-  @POST("Source/GetSourceList")
-  fun getSourceList(
-    @Body request: SourceListRequest
-  ): Observable<List<SourceListItem>>
+    @GET
+    @ExcludeWrapper
+    fun getClientGainLossSummary(
+        @Url url: String,
+        @Query("Userid") userId: String,
+        @Query("ClientUCID") ucid: String
+    ): Observable<ClientGainLossSummaryResponse>
 
-  @POST("LeadSource/GetLeadSourceList")
-  fun getLeadSourceList(
-    @Body request: LeadSourceListRequest
-  ): Observable<List<LeadSourceItem>>
+    //===================== Create Lead=========================
 
-  @POST("Lead/TransferLeadCaughtInC2")
-  fun transferLead(
-    @Body request: TransferLeadRequest
-  ): Observable<SaathiCommonResponse<TransferLeadResponse>>
+    @POST("Source/GetSourceList")
+    fun getSourceList(
+        @Body request: SourceListRequest
+    ): Observable<List<SourceListItem>>
 
-  @POST("Lead/AddUpdateLead")
-  fun addUpdateLead(
-    @Body request: CreateLeadRequest
-  ): Observable<SaathiCommonResponse<CreateLeadResponse>>
+    @POST("LeadSource/GetLeadSourceList")
+    fun getLeadSourceList(
+        @Body request: LeadSourceListRequest
+    ): Observable<List<LeadSourceItem>>
 
-  @POST("Common/GetRefereeCode")
-  fun getRefereeCode(
-    @Body request: SearchRefereeModel
-  ): Observable<SearchRefereeResponse>
+    @POST("Lead/TransferLeadCaughtInC2")
+    fun transferLead(
+        @Body request: TransferLeadRequest
+    ): Observable<SaathiCommonResponse<TransferLeadResponse>>
 
-  // ==================== Query ===========================
+    @POST("Lead/AddUpdateLead")
+    fun addUpdateLead(
+        @Body request: CreateLeadRequest
+    ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
-  @POST("Common/RequetQuery")
-  fun postQuery(
-    @Body request: QueryRequest
-  ): Observable<QueryItem>
+    @POST("Common/GetRefereeCode")
+    fun getRefereeCode(
+        @Body request: SearchRefereeModel
+    ): Observable<SearchRefereeResponse>
 
-  //========================== Pending Approval ====================
+    // ==================== Query ===========================
 
-  @POST("ApprovalRequest/GetAprovalCoutSummary")
-  fun postApprovalSummaryCount(
-    @Body request: PendingApprovalRequest
-  ): Observable<ApprovalSummaryCountItem>
+    @POST("Common/RequetQuery")
+    fun postQuery(
+        @Body request: QueryRequest
+    ): Observable<QueryItem>
 
-  @POST("ApprovalRequest/GetApprovalFieldListSummaryByEmployeeCode")
-  fun postApprovalSummaryByEmployee(
-    @Body request: PendingApprovalRequest
-  ): Observable<List<ApprovalSummaryByEmployeeItem>>
+    //========================== Pending Approval ====================
 
-  //======================= Birthday Anniversary ====================
+    @POST("ApprovalRequest/GetAprovalCoutSummary")
+    fun postApprovalSummaryCount(
+        @Body request: PendingApprovalRequest
+    ): Observable<ApprovalSummaryCountItem>
 
-  @POST("Client/GetBirthdayAnniversary")
-  fun postBirthdayAnniversary(
-    @Body request: BirthdayAnniversaryRequest
-  ): Observable<BirthdayAnniversaryItem>
+    @POST("ApprovalRequest/GetApprovalFieldListSummaryByEmployeeCode")
+    fun postApprovalSummaryByEmployee(
+        @Body request: PendingApprovalRequest
+    ): Observable<List<ApprovalSummaryByEmployeeItem>>
 
-  @POST("Client/SendGiftRequest")
-  fun postSendGift(
-    @Body request: SendGiftRequest
-  ): Observable<String>
+    //======================= Birthday Anniversary ====================
 
-  @POST("Client/GetMailClientId")
-  fun postSendEmail(
-    @Body request: SendEmailRequest
-  ): Observable<String>
+    @POST("Client/GetBirthdayAnniversary")
+    fun postBirthdayAnniversary(
+        @Body request: BirthdayAnniversaryRequest
+    ): Observable<BirthdayAnniversaryItem>
 
-  //===================== Notification=========================
+    @POST("Client/SendGiftRequest")
+    fun postSendGift(
+        @Body request: SendGiftRequest
+    ): Observable<String>
 
-  @POST("NotificationMessage/GetNotificationMessageMobile")
-  @ExtraDataWrapper
-  fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+    @POST("Client/GetMailClientId")
+    fun postSendEmail(
+        @Body request: SendEmailRequest
+    ): Observable<String>
 
-  //===================== Lead View Activities=========================
+    //===================== Notification=========================
 
-  @POST("Meeting/GetMeeting")
-  @ExtraDataWrapper
-  fun getMeetings(@Body request: MeetingRequest): Observable<List<MeetingResponse>>
+    @POST("NotificationMessage/GetNotificationMessageMobile")
+    @ExtraDataWrapper
+    fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
 
-  @POST("Meeting/GetAppointment")
-  @ExtraDataWrapper
-  fun getAppointments(@Body request: AppointmentRequest): Observable<List<AppointmentResponse>>
+    //===================== Lead View Activities=========================
 
-  @POST("Meeting/{action}")
-  fun deleteAppointments(
-    @Path("action") action: String,
-    @Body request: DeleteAppointmentRequest
-  ): Observable<String>
+    @POST("Meeting/GetMeeting")
+    @ExtraDataWrapper
+    fun getMeetings(@Body request: MeetingRequest): Observable<List<MeetingResponse>>
 
-  @POST("Lead/GetAddressByLeadId")
-  fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
+    @POST("Meeting/GetAppointment")
+    @ExtraDataWrapper
+    fun getAppointments(@Body request: AppointmentRequest): Observable<List<AppointmentResponse>>
 
-  @POST("UserApi/AutoCompleteAttendee")
-  fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+    @POST("Meeting/{action}")
+    fun deleteAppointments(
+        @Path("action") action: String,
+        @Body request: DeleteAppointmentRequest
+    ): Observable<String>
 
-  @POST("UserApi/AutoCompleteSplAttendee")
-  fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+    @POST("Lead/GetAddressByLeadId")
+    fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
-  @POST("Meeting/GetMeetingByID")
-  fun getMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+    @POST("UserApi/AutoCompleteAttendee")
+    fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
 
-  //================================Add Update Meeting======================================
+    @POST("UserApi/AutoCompleteSplAttendee")
+    fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
 
-  @POST("Meeting/AddUpdateMeeting")
-  fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
+    @POST("Meeting/GetMeetingByID")
+    fun getMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
 
-  @POST("Meeting/AddUpdateMeeting")
-  fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>
-  //===================== Lead View Main=========================
+    //================================Add Update Meeting======================================
 
-  @POST("Prospect/SMT_RegisterProspectOnline/")
-  fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
+    @POST("Meeting/AddUpdateMeeting")
+    fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
 
-  //==================== Lead Profile ===========================
-  @POST("Lead/GetLeadProfileParameters")
-  fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
+    @POST("Meeting/AddUpdateMeeting")
+    fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>
+    //===================== Lead View Main=========================
 
-  @POST("Lead/SaveLeadProfileParameter")
-  fun postLeadProfileOld(
-    @Body request: List<SaveLeadProfileRequest>
-  ): Observable<String>
+    @POST("Prospect/SMT_RegisterProspectOnline/")
+    fun getRegisterProspectOnline(@Body request: RegisterProspectOnlineRequest): Observable<RegisterProspectOnlineResponse>
 
-  @POST("Lead/SaveLeadProfileParameter")
-  fun postLeadProfile(
-    @Body request: List<SaveLeadProfileRequest>
-  ): Observable<SaathiCommonResponse<String>>
+    //==================== Lead Profile ===========================
+    @POST("Lead/GetLeadProfileParameters")
+    fun getLeadProfile(@Body request: LeadProfileRequest): Observable<List<LeadProfileItem>>
 
-  //================= Pending For Approval ====================
+    @POST("Lead/SaveLeadProfileParameter")
+    fun postLeadProfileOld(
+        @Body request: List<SaveLeadProfileRequest>
+    ): Observable<String>
 
-  @POST("ApprovalRequest/GetApprovelReqestFieldList")
-  fun getApprovalFieldList(
-    @Body request: ApprovelRequest
-  ): Observable<List<ApprovalFieldItem>>
+    @POST("Lead/SaveLeadProfileParameter")
+    fun postLeadProfile(
+        @Body request: List<SaveLeadProfileRequest>
+    ): Observable<SaathiCommonResponse<String>>
 
-  @POST("ApprovalRequest/GetApprovelReqestUserList")
-  fun getApprovalUserList(
-    @Body request: ApprovelRequest
-  ): Observable<List<ApprovalUserItem>>
+    //================= Pending For Approval ====================
 
-  @POST("ApprovalRequest/ApprovalRequestList")
-  fun getApprovalRequestListOld(
-      @Body request: ApprovalListRequest
-  ): Observable<String>
+    @POST("ApprovalRequest/GetApprovelReqestFieldList")
+    fun getApprovalFieldList(
+        @Body request: ApprovelRequest
+    ): Observable<List<ApprovalFieldItem>>
+
+    @POST("ApprovalRequest/GetApprovelReqestUserList")
+    fun getApprovalUserList(
+        @Body request: ApprovelRequest
+    ): Observable<List<ApprovalUserItem>>
+
+    @POST("ApprovalRequest/ApprovalRequestList")
+    fun getApprovalRequestListOld(
+        @Body request: ApprovalListRequest
+    ): Observable<String>
 
     @ExtraDataWrapper
     @POST("ApprovalRequest/ApprovalRequestList")
@@ -401,287 +409,287 @@ interface SaathiApi {
         @Body request: GetLeadAssignStpRequest
     ): Observable<List<GetLeadAssignStpItemResponse>>
 
-  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
-  fun postMultiUpdateApprovalOld(
-    @Body request: MultiUpdateApprovalRequest
-  ): Observable<String>
+    @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+    fun postMultiUpdateApprovalOld(
+        @Body request: MultiUpdateApprovalRequest
+    ): Observable<String>
 
-  @POST("ApprovalRequest/MultiUpdateApprovalRequest")
-  fun postMultiUpdateApproval(
-    @Body request: MultiUpdateApprovalRequest
-  ): Observable<SaathiCommonResponse<String>>
+    @POST("ApprovalRequest/MultiUpdateApprovalRequest")
+    fun postMultiUpdateApproval(
+        @Body request: MultiUpdateApprovalRequest
+    ): Observable<SaathiCommonResponse<String>>
 
-  @POST("Lead/STPAssignedLead")
-  fun getSTPLeadTransfer(
-    @Body request: STPLeadTransferRequest
-  ): Observable<SaathiCommonResponse<String>>
-  //====================== Dashboard =====================
+    @POST("Lead/STPAssignedLead")
+    fun getSTPLeadTransfer(
+        @Body request: STPLeadTransferRequest
+    ): Observable<SaathiCommonResponse<String>>
+    //====================== Dashboard =====================
 
-  @POST("UserApi/GetBankCode")
-  fun getBankFilter(): Observable<List<BankCodeResponse>>
+    @POST("UserApi/GetBankCode")
+    fun getBankFilter(): Observable<List<BankCodeResponse>>
 
-  @POST("UserApi/GetBranchCodeByBank")
-  fun getBranchFilter(@Body request: BranchCodeRequest): Observable<List<BranchCodeResponse>>
+    @POST("UserApi/GetBranchCodeByBank")
+    fun getBranchFilter(@Body request: BranchCodeRequest): Observable<List<BranchCodeResponse>>
 
-  @POST("UserApi/GetSubBranchCodeByBank")
-  fun getSubBranchFilter(@Body request: SubBranchCodeRequest): Observable<List<SubBranchCodeResponse>>
+    @POST("UserApi/GetSubBranchCodeByBank")
+    fun getSubBranchFilter(@Body request: SubBranchCodeRequest): Observable<List<SubBranchCodeResponse>>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getClients(
-    @Body request: CommonRequest
-  ): Observable<ClientItemResponse>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getClients(
+        @Body request: CommonRequest
+    ): Observable<ClientItemResponse>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getDashboardData(
-    @Body request: CommonRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getDashboardData(
+        @Body request: CommonRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTrendsWidgetData(
-    @Body request: TrendsRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getTrendsWidgetData(
+        @Body request: TrendsRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getBusinessSnapshotAdv(
-    @Body request: BusinessSnapshotRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getBusinessSnapshotAdv(
+        @Body request: BusinessSnapshotRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getProductivity(
-    @Body request: ProductivityRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getProductivity(
+        @Body request: ProductivityRequest
+    ): Observable<String>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getLeadWidgetData(
-    @Body request: LeadRequest
-  ): Observable<LeadResponse>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getLeadWidgetData(
+        @Body request: LeadRequest
+    ): Observable<LeadResponse>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getLeadReportWidgetData(
-    @Body request: LeadsReportRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getLeadReportWidgetData(
+        @Body request: LeadsReportRequest
+    ): Observable<String>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getClientsWidgetData(
-    @Body request: ClientsRequest
-  ): Observable<ClientItemResponse>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getClientsWidgetData(
+        @Body request: ClientsRequest
+    ): Observable<ClientItemResponse>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTargetWidgetData(
-    @Body request: TargetRequest
-  ): Observable<TargetItemResponse>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getTargetWidgetData(
+        @Body request: TargetRequest
+    ): Observable<TargetItemResponse>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTeamTargetWidgetData(
-    @Body request: TeamTargetRequest
-  ): Observable<TeamTargetResponse>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getTeamTargetWidgetData(
+        @Body request: TeamTargetRequest
+    ): Observable<TeamTargetResponse>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getSnapshot(
-    @Body request: CommonRequest
-  ): Observable<SnapshotItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getSnapshot(
+        @Body request: CommonRequest
+    ): Observable<SnapshotItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getBusinessSnapshot(
-    @Body requestBusiness: BusinessSnapshotRequest
-  ): Observable<SnapshotItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getBusinessSnapshot(
+        @Body requestBusiness: BusinessSnapshotRequest
+    ): Observable<SnapshotItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTargetAchievement(
-    @Body request: CommonRequest
-  ): Observable<TargetAchievementItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getTargetAchievement(
+        @Body request: CommonRequest
+    ): Observable<TargetAchievementItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getTargetAchievementTeam(
-    @Body request: CommonRequest
-  ): Observable<TargetAchievementTeamItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getTargetAchievementTeam(
+        @Body request: CommonRequest
+    ): Observable<TargetAchievementTeamItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getClientsTradedYesterdayOld(
-    @Body request: CommonRequest
-  ): Observable<ClientTradedYesterdayItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getClientsTradedYesterdayOld(
+        @Body request: CommonRequest
+    ): Observable<ClientTradedYesterdayItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getClientsTradedYesterday(
-    @Body request: ClientTradeYesterdayRequest
-  ): Observable<ClientTradedYesterdayItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getClientsTradedYesterday(
+        @Body request: ClientTradeYesterdayRequest
+    ): Observable<ClientTradedYesterdayItem>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoaddetailsWidgeAsync")
-  fun getDashboardSecondLevel(
-    @Body request: DashboardSecondLevelRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoaddetailsWidgeAsync")
+    fun getDashboardSecondLevel(
+        @Body request: DashboardSecondLevelRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Dashboard/LoaddetailsWidgeAsync")
-  fun getDashboardHierarchy(
-    @Body request: DashboardSecondLevelRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Dashboard/LoaddetailsWidgeAsync")
+    fun getDashboardHierarchy(
+        @Body request: DashboardSecondLevelRequest
+    ): Observable<String>
 
-  @POST("Dashboard/GetIncentivePolicy")
-  fun getIncentivePolicy(
-    @Body request: IncentivePolicyRequest
-  ): Observable<IncentivePolicyItem>
+    @POST("Dashboard/GetIncentivePolicy")
+    fun getIncentivePolicy(
+        @Body request: IncentivePolicyRequest
+    ): Observable<IncentivePolicyItem>
 
-  @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
-  fun getDashboardMetaData(
-    @Body request: DashboardMetaDataRequest
-  ): Observable<List<DashboardMetaDataItem>>
+    @POST("Dashboard/GetDashboardWithWidgetsWithGroup/")
+    fun getDashboardMetaData(
+        @Body request: DashboardMetaDataRequest
+    ): Observable<List<DashboardMetaDataItem>>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getActionableCount(
-    @Body request: ActionableCountRequest
-  ): Observable<ActionableCountItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getActionableCount(
+        @Body request: ActionableCountRequest
+    ): Observable<ActionableCountItem>
 
-  @POST("Dashboard/LoadWidgetAsync")
-  fun getIncentive(
-    @Body request: CommonRequest
-  ): Observable<IncentiveItem>
+    @POST("Dashboard/LoadWidgetAsync")
+    fun getIncentive(
+        @Body request: CommonRequest
+    ): Observable<IncentiveItem>
 
-  //================== Calender ========================
+    //================== Calender ========================
 
-  @POST("Meeting/GetMeetingByDate")
-  fun postCalenderByDate(
-    @Body request: CalenderRequest
-  ): Observable<List<CalenderItem>?>
+    @POST("Meeting/GetMeetingByDate")
+    fun postCalenderByDate(
+        @Body request: CalenderRequest
+    ): Observable<List<CalenderItem>?>
 
-  @POST("Auth/Login")
-  fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>
+    @POST("Auth/Login")
+    fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>
 
-  @POST("Auth/Logout")
-  fun logout(@Body logoutRequest: LogoutRequest): Observable<String>
+    @POST("Auth/Logout")
+    fun logout(@Body logoutRequest: LogoutRequest): Observable<String>
 
-  @POST("Auth/UpdateFCMToken")
-  fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<FcmTokenResponse>
+    @POST("Auth/UpdateFCMToken")
+    fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<FcmTokenResponse>
 
-  @POST("Prospect/RegisterProspectOnline")
-  fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
+    @POST("Prospect/RegisterProspectOnline")
+    fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
 
-  @POST("Prospect/SMT_RegisterProspectOnline")
-  fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
+    @POST("Prospect/SMT_RegisterProspectOnline")
+    fun suggestMe(@Body suggestMeRequest: SuggestMeRequest): Observable<SaathiCommonResponse<ProspectResponse>>
 
-  @POST("Lead/Create_DIY_LeadDetail")
-  fun createDiy(@Body request: DiyRequest): Observable<SaathiCommonResponse<DiyLinkResponse>>
+    @POST("Lead/Create_DIY_LeadDetail")
+    fun createDiy(@Body request: DiyRequest): Observable<SaathiCommonResponse<DiyLinkResponse>>
 
-  @POST("Common/GetAppVersion")
-  @ExtraDataWrapper
-  fun appVersion(@Body versionRequest: VersionRequest): Observable<List<VersionResponse>>
+    @POST("Common/GetAppVersion")
+    @ExtraDataWrapper
+    fun appVersion(@Body versionRequest: VersionRequest): Observable<List<VersionResponse>>
 
-  @POST("Report/FetchReportTypes")
-  fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
+    @POST("Report/FetchReportTypes")
+    fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
 
-  //===================== Documents=========================
+    //===================== Documents=========================
 
-  @POST("Lead/GetLeadDocuments")
-  @ExtraDataWrapper
-  fun getLeadDocuments(
-    @Body request: DocumentsRequest
-  ): Observable<List<LeadDocumentsItem>>
+    @POST("Lead/GetLeadDocuments")
+    @ExtraDataWrapper
+    fun getLeadDocuments(
+        @Body request: DocumentsRequest
+    ): Observable<List<LeadDocumentsItem>>
 
-  @POST("Lead/UploadDocument")
-  fun postUploadDocuments(
-    @Body request: UploadDocumentsRequest
-  ): Observable<UploadDocumentItem>
+    @POST("Lead/UploadDocument")
+    fun postUploadDocuments(
+        @Body request: UploadDocumentsRequest
+    ): Observable<UploadDocumentItem>
 
-  @POST("Lead/UpdateLeadDocuments")
-  fun postUpdateDocuments(
-    @Body request: UpdateDocumentsRequest
-  ): Observable<String>
+    @POST("Lead/UpdateLeadDocuments")
+    fun postUpdateDocuments(
+        @Body request: UpdateDocumentsRequest
+    ): Observable<String>
 
-  @POST("Lead/DeleteLeadDocuments")
-  fun postDeleteDocuments(
-    @Body request: DeleteDocumentRequest
-  ): Observable<String>
+    @POST("Lead/DeleteLeadDocuments")
+    fun postDeleteDocuments(
+        @Body request: DeleteDocumentRequest
+    ): Observable<String>
 
-  // ================== Lead View History ========================
+    // ================== Lead View History ========================
 
-  @ExcludeWrapper
-  @POST("Lead/GetLeadHistoryByLeadId")
-  fun getLeadHistoryByLeadId(
-    @Body request: LeadHistoryRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Lead/GetLeadHistoryByLeadId")
+    fun getLeadHistoryByLeadId(
+        @Body request: LeadHistoryRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Lead/GetLeadProductHistoryByLeadId")
-  fun getLeadProductHistoryByLeadId(
-    @Body request: LeadHistoryRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Lead/GetLeadProductHistoryByLeadId")
+    fun getLeadProductHistoryByLeadId(
+        @Body request: LeadHistoryRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Client/GetCurrentMapping")
-  fun getCurrentMapping(
-    @Body request: ClientHistoryRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Client/GetCurrentMapping")
+    fun getCurrentMapping(
+        @Body request: ClientHistoryRequest
+    ): Observable<String>
 
-  @ExcludeWrapper
-  @POST("Client/GetMappingHistory")
-  fun getMappingHistory(
-    @Body request: ClientHistoryRequest
-  ): Observable<String>
+    @ExcludeWrapper
+    @POST("Client/GetMappingHistory")
+    fun getMappingHistory(
+        @Body request: ClientHistoryRequest
+    ): Observable<String>
 
-  // ==========================Lead Interaction===================
+    // ==========================Lead Interaction===================
 
-  @ExtraDataWrapper
-  @POST("TalismaInteractionRequest/TalismaRequestGet")
-  fun getInteraction(@Body request: LeadInteractionRequest): Observable<String>
+    @ExtraDataWrapper
+    @POST("TalismaInteractionRequest/TalismaRequestGet")
+    fun getInteraction(@Body request: LeadInteractionRequest): Observable<String>
 
-  @ExtraDataWrapper
-  @POST("Client/GetClientBirthdayAnniversaryWishLog")
-  fun getBirthdayAnniversaryEvent(@Body request: LeadInteractionRequest): Observable<String>
+    @ExtraDataWrapper
+    @POST("Client/GetClientBirthdayAnniversaryWishLog")
+    fun getBirthdayAnniversaryEvent(@Body request: LeadInteractionRequest): Observable<String>
 
-  @ExtraDataWrapper
-  @POST("Event/GetEventSeminarAttendedList")
-  fun getSeminarEvent(@Body request: LeadInteractionRequest): Observable<String>
+    @ExtraDataWrapper
+    @POST("Event/GetEventSeminarAttendedList")
+    fun getSeminarEvent(@Body request: LeadInteractionRequest): Observable<String>
 
-  @POST("Client/GetClientImage")
-  fun getClientImage(
-    @Body request: ClientImageRequest
-  ): Observable<SaathiCommonResponse<String>>
+    @POST("Client/GetClientImage")
+    fun getClientImage(
+        @Body request: ClientImageRequest
+    ): Observable<SaathiCommonResponse<String>>
 
-  //===================== Update meeting =========================
+    //===================== Update meeting =========================
 
-  @POST("Meeting/GetMeetingByID")
-  fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
+    @POST("Meeting/GetMeetingByID")
+    fun postMeetingById(@Body request: MeetingByIdRequest): Observable<MeetingByIdItem>
 
-  @POST("Meeting/AddUpdateMeeting")
-  fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
+    @POST("Meeting/AddUpdateMeeting")
+    fun saveUpdateMeeting(@Body request: RequestBody): Observable<Any>
 
-  //=======================AU Bank Meeting==========================
-  @POST("BankMeeting/GetBankList")
-  fun getBankList(@Body request: BankRequest): Observable<List<BankListResponse>>
+    //=======================AU Bank Meeting==========================
+    @POST("BankMeeting/GetBankList")
+    fun getBankList(@Body request: BankRequest): Observable<List<BankListResponse>>
 
-  @POST("BankMeeting/GetBankBranchList")
-  fun getBankBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
+    @POST("BankMeeting/GetBankBranchList")
+    fun getBankBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
 
-  @POST("Master/GetAllLookupMaster")
-  fun getAllLookupMaster(
-    @Body request: LookupRequest
-  ): Observable<List<MeetingTypeResponse>>
+    @POST("Master/GetAllLookupMaster")
+    fun getAllLookupMaster(
+        @Body request: LookupRequest
+    ): Observable<List<MeetingTypeResponse>>
 
-  @POST("BankMeeting/AutoCompleteBankBranchSubBroker")
-  fun getSubBroker(
-    @Body request: SubBrokerRequest
-  ): Observable<List<SubBrokerResponse>>
+    @POST("BankMeeting/AutoCompleteBankBranchSubBroker")
+    fun getSubBroker(
+        @Body request: SubBrokerRequest
+    ): Observable<List<SubBrokerResponse>>
 
-  @POST("BankMeeting/AutoCompleteBankEmployee")
-  fun getBankEmployee(
-    @Body request: BankEmployeeRequest
-  ): Observable<List<BankEmployeeResponse>>
+    @POST("BankMeeting/AutoCompleteBankEmployee")
+    fun getBankEmployee(
+        @Body request: BankEmployeeRequest
+    ): Observable<List<BankEmployeeResponse>>
 
-  @POST("BankMeeting/InserBankMeeting")
-  fun inserBankMeeting(
-    @Body request: MeetingSaveRequest
-  ): Observable<String>
+    @POST("BankMeeting/InserBankMeeting")
+    fun inserBankMeeting(
+        @Body request: MeetingSaveRequest
+    ): Observable<String>
 
-  @POST("BankMeeting/GetBankMeetingReportForMobile")
-  fun postBankMeetingReport(
-    @Body request: MeetingReportRequest
-  ): Observable<String>
+    @POST("BankMeeting/GetBankMeetingReportForMobile")
+    fun postBankMeetingReport(
+        @Body request: MeetingReportRequest
+    ): Observable<String>
 
     @ExcludeWrapper
     @POST("GeoLocation/SaveGeoLocation")
@@ -691,22 +699,22 @@ interface SaathiApi {
 
     @POST("report/IncentiveReport")
     fun getIncentiveReport(
-      @Body request: IncentiveReportRequest
+        @Body request: IncentiveReportRequest
     ): Observable<SaathiCommonResponse<String>>
 
-  /*==================================================*/
-  @POST("Auth/$LoginEndPoint")
-  fun login(
-    @Header("EmployeeCode") employeeCode: String, @Body loginRequest: LoginRequest
-  ): Observable<LoginResponse>
+    /*==================================================*/
+    @POST("Auth/$LoginEndPoint")
+    fun login(
+        @Header("EmployeeCode") employeeCode: String, @Body loginRequest: LoginRequest
+    ): Observable<LoginResponse>
 
-  @POST("Common/${ApiEndpoints.AppVersionEndPoint}")
-  @ExtraDataWrapper
-  fun appVersion(
-    @Header(
-      "macaddress"
-    ) macAddress: String, @Body versionRequest: VersionRequest
-  ): Observable<List<VersionResponse>>
+    @POST("Common/${ApiEndpoints.AppVersionEndPoint}")
+    @ExtraDataWrapper
+    fun appVersion(
+        @Header(
+            "macaddress"
+        ) macAddress: String, @Body versionRequest: VersionRequest
+    ): Observable<List<VersionResponse>>
 
     @POST("Lead/GetCommonURLforMobileApp")
     fun getEkycExpressUrl(

@@ -50,6 +50,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     var leadId = "0"
     var mUCID = "0"
+    var mobileNumber = "0"
     var randomInt = 0
     private val otpEvent = PublishSubject.create<Boolean>()
     override fun getLayout(): Int {
@@ -60,6 +61,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         try {
             leadId = bundle.getString(OTPContract.ARG_LEAD_ID, "0")
             mUCID = bundle.getString(OTPContract.ARG_UCID, "0")
+            mobileNumber = bundle.getString(OTPContract.ARG_MOBILE_NUMBER, "0")
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -77,6 +79,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         isCancelable = false
         binding.apply {
             imgCancel.setOnClickListener {
+                callBack.cancelClick()
                 dismiss()
             }
             btnSubmitOtp.setOnClickListener {
@@ -97,7 +100,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             val resendOtpFlag = 1
             val request = SendOTPRequest(
-                leadId, mUCID, "",
+                leadId, mobileNumber, mUCID, "",
                 "",
                 "", "2", resendOtpFlag, userManager.getUser()!!.employeeCode
             )
@@ -233,12 +236,14 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         @JvmStatic
         fun newInstance(
             leadId: String,
-            ucid: String
+            ucid: String,
+            mobileNumber: String
         ): OTPFragment {
 
             val args = Bundle().apply {
                 putString(OTPContract.ARG_LEAD_ID, leadId)
                 putString(OTPContract.ARG_UCID, ucid)
+                putString(OTPContract.ARG_MOBILE_NUMBER, mobileNumber)
             }
 
             return OTPFragment().apply {
@@ -249,6 +254,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     interface OTPDialogListener {
         fun onSuccessResult(status: Boolean)
+        fun cancelClick()
     }
 
 }

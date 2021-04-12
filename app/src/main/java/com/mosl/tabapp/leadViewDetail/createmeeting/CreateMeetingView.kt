@@ -25,6 +25,7 @@ interface CreateMeetingView : BaseView {
   fun onTravellingModeSelected(): Observable<Int>
   fun onMeetingLocationSelected(): Observable<Int>
   fun onMeetingReasonSelected(): Observable<Int>
+  fun onMobileNumberSelected(): Observable<Int>
   fun onActivityTypeSelected(): Observable<Int>
   fun onProductSelected(): Observable<Int>
   fun onCategorySelected(): Observable<Int>
@@ -36,6 +37,7 @@ interface CreateMeetingView : BaseView {
   fun getSelectedMeetingObjective(): LookUp?
   fun getSelectedMeetingReason(): LookUp?
   fun getSelectedActivityType(): LookUp?
+  fun getMobileNumberType(): MobileListData?
   fun getSelectedProduct(): LookUp?
   fun getSelectedCategory(): LookUp?
   fun getSelectedSubCategory(): LookUp?
@@ -72,7 +74,8 @@ interface CreateMeetingView : BaseView {
   fun showSplAttendeAddedDialog()
   fun showOTPDialog(
     ucid: String,
-    leadId: String
+    leadId: String,
+    mobileNumber: String
   )
 
   fun showToast()
@@ -85,6 +88,7 @@ interface CreateMeetingView : BaseView {
   fun renderOnTravellingModeClick(lookUp: LookUp)
 
   fun toggleOTPVisibility(show: Boolean)
+  fun onMobileClick()
   fun toggleActionableVisibility(show: Boolean)
   fun toggleSearchState(
     queryEmpty: Boolean,
@@ -97,6 +101,7 @@ interface CreateMeetingView : BaseView {
   fun sendOTP(): Observable<SendOtpRequest>
   fun resetData()
   fun validateFormData(): Boolean
+  fun validateMobileNumber(): Boolean
   fun onDataValidated(): Observable<ValidationStatus>
   fun setInputData(meetingApptModel: MeetingApptModel)
   fun onDataSaved(): Observable<SaveRequestData>

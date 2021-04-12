@@ -178,6 +178,21 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val brokingProfileAdapter: ArrayAdapter<RowData> by lazy {
+
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
+    private val ipProfileAdapter: ArrayAdapter<RowData> by lazy {
+
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
+    private val finalProfileAdapter: ArrayAdapter<RowData> by lazy {
+
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val interestedAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
@@ -265,6 +280,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
                 setIcon(llBorkingProducts, txtBrokingProducts, CONST_INNER)
                 setIcon(llAssestProducts, txtAssestProducts, CONST_INNER)
+            }
+        }
+
+        userManager.getUser()?.apply {
+            if (isBank) {
+                binding.ilBank.visibility = View.VISIBLE
+                binding.ilBranch.visibility = View.VISIBLE
+            } else {
+                binding.ilBank.visibility = View.GONE
+                binding.ilBranch.visibility = View.GONE
             }
         }
     }
@@ -1575,6 +1600,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.refereeMobile = binding.etRefereeNumber.text.toString().trim()
         leadDetailModel.comments = getJsonSafeString(binding.etComments.text.toString().trim())
         leadDetailModel.profileID = (binding.spProfile.selectedItem as RowData).key
+        leadDetailModel.brokingProfileID = (binding.spBrokingProfile.selectedItem as RowData).key
+        leadDetailModel.ipProfileID = (binding.spIpProfile.selectedItem as RowData).key
+        leadDetailModel.finalProfileID = (binding.spFinalProfile.selectedItem as RowData).key
         leadDetailModel.professionID = (binding.spProfession.selectedItem as RowData).key
         leadDetailModel.createdBy = binding.etCreatedBy.text.toString().trim()
         leadDetailModel.createdThrough = "0"
@@ -1630,7 +1658,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.leadSourceID, model.leadSourceDetailsID,
             model.leadSourceDetails, model.refereeCode.nullSafe(), model.refereeName.nullSafe(),
             model.refereeEmail, model.refereeMobile, model.comments,
-            model.profileID,
+            model.profileID, model.brokingProfileID, model.ipProfileID, model.finalProfileID,
             model.professionID, model.createdBy, model.prospectRefereName,
             model.prospectRefereMobile, model.prospectRefereEmail,
             model.createdThrough, model.creationDate,
@@ -1773,8 +1801,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
+            brokingProfileAdapter.addAll(data.brokingProfileRowDatas)
+            binding.spBrokingProfile.setSpinnerData(
+                brokingProfileAdapter,
+                data.brokingProfileRowDatas
+            )
+            ipProfileAdapter.addAll(data.ipProfileRowDatas)
+            binding.spIpProfile.setSpinnerData(ipProfileAdapter, data.ipProfileRowDatas)
+            finalProfileAdapter.addAll(data.finalProfileRowDatas)
+            binding.spFinalProfile.setSpinnerData(finalProfileAdapter, data.finalProfileRowDatas)
             profileAdapter.addAll(data.profileRowDatas)
             binding.spProfile.setSpinnerData(profileAdapter, data.profileRowDatas)
+
+            profileVisibility()
+
             interestedData = data.interestInRowDatas
             interestedAdapter.addAll(data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
@@ -1782,6 +1822,32 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.llEditLeadDetail.performClick()
         }
     }
+
+    private fun profileVisibility() {
+        userManager.getUser()?.let {
+            if (it.isPCG()) {
+                binding.tvBrokingProfile.visibility = View.VISIBLE
+                binding.tvIpProfile.visibility = View.VISIBLE
+                binding.tvFinalProfile.visibility = View.VISIBLE
+                binding.tvLeadDetailProfile.visibility = View.GONE
+                binding.tlBrokingProfile.visibility = View.VISIBLE
+                binding.tlIpProfile.visibility = View.VISIBLE
+                binding.tlFinalProfile.visibility = View.VISIBLE
+                binding.tlProfile.visibility = View.GONE
+            } else {
+                binding.tvLeadDetailProfile.visibility = View.VISIBLE
+                binding.tvBrokingProfile.visibility = View.GONE
+                binding.tvIpProfile.visibility = View.GONE
+                binding.tvFinalProfile.visibility = View.GONE
+                binding.tlBrokingProfile.visibility = View.GONE
+                binding.tlIpProfile.visibility = View.GONE
+                binding.tlFinalProfile.visibility = View.GONE
+                binding.tlProfile.visibility = View.VISIBLE
+            }
+        }
+
+    }
+
 
     override fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>) {
         toggleProgressBar(uiModel.inProgress)
@@ -1792,7 +1858,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
-    private val leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+    private var leadDetailAddProductList = ArrayList<LeadDetailAddProductModel>()
+
+    private fun setPCGProfileEnableDisable(status: Boolean) {
+
+        if (userManager.getUser()?.currentBusinessProfile?.businessProfileId != "1102")
+            binding.apply {
+                spBrokingProfile.isEnabled = status
+                spFinalProfile.isEnabled = status
+                spIpProfile.isEnabled = status
+            }
+    }
 
     private fun setEnableDisable(status: Boolean) {
         binding.apply {
@@ -1817,6 +1893,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etComments.isEnabled = status
             btnSubmit.isEnabled = status
             spProfile.isEnabled = status
+            spBrokingProfile.isEnabled = status
+            spIpProfile.isEnabled = status
+            spFinalProfile.isEnabled = status
             spProfession.isEnabled = status
             cbSameAs.isEnabled = status
             cbPrimaryAddress.isEnabled = status
@@ -1854,6 +1933,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     }
                 }
             }
+            compareStageID(leadDetailAddProductList)
         }
     }
 
@@ -1884,6 +1964,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etRefereeEmail.setText(referEmail)
         binding.etRefereeNumber.setText(referMobile)
         binding.etCreatedBy.setText(createdBy)
+        binding.etBank.setText(bankName)
+        binding.etBranch.setText(branchName)
         binding.etCreatedThrough.setText(createdThrough)
         binding.etLastModifiedBy.setText(lastModifiedBy)
         try {
@@ -1934,6 +2016,22 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         val dataProfile = RowData.getSpinnerRowDataByValue(profile, profileAdapter)
         dataProfile?.let {
             binding.spProfile.setSelection(it.position)
+        }
+
+        val dataBrokingProfile =
+            RowData.getSpinnerRowDataByValue(brokingProfile, brokingProfileAdapter)
+        dataBrokingProfile?.let {
+            binding.spBrokingProfile.setSelection(it.position)
+        }
+
+        val dataIPProfile = RowData.getSpinnerRowDataByValue(ipProfile, ipProfileAdapter)
+        dataIPProfile?.let {
+            binding.spIpProfile.setSelection(it.position)
+        }
+
+        val dataFinalProfile = RowData.getSpinnerRowDataByValue(finalProfile, finalProfileAdapter)
+        dataFinalProfile?.let {
+            binding.spFinalProfile.setSelection(it.position)
         }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
@@ -2041,6 +2139,25 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    private fun compareStageID(leadDetailAddProductList: List<LeadDetailAddProductModel>) {
+        for (leadDetailAddProductModel in leadDetailAddProductList) {
+            if (leadDetailAddProductModel.stageId == "41" || leadDetailAddProductModel.stageId == "42"
+                || leadDetailAddProductModel.stageId == "43" || leadDetailAddProductModel.stageId == "44"
+            ) {
+                setPCGProfileEnableDisable(false)
+                break
+            } else {
+                setPCGProfileEnableDisable(true)
+            }
+        }
+    }
+
+    override fun updateProduct(leadDetailAddProductList: List<LeadDetailAddProductModel>) {
+        compareStageID(leadDetailAddProductList)
+        this.leadDetailAddProductList =
+            leadDetailAddProductList as ArrayList<LeadDetailAddProductModel>
+    }
+
     private var leadDetailAddProductAdapter: LeadDetailAddProductAdapter? = null
 
     private fun List<LeadProductMappingItem>.renderMapping() {
@@ -2051,6 +2168,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.tvClientCode.text = it.clientCode
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
+
         leadDetailAddProductAdapter =
             LeadDetailAddProductAdapter(
                 saathiApi,

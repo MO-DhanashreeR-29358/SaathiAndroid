@@ -54,6 +54,7 @@ data class ClientData(
   @JvmField val clientDetail: ClientDetail,
   @JvmField val imageUrl: String,
   @JvmField val listActivity: List<LookUp>,
+  @JvmField val listMobileNumber: List<MobileListData>,
   @JvmField val listMeetingDuration: List<LookUp>,
   @JvmField val listInterestedIn: List<LookUp>,
   @JvmField val listMeetingObjective: List<LookUp>,
@@ -61,12 +62,15 @@ data class ClientData(
   @JvmField val listMeetingAdressID: List<LookUp>
 )
 
+
 data class OTPRequestData(
   @JvmField val latitude: String,
   @JvmField val longitude: String,
   @JvmField val geoArea: String,
   @JvmField val ucid: String,
-  @JvmField val leadid: String
+  @JvmField val leadid: String,
+  @JvmField val mobileNumber: String
+
 )
 
 data class AddUpdateMeeting(

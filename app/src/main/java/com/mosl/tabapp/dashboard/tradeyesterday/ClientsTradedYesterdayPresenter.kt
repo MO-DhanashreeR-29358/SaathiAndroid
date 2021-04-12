@@ -14,29 +14,29 @@ import java.io.Serializable
 import javax.inject.Inject
 
 class ClientsTradedYesterdayPresenter @Inject constructor(
-  view: ClientsTradedYesterdayView,
-  val dashboardModel: DashboardModel,
-  val navigator: ScreenNavigatorImpl,
-  val repository: ClientTradeYesterdayRepository
+    view: ClientsTradedYesterdayView,
+    val dashboardModel: DashboardModel,
+    val navigator: ScreenNavigatorImpl,
+    val repository: ClientTradeYesterdayRepository
 ) : BasePresenter<ClientsTradedYesterdayView>(view) {
-  override fun start() {
-    onFetchCalled().switchMap {
-      repository.getClientsTradedYesterday(getWidgetRequest())
-        .compose(applyUiModel())
+    override fun start() {
+        onFetchCalled().switchMap {
+            repository.getClientsTradedYesterday(getWidgetRequest())
+                .compose(applyUiModel())
+        }
+            .subscribe(view::renderData)
+            .addTo(disposable)
+
+        view.onDataEvent().filter {
+            view.getClientList().size > 0
+        }.subscribe {
+            view.renderUI()
+        }.addTo(disposable)
+
+        view.onNavigateEvent().subscribe {
+            navigationFlow(it)
+        }.addTo(disposable)
     }
-      .subscribe(view::renderData)
-      .addTo(disposable)
-
-    view.onDataEvent().filter {
-      view.getClientList().size > 0
-    }.subscribe {
-      view.renderUI()
-    }.addTo(disposable)
-
-    view.onNavigateEvent().subscribe {
-      navigationFlow(it)
-    }.addTo(disposable)
-  }
 
   private fun navigationFlow(data: MutableMap<String, String>) {
     val args = Bundle()
@@ -51,16 +51,17 @@ class ClientsTradedYesterdayPresenter @Inject constructor(
     )
   }
 
-  private fun getWidgetRequest(): ClientTradeYesterdayInput {
-    return ClientTradeYesterdayInput(
-      businessProfileId = dashboardModel.businessProfileIdForDashboard,
-      widgetSystemName = view.getWidgetSystemsName(),
-      productId = dashboardModel.productId,
-      employeeCode = dashboardModel.employeeCode,
-      additionalParameters = APClientsInput(
-        fltPeriod = MOSLConstants.SELF_KEY,
-        fltHierarchy = dashboardModel.dashboardFor
-      )
-    )
-  }
+    private fun getWidgetRequest(): ClientTradeYesterdayInput {
+        return ClientTradeYesterdayInput(
+            businessProfileId = dashboardModel.businessProfileIdForDashboard,
+            widgetSystemName = view.getWidgetSystemsName(),
+            productId = dashboardModel.productId,
+            employeeCode = dashboardModel.employeeCode,
+            additionalParameters = APClientsInput(
+                fltBankName = null,
+                fltPeriod = MOSLConstants.SELF_KEY,
+                fltHierarchy = dashboardModel.dashboardFor
+            )
+        )
+    }
 }

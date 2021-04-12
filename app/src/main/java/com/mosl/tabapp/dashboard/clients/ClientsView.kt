@@ -5,7 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.clients.ClientItemResponseModel
 import com.mosl.tabapp.common.FilterRowData
 import io.reactivex.Observable
-import java.util.HashMap
+import java.util.*
 
 interface ClientsView : BaseView {
     fun onPeriodChange(): Observable<Int>
@@ -18,4 +18,6 @@ interface ClientsView : BaseView {
     fun getFamilyCount(): Int
     fun renderUI(text: String, value: String)
     fun onNaviagteEvent(): Observable<MutableMap<String, String>>
+    fun onBankChange(): Observable<Int>
+    fun getBank(): FilterRowData?
 }

@@ -3,6 +3,7 @@ package com.mosl.tabapp.model.leaddetail;
 import com.mosl.saathi.api.model.lead.LeadFieldValueRequest;
 import com.mosl.tabapp.model.AddressDetailModel;
 import com.mosl.tabapp.model.ContactDetailModel;
+
 import java.util.List;
 
 import static com.mosl.tabapp.common.CRMAppUtil.isBlank;
@@ -26,6 +27,9 @@ public class LeadDetailModel {
 	private String refereeMobile;
 	private String comments;
 	private String profileID;
+	private String brokingProfileID;
+	private String ipProfileID;
+	private String finalProfileID;
 	private String active;
 	private String createdThrough;
 	private String createdBy;
@@ -168,6 +172,30 @@ public class LeadDetailModel {
 
 	public void setProfileID(String profileID) {
 		this.profileID = profileID;
+	}
+
+	public String getBrokingProfileID() {
+		return brokingProfileID;
+	}
+
+	public void setBrokingProfileID(String brokingProfileID) {
+		this.brokingProfileID = brokingProfileID;
+	}
+
+	public String getIPProfileID() {
+		return ipProfileID;
+	}
+
+	public void setIPProfileID(String ipProfileID) {
+		this.ipProfileID = ipProfileID;
+	}
+
+	public String getFinalProfileID() {
+		return finalProfileID;
+	}
+
+	public void setFinalProfileID(String finalProfileID) {
+		this.finalProfileID = finalProfileID;
 	}
 
 	public String getActive() {

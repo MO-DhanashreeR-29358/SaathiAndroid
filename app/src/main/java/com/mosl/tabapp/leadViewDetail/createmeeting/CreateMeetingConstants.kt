@@ -2,10 +2,14 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.MobileListData
 
 object CreateMeetingConstants {
   @JvmField
   val SELECT_ACTIVITY_TYPE = LookUp(0, "Select Activity Type")
+
+  @JvmField
+  val SELECT_MOBILE_NUMBER = MobileListData("Select Mobile Number For Verification Code", "0")
 
   @JvmField
   val SELECT_PRODUCT = LookUp(0, "Select Product")
@@ -40,6 +44,7 @@ object CreateMeetingConstants {
   }
 
   const val MSG_SELECT_ACTIVITY_TYPE = "Select Activity Type"
+  const val MSG_SELECT_MOBILE_NUMBER = "Select Mobile Number For Verification Code"
   const val MSG_SELECT_PRODUCT = "Select Product"
   const val MSG_SELECT_ACTIONABLE = "Select Actionables"
   const val MSG_SELECT_CATEGORY = "Select Category"

@@ -71,6 +71,10 @@ import timber.log.Timber;
         init();
     }
 
+    public FusedLocationProviderClient getFusedLocationClient() {
+        return mFusedLocationClient;
+    }
+
     public void init() {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mSettingsClient = LocationServices.getSettingsClient(activity);
@@ -164,13 +168,15 @@ import timber.log.Timber;
                 switch (resultCode) {
                     case Activity.RESULT_OK:
                         // Nothing to do. startLocationupdates() gets called in onResume again.
-                        gpsCallBack.gpsStatus(true);
+                        if (gpsCallBack != null)
+                            gpsCallBack.gpsStatus(true);
                         break;
                     case Activity.RESULT_CANCELED:
                         if (!isFromSettingFragment)
                             mRequestingLocationUpdates = false;
                         //startLocationUpdates();
-                        gpsCallBack.gpsStatus(false);
+                        if (gpsCallBack != null)
+                            gpsCallBack.gpsStatus(false);
                         break;
                 }
                 break;
@@ -186,6 +192,8 @@ import timber.log.Timber;
         } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             startLocationUpdates();
         } else {
+            if (gpsCallBack != null)
+                gpsCallBack.gpsStatus(false);
             new AlertDialog.Builder(activity)
                     .setMessage(activity.getString(R.string.permission_denied_explanation))
                     .setPositiveButton(activity.getString(R.string.settings), (dialogInterface, i) -> openAppSettings()).show();

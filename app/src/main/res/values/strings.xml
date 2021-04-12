@@ -393,6 +393,7 @@
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>
+    <string name="txt_lable_mobile_number">Mobile Number*</string>
     <string name="txt_lable_meeting_date">Meeting Date</string>
     <string name="txt_lable_product">Product*</string>
     <string name="txt_lable_meeting_duration">Meeting Duration*</string>
@@ -442,6 +443,8 @@
     <string name="mock_location_label">Please Disable Mock Location!</string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
     <string name="lbl_lead_creation_category">Category*</string>
+    <string name="lbl_lead_creation_branch">Branch*</string>
+    <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
     <string name="hint_lead_creation_land_line">Land Line</string>
     <string name="hint_lead_creation_ekyc_mobile">Ekyc Mobile No</string>
@@ -490,6 +493,8 @@
     <string name="text_msg_product_update">Products Updated Successfully</string>
 
     <string name="error_message_category">Select Category</string>
+    <string name="error_message_bank">Select Bank</string>
+    <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>
     <string name="error_message_already_added">%s is already selected</string>
     <string name="error_message_alphabets">Only alphabets are allowed</string>
@@ -539,6 +544,8 @@
     <string name="lead_detail_anniversary">Anniversary</string>
     <string name="lead_detail_creation_date">Creation Date</string>
     <string name="lead_detail_created_by">Created By</string>
+    <string name="lead_detail_bank">Bank</string>
+    <string name="lead_detail_branch">Branch</string>
     <string name="lead_detail_last_modified_date">Last Modified Date</string>
     <string name="lead_detail_modified_by">Modified By</string>
     <string name="lead_detail_source">Source</string>
@@ -546,6 +553,10 @@
     <string name="lead_detail_prospect_source_detail">Prospect Source Detail</string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>
+    <string name="lead_detail_broking_profile">Broking Profile</string>
+    <string name="lead_detail_ip_profile">IP Profile</string>
+    <string name="lead_detail_final_profile">Final Profile</string>
+
     <string name="lead_detail_contact_person">Contact Person</string>
     <string name="lead_detail_mobile_number">Mobile Number</string>
     <string name="lead_detail_alternate_mobile_number">Alternate Mobile Number</string>

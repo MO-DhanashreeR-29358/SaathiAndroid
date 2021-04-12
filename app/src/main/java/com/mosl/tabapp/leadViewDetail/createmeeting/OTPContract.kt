@@ -10,6 +10,7 @@ interface OTPContract : BaseView {
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"
     const val ARG_UCID = "arg_ucid"
+    const val ARG_MOBILE_NUMBER = "arg_mobile_number"
   }
 
 }

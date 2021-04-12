@@ -2,31 +2,14 @@ package com.mosl.tabapp.leadcreation.data
 
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.mobile.user.model.User
-import com.mosl.saathi.api.model.createlead.CreateLeadAddressDetails
-import com.mosl.saathi.api.model.createlead.CreateLeadContact
-import com.mosl.saathi.api.model.createlead.CreateLeadProduct
-import com.mosl.saathi.api.model.createlead.CreateLeadRequest
-import com.mosl.saathi.api.model.createlead.LeadSourceItem
-import com.mosl.saathi.api.model.createlead.SearchRefereeResponse
-import com.mosl.saathi.api.model.createlead.SourceListItem
-import com.mosl.saathi.api.model.lead.BusinessProfile
-import com.mosl.saathi.api.model.lead.CityItem
-import com.mosl.saathi.api.model.lead.CountryItem
-import com.mosl.saathi.api.model.lead.LookupItem
-import com.mosl.saathi.api.model.lead.StageItem
-import com.mosl.saathi.api.model.lead.StateProvinceItem
-import com.mosl.saathi.api.model.lead.StatusItem
+import com.mosl.saathi.api.model.createlead.*
+import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
-import com.mosl.tabapp.model.AddressDetailModel
-import com.mosl.tabapp.model.ContactDetailModel
-import com.mosl.tabapp.model.EmployeeModel
-import com.mosl.tabapp.model.LeadCreationContact
-import com.mosl.tabapp.model.LeadCreationModel
-import com.mosl.tabapp.model.LeadCreationProductMapping
+import com.mosl.tabapp.model.*
 
 internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): CreateLeadRequest {
 
@@ -37,6 +20,7 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
     return CreateLeadRequest(
         businessUnitID = model.businessUnitID,
         leadCategoryID = model.leadCategoryID,
+        branchCode = model.branchCode,
         contactPerson = model.contactPerson,
         sourceID = model.sourceID,
         leadSourceID = model.leadSourceID,
@@ -104,6 +88,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         setAadharNo(aadharNo)
         setBusinessUnitID(user?.currentBusinessProfile?.businessUnitId)
         setLeadCategoryID(selectedCategory.key)
+        setBranchCode(selectedBranch.branchName)
         setContactPerson(contactPerson)
         setSourceID(selectedSource.key)
         setLeadSourceID(selectedProspectSource.key)

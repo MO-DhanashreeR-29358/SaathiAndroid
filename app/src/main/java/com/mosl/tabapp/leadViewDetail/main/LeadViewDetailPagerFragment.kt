@@ -50,6 +50,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     internal lateinit var presenter: LeadViewDetailPagerPresenter
 
     private var mobile: String? = null
+    private var branchName: String? = null
     private var oaoUserId: Int = 0
     private var diyCode: Int = 0
     private var diyLink: String = ""
@@ -227,6 +228,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         val message = when (id) {
             1 -> getString(string.mgs_update_address)
             2 -> getString(string.mgs_update_profile)
+            4 -> PROFILE_ADDRESS
+            5 -> PROFILE
             else -> getString(string.mgs_update_profile_address)
         }
         erroMsgDialog(message)
@@ -297,7 +300,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     override fun renderOpenAccountClick() {
         gotoEkycPage(
             EkycModule(
-                mobile, email, leadOwner, sourceName, prospectSourceName,
+                mobile, branchName, email, leadOwner, sourceName, prospectSourceName,
                 prospectSourceDetail, interestedIn, oaoUserId.toString()
             )
         )
@@ -375,6 +378,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 ucId = stringOrZero(it.personalDetail.ucId)
                 email = it.personalDetail.email
                 mobile = it.personalDetail.mobile
+                branchName = it.branchCode
                 includeClient.detail.tvName.text = it.personalDetail.name
                 hideAppTitle()
                 includeClient.detail.tvLeadId.text = it.id
@@ -433,6 +437,13 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         ucId = args.getString(MOSLConstants.UCID, "0") ?: "0"
         setupView()
         subject.onNext(RetryClick)
+    }
+
+    companion object {
+        const val PROFILE_ADDRESS =
+            "Kindly update address and all Profile Fields(BrokingProfile, IPProfile, FinalProfile)"
+        const val PROFILE =
+            "Kindly update all Profile Fields (BrokingProfile, IPProfile, FinalProfile)"
     }
 
 }

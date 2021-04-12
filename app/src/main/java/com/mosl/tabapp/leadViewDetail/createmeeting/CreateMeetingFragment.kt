@@ -30,8 +30,8 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.mobile.user.login.user
-import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE11
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
+import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
 import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -64,6 +64,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MOBILE_NUMBER
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
@@ -116,6 +117,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
     private lateinit var actionableAdapter: ArrayAdapter<LookUp>
     private lateinit var activityAdapter: ArrayAdapter<LookUp>
+    private lateinit var mobileNumberAdapter: ArrayAdapter<MobileListData>
     private lateinit var meetingObjectiveAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
@@ -148,6 +150,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spActivityType.adapter = activityAdapter
+        mobileNumberAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spMobileNumber.adapter = mobileNumberAdapter
 
         meetingLocationAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spMeetingLocation.adapter = meetingLocationAdapter
@@ -221,6 +225,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             )
             meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
             activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
+            mobileNumberAdapter.setSpinnerData(binding.spMobileNumber, it.listMobileNumber)
             meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
             travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
             isOnlyClient = clientDetail.isOnlyClient
@@ -256,7 +261,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             dialog.findViewById<Button>(R.id.btnSubmit)
         val timePicker = dialog.findViewById<TimePicker>(R.id.timePicker)
         timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-
+        timePicker.setIs24HourView(true)
         val cal = Calendar.getInstance()
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
@@ -375,7 +380,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             if (it.size > 1) {
-                Timber.i("VisiBilityVisible")
                 binding.llSubcategory.visibility = View.VISIBLE
                 subCategoryAdapter.clear()
                 subCategoryAdapter.setSpinnerData(binding.spSubCategory, it)
@@ -411,8 +415,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getDate(): String {
-        return getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE11)
-
+        return getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE9)
     }
 
     override fun getSplAttendeeSearchText(): Observable<SearchTextChangeSplAttendee> {
@@ -744,6 +747,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.spProduct.setSelection(0)
         binding.spMeetingDuration.setSelection(0)
         binding.spActivityType.setSelection(0)
+        binding.spMobileNumber.setSelection(0)
         binding.spMeetingReason.setSelection(0)
         binding.spMeetingObjective.setSelection(0)
         binding.spMeetingLocation.setSelection(0)
@@ -759,6 +763,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.etMeetingDescription.setText("")
         binding.etCustomerComment.setText("")
         binding.btnSendOtp.text = SEND_OTP_LABEL
+        isSendOTPSuccesssful = false
         toggleOTPVisibility(false)
         meetingProductAdapter.deleteAllProduct()
         travellingAdapter.deleteAllProduct()
@@ -871,6 +876,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return status
     }
 
+    override fun validateMobileNumber(): Boolean {
+        binding.tilMobileNumber.disableErrorMessages()
+        return if (getMobileNumberType() == CreateMeetingConstants.SELECT_MOBILE_NUMBER) {
+            binding.tilMobileNumber.setErrorMessages(MSG_SELECT_MOBILE_NUMBER)
+            false
+        } else true
+    }
+
     override fun onAttendeeClicked(): Observable<Unit> {
         return binding.ibAttendee.clicks()
     }
@@ -897,6 +910,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun onMeetingReasonSelected(): Observable<Int> {
         return binding.spMeetingReason.itemSelections()
+    }
+
+    override fun onMobileNumberSelected(): Observable<Int> {
+        return binding.spMobileNumber.itemSelections()
     }
 
     override fun onActivityTypeSelected(): Observable<Int> {
@@ -958,6 +975,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return null
     }
 
+    override fun getMobileNumberType(): MobileListData? {
+        if (binding.spMobileNumber.selectedItem is MobileListData) {
+            return (binding.spMobileNumber.selectedItem as MobileListData)
+        }
+        return null
+    }
+
     override fun getSelectedProduct(): LookUp? {
         if (binding.spProduct.selectedItem is LookUp) {
             return (binding.spProduct.selectedItem as LookUp)
@@ -1002,10 +1026,16 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         if (userManager.user.isRM()) {
             if (show) {
                 binding.btnSendOtp.visibility = View.VISIBLE
+                binding.tilMobileNumber.visibility = View.VISIBLE
             } else {
                 binding.btnSendOtp.visibility = View.GONE
+                binding.tilMobileNumber.visibility = View.GONE
             }
         }
+    }
+
+    override fun onMobileClick() {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
     }
 
     override fun toggleActionableVisibility(show: Boolean) {
@@ -1037,13 +1067,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun showOTPDialog(
         ucid: String,
-        leadId: String
+        leadId: String,
+        mobileNumber: String
     ) {
         val ft =
             requireActivity().supportFragmentManager
                 .beginTransaction()
 
-        val dialogFragment = OTPFragment.newInstance(leadId, ucid)
+        val dialogFragment = OTPFragment.newInstance(leadId, ucid, mobileNumber)
         dialogFragment.setTargetFragment(this, 1)
         dialogFragment.setListener(this)
         dialogFragment.show(ft, "")
@@ -1072,6 +1103,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private var enableLocationGroup = false
     override fun onSuccessResult(status: Boolean) {
         isSendOTPSuccesssful = status
+    }
+
+    override fun cancelClick() {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
     }
 
     override fun isOTPSuccessful(): Boolean {

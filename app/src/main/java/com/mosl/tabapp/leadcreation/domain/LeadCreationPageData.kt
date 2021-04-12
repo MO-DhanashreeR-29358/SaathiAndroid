@@ -1,20 +1,26 @@
 package com.mosl.tabapp.leadcreation.domain
 
+import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.tabapp.common.RowData
 
 data class LeadCreationPageData(
-  @JvmField val categoryRowDatas: List<RowData>,
-  @JvmField val professionRowDatas: List<RowData>,
-  @JvmField val interestInRowDatas: List<RowData>,
-  @JvmField val sourceRowDatas: List<RowData>,
-  @JvmField val stageRowDatas: List<RowData>,
-  @JvmField val countryRowDatas: List<RowData>
+    @JvmField val categoryRowDatas: List<RowData>,
+    @JvmField val professionRowDatas: List<RowData>,
+    @JvmField val interestInRowDatas: List<RowData>,
+    @JvmField val sourceRowDatas: List<RowData>,
+    @JvmField val stageRowDatas: List<RowData>,
+    @JvmField val countryRowDatas: List<RowData>,
+    @JvmField val listBank: List<BankCodeModel>
+
 )
 
 data class LeadDetailPageData(
-  @JvmField val profileRowDatas: List<RowData>,
-  @JvmField val interestInRowDatas: List<RowData>,
-  @JvmField val countryRowDatas: List<RowData>
+    @JvmField val profileRowDatas: List<RowData>,
+    @JvmField val brokingProfileRowDatas: List<RowData>,
+    @JvmField val ipProfileRowDatas: List<RowData>,
+    @JvmField val finalProfileRowDatas: List<RowData>,
+    @JvmField val interestInRowDatas: List<RowData>,
+    @JvmField val countryRowDatas: List<RowData>
 )
 
 data class SearchReferee(

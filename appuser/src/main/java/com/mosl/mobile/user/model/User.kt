@@ -21,12 +21,14 @@ data class User(
     @JvmField val userTypeSequence: String,
     @JvmField val defaultBusinessProfile: BusinessProfileRequest,
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,
-    @JvmField var password: String
+    @JvmField var password: String,
+    @JvmField var isBank: Boolean
 
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
     }
+
 
     fun isSMTEnabled(): Boolean {
         return smtEnabled == "1"
@@ -66,6 +68,10 @@ data class User(
 
     fun isIFA(): Boolean {
         return currentBusinessProfile.businessUnitId?.equals("4") ?: false
+    }
+
+    fun isPCG(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("5") ?: false
     }
 
     fun isRM(): Boolean {

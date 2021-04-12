@@ -1,11 +1,7 @@
 package com.mosl.tabapp.leaddetail
 
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
-import com.mosl.saathi.api.model.lead.BusinessProfile
-import com.mosl.saathi.api.model.lead.ClientGainLossSummaryResponse
-import com.mosl.saathi.api.model.lead.ClientSummaryResponse
-import com.mosl.saathi.api.model.lead.LeadProductMappingItem
-import com.mosl.saathi.api.model.lead.LeadViewItem
+import com.mosl.saathi.api.model.lead.*
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistItem
 import com.mosl.tabapp.util.emptyString
 import com.mosl.tabapp.util.nullSafe
@@ -47,6 +43,9 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       refereeCode = refereeCode ?: emptyString(),
       refereeName = refereeName ?: emptyString(),
       profile = profile ?: emptyString(),
+      brokingProfile = brokingFinal ?: emptyString(),
+      ipProfile = ipProfile ?: emptyString(),
+      finalProfile = finalProfie ?: emptyString(),
       profession = profession ?: emptyString(),
       createdDate = creationDate ?: emptyString(),
       isPotentialPMSProduct = isPotentialPMSProduct ?: emptyString(),
@@ -56,6 +55,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       referEmail = refereeEmail ?: emptyString(),
       referMobile = refereeMobile ?: emptyString(),
       createdBy = createdBy ?: emptyString(),
+      bankName = bankName ?: emptyString(),
+      branchName = branchcode ?: emptyString(),
       createdThrough = createdThrough ?: emptyString(),
       prospectSource = prospectSource ?: emptyString(),
       lastModifiedBy = lastModifiedBy ?: emptyString(),

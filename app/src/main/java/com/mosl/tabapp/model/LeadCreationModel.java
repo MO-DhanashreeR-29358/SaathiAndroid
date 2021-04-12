@@ -1,7 +1,7 @@
 package com.mosl.tabapp.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.mosl.tabapp.common.CRMAppUtil;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,8 +11,12 @@ import java.util.List;
 
 public class LeadCreationModel implements Serializable {
     @SerializedName("BusinessUnitID") private String businessUnitID;
-    @SerializedName("LeadCategoryID") private String leadCategoryID;
-    @SerializedName("ContactPerson") private String contactPerson;
+    @SerializedName("LeadCategoryID")
+    private String leadCategoryID;
+    @SerializedName("Branchcode")
+    private String branchCode;
+    @SerializedName("ContactPerson")
+    private String contactPerson;
     @SerializedName("SourceID") private String sourceID;
     @SerializedName("LeadSourceDetails") private String leadSourceDetails;
     @SerializedName("LeadSourceID") private String leadSourceID;
@@ -299,45 +303,6 @@ public class LeadCreationModel implements Serializable {
         return productMapping;
     }
 
-    public String getJson() {
-        String json = "{";
-        json += "\"BusinessUnitID\":" + getBusinessUnitID();
-        json += ",\"LeadCategoryID\":" + getLeadCategoryID();
-        if (!CRMAppUtil.isBlank(getContactPerson())) {
-            json += ",\"ContactPerson\":\"" + getContactPerson() + "\"";
-        }
-        json += ",\"SourceID\":" + getSourceID();
-        json += ",\"LeadSourceDetails\":\"" + getLeadSourceDetails() + "\"";
-        json += ",\"LeadSourceID\":" + getLeadSourceID();
-        json += ",\"LeadSourceDetailsID\":" + getLeadSourceDetailsID();
-        json += ",\"ProfessionID\":" + getProfessionid();
-        if (!CRMAppUtil.isBlank(getRefereeCode())) {
-            json += ",\"RefereeCode\":\"" + getRefereeCode() + "\"";
-        }
-        if (!CRMAppUtil.isBlank(getRefereeName())) {
-            json += ",\"RefereeName\":\"" + getRefereeName() + "\"";
-        }
-        if (!CRMAppUtil.isBlank(getRefereeEmail())) {
-            json += ",\"RefereeEmail\":\"" + getRefereeEmail() + "\"";
-        }
-        if (!CRMAppUtil.isBlank(getRefereeMobile())) {
-            json += ",\"RefereeMobile\":\"" + getRefereeMobile() + "\"";
-        }
-        json += ",\"Comments\":\"" + getComments() + "\"";
-        if (!CRMAppUtil.isBlank(getCreatedBy())) {
-            json += ",\"CreatedBy\":\"" + getCreatedBy() + "\"";
-        }
-        json += ",\"CreatedThrough\":\"" + getCreatedThrough() + "\"";
-        json += ",\"ProspectRefereName\":\"" + getProspectRefereName() + "\"";
-        json += ",\"ProspectRefereMobile\":\"" + getProspectRefereMobile() + "\"";
-        json += ",\"ProspectRefereEmail\":\"" + getProspectRefereEmail() + "\"";
-        json += ",\"CreationDate\":\"" + getCreationDate() + "\"";
-        json += ",\"contact\":" + contact.getContactJson();
-        json += ",\"leadProductMapping\":" + productMapping.getLeadProductMapping();
-
-        json += "}";
-        return json;
-    }
 
     public void setSameAsAbove(boolean sameAsAbove) {
         contact.setSameAsAbove(sameAsAbove);
@@ -349,5 +314,13 @@ public class LeadCreationModel implements Serializable {
 
     public void setLeadSourceDetails(String leadSourceDetails) {
         this.leadSourceDetails = leadSourceDetails;
+    }
+
+    public String getBranchCode() {
+        return branchCode;
+    }
+
+    public void setBranchCode(String branchCode) {
+        this.branchCode = branchCode;
     }
 }

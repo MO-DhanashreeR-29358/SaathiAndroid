@@ -9,7 +9,6 @@ import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeResponse
 fun List<BankCodeResponse>.banckCodeTransform(): List<BankCodeModel> {
     return map {
         BankCodeModel(
-
             bankId = it.bankId,
             bankName = it.bankName
 

@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadcreation.ui
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
+import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.Observable
@@ -13,7 +14,8 @@ import javax.inject.Inject
 class LeadCreationPresenter @Inject constructor(
     view: LeadCreationView,
     val repository: LeadCreationRepository,
-    val navigator: LeadCreationNavigator
+    val navigator: LeadCreationNavigator,
+    val bankRepository: BankRepository
 ) : BasePresenter<LeadCreationView>(view) {
     private val validator = LeadCreationValidator()
 
@@ -25,6 +27,15 @@ class LeadCreationPresenter @Inject constructor(
             }
             .subscribe(view::renderLeadCreationPageData, Timber::e)
             .addTo(disposable)
+
+        val bankChangeObsc = view.onBankChange().share()
+        bankChangeObsc
+            .filter(InvalidSelectionPredicate)
+            .switchMap {
+                bankRepository.getBranchFilter(view.getBank()!!.bankId)
+                    .compose(applyUiModel())
+            }.subscribe(view::renderBranchFilter).addTo(disposable)
+
 
         view.onPrimaryCheckboxChanged()
             .skip(1)

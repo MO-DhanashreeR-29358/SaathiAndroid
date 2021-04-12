@@ -2,16 +2,15 @@ package com.mosl.tabapp.leadcreation.ui
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.bank.BankCodeModel
+import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.AssignToSearchEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.CreateLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadEvent
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.TransferLeadPayment
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.*
 import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.Observable
 
@@ -108,6 +107,11 @@ interface LeadCreationView : BaseView {
   fun onTransferLeadPaymentFired(): Observable<TransferLeadPayment>
   fun getMobile(): String
   fun renderTransferLead(uiModel: UiModel<TransferLead>)
+  fun onBranchChange(): Observable<Int>
+  fun onBankChange(): Observable<Int>
+  fun getBank(): BankCodeModel?
+  fun getBranch(): BranchCodeModel?
+  fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>)
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

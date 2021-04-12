@@ -16,6 +16,7 @@ fun ClientInput.requestTransform(): ClientsRequest {
 
 fun APClientsInput.additionalParametersTransform(): AddtionalParameters {
     return AddtionalParameters(
+        fltBankName,
         fltHierarchy, fltPeriod
     )
 }
