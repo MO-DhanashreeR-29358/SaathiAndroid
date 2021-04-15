@@ -47,6 +47,7 @@ import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
+import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -79,6 +80,9 @@ class CommonActivity : BaseActivity(),
 
   @Inject
   lateinit var activityNavHelper: ActivityNavigationHelper
+
+  @Inject
+  lateinit var navigator: EkycNavigator
 
   @Inject
   lateinit var userManager: UserManager
@@ -489,7 +493,8 @@ class CommonActivity : BaseActivity(),
             logoutCustomer()
             binding.drawerLayout.closeDrawers()
           } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_FRESH_REG) {
-            gotoEkycExpressPage(false, WebviewFragment.FRESH_REGISTRATION_ID)
+            navigator.openEkyc()
+            // gotoEkycExpressPage(false, WebviewFragment.FRESH_REGISTRATION_ID)
             binding.drawerLayout.closeDrawers()
           } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EXISTING_APP) {
             activityNavHelper.openEkycApp(true)
