@@ -36,11 +36,11 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.webview.WebviewFragment
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.functions.Consumer
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.functions.Consumer
 import timber.log.Timber
-import java.util.Objects
+import java.util.*
 import javax.inject.Inject
 
 @ActivityScoped

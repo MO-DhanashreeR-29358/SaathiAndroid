@@ -20,8 +20,8 @@ import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.util.emptyString
-import io.reactivex.Observable
-import io.reactivex.functions.Function7
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.Function7
 import java.net.URLEncoder
 import javax.inject.Inject
 

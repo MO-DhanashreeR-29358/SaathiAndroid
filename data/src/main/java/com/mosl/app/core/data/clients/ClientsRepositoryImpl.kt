@@ -4,7 +4,7 @@ import com.mosl.mobile.domain.clients.ClientInput
 import com.mosl.mobile.domain.clients.ClientItemResponseModel
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class ClientsRepositoryImpl @Inject constructor(

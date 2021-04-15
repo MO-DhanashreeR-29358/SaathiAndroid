@@ -1,18 +1,11 @@
 package com.mosl.app.core.data.pendingapproval.report
 
-import com.mosl.mobile.domain.pendingapproval.EmployeeModel
-import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalModel
-import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalResponse
-import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
-import com.mosl.mobile.domain.pendingapproval.PendingForApprovalItem
-import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
-import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
-import com.mosl.mobile.domain.pendingapproval.ProfileModel
+import com.mosl.mobile.domain.pendingapproval.*
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.pendingforapproval.ApprovelRequest
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
 class PendingForApprovalRepositoryImpl @Inject constructor(

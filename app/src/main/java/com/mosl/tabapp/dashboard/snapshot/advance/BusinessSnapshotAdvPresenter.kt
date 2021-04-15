@@ -8,7 +8,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.kotlin.addTo
 import java.io.Serializable
 import javax.inject.Inject
 

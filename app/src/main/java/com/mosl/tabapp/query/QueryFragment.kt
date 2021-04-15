@@ -3,7 +3,7 @@ package com.mosl.tabapp.query
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -15,9 +15,9 @@ import com.mosl.tabapp.databinding.FragmentQueryNewBinding
 import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.tabapp.util.initiateCall
 import com.mosl.validator.exception.ValidationException
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class QueryFragment : CommonFragment(), QueryView {

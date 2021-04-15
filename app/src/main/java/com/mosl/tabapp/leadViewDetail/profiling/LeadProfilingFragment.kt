@@ -12,7 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -35,9 +35,9 @@ import com.mosl.tabapp.model.profile.ProfileQuestion
 import com.mosl.tabapp.model.profile.ProfileQuestionGroup
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*

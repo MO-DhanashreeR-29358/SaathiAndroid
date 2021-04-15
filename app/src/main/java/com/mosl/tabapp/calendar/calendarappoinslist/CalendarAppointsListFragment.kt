@@ -12,7 +12,7 @@ import android.widget.DatePicker
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -30,13 +30,12 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DatePickerBinding
 import com.mosl.tabapp.databinding.FragmentCalendarAppointsListBinding
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Calendar
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -67,7 +66,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
     section = DataManagerSection(onRetryClick)
     section.retrySubject = dataActionSubject
 
-    var mainToDate = this.arguments!!.getString(MOSLConstants.DATE)
+    var mainToDate = this.arguments?.getString(MOSLConstants.DATE)
     mainToDate?.let {
       fromPostingDate = it
       mainToDate = CRMAppUtil.getDateFromString(
@@ -89,7 +88,7 @@ class CalendarAppointsListFragment : CommonFragment(), CalendarAppointsListView 
   }
 
   private fun setUpRecyclerView() {
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
 
     binding.rvCalendarAppointsList.apply {
       layoutManager = LinearLayoutManager(requireContext())

@@ -7,7 +7,7 @@ import com.mosl.mobile.domain.pendingapproval.MultiUpdateApprovalResponse
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalDropdownData
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalItem
 import com.mosl.tabapp.common.RowData
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface PendingForApprovalView : BaseView {
   fun render(uiModel: UiModel<PendingForApprovalDropdownData>)

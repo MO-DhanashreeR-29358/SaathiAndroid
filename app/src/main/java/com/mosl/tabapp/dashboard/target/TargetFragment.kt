@@ -15,19 +15,14 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.bank.BankCodeModel
-import com.mosl.mobile.domain.bank.BranchCodeModel
-import com.mosl.mobile.domain.bank.SelectBank
-import com.mosl.mobile.domain.bank.SelectBranch
-import com.mosl.mobile.domain.bank.SelectSubBranch
-import com.mosl.mobile.domain.bank.SubBranchCodeModel
+import com.mosl.mobile.domain.bank.*
 import com.mosl.mobile.domain.target.Table1ItemModel
 import com.mosl.mobile.domain.target.TableItemModel
 import com.mosl.mobile.domain.target.TargetItemModel
@@ -45,11 +40,10 @@ import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import java.util.ArrayList
-import java.util.HashMap
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 import javax.inject.Inject
 
 class TargetFragment : CommonFragment(), TargetView {
@@ -82,8 +76,8 @@ class TargetFragment : CommonFragment(), TargetView {
 
   private var widgetModel: WidgetModel? = null
 
-  private val summaryCountGroupAdapter = GroupAdapter<ViewHolder>()
-  private val labelGroupAdapter = GroupAdapter<ViewHolder>()
+  private val summaryCountGroupAdapter = GroupAdapter<GroupieViewHolder>()
+  private val labelGroupAdapter = GroupAdapter<GroupieViewHolder>()
 
   override fun getLayout(): Int {
     return R.layout.fragment_target
@@ -109,7 +103,7 @@ class TargetFragment : CommonFragment(), TargetView {
   }
 
   private fun setUpView() {
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.horizontalRecyclerView.apply {
       layoutManager =
         LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

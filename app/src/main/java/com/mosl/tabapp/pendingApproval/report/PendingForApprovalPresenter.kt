@@ -7,9 +7,9 @@ import com.mosl.mobile.domain.pendingapproval.PendingForApprovalListRequest
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.constants.MOSLConstants.REPORT_PAGE_SIZE
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.Function3
+import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
 import javax.inject.Inject
 

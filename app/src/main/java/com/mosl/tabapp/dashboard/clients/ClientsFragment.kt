@@ -3,7 +3,7 @@ package com.mosl.tabapp.dashboard.clients
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -22,9 +22,9 @@ import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap

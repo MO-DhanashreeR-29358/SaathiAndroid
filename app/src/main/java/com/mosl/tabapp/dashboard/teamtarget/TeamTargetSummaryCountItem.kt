@@ -7,7 +7,7 @@ import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.TargetSummaryCountItemBinding
 import com.xwray.groupie.databinding.BindableItem
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class TeamTargetSummaryCountItem(
   val itemModel: TeamTableItem3Model,

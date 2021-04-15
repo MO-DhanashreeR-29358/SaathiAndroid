@@ -1,205 +1,203 @@
 buildscript {
-  ext.google_services_version = '4.2.0'
-  ext.android_plugin_version = '4.0.1'
-  ext.kotlin_version = '1.3.30'
-  repositories {
-    google()
-    jcenter()
-    maven { url 'https://maven.fabric.io/public' }
-    maven {
-      url 'http://192.168.103.116:9090/artifactory/libs-release-local'
+    ext.google_services_version = '4.2.0'
+    ext.android_plugin_version = '4.0.1'
+    ext.kotlin_version = '1.3.30'
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://192.168.103.116:9090/artifactory/libs-release-local'
+        }
     }
-  }
-  dependencies {
-    classpath "com.android.tools.build:gradle:${android_plugin_version}"
-    classpath "com.google.gms:google-services:$google_services_version"
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-      classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'//Firebase Performance
-    classpath 'com.google.firebase:perf-plugin:1.3.1' //Firebase Performance
-  }
+    dependencies {
+        classpath "com.android.tools.build:gradle:${android_plugin_version}"
+        classpath "com.google.gms:google-services:$google_services_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'//Firebase Performance
+        classpath 'com.google.firebase:perf-plugin:1.3.1' //Firebase Performance
+    }
 }
 
-ext.versions = ["compileSdkVersion": 30,
-                "targetSdkVersion": 30,
-                "buildToolsVersion": "29.0.3",
-                'multidex': '2.0.1',
+ext.versions = ["compileSdkVersion"   : 30,
+                "targetSdkVersion"    : 30,
+                "buildToolsVersion"   : "29.0.3",
+                'multidex'            : '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',
-                'sdp': '1.0.6',
-                'dagger': '2.22.1',
-                'leakCanary': '1.6.3',
-                'okHttp': '3.12.2',
-                'circleimageview': '2.2.0',
-                'glide': '3.7.0',
-                'calendarview': '1.4.3',
-                'asyncHttp': '1.4.9',
-                'smoothprogressbar': '1.1.0',
-                'floatingbutton': '1.10.1',
-                'firebase': '20.2.0',
-                'espresso': '3.0.2',
-                'timber': '4.7.1',
-                'imageLoader': '1.9.5',
-                'stetho': '1.5.0',
-                'gson': '2.8.5',
-                'retrofit': '2.5.0',
-                'rxJava': '2.2.8',
-                'rxBinding': '3.0.0-alpha2',
-                'groupie': '2.3.0',
-                'room': '2.1.0',
-                'picasso': '2.5.2',
-                'androidx': '1.0.0',
-                 'stdLib':'1.3.50'
+                'sdp'                 : '1.0.6',
+                'dagger'              : '2.22.1',
+                'leakCanary'          : '1.6.3',
+                'okHttp'              : '3.12.2',
+                'circleimageview'     : '2.2.0',
+                'glide'               : '3.7.0',
+                'calendarview'        : '1.4.3',
+                'asyncHttp'           : '1.4.9',
+                'smoothprogressbar'   : '1.1.0',
+                'floatingbutton'      : '1.10.1',
+                'firebase'            : '20.2.0',
+                'espresso'            : '3.0.2',
+                'timber'              : '4.7.1',
+                'imageLoader'         : '1.9.5',
+                'stetho'              : '1.5.0',
+                'gson'                : '2.8.5',
+                'retrofit'            : '2.9.0',
+                'rxJava'              : '2.2.8',
+                'rxBinding'           : '4.0.0',
+                'groupie'             : '2.3.0',
+                'room'                : '2.1.0',
+                'picasso'             : '2.5.2',
+                'androidx'            : '1.0.0',
+                'stdLib'              : '1.3.50',
+                'securityVersion'     : '1.1.0-alpha02'
 
 ]
 
 ext.deps = [
-    'androidx': [
-                'annotation': "androidx.annotation:annotation:1.1.0",
-                'material': 'com.google.android.material:material:1.3.0-alpha04',
-                'appcompat': "androidx.appcompat:appcompat:1.3.0-alpha01",
+        'androidx'                : [
+                'annotation'      : "androidx.annotation:annotation:1.1.0",
+                'material'        : 'com.google.android.material:material:1.3.0-alpha04',
+                'appcompat'       : "androidx.appcompat:appcompat:1.3.0-alpha01",
                 'constraintlayout': 'androidx.constraintlayout:constraintlayout:1.1.3',
-                'fragment': 'androidx.fragment:fragment:1.1.0-alpha02',
-                'cardview': "androidx.cardview:cardview:1.0.0",
-                'pager2': "androidx.viewpager2:viewpager2:1.1.0-alpha01",
-                'browser': "androidx.browser:browser:1.2.0",
-                'legacy': "androidx.legacy:legacy-support-core-ui:1.0.0",
-                'vectordrawable': "androidx.vectordrawable:vectordrawable:1.1.0",
-                'recylerview': "androidx.recyclerview:recyclerview:1.1.0-beta01",
-                'support': 'androidx.legacy:legacy-support-v4:1.0.0-rc01',
-                'multidex': "androidx.multidex:multidex:${versions.multidex}",
-                'test': [
-                    'runner': 'androidx.test:runner:1.1.0',
-                    'espresso': 'androidx.test.espresso:espresso-core:3.1.0']
-    ],
-    'room': [
-        'runtime': "androidx.room:room-runtime:${versions.room}",
-        'compiler': "androidx.room:room-compiler:${versions.room}",
-        'rx': "androidx.room:room-rxjava2:${versions.room}"
-    ],
-    'leakCanary': [
-        "debug": "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}",
-        "release": "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakCanary}"
-    ],
-    'rxBinding': [
-        'platform': "com.jakewharton.rxbinding3:rxbinding:${versions.rxBinding}",
-        'core': "com.jakewharton.rxbinding3:rxbinding-core:${versions.rxBinding}",
-        'swiperefresh': "com.jakewharton.rxbinding3:rxbinding-swiperefreshlayout:${versions.rxBinding}",
-        'viewpager': "com.jakewharton.rxbinding3:rxbinding-viewpager:${versions.rxBinding}",
-        'V4': "com.jakewharton.rxbinding2:rxbinding-support-v4:${versions.rxBinding}",
-        'appcompat': "com.jakewharton.rxbinding3:rxbinding-appcompat:${versions.rxBinding}"
-    ],
-    'mofslArtifacts': [
-        'validator': "MofslArtifacts:validator:1.1.1",
-        'annotation': "MofslArtifacts:annotations:1.0.2",
-        'appcore': "MofslArtifacts:appcore:1.1.0-alpha6",
-        'navigator': "MofslArtifacts:navigator:1.0.13",
-        'appcoreui': "MofslArtifacts:appcoreui:1.1.0-alphla6",
-        'tableview'    : "MofslArtifacts:tableview:1.0.35",
-        'tableviewx'   : "MofslArtifacts:tableview_extensions:1.0.18",
-        'groupie': "MofslArtifacts:groupie_extensions:1.0.8",
-        'conceal'      : "MofslArtifacts:conceal:1.0.0",
-        'tokenmanager': "MofslArtifacts:tokenmanager:1.1.0",
-        'moslcommons'  : "MofslArtifacts:moslcommons:1.1.0-alpha4"
-    ],
-    'groupie': ['core': "com.xwray:groupie:${versions.groupie}",
-        'dataBinding': "com.xwray:groupie-databinding:${versions.groupie}"],
-    'kotlin': "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}",
-    'constraintLayout': "androidx.constraintlayout:constraintlayout:1.1.3",
+                'fragment'        : 'androidx.fragment:fragment:1.1.0-alpha02',
+                'cardview'        : "androidx.cardview:cardview:1.0.0",
+                'pager2'          : "androidx.viewpager2:viewpager2:1.1.0-alpha01",
+                'browser'         : "androidx.browser:browser:1.2.0",
+                'legacy'          : "androidx.legacy:legacy-support-core-ui:1.0.0",
+                'vectordrawable'  : "androidx.vectordrawable:vectordrawable:1.1.0",
+                'recylerview'     : "androidx.recyclerview:recyclerview:1.1.0-beta01",
+                'support'         : 'androidx.legacy:legacy-support-v4:1.0.0-rc01',
+                'multidex'        : "androidx.multidex:multidex:${versions.multidex}",
+                'security'        : "androidx.security:security-crypto:${versions.securityVersion}",
+                'test'            : [
+                        'runner'  : 'androidx.test:runner:1.1.0',
+                        'espresso': 'androidx.test.espresso:espresso-core:3.1.0']
+        ],
+        'room'                    : [
+                'runtime' : "androidx.room:room-runtime:${versions.room}",
+                'compiler': "androidx.room:room-compiler:${versions.room}",
+                'rx'      : "androidx.room:room-rxjava2:${versions.room}"
+        ],
+        'leakCanary'              : [
+                "debug"  : "com.squareup.leakcanary:leakcanary-android:${versions.leakCanary}",
+                "release": "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakCanary}"
+        ],
+        'rxBinding'               : [
+                'platform': "com.jakewharton.rxbinding4:rxbinding:${versions.rxBinding}",
+                'core'    : "com.jakewharton.rxbinding3:rxbinding-core:${versions.rxBinding}"
+        ],
+        'mofslArtifacts'          : [
+                'validator'   : "MofslArtifacts:validator:1.2.2",
+                'annotation'  : "MofslArtifacts:annotations:2.1.0",
+                'appcore'     : "MofslArtifacts:appcore:3.1.5",
+                'navigator'   : "MofslArtifacts:navigator:1.1.4",
+                'appcoreui'   : "MofslArtifacts:appcoreui:3.1.7",
+                'tableview'   : "MofslArtifacts:tableview:1.0.35",
+                'tableviewx'  : "MofslArtifacts:tableview_extensions:1.0.18",
+                'groupie'     : "MofslArtifacts:groupie_extensions:3.1.7",
+                'conceal'     : "MofslArtifacts:conceal:1.0.0",
+                'tokenmanager': "MofslArtifacts:tokenmanager:1.2.2",
+                'moslcommons' : "MofslArtifacts:moslcommons:1.2.3"
+        ],
+        'groupie'                 : ['core'       : "com.xwray:groupie:${versions.groupie}",
+                                     'dataBinding': "com.xwray:groupie-databinding:${versions.groupie}"],
+        'kotlin'                  : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}",
+        'constraintLayout'        : "androidx.constraintlayout:constraintlayout:1.1.3",
 
-    'testing': ['espresso': ['core': "com.android.support.test.espresso:espresso-core:${versions.espresso}"],
-        'junit': 'junit:junit:4.12',
-        'runner': 'com.android.support.test:runner:1.0.2'],
-    'stetho': ['stetho': "com.facebook.stetho:stetho:${versions.stetho}",
-        'okhttp': "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"],
-    'multidex': "androidx.multidex:multidex:${versions.multidex}",
-    'pagerslidingtabstrip': "com.astuetz:pagerslidingtabstrip:${versions.pagerslidingtabstrip}",
-    'sdpAndroid': "com.intuit.sdp:sdp-android:${versions.sdp}",
-    'circleImageView': "de.hdodenhof:circleimageview:${versions.circleimageview}",
-    'mpChart': 'com.github.PhilJay:MPAndroidChart:v3.0.3',
-    'glide': "com.github.bumptech.glide:glide:${versions.glide}",
-    'calendarView': "com.prolificinteractive:material-calendarview:${versions.calendarview}",
-    'asyncHttp': "com.loopj.android:android-async-http:${versions.asyncHttp}",
-    'dialogPlus': "com.orhanobut:dialogplus:1.11@aar",
-    'smoothProgressbar': "com.github.castorflex.smoothprogressbar:library:${versions.smoothprogressbar}",
-    'floatingButton': "com.getbase:floatingactionbutton:${versions.floatingbutton}",
-    'timber': "com.jakewharton.timber:timber:${versions.timber}",
-    'imageLoader': "com.nostra13.universalimageloader:universal-image-loader:${versions.imageLoader}",
-    'firebase': [
-        'core': "com.google.firebase:firebase-core:17.1.0",
-        'remoteConfig': "com.google.firebase:firebase-config:19.1.4",
-        'messaging': "com.google.firebase:firebase-messaging:${versions.firebase}",
-        'preformance': 'com.google.firebase:firebase-perf:19.0.7',
-        'crashlytics_sdk': 'com.crashlytics.sdk.android:crashlytics:2.10.1',
-        'crashlytics': 'com.google.firebase:firebase-crashlytics:17.0.1',
-        'analytics'  : 'com.google.firebase:firebase-analytics:17.4.3'
-    ],
-    'retrofit': ['core': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
-        'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
-        'gson': "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
-        'rxJava': "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}",
-        'scalar': "com.squareup.retrofit2:converter-scalars:${versions.retrofit}"],
-    'rx': [
-        'java': "io.reactivex.rxjava2:rxjava:2.2.10",
-        'kotlin': "io.reactivex.rxjava2:rxkotlin:2.3.0",
-        'android': "io.reactivex.rxjava2:rxandroid:2.1.1",
-        'relay': "com.jakewharton.rxrelay2:rxrelay:2.1.0",
-        'preferences': "com.f2prateek.rx.preferences2:rx-preferences:2.0.0"
-    ],
-    'dagger': [
-        'core': "com.google.dagger:dagger:${versions.dagger}",
-        'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
-        'android': "com.google.dagger:dagger-android-support:${versions.dagger}",
-        'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}"
-    ],
-    'picasso': "com.squareup.picasso:picasso:${versions.picasso}",
-    'dataBinding': "androidx.databinding:databinding-compiler:$android_plugin_version",
-    'okHttp': [
-        'okio': "com.squareup.okio:okio:${versions.okIo}",
-        'core': "com.squareup.okhttp3:okhttp:${versions.okHttp}",
-        'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
-    ],
-    'gson': "com.google.code.gson:gson:${versions.gson}",
-    'commonsLang': "org.apache.commons:commons-lang3:3.4",
-    'segmented': "info.hoang8f:android-segmented:1.0.6",
-    'htmlTextview': "org.sufficientlysecure:html-textview:3.4",
-    'slidinguppanel': "com.sothree.slidinguppanel:library:3.1.1",
-    'playService': "com.google.android.gms:play-services:${versions.firebase}",
-    'compressor': "id.zelory:compressor:2.1.0",
-    'location': "com.google.android.gms:play-services-location:16.0.0",
-    'work': "androidx.work:work-runtime-ktx:2.3.4",
-    'javax': "javax.annotation:jsr250-api:1.0",
-    'EkycArtifactDependencies': [
-        'app'         : "EkycArtifacts:ekycapp:0.5.6-alpha5",
-        'core'        : "EkycArtifacts:ekyccore:0.2.8-alpha1",
-        'api'         : "EkycArtifacts:ekycapi:0.1.3-alpha1",
-        'data'        : "EkycArtifacts:ekycdata:0.4.1-alpha2",
-        'dataResolver': "EkycArtifacts:ekycdataresolver:0.0.5",
-        'domain'      : "EkycArtifacts:ekycdomain:0.1.3-alpha1",
-        'loginApi'    : "EkycArtifacts:ekycloginapi:0.1.1",
-        'loginUi'     : "EkycArtifacts:ekycloginui:0.3.5",
-        'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
-        'coreUi'      : "EkycArtifacts:ekyccoreui:0.2.9",
-        'appUser'     : "EkycArtifacts:ekycappuser:0.3.2-alpha1"
-    ]
+        'testing'                 : ['espresso': ['core': "com.android.support.test.espresso:espresso-core:${versions.espresso}"],
+                                     'junit'   : 'junit:junit:4.12',
+                                     'runner'  : 'com.android.support.test:runner:1.0.2'],
+        'stetho'                  : ['stetho': "com.facebook.stetho:stetho:${versions.stetho}",
+                                     'okhttp': "com.facebook.stetho:stetho-okhttp3:${versions.stetho}"],
+        'multidex'                : "androidx.multidex:multidex:${versions.multidex}",
+        'pagerslidingtabstrip'    : "com.astuetz:pagerslidingtabstrip:${versions.pagerslidingtabstrip}",
+        'sdpAndroid'              : "com.intuit.sdp:sdp-android:${versions.sdp}",
+        'circleImageView'         : "de.hdodenhof:circleimageview:${versions.circleimageview}",
+        'mpChart'                 : 'com.github.PhilJay:MPAndroidChart:v3.0.3',
+        'glide'                   : "com.github.bumptech.glide:glide:${versions.glide}",
+        'calendarView'            : "com.prolificinteractive:material-calendarview:${versions.calendarview}",
+        'asyncHttp'               : "com.loopj.android:android-async-http:${versions.asyncHttp}",
+        'dialogPlus'              : "com.orhanobut:dialogplus:1.11@aar",
+        'smoothProgressbar'       : "com.github.castorflex.smoothprogressbar:library:${versions.smoothprogressbar}",
+        'floatingButton'          : "com.getbase:floatingactionbutton:${versions.floatingbutton}",
+        'timber'                  : "com.jakewharton.timber:timber:${versions.timber}",
+        'imageLoader'             : "com.nostra13.universalimageloader:universal-image-loader:${versions.imageLoader}",
+        'firebase'                : [
+                'core'           : "com.google.firebase:firebase-core:17.1.0",
+                'remoteConfig'   : "com.google.firebase:firebase-config:19.1.4",
+                'messaging'      : "com.google.firebase:firebase-messaging:${versions.firebase}",
+                'preformance'    : 'com.google.firebase:firebase-perf:19.0.7',
+                'crashlytics_sdk': 'com.crashlytics.sdk.android:crashlytics:2.10.1',
+                'crashlytics'    : 'com.google.firebase:firebase-crashlytics:17.0.1',
+                'analytics'      : 'com.google.firebase:firebase-analytics:17.4.3'
+        ],
+        'retrofit'                : ['core'  : "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+                                     'mock'  : "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
+                                     'gson'  : "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+                                     'rxJava': "com.squareup.retrofit2:adapter-rxjava3:${versions.retrofit}",
+                                     'scalar': "com.squareup.retrofit2:converter-scalars:${versions.retrofit}"],
+        'rx'                      : [
+                'java'       : "io.reactivex.rxjava3:rxjava:3.0.5",
+                'kotlin'     : "io.reactivex.rxjava3:rxkotlin:3.0.0",
+                'android'    : "io.reactivex.rxjava3:rxandroid:3.0.0",
+                'relay'      : "com.jakewharton.rxrelay3:rxrelay:3.0.0",
+                'preferences': "MofslArtifacts:rxpreferences:1.0.2"
+        ],
+        'dagger'                  : [
+                'core'           : "com.google.dagger:dagger:${versions.dagger}",
+                'compiler'       : "com.google.dagger:dagger-compiler:${versions.dagger}",
+                'android'        : "com.google.dagger:dagger-android-support:${versions.dagger}",
+                'androidCompiler': "com.google.dagger:dagger-android-processor:${versions.dagger}"
+        ],
+        'picasso'                 : "com.squareup.picasso:picasso:${versions.picasso}",
+        'dataBinding'             : "androidx.databinding:databinding-compiler:$android_plugin_version",
+        'okHttp'                  : [
+                'okio'  : "com.squareup.okio:okio:${versions.okIo}",
+                'core'  : "com.squareup.okhttp3:okhttp:${versions.okHttp}",
+                'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
+        ],
+        'gson'                    : "com.google.code.gson:gson:${versions.gson}",
+        'commonsLang'             : "org.apache.commons:commons-lang3:3.4",
+        'segmented'               : "info.hoang8f:android-segmented:1.0.6",
+        'htmlTextview'            : "org.sufficientlysecure:html-textview:3.4",
+        'slidinguppanel'          : "com.sothree.slidinguppanel:library:3.1.1",
+        'playService'             : "com.google.android.gms:play-services:${versions.firebase}",
+        'compressor'              : "id.zelory:compressor:2.1.0",
+        'location'                : "com.google.android.gms:play-services-location:16.0.0",
+        'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
+        'javax'                   : "javax.annotation:jsr250-api:1.0",
+        'EkycArtifactDependencies': [
+                'app'         : "EkycArtifacts:ekycapp:0.5.6-alpha5",
+                'core'        : "EkycArtifacts:ekyccore:0.2.8-alpha1",
+                'api'         : "EkycArtifacts:ekycapi:0.1.3-alpha1",
+                'data'        : "EkycArtifacts:ekycdata:0.4.1-alpha2",
+                'dataResolver': "EkycArtifacts:ekycdataresolver:0.0.5",
+                'domain'      : "EkycArtifacts:ekycdomain:0.1.3-alpha1",
+                'loginApi'    : "EkycArtifacts:ekycloginapi:0.1.1",
+                'loginUi'     : "EkycArtifacts:ekycloginui:0.3.5",
+                'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
+                'coreUi'      : "EkycArtifacts:ekyccoreui:0.2.9",
+                'appUser'     : "EkycArtifacts:ekycappuser:0.3.2-alpha1"
+        ]
 
 ]
 
 allprojects {
-  repositories {
-    google()
-    jcenter()
-    mavenLocal()
-    maven {
-      url 'https://maven.google.com/'
-      name 'Google'
+    repositories {
+        google()
+        jcenter()
+        mavenLocal()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
+        maven { url "https://jitpack.io" }
+        maven { url 'https://maven.fabric.io/public' }
+        maven {
+            url 'http://192.168.103.116:9090/artifactory/libs-release-local'
+        }
     }
-    maven { url "https://jitpack.io" }
-    maven { url 'https://maven.fabric.io/public' }
-    maven {
-      url 'http://192.168.103.116:9090/artifactory/libs-release-local'
-    }
-  }
 }
 
 task clean(type: Delete) {
-  delete rootProject.buildDir
+    delete rootProject.buildDir
 }

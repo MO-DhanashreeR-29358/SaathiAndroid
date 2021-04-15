@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LeadViewProfilingRepositoryImpl @Inject constructor(

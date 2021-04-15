@@ -10,9 +10,7 @@ import com.mosl.mobile.domain.tradeyesterday.ClientTradeYesterdayResponseModel
 import com.mosl.shared.util.toDecimalsOrDash
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MOSLConstants.NO_OF_CLIENTS
-import com.mosl.tabapp.constants.MOSLConstants.REVENUE_GENERATED
-import com.mosl.tabapp.constants.MOSLConstants.REVENUE_TYPE
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragClientTradedBinding
 import com.mosl.tabapp.databinding.FragClientTradedBottomBinding
@@ -20,10 +18,10 @@ import com.mosl.tabapp.databinding.FragClientTradedTopBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
-import java.util.HashMap
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 import javax.inject.Inject
 
 class ClientsTradedYesterdayFragment : CommonFragment(), ClientsTradedYesterdayView {

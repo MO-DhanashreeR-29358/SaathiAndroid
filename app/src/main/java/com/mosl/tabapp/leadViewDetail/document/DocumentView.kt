@@ -5,10 +5,8 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentInput
 import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.UploadImage
-import io.reactivex.Observable
+import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.*
+import io.reactivex.rxjava3.core.Observable
 
 interface DocumentView : BaseView {
   fun getLeadDocumentInput(): DocumentInput

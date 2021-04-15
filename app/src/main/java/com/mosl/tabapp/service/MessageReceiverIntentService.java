@@ -14,7 +14,6 @@ import android.os.Build;
 
 import androidx.core.app.NotificationCompat;
 
-import com.f2prateek.rx.preferences2.Preference;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mosl.annotations.FcmToken;
@@ -28,6 +27,7 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
+import mosl.rx_preferences.Preference;
 import timber.log.Timber;
 
 import static com.mosl.tabapp.core.ActivityNavigationHelper.ARG_NOTIFICATION_CATEGORY;
@@ -36,7 +36,8 @@ public class MessageReceiverIntentService extends FirebaseMessagingService {
 	private static final String CHANNEL_ID = "saathi";
 	String TAG = MessageReceiverIntentService.class.getCanonicalName();
 	@Inject
-	@FcmToken Preference<String> fcmtokenPref;
+	@FcmToken
+	Preference<String> fcmtokenPref;
 
 	@Override
 	public void onMessageReceived(RemoteMessage remoteMessage) {

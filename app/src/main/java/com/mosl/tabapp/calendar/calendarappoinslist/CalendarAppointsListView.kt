@@ -4,7 +4,7 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.calendar.CalenderItemResponse
 import com.mosl.tabapp.calendar.CalendarUiEvent.CallAPi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface CalendarAppointsListView : BaseView {
   fun onDatePicker(): Observable<Unit>

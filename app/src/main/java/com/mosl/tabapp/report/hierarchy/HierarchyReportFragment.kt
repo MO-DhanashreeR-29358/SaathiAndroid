@@ -30,9 +30,9 @@ import com.mosl.tabapp.report.HierarchyReportUIEvent.CellEvent
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
 import com.mosl.tableview.rowadapter.TableRowAdapter
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class HierarchyReportFragment : CommonFragment(),

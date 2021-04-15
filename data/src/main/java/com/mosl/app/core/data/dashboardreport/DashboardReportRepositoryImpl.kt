@@ -10,10 +10,20 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportRequest
 import com.mosl.mobile.domain.productivity.ColHeader
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.emptyList
+import kotlin.collections.forEach
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.set
+import kotlin.collections.sortedBy
 
 class DashboardReportRepositoryImpl @Inject constructor(
   val api: SaathiApi,

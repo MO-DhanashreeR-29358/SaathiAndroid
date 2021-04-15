@@ -6,18 +6,10 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.CombinedChart
 import com.github.mikephil.charting.charts.CombinedChart.DrawOrder
-import com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment
-import com.github.mikephil.charting.components.Legend.LegendOrientation
-import com.github.mikephil.charting.components.Legend.LegendVerticalAlignment
+import com.github.mikephil.charting.components.Legend.*
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.CombinedData
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import com.mosl.app.core.events.DataAction
@@ -36,9 +28,9 @@ import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
@@ -78,7 +70,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
   }
 
   private fun setUpView() {
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.recyclerView.apply {
       layoutManager =
         LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)

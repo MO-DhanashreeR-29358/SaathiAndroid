@@ -1,6 +1,6 @@
 package com.mosl.mobile.domain.leadviewdetail.document
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface DocumentRepository {
   fun getLeadDocuments(request: DocumentInput): Observable<List<LeadDocumentsItemData>>

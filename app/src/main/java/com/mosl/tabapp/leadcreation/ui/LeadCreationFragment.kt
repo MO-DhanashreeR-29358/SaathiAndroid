@@ -15,10 +15,10 @@ import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.afterTextChangeEvents
-import com.jakewharton.rxbinding3.widget.checkedChanges
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
+import com.jakewharton.rxbinding4.widget.checkedChanges
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -66,8 +66,8 @@ import com.mosl.tabapp.util.setErrorMessages
 import com.mosl.tabapp.util.visible
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

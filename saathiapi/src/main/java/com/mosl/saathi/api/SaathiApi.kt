@@ -105,7 +105,7 @@ import com.mosl.saathi.api.model.splash.VersionResponse
 import com.mosl.saathi.api.model.webview.CommonURLRequest
 import com.mosl.saathi.api.model.webview.CommonURLResponse
 import com.mosl.saathi.api.model.webview.IncentiveReportRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
 import retrofit2.http.*
 

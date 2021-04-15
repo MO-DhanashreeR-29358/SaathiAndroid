@@ -14,10 +14,10 @@ import com.mosl.tabapp.dashboard.leads.LeadUiEvent
 import com.mosl.tabapp.dashboard.leads.LeadsFragment
 import com.mosl.tabapp.databinding.FragTableLeadShowBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
-import java.util.HashMap
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 import javax.inject.Inject
 
 class LeadsReportFragment : CommonFragment(), LeadsReportView, View.OnClickListener {

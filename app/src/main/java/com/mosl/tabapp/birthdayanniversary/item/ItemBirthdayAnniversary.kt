@@ -29,7 +29,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.xwray.groupie.databinding.BindableItem
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class ItemBirthdayAnniversary(
   private val data: BirthdayAnniversaryListData,

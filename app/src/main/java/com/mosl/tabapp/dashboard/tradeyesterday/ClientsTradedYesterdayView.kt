@@ -3,8 +3,8 @@ package com.mosl.tabapp.dashboard.tradeyesterday
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.tradeyesterday.ClientTradeYesterdayResponseModel
-import io.reactivex.Observable
-import java.util.HashMap
+import io.reactivex.rxjava3.core.Observable
+import java.util.*
 
 interface ClientsTradedYesterdayView : BaseView {
   fun getGroupName(): String?

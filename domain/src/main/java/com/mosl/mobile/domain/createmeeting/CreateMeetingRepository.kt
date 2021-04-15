@@ -1,6 +1,6 @@
 package com.mosl.mobile.domain.createmeeting
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface CreateMeetingRepository {
     fun getClientDetail(ucid: Int): Observable<ClientDetail>

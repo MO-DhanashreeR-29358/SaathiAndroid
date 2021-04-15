@@ -4,7 +4,7 @@ import com.mosl.mobile.domain.target.TargetInput
 import com.mosl.mobile.domain.target.TargetItemModel
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class TargetRepositoryImpl @Inject constructor(

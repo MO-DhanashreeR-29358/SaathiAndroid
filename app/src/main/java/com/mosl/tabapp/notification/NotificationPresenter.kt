@@ -5,13 +5,11 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.notification.NotificationRequestInput
-import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
-import com.mosl.tabapp.constants.MOSLConstants.NOTIFICATION_DATA
-import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class NotificationPresenter @Inject constructor(

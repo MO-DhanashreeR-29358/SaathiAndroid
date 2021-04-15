@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.ErrorState.NO_DATA_ERROR
@@ -23,9 +23,7 @@ import com.mosl.mobile.domain.birthdayanniversary.ProfileSpinner
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.GetDataList
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.*
 import com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
@@ -36,10 +34,10 @@ import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 /**
@@ -85,7 +83,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
   }
 
   private fun setUpRecyclerView() {
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
     section = DataManagerSection(onRetryClick)
     section.retrySubject = dataActionSubject
     groupAdapter.add(section)

@@ -21,23 +21,14 @@ import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import com.mosl.tabapp.drawermenu.data.ChildMenu
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSource
-import com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem
-import com.mosl.tabapp.drawermenu.item.BaseMenuItem
-import com.mosl.tabapp.drawermenu.item.ChildMenuItem
-import com.mosl.tabapp.drawermenu.item.MenuHeaderItem
-import com.mosl.tabapp.drawermenu.item.SelectableMenu
-import com.xwray.groupie.ExpandableGroup
-import com.xwray.groupie.Group
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
+import com.mosl.tabapp.drawermenu.item.*
+import com.xwray.groupie.*
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -84,7 +75,7 @@ class DrawerMenuView : FrameLayout {
 
     rvDrawerMenu = findViewById(R.id.rv_drawer_menu)
 
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
     rvDrawerMenu.layoutManager = LinearLayoutManager(context)
     rvDrawerMenu.addItemDecoration(
         DividerItemDecoration(context, DividerItemDecoration.VERTICAL)

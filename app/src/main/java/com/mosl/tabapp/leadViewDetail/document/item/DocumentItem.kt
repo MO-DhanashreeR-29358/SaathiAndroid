@@ -21,7 +21,7 @@ import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.mosl.tabapp.util.downloadImage
 import com.xwray.groupie.databinding.BindableItem
 import io.fabric.sdk.android.services.common.CommonUtils.hideKeyboard
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class DocumentItem(
   private val data: LeadDocumentsItemData,

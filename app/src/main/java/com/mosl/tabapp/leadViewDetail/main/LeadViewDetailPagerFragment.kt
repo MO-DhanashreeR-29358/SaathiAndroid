@@ -14,7 +14,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -36,9 +36,9 @@ import com.mosl.tabapp.ui.MSFDialog.Action.OK
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.util.initiateCall
 import com.mosl.tabapp.util.initiateMessage
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 

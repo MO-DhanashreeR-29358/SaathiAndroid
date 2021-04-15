@@ -6,9 +6,9 @@ import com.mosl.mobile.domain.dashboardreport.LeadAssignRequest
 import com.mosl.mobile.domain.dashboardreport.STPLeadTransferModel
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.dashboard.report.DashboardReportData
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class DashboardReportAssignPresenter @Inject constructor(
@@ -53,8 +53,10 @@ class DashboardReportAssignPresenter @Inject constructor(
             .map {
                 view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
             }.switchMap {
-                repository.getStpLeadTransfer(it)
-                    .compose(applyUiModel())
+                it?.let { it1 ->
+                    repository.getStpLeadTransfer(it1)
+                        .compose(applyUiModel())
+                }
             }.subscribe(view::multiUpdateApproval).addTo(disposable)
 
         view.onSelectedApprovalList().subscribe {

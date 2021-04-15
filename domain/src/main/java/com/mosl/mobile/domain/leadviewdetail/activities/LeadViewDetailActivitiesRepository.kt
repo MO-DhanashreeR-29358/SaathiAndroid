@@ -1,6 +1,6 @@
 package com.mosl.mobile.domain.leadviewdetail.activities
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadViewDetailActivitiesRepository {
   fun getActivityData(request: ActivityRequest): Observable<ActivityData>

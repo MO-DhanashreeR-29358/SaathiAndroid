@@ -7,7 +7,7 @@ import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.saathi.api.model.dashboard.lead.LeadModel
 import com.mosl.tabapp.common.FilterRowData
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadsView : BaseView {
 

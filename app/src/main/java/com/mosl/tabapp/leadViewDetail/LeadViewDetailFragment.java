@@ -37,7 +37,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.textfield.TextInputLayout;
-import com.jakewharton.rxbinding3.widget.RxTextView;
+import com.jakewharton.rxbinding4.widget.RxTextView;
 import com.mosl.app.coreui.spinner.AdapterUtils;
 import com.mosl.commons.data.UiModel;
 import com.mosl.mobile.user.login.UserManagerImpl;
@@ -133,11 +133,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import timber.log.Timber;
 
-import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
+import static com.jakewharton.rxbinding4.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.tabapp.common.CRMAppUtil.getDBDateFrom;

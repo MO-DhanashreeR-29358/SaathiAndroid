@@ -3,7 +3,7 @@ package com.mosl.tabapp.login
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.user.login.LoginRepository
 import com.mosl.tabapp.core.LoginNavigator
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor(

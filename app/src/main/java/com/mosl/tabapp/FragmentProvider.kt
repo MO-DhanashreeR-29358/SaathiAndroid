@@ -1,6 +1,5 @@
 package com.mosl.tabapp
 
-import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.mobile.pdf.OTPModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
@@ -46,6 +45,7 @@ import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewMainFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.OTPFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment

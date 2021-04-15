@@ -6,7 +6,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.query.QueryUiEvent.OnSubmitConfirmClick
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface QueryView : BaseView {
   fun getQueryMessgae(): String

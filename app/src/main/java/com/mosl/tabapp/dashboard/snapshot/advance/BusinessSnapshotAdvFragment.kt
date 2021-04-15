@@ -8,14 +8,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotResponseModel
 import com.mosl.tabapp.R
-import com.mosl.tabapp.constants.MOSLConstants.COL_FILTER
-import com.mosl.tabapp.constants.MOSLConstants.MTD
-import com.mosl.tabapp.constants.MOSLConstants.MTD_CNT
-import com.mosl.tabapp.constants.MOSLConstants.PARAMETER
-import com.mosl.tabapp.constants.MOSLConstants.ROW_FILTER
-import com.mosl.tabapp.constants.MOSLConstants.SELF_KEY
-import com.mosl.tabapp.constants.MOSLConstants.WIDGETTYPE
-import com.mosl.tabapp.constants.MOSLConstants.YTD_CNT
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragBusinessSnapshotBottomBinding
 import com.mosl.tabapp.databinding.FragBusinessSnapshotTopBinding
@@ -23,10 +16,10 @@ import com.mosl.tabapp.databinding.FragmentClientsNewBinding
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
-import java.util.HashMap
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 import javax.inject.Inject
 
 class BusinessSnapshotAdvFragment : CommonFragment(), BusinessSnapshotAdvView {

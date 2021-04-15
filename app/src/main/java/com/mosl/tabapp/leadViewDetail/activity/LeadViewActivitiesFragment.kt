@@ -21,18 +21,11 @@ import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.constants.MOSLConstants.APPT_CANCELLED
-import com.mosl.tabapp.constants.MOSLConstants.NO
-import com.mosl.tabapp.constants.MOSLConstants.UCID
-import com.mosl.tabapp.constants.MOSLConstants.YES
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogAppointmentsBinding
 import com.mosl.tabapp.databinding.FragmentLeadActivitiesBinding
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.AppointmentEvent
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.DeleteEvent
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.MeetingEvent
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.RescheduleEvent
-import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.UpdateEvent
+import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesUiEvent.*
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesAppointmentChildItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem
 import com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem
@@ -42,10 +35,10 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.xwray.groupie.ExpandableGroup
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
@@ -85,7 +78,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
   private fun setUpRecyclerView() {
     appointmentSection = DataManagerSection(onRetryClick)
     meetingSection = DataManagerSection(onRetryClick)
-    val groupAdapter = GroupAdapter<ViewHolder>().apply {
+    val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
       add(appointmentSection)
       add(meetingSection)
     }

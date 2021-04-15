@@ -6,7 +6,7 @@ import com.mosl.tabapp.common.CRMAppUtil.setImageUrl
 import com.mosl.tabapp.databinding.HorinzontalWidgetItemBinding
 import com.mosl.tabapp.model.dashboard.DashboardGroupModel
 import com.xwray.groupie.databinding.BindableItem
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class HorinzatalTrendsWidgetItem(
   val dashboardGroupModel: DashboardGroupModel,

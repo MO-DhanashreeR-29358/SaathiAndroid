@@ -1,14 +1,9 @@
 package com.mosl.app.core.data.leadviewdetail.document
 
-import com.mosl.mobile.domain.leadviewdetail.document.DocumentInput
-import com.mosl.mobile.domain.leadviewdetail.document.DocumentRepository
-import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
-import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
-import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
-import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
+import com.mosl.mobile.domain.leadviewdetail.document.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class DocumentRepositoryImpl @Inject constructor(

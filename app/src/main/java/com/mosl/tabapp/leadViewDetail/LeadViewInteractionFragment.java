@@ -39,10 +39,9 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -134,8 +133,7 @@ public class LeadViewInteractionFragment extends CommonFragment
         try {
             super.setUserVisibleHint(isVisibleToUser);
             if (isVisibleToUser && leadViewInteractionView != null && (viewPager.getCurrentItem()
-                    == Objects
-                    .requireNonNull(this.getArguments())
+                    == this.requireArguments()
                     .getInt("Position"))) {
                 String[] eventTypeArray = requireActivity()
                         .getResources()

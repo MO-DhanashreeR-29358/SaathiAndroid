@@ -15,48 +15,34 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.groupiex.section.DataManagerSection
-import com.mosl.mobile.domain.leadviewdetail.document.DocumentInput
-import com.mosl.mobile.domain.leadviewdetail.document.FilterRequestInput
-import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsInput
-import com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData
-import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentData
+import com.mosl.mobile.domain.leadviewdetail.document.*
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_DELETED
-import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_RENAME
-import com.mosl.tabapp.constants.MOSLConstants.DOCUMENT_UPLOADED
-import com.mosl.tabapp.constants.MOSLConstants.FILE_LARGE_MESSAGE
-import com.mosl.tabapp.constants.MOSLConstants.FILE_NOT_ALLOWED_MESSAGE
-import com.mosl.tabapp.constants.MOSLConstants.FILE_UPLOAD_COUNT_LIMT
-import com.mosl.tabapp.constants.MOSLConstants.LEAD_ID
-import com.mosl.tabapp.constants.MOSLConstants.SOME_ERROR_OCCURED_PLEASE_RETRY
-import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentDocumentNewBinding
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.DeleteLeadDocuments
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.RenameLeadDocuments
-import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.UploadImage
+import com.mosl.tabapp.leadViewDetail.document.DocumentUiEvent.*
 import com.mosl.tabapp.leadViewDetail.document.item.DocumentItem
 import com.mosl.tabapp.permission.ImageUploadHelper
 import com.mosl.tabapp.permission.ImageUploadHelper.ImageUploadCallback
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -119,7 +105,7 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
     setAppTitle("Documents")
     documentList = ArrayList()
     section = DataManagerSection(onRetryClick)
-    val groupAdapter = GroupAdapter<ViewHolder>()
+    val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.rvDocumentList.apply {
       layoutManager = LinearLayoutManager(requireContext())
       setHasFixedSize(false)

@@ -1,14 +1,10 @@
 package com.mosl.app.core.data.leadviewdetail.activities
 
-import com.mosl.mobile.domain.leadviewdetail.activities.ActivityData
-import com.mosl.mobile.domain.leadviewdetail.activities.ActivityRequest
-import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
-import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
-import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
+import com.mosl.mobile.domain.leadviewdetail.activities.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
 class LeadViewDetailActivitiesRepositoryImpl @Inject constructor(

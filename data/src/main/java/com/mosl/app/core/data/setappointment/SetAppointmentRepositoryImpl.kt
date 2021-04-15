@@ -1,9 +1,9 @@
 package com.mosl.app.core.data.setappointment
 
-import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
-import com.mosl.mobile.domain.setappointment.SetAppointmentRepository
 import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.AutoCompleteAttendeeItemResponse
+import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
+import com.mosl.mobile.domain.setappointment.SetAppointmentRepository
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
@@ -14,7 +14,7 @@ import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
 import org.json.JSONObject

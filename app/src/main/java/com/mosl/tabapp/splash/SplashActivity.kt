@@ -29,8 +29,8 @@ import com.mosl.tabapp.databinding.ActivitySplashBinding
 import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.LoginActivity
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

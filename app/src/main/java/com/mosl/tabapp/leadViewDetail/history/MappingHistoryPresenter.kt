@@ -2,8 +2,8 @@ package com.mosl.tabapp.leadViewDetail.history
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryRepository
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class MappingHistoryPresenter @Inject constructor(

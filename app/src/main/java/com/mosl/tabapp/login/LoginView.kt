@@ -4,7 +4,7 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LoginView : BaseView {
   fun onLoginClicked(): Observable<Unit>

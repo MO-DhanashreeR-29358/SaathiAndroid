@@ -17,9 +17,9 @@ import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -57,9 +57,9 @@ class CreateMeetingPresenter @Inject constructor(
 
         activityTypeSelectedObs.map {
             Timber.d("activity type")
-            it.isPersonalMeeting()
+            it?.isPersonalMeeting() ?: false
         }
-            .startWith(false)
+            .startWithItem(false)
             .subscribe(view::toggleOTPVisibility)
             .addTo(disposable)
 
@@ -100,10 +100,10 @@ class CreateMeetingPresenter @Inject constructor(
             .map { view.getSelectedMeetingLocation() }
             .filter {
                 it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
-                        it.isLocationProper()
+                        it?.isLocationProper() ?: false
             }
             .switchMap {
-                repository.getAddress(it.lookUpID.toString(), createMeetingData.leadId)
+                repository.getAddress(it?.lookUpID.toString(), createMeetingData.leadId)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderAddress)
@@ -125,13 +125,13 @@ class CreateMeetingPresenter @Inject constructor(
             .addTo(disposable)
 
         meetingReasonObs.map {
-            it.isCustomerService()
+            it?.isCustomerService() ?: false
         }
-            .startWith(false)
+            .startWithItem(false)
             .subscribe(view::toggleActionableVisibility)
             .addTo(disposable)
 
-        meetingReasonObs.filter { it.isCustomerService() }
+        meetingReasonObs.filter { it?.isCustomerService() ?: false }
             .switchMap {
                 repository.getCustomerServiceData()
                     .compose(applyUiModel())
@@ -144,7 +144,7 @@ class CreateMeetingPresenter @Inject constructor(
             .skip(1)
             .map { view.getSelectedCategory() }
             .switchMap {
-                repository.getLookup(SUBCATEGORY, null, it.lookUpID.toString())
+                repository.getLookup(SUBCATEGORY, null, it?.lookUpID.toString())
                     .compose(applyUiModel())
             }
             .subscribe(view::renderSubCategory)

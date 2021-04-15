@@ -7,8 +7,8 @@ import com.mosl.mobile.domain.report.HierarchyReportRepository
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class HierarchyReportPresenter @Inject constructor(

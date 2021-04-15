@@ -18,7 +18,7 @@ import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_TYPE_L
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment.Companion.KEY_TYPE_T
 import com.mosl.tabapp.constants.MOSLConstants
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 import javax.inject.Inject
 

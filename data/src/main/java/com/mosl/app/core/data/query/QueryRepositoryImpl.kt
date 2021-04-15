@@ -5,7 +5,7 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.query.QueryRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class QueryRepositoryImpl @Inject constructor(val saathiApi: SaathiApi) : QueryRepository {

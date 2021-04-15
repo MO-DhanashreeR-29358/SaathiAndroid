@@ -2,9 +2,10 @@ package com.mosl.mobile.user.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import com.f2prateek.rx.preferences2.Preference;
-import com.f2prateek.rx.preferences2.RxSharedPreferences;
-import com.facebook.crypto.Crypto;
+
+import androidx.security.crypto.EncryptedSharedPreferences;
+import androidx.security.crypto.MasterKey;
+
 import com.mosl.annotations.FcmToken;
 import com.mosl.annotations.FcmTokenRequest;
 import com.mosl.annotations.ServerTime;
@@ -16,6 +17,7 @@ import com.mosl.mobile.user.UserPreference;
 import com.mosl.mobile.user.annotation.LastLocationAPITime;
 import com.mosl.mobile.user.annotation.LastLocationTime;
 import com.mosl.mobile.user.annotation.RemoteConfigData;
+import com.mosl.mobile.user.annotation.SafePreference;
 import com.mosl.mobile.user.helper.AppUserHelperKt;
 import com.mosl.mobile.user.helper.PrefStoreProvider;
 import com.mosl.mobile.user.helper.UserPrefStore;
@@ -28,10 +30,18 @@ import com.mosl.mobile.user.login.UserCacheImpl;
 import com.mosl.mobile.user.login.UserManager;
 import com.mosl.mobile.user.login.UserManagerImpl;
 import com.mosl.token.manager.prefs.TokenPrefStore;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Objects;
+
+import javax.inject.Singleton;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Singleton;
+import mosl.rx_preferences.Preference;
+import mosl.rx_preferences.RxSharedPreferences;
 
 /**
  * Created by lalkishore on 14/01/18.
@@ -46,7 +56,7 @@ public abstract class UserModule {
     private static final String LAST_LOCATION_TIME_KEY = "LastLocationTime";
     private static final String LAST_LOCATION_API_TIME_KEY = "LastLocationAPITime";
     private static final String TWENTY_FOUR_SEVEN_CHECK = "TwentyFourSevenCheck";
-
+    private static final String SAFE_USER_MANAGER__PREF = ".safe_user_manager";
     @Provides
     @UserPreference
     @Singleton
@@ -69,8 +79,8 @@ public abstract class UserModule {
     @Provides
     @Singleton
     public static TokenPrefStore provideTokenPrefStore(
-        @UserPreference SharedPreferences preferences, Crypto crypto) {
-        return TokenPrefStore.Companion.createTokenPrefStore(preferences, crypto);
+            @UserPreference SharedPreferences preferences, @SafePreference SharedPreferences safePrefrence) {
+        return TokenPrefStore.Companion.createTokenPrefStore(preferences, safePrefrence);
     }
 
     @Provides
@@ -131,4 +141,31 @@ public abstract class UserModule {
 
     @Binds
     abstract UserCache provideUserCache(UserCacheImpl userCache);
+
+    @Provides
+    @SafePreference
+    @Singleton
+    static SharedPreferences provideSafePreference(Context context) {
+        MasterKey masterKeyAlias = null;
+        try {
+            masterKeyAlias = new MasterKey.Builder(
+                    context, "MASTER_KEY_ALIAS")
+                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                    .build();
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            return EncryptedSharedPreferences.create(
+                    context,
+                    context.getPackageName() + SAFE_USER_MANAGER__PREF,
+                    Objects.requireNonNull(masterKeyAlias),
+                    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

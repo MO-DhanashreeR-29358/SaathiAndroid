@@ -2,8 +2,8 @@ package com.mosl.tabapp.leadViewDetail.profiling
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadViewProfilingRepository
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 import javax.inject.Named
 

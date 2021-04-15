@@ -9,8 +9,8 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
 class LeadViewDetailPagerRepositoryImpl @Inject constructor(

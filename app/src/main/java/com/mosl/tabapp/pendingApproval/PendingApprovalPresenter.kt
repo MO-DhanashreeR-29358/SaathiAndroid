@@ -7,7 +7,7 @@ import com.mosl.mobile.domain.pendingapproval.PendingApprovalRepository
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class PendingApprovalPresenter @Inject constructor(

@@ -10,8 +10,8 @@ import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.productspecialist.ProductSpecialistRequest
-import io.reactivex.Observable
-import io.reactivex.functions.Function3
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.Function3
 import java.net.URLEncoder
 import javax.inject.Inject
 

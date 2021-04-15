@@ -55,4 +55,5 @@ dependencies {
   implementation deps.mofslArtifacts.tokenmanager
   implementation deps.mofslArtifacts.moslcommons
   implementation deps.mofslArtifacts.appcore
+  implementation(deps.androidx.security)
 }

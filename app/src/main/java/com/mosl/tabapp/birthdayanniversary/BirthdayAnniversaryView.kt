@@ -5,11 +5,8 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryItemResponse
 import com.mosl.mobile.domain.birthdayanniversary.ProfileSpinner
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
-import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.GetDataList
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendEmailAll
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.SendGift
-import io.reactivex.Observable
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent.*
+import io.reactivex.rxjava3.core.Observable
 
 interface BirthdayAnniversaryView : BaseView {
   fun getDayType(): String

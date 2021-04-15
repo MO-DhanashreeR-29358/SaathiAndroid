@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -47,11 +47,11 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.NAME
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tableview.rowadapter.TableRowAdapter
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.Date
+import java.util.*
 import javax.inject.Inject
 
 class ReportFragment : CommonFragment(),

@@ -4,14 +4,12 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.ActionableCount
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.CurrentQuarterStatus
-import com.mosl.tabapp.dashboard.base.DashboardUiEvent.PerformanceIncentive
+import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(

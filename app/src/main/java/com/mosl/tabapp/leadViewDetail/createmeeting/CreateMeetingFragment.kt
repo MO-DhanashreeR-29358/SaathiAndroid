@@ -19,8 +19,8 @@ import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.recyclerview.widget.GridLayoutManager
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -28,7 +28,6 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
-import com.mosl.mobile.pdf.OTPFragment
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
@@ -89,8 +88,8 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject

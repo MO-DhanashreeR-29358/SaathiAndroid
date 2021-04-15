@@ -3,7 +3,7 @@ package com.mosl.app.core.data.dashboardreport
 import com.mosl.mobile.domain.dashboardreport.*
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LeadAssignRepositoryImpl @Inject constructor(

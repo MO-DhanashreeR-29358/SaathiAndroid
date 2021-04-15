@@ -4,7 +4,7 @@ import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.notification.NotificationRequestInput
 import com.mosl.mobile.domain.notification.NotificationResponseData
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(

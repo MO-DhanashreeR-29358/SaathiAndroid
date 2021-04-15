@@ -12,7 +12,7 @@ import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent.*
 import com.mosl.tabapp.model.EmployeeModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadCreationView : BaseView {
   fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>)

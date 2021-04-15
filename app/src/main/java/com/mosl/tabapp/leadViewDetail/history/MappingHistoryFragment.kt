@@ -3,7 +3,7 @@ package com.mosl.tabapp.leadViewDetail.history
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager.widget.ViewPager
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -16,7 +16,6 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.R.array
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentMappingHistoryBinding
@@ -25,9 +24,14 @@ import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
 import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
 import com.mosl.tableview.rowadapter.TableRowAdapter
-import io.reactivex.Observable
-import java.util.Arrays
+import io.reactivex.rxjava3.core.Observable
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.List
+import kotlin.collections.forEachIndexed
+import kotlin.collections.map
+import kotlin.collections.mutableListOf
 
 class MappingHistoryFragment : CommonFragment(), MappingHistoryView {
     private lateinit var binding: FragmentMappingHistoryBinding

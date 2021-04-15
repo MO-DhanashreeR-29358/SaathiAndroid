@@ -3,7 +3,7 @@ package com.mosl.tabapp.notification
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.ErrorState.NO_DATA_ERROR
@@ -19,9 +19,9 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragNotificationBinding
 import com.mosl.tabapp.notification.NotificationUiEvent.ItemClick
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class NotificationFragment : CommonFragment(), NotificationView {
@@ -59,9 +59,9 @@ class NotificationFragment : CommonFragment(), NotificationView {
 
   private fun setUpRecyclerView() {
     section = DataManagerSection(onRetryClick)
-    val groupAdapter = GroupAdapter<ViewHolder>().apply {
-      add(section)
-    }
+      val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
+          add(section)
+      }
 
     binding.recyclerView.apply {
       layoutManager = LinearLayoutManager(requireContext())

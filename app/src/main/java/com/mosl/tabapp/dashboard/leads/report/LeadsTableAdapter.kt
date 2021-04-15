@@ -10,16 +10,10 @@ import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.dashboard.leads.LeadUiEvent
-import com.mosl.tabapp.databinding.ItemTableBinding
-import com.mosl.tabapp.databinding.ItemTableFamilyBinding
-import com.mosl.tabapp.databinding.ItemTableFirstLeadBinding
-import com.mosl.tabapp.databinding.ItemTableHeaderFirstLeadBinding
-import com.mosl.tabapp.databinding.ItemTableHeaderLeadBinding
+import com.mosl.tabapp.databinding.*
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter
-import io.reactivex.subjects.PublishSubject
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.LinkedHashMap
+import io.reactivex.rxjava3.subjects.PublishSubject
+import java.util.*
 
 class LeadsTableAdapter internal constructor(
   requireActivity: FragmentActivity,

@@ -6,7 +6,7 @@ import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject

@@ -10,7 +10,7 @@ import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class AppUserRepositoryImpl @Inject constructor(

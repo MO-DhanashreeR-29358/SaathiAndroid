@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.util;
 
 import android.content.Context;
+
 import com.facebook.android.crypto.keychain.AndroidConceal;
 import com.facebook.android.crypto.keychain.SharedPrefsBackedKeyChain;
 import com.facebook.crypto.Crypto;
@@ -13,15 +14,18 @@ import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.rx.RxDispatchers;
 import com.mosl.commons.rx.Dispatchers;
 import com.mosl.mobile.coredata.PreferenceDataModule;
+
+import java.io.File;
+
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.schedulers.Schedulers;
-import java.io.File;
-import javax.inject.Singleton;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 import timber.log.Timber;
@@ -35,8 +39,8 @@ public abstract class BaseDataModule {
 
     @Provides
     @Singleton
-    static RxJava2CallAdapterFactory getRxJava2CallAdapter() {
-        return RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io());
+    static RxJava3CallAdapterFactory getRxJava2CallAdapter() {
+        return RxJava3CallAdapterFactory.createWithScheduler(Schedulers.io());
     }
 
     @Provides
@@ -44,8 +48,8 @@ public abstract class BaseDataModule {
     @InternalAPIRetrofit
     static Retrofit.Builder provideNewRetrofitBuilder(OkHttpClient client,
                                                       MOSLResponseWrapper moslResponseWrapper, GsonConverterFactory gsonConverterFactory,
-        RxJava2CallAdapterFactory rxJava2CallAdapterFactory,
-        ScalarsConverterFactory scalarsConverterFactory) {
+                                                      RxJava3CallAdapterFactory rxJava2CallAdapterFactory,
+                                                      ScalarsConverterFactory scalarsConverterFactory) {
         return new Retrofit.Builder().client(client)
             .addConverterFactory(scalarsConverterFactory)
                 .addConverterFactory(moslResponseWrapper)
@@ -58,7 +62,7 @@ public abstract class BaseDataModule {
     static Retrofit.Builder provideRetrofitBuilder(OkHttpClient client,
                                                    MOSLResponseWrapper moslResponseWrapper,
                                                    GsonConverterFactory gsonConverterFactory,
-                                                   RxJava2CallAdapterFactory rxJava2CallAdapterFactory) {
+                                                   RxJava3CallAdapterFactory rxJava2CallAdapterFactory) {
         return new Retrofit.Builder().client(client)
                 .addConverterFactory(moslResponseWrapper)
                 .addConverterFactory(gsonConverterFactory)

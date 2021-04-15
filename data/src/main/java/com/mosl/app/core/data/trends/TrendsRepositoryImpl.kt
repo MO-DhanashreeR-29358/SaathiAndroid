@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.trends.TrendsChartModel
 import com.mosl.mobile.domain.trends.TrendsInput
 import com.mosl.mobile.domain.trends.TrendsRepository
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject

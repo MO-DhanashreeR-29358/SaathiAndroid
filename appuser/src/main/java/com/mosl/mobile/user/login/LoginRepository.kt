@@ -1,8 +1,8 @@
 package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.model.*
-import io.reactivex.Completable
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
 
 interface LoginRepository {
   fun login(loginInfo: LoginInfo): Observable<User>

@@ -5,7 +5,7 @@ import com.mosl.mobile.domain.location.LocationRepository
 import com.mosl.mobile.domain.location.LocationResponse
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.location.LocationRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(val saathiApi: SaathiApi) : LocationRepository {

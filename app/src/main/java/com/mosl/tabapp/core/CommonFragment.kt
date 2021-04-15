@@ -13,7 +13,7 @@ import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
 import com.mosl.tabapp.ws.CRMWebServiceHandler
-import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
 
 open class CommonFragment : BaseFragment() {

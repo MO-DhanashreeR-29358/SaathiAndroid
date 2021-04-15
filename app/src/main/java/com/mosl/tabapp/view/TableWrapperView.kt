@@ -14,7 +14,7 @@ import com.mosl.tabapp.R
 import com.mosl.tableview.TableFixHeaders
 import com.mosl.tableview.rowadapter.TableRow
 import com.mosl.tableview.rowadapter.TableRowAdapter
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class TableWrapperView<T : TableRow>(
   context: Context,

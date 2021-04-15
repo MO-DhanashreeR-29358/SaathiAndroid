@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.commons.data.UiModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
-import io.reactivex.ObservableTransformer
+import io.reactivex.rxjava3.core.ObservableTransformer
 
 fun Context.getPref(name: String): SharedPreferences {
   return getSharedPreferences(name, Context.MODE_PRIVATE)

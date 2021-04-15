@@ -1,6 +1,6 @@
 package com.mosl.mobile.domain.leadviewdetail.main
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadViewDetailPagerRepository {
   fun getLeadDetailForId(id: String): Observable<LeadDetail>

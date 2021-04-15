@@ -2,9 +2,9 @@ package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton

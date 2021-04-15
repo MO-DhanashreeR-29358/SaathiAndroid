@@ -1,7 +1,7 @@
 package com.mosl.tabapp.banner
 
 import com.mosl.app.core.base.BasePresenter
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class BannerPresenter @Inject constructor(

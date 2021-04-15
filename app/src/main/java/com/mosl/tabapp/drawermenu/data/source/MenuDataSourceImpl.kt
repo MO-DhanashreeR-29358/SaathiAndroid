@@ -6,8 +6,8 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import com.mosl.tabapp.drawermenu.data.ChildMenu
 import com.mosl.tabapp.navigation.NavigationConstants
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 open class MenuDataSourceImpl @Inject constructor(

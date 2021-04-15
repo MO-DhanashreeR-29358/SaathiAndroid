@@ -7,7 +7,7 @@ import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
 import com.mosl.tabapp.model.MeetingApptModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface CreateMeetingView : BaseView {
   fun render(uiModel: UiModel<ClientData>)

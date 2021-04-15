@@ -6,7 +6,7 @@ import com.mosl.tabapp.model.dashboard.WidgetModel
 
 interface ActionableInsightView : BaseView {
   fun render(data: List<WidgetModel>)
-  fun onCloseClicked(): io.reactivex.Observable<Unit>
-  fun dismissDialog()
-  fun onActionableInsightItemClick(): io.reactivex.Observable<OnItemClicked>
+    fun onCloseClicked(): io.reactivex.rxjava3.core.Observable<Unit>
+    fun dismissDialog()
+    fun onActionableInsightItemClick(): io.reactivex.rxjava3.core.Observable<OnItemClicked>
 }

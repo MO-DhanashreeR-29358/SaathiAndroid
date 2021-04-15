@@ -7,7 +7,7 @@ import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseD
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface SetAppointmentRepository {
   fun getMeetingById(meetingId: String): Observable<MeetingByIdItemResponse>

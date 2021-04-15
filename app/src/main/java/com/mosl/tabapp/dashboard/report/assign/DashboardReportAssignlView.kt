@@ -5,7 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.dashboardreport.LeadAssignItem
 import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
 import com.mosl.tabapp.common.FilterRowData
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface DashboardReportAssignlView : BaseView {
     fun renderLeadAssignStpList(uiModel: UiModel<List<LeadAssignItem>>)

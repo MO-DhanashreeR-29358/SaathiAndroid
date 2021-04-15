@@ -61,9 +61,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
-import static com.jakewharton.rxbinding3.widget.RxAdapterView.itemSelections;
+import static com.jakewharton.rxbinding4.widget.RxAdapterView.itemSelections;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.commons.rx.RxUtils.InvalidSelectionPredicate;
 import static com.mosl.shared.util.Utility.stringOrEmpty;

@@ -4,7 +4,7 @@ import com.mosl.mobile.domain.teamtarget.TeamTargetInput
 import com.mosl.mobile.domain.teamtarget.TeamTargetItemModel
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class TeamTargetRepositoryImpl @Inject constructor(

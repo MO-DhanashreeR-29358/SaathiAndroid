@@ -5,7 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.report.AssignedLeadReportModel
 import com.mosl.mobile.domain.report.HierarchyReportCombo
 import com.mosl.tabapp.report.HierarchyReportUIEvent.CellEvent
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface ReportView : BaseView {
 

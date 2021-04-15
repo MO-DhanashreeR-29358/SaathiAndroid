@@ -7,8 +7,8 @@ import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.utils.getUuid
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class FcmTokenSyncHelper @Inject constructor(

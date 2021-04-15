@@ -1,6 +1,6 @@
 package com.mosl.mobile.domain.report
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface HierarchyReportRepository {
 

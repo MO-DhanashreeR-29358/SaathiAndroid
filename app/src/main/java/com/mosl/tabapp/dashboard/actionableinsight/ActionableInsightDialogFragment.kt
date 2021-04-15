@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.groupiex.section.DataManagerSection
 import com.mosl.tabapp.R
@@ -16,12 +16,12 @@ import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightEvent.OnItem
 import com.mosl.tabapp.databinding.DialogFragmentActionableInsightsBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import com.xwray.groupie.ViewHolder
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class ActionableInsightDialogFragment : DialogFragment(), ActionableInsightView {
@@ -72,7 +72,7 @@ class ActionableInsightDialogFragment : DialogFragment(), ActionableInsightView 
     section = DataManagerSection(onRetryClick)
 
     val context = requireContext()
-    val actionableInsightAdapter = GroupAdapter<ViewHolder>()
+    val actionableInsightAdapter = GroupAdapter<GroupieViewHolder>()
     actionableInsightAdapter.setOnItemClickListener { item, _ ->
       if (item is ActionableInsightItem) {
         actionableInsightEvent.onNext(ActionableInsightEvent.OnItemClicked(item.data!!))

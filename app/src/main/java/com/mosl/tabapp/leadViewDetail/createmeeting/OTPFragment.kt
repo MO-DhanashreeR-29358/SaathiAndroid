@@ -1,4 +1,4 @@
-package com.mosl.mobile.pdf
+package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.app.AlertDialog
 import android.content.Context
@@ -24,10 +24,9 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.FragmentOtpBinding
-import com.mosl.tabapp.leadViewDetail.createmeeting.OTPContract
 import com.mosl.tabapp.ui.MSFDialog
-import io.reactivex.disposables.Disposable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 import kotlin.random.Random
 

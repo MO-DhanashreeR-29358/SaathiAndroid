@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import com.jakewharton.rxbinding3.widget.textChanges
+import com.jakewharton.rxbinding4.widget.textChanges
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.core.utils.hideKeyBoard
 import com.mosl.app.core.utils.obtain
@@ -37,9 +37,9 @@ import com.mosl.tabapp.util.SEARCH_TYPE_DASHBOARD_HINT
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.Companion.NO_RECORDS_FOUND
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.SearchResultClickListener
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
 import org.json.JSONObject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS

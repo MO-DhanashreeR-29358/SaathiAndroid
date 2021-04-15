@@ -17,8 +17,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.editorActions
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.editorActions
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.base.BaseActivity
@@ -43,7 +43,7 @@ import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.permission.PermissionCheckHelper
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {

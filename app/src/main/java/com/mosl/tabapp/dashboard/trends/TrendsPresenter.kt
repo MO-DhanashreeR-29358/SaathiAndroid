@@ -4,7 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.trends.TrendsInput
 import com.mosl.mobile.domain.trends.TrendsRepository
 import com.mosl.tabapp.model.dashboard.DashboardModel
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class TrendsPresenter @Inject constructor(

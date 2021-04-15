@@ -16,7 +16,7 @@ import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter.Co
 import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter.Companion.TEAM_LEADER
 import com.mosl.tabapp.databinding.*
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 
 class DashboardReportAssignTableAdapter(

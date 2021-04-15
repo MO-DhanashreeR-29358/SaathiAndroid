@@ -2,8 +2,8 @@ package com.mosl.tabapp.leadViewDetail.activity
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.leadviewdetail.activities.LeadViewDetailActivitiesRepository
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
 import javax.inject.Inject
 

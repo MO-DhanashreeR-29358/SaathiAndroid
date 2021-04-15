@@ -1,17 +1,12 @@
 package com.mosl.app.core.data.dashboard
 
-import com.mosl.mobile.domain.dashboard.ActionableCount
-import com.mosl.mobile.domain.dashboard.DashboardData
-import com.mosl.mobile.domain.dashboard.DashboardRepository
-import com.mosl.mobile.domain.dashboard.DashboardRequestData
-import com.mosl.mobile.domain.dashboard.Incentive
-import com.mosl.mobile.domain.dashboard.IncentivePolicy
+import com.mosl.mobile.domain.dashboard.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.dashboard.CommonRequest
 import com.mosl.saathi.api.model.dashboard.actionablecount.ActionableCountRequest
 import com.mosl.saathi.api.model.dashboard.dashboardmetadata.DashboardMetaDataRequest
 import com.mosl.saathi.api.model.dashboard.incentivepolicy.IncentivePolicyRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class DashboardRepositoryImpl @Inject constructor(

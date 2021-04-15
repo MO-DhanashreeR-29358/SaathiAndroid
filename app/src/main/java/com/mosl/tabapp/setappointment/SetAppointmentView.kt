@@ -7,18 +7,8 @@ import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.setappointment.clientdetail.ClientDetailIResponseData
 import com.mosl.mobile.domain.setappointment.lead.LeadViewItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ActivityType
-
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.GetClientDetail
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.GetMeeting
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.LeadView
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Product
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.ProfileImage
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.RepeatMode
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.SetAppointmentMeeting
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.WeekDays
-import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.Weeks
-import io.reactivex.Observable
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent.*
+import io.reactivex.rxjava3.core.Observable
 
 interface SetAppointmentView : BaseView {
 

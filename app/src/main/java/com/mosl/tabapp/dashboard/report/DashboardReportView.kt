@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
 import com.mosl.tabapp.model.TypeActionableFilterModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface DashboardReportView : BaseView {
 

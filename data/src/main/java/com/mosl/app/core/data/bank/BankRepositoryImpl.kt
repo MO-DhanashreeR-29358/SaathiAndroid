@@ -7,7 +7,7 @@ import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.dashboard.bank.BranchCodeRequest
 import com.mosl.saathi.api.model.dashboard.bank.SubBranchCodeRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class BankRepositoryImpl @Inject constructor(

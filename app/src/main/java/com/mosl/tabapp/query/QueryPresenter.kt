@@ -5,8 +5,8 @@ import com.mosl.mobile.domain.query.QueryRepository
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_1
 import com.mosl.tabapp.query.QueryFragment.Companion.TELE_PHONE_2
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class QueryPresenter @Inject constructor(

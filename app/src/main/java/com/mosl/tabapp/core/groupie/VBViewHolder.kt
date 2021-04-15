@@ -1,6 +1,6 @@
 package com.mosl.tabapp.core.groupie
 
 import androidx.viewbinding.ViewBinding
-import com.xwray.groupie.ViewHolder
+import com.xwray.groupie.GroupieViewHolder
 
-class VBViewHolder<T : ViewBinding>(val binding: T) : ViewHolder(binding.root)
+class VBViewHolder<T : ViewBinding>(val binding: T) : GroupieViewHolder(binding.root)

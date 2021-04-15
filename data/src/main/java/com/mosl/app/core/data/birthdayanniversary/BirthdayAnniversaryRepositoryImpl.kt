@@ -10,9 +10,8 @@ import com.mosl.mobile.domain.birthdayanniversary.SendEmailRequestInput
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class BirthdayAnniversaryRepositoryImpl @Inject constructor(

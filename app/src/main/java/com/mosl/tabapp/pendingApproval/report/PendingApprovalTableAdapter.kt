@@ -10,7 +10,7 @@ import com.mosl.tabapp.R.*
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.*
 import com.mosl.tabapp.tablefixheader.adapters.BaseTableAdapter
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.ArrayList
 import java.util.HashMap
 import java.util.LinkedHashMap

@@ -16,9 +16,9 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragPendingApprovalsBinding
 import com.mosl.tabapp.pendingApproval.PendingApprovalUiEvent.ItemClick
 import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class PendingApprovalFragment : CommonFragment(), PendingApprovalView {
@@ -55,9 +55,9 @@ class PendingApprovalFragment : CommonFragment(), PendingApprovalView {
 
   private fun setUpRecyclerView() {
     section = DataManagerSection(onRetryClick)
-    val groupAdapter = GroupAdapter<ViewHolder>().apply {
-      add(section)
-    }
+      val groupAdapter = GroupAdapter<GroupieViewHolder>().apply {
+          add(section)
+      }
 
     binding.recyclerView.apply {
       layoutManager = LinearLayoutManager(requireContext())

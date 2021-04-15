@@ -32,11 +32,13 @@ def gitTimestamp() {
 android {
   packagingOptions {
     exclude "META-INF/domain.kotlin_module"
+    exclude "META-INF/rxkotlin.kotlin_module"
     exclude "META-INF/coreui_release.kotlin_module"
     exclude "META-INF/core_release.kotlin_module"
     exclude "META-INF/appuser_release.kotlin_module"
     exclude "META-INF/loginui_release.kotlin_module"
     exclude "META-INF/data_release.kotlin_module"
+    exclude "META-INF/rxbinding_release.kotlin_module"
   }
   compileSdkVersion rootProject.ext.versions.compileSdkVersion
   buildToolsVersion rootProject.ext.versions.buildToolsVersion
@@ -211,9 +213,8 @@ dependencies {
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
   implementation deps.rx.kotlin
-  implementation deps.rxBinding.core
+  //implementation deps.rxBinding.core
   implementation deps.rx.preferences
-  //  implementation deps.rxBinding.V4
   implementation deps.rxBinding.platform
   implementation deps.rx.android
   implementation deps.gson

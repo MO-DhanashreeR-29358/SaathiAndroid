@@ -4,7 +4,7 @@ import com.mosl.mobile.domain.lead.LeadInput
 import com.mosl.mobile.domain.lead.LeadRepository
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.dashboard.lead.LeadModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class LeadRepositoryImpl @Inject constructor(

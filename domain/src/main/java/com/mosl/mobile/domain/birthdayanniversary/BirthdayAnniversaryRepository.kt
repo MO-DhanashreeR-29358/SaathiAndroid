@@ -2,7 +2,7 @@ package com.mosl.mobile.domain.birthdayanniversary
 
 import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface BirthdayAnniversaryRepository {
   fun getAllLookUp(request: LookupRequestInput): Observable<List<LookupItemResponse>>

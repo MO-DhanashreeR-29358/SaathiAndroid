@@ -5,7 +5,7 @@ import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.document.DocumentRepository
 import com.mosl.mobile.domain.leadviewdetail.document.UpdateDocumentsInput
 import com.mosl.mobile.domain.leadviewdetail.document.UploadDocumentsInput
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
 import javax.inject.Inject
 

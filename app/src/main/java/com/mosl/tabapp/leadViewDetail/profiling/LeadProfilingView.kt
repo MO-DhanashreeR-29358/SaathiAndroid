@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfileUiEvent.SubmitProfileEvent
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadProfilingView : BaseView {
 

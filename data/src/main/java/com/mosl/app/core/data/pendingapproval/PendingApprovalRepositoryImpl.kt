@@ -7,8 +7,8 @@ import com.mosl.mobile.domain.pendingapproval.PendingApprovalRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
 import javax.inject.Inject
 
 class PendingApprovalRepositoryImpl @Inject constructor(

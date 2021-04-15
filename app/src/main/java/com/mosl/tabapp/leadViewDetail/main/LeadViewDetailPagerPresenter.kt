@@ -3,8 +3,8 @@ package com.mosl.tabapp.leadViewDetail.main
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.main.LeadViewDetailPagerRepository
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -4,7 +4,7 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Lookup
 import com.mosl.mobile.domain.leadviewdetail.updatemeeting.Meeting
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface UpdateMeetingView : BaseView {
 

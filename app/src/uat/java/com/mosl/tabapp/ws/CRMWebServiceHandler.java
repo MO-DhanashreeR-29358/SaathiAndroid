@@ -1,6 +1,7 @@
 package com.mosl.tabapp.ws;
 
 import android.content.Context;
+
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.rx.DispatchersKt;
@@ -8,13 +9,15 @@ import com.mosl.saathi.api.SaathiApi;
 import com.mosl.tabapp.CertPinProviderImpl;
 import com.mosl.tabapp.EncryptionInterceptor;
 import com.mosl.tabapp.common.CRMSecurityUtil;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
@@ -98,8 +101,8 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi buildSaathiApi(Context context) {
 
-        RxJava2CallAdapterFactory callAdapterFactory =
-                RxJava2CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
+        RxJava3CallAdapterFactory callAdapterFactory =
+                RxJava3CallAdapterFactory.createWithScheduler(DispatchersKt.RxDispatchers.io);
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);

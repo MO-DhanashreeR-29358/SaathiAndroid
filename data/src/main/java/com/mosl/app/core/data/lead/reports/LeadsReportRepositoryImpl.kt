@@ -7,9 +7,19 @@ import com.mosl.mobile.domain.lead.report.LeadsReportInput
 import com.mosl.mobile.domain.lead.report.LeadsReportModel
 import com.mosl.mobile.domain.lead.report.LeadsReportRepository
 import com.mosl.saathi.api.SaathiApi
-import io.reactivex.Observable
-import java.util.HashMap
+import io.reactivex.rxjava3.core.Observable
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.emptyList
+import kotlin.collections.emptyMap
+import kotlin.collections.indices
+import kotlin.collections.set
 
 class LeadsReportRepositoryImpl @Inject constructor(
   val api: SaathiApi,

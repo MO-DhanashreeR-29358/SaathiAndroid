@@ -9,8 +9,8 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.getbase.floatingactionbutton.FloatingActionButton
-import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.itemSelections
+import com.jakewharton.rxbinding4.view.clicks
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -51,9 +51,9 @@ import com.mosl.tabapp.util.downloadImage
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
 import com.mosl.tabapp.webview.WebviewFragment
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.ofType
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.*
 import org.json.JSONObject
 import timber.log.Timber

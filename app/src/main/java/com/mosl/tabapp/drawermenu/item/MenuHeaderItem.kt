@@ -5,7 +5,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ViewMenuHeaderBinding
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.databinding.BindableItem
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class MenuHeaderItem(
   val partnerName: String,

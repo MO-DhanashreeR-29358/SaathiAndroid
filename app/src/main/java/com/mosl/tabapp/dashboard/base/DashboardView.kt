@@ -6,7 +6,7 @@ import com.mosl.mobile.domain.dashboard.DashboardData
 import com.mosl.mobile.domain.dashboard.Incentive
 import com.mosl.mobile.domain.dashboard.IncentivePolicy
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface DashboardView : BaseView {
   fun render(uiModel: UiModel<List<DashboardData>>)

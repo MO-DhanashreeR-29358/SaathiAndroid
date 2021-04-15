@@ -22,10 +22,10 @@ import com.mosl.tabapp.AppComponent
 import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.SaathiAppNew
 import com.mosl.tabapp.database.LocationData
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 import java.io.IOException
 import java.util.*

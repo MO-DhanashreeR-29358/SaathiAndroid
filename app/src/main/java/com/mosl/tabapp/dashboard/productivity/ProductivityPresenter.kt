@@ -10,8 +10,8 @@ import com.mosl.tabapp.dashboard.productivity.ProductivityFragment.Companion.PRO
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import java.io.Serializable
 import javax.inject.Inject
 

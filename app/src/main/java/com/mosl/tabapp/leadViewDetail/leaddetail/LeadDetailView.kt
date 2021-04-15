@@ -10,7 +10,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leaddetail.*
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadDetailView : BaseView {
     fun renderArguments(data: LeadDetailArgument)

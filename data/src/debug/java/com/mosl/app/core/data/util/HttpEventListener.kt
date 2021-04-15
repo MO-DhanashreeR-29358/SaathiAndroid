@@ -1,7 +1,7 @@
 package com.mosl.app.core.data.util
 
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
+import com.jakewharton.rxrelay3.PublishRelay
+import io.reactivex.rxjava3.core.Observable
 import okhttp3.*
 import timber.log.Timber
 import java.io.IOException

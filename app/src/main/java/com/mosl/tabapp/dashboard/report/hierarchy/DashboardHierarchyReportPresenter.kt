@@ -14,8 +14,8 @@ import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.PAGE
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import java.io.Serializable
 import javax.inject.Inject
 

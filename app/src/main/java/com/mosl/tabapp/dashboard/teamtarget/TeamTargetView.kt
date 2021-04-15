@@ -8,7 +8,7 @@ import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.mobile.domain.teamtarget.TeamTargetItemModel
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.model.dashboard.WidgetModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface TeamTargetView : BaseView {
 

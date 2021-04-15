@@ -11,13 +11,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
-import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.FragmentBannerBinding
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class BannerFragment : DialogFragment(), BannerView {

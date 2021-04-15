@@ -7,7 +7,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadCreationRepository {
     fun getLeadCreationPageData(): Observable<LeadCreationPageData>

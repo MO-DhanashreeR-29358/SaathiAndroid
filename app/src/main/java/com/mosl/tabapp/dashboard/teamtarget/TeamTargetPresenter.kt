@@ -10,17 +10,14 @@ import com.mosl.mobile.domain.teamtarget.TeamTargetInput
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
-import com.mosl.tabapp.constants.MOSLConstants.KEY
-import com.mosl.tabapp.constants.MOSLConstants.LABEL
-import com.mosl.tabapp.constants.MOSLConstants.MAP
-import com.mosl.tabapp.constants.MOSLConstants.SYSTEM_NAME
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.addTo
 import java.io.Serializable
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class TeamTargetPresenter @Inject constructor(

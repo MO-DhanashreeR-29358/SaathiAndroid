@@ -23,12 +23,11 @@ import com.mosl.saathi.api.model.webview.CommonURLRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.tabapp.R
 import com.mosl.tabapp.banner.BannerNavigator
-import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragWebviewBinding
 import com.mosl.tabapp.util.nullSafe
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

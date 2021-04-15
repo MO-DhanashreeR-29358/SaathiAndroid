@@ -1,10 +1,9 @@
 package com.mosl.tabapp.leaddetail
 
-import androidx.room.Update
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface LeadDetailRepository {
   fun getLeadDetail(leadId: String): Observable<LeadDetail>

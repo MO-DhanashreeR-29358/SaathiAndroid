@@ -12,9 +12,9 @@ import com.mosl.tabapp.leadcreation.ui.LeadCreationView
 import com.mosl.tabapp.leaddetail.LeadDetail
 import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadDetailRepository
-import io.reactivex.Observable
-import io.reactivex.functions.BiFunction
-import io.reactivex.functions.Function6
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function6
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
