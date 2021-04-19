@@ -2,7 +2,6 @@ package com.mosl.tabapp
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
@@ -47,7 +46,6 @@ abstract class SaathiAppNew : DaggerApplication() {
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
-    MultiDex.install(this)
   }
 
   abstract fun init()

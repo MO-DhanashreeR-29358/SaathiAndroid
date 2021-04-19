@@ -213,7 +213,6 @@ dependencies {
   implementation deps.retrofit.rxJava
   implementation deps.rx.java
   implementation deps.rx.kotlin
-  //implementation deps.rxBinding.core
   implementation deps.rx.preferences
   implementation deps.rxBinding.platform
   implementation deps.rx.android
