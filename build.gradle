@@ -1,7 +1,7 @@
 buildscript {
     ext.google_services_version = '4.2.0'
     ext.android_plugin_version = '4.0.1'
-    ext.kotlin_version = '1.3.30'
+    ext.kotlin_version = '1.3.72'
     repositories {
         google()
         jcenter()
@@ -166,17 +166,17 @@ ext.deps = [
         'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
         'EkycArtifactDependencies': [
-                'app'         : "EkycArtifacts:ekycapp:0.5.6-alpha5",
-                'core'        : "EkycArtifacts:ekyccore:0.2.8-alpha1",
-                'api'         : "EkycArtifacts:ekycapi:0.1.3-alpha1",
-                'data'        : "EkycArtifacts:ekycdata:0.4.1-alpha2",
-                'dataResolver': "EkycArtifacts:ekycdataresolver:0.0.5",
-                'domain'      : "EkycArtifacts:ekycdomain:0.1.3-alpha1",
-                'loginApi'    : "EkycArtifacts:ekycloginapi:0.1.1",
-                'loginUi'     : "EkycArtifacts:ekycloginui:0.3.5",
-                'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
-                'coreUi'      : "EkycArtifacts:ekyccoreui:0.2.9",
-                'appUser'     : "EkycArtifacts:ekycappuser:0.3.2-alpha1"
+            'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha2",
+            'core'        : "EkycArtifacts:ekyccore:1.0.0-alpha1",
+            'api'         : "EkycArtifacts:ekycapi:1.0.0",
+            'data'        : "EkycArtifacts:ekycdata:1.0.0-alpha1",
+            'dataResolver': "EkycArtifacts:ekycdataresolver:0.0.5",
+            'domain'      : "EkycArtifacts:ekycdomain:1.0.0",
+            'loginApi'    : "EkycArtifacts:ekycloginapi:1.0.0",
+            'loginUi'     : "EkycArtifacts:ekycloginui:1.0.0-alpha1",
+            'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
+            'coreUi'      : "EkycArtifacts:ekyccoreui:1.0.0-alpha1",
+            'appUser'     : "EkycArtifacts:ekycappuser:1.0.0-alpha1"
         ]
 
 ]

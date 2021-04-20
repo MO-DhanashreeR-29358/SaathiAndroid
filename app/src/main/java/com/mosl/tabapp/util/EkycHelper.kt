@@ -17,6 +17,8 @@ class EkycHelper @Inject constructor(
         LoginConstants.NAVIGATE_TO_VERIFY_MOBILE
     )
     login.putExtra(LoginActivity.TRADER_APP, false)
+    login.putExtra(LoginActivity.APPLICATION_TYPE, LoginActivity.BR)
+    login.putExtra(LoginActivity.APP_LOGIN_ID, "10465")
     activity.startActivityForResult(login, LoginRequested)
   }
 }

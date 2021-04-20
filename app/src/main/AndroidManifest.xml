@@ -43,7 +43,8 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        tools:replace="android:theme">
         <activity android:name=".settings.SettingActivity"></activity>
         <activity
             android:name=".slider.SliderActivity"

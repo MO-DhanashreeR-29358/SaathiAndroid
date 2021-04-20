@@ -4,7 +4,7 @@ import com.crashlytics.android.Crashlytics
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.fabric.sdk.android.Fabric
-import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import timber.log.Timber
 
 class SaathiAppImpl : SaathiAppNew() {

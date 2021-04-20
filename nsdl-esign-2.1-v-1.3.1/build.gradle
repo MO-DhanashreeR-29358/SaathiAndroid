@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('nsdl-esign-2.1-v-1.3.1.aar'))
