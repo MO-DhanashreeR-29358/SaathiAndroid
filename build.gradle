@@ -166,7 +166,7 @@ ext.deps = [
         'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
         'EkycArtifactDependencies': [
-            'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha2",
+            'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha3",
             'core'        : "EkycArtifacts:ekyccore:1.0.0-alpha1",
             'api'         : "EkycArtifacts:ekycapi:1.0.0",
             'data'        : "EkycArtifacts:ekycdata:1.0.0-alpha1",
