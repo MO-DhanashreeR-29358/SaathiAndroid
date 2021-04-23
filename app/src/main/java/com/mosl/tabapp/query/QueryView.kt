@@ -12,7 +12,6 @@ interface QueryView : BaseView {
   fun getQueryMessgae(): String
 
   fun onSubmitBtnClick(): Observable<Unit>
-  fun onEsignClick(): Observable<Unit>
   fun onSubmitDialogOpen(uiModel: UiModel<String>)
   fun onSubmitConfirmClicked(): Observable<OnSubmitConfirmClick>
   fun onResetBtnClick(): Observable<Unit>
