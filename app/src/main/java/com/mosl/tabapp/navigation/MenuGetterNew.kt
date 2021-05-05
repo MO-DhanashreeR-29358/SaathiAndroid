@@ -33,7 +33,6 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
-import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_KEY
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
@@ -144,6 +143,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SETTING -> false
             NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
+            NavigationConstants.NAVIGATE_TO_PENDING_ESIGN -> true
             else -> return false
         }
     }

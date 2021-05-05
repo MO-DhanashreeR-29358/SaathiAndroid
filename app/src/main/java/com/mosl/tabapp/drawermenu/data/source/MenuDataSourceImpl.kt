@@ -339,6 +339,12 @@ open class MenuDataSourceImpl @Inject constructor(
                     enabled = true,
                     pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
                     navigateKey = ""
+                ),
+                ChildMenu(
+                    label = R.string.MOSL_MENU_PENDING_ESIGN_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_PENDING_ESIGN,
+                    navigateKey = ""
                 )
             )
         )

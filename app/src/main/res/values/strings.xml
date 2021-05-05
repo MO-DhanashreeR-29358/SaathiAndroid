@@ -14,7 +14,8 @@
     <string name="MOSL_MENU_SIP_TXT">SIP</string>
     <string name="MOSL_MENU_PRIME_ENTRY_TXT">Prime Entry</string>
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
-    <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing applications</string>
+    <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing Applications</string>
+    <string name="MOSL_MENU_PENDING_ESIGN_TXT">Pending Esign</string>
     <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>
     <string name="MOSL_MENU_RESUME_APPLICATIONS_TXT">Resume Application</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
