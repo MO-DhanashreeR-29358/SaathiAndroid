@@ -3,7 +3,10 @@ package com.mosl.tabapp.core
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.NotificationManager
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
@@ -31,7 +34,6 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
@@ -61,7 +63,6 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.addTo
 import timber.log.Timber
-import java.nio.channels.WritableByteChannel
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
@@ -195,7 +196,7 @@ class CommonActivity : BaseActivity(),
         }
         setupObservables()
         setBanner()
-
+        menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
     }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
@@ -267,6 +268,10 @@ class CommonActivity : BaseActivity(),
             }
         }
     }*/
+
+    private fun menuTopSection(branchCode: String) {
+        binding.drawerMenu.refreshHeader(userManager, branchCode)
+    }
 
     override fun onResume() {
         super.onResume()

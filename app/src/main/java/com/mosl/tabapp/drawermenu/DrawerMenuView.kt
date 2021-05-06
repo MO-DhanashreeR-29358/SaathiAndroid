@@ -21,23 +21,14 @@ import com.mosl.tabapp.drawermenu.data.AppMenu
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import com.mosl.tabapp.drawermenu.data.ChildMenu
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSource
-import com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem
-import com.mosl.tabapp.drawermenu.item.BaseMenuItem
-import com.mosl.tabapp.drawermenu.item.ChildMenuItem
-import com.mosl.tabapp.drawermenu.item.MenuHeaderItem
-import com.mosl.tabapp.drawermenu.item.SelectableMenu
-import com.xwray.groupie.ExpandableGroup
-import com.xwray.groupie.Group
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.Item
-import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
+import com.mosl.tabapp.drawermenu.item.*
+import com.xwray.groupie.*
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.subjects.PublishSubject
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -49,16 +40,16 @@ class DrawerMenuView : FrameLayout {
   private val menuSelectSubject = PublishSubject.create<AppMenu>()
   private val closeSelectSubject = PublishSubject.create<View>()
   private val selectableItemList = ArrayList<SelectableMenu>()
-  private val expandableItems = ArrayList<BaseMenuExpandableItem>()
 
-  val itemExpansionListener: com.xwray.groupie.OnItemClickListener =
+  private val itemExpansionListener: com.xwray.groupie.OnItemClickListener =
     com.xwray.groupie.OnItemClickListener { item, _ ->
       expandableGroups.mapNotNull { it as? MenuExpandableGroup }
-          .filter { it.header != item }
-          .forEach {
-            it.header.collapse()
-          }
+        .filter { it.header != item }
+        .forEach {
+          it.header.collapse()
+        }
     }
+
   @Inject
   lateinit var source: MenuDataSource
   @Inject
@@ -95,13 +86,13 @@ class DrawerMenuView : FrameLayout {
         ContextCompat.getDrawable(context, R.drawable.grey_item_decorator)!!
     )
     rvDrawerMenu.addItemDecoration(dividerItemDecoration)
-    groupAdapter.setOnItemClickListener({ item, _ ->
+    groupAdapter.setOnItemClickListener { item, _ ->
       if (item is SelectableMenu) {
         menuSelectSubject.onNext((item as SelectableMenu).getAppMenu())
       } else if (item is BaseMenuExpandableItem) {
         expandableGroup!!.onToggleExpanded()
       }
-    })
+    }
 
     menuSection = Section()
     groupAdapter.add(menuSection)
@@ -144,14 +135,21 @@ class DrawerMenuView : FrameLayout {
     }
   }
 
-  fun refreshHeader() {
+  fun refreshHeader(userManager: UserManager, branchCode: String) {
     userManager.getUser()
-        ?.let {
-          val name = it.firstName.plus(it.lastName)
-          menuSection.setHeader(
-              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl, closeSelectSubject)
+      ?.let {
+        val name = it.firstName.plus(it.lastName)
+        menuSection.setHeader(
+          MenuHeaderItem(
+            name,
+            branchCode,
+            it.imageUrl,
+            closeSelectSubject,
+            menuSelectSubject
           )
-        }
+        )
+      }
+
   }
 
   internal fun render(uiModel: UiModel<List<BaseMenu>>) {
@@ -160,7 +158,6 @@ class DrawerMenuView : FrameLayout {
     }
 
     uiModel.onSuccess {
-      refreshHeader()
       selectableItemList.clear()
       expandableGroups.clear()
 
