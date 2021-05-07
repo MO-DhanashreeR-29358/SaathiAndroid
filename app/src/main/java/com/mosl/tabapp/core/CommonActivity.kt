@@ -34,6 +34,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
@@ -131,13 +132,17 @@ class CommonActivity : BaseActivity(),
 
     @Inject
     lateinit var gson: Gson
+
+    @Inject
+    @field:BranchCode
+    lateinit var branchCodePreference: StringPreference
     lateinit var remoteConfigModel: RemoteConfigModel
     var mService: ForegroundService? = null
 
     /**/
-   /* lateinit var sharedPreferences: SharedPreferences
-    var editor: SharedPreferences.Editor? = null
-    var twentyFourSevenCheck = false*/
+    /* lateinit var sharedPreferences: SharedPreferences
+     var editor: SharedPreferences.Editor? = null
+     var twentyFourSevenCheck = false*/
     /**/
 
     override fun getLayout(): Int {
@@ -198,7 +203,12 @@ class CommonActivity : BaseActivity(),
         }
         setupObservables()
         setBanner()
-        menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
+        if (branchCodePreference.get().isNotEmpty()) {
+            menuTopSection(branchCodePreference.get())
+        } else {
+            menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
+        }
+
     }
 
     override fun onActivityResult(
