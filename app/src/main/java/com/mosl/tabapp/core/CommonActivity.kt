@@ -41,10 +41,12 @@ import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
+import com.mosl.shared.BranchSelectNeeded
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.banner.BannerScreenData
+import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
@@ -199,6 +201,17 @@ class CommonActivity : BaseActivity(),
         menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
     }
 
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        if (resultCode == BranchSelectNeeded) {
+            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -269,7 +282,8 @@ class CommonActivity : BaseActivity(),
         }
     }*/
 
-    private fun menuTopSection(branchCode: String) {
+    private fun menuTopSection(branchCode: String?) {
+
         binding.drawerMenu.refreshHeader(userManager, branchCode)
     }
 

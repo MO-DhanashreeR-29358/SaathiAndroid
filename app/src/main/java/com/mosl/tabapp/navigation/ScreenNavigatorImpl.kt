@@ -11,10 +11,12 @@ import com.mosl.mobile.domain.leadviewdetail.activities.Appointment
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.*
+import com.mosl.shared.BranchRequested
 import com.mosl.tabapp.banner.BannerFragment
 import com.mosl.tabapp.banner.BannerNavigator
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.banner.BannerView.Companion.ARG_BANNER_SCREEN_DATA
+import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.common.EkycSecurityUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
@@ -105,6 +107,11 @@ class ScreenNavigatorImpl @Inject constructor(
         }
     }
 
+    private fun openBranch() {
+        val intent = Intent(activity, BranchActivity::class.java)
+        activity.startActivityForResult(intent, BranchRequested)
+    }
+
     protected fun handleNavigationRequest(request: NavigationRequest) {
         val pageId = request.pageId
         when {
@@ -119,6 +126,7 @@ class ScreenNavigatorImpl @Inject constructor(
             /**
              * Handles back navigation on fragments.
              */
+            pageId == NavigationConstants.NAVIGATE_TO_BRANCH_CODE -> openBranch()
             pageId == FragmentNavigationEntry.GoBackPageId -> processNavigation(request.asFragmentEntry())
             else -> processNavigation(request.asFragmentEntry())
             /* LoginFragmentGetter.isHandled(pageId) -> {
@@ -127,6 +135,7 @@ class ScreenNavigatorImpl @Inject constructor(
              else -> {
                processNavigation(request.asFragmentEntry())
              }*/
+
         }
     }
 

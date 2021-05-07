@@ -11,6 +11,8 @@ import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendEmailRequest
 import com.mosl.saathi.api.model.birthdayanniversary.SendGiftRequest
+import com.mosl.saathi.api.model.branch.BranchItem
+import com.mosl.saathi.api.model.branch.BranchRequest
 import com.mosl.saathi.api.model.calender.CalenderItem
 import com.mosl.saathi.api.model.calender.CalenderRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
@@ -557,6 +559,11 @@ interface SaathiApi {
     fun postCalenderByDate(
         @Body request: CalenderRequest
     ): Observable<List<CalenderItem>?>
+
+    @POST("Branch/GetBranchsByEmployeeCode")
+    fun getBranchByEmployeeCode(
+        @Body request: BranchRequest
+    ): Observable<SaathiCommonResponse<List<BranchItem>>>
 
     @POST("Auth/Login")
     fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>

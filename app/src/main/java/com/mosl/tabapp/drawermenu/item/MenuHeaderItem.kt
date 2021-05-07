@@ -12,7 +12,7 @@ import io.reactivex.subjects.PublishSubject
 
 class MenuHeaderItem(
     val partnerName: String,
-    val branchCode: String,
+    val branchCode: String?,
     val imageUrl: String,
     val closeSelectSubject: PublishSubject<View>,
     val subject: PublishSubject<AppMenu>

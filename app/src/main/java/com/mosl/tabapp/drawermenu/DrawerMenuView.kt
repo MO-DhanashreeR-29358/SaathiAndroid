@@ -135,17 +135,17 @@ class DrawerMenuView : FrameLayout {
     }
   }
 
-  fun refreshHeader(userManager: UserManager, branchCode: String) {
-    userManager.getUser()
-      ?.let {
-        val name = it.firstName.plus(it.lastName)
-        menuSection.setHeader(
-          MenuHeaderItem(
-            name,
-            branchCode,
-            it.imageUrl,
-            closeSelectSubject,
-            menuSelectSubject
+  fun refreshHeader(userManager: UserManager, branchCode: String?) {
+      userManager.getUser()
+          ?.let {
+              val name = it.firstName.plus(it.lastName)
+              menuSection.setHeader(
+                  MenuHeaderItem(
+                      name,
+                      branchCode,
+                      it.imageUrl,
+                      closeSelectSubject,
+                      menuSelectSubject
           )
         )
       }
