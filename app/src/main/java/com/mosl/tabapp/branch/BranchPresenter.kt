@@ -2,7 +2,7 @@ package com.mosl.tabapp.branch
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.domain.branch.BranchRepository
-import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class BranchPresenter @Inject constructor(

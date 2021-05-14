@@ -92,7 +92,7 @@ class DrawerMenuView : FrameLayout {
       } else if (item is BaseMenuExpandableItem) {
         expandableGroup!!.onToggleExpanded()
       }
-    })
+    }
 
     menuSection = Section()
     groupAdapter.add(menuSection)

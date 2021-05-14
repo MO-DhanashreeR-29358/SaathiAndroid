@@ -20,10 +20,10 @@ import com.mosl.shared.BranchSelectNeeded
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.BranchActivityBinding
 import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Section
-import com.xwray.groupie.ViewHolder
-import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 class BranchActivity : LeanBaseActivity(), BranchContract.View {
@@ -59,7 +59,7 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
     }
 
     private fun setUpRecyclerView() {
-        val groupAdapter = GroupAdapter<ViewHolder>()
+        val groupAdapter = GroupAdapter<GroupieViewHolder>()
         binding.rvBranch.layoutManager = LinearLayoutManager(this)
         binding.rvBranch.addItemDecoration(
             DividerItemDecoration(this, DividerItemDecoration.VERTICAL)

@@ -219,16 +219,6 @@ class CommonActivity : BaseActivity(),
 
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        if (resultCode == BranchSelectNeeded) {
-            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -254,6 +244,9 @@ class CommonActivity : BaseActivity(),
             val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
             intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
             startActivity(intent)
+        }
+        if (resultCode == BranchSelectNeeded) {
+            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
