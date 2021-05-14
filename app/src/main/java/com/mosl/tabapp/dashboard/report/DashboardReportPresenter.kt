@@ -79,7 +79,15 @@ class DashboardReportPresenter @Inject constructor(
 
     view.onNavigateEvent()
       .subscribe {
-        navigationFlow(it.leadId, it.ucid, it.employeeCode, it.level, it.rmName, it.systemsName)
+        navigationFlow(
+            it.leadId,
+            it.ucid,
+            it.employeeCode,
+            it.level,
+            it.rmName,
+            it.systemsName,
+            it.branchCode
+        )
       }
       .addTo(disposable)
 
@@ -123,34 +131,36 @@ class DashboardReportPresenter @Inject constructor(
   }
 
   private fun navigationFlow(
-    leadID: String,
-    ucid: String,
-    empCode: String,
-    level: String,
-    rmName: String,
-    systemsName: String
+      leadID: String,
+      ucid: String,
+      empCode: String,
+      level: String,
+      rmName: String,
+      systemsName: String,
+      branchCode: String
   ) {
     if (leadID != "0" || ucid != "0") {
-      val args = Bundle()
-      val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
-      args.putString(MOSLConstants.LEAD_ID, leadID)
-      args.putString(MOSLConstants.UCID, ucid)
-      navigator.openPage(
-          navigationConstants.toString(),
-          args,
-          addToStack = true,
-          forceReload = false
-      )
-    } else if (rmName.isNotEmpty()) {
-      val args = Bundle()
-      val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
-      val additionalMap = data.additionalMap as HashMap<String, String>
-      additionalMap[FltLevel] = level
-      additionalMap[FltHierarchyEmpCode] = empCode
-      args.putSerializable(
-        ADDITIONALPARAMETERS,
-        additionalMap as Serializable
-      )
+        val args = Bundle()
+        val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
+        args.putString(MOSLConstants.LEAD_ID, leadID)
+        args.putString(MOSLConstants.UCID, ucid)
+        navigator.openPage(
+            navigationConstants.toString(),
+            args,
+            addToStack = true,
+            forceReload = false
+        )
+    } else if (rmName.isNotEmpty() || branchCode.isNotEmpty()) {
+        val args = Bundle()
+        val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT
+        val additionalMap = data.additionalMap as HashMap<String, String>
+        additionalMap[FltLevel] = level
+        additionalMap[FltHierarchyEmpCode] = empCode
+        additionalMap[FLT_HIERARCHY_BRANCH_CODE] = branchCode
+        args.putSerializable(
+            ADDITIONALPARAMETERS,
+            additionalMap as Serializable
+        )
       args.putString(LABEL, data.label)
       args.putString(WidgetSystemName, systemsName)
       navigator.openPage(
@@ -172,8 +182,9 @@ class DashboardReportPresenter @Inject constructor(
     const val FltLevel = "flt_level"
     const val Flg_Hierarchy = "flg_Hierarchy"
     const val FlgEmpcode = "flg_empcode"
-    const val FltHierarchyEmpCode = "flt_Hierarchy_empCode"
-    const val DASHBOARD_REPORT_PAGE_SIZE = "100"
+      const val FltHierarchyEmpCode = "flt_Hierarchy_empCode"
+      const val FLT_HIERARCHY_BRANCH_CODE = "flt_Hierarchy_Branch_Code"
+      const val DASHBOARD_REPORT_PAGE_SIZE = "100"
     const val PAGE = "1"
     const val WIDGETNAME = "Widget name"
     const val SYSTEM_NAME = "system_name"

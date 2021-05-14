@@ -20,6 +20,7 @@ import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
 import com.mosl.tabapp.constants.MoslConstant.Lead_Id
 import com.mosl.tabapp.constants.MoslConstant.UCID
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FlgEmpcode
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.Flg_Hierarchy
 import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
@@ -89,10 +90,12 @@ class DashboardHierarchyReportFragment : CommonFragment(),
             val systemsName = getValue(WidgetSystemName, hasMap = reportData.hasMap)
             val rmName = reportData.hasMap[FltHierarchyEmpCode] ?: ""
             val level = getValue(Flg_Hierarchy, hasMap = reportData.hasMap)
+            val branchCode =
+              reportData.hasMap[DashboardReportPresenter.FLT_HIERARCHY_BRANCH_CODE] ?: ""
 
             navigateEvent.onNext(
               CellEvent(
-                leadId, ucid, empCode, level, systemsName, rmName
+                leadId, ucid, empCode, level, systemsName, rmName, branchCode
               )
             )
           }
