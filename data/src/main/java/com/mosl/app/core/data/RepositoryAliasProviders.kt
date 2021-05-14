@@ -3,6 +3,7 @@ package com.mosl.app.core.data
 import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryImpl
+import com.mosl.app.core.data.branch.BranchRepositoryImpl
 import com.mosl.app.core.data.calendar.CalendarRepositoryImpl
 import com.mosl.app.core.data.clients.ClientsRepositoryImpl
 import com.mosl.app.core.data.dashboardreport.DashboardReportRepositoryImpl
@@ -23,6 +24,7 @@ import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.app.core.data.trends.TrendsRepositoryImpl
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
+import com.mosl.mobile.domain.branch.BranchRepository
 import com.mosl.mobile.domain.calendar.CalendarRepository
 import com.mosl.mobile.domain.clients.ClientsRepository
 import com.mosl.mobile.domain.dashboardreport.DashboardReportRepository
@@ -83,6 +85,10 @@ interface RepositoryAliasProviders {
 
     @Binds
     fun bindsCalendarRepository(repository: CalendarRepositoryImpl): CalendarRepository
+
+    @Binds
+    fun bindsBranchRepository(repository: BranchRepositoryImpl): BranchRepository
+
 
     @Binds
     fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository

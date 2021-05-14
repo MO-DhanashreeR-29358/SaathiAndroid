@@ -40,16 +40,16 @@ class DrawerMenuView : FrameLayout {
   private val menuSelectSubject = PublishSubject.create<AppMenu>()
   private val closeSelectSubject = PublishSubject.create<View>()
   private val selectableItemList = ArrayList<SelectableMenu>()
-  private val expandableItems = ArrayList<BaseMenuExpandableItem>()
 
-  val itemExpansionListener: com.xwray.groupie.OnItemClickListener =
+  private val itemExpansionListener: com.xwray.groupie.OnItemClickListener =
     com.xwray.groupie.OnItemClickListener { item, _ ->
       expandableGroups.mapNotNull { it as? MenuExpandableGroup }
-          .filter { it.header != item }
-          .forEach {
-            it.header.collapse()
-          }
+        .filter { it.header != item }
+        .forEach {
+          it.header.collapse()
+        }
     }
+
   @Inject
   lateinit var source: MenuDataSource
   @Inject
@@ -86,7 +86,7 @@ class DrawerMenuView : FrameLayout {
         ContextCompat.getDrawable(context, R.drawable.grey_item_decorator)!!
     )
     rvDrawerMenu.addItemDecoration(dividerItemDecoration)
-    groupAdapter.setOnItemClickListener({ item, _ ->
+    groupAdapter.setOnItemClickListener { item, _ ->
       if (item is SelectableMenu) {
         menuSelectSubject.onNext((item as SelectableMenu).getAppMenu())
       } else if (item is BaseMenuExpandableItem) {
@@ -135,14 +135,21 @@ class DrawerMenuView : FrameLayout {
     }
   }
 
-  fun refreshHeader() {
-    userManager.getUser()
-        ?.let {
-          val name = it.firstName.plus(it.lastName)
-          menuSection.setHeader(
-              MenuHeaderItem(name, it.currentBusinessProfile.name, it.imageUrl, closeSelectSubject)
+  fun refreshHeader(userManager: UserManager, branchCode: String?) {
+      userManager.getUser()
+          ?.let {
+              val name = it.firstName.plus(it.lastName)
+              menuSection.setHeader(
+                  MenuHeaderItem(
+                      name,
+                      branchCode,
+                      it.imageUrl,
+                      closeSelectSubject,
+                      menuSelectSubject
           )
-        }
+        )
+      }
+
   }
 
   internal fun render(uiModel: UiModel<List<BaseMenu>>) {
@@ -151,7 +158,6 @@ class DrawerMenuView : FrameLayout {
     }
 
     uiModel.onSuccess {
-      refreshHeader()
       selectableItemList.clear()
       expandableGroups.clear()
 

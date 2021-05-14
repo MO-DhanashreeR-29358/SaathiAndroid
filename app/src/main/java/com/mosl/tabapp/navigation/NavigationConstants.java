@@ -46,9 +46,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_PRIME_ENTRY,
         NavigationConstants.NAVIGATE_TO_SETTING,
         NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
-        NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
-        NavigationConstants.NAVIGATE_TO_PENDING_ESIGN
-
+        NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION
 
 })
 public @interface NavigationConstants {
@@ -94,4 +92,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_LAS_RESUME_APPLICATION = 40;
     int NAVIGATE_TO_PRIME_ENTRY = 41;
     int NAVIGATE_TO_PENDING_ESIGN = 42;
+    int NAVIGATE_TO_BRANCH_CODE = 43;
 }

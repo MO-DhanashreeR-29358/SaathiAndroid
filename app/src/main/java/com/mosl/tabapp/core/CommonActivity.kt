@@ -33,6 +33,7 @@ import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
@@ -40,10 +41,12 @@ import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.navigator.*
+import com.mosl.shared.BranchSelectNeeded
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.banner.BannerScreenData
+import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.data.RemoteConfigModel
 import com.mosl.tabapp.databinding.ActivityCommonbaseBinding
@@ -133,6 +136,10 @@ class CommonActivity : BaseActivity(),
 
     @Inject
     lateinit var gson: Gson
+
+    @Inject
+    @field:BranchCode
+    lateinit var branchCodePreference: StringPreference
     lateinit var remoteConfigModel: RemoteConfigModel
     var mService: ForegroundService? = null
 
@@ -203,7 +210,24 @@ class CommonActivity : BaseActivity(),
         }
         setupObservables()
         setBanner()
+        if (branchCodePreference.get().isNotEmpty()) {
+            menuTopSection(branchCodePreference.get())
+        } else {
+            branchCodePreference.set(userManager.user.defaultBusinessProfile.branchCode)
+            menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
+        }
 
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        if (resultCode == BranchSelectNeeded) {
+            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
@@ -288,6 +312,10 @@ class CommonActivity : BaseActivity(),
             }
         }
     }*/
+    private fun menuTopSection(branchCode: String?) {
+
+        binding.drawerMenu.refreshHeader(userManager, branchCode)
+    }
 
     override fun onResume() {
         super.onResume()

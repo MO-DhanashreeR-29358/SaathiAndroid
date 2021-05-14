@@ -5,9 +5,12 @@ import com.mosl.annotations.ServerTime
 import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.LongPreference
+import com.mosl.app.core.prefs.StringPreference
+import com.mosl.mobile.app_user.BRANCH_CODE
 import com.mosl.mobile.app_user.PREFERENCE_CLEAR
 import com.mosl.mobile.app_user.PREF_SERVER_TIME
 import com.mosl.mobile.app_user.TWENTY_FOUR_SEVEN_CHECK
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import dagger.Module
@@ -30,6 +33,13 @@ class PreferenceDataModule {
         prefs, PREF_SERVER_TIME, 0
     )
   }
+
+    @BranchCode
+    @Singleton
+    @Provides
+    fun provideBranchCode(prefs: SharedPreferences): StringPreference {
+        return StringPreference(prefs, BRANCH_CODE)
+    }
 
   @TwentyFourSevenCheck
   @Singleton

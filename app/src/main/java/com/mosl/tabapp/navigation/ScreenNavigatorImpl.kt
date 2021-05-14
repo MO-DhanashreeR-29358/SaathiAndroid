@@ -124,6 +124,7 @@ class ScreenNavigatorImpl @Inject constructor(
       /**
        * Handles back navigation on fragments.
        */
+        pageId == NavigationConstants.NAVIGATE_TO_BRANCH_CODE -> openBranch()
       pageId == FragmentNavigationEntry.GoBackPageId -> processNavigation(request.asFragmentEntry())
       else -> processNavigation(request.asFragmentEntry())
       /* LoginFragmentGetter.isHandled(pageId) -> {
@@ -244,15 +245,15 @@ class ScreenNavigatorImpl @Inject constructor(
 
     val updateMeetingScreenData = data.mapToUpdateMeetingScreenData()
 
-    val args = Bundle().apply {
-      /*putString(MEETING, data.meetingId)
-      putString(LEAD_ID, data.leadId)
-      putString(DATE, data.date)
-      putString(TIME, data.time)
-      putString(PRODUCT, data.product)
-      putString(UCID, data.ucid)*/
-      putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
-    }
+        val args = Bundle().apply {
+            /*putString(MEETING, data.meetingId)
+            putString(LEAD_ID, data.leadId)
+            putString(DATE, data.date)
+            putString(TIME, data.time)
+            putString(PRODUCT, data.product)
+            putString(UCID, data.ucid)*/
+            putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
+        }
 
     openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
   }

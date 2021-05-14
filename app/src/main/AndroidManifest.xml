@@ -89,6 +89,10 @@
             android:name=".core.CommonActivity"
             android:screenOrientation="portrait"
             android:theme="@style/CRMMOSLTheme" />
+        <activity
+            android:name=".branch.BranchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/CRMMOSLTheme" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
