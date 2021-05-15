@@ -742,7 +742,7 @@ class CommonActivity : BaseActivity(),
         oaoUserID: String
     ) {
         if (userManager.user.isUseUrlEnable() || id == WebviewFragment.E_MODIFICATION_ID || id == WebviewFragment.NEW_LAS_APPLICATION_ID || id == WebviewFragment.RESUME_LAS_APPLICATION_ID) {
-            activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID)
+            activityNavHelper.gotoEkycExpressPage(this, id, oaoUserID, branchCodePreference.get())
         } else {
             activityNavHelper.openEkycApp(isExistingOrNewUser, oaoUserID)
         }

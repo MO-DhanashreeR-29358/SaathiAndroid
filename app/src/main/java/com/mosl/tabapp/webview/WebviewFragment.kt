@@ -13,10 +13,12 @@ import android.provider.MediaStore
 import android.view.View
 import android.webkit.*
 import android.widget.Toast
+import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.webview.CommonURLRequest
@@ -46,6 +48,9 @@ class WebviewFragment : CommonFragment() {
     @Inject
     lateinit var encryptor: AESEncryptor
 
+    @Inject
+    @field:BranchCode
+    lateinit var branchCodePreference: StringPreference
 
     @Inject
     lateinit var bannerNavigator: BannerNavigator
@@ -356,14 +361,19 @@ class WebviewFragment : CommonFragment() {
         when (webViewRequest.id) {
             INCENTIVE_REPORT_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(INCENTIVE_REPORT_KEY, null, userManager.user.employeeCode)
+                    CommonURLRequest(
+                        INCENTIVE_REPORT_KEY,
+                        null,
+                        null,
+                        userManager.user.employeeCode
+                    )
                 ).map { it ->
                     Pair(it.url, webViewRequest.id)
                 }
             }
             FRESH_REGISTRATION_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(FRESH_REGISTRATION_KEY, null, null)
+                    CommonURLRequest(FRESH_REGISTRATION_KEY, null, branchCodePreference.get(), null)
                 )
                     .map {
                         Pair(it.url, webViewRequest.id)
@@ -371,71 +381,74 @@ class WebviewFragment : CommonFragment() {
             }
             EXISTING_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(EXISTING_APPLICATIONS_KEY, null, null)
+                    CommonURLRequest(
+                        EXISTING_APPLICATIONS_KEY, null,
+                        branchCodePreference.get(), null
+                    )
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             E_MODIFICATION_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(E_MODIFICATION_KEY, null, null)
+                    CommonURLRequest(E_MODIFICATION_KEY, null, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
             NEW_LAS_APPLICATION_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(NEW_LAS_APPLICATION_KEY, null, null)
+                    CommonURLRequest(NEW_LAS_APPLICATION_KEY, null, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
             RESUME_LAS_APPLICATION_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(RESUME_LAS_APPLICATION_KEY, null, null)
+                    CommonURLRequest(RESUME_LAS_APPLICATION_KEY, null, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
             RESUME_APPLICATIONS_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId, null)
+                    CommonURLRequest(RESUME_APPLICATIONS_KEY, webViewRequest.oaoUserId, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             STADIUM_PITCH_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(STADIUM_PITCH_KEY, null, null)
+                    CommonURLRequest(STADIUM_PITCH_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             COLLATERAL_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(COLLATERAL_KEY, null, null)
+                    CommonURLRequest(COLLATERAL_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             MOST_GUIDE_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(MOST_GUIDE_KEY, webViewRequest.oaoUserId, null)
+                    CommonURLRequest(MOST_GUIDE_KEY, webViewRequest.oaoUserId, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             SIP_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(SIP_KEY, null, null)
+                    CommonURLRequest(SIP_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             PRIME_ENTRY_ID -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(PRIME_ENTRY_KEY, null, null)
+                    CommonURLRequest(PRIME_ENTRY_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
             }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
-                    CommonURLRequest(CHECK_APPROVAL_KEY, null, null)
+                    CommonURLRequest(CHECK_APPROVAL_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }

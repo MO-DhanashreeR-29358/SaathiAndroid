@@ -241,12 +241,12 @@ class ActivityNavigationHelper @Inject constructor(
 
     fun gotoEkycExpressPage(
         context: Context,
-        id: String, oaoUserID: String
+        id: String, oaoUserID: String, branchCode: String
     ) {
         if (context.isNetworkConnected()) {
             disposable.add(Observable.just(id)
                 .switchMap { pageID ->
-                    getUrlObservable(pageID, oaoUserID)
+                    getUrlObservable(pageID, oaoUserID, branchCode)
                         .compose(applyUiModel())
                 }
                 .subscribe { this.renderUrl(it, context) })
@@ -268,12 +268,19 @@ class ActivityNavigationHelper @Inject constructor(
         }
     }
 
-    private fun getUrlObservable(id: String, oaoUserID: String): Observable<String> {
+    private fun getUrlObservable(
+        id: String,
+        oaoUserID: String,
+        branchCode: String
+    ): Observable<String> {
 
         when (id) {
             WebviewFragment.FRESH_REGISTRATION_ID -> {
                 return saathiApi.getEkycExpressUrl(
-                    CommonURLRequest(WebviewFragment.FRESH_REGISTRATION_KEY, null, null)
+                    CommonURLRequest(
+                        WebviewFragment.FRESH_REGISTRATION_KEY, null,
+                        branchCode, null
+                    )
                 )
                     .map {
                         it.url?.apply { this.replace(" ", "%20") }
@@ -281,28 +288,40 @@ class ActivityNavigationHelper @Inject constructor(
             }
             WebviewFragment.EXISTING_APPLICATIONS_ID -> {
                 return saathiApi.getEkycExpressUrl(
-                    CommonURLRequest(WebviewFragment.EXISTING_APPLICATIONS_KEY, null, null)
+                    CommonURLRequest(
+                        WebviewFragment.EXISTING_APPLICATIONS_KEY, null,
+                        branchCode, null
+                    )
                 ).map {
                     it.url?.apply { this.replace(" ", "%20") }
                 }
             }
             WebviewFragment.E_MODIFICATION_ID -> {
                 return saathiApi.getEkycExpressUrl(
-                    CommonURLRequest(WebviewFragment.E_MODIFICATION_KEY, null, null)
+                    CommonURLRequest(
+                        WebviewFragment.E_MODIFICATION_KEY, null,
+                        null, null
+                    )
                 ).map {
                     it.url?.apply { this.replace(" ", "%20") }
                 }
             }
             WebviewFragment.NEW_LAS_APPLICATION_ID -> {
                 return saathiApi.getEkycExpressUrl(
-                    CommonURLRequest(WebviewFragment.NEW_LAS_APPLICATION_KEY, null, null)
+                    CommonURLRequest(
+                        WebviewFragment.NEW_LAS_APPLICATION_KEY, null,
+                        null, null
+                    )
                 ).map {
                     it.url?.apply { this.replace("", "%20") }
                 }
             }
             WebviewFragment.RESUME_LAS_APPLICATION_ID -> {
                 return saathiApi.getEkycExpressUrl(
-                    CommonURLRequest(WebviewFragment.RESUME_LAS_APPLICATION_KEY, null, null)
+                    CommonURLRequest(
+                        WebviewFragment.RESUME_LAS_APPLICATION_KEY, null,
+                        null, null
+                    )
                 ).map {
                     it.url?.apply { this.replace("", "%20") }
                 }
@@ -312,7 +331,7 @@ class ActivityNavigationHelper @Inject constructor(
                     CommonURLRequest(
                         WebviewFragment.RESUME_APPLICATIONS_KEY,
                         oaoUserID,
-                        null
+                        null, null
                     )
                 ).map {
                     it.url?.apply { this.replace(" ", "%20") }
@@ -339,7 +358,12 @@ class ActivityNavigationHelper @Inject constructor(
             if (prospectResponse.isRegistrationAllowed()) {
                 val oaoUserId = prospectResponse.ekycUserID
                 if (prospectResponse.isUseUrlEnable()) {
-                    gotoEkycExpressPage(context, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId)
+                    gotoEkycExpressPage(
+                        context,
+                        WebviewFragment.RESUME_APPLICATIONS_ID,
+                        oaoUserId,
+                        ""
+                    )
                 } else {
                     ekycNavigator.openNewEkycApp(true, oaoUserId)
                 }

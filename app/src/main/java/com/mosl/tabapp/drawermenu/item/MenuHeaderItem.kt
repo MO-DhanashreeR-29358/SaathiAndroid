@@ -1,6 +1,7 @@
 package com.mosl.tabapp.drawermenu.item
 
 import android.view.View
+import androidx.constraintlayout.widget.Group
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ViewMenuHeaderBinding
 import com.mosl.tabapp.drawermenu.data.AppMenu
@@ -27,23 +28,31 @@ class MenuHeaderItem(
         position: Int
     ) {
         val context = viewBinding.root.context
-        viewBinding.txtPartnerName.setText(partnerName)
-        viewBinding.txtBusinessProfileName.setText(branchCode)
-        viewBinding.txtBusinessProfileName.setOnClickListener {
+        viewBinding.txtPartnerName.text = partnerName
+        viewBinding.txtBusinessProfileName.text = branchCode
+
+        viewBinding.group.setAllOnClickListener(View.OnClickListener {
             subject.onNext(
                 OtherMenu(NavigationConstants.NAVIGATE_TO_BRANCH_CODE)
             )
-        }
-        viewBinding.imgClose.setOnClickListener(View.OnClickListener { it ->
-            closeSelectSubject.onNext(it);
         })
 
-        if (!imageUrl.isEmpty()) {
+        viewBinding.imgClose.setOnClickListener { it ->
+            closeSelectSubject.onNext(it);
+        }
+
+        if (imageUrl.isNotEmpty()) {
             Picasso.with(context)
                 .load(imageUrl)
                 .placeholder(R.drawable.menu_profile_pic)
                 .into(viewBinding.imgPartner)
         }
 
+    }
+
+    fun Group.setAllOnClickListener(listener: View.OnClickListener?) {
+        referencedIds.forEach { id ->
+            rootView.findViewById<View>(id).setOnClickListener(listener)
+        }
     }
 }

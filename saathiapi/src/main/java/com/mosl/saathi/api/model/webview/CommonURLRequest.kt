@@ -7,6 +7,8 @@ data class CommonURLRequest(
     val key: String,
     @JvmField @SerializedName("OAOUserid")
     val OAOUserid: String?,
+    @JvmField @SerializedName("Branchcode")
+    val branchcode: String?,
     @JvmField @SerializedName("Employeecode")
     val employeeCode: String?
 

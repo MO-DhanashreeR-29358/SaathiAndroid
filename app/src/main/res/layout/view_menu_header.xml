@@ -1,65 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
-  <androidx.constraintlayout.widget.ConstraintLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/menu_header_background_color"
-      android:paddingTop="@dimen/padding_extra_large"
-      >
-    <ImageView
-        android:id="@+id/imgClose"
-        android:layout_width="@dimen/_16sdp"
-        android:layout_height="@dimen/_16sdp"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:src="@drawable/ic_close"
-        app:layout_constraintBottom_toTopOf="@id/txtPartnerName"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgPartner"
-        android:layout_width="@dimen/menu_icons_size"
-        android:layout_height="@dimen/menu_icons_size"
-        android:layout_marginStart="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/menu_profile_pic"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/txtPartnerName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:paddingLeft="@dimen/padding_medium"
-        android:paddingRight="@dimen/padding_medium"
-        android:textColor="@color/white"
-        android:paddingBottom="@dimen/padding_small"
-        android:textSize="@dimen/text_size_small"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/txtBusinessProfileName"
-        app:layout_constraintStart_toEndOf="@id/imgPartner"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Suman Roy"
-        />
+        android:background="@color/menu_header_background_color"
+        android:paddingTop="@dimen/padding_extra_large">
 
-    <TextView
-        android:id="@+id/txtBusinessProfileName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/padding_medium"
-        android:paddingEnd="@dimen/padding_medium"
-        android:paddingStart="@dimen/padding_medium"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@id/imgPartner"
-        app:layout_constraintTop_toBottomOf="@id/txtPartnerName"
-        tools:text="Retail Branch Manager"
-        />
-  </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:layout_marginEnd="@dimen/margin_medium"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toTopOf="@id/txtPartnerName"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgPartner"
+            android:layout_width="@dimen/menu_icons_size"
+            android:layout_height="@dimen/menu_icons_size"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:src="@drawable/menu_profile_pic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtPartnerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:paddingLeft="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_small"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_small"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/txtBusinessProfileName"
+            app:layout_constraintStart_toEndOf="@id/imgPartner"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Suman Roy" />
+
+        <TextView
+            android:id="@+id/txtBusinessProfileName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/padding_medium"
+            android:paddingBottom="@dimen/padding_medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/imgPartner"
+            app:layout_constraintTop_toBottomOf="@id/txtPartnerName"
+            tools:text="Retail Branch Manager" />
+
+        <ImageView
+            android:id="@+id/imgArrow"
+            android:layout_width="@dimen/_24sdp"
+            android:layout_height="@dimen/_24sdp"
+            android:src="@drawable/ic_arrow_down_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/txtBusinessProfileName"
+            app:layout_constraintTop_toBottomOf="@id/txtPartnerName" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:constraint_referenced_ids="imgArrow,txtBusinessProfileName" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
