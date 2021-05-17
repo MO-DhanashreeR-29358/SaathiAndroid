@@ -22,6 +22,7 @@ class EkycHelper @Inject constructor(
     login.putExtra(LoginActivity.TRADER_APP, false)
     login.putExtra(LoginActivity.APPLICATION_TYPE, LoginActivity.BR)
     login.putExtra(LoginActivity.APP_LOGIN_ID, userManager.user.employeeCode)
+    login.putExtra(LoginActivity.BRANCH_CODE, userManager.user.defaultBusinessProfile.branchCode)
     activity.startActivityForResult(login, LoginRequested)
   }
 }
