@@ -32,7 +32,7 @@ class LeadCreationPresenter @Inject constructor(
         bankChangeObsc
             .filter(InvalidSelectionPredicate)
             .switchMap {
-                bankRepository.getBranchFilter(view.getBank()!!.bankId)
+                bankRepository.getBranchFilter(view.getBank()!!.bankName)
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 

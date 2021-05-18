@@ -19,18 +19,18 @@ class BankRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getBranchFilter(bankId: Int): Observable<List<BranchCodeModel>> {
+    override fun getBranchFilter(bankId: String): Observable<List<BranchCodeModel>> {
         val branchCodeRequest =
-            BranchCodeRequest(bankId = bankId.toString())
+            BranchCodeRequest(bankId = bankId)
         return api.getBranchFilter(branchCodeRequest).map {
             it.branchCodeTransform()
         }
     }
 
-    override fun getSubBranchFilter(branchId: Int): Observable<List<SubBranchCodeModel>> {
+    override fun getSubBranchFilter(branchId: String): Observable<List<SubBranchCodeModel>> {
         val subBranchCodeRequest =
             SubBranchCodeRequest(
-                bankBranchId = branchId.toString()
+                bankBranchId = branchId
             )
         return api.getSubBranchFilter(subBranchCodeRequest).map {
             it.subBranchCodeTransform()

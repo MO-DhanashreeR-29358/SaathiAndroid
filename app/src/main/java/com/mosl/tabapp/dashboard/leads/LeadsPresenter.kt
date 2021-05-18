@@ -41,14 +41,14 @@ class LeadsPresenter @Inject constructor(
         bankChangeObsc
             .filter(InvalidSelectionPredicate)
             .switchMap {
-                bankRepository.getBranchFilter(view.getBank()!!.bankId)
+                bankRepository.getBranchFilter(view.getBank()!!.bankName)
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 
         branchChangeObsc
             .filter(InvalidSelectionPredicate)
             .switchMap {
-                bankRepository.getSubBranchFilter(view.getBranch()!!.branchId)
+                bankRepository.getSubBranchFilter(view.getBranch()!!.branchName)
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
 
@@ -93,9 +93,9 @@ class LeadsPresenter @Inject constructor(
             productId = dashboardModel.productId,
             employeeCode = dashboardModel.employeeCode,
             addtionalParameters = AdditionalParametersInput(
-                fltBankName = view.getBank()?.bankId.toString(),
-                fltBankBranchCode = view.getBranch()?.branchId.toString(),
-                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
+                fltBankName = view.getBank()?.bankName,
+                fltBankBranchCode = view.getBranch()?.branchName,
+                fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
                 fltPeriod = view.getPeriod()?.value.toString(),
                 fltProduct = view.getProduct()?.value.toString(),
                 fltProspect = view.getSource()?.value.toString(),

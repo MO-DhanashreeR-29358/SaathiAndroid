@@ -42,13 +42,13 @@ class TargetPresenter @Inject constructor(
         bankChangeObsc
             .filter(InvalidSelectionPredicate)
             .switchMap {
-                bankRepository.getBranchFilter(view.getBank()!!.bankId)
+                bankRepository.getBranchFilter(view.getBank()!!.bankName)
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 
         branchChangeObsc
             .filter(InvalidSelectionPredicate).switchMap {
-                bankRepository.getSubBranchFilter(view.getBranch()!!.branchId)
+                bankRepository.getSubBranchFilter(view.getBranch()!!.branchName)
                     .compose(applyUiModel())
             }.subscribe(view::renderSubBranchFilter).addTo(disposable)
 
@@ -104,7 +104,7 @@ class TargetPresenter @Inject constructor(
     fun toNavigate(addtionalParameterMap: MutableMap<String, String> = HashMap()) {
         val args = Bundle()
         args.putString(SYSTEM_NAME, view.getWidgetModel()?.systemName)
-      args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.name)
+        args.putString(LABEL, TEAM_TARGET_TITLE + "-" + view.getWidgetModel()?.name)
         args.putSerializable(MAP, addtionalParameterMap as Serializable?)
         navigator.openPage(
             NavigationConstants.NAVIGATE_TO_SECOND_CLICK_DASHBOARD.toString(), args, true,
@@ -119,9 +119,9 @@ class TargetPresenter @Inject constructor(
             productId = dashboardModel.productId,
             employeeCode = dashboardModel.employeeCode,
             addtionalParameters = AditionalParametersTarget(
-                fltBankName = view.getBank()?.bankId.toString(),
-                fltBankBranchCode = view.getBranch()?.branchId.toString(),
-                fltBankSubBrokerCode = view.getSubBranch()?.bankBranchId.toString(),
+                fltBankName = view.getBank()?.bankName,
+                fltBankBranchCode = view.getBranch()?.branchName,
+                fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
                 fltPeriod = view.getPeriod()?.value.toString(),
                 fltHierarchy = dashboardModel.dashboardFor
             )
