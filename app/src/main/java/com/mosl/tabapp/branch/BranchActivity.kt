@@ -73,13 +73,6 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
             ContextCompat.getDrawable(this, R.drawable.grey_item_decorator)!!
         )
         binding.rvBranch.addItemDecoration(dividerItemDecoration)
-//        groupAdapter.setOnItemClickListener { item, _ ->
-//            if (item is ItemBranch) {
-//                branchCodePreference.set(item.branchItemResponse.branchCode)
-//                updateBranch(item.branchItemResponse.branchCode)
-//                finish()
-//            }
-//        }
 
         section = Section()
         groupAdapter.add(section)
