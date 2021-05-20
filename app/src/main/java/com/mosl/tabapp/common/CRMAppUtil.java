@@ -17,12 +17,15 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
+
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.mosl.tabapp.R;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.SimpleDateFormat;
@@ -418,6 +421,7 @@ public class CRMAppUtil {
         columnName = columnName.replace("__KENDOEMPTY__", " ");
         columnName = columnName.replace("flg_Hierarchy", "Hierarchy");
         columnName = columnName.replace("flt_Hierarchy_empCode", "RM Name");
+        columnName = columnName.replace("flt_Hierarchy_Branch_Code", "Branch Code");
         columnName = columnName.replace("_", " ");
 
         return columnName;
