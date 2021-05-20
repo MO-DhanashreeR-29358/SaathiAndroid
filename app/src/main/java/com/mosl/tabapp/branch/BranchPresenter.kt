@@ -21,6 +21,10 @@ class BranchPresenter @Inject constructor(
             }
             .addTo(disposable)
 
+        view.onItemClick()
+            .subscribe {
+                view.renderItemClick(it)
+            }
 
     }
 }

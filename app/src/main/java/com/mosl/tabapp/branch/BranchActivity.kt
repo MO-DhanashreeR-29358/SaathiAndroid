@@ -14,6 +14,7 @@ import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.branch.BranchItemResponse
 import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.shared.BranchSelectNeeded
@@ -31,6 +32,8 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
     lateinit var binding: BranchActivityBinding
     private val dataActionSubject = PublishSubject.create<DataAction>()
     lateinit var section: Section
+    private val itemUiEvent =
+        PublishSubject.create<String>()
 
     @Inject
     @field:BranchCode
@@ -70,12 +73,13 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
             ContextCompat.getDrawable(this, R.drawable.grey_item_decorator)!!
         )
         binding.rvBranch.addItemDecoration(dividerItemDecoration)
-        groupAdapter.setOnItemClickListener { item, _ ->
-            if (item is ItemBranch) {
-                branchCodePreference.set(item.branchItemResponse.branchCode)
-                updateBranch(item.branchItemResponse.branchCode)
-            }
-        }
+//        groupAdapter.setOnItemClickListener { item, _ ->
+//            if (item is ItemBranch) {
+//                branchCodePreference.set(item.branchItemResponse.branchCode)
+//                updateBranch(item.branchItemResponse.branchCode)
+//                finish()
+//            }
+//        }
 
         section = Section()
         groupAdapter.add(section)
@@ -88,10 +92,21 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
         }
         uiModel.onSuccess {
             if (it.isNotEmpty()) {
-                section.addAll(it.map { item -> ItemBranch(item) })
+                section.addAll(it.map { item -> ItemBranch(item, itemUiEvent) })
             }
         }
     }
+
+    override fun onItemClick(): Observable<String> {
+        return itemUiEvent.ofType()
+    }
+
+    override fun renderItemClick(branchCode: String) {
+        branchCodePreference.set(branchCode)
+        updateBranch(branchCode)
+        finish()
+    }
+
 
     fun Throwable.showOnFailurePopup() {
         val errorOnFailure = this.getErrorOnFailure()
