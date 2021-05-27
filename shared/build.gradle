@@ -36,4 +36,5 @@ dependencies {
   api deps.mofslArtifacts.appcore
   api deps.mofslArtifacts.tableview
   api deps.mofslArtifacts.tableviewx
+
 }

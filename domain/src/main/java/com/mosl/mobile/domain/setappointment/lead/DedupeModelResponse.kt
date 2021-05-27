@@ -1,8 +1,6 @@
 package com.mosl.mobile.domain.setappointment.lead
 
-import javax.annotation.Generated
 
-@Generated("com.robohorse.robopojogenerator")
 data class DedupeModelResponse(
 
   @JvmField val status: Int? = null,
