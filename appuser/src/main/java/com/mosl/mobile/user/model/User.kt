@@ -54,6 +54,7 @@ data class User(
     fun isAuBankSalesSupport(): Boolean {
         currentBusinessProfile.businessProfileId?.apply {
             return this == "1142" || this == "1156"
+                    || this == "1158"
         }
         return false
     }
