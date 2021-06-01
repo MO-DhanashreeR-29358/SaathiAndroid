@@ -40,6 +40,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
+import io.reactivex.rxjava3.core.Observable
 
 class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
@@ -333,20 +334,20 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     lableString: Array<String>
   ) {
     val mChart = binding.includeChart.chart
-    Collections.reverse(xAxisValue)
-    Collections.reverse(yAxisValue.get(0))
-    Collections.reverse(yAxisValue.get(1))
+    xAxisValue.reverse()
+    yAxisValue[0].reverse()
+    yAxisValue[1].reverse()
 
     val leftAxis = mChart.axisLeft
     leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
 
-    val xAxis: XAxis = mChart.getXAxis()
+    val xAxis: XAxis = mChart.xAxis
     xAxis.setDrawGridLines(false)
     xAxis.position = XAxis.XAxisPosition.BOTTOM
     xAxis.setCenterAxisLabels(true)
     xAxis.setDrawAxisLine(false)
     xAxis.textColor = ContextCompat.getColor(requireContext(), R.color.black)
-    xAxis.setValueFormatter(IndexAxisValueFormatter(xAxisValue))
+    xAxis.valueFormatter = IndexAxisValueFormatter(xAxisValue)
 
     val data = getBarData(yAxisValue, lableString)
     data.setValueFormatter(CRMValueFormatter())
@@ -354,7 +355,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     data.setValueTextSize(13f)
     data.barWidth = 0.6f
 
-    mChart.setData(data)
+    mChart.data = data
     mChart.invalidate()
     mChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
       override fun onValueSelected(
@@ -363,11 +364,11 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
       ) {
         if (e.y == 0.0f) return
 
-        if (!yAxisValue.get(h.stackIndex).get(e.x.toInt()).equals("0")) {
+        if (yAxisValue[h.stackIndex][e.x.toInt()] != "0") {
           barChartEvent.onNext(
             LeadUiEvent.BarChartClick(
               lableString[h.stackIndex],
-              xAxisValue.get(e.x.toInt())
+              xAxisValue[e.x.toInt()]
             )
           )
         }
@@ -395,13 +396,12 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
       }
     }
 
-    val barDataSet: BarDataSet
     val colors = ArrayList<Int>()
-    val VORDIPLOM_COLORS = intArrayOf(
+    val vordiplomColors = intArrayOf(
       Color.rgb(38, 127, 183), Color.rgb(255, 154, 0)
     )
-    for (c in VORDIPLOM_COLORS) colors.add(c)
-    barDataSet = BarDataSet(entries, "")
+    for (c in vordiplomColors) colors.add(c)
+    val barDataSet = BarDataSet(entries, "")
     barDataSet.colors = colors
     barDataSet.stackLabels = lableString
 
