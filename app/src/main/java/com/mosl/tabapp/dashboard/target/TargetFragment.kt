@@ -336,12 +336,16 @@ class TargetFragment : CommonFragment(), TargetView {
 
       getPeriod()?.let { this[it.keyValue] = it.value }
 
-      getBank()?.let { this[LeadsFragment.FLT_BANKNAME] = it.bankId.toString() }
+      getBank()?.let {
+        this[LeadsFragment.FLT_BANKNAME] = it.bankName
+      }
 
-      getBranch()?.let { this[LeadsFragment.FLT_BANKBRANCHCODE] = it.branchId.toString() }
+      getBranch()?.let {
+        this[LeadsFragment.FLT_BANKBRANCHCODE] = it.branchName
+      }
 
       getSubBranch()?.let {
-        this[LeadsFragment.FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+        this[LeadsFragment.FLT_BANKSUBBROKERCODE] = it.subBrokerName
       }
 
       this[MOSLConstants.SELF_KEY] = dashboardModel.dashboardFor

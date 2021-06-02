@@ -311,15 +311,15 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
         this[it.keyValue] = it.value
       }
       getBank()?.let {
-        this[FLT_BANKNAME] = it.bankId.toString()
+        this[FLT_BANKNAME] = it.bankName
       }
 
       getBranch()?.let {
-        this[FLT_BANKBRANCHCODE] = it.branchId.toString()
+        this[FLT_BANKBRANCHCODE] = it.branchName
       }
 
       getSubBranch()?.let {
-        this[FLT_BANKSUBBROKERCODE] = it.bankBranchId.toString()
+        this[FLT_BANKSUBBROKERCODE] = it.subBrokerName
       }
 
       this[SELF_KEY] = dashboardModel.dashboardFor
