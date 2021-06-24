@@ -30,6 +30,7 @@ interface LeadsView : BaseView {
     fun renderData(uiModel: UiModel<LeadModel>)
     fun getAddtionalParameterMap(): Map<String, String>
     fun onBarChartClick(): Observable<LeadUiEvent.BarChartClick>
+    fun getFilterSize():Int
 
 }
 

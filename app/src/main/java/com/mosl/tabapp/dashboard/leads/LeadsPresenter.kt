@@ -87,21 +87,39 @@ class LeadsPresenter @Inject constructor(
     }
 
     private fun getWidgetRequest(): LeadInput {
-        return LeadInput(
-            businessProfileId = dashboardModel.businessProfileIdForDashboard,
-            widgetSystemName = view.getWidgetSystemsName(),
-            productId = dashboardModel.productId,
-            employeeCode = dashboardModel.employeeCode,
-            addtionalParameters = AdditionalParametersInput(
-                fltBankName = view.getBank()?.bankName,
-                fltBankBranchCode = view.getBranch()?.branchName,
-                fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
-                fltPeriod = view.getPeriod()?.value.toString(),
-                fltProduct = view.getProduct()?.value.toString(),
-                fltProspect = view.getSource()?.value.toString(),
-                fltHierarchy = dashboardModel.dashboardFor
+
+        return if (view.getFilterSize() == 3) {
+            LeadInput(
+                businessProfileId = dashboardModel.businessProfileIdForDashboard,
+                widgetSystemName = view.getWidgetSystemsName(),
+                productId = dashboardModel.productId,
+                employeeCode = dashboardModel.employeeCode,
+                addtionalParameters = AdditionalParametersInput(
+                    fltBankName = view.getBank()?.bankName,
+                    fltBankBranchCode = view.getBranch()?.branchName,
+                    fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
+                    fltPeriod = view.getSource()?.value.toString(),
+                    fltProduct = view.getProduct()?.value.toString(),
+                    fltProspect = view.getPeriod()?.value.toString(),
+                    fltHierarchy = dashboardModel.dashboardFor
+                )
             )
-        )
+        } else {
+            LeadInput(
+                businessProfileId = dashboardModel.businessProfileIdForDashboard,
+                widgetSystemName = view.getWidgetSystemsName(),
+                productId = dashboardModel.productId,
+                employeeCode = dashboardModel.employeeCode,
+                addtionalParameters = AdditionalParametersInput(
+                    fltBankName = view.getBank()?.bankName,
+                    fltBankBranchCode = view.getBranch()?.branchName,
+                    fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
+                    fltPeriod = view.getPeriod()?.value.toString(),
+                    fltProduct = view.getProduct()?.value.toString(),
+                    fltProspect = view.getSource()?.value.toString(),
+                    fltHierarchy = dashboardModel.dashboardFor
+                ))
+        }
     }
 
 }

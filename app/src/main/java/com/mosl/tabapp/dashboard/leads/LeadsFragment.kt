@@ -57,6 +57,8 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
   private var model: WidgetModel = WidgetModel()
 
+  private var filterSize = 0
+
   private val barChartEvent =
     PublishSubject.create<LeadUiEvent>()
 
@@ -92,6 +94,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     lateinit var periodAdapter: ArrayAdapter<FilterRowData>
     lateinit var productAdapter: ArrayAdapter<FilterRowData>
     lateinit var sourceAdapter: ArrayAdapter<FilterRowData>
+    filterSize = filterList.size
     if (filterList.size == 3) {
       periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
       binding.spPeriod.adapter = periodAdapter
@@ -201,6 +204,10 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
   override fun onBarChartClick(): Observable<LeadUiEvent.BarChartClick> {
 
     return barChartEvent.ofType()
+  }
+
+  override fun getFilterSize(): Int {
+    return filterSize
   }
 
   override fun renderBankFilter(uiModel: UiModel<List<BankCodeModel>>) {
