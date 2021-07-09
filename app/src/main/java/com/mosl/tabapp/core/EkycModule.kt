@@ -9,5 +9,6 @@ data class EkycModule(
     val prospectSource: String?,
     val prospectSourceDetails: String?,
     val interestedIn: String?,
-    val oaoUserId: String?
+    val oaoUserId: String?,
+    val crmBranch: String?
 )

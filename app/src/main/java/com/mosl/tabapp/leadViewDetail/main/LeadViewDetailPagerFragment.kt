@@ -301,7 +301,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         gotoEkycPage(
             EkycModule(
                 mobile, branchName, email, leadOwner, sourceName, prospectSourceName,
-                prospectSourceDetail, interestedIn, oaoUserId.toString()
+                prospectSourceDetail, interestedIn, oaoUserId.toString(), leadOwner
             )
         )
     }

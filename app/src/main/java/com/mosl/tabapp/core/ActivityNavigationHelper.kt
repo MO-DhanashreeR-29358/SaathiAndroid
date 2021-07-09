@@ -226,7 +226,8 @@ class ActivityNavigationHelper @Inject constructor(
                 ekycModule.prospectSourceDetails,
                 ekycModule.interestedIn,
                 ekycModule.oaoUserId,
-                ekycModule.branchName
+                ekycModule.branchName,
+                ekycModule.crmBranch
             )
 
             disposable.add(saathiApi
@@ -353,6 +354,7 @@ class ActivityNavigationHelper @Inject constructor(
         }
 
         uiModel.onSuccess { data ->
+            Timber.d("open an account %s", data.response)
             val prospectResponse =
                 Objects.requireNonNull<List<ProspectResponse>>(data.response)[0]
             if (prospectResponse.isRegistrationAllowed()) {

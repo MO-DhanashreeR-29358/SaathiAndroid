@@ -172,11 +172,13 @@ class AutoCompleteAdapter(
           prospectSource = resultModel.prospectSourceName,
           source = resultModel.sourceName,
           oaoUserId = "",
-          branchName = resultModel.branchCode
+          branchName = resultModel.branchCode,
+          crmBranch = resultModel.branchCode
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
       }
+
 
       holderView.rlDiyLink.setOnClickListener {
         convertToEkyc.renderDiyLink(resultModel.leadId, null)
@@ -190,7 +192,8 @@ class AutoCompleteAdapter(
           prospectSource = resultModel.prospectSourceName,
           source = resultModel.sourceName,
           oaoUserId = resultModel.oaoUserId.toString(),
-          branchName = resultModel.branchCode
+          branchName = resultModel.branchCode,
+          crmBranch = resultModel.branchCode
         )
         convertToEkyc.gotoEkycPage(data)
         clickListener.onSearchResultClick()
