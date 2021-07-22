@@ -76,9 +76,18 @@ data class User(
     }
 
     fun isRM(): Boolean {
-        currentBusinessProfile.businessProfileName.apply {
-            return this.equals("Sales") || this.equals("Retail Advisor")
+        var flag: Boolean = false
+        if(!currentBusinessProfile.businessUnitId.equals("14")) {
+            currentBusinessProfile.businessProfileName.apply {
+                //return this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")
+                if(this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")) {
+                    flag = true
+                }
+            }
+        } else {
+            flag = true
         }
+        return flag
     }
 
 }

@@ -13,7 +13,6 @@ class TeamTargetRepositoryImpl @Inject constructor(
   override fun getTeamTargetWidget(request: TeamTargetInput): Observable<TeamTargetItemModel> {
     val targetRequest = request.requestTransform()
     return api.getTeamTargetWidgetData(targetRequest).map {
-
       it.responseTransform()
     }
   }

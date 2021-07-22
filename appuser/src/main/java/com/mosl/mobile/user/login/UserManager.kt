@@ -9,13 +9,11 @@ import com.mosl.saathi.api.model.splash.ChildMenu
  */
 
 interface UserManager {
-
   fun getUser(): User?
   fun getCredentials(): LoginInfo?
   fun isLoggedIn(): Boolean
   fun setReportMenuList(reportMenuList: List<ChildMenu>)
   fun getReportMenuList(): List<ChildMenu>
-
 }
 
 val UserManager.user: User

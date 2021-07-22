@@ -461,7 +461,6 @@ class CommonActivity : BaseActivity(),
     private fun setupObservables() {
         val mainThread = dispatchers.main
         disposable.add(
-
             tokenPref.asObservable()
                 .distinctUntilChanged()
                 .map { tokenPref.get() }

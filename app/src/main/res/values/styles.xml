@@ -26,6 +26,7 @@
         <item name="android:textColorPrimary">@color/ekyc_dark_grey</item>
         <item name="android:textColor">@color/ekyc_dark_grey</item>
         <item name="android:textColorHint">@color/ekyc_dark_grey</item>
+        <!--<item name="alertDialogStyle"></item>-->
         <item name="android:buttonStyle">@style/CRMButtonSelector</item>
         <item name="android:spinnerStyle">@style/CRMSpinnerSelector</item>
         <item name="android:textCursorDrawable">@null</item>

@@ -23,7 +23,6 @@ fun AditionalParametersTeamTarget.apTransform(): APTeamTargetRequest {
 
 fun TeamTargetResponse.responseTransform(): TeamTargetItemModel {
   return TeamTargetItemModel(
-
     table = table.itemTransform1(),
     table1 = table1.itemTransform1(),
     table2 = table2.itemTransform1(),
