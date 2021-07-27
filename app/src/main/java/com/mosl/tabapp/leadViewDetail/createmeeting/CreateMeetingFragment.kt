@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
@@ -90,6 +91,7 @@ import com.mosl.tabapp.util.gone
 import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -716,16 +718,21 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun getGeoArea(): String {
         var geoArea = ""
-        if (enableLocationGroup) {
-            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            location?.apply {
-                val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
-                if (addressLine.size > 0) {
-                    geoArea = addressLine[0].getAddressLine(0)
+        CoroutineScope(Dispatchers.IO).launch {
+            //var geoArea = ""
+            if (enableLocationGroup) {
+                val geocoder = Geocoder(requireContext(), Locale.getDefault())
+                location?.apply {
+                    val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
+                    if (addressLine.size > 0) {
+                        geoArea = addressLine[0].getAddressLine(0)
+                    }
                 }
             }
+            withContext(Dispatchers.Main) {
+                println("Geo area found ::: $geoArea")
+            }
         }
-
         return geoArea
     }
 

@@ -43,9 +43,7 @@ import java.util.*
 import javax.inject.Inject
 
 class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, DiyLinkClickListner {
-
     private lateinit var binding: FragLeadviewMainBinding
-
     @Inject
     internal lateinit var presenter: LeadViewDetailPagerPresenter
 
