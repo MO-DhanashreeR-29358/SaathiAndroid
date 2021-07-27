@@ -1,22 +1,34 @@
 package com.mosl.tabapp.login
 
+import android.Manifest
 import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.provider.Settings
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.editorActions
 import com.mosl.app.core.error.getErrorOnFailure
@@ -46,8 +58,12 @@ import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
+
 class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
+  private val PERMISSIONS_REQUEST_ENABLE_GPS: Int = 1005
+  private val ERROR_DIALOG_REQUEST: Int = 203
+  private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
   lateinit var binding: ActivityLoginNewBinding
 
   @Inject
@@ -67,6 +83,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   lateinit var sharedPreferences: SharedPreferences
   lateinit var editor: SharedPreferences.Editor
+  var mLocationPermissionGranted = false
 
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
@@ -161,6 +178,14 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       editor.commit()
       dialog.dismiss()
       if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        if(checkMapServices()) {
+          if(mLocationPermissionGranted) {
+            //Toast.makeText(this@LoginActivity, "Location permitted", Toast.LENGTH_SHORT).show()
+          } else {
+            getLocationPermission()
+          }
+        }
+
         permissionCheckHelper.requestAllPermissions()
       }
     }
@@ -176,8 +201,113 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     alertDialog.show()
   }
 
-  override fun setUserProperty(user: User?) {
+  private fun checkMapServices(): Boolean {
+    if (isServicesOK()) {
+      if (isMapsEnabled()) {
+        return true
+      }
+    }
+    return false
+  }
 
+  private fun buildAlertMessageNoGps() {
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+      .setCancelable(false)
+      .setPositiveButton("Yes") { dialog, id ->
+        val enableGpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS)
+      }
+    val alert = builder.create()
+    alert.show()
+  }
+
+  fun isMapsEnabled(): Boolean {
+    val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+      buildAlertMessageNoGps()
+      return false
+    }
+    return true
+  }
+
+  private fun getLocationPermission() {
+    /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+    if (ContextCompat.checkSelfPermission(
+        this.applicationContext,
+        Manifest.permission.ACCESS_FINE_LOCATION
+      )
+      === PackageManager.PERMISSION_GRANTED
+    ) {
+      mLocationPermissionGranted = true
+      //getChatrooms()
+    } else {
+      ActivityCompat.requestPermissions(
+        this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+      )
+    }
+  }
+
+  fun isServicesOK(): Boolean {
+    Log.d("TAG", "isServicesOK: checking google services version")
+    val available =
+      GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this@LoginActivity)
+    if (available == ConnectionResult.SUCCESS) {
+      //everything is fine and the user can make map requests
+      Log.d("TAG", "isServicesOK: Google Play Services is working")
+      return true
+    } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+      //an error occured but we can resolve it
+      Log.d("TAG", "isServicesOK: an error occured but we can fix it")
+      val dialog: Dialog = GoogleApiAvailability.getInstance()
+        .getErrorDialog(this@LoginActivity, available, ERROR_DIALOG_REQUEST)
+      dialog.show()
+    } else {
+      Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show()
+    }
+    return false
+  }
+
+  override fun onRequestPermissionsResult(
+    requestCode: Int,
+    permissions: Array<out String>,
+    grantResults: IntArray
+  ) {
+    mLocationPermissionGranted = false
+    when (requestCode) {
+      PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
+
+        // If request is cancelled, the result arrays are empty.
+        if (grantResults.size > 0
+          && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+          mLocationPermissionGranted = true
+        }
+      }
+    }
+  }
+
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    Log.d("TAG", "onActivityResult: called.")
+    when (requestCode) {
+      PERMISSIONS_REQUEST_ENABLE_GPS -> {
+        if (mLocationPermissionGranted) {
+          //getChatrooms()
+        } else {
+          getLocationPermission()
+        }
+      }
+    }
+  }
+
+  override fun setUserProperty(user: User?) {
     user?.apply {
       if (!isEmulator()) {
         firebaseHelper.setUserProperty(user.employeeCode)

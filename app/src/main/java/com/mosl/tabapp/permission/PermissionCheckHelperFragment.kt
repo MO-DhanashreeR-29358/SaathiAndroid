@@ -1,6 +1,7 @@
 package com.mosl.tabapp.permission
 
 import android.Manifest.permission.*
+import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
