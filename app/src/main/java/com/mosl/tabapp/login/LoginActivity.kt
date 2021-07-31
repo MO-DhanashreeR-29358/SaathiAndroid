@@ -64,6 +64,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   private val PERMISSIONS_REQUEST_ENABLE_GPS: Int = 1005
   private val ERROR_DIALOG_REQUEST: Int = 203
   private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
+  var mLocationPermissionGranted = false
   lateinit var binding: ActivityLoginNewBinding
 
   @Inject
@@ -83,7 +84,6 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   lateinit var sharedPreferences: SharedPreferences
   lateinit var editor: SharedPreferences.Editor
-  var mLocationPermissionGranted = false
 
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
@@ -92,7 +92,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+      super.onCreate(savedInstanceState)
     AndroidInjection.inject(this)
     setUpView()
     fusedLocation.initDispatcher(this)
@@ -178,14 +178,15 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       editor.commit()
       dialog.dismiss()
       if (VERSION.SDK_INT >= VERSION_CODES.M) {
-        if(checkMapServices()) {
-          if(mLocationPermissionGranted) {
-            //Toast.makeText(this@LoginActivity, "Location permitted", Toast.LENGTH_SHORT).show()
-          } else {
-            getLocationPermission()
-          }
+        if(VERSION.SDK_INT > VERSION_CODES.Q) {
+            if(checkMapServices()) {
+                if(mLocationPermissionGranted) {
+                    //Toast.makeText(this@LoginActivity, "Location permitted", Toast.LENGTH_SHORT).show()
+                } else {
+                    getLocationPermission()
+                }
+            }
         }
-
         permissionCheckHelper.requestAllPermissions()
       }
     }
@@ -244,7 +245,6 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       === PackageManager.PERMISSION_GRANTED
     ) {
       mLocationPermissionGranted = true
-      //getChatrooms()
     } else {
       ActivityCompat.requestPermissions(
         this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -299,7 +299,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     when (requestCode) {
       PERMISSIONS_REQUEST_ENABLE_GPS -> {
         if (mLocationPermissionGranted) {
-          //getChatrooms()
+
         } else {
           getLocationPermission()
         }

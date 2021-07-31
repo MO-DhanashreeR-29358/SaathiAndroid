@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/dashboard_background">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +33,7 @@
             <Spinner
                 android:id="@+id/spActivityType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -114,6 +113,7 @@
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:text="@string/txt_lable_product"
+            android:visibility="gone"
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp" />
 
@@ -121,8 +121,16 @@
             android:id="@+id/til_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             app:errorTextAppearance="@style/error_appearance"
             app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_product"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_product" />
 
             <Spinner
                 android:id="@+id/spProduct"
@@ -135,12 +143,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
             android:text="@string/txt_lable_meeting_duration"
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp" />
@@ -149,8 +157,16 @@
             android:id="@+id/til_meeting_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             app:errorTextAppearance="@style/error_appearance"
             app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_meeting_duration"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_meeting_duration" />
 
             <Spinner
                 android:id="@+id/spMeetingDuration"
@@ -164,6 +180,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
             android:text="@string/txt_lable_meeting_objective"
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp" />
@@ -172,14 +189,20 @@
             android:id="@+id/til_meeting_objective"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             app:errorTextAppearance="@style/error_appearance"
             app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_meeting_objective"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_meeting_objective" />
 
             <Spinner
                 android:id="@+id/spMeetingObjective"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -188,6 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_2sdp"
             android:layout_marginTop="@dimen/_5sdp"
+            android:visibility="gone"
             android:text="@string/txt_lable_meeting_reason"
             android:textColor="@color/text_color_personal"
             android:textSize="@dimen/_11sdp" />
@@ -196,13 +220,18 @@
             android:id="@+id/til_meeting_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
             app:hintEnabled="false">
-
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_meeting_reason"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_meeting_reason" />
             <Spinner
                 android:id="@+id/spMeetingReason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:entries="@array/Select_Meeting_Reason" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -217,7 +246,7 @@
                 android:id="@+id/etMeetingDescription"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_80sdp"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
                 android:hint="@string/hint_lable_enter_meeting_description"
                 android:inputType="textMultiLine"
                 android:maxLength="500"
@@ -350,6 +379,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Meeting Location*"
+                android:visibility="gone"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
 
@@ -357,14 +387,20 @@
                 android:id="@+id/til_meeting_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_meeting_location"
+                    style="@style/EditTextHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_22sdp"
+                    android:hint="Meeting Location*" />
 
                 <Spinner
                     android:id="@+id/spMeetingLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
                     android:entries="@array/Select" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -372,6 +408,7 @@
                 android:id="@+id/tvTravellingMode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:text="@string/txt_lable_travelling_mode"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
@@ -380,14 +417,20 @@
                 android:id="@+id/til_travelling_mode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_travelling_mode"
+                    style="@style/EditTextHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_22sdp"
+                    android:hint="@string/txt_lable_travelling_mode" />
 
                 <Spinner
                     android:id="@+id/spTravellingMode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
                     android:entries="@array/Select" />
 
             </com.google.android.material.textfield.TextInputLayout>

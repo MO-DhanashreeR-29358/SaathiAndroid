@@ -31,10 +31,6 @@ class LoginPresenter @Inject constructor(
 
           if (it.isSuccess) {
             view.setUserProperty(it.data)
-            Timber.d("DEFAULT FOUND::: ${it.data!!.defaultBusinessProfile}")
-            Timber.d("USER FOUND::: ${it.data!!.currentBusinessProfile.businessProfileName}")
-            Timber.d("UNIT-ID FOUND::: ${it.data!!.currentBusinessProfile.businessUnitId}")
-            Timber.d("USER-ID FOUND::: ${it.data!!.currentBusinessProfile.businessProfileId}")
             disposable.add(loginRepository.fetchReportTypes().compose(applyUiModel())
                 .subscribe {
                   view.renderReportsData(it)

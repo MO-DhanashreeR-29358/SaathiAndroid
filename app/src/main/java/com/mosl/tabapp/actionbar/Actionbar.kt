@@ -137,7 +137,7 @@ class Actionbar @JvmOverloads constructor(
                                     val oaoUserId = jsonObject.getInt(OAOUSERID)
                                     val diyCode = jsonObject.getInt(DIY_CODE)
                                     val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
-                                    val branchCode = jsonObject.getString(BRANCHCODE) ?: ""
+                                    var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
                                     val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
                                     SearchModelNew(
                                         getSearchHint(),

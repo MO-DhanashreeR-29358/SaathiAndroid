@@ -99,8 +99,8 @@ class CreateMeetingPresenter @Inject constructor(
             .skip(1)
             .map { view.getSelectedMeetingLocation() }
             .filter {
-                it != CreateMeetingConstants.SELECT_MEETING_LOCATION &&
-                        it?.isLocationProper() ?: false
+                it != CreateMeetingConstants.SELECT_MEETING_LOCATION/* &&
+                        it?.isLocationProper() ?: false*/
             }
             .switchMap {
                 repository.getAddress(it?.lookUpID.toString(), createMeetingData.leadId)
@@ -212,7 +212,7 @@ class CreateMeetingPresenter @Inject constructor(
             .subscribe { view.showSplAttendeAddedDialog() }
             .addTo(disposable)
 
-        val isOTPSentSuccessful = view.onSendOTPClicked()
+        var isOTPSentSuccessful = view.onSendOTPClicked()
             .filter { view.validateMobileNumber() }
             .map {
                 view.isOTPSuccessful()
