@@ -167,9 +167,8 @@ class CommonActivity : BaseActivity(),
         }
     }
 
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ) {
+    @SuppressLint("MissingSuperCall")
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
@@ -754,6 +753,7 @@ class CommonActivity : BaseActivity(),
         activityNavHelper.getDiyLink(this, leadId, callBack)
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onDestroy() {
         super.onDestroy()
         globalTitles.clear()
