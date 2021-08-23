@@ -22,7 +22,7 @@
         </intent>
         <!-- Gallery-->
         <intent>
-            <action android:name="android.intent.action.GET_CONTENT" />
+             <action android:name="android.intent.action.GET_CONTENT" />
             <data android:mimeType="image/*" />
         </intent>
     </queries>

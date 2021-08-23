@@ -178,6 +178,7 @@
     </LinearLayout>
 
     <com.mosl.tabapp.view.TableWrapperView
+        style="@style/TableRowTheme"
         android:id="@+id/table_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
