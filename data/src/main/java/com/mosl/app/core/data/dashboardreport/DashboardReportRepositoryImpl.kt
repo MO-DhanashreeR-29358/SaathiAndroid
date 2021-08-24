@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.dashboardreport
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mosl.app.core.exception.ServiceFailureException
@@ -91,11 +92,18 @@ class DashboardReportRepositoryImpl @Inject constructor(
             !header.equals("flg_empcode", ignoreCase = true)
           ) {
             headerData.add(header)
-            values.add(json.get(header).toString())
+            try{
+              val toDouble = json.get(header).toString().toDouble()
+              values.add(toDouble.toBigDecimal().toPlainString())
+
+            }catch (e: NumberFormatException){
+              values.add(json.get(header).toString())
+            }
           }
           hasMap[header] = json.get(header)
             .toString()
         }
+
         data.add(DashboardReportData(setData(values), headerData, hasMap))
       }
       return DashboardReportCombo(headerData, data = data)
