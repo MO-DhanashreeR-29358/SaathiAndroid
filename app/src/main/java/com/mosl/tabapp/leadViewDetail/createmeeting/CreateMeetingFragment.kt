@@ -286,7 +286,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
-        } else {
+        }
+        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
+            && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
+            dpFromDate.minDate = System.currentTimeMillis() - 1000
+        }
+        else {
             dpFromDate.minDate = cal.timeInMillis
         }
         dpFromDate.maxDate = System.currentTimeMillis() - 1000
