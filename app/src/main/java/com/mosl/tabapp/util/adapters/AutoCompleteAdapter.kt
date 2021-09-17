@@ -66,7 +66,10 @@ class AutoCompleteAdapter(
     val name = resultModel.name
     if (name.isEmpty() || name.isBlank()) {
       holderView.llExpand.visibility = View.GONE
+    }else if(name == NO_RECORDS_FOUND){
+      holderView.llDropDownMenuLayout.visibility = View.GONE
     } else {
+      holderView.llDropDownMenuLayout.visibility = View.VISIBLE
       holderView.llExpand.visibility = View.VISIBLE
     }
     if (resultModel.isEmpType(resultModel.searchType)) {
