@@ -98,10 +98,10 @@ class LeadsPresenter @Inject constructor(
                     fltBankName = view.getBank()?.bankName,
                     fltBankBranchCode = view.getBranch()?.branchName,
                     fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
-                    /*fltPeriod = view.getSource()?.value.toString(),*/
-                    fltPeriod = view.getPeriod()?.value.toString(),
+                    fltPeriod = view.getSource()?.value.toString(),
+                    //fltPeriod = view.getPeriod()?.value.toString(),
                     fltProduct = view.getProduct()?.value.toString(),
-                    fltProspect = view.getSource()?.value.toString(),
+                    fltProspect = view.getPeriod()?.value.toString(),
                     fltHierarchy = dashboardModel.dashboardFor
                 )
             )
