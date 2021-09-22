@@ -757,11 +757,15 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }*/
         if (enableLocationGroup) {
             val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            location?.apply {
-                val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
-                if (addressLine.size > 0) {
-                    geoArea = addressLine[0].getAddressLine(0)
+            try {
+                location?.apply {
+                    val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
+                    if (addressLine.size > 0) {
+                        geoArea = addressLine[0].getAddressLine(0)
+                    }
                 }
+            }catch (ex : Exception){
+                ex.printStackTrace()
             }
         }
         println("Geo area found ::: $geoArea")
