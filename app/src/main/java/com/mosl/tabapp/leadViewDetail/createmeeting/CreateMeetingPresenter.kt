@@ -311,7 +311,7 @@ class CreateMeetingPresenter @Inject constructor(
   }
 
     private fun getInputData(): MeetingApptModel {
-        val attendeeList = if (view.getSplAttendeeList()
+        val attendeeList = if (view.getAttendeeList()
                 .isEmpty()
         ) {
             emptyList()
