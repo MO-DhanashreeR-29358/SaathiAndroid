@@ -98,7 +98,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     if (filterList.size == 3) {
       periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
       binding.spPeriod.adapter = periodAdapter
-      periodAdapter.setSpinnerData(binding.spPeriod, filterList[2].filterData)
+      periodAdapter.setSpinnerData(binding.spPeriod, filterList[0].filterData)
       arguments?.let { binding.spPeriod.setSelection(it.getInt(PERIOD_FILTER)) }
 
       productAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
@@ -109,7 +109,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
       sourceAdapter = SpinnerAdapterFactory.getDefaultAdapter(context)
       binding.spSource.adapter = sourceAdapter
-      sourceAdapter.setSpinnerData(binding.spSource, filterList[0].filterData)
+      sourceAdapter.setSpinnerData(binding.spSource, filterList[2].filterData)
       binding.spSource.visibility = View.VISIBLE
       arguments?.let { binding.spSource.setSelection(it.getInt(SOURCE_FILTER)) }
 

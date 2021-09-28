@@ -98,10 +98,9 @@ class LeadsPresenter @Inject constructor(
                     fltBankName = view.getBank()?.bankName,
                     fltBankBranchCode = view.getBranch()?.branchName,
                     fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
-                    fltPeriod = view.getSource()?.value.toString(),
-                    //fltPeriod = view.getPeriod()?.value.toString(),
+                    fltPeriod = view.getPeriod()?.value.toString(),
                     fltProduct = view.getProduct()?.value.toString(),
-                    fltProspect = view.getPeriod()?.value.toString(),
+                    fltProspect = view.getSource()?.value.toString(),
                     fltHierarchy = dashboardModel.dashboardFor
                 )
             )
@@ -116,9 +115,9 @@ class LeadsPresenter @Inject constructor(
                     fltBankBranchCode = view.getBranch()?.branchName,
                     fltBankSubBrokerCode = view.getSubBranch()?.subBrokerName,
                     fltProduct = view.getProduct()?.value.toString(),
-                    fltProspect = view.getPeriod()?.value.toString(),
+                    fltProspect = view.getSource()?.value.toString(),
                     fltHierarchy = dashboardModel.dashboardFor,
-                    fltPeriod = view.getSource()?.value.toString()
+                    fltPeriod = view.getPeriod()?.value.toString()
 
                 ))
         }
