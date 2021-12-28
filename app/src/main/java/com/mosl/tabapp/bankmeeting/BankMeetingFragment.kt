@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.core.utils.toggleVisibility
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -735,20 +736,28 @@ class BankMeetingFragment : CommonFragment() {
             ilMeetingDescription.setErrorMessages()
             tvBankError.toggleTextView(false)
             tvBranchError.toggleTextView(false)
+
+            /*ilMobileNumber.setErrorMessages()
+            ilClientName.setErrorMessages()*/
             ilSubBroker.setErrorMessages()
 //      ilBankEmployee.setErrorMessages()
             tvBankEmployeeError.toggleTextView(false)
             ilSubject.setErrorMessages()
+
         }
     }
 
     private fun getFormInput(): BankMeetingInput {
         var clientNameValue = ""
-        for (a in clientNameAdapter.listProduct) {
-            clientNameValue += if (clientNameValue.isBlank())
-                a.clientName
-            else
-                "," + a.clientName
+        if(clientNameAdapter.listProduct.size==0){
+            clientNameValue=binding.etClientName.text.toString()
+        }else {
+            for (a in clientNameAdapter.listProduct) {
+                clientNameValue += if (clientNameValue.isBlank())
+                    a.clientName
+                else
+                    "," + a.clientName
+            }
         }
         binding.apply {
             return BankMeetingInput(
