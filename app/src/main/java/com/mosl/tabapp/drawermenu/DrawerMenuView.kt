@@ -142,7 +142,8 @@ class DrawerMenuView : FrameLayout {
               menuSection.setHeader(
                   MenuHeaderItem(
                       name,
-                      it.defaultBusinessProfile.branchCode,
+                     // it.defaultBusinessProfile.branchCode,
+                    branchCode,
                       it.imageUrl,
                       closeSelectSubject,
                       menuSelectSubject
