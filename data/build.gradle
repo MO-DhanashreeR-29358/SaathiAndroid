@@ -59,7 +59,6 @@ dependencies {
   implementation deps.okHttp.core
   implementation deps.okHttp.logger
   implementation deps.retrofit.scalar
-  implementation deps.mofslArtifacts.conceal
 
   implementation project(':saathiapi')
   implementation project(':appuser')

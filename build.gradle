@@ -88,13 +88,12 @@ ext.deps = [
         'mofslArtifacts'          : [
                 'validator'   : "MofslTraderArtifacts:validator:1.2.1",
                 'annotation'  : "MofslTraderArtifacts:annotations:2.0.1",
-                'appcore'     : "MofslTraderArtifacts:appcore:1.2.2",
+                'appcore'     : "MofslTraderArtifacts:appcore:1.2.3",
                 'navigator'   : "MofslArtifacts:navigator:1.1.4",
-                'appcoreui'   : "MofslTraderArtifacts:appcoreui:1.2.2",
-                'tableview'   : "MofslTraderArtifacts:tableview:1.1.0",
-                'tableviewx'  : "MofslTraderArtifacts:tableview_extensions:1.1.0",
-                'groupie'     : "MofslTraderArtifacts:groupie_extensions:1.1.2",
-                'conceal'     : "MofslArtifacts:conceal:1.0.0",
+                'appcoreui'   : "MofslTraderArtifacts:appcoreui:1.2.5-alpha1",
+                'tableview'   : "MofslArtifacts:tableview:1.1.0",
+                'tableviewx'  : "MofslArtifacts:tableview_extensions:1.1.0",
+                'groupie'     : "MofslTraderArtifacts:groupie_extensions:1.1.5-alpha1",
                 'tokenmanager': "MofslArtifacts:tokenmanager:1.2.2",
                 'moslcommons' : "MofslTraderArtifacts:moslcommons:1.2.1"
         ],
@@ -166,17 +165,16 @@ ext.deps = [
         'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
         'EkycArtifactDependencies': [
-            'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha4",
-            'core'        : "EkycArtifacts:ekyccore:1.0.0-alpha2",
-            'api'         : "EkycArtifacts:ekycapi:1.0.0",
-            'data'        : "EkycArtifacts:ekycdata:1.0.0-alpha2",
-            'dataResolver': "EkycArtifacts:ekycdataresolver:0.0.5",
-            'domain'      : "EkycArtifacts:ekycdomain:1.0.0",
-            'loginApi'    : "EkycArtifacts:ekycloginapi:1.0.0-alpha1",
-            'loginUi'     : "EkycArtifacts:ekycloginui:1.0.0-alpha2",
-            'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
-            'coreUi'      : "EkycArtifacts:ekyccoreui:1.0.0-alpha2",
-            'appUser'     : "EkycArtifacts:ekycappuser:1.0.0-alpha2"
+            'app'         : "EkycArtifacts:ekycapp:2.7.5",
+            'core'        : "EkycArtifacts:ekyccore:2.3.2",
+            'api'         : "EkycArtifacts:ekycapi:2.2.9",
+            'data'        : "EkycArtifacts:ekycdata:2.4.3",
+            'domain'      : "EkycArtifacts:ekycdomain:2.3.0",
+            'loginApi'    : "EkycArtifacts:ekycloginapi:2.2.4",
+            'loginUi'     : "EkycArtifacts:ekycloginui:2.5.5",
+            'mockData'    : "EkycArtifacts:ekycmockdata:2.3.3",
+            'coreUi'      : "EkycArtifacts:ekyccoreui:2.3.4",
+            'appUser'     : "EkycArtifacts:ekycappuser:2.3.6"
         ]
 
 ]

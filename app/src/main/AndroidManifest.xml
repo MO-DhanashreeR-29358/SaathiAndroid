@@ -30,6 +30,10 @@
         <package android:name="com.mosl.mobile.modao" />
     </queries>
 
+    <queries>
+        <package android:name="com.nsdl.egov.sdkEsignAuth" />
+    </queries>
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />

@@ -234,7 +234,7 @@ dependencies {
     implementation deps.groupie.dataBinding
 
     implementation deps.picasso
-    implementation deps.mofslArtifacts.conceal
+
     implementation deps.mofslArtifacts.tokenmanager
     implementation deps.mofslArtifacts.navigator
 
@@ -251,9 +251,6 @@ dependencies {
         exclude group: 'MofslArtifacts'
     }
     implementation(deps.EkycArtifactDependencies.data) {
-        exclude group: 'MofslArtifacts'
-    }
-    implementation(deps.EkycArtifactDependencies.dataResolver) {
         exclude group: 'MofslArtifacts'
     }
     implementation(deps.EkycArtifactDependencies.core) {

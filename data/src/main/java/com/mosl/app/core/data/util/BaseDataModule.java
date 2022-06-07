@@ -2,11 +2,13 @@ package com.mosl.app.core.data.util;
 
 import android.content.Context;
 
+/*
 import com.facebook.android.crypto.keychain.AndroidConceal;
 import com.facebook.android.crypto.keychain.SharedPrefsBackedKeyChain;
 import com.facebook.crypto.Crypto;
 import com.facebook.crypto.CryptoConfig;
 import com.facebook.soloader.SoLoader;
+*/
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mosl.app.core.data.MOSLResponseWrapper;
@@ -105,7 +107,7 @@ public abstract class BaseDataModule {
     static HttpListenerFactory provideEventListenerFactory() {
         return HttpListenerFactory.INSTANCE;
     }
-
+/*
     @Singleton @Provides static Crypto provideCrypto(Context context) {
         try {
             SoLoader.init(context, false);
@@ -117,5 +119,5 @@ public abstract class BaseDataModule {
         Crypto crypto = AndroidConceal.get().createDefaultCrypto(keyChain);
         Timber.e("Crypto status, enabled : %s", crypto.isAvailable());
         return crypto;
-    }
+    }*/
 }
