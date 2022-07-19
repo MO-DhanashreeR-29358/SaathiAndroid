@@ -178,6 +178,22 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
                 identifier = 26
                 R.string.error_message_pincode
             }
+            input.branchCode == MOSLConstants.BRANCH_CODE_FSFBMAIN &&
+                    input.referaalCode.isNotBlank() && input.referaalCode.length < 6 -> {
+                identifier = 29
+                R.string.error_message_invalid_referaal_code
+            }
+
+            input.panNo.isBlank() &&
+                    input.branchCode == MOSLConstants.BRANCH_CODE_CBIMAIN -> {
+                identifier = 30
+                R.string.error_message_enter_pan
+            }
+            input.panNo.isBlank() &&
+                    input.branchCode == MOSLConstants.BRANCH_CODE_FSFBMAIN  -> {
+                identifier = 31
+                R.string.error_message_enter_pan
+            }
             else -> {
                 identifier = 0
                 null

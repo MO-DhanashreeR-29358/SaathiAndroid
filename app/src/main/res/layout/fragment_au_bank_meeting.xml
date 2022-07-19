@@ -248,14 +248,72 @@
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="sp_branch,tv_branch_error" />
 
+            <TextView
+                android:id="@+id/tv_bank_branch_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/text_label_bank_branch"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_branch" />
+
+            <Spinner
+                android:id="@+id/sp_bank_branch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bank_branch_label" />
+
+            <TextView
+                android:id="@+id/tv_bank_branch_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textColor="@color/error_red"
+                android:textSize="@dimen/_10sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/sp_bank_branch" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_bank_branch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="sp_bank_branch,tv_bank_branch_error" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/il_bank_branch_other"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false"
+                android:visibility="gone"
+                app:hintTextAppearance="@style/InputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/barrier_bank_branch">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_bank_branch_other"
+                    style="@style/Widget.AppCompat.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_50sdp"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
+                    android:hint="@string/text_hint_label_enter_bank_branch_other"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_sub_broker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false"
+                android:layout_marginTop="@dimen/_10sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/barrier_branch">
+                app:layout_constraintTop_toBottomOf="@+id/il_bank_branch_other">
 
                 <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_sub_broker"
@@ -360,7 +418,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
-                il_sub_broker,ll_bank_employee"
+                tv_bank_branch_label,sp_bank_branch,il_sub_broker,ll_bank_employee, il_bank_branch_other"
                 tools:visibility="visible" />
 
             <com.google.android.material.textfield.TextInputLayout

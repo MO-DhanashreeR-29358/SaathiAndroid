@@ -24,11 +24,14 @@ data class CreateLeadRequest(
   @SerializedName("ProspectRefereEmail") val ProspectRefereEmail: String = "",
   @SerializedName("CreationDate") val creationDate: String = "",
   @SerializedName("contact") private val contact: CreateLeadContact,
-  @SerializedName("leadProductMapping") private val productMapping: List<CreateLeadProduct>
+  @SerializedName("leadProductMapping") private val productMapping: List<CreateLeadProduct>,
+    @SerializedName("ReferralEmpCode") val referralEmpCode: String = ""
 )
 
 data class CreateLeadContact(
   @SerializedName("Name") val name: String = "",
+  @SerializedName("DOB") val dob: String = "",
+  @SerializedName("BANKACCNO") val bankAccountNumber: String = "",
   @SerializedName("EmailId") val eMail: String = "",
   @SerializedName("AlternateEmailId") val alternateEmail: String = "",
   @SerializedName("AlternateMobileNo") val alternateMobileNo: String = "",

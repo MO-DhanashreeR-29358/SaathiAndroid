@@ -46,5 +46,9 @@ data class LeadCreationUserInput(
     @JvmField val clientCode: String? = null,
     @JvmField val residenceAdd: AddressDetailModel,
     @JvmField val officeAdd: AddressDetailModel,
-    @JvmField val isBank: Boolean
+    @JvmField val isBank: Boolean,
+    @JvmField val branchCode : String,
+    @JvmField val referaalCode : String,
+    @JvmField val BankAccountNumber : String,
+    @JvmField val dob : String
 )

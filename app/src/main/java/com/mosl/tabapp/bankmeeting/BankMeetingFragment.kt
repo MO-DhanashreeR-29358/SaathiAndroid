@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.rx.applyUiModel
@@ -53,10 +54,12 @@ class BankMeetingFragment : CommonFragment() {
     private var arrMeetingDuration = ArrayList<RowData>()
     private var arrBank = ArrayList<RowData>()
     private var arrBranch = ArrayList<RowData>()
+    private var arrBankBranch = ArrayList<RowData>()
     private lateinit var meetingTypeAdapter: ArrayAdapter<RowData>
     private lateinit var meetingDurationAdapter: ArrayAdapter<RowData>
     private lateinit var bankAdapter: ArrayAdapter<RowData>
     private lateinit var branchAdapter: ArrayAdapter<RowData>
+    private lateinit var bankBranchAdapter: ArrayAdapter<RowData>
     private var subBrokerId = -1
     private lateinit var clientNameList: ArrayList<MeetingClientName>
     private lateinit var clientNameAdapter: ClientNameAdapter
@@ -174,7 +177,8 @@ class BankMeetingFragment : CommonFragment() {
         ) {
             try {
                 binding.tvBankError.visibility = View.GONE
-                callBranchList()
+                callBranchList(arrBank[position].key)
+                callBankBranchList(arrBank[position].key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -185,7 +189,7 @@ class BankMeetingFragment : CommonFragment() {
         }
     }
 
-    private val bankBranchListener = object : AdapterView.OnItemSelectedListener {
+    private val branchListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(
             parent: AdapterView<*>,
             view: View,
@@ -218,6 +222,35 @@ class BankMeetingFragment : CommonFragment() {
 
         }
     }
+
+    private val bankBranchListener = object : AdapterView.OnItemSelectedListener {
+        override fun onItemSelected(
+            parent: AdapterView<*>,
+            view: View,
+            position: Int,
+            id: Long
+        ) {
+            try {
+                binding.tvBankBranchError.visibility = View.GONE
+                if (getSelectedBankBranch().value == "Others") {
+                    binding.apply {
+                        ilBankBranchOther.visibility = View.VISIBLE
+                        resetError()
+                    }
+
+                } else {
+                    binding.ilBankBranchOther.visibility = View.GONE
+                }
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
+
+        override fun onNothingSelected(parent: AdapterView<*>) {
+
+        }
+    }
+
 
     private fun openDatePicker() {
         val cal = Calendar.getInstance()
@@ -277,7 +310,7 @@ class BankMeetingFragment : CommonFragment() {
     }
 
     private fun dialogBankEmployee() {
-        val dialogAttendeeList = Dialog(getContext()!!)
+        val dialogAttendeeList = Dialog(requireContext())
         dialogAttendeeList.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogAttendeeList.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogAttendeeList.setContentView(layout.dialog_attendee_list)
@@ -334,7 +367,7 @@ class BankMeetingFragment : CommonFragment() {
     }
 
     private fun dialogAddedEmployee() {
-        val dialogAddedAttendee = Dialog(getContext()!!)
+        val dialogAddedAttendee = Dialog(requireContext())
         dialogAddedAttendee.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialogAddedAttendee.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialogAddedAttendee.setContentView(layout.dialog_added_bank_employee_list)
@@ -487,19 +520,36 @@ class BankMeetingFragment : CommonFragment() {
         }
     }
 
-    private fun callBranchList() {
+    private fun callBranchList(strBankId : String) {
+        var bankId = if(strBankId.isNotEmpty()) strBankId.toInt() else 0
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             val request =
                 BankRequest(
-                    bankId = 1
+                    bankId = bankId
                 )
-            disposable.add(saathiApi.getBankBranchList(request)
+            disposable.add(saathiApi.getBranchList(request)
                 .compose(applyUiModel())
                 .subscribe { this.renderBranch(it) })
         } else {
             noInternetConnectionDialog()
         }
     }
+
+    private fun callBankBranchList(strBankId : String) {
+        var bankId = if(strBankId.isNotEmpty()) strBankId.toInt() else 0
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            val request =
+                BankRequest(
+                    bankId = bankId
+                )
+            disposable.add(saathiApi.getBankBranchList(request)
+                .compose(applyUiModel())
+                .subscribe { this.renderBankBranch(it) })
+        } else {
+            noInternetConnectionDialog()
+        }
+    }
+
 
     private fun renderBranch(uiModel: UiModel<List<BranchListResponse>>) {
         toggleProgress(uiModel.inProgress)
@@ -512,7 +562,7 @@ class BankMeetingFragment : CommonFragment() {
             arrBranch.clear()
             arrBranch.add(RowData(0, "-1", MOSLConstants.SELECT_BRANCH))
             for (i in data.indices) {
-                val (branchName, branchId, _, _, _, _, _) = data[i]
+                val (branchName,_, branchId, _, _, _, _, _) = data[i]
                 val id = stringOrEmpty(branchId.toString())
                 val name = stringOrEmpty(branchName)
                 arrBranch.add(RowData(i + 1, id, name))
@@ -524,6 +574,34 @@ class BankMeetingFragment : CommonFragment() {
             branchAdapter.setDropDownViewResource(layout.mdropdown)
             binding.spBranch.apply {
                 adapter = branchAdapter
+                onItemSelectedListener = branchListener
+            }
+        }
+    }
+
+    private fun renderBankBranch(uiModel: UiModel<List<BranchListResponse>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { error ->
+            arrBankBranch.clear()
+            showOnFailurePopup(error)
+        }
+        uiModel.onSuccess { data ->
+            arrBankBranch.clear()
+            arrBankBranch.add(RowData(0, "-1", MOSLConstants.SELECT_BANK_BRANCH))
+            for (i in data.indices) {
+                val (_,bankBranchName, branchId, _, _, _, _, _) = data[i]
+                val id = stringOrEmpty(branchId.toString())
+                val name = stringOrEmpty(bankBranchName)
+                arrBankBranch.add(RowData(i + 1, id, name))
+            }
+            bankBranchAdapter = ArrayAdapter(
+                requireContext(),
+                layout.simple_spinner_item, arrBankBranch
+            )
+            bankBranchAdapter.setDropDownViewResource(layout.mdropdown)
+            binding.spBankBranch.apply {
+                adapter = bankBranchAdapter
                 onItemSelectedListener = bankBranchListener
             }
         }
@@ -575,9 +653,12 @@ class BankMeetingFragment : CommonFragment() {
         if (constraint == null) return
         val profileRequest: SubBrokerRequest
         try {
+           val bankId = if (binding.spBank.isSpinnerVisible()) getSelectedBank().key else "-1"
+            val branchId = if (binding.spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1"
+
             profileRequest = SubBrokerRequest(
-                URLEncoder.encode("1", "utf-8"),
-                URLEncoder.encode("1"/*getSelectedBranch().value*/, "utf-8"),
+                URLEncoder.encode(bankId, "utf-8"),
+                URLEncoder.encode(branchId, "utf-8"),
                 URLEncoder.encode(constraint.toString(), "utf-8")
             )
         } catch (e: UnsupportedEncodingException) {
@@ -646,7 +727,9 @@ class BankMeetingFragment : CommonFragment() {
     private fun getMeetingDescription(): String {
         return binding.etMeetingDescription.text.toString()
     }
-
+    private fun getBankBranchName(): String {
+        return binding.etBankBranchOther.text.toString()
+    }
     private fun getSelectedBank(): RowData {
         return binding.spBank.selectedItem as RowData
     }
@@ -654,7 +737,9 @@ class BankMeetingFragment : CommonFragment() {
     private fun getSelectedBranch(): RowData {
         return binding.spBranch.selectedItem as RowData
     }
-
+    private fun getSelectedBankBranch(): RowData {
+        return binding.spBankBranch.selectedItem as RowData
+    }
     private fun getSubBroker(): Int {
         return subBrokerId
     }
@@ -712,11 +797,13 @@ class BankMeetingFragment : CommonFragment() {
     private fun resetFields() {
         binding.apply {
             etMeetingDescription.setText("")
+            etBankBranchOther.setText("")
             tvDate.setText("")
             spMeetingType.setSelection(0)
             spMeetingDuration.setSelection(0)
             spBank.setSelection(0)
             spBranch.setSelection(0)
+            spBankBranch.setSelection(0)
             actvSubBroker.setText("")
             subBrokerId = -1
 //      actvBankEmployee.setText("")
@@ -736,13 +823,14 @@ class BankMeetingFragment : CommonFragment() {
             ilMeetingDescription.setErrorMessages()
             tvBankError.toggleTextView(false)
             tvBranchError.toggleTextView(false)
-
+            tvBankBranchError.toggleTextView(false)
             /*ilMobileNumber.setErrorMessages()
             ilClientName.setErrorMessages()*/
             ilSubBroker.setErrorMessages()
 //      ilBankEmployee.setErrorMessages()
             tvBankEmployeeError.toggleTextView(false)
             ilSubject.setErrorMessages()
+            ilBankBranchOther.setErrorMessages()
 
         }
     }
@@ -766,7 +854,7 @@ class BankMeetingFragment : CommonFragment() {
                 meetingDurationId = getMeetingDuration().key,
                 meetingDescription = getMeetingDescription(),
                 bankId = if (spBank.isSpinnerVisible()) getSelectedBank().key else "-1",
-                bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
+                branchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
                 disabledFields = if (spBranch.isSpinnerVisible()) getSelectedBranch().value == "Other" else false,
                 subBrokerId = getSubBroker(),
                 bankEmployeeCode = getBankEmployee(),
@@ -774,8 +862,9 @@ class BankMeetingFragment : CommonFragment() {
                 isSubjectVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Training"),
                 isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Client Meeting"),
                 clientMobileNumber = getMobileNumber(),
-                clientName = clientNameValue
-
+                clientName = clientNameValue,
+                bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
+                bankBranchName = getBankBranchName()
             )
         }
     }

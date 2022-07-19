@@ -13,7 +13,7 @@ data class SaathiCommonResponse<T>(
     get() = status
 
   fun getMessage(): String {
-    return errors?.let { it[0].message } ?: "An Error Occurred"
+    return if(errors!= null && errors.isNotEmpty()) errors?.let { it[0].message }  else "An Error Occurred"
   }
 }
 

@@ -30,6 +30,7 @@ import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.DELETE_REQUEST_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
@@ -69,6 +70,10 @@ object MenuGetterNew {
 
             NavigationConstants.NAVIGATE_TO_SIP -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, SIP_ID)
+                arguments = args
+            }
+            NavigationConstants.NAVIGATE_TO_DELETE_REQUEST -> WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, DELETE_REQUEST_ID)
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_PRIME_ENTRY -> WebviewFragment().apply {
@@ -144,6 +149,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_PENDING_ESIGN -> true
+            NavigationConstants.NAVIGATE_TO_DELETE_REQUEST -> true
             else -> return false
         }
     }

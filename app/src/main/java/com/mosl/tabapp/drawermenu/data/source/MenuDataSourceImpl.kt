@@ -48,6 +48,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -70,6 +71,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -146,6 +148,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -169,6 +172,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -201,6 +205,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return arrayListOf(
             getDashboard(),
             getOpenAccount(),
+            getDeleteRequest(),
             getLogout()
         )
     }
@@ -213,6 +218,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -232,6 +238,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -372,7 +379,14 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-
+    private fun getDeleteRequest(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_delete,
+            label = R.string.MOSL_MENU_DELETE_REQUEST,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_DELETE_REQUEST
+        )
+    }
     private fun getEModification(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_emodification,

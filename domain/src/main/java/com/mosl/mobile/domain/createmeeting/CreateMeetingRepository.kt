@@ -22,7 +22,7 @@ interface CreateMeetingRepository {
     fun getFranchiseIFAUserData(): Observable<Pair<List<LookUp>, List<LookUp>>>
     fun getAttendeeData(searchText: String): Observable<List<Attendee>>
     fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
-    fun sendOTP(data: OTPRequestData): Observable<String>
+    fun sendOTP(data: OTPRequestData): Observable<SendOtpResponse>
     fun saveRequest(data: String): Observable<AddUpdateMeeting>
     fun getMobileList(
         ucid: String,

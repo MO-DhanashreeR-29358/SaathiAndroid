@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LeadCreationContact {
+    @SerializedName("DOB") private String dob;
+    @SerializedName("BANKACCNO") private String bankAccountNumber;
     @SerializedName("Name") private String name;
     @SerializedName("EmailId") private String eMail;
     @SerializedName("AlternateEmailId") private String alternateEmail;
@@ -16,6 +18,22 @@ public class LeadCreationContact {
     @SerializedName("AadharNumber") private String aadharNo;
     @SerializedName("IsSameAsAbove") private boolean sameAsAbove;
     @SerializedName("contactAddress") private List<AddressDetailModel> addresses;
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    public void setBankAccountNumber(String bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
+    }
 
     public String getName() {
         return name;

@@ -37,7 +37,8 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         prospectRefereName = model.prospectRefereName,
         prospectRefereMobile = model.prospectRefereMobile,
         productMapping = listOfCreateLeadProduct,
-        contact = leadContact
+        contact = leadContact,
+        referralEmpCode = model.referralEmpCode
     )
 }
 
@@ -46,6 +47,8 @@ private fun LeadCreationContact.mapToCreateLeadContact(): CreateLeadContact {
 
     return CreateLeadContact(
         name,
+        dob,
+        bankAccountNumber,
         geteMail(),
         alternateEmail,
         alternateMobileNo,
@@ -86,6 +89,9 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         setEkycMobileNo(ekycMobileNo)
         setPanNo(panNo)
         setAadharNo(aadharNo)
+        setDob(dob)
+        setBankAccountNumber(BankAccountNumber)
+        referralEmpCode = referaalCode
         setBusinessUnitID(user?.currentBusinessProfile?.businessUnitId)
         setLeadCategoryID(selectedCategory.key)
         setBranchCode(selectedBranch.branchName)

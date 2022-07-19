@@ -6,6 +6,8 @@ data class BranchListResponse(
 
   @JvmField @SerializedName("BranchName") val branchName: String,
 
+  @JvmField @SerializedName("BankBranchName") val bankBranchName: String,
+
   @JvmField @SerializedName("BankBranchId") val bankBranchId: Int,
 
   @JvmField @SerializedName("Status") val status: Int,

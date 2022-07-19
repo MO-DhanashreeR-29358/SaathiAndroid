@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding4.widget.checkedChanges
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
@@ -31,6 +33,7 @@ import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SelectBank
 import com.mosl.mobile.domain.bank.SelectBranch
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.DedupeModelResponse
@@ -58,12 +61,7 @@ import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
-import com.mosl.tabapp.util.SpinnerAdapterFactory
-import com.mosl.tabapp.util.disableErrorMessages
-import com.mosl.tabapp.util.emptyString
-import com.mosl.tabapp.util.gone
-import com.mosl.tabapp.util.setErrorMessages
-import com.mosl.tabapp.util.visible
+import com.mosl.tabapp.util.*
 import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
@@ -134,6 +132,10 @@ class LeadCreationFragment : CommonFragment(),
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
 
     private val selectedList = ArrayList<RowData>()
+
+    @Inject
+    @field:BranchCode
+    lateinit var branchCodePreference: StringPreference
 
     override fun getLayout(): Int = R.layout.fragment_lead_creation
 
@@ -421,6 +423,37 @@ class LeadCreationFragment : CommonFragment(),
             } else {
                 binding.groupBank.visibility = View.GONE
             }
+        }
+
+        //this fields only required for indusand bank development
+        binding.ilDOB.visibility = View.GONE
+        binding.ilAccountNumber.visibility = View.GONE
+
+        if(branchCodePreference.get().equals(BRANCH_CODE_FSFBMAIN) || branchCodePreference.get().equals(BRANCH_CODE_CBIMAIN)){
+            binding.ilReferaalCode.visibility =View.VISIBLE
+            binding.etPanNum.hint = getString(R.string.hint_lead_creation_pan_mandatory)
+            if(branchCodePreference.get().equals(BRANCH_CODE_CBIMAIN)){
+                binding.ilReferaalCode.visibility =View.GONE
+            }
+        }else{
+            binding.ilReferaalCode.visibility =View.GONE
+            binding.etPanNum.hint = getString(R.string.hint_lead_creation_pan)
+        }
+
+        val filterArray = arrayOf(InputFilter.LengthFilter(10))
+        binding.etDOB.apply {
+            filters = filterArray
+            DateInputMask(this).listen()
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    this.hint = context.getString(R.string.hint_lead_creation_date_format)
+                } else {
+                    this.hint = ""
+                    if (!text.isNullOrEmpty() && text?.length == 10) {
+                    }
+                }
+            }
+
         }
 
     }
@@ -896,6 +929,15 @@ class LeadCreationFragment : CommonFragment(),
                 26 -> {
                     binding.tilOffPin.setErrorMessages(getString(it))
                 }
+                29 -> {
+                    binding.tilReferaalCode.setErrorMessages(getString(it))
+                }
+                30 -> {
+                    binding.tilPan.setErrorMessages(getString(it))
+                }
+                31 -> {
+                    binding.tilPan.setErrorMessages(getString(it))
+                }
                 else -> {
                 }
 
@@ -977,11 +1019,8 @@ class LeadCreationFragment : CommonFragment(),
                     }
                 }
             } else if (response != null) {
-                val dedupeModel =
-                    response.dedupeModel
-                if (dedupeModel != null && data.errors != null) {
-                    dedupeDialog(dedupeModel)
-                } else if (data.errors != null) {
+                val dedupeModel = response.dedupeModel
+                if (data.errors != null) {
                     val errorMsg = data.errors!![0]
                         .message
                     MSFDialog.alertDialog(
@@ -989,6 +1028,8 @@ class LeadCreationFragment : CommonFragment(),
                         getString(string.motilal_oswal),
                         errorMsg, "OK", true, null
                     )
+                } else if (dedupeModel != null && data.errors != null) {
+                    dedupeDialog(dedupeModel)
                 }
             }
         }
@@ -1203,7 +1244,11 @@ class LeadCreationFragment : CommonFragment(),
             statusId = binding.spStatus.selectedItem as RowData,
             residenceAdd = resAdd,
             officeAdd = offAdd,
-            isBank = userManager.getUser()?.isBank ?: false
+            isBank = userManager.getUser()?.isBank ?: false,
+            branchCode = branchCodePreference.get(),
+            referaalCode = binding.etReferaalCode.text.toString(),
+            dob = binding.etDOB.text.toString(),
+            BankAccountNumber = binding.etAccountNumber.text.toString()
         )
     }
 

@@ -21,7 +21,7 @@ interface CreateMeetingView : BaseView {
     isAttendee: Boolean
   )
 
-  fun renderOTP(uiModel: UiModel<String>)
+  fun renderOTP(uiModel: UiModel<SendOtpResponse>)
   fun onTravellingModeSelected(): Observable<Int>
   fun onMeetingLocationSelected(): Observable<Int>
   fun onMeetingReasonSelected(): Observable<Int>

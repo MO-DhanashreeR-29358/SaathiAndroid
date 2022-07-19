@@ -14,5 +14,7 @@ data class MeetingSaveRequest(
     @JvmField @SerializedName("Subject") val subject: String,
     @JvmField @SerializedName("ClientName") val clientName: String,
     @JvmField @SerializedName("BankEmployeeCode") val bankEmployeeCode: String,
-    @JvmField @SerializedName("MobileNumber") val clientMobileNumber: String
+    @JvmField @SerializedName("MobileNumber") val clientMobileNumber: String,
+    @JvmField @SerializedName("BankBranchIDwithIFSC") val bankBranchIdWithIFSC: String,
+    @JvmField @SerializedName("OtherBranchName") val otherBranchName: String
 )

@@ -446,6 +446,11 @@ class WebviewFragment : CommonFragment() {
                     Pair(it.url, webViewRequest.id)
                 }
             }
+            DELETE_REQUEST_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(DELETE_REQUEST_KEY, null, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null, null)
@@ -501,5 +506,7 @@ class WebviewFragment : CommonFragment() {
         const val RESUME_LAS_APPLICATION_KEY = "ExistingLASaccount"
         const val PRIME_ENTRY_ID = "14"
         const val PRIME_ENTRY_KEY = "PrimeEntry"
+        const val DELETE_REQUEST_ID = "15"
+        const val DELETE_REQUEST_KEY = "LEADUPDATEUTILITY"
     }
 }

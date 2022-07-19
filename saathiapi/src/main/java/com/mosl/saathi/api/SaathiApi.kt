@@ -150,7 +150,7 @@ interface SaathiApi {
     @POST("Meeting/StartMeeting")
     fun getStartMeeting(
         @Body request: SendOTPRequest
-    ): Observable<String>
+    ): Observable<SaathiCommonResponse<String>>
 
     @POST("Meeting/GetMobileList")
     fun getMobileList(
@@ -671,6 +671,9 @@ interface SaathiApi {
     fun getBankList(@Body request: BankRequest): Observable<List<BankListResponse>>
 
     @POST("BankMeeting/GetBankBranchList")
+    fun getBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
+
+    @POST("BankMeeting/GetBankBranchNameList")
     fun getBankBranchList(@Body request: BankRequest): Observable<List<BranchListResponse>>
 
     @POST("Master/GetAllLookupMaster")

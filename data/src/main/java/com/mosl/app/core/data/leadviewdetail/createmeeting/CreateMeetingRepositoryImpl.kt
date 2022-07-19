@@ -1,11 +1,14 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapToSendOtpResponse
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformMobileList
+import com.mosl.app.core.data.pendingapproval.report.mapToMultiUpdateApprovalresponse
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
@@ -154,7 +157,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
             .map { CreateMeetingMapper.transformAttendeeData(it) }
     }
 
-    override fun sendOTP(data: OTPRequestData): Observable<String> {
+    override fun sendOTP(data: OTPRequestData): Observable<SendOtpResponse> {
         val request = SendOTPRequest(
             employeeCode = userManager.getUser()!!.employeeCode,
             latitude = data.latitude,
@@ -166,6 +169,9 @@ class CreateMeetingRepositoryImpl @Inject constructor(
 
         )
         return saathiApi.getStartMeeting(request)
+            .map {
+                mapToSendOtpResponse(it.status, it.getMessage())
+            }
     }
 
     fun getType(type: Int): String {

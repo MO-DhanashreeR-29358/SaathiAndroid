@@ -14,9 +14,11 @@ import com.mosl.app.coreui.dialog.BaseDialogFragment
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.createmeeting.SendOtpResponse
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.navigator.Navigator
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.lead.SubmitOTPResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
@@ -112,7 +114,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     }
 
-    private fun renderResendOTP(uiModel: UiModel<String>) {
+    private fun renderResendOTP(uiModel: UiModel<SaathiCommonResponse<String>>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {

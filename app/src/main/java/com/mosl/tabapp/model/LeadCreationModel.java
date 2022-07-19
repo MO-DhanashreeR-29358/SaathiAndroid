@@ -33,6 +33,7 @@ public class LeadCreationModel implements Serializable {
     @SerializedName("ProspectRefereMobile") private String prospectRefereMobile = "";
     @SerializedName("ProspectRefereEmail") private String ProspectRefereEmail = "";
     @SerializedName("CreationDate") private String creationDate;
+    @SerializedName("ReferralEmpCode") private String referralEmpCode = "";
     @SerializedName("contact") private LeadCreationContact contact = new LeadCreationContact();
     @SerializedName("leadProductMapping") private LeadCreationProductMapping productMapping =
         new LeadCreationProductMapping();
@@ -40,6 +41,14 @@ public class LeadCreationModel implements Serializable {
     private transient List<ContactDetailModel> contactDetailModels;
     private transient List<AddressDetailModel> addressDetailModels;
     private transient List<LeadCreationProductMapping> productDetailModels;
+
+    public String getReferralEmpCode() {
+        return referralEmpCode;
+    }
+
+    public void setReferralEmpCode(String referralEmpCode) {
+        this.referralEmpCode = referralEmpCode;
+    }
 
     public void setAlternateMobileNo(String alternateMobileNo) {
         contact.setAlternateMobileNo(alternateMobileNo);
@@ -55,6 +64,13 @@ public class LeadCreationModel implements Serializable {
 
     public void seteMail(String eMail) {
         contact.seteMail(eMail);
+    }
+
+    public void setDob(String dob) {
+        contact.setDob(dob);
+    }
+    public void setBankAccountNumber(String accno) {
+        contact.setBankAccountNumber(accno);
     }
 
     public void setAlternateEmail(String alternateEmail) {

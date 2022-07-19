@@ -140,7 +140,8 @@ public interface MOSLConstants extends LabelConfig {
     String APPT_CANCELLED = "Appointment cancelled successfully";
     String SELECT_MEETING_DURATION = "Select Meeting Duration";
     String SELECT_BANK = "Select Bank";
-    String SELECT_BRANCH = "Select Bank Branch";
+    String SELECT_BRANCH = "Select Branch";
+    String SELECT_BANK_BRANCH = "Select Bank Branch";
     String SELECT_MEETING_REASON = "Select Meeting Reason";
     String SELECT_PRODUCT = "Select Product";
     String SELECT_PROFILE = "Select Profile";
@@ -267,6 +268,8 @@ public interface MOSLConstants extends LabelConfig {
     String ENTER_EMAIL_ID = "Enter email id.";
     String ENTER_MOBILE_NUMBER = "Enter mobile number";
     String WEBSITE_PROSPECT_REFERRAL = "Website-ProspectReferral";
+    String BRANCH_CODE_FSFBMAIN = "FSFBMAIN";
+    String BRANCH_CODE_CBIMAIN = "CBIMAIN";
     String MOCK_LOCATION_ENABLED_MSG =
             "Mocked location enabled. Please uninstall mock location apps to continue ";
 

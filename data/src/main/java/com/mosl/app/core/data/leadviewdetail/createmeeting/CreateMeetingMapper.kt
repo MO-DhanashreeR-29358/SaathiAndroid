@@ -2,6 +2,7 @@ package com.mosl.app.core.data.leadviewdetail.createmeeting
 
 import com.mosl.app.core.data.util.addDefaultSelection
 import com.mosl.mobile.domain.createmeeting.*
+import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
@@ -78,6 +79,16 @@ object CreateMeetingMapper {
         return AddUpdateMeeting(
             leadId = addUpdateMeetingItem.leadId ?: 0,
             ucidId = addUpdateMeetingItem.uCID ?: 0
+        )
+    }
+
+    fun mapToSendOtpResponse(
+        status: Boolean,
+        error: String
+    ): SendOtpResponse {
+        return SendOtpResponse(
+            status = status,
+            errorMessage = error
         )
     }
 }

@@ -1301,15 +1301,21 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             .show()
     }
 
-    override fun renderOTP(uiModel: UiModel<String>) {
+    override fun renderOTP(uiModel: UiModel<SendOtpResponse>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure { showOnFailurePopup(it) }
 
         uiModel.onSuccess {
-            Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
-                .show()
-            binding.btnSendOtp.setText(string.btn_label_verify_otp)
+            if(it.status ){
+                Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
+                    .show()
+                binding.btnSendOtp.setText(string.btn_label_verify_otp)
+            }else{
+                Toast.makeText(requireContext(), it.errorMessage, Toast.LENGTH_SHORT)
+                    .show()
+            }
+
         }
     }
 
