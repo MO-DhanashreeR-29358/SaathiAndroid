@@ -11,10 +11,10 @@
       "type": "SINGLE",
       "filters": [],
       "properties": [],
-      "versionCode": 211,
-      "versionName": "2.1.1",
+      "versionCode": 214,
+      "versionName": "2.1.4",
       "enabled": true,
-      "outputFile": "app-prodRelease-2.1.1.apk"
+      "outputFile": "app-prodRelease-2.1.4.apk"
     }
   ]
 }

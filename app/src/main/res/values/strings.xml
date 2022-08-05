@@ -292,6 +292,8 @@
     <string name="text_hint_label_enter_bank_branch_other">Enter Other Branch*</string>
     <string name="text_hint_label_enter_sub_broker">Enter SubBroker*</string>
     <string name="text_hint_label_enter_bank_employee">Enter Bank Employee*</string>
+    <string name="text_hint_label_enter_mosl_employee">Enter MOFSL Employee*</string>
+
     <string name="text_hint_label_enter_subject">Enter Subject*</string>
     <string name="text_hint_label_enter_client">Enter Client Name*</string>
     <string name="text_label_add">Add</string>

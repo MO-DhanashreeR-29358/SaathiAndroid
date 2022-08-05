@@ -82,3 +82,9 @@ data class SendOtpResponse(
   @JvmField val status: Boolean,
   @JvmField val errorMessage: String
 )
+
+data class CommanResponse(
+  @JvmField val response: String?,
+  @JvmField val status: Boolean,
+  @JvmField val errorMessage: String
+)

@@ -691,6 +691,7 @@ interface SaathiApi {
         @Body request: BankEmployeeRequest
     ): Observable<List<BankEmployeeResponse>>
 
+    @ExtraDataWrapper
     @POST("BankMeeting/InserBankMeeting")
     fun inserBankMeeting(
         @Body request: MeetingSaveRequest

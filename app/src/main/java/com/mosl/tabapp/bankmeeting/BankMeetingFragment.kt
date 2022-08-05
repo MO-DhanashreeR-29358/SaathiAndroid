@@ -13,11 +13,12 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
-import com.mosl.app.core.utils.toggleVisibility
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -43,6 +44,8 @@ import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
+import org.json.JSONObject
+import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
@@ -178,7 +181,6 @@ class BankMeetingFragment : CommonFragment() {
             try {
                 binding.tvBankError.visibility = View.GONE
                 callBranchList(arrBank[position].key)
-                callBankBranchList(arrBank[position].key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -213,6 +215,7 @@ class BankMeetingFragment : CommonFragment() {
                 } else {
                     binding.etClientName.isEnabled = true
                 }
+                callBankBranchList(getSelectedBank().key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -561,6 +564,7 @@ class BankMeetingFragment : CommonFragment() {
         uiModel.onSuccess { data ->
             arrBranch.clear()
             arrBranch.add(RowData(0, "-1", MOSLConstants.SELECT_BRANCH))
+            val bankId = if(data.size > 0) data.get(0).bankId.toString()  else "-1"
             for (i in data.indices) {
                 val (branchName,_, branchId, _, _, _, _, _) = data[i]
                 val id = stringOrEmpty(branchId.toString())
@@ -576,6 +580,7 @@ class BankMeetingFragment : CommonFragment() {
                 adapter = branchAdapter
                 onItemSelectedListener = branchListener
             }
+
         }
     }
 
@@ -768,30 +773,48 @@ class BankMeetingFragment : CommonFragment() {
         resetError()
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             if (getFormInput().validateForm(binding)) {
-                disposable.add(saathiApi.inserBankMeeting(transformInput(getFormInput()))
+
+                 saathiApi.inserBankMeeting(transformInput(getFormInput()))
                     .compose(applyUiModel())
-                    .subscribe { this.render(it) })
+                    .subscribe(this::render)
+
+
+
             }
         } else {
             noInternetConnectionDialog()
         }
     }
 
-    private fun render(uiModel: UiModel<String>) {
-        toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { error ->
-            arrBranch.clear()
-            showOnFailurePopup(error)
+
+    private fun render(uiModel:UiModel<String> ) {
+
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
         }
-        uiModel.onSuccess { _ ->
-            alertDialog(
-                requireContext(), 0,
-                resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
-                "OK", true, null
-            )
-            resetFields()
+        uiModel.onSuccess {
+            val jsonObject = JSONObject(it)
+            val status: Boolean = jsonObject.getBoolean(MOSLConstants.STATUS)
+            if (status) {
+                alertDialog(
+                    requireContext(), 0,
+                    resources.getString(R.string.motilal_oswal), "Meeting Completed Successfully",
+                    "OK", true, null
+                )
+                resetFields()
+            } else {
+                val message: String = jsonObject.getString(MOSLConstants.MESSAGE)
+                alertDialog(
+                    requireContext(), 0,
+                    resources.getString(R.string.motilal_oswal), message,
+                    "OK", true, null
+                )
+                throw ServiceFailureException(message, message)
+            }
         }
+
     }
 
     private fun resetFields() {
@@ -863,7 +886,7 @@ class BankMeetingFragment : CommonFragment() {
                 isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Client Meeting"),
                 clientMobileNumber = getMobileNumber(),
                 clientName = clientNameValue,
-                bankBranchId = if (spBranch.isSpinnerVisible()) getSelectedBranch().key else "-1",
+                bankBranchId = if (spBankBranch.isSpinnerVisible()) getSelectedBankBranch().key else "-1",
                 bankBranchName = getBankBranchName()
             )
         }

@@ -91,4 +91,16 @@ object CreateMeetingMapper {
             errorMessage = error
         )
     }
+
+    fun mapToCommanResponse(
+        response : String?,
+        status: Boolean,
+        error: String
+    ): CommanResponse {
+        return CommanResponse(
+            response = response?: "",
+            status = status,
+            errorMessage = error
+        )
+    }
 }
