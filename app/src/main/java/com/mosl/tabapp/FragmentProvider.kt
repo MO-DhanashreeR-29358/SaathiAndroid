@@ -40,6 +40,8 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.geoLocation.GeoTaggingModule
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragmentProvider
 import com.mosl.tabapp.leadViewDetail.LeadViewInteractionFragment
@@ -183,4 +185,7 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [DashboardModule::class])
     fun provideNewDashboardFragmentFactory(): DashboardFragment
+
+    @ContributesAndroidInjector(modules = [GeoTaggingModule::class])
+    fun provideGeoTaggingFactory(): GeoTaggingFragment
 }

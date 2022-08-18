@@ -50,6 +50,14 @@
         android:theme="@style/CRMMOSLTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBMQAiQWGdFOTRPecAwybutD8O7XMdUhiQ" />
+        <!--<meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCBwZ-oxAQ2ww1o7Y9zqpGGQZsGP1FBg3w" />-->
+
         <activity android:name=".settings.SettingActivity"></activity>
         <activity
             android:name=".slider.SliderActivity"

@@ -628,4 +628,7 @@
     <string name="lead_detail_asset_product">Asset Product</string>
     <string name="lead_detail_total_gain_losss">Total Gain/ Loss</string>
     <string name="lead_detail_available_limits">Available Limits</string>
+    <string name="button_label_save_location">Save</string>
+    <string name="text_label_note_long_press_marker">Long Press Marker</string>
+    <string name="text_label_selected_location">Selected Location</string>
 </resources>

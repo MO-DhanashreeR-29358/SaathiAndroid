@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.createmeeting.*
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
@@ -106,4 +107,7 @@ interface CreateMeetingView : BaseView {
   fun setInputData(meetingApptModel: MeetingApptModel)
   fun onDataSaved(): Observable<SaveRequestData>
   fun onSaveConfirmClick(): Observable<SaveConfirmClick>
+
+  fun onLocationSaveEventFired() : Observable<OnLocationSaveClick>
+  fun renderLocationSave(locationItem: LocationItem)
 }

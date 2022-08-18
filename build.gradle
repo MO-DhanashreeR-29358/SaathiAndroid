@@ -161,6 +161,7 @@ ext.deps = [
         'slidinguppanel'          : "com.sothree.slidinguppanel:library:3.1.1",
         'playService'             : "com.google.android.gms:play-services:${versions.firebase}",
         'compressor'              : "id.zelory:compressor:2.1.0",
+        'maps'                    : "com.google.android.gms:play-services-maps:17.0.1",
         'location'                : "com.google.android.gms:play-services-location:16.0.0",
         'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
