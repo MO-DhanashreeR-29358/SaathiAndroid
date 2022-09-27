@@ -11,6 +11,7 @@ import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.report.DashboardReportFragment
 import com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment
 import com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment
+import com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment
 import com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.document.DocumentFragment
@@ -102,6 +103,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> BankMeetingReportFragmentNew()
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
             NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
+            NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> DigitalSalesKitFragment()
             else -> null
         }
     }
@@ -150,6 +152,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION -> true
             NavigationConstants.NAVIGATE_TO_PENDING_ESIGN -> true
             NavigationConstants.NAVIGATE_TO_DELETE_REQUEST -> true
+            NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> true
             else -> return false
         }
     }

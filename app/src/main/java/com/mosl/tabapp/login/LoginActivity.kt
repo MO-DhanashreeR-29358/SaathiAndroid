@@ -33,10 +33,12 @@ import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.editorActions
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
@@ -44,6 +46,7 @@ import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.shared.util.isEmulator
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
@@ -56,6 +59,7 @@ import com.mosl.tabapp.permission.PermissionCheckHelper
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Inject
 
 
@@ -84,15 +88,21 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   lateinit var sharedPreferences: SharedPreferences
   lateinit var editor: SharedPreferences.Editor
+  private lateinit var digitalSalesKitParentList : List<DigitalSalesKitData>
 
   @Inject
   lateinit var firebaseHelper: FirebaseHelper
+
+  lateinit var disposables: CompositeDisposable
+  @Inject
+  lateinit var loginRepository: LoginRepositoryImpl
   override fun getLayout(): Int {
     return R.layout.activity_login_new
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
+    disposables = CompositeDisposable()
     AndroidInjection.inject(this)
     setUpView()
     fusedLocation.initDispatcher(this)
@@ -324,12 +334,57 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
             for (childMenu in childMenuList) {
               if (childMenu.isBasicReports()) {
                 userManager.setReportMenuList(childMenu.ChildMenuList)
-                openCommonActivity()
+                fetchDigitalSalesKitParentMenu()
               }
             }
           }
         }
       }
+    }
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+  }
+
+  private fun fetchDigitalSalesKitParentMenu() {
+    disposables.add(
+      loginRepository.fetchDigitalSalesKitParentMenu().compose(applyUiModel())
+        .subscribe {
+          renderDigitalSalesKitParentData(it)
+        }
+    )
+  }
+
+  private fun renderDigitalSalesKitParentData(uiModel: UiModel<List<DigitalSalesKitData>>) {
+    uiModel.onSuccess {
+      digitalSalesKitParentList = it.filter { data -> !data.parentId.equals("0") }
+      loginRepository.fetchDigitalSalesKitChildMenu().compose(applyUiModel())
+        .subscribe {
+          renderDigitalSalesKitChildData(it)
+        }
+    }
+    uiModel.onFailure {
+      openCommonActivity()
+    }
+  }
+
+  private fun renderDigitalSalesKitChildData(uiModel: UiModel<List<DigitalSalesKitData>>) {
+    uiModel.onSuccess { data->
+      digitalSalesKitParentList.map{
+        it.menuList = data.filter { objoption ->
+          objoption?.parentId.equals(it?.id.toString())
+        }.map{
+          DigitalSalesKitData(
+            id = it.id,
+            parentId = it.parentId,
+            systemName = it.systemName,
+            pdfPath = it.pdfPath
+          )
+        }
+      }
+      userManager.setDigitalSalesKitMenuList(digitalSalesKitParentList)
+
+      openCommonActivity()
     }
     uiModel.onFailure {
       openCommonActivity()

@@ -19,6 +19,7 @@ import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.model.*
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.Utility
 import com.mosl.shared.util.isEmulator
@@ -38,7 +39,7 @@ import javax.inject.Inject
 class SplashActivity : LeanBaseActivity() {
     lateinit var disposables: CompositeDisposable
     lateinit var binding: ActivitySplashBinding
-
+    private lateinit var digitalSalesKitParentList : List<DigitalSalesKitData>
     @Inject
     lateinit var loginRepository: LoginRepositoryImpl
 
@@ -238,7 +239,7 @@ class SplashActivity : LeanBaseActivity() {
                             if (childMenu.isBasicReports()) {
                                 userManager.setReportMenuList(childMenu.ChildMenuList)
 //                AccountDetails.setMenuReportList(childMenu.ChildMenuList)
-                                openCommonActivity()
+                                fetchDigitalSalesKitParentMenu()
                             }
                         }
                     }
@@ -250,6 +251,51 @@ class SplashActivity : LeanBaseActivity() {
             openCommonActivity()
         }
 
+    }
+
+    private fun fetchDigitalSalesKitParentMenu() {
+        disposables.add(
+            loginRepository.fetchDigitalSalesKitParentMenu().compose(applyUiModel())
+                .subscribe {
+                    renderDigitalSalesKitParentData(it)
+                }
+        )
+    }
+
+    private fun renderDigitalSalesKitParentData(uiModel: UiModel<List<DigitalSalesKitData>>) {
+        uiModel.onSuccess {
+            digitalSalesKitParentList = it.filter { data -> !data.parentId.equals("0") }
+            loginRepository.fetchDigitalSalesKitChildMenu().compose(applyUiModel())
+                .subscribe {
+                    renderDigitalSalesKitChildData(it)
+                }
+        }
+        uiModel.onFailure {
+            openCommonActivity()
+        }
+    }
+
+    private fun renderDigitalSalesKitChildData(uiModel: UiModel<List<DigitalSalesKitData>>) {
+        uiModel.onSuccess { data->
+            digitalSalesKitParentList.map{
+                it.menuList = data.filter { objoption ->
+                    objoption?.parentId.equals(it?.id.toString())
+                }.map{
+                    DigitalSalesKitData(
+                        id = it.id,
+                        parentId = it.parentId,
+                        systemName = it.systemName,
+                        pdfPath = it.pdfPath
+                    )
+                }
+            }
+            userManager.setDigitalSalesKitMenuList(digitalSalesKitParentList)
+
+            openCommonActivity()
+        }
+        uiModel.onFailure {
+            openCommonActivity()
+        }
     }
 
     private fun handleStartup() {

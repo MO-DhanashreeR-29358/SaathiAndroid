@@ -2,6 +2,7 @@ package com.mosl.tabapp.drawermenu.data.source
 
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.saathi.api.model.splash.ChildMenu
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import io.reactivex.rxjava3.core.Observable
 
@@ -12,6 +13,7 @@ import io.reactivex.rxjava3.core.Observable
 interface MenuDataSource {
   fun getMenuItems(
     userManager: UserManager,
-    menuItems: List<ChildMenu>
+    menuItems: List<ChildMenu>,
+    digitalSalesKitMenu : List<DigitalSalesKitData>
   ): Observable<List<BaseMenu>>
 }

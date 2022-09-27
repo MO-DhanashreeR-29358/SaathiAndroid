@@ -8,6 +8,7 @@ import com.mosl.mobile.user.helper.UserPrefStore
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.splash.ChildMenu
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,6 +55,19 @@ class UserCacheImpl @Inject internal constructor(
             else -> emptyList<ChildMenu>()
         }
 
+    }
+
+    override fun setDigitalSalesKitMenuList(reportMenuList: List<DigitalSalesKitData>) {
+        userStore.digitalSalesKitMenuList.set(gson.toJson(reportMenuList))
+    }
+
+    override fun getDigitalSalesKitMenuList(): List<DigitalSalesKitData> {
+        val type = object : TypeToken<List<DigitalSalesKitData>>() {}.type
+        return when {
+            userStore.digitalSalesKitMenuList.isSet -> gson.fromJson(userStore.digitalSalesKitMenuList.get(), type)
+
+            else -> emptyList<DigitalSalesKitData>()
+        }
     }
 
     override fun getCredentials(): LoginInfo? {

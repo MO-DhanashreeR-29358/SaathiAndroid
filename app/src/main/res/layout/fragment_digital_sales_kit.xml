@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".drawermenu.digitalSalesKit.DigitalSalesKitFragment">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_menu_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@color/titleBarBackground"
+        android:text="@string/MOSL_MENU_DIGITAL_SALES_KIT_TXT"
+        android:textColor="@color/alternateTextColor"
+        android:textSize="@dimen/appTitleTextSize"
+        android:textStyle="bold"
+        android:gravity="center">
+    </androidx.appcompat.widget.AppCompatTextView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_digital_sales_kit_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/branch_item" />
+
+</LinearLayout>

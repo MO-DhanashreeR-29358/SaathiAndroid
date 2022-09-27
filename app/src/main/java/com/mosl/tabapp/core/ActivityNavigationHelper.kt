@@ -114,6 +114,7 @@ class ActivityNavigationHelper @Inject constructor(
         when (target) {
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> getSuggestMe(context)
             NavigationConstants.NAVIGATE_TO_REPORTS -> navigateToReport(appMenu)
+            NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> navigateToDigitalSalesKit(appMenu)
             else -> loadFragment(target)
         }
     }
@@ -384,6 +385,13 @@ class ActivityNavigationHelper @Inject constructor(
         bundle.putString(MOSLConstants.SYSTEM_NAME, appMenu.navigateKey)
         bundle.putString(MOSLConstants.NAME, appMenu.labelStr)
         screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_REPORTS.toString(), bundle, false)
+    }
+
+    private fun navigateToDigitalSalesKit(appMenu: AppMenu) {
+        val bundle = Bundle()
+        bundle.putString(MOSLConstants.SYSTEM_NAME, appMenu.navigateKey)
+        bundle.putString(MOSLConstants.NAME, appMenu.labelStr)
+        screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT.toString(), bundle, false)
     }
 
     private fun noInternetConnectionDialog(context: Context) {

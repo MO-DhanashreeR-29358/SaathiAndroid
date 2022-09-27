@@ -95,4 +95,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_PENDING_ESIGN = 42;
     int NAVIGATE_TO_BRANCH_CODE = 43;
     int NAVIGATE_TO_DELETE_REQUEST = 44;
+    int NAVIGATE_TO_DIGITAL_SALES_KIT = 45;
 }

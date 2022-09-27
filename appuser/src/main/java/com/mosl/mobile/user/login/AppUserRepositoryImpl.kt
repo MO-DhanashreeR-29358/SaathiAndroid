@@ -7,6 +7,8 @@ import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.logout.LogoutRequest
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
+import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
@@ -50,7 +52,17 @@ class AppUserRepositoryImpl @Inject constructor(
         .map { response -> response.response?.transformReportData() }
   }
 
-  override fun logout(logoutInfo: LogoutInfo): Observable<Boolean> {
+    override fun fetchDigitalSalesKitParentMenu(): Observable<List<DigitalSalesKitData>> {
+        return saathiApi.GetCategoryforMobileParentMenuList()
+            .map { response -> response.response?.transformDigitalSalesKitData() }
+    }
+
+    override fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>> {
+        return saathiApi.GetCategoryforMobileChildMenuList()
+            .map { response -> response.response?.transformDigitalSalesKitData() }
+    }
+
+    override fun logout(logoutInfo: LogoutInfo): Observable<Boolean> {
     val request = LogoutRequest(
         userId = logoutInfo.userId, businessUnitId = logoutInfo.businessUnitId,
         token = logoutInfo.token,

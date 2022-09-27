@@ -101,6 +101,7 @@ import com.mosl.saathi.api.model.reports.report.LeadReportRequest
 import com.mosl.saathi.api.model.search.DiyLinkResponse
 import com.mosl.saathi.api.model.search.DiyRequest
 import com.mosl.saathi.api.model.search.SearchResponse
+import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.saathi.api.model.splash.VersionResponse
@@ -589,6 +590,13 @@ interface SaathiApi {
 
     @POST("Report/FetchReportTypes")
     fun fetchReportTypes(): Observable<SaathiCommonResponse<List<ReportTypeResponse>>>
+
+    @POST("Menu/GetCategoryforMobileParentMenuList")
+    fun GetCategoryforMobileParentMenuList(): Observable<SaathiCommonResponse<List<DigitalSalesKitMenu>>>
+
+    @POST("Menu/GetCategoryforMobileChildMenuList")
+    fun GetCategoryforMobileChildMenuList(): Observable<SaathiCommonResponse<List<DigitalSalesKitMenu>>>
+
 
     //===================== Documents=========================
 

@@ -3,6 +3,7 @@ package com.mosl.mobile.user.login
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.splash.ChildMenu
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,12 +17,15 @@ class UserManagerImpl @Inject constructor(
 
   private var user: User?
   private var reportMenulist: List<ChildMenu>
+  private lateinit var digitalSalesKitMenuList: List<DigitalSalesKitData>
 
   init {
     val user = userCache.getUser()
     this.user = user
     val reportMenuList = userCache.getReportMenuList()
+    val digitalSalesKitMenuList = userCache.getDigitalSalesKitMenuList()
     this.reportMenulist = reportMenuList
+    this.digitalSalesKitMenuList = digitalSalesKitMenuList
   }
 
   fun saveUser(user: User) {
@@ -58,6 +62,15 @@ class UserManagerImpl @Inject constructor(
 
   override fun getReportMenuList(): List<ChildMenu> {
     return reportMenulist
+  }
+
+  override fun setDigitalSalesKitMenuList(list: List<DigitalSalesKitData>) {
+    userCache.setDigitalSalesKitMenuList(list)
+    this.digitalSalesKitMenuList = list
+  }
+
+  override fun getDigitalSalesKitMenuList(): List<DigitalSalesKitData> {
+    return digitalSalesKitMenuList
   }
   /*override fun isLoggedIn(): Boolean {
     return user != null

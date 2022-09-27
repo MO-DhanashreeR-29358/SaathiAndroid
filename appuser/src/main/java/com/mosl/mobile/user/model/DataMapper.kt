@@ -3,6 +3,8 @@ package com.mosl.mobile.user.model
 import com.mosl.saathi.api.model.login.BusinessProfile
 import com.mosl.saathi.api.model.login.CurrentBusinessProfile
 import com.mosl.saathi.api.model.login.LoginResponse
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
+import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
 import com.mosl.saathi.api.model.splash.VersionResponse
 
@@ -102,4 +104,9 @@ fun List<ReportTypeResponse>.transformReportData(): List<ReportType> {
     }
 }
 
-
+fun List<DigitalSalesKitMenu>.transformDigitalSalesKitData(): List<DigitalSalesKitData> {
+    return this.map {
+        DigitalSalesKitData(id = it.id, systemName = it.systemName,
+        parentId = it.parentId,pdfPath = it.pdfPath)
+    }
+}

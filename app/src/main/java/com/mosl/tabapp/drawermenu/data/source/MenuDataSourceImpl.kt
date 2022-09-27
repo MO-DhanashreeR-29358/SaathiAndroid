@@ -2,6 +2,7 @@ package com.mosl.tabapp.drawermenu.data.source
 
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.drawermenu.data.BaseMenu
 import com.mosl.tabapp.drawermenu.data.ChildMenu
@@ -14,7 +15,8 @@ open class MenuDataSourceImpl @Inject constructor(
 ) : MenuDataSource {
     override fun getMenuItems(
         userManager: UserManager,
-        menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>
+        menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        digitalSalesKitMenu : List<DigitalSalesKitData>
     ): Observable<List<BaseMenu>> {
         return Observable.fromCallable {
             val user = userManager.user
@@ -23,16 +25,16 @@ open class MenuDataSourceImpl @Inject constructor(
                     getAufsbUserMenu()
                 }
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser)
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
                 else -> {
-                    getUserMenu(menuItems, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
                 }
             }
         }
@@ -41,6 +43,7 @@ open class MenuDataSourceImpl @Inject constructor(
 
     private fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean
     ): List<BaseMenu> {
@@ -53,6 +56,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCheckApproval(),
                 getCalendar(),
@@ -76,6 +80,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCalendar(),
                 getPendingApproval(),
@@ -94,6 +99,7 @@ open class MenuDataSourceImpl @Inject constructor(
 
     private fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean
     ): List<BaseMenu> {
@@ -103,6 +109,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCheckApproval(),
                 getCalendar(),
@@ -123,6 +130,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCalendar(),
                 getPendingApproval(),
@@ -141,6 +149,7 @@ open class MenuDataSourceImpl @Inject constructor(
 
     private fun getSMTUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
+        digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean
     ): List<BaseMenu> {
@@ -153,6 +162,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCheckApproval(),
                 getCalendar(),
@@ -177,6 +187,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSip(),
                 getEModification(),
                 getReports(list),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getIncentiveReport(),
                 getCalendar(),
                 getPendingApproval(),
@@ -212,6 +223,7 @@ open class MenuDataSourceImpl @Inject constructor(
 
     private fun getAuSalesBank(
         isCheckApproval: Boolean,
+        digitalSalesKitList : List<DigitalSalesKitData>,
         isPrimeUser: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
@@ -220,6 +232,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -240,6 +253,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -310,6 +324,25 @@ open class MenuDataSourceImpl @Inject constructor(
             }
         )
     }
+
+    private fun getDigitalSalesKitMenu(list: List<DigitalSalesKitData>): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_my_reports,
+            label = R.string.MOSL_MENU_DIGITAL_SALES_KIT_TXT,
+            enabled = true,
+            children = list.map {
+                ChildMenu(
+                    label = 0,
+                    labelStr = it.systemName,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT,
+                    navigateKey = it.id
+                )
+
+            }
+        )
+    }
+
 
     private fun getAUBankMeeting(): BaseMenu {
         return BaseMenu(

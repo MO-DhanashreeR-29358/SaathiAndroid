@@ -99,7 +99,7 @@ class DrawerMenuView : FrameLayout {
 
     disposable = CompositeDisposable()
 
-    source.getMenuItems(userManager, userManager.getReportMenuList())
+    source.getMenuItems(userManager, userManager.getReportMenuList(), userManager.getDigitalSalesKitMenuList())
         .compose(applyUiModel())
         .subscribe(this::render)
         .addTo(disposable)

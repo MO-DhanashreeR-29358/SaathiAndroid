@@ -2,6 +2,8 @@ package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
+import com.mosl.saathi.api.model.splash.DigitalSalesKitData
+import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -32,6 +34,14 @@ class LoginRepositoryImpl @Inject constructor(
 
   override fun fetchReportTypes(): Observable<List<ReportType>> {
     return userRepository.fetchReportTypes()
+  }
+
+  override fun fetchDigitalSalesKitParentMenu(): Observable<List<DigitalSalesKitData>> {
+    return userRepository.fetchDigitalSalesKitParentMenu()
+  }
+
+  override fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>> {
+    return userRepository.fetchDigitalSalesKitChildMenu()
   }
 
   override fun logout(): Completable {

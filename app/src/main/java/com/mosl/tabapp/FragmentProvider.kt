@@ -40,6 +40,8 @@ import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
+import com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment
+import com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.geoLocation.GeoTaggingModule
 import com.mosl.tabapp.leadViewDetail.LeadViewDetailFragment
@@ -146,6 +148,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReportModule::class])
     fun provideReportFragmentFactory(): ReportFragment
+
+    @ContributesAndroidInjector(modules = [DigitalSalesKitModule::class])
+    fun provideDigitalSalesKitFragmentFactory(): DigitalSalesKitFragment
 
     @ContributesAndroidInjector(modules = [HierarchyReportModule::class])
     fun provideHierarchyReportFragmentFactory(): HierarchyReportFragment
