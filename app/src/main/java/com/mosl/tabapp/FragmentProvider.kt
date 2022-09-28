@@ -190,7 +190,4 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [DashboardModule::class])
     fun provideNewDashboardFragmentFactory(): DashboardFragment
-
-    @ContributesAndroidInjector(modules = [GeoTaggingModule::class])
-    fun provideGeoTaggingFactory(): GeoTaggingFragment
 }
