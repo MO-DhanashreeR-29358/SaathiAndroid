@@ -144,6 +144,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
     var mLocationPermissionGranted = false
     var isLocEn : Boolean? = null
+    var currentDate : String = CRMAppUtil.getDateStr(Date(), dd_MM_yyyy)
+    var selectedDate : String = CRMAppUtil.getDateStr(Date(), dd_MM_yyyy)
 
     override fun onViewCreated(
         view: View,
@@ -329,6 +331,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             try {
                 val fromDat = CRMAppUtil.getDate(mainFromDate, yyyy_MM_dd)
                 val fromPostingDate = CRMAppUtil.getDateStr(fromDat, dd_MM_yyyy)
+                selectedDate = fromPostingDate
                 val finalSelectedDateStr =
                     String.format(
                         "%s %d:%d:00", fromPostingDate, hour,
@@ -839,6 +842,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             false
         } else if (getSelectedActivityType() == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
             binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
+            false
+        } else if (getSelectedActivityType()?.isPersonalMeeting() == true && !currentDate.equals(selectedDate)) {
+            alert("Can not set previous date for Activity type Personal meeting")
             false
         } else if (getSelectedSpinnerValue(binding.spProduct) == SELECT_PRODUCT && meetingProductAdapter.listProduct.size == 0) {
             binding.tilProduct.setErrorMessages(MSG_SELECT_PRODUCT)
