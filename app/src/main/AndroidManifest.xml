@@ -150,6 +150,9 @@
         <service
             android:name=".service.ForegroundService"
             android:enabled="true" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
     </application>
 
 </manifest>
