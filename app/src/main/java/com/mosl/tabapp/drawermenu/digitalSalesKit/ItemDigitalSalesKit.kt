@@ -8,6 +8,7 @@ import com.mosl.tabapp.databinding.BranchItemBinding
 import com.mosl.tabapp.databinding.DigitalSalesKitItemBinding
 import com.xwray.groupie.databinding.BindableItem
 import io.reactivex.rxjava3.subjects.PublishSubject
+import okhttp3.internal.notifyAll
 
 class ItemDigitalSalesKit(
     val childMenu: DigitalSalesKitData,
@@ -17,6 +18,7 @@ class ItemDigitalSalesKit(
     override fun getLayout(): Int {
         return R.layout.digital_sales_kit_item
     }
+    var selectedPosition: Int = -1
 
 
     override fun bind(viewBinding: DigitalSalesKitItemBinding, position: Int) {
@@ -25,10 +27,11 @@ class ItemDigitalSalesKit(
             tvChildMenu.text = childMenu.systemName
             cardView.setCardBackgroundColor(
                 ContextCompat.getColor(context, R.color.white))
+
             cardView.setOnClickListener {
                 cardView.setCardBackgroundColor(
-                    ContextCompat.getColor(context, R.color.secondaryBackground)
-                )
+                    ContextCompat.getColor(context, R.color.secondaryBackground))
+                selectedPosition = position
                 publishSubject.onNext(childMenu.pdfPath)
             }
         }

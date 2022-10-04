@@ -99,6 +99,7 @@ class DigitalSalesKitFragment : CommonFragment(), DigitalSalesKitView {
     }
 
     override fun renderItemClick(pdfPath: String) {
+        section.notifyChanged()
         val intent = CustomTabsIntent.Builder().build()
         intent.launchUrl(requireContext(), Uri.parse(pdfPath))
     }
