@@ -46,6 +46,7 @@ class CreateMeetingPresenter @Inject constructor(
 
         val productSelectedObs = view.onProductSelected()
             .filter(InvalidSelectionPredicate)
+            .skip(1)
             .map { view.getSelectedProduct() }
             .share()
 

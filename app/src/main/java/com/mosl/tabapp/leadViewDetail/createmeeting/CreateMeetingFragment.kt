@@ -154,15 +154,18 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         super.onViewCreated(view, savedInstanceState)
         binding = FragCreateMeetingBinding.bind(view)
         setAppTitle(string.page_title_create_meeting)
+        setupViews()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        setupViews()
+
         if (permissionCheckHelper.locationPermission()) {
             fusedLocation.initDispatcher(this)
         }
     }
 
     private fun setupViews() {
+        meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
+        travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         productAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spProduct.adapter = productAdapter
 
@@ -195,10 +198,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         subCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spSubCategory.adapter = subCategoryAdapter
 
-        meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
+
         binding.rvProductList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvProductList.adapter = meetingProductAdapter
-        travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
+
         binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvTravellingList.adapter = travellingAdapter
         AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()?.employeeCode)
@@ -783,6 +786,35 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.btnReset.clicks()
     }
 
+     fun resetDataOnActivityTypeChange() {
+        errorDisabled()
+        addedAttendeeList.clear()
+        addedSplAttendeeList.clear()
+        binding.tvAttendeeCount.text = ""
+        binding.tvSplAttendeeCount.text = ""
+        binding.spProduct.setSelection(0)
+        binding.spMeetingDuration.setSelection(0)
+        binding.spMeetingReason.setSelection(0)
+        binding.spMeetingObjective.setSelection(0)
+        binding.spMeetingLocation.setSelection(0)
+        binding.spTravellingMode.setSelection(0)
+        binding.spActionables.setSelection(0)
+        binding.spCategory.setSelection(0)
+        binding.spSubCategory.setSelection(0)
+        binding.etCategory.setText("")
+        binding.etSubCategory.setText("")
+        binding.etLocation.setText("")
+        binding.etPinCode.setText("")
+        binding.etAmount.setText("")
+        binding.etMeetingDescription.setText("")
+        binding.etCustomerComment.setText("")
+        binding.btnSendOtp.text = SEND_OTP_LABEL
+        isSendOTPSuccesssful = false
+        meetingProductAdapter.deleteAllProduct()
+        travellingAdapter.deleteAllProduct()
+    }
+
+
     override fun resetData() {
         errorDisabled()
         addedAttendeeList.clear()
@@ -1080,6 +1112,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.tilMobileNumber.visibility = View.GONE
             }
         }
+        resetDataOnActivityTypeChange()
     }
 
     override fun onMobileClick() {

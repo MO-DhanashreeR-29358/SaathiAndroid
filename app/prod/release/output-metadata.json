@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
@@ -10,11 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 214,
-      "versionName": "2.1.4",
-      "enabled": true,
-      "outputFile": "app-prodRelease-2.1.4.apk"
+      "versionCode": 215,
+      "versionName": "2.1.5",
+      "outputFile": "app-prodRelease-2.1.5.apk"
     }
   ]
 }
