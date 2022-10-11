@@ -262,6 +262,12 @@ dependencies {
     implementation(deps.EkycArtifactDependencies.loginUi) {
         exclude group: 'MofslArtifacts'
     }
+
+    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
+
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
 }
 kapt {
     javacOptions {

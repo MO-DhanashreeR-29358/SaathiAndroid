@@ -2,12 +2,14 @@ package com.mosl.tabapp
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
+import utils.DistaApplication
 
 abstract class SaathiAppNew : DaggerApplication() {
   init {
@@ -38,6 +40,7 @@ abstract class SaathiAppNew : DaggerApplication() {
     ).addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE = this
+    DistaApplication.newInstance(this)
   }
 
   fun getDB(): AppDatabase? {
@@ -46,6 +49,7 @@ abstract class SaathiAppNew : DaggerApplication() {
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
+    MultiDex.install(this)
   }
 
   abstract fun init()

@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -66,6 +68,10 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import mosl.rx_preferences.Preference
+import sdk.DistaSDK
+import sdk.interfaces.IDistaSDK
+import sdk.interfaces.OnTaskFailureListener
+import sdk.interfaces.OnTaskSuccessListener
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -129,7 +135,7 @@ class CommonActivity : BaseActivity(),
     private lateinit var compressionLocationWorkId: UUID
     private lateinit var compressionDataSyncWorkId: UUID
     internal var snackbar: Snackbar? = null
-
+    private val REQUEST_CODE_CUSTOM_PERMISSION = 1153
     @Inject
     @field:RemoteConfigData
     lateinit var remoteCongigData: StringPreference
@@ -148,6 +154,8 @@ class CommonActivity : BaseActivity(),
      var editor: SharedPreferences.Editor? = null
      var twentyFourSevenCheck = false*/
     /**/
+
+    private lateinit var mDistaSdk : IDistaSDK
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -216,9 +224,109 @@ class CommonActivity : BaseActivity(),
             menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
         }
 
+        mDistaSdk = DistaSDK.getInstance()
+
+        //ActivityCompat.requestPermissions(
+         //   this, arrayOf(android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.CALL_PHONE,android.Manifest.permission.ACCESS_FINE_LOCATION),
+         //   REQUEST_CODE_CUSTOM_PERMISSION
+        //)
+
+        mDistaSdk.initOrganization( userManager.getUser()?.employeeCode,
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                    Toast.makeText(
+                        applicationContext,
+                        "initialize organization successfully !",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    Toast.makeText(
+                        applicationContext,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+
+        mDistaSdk.login(this,
+            userManager.getUser()?.employeeCode,
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                    Toast.makeText(
+                        applicationContext,
+                        "User loggedin successfully !",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    Toast.makeText(
+                        applicationContext,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            REQUEST_CODE_CUSTOM_PERMISSION ->{
+                mDistaSdk.initOrganization( userManager.getUser()?.employeeCode,
+                    object : OnTaskSuccessListener {
+                        override fun onSuccess() {
+                            Toast.makeText(
+                                applicationContext,
+                                "initialize organization successfully !",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    },
+                    object : OnTaskFailureListener {
+                        override fun onFailure(message: String?) {
+                            Toast.makeText(
+                                applicationContext,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
 
+                mDistaSdk.login(this,
+                    userManager.getUser()?.employeeCode,
+                    object : OnTaskSuccessListener {
+                        override fun onSuccess() {
+                            Toast.makeText(
+                                applicationContext,
+                                "User loggedin successfully !",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    },
+                    object : OnTaskFailureListener {
+                        override fun onFailure(message: String?) {
+                            Toast.makeText(
+                                applicationContext,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    })
+            }
+
+        }
+
+    }
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
