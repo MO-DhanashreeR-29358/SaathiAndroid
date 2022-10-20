@@ -231,7 +231,7 @@ class CommonActivity : BaseActivity(),
          //   REQUEST_CODE_CUSTOM_PERMISSION
         //)
 
-        mDistaSdk.initOrganization( userManager.getUser()?.employeeCode,
+        mDistaSdk.initOrganization( "MOSL",
             object : OnTaskSuccessListener {
                 override fun onSuccess() {
                     Toast.makeText(
@@ -251,82 +251,34 @@ class CommonActivity : BaseActivity(),
                 }
             })
 
-        mDistaSdk.login(this,
-            userManager.getUser()?.employeeCode,
-            object : OnTaskSuccessListener {
-                override fun onSuccess() {
-                    Toast.makeText(
-                        applicationContext,
-                        "User loggedin successfully !",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            },
-            object : OnTaskFailureListener {
-                override fun onFailure(message: String?) {
-                    Toast.makeText(
-                        applicationContext,
-                        message,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
+
+            mDistaSdk.doLoginCheckIn(
+                userManager.getUser()?.employeeCode,
+                object : OnTaskSuccessListener {
+                    override fun onSuccess() {
+                        Toast.makeText(
+                            applicationContext,
+                            "User logged in successfully !",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
+                object : OnTaskFailureListener {
+                    override fun onFailure(message: String?) {
+                        Toast.makeText(
+                            applicationContext,
+                            message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                })
+
+
+
 
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            REQUEST_CODE_CUSTOM_PERMISSION ->{
-                mDistaSdk.initOrganization( userManager.getUser()?.employeeCode,
-                    object : OnTaskSuccessListener {
-                        override fun onSuccess() {
-                            Toast.makeText(
-                                applicationContext,
-                                "initialize organization successfully !",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    },
-                    object : OnTaskFailureListener {
-                        override fun onFailure(message: String?) {
-                            Toast.makeText(
-                                applicationContext,
-                                message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
 
-                mDistaSdk.login(this,
-                    userManager.getUser()?.employeeCode,
-                    object : OnTaskSuccessListener {
-                        override fun onSuccess() {
-                            Toast.makeText(
-                                applicationContext,
-                                "User loggedin successfully !",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    },
-                    object : OnTaskFailureListener {
-                        override fun onFailure(message: String?) {
-                            Toast.makeText(
-                                applicationContext,
-                                message,
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    })
-            }
-
-        }
-
-    }
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -686,6 +638,7 @@ class CommonActivity : BaseActivity(),
                         forcePreference.set(100)
                         stopService()
                         twentyFourSevenCheck.set(false)
+                        distaLogoutCheckout()
                         /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
                         editor?.commit()*/
                         openLogin()
@@ -878,6 +831,48 @@ class CommonActivity : BaseActivity(),
                 finish()
             }
         }
+    }
+
+    private fun distaLogoutCheckout(){
+        mDistaSdk.logout(
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                    Toast.makeText(
+                        applicationContext,
+                        "User logout successfully !",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    Toast.makeText(
+                        applicationContext,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+
+        mDistaSdk.checkout(
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                    Toast.makeText(
+                        applicationContext,
+                        "User check out successfully !",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    Toast.makeText(
+                        applicationContext,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
     }
 
     override fun erroMsgDialog(msg: String) {
