@@ -10,4 +10,7 @@ sealed class CreateMeetingUiEvent {
   data class ValidationStatus(val boolean: Boolean) : CreateMeetingUiEvent()
   data class SaveRequestData(val data: String) : CreateMeetingUiEvent()
   object SaveConfirmClick : CreateMeetingUiEvent()
+
+  object TouchedUntouchedRequest : CreateMeetingUiEvent()
+  object FeedbackRequest : CreateMeetingUiEvent()
 }

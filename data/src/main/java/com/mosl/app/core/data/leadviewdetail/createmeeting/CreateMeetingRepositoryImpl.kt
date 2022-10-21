@@ -187,6 +187,8 @@ class CreateMeetingRepositoryImpl @Inject constructor(
             ACTIONABLES -> "Select Actionables"
             BACLIENTMEETING -> "Select BA Client Meeting"
             OUTSTATIONMEETING -> "Select Out Station Meeting"
+            TOUCHEDUNTOUCHED -> "Select Touched Untouched"
+            FEEDBACK -> "Select Feedback"
             else -> "Select Activity Type"
         }
     }
@@ -212,3 +214,5 @@ const val SUBCATEGORY = 22
 const val ACTIONABLES = 20
 const val OUTSTATIONMEETING = 17
 const val BACLIENTMEETING = 16
+const val TOUCHEDUNTOUCHED = 132
+const val FEEDBACK = 133

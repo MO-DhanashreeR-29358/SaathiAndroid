@@ -409,6 +409,8 @@
     <string name="txt_lable_meeting_duration">Meeting Duration*</string>
     <string name="txt_lable_meeting_objective">Meeting Objective*</string>
     <string name="txt_lable_meeting_reason">Meeting Reason*</string>
+    <string name="txt_lable_touched_untouched">Touched Untouched</string>
+    <string name="txt_lable_feedback">Feedback</string>
     <string name="hint_lable_enter_meeting_description">Enter Meeting Description*</string>
     <string name="txt_lable_ba_client_meeting">BA Client Meeting*</string>
     <string name="txt_lable_out_station_meeting">Out Station Meeting*</string>

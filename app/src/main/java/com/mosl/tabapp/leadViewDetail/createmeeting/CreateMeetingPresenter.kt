@@ -151,6 +151,34 @@ class CreateMeetingPresenter @Inject constructor(
             .subscribe(view::renderSubCategory)
             .addTo(disposable)
 
+        view.onTouchedUntouchedEventFired()
+            .switchMap {
+                repository.getLookup(TOUCHEDUNTOUCHED, null, null)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderTouchedUntouchedList)
+            .addTo(disposable)
+
+        view.onFeedbackEventFired()
+            .switchMap {
+                repository.getLookup(FEEDBACK, null, null)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderFeedbackList)
+            .addTo(disposable)
+
+        view.onCategorySelected()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getSelectedCategory() }
+            .switchMap {
+                repository.getLookup(SUBCATEGORY, null, it?.lookUpID.toString())
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderSubCategory)
+            .addTo(disposable)
+
+
         view.onAttendeeClicked()
             .subscribe {
                 view.showAttendeDialog()
@@ -365,12 +393,16 @@ class CreateMeetingPresenter @Inject constructor(
         data.geoArea = view.getGeoArea()
         data.geoLatitude = view.getLatitude()
         data.geoLongitude = view.getLongitude()
+        data.touchedUntouchedId = view.getSelectedTouchedUntouched()?.lookUpID.toString()
+        data.feedbackId = view.getSelectedFeedback()?.lookUpID.toString()
         return data
     }
 
   companion object {
     const val MEETINGREASON = 14
     const val SUBCATEGORY = 22
+    const val TOUCHEDUNTOUCHED = 132
+    const val FEEDBACK = 133
   }
 
 }

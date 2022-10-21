@@ -132,6 +132,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var meetingDurationAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingLocationAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingReasonAdapter: ArrayAdapter<LookUp>
+    private lateinit var touchedUntouchedAdapter: ArrayAdapter<LookUp>
+    private lateinit var feedbackAdapter: ArrayAdapter<LookUp>
     private lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
@@ -189,6 +191,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         meetingReasonAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spMeetingReason.adapter = meetingReasonAdapter
 
+        touchedUntouchedAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spTouchedUntouched.adapter = touchedUntouchedAdapter
+
+        feedbackAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spFeedback.adapter = feedbackAdapter
+
         categoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spCategory.adapter = categoryAdapter
 
@@ -214,6 +222,35 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun onSaveConfirmClick(): Observable<SaveConfirmClick> {
         return uiSubject.ofType()
+    }
+
+    override fun onTouchedUntouchedEventFired(): Observable<TouchedUntouchedRequest> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderTouchedUntouchedList(uiModel: UiModel<List<LookUp>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { showOnFailurePopup(it) }
+
+        uiModel.onSuccess {
+            touchedUntouchedAdapter.setSpinnerData(binding.spTouchedUntouched, it)
+            uiSubject.onNext(CreateMeetingUiEvent.FeedbackRequest)
+        }
+    }
+
+    override fun onFeedbackEventFired(): Observable<FeedbackRequest> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderFeedbackList(uiModel: UiModel<List<LookUp>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { showOnFailurePopup(it) }
+
+        uiModel.onSuccess {
+            feedbackAdapter.setSpinnerData(binding.spFeedback, it)
+        }
     }
 
     override fun render(uiModel: UiModel<ClientData>) {
@@ -252,6 +289,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             isOnlyClient = clientDetail.isOnlyClient
             isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
             mainFromDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
+            uiSubject.onNext(CreateMeetingUiEvent.TouchedUntouchedRequest)
         }
     }
 
@@ -1006,6 +1044,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun getSelectedCategory(): LookUp? {
         return getSelectedSpinnerValue(binding.spCategory)
+    }
+
+    override fun getSelectedTouchedUntouched(): LookUp? {
+        return getSelectedSpinnerValue(binding.spTouchedUntouched)
+    }
+
+    override fun getSelectedFeedback(): LookUp? {
+        return getSelectedSpinnerValue(binding.spFeedback)
     }
 
     private fun getSelectedSpinnerValue(spinner: Spinner): LookUp? {

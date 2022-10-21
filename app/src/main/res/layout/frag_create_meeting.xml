@@ -239,6 +239,41 @@
                 android:entries="@array/Select_Meeting_Reason" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_touched_untouched"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_touched_untouched"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_touched_untouched" />
+            <Spinner
+                android:id="@+id/spTouchedUntouched"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_feedback"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_feedback" />
+            <Spinner
+                android:id="@+id/spFeedback"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

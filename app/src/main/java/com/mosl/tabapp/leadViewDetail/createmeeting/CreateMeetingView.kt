@@ -40,6 +40,8 @@ interface CreateMeetingView : BaseView {
   fun getMobileNumberType(): MobileListData?
   fun getSelectedProduct(): LookUp?
   fun getSelectedCategory(): LookUp?
+  fun getSelectedTouchedUntouched(): LookUp?
+  fun getSelectedFeedback(): LookUp?
   fun getSelectedSubCategory(): LookUp?
   fun getPincode(): String?
   fun getAmount(): String?
@@ -106,4 +108,10 @@ interface CreateMeetingView : BaseView {
   fun setInputData(meetingApptModel: MeetingApptModel)
   fun onDataSaved(): Observable<SaveRequestData>
   fun onSaveConfirmClick(): Observable<SaveConfirmClick>
+
+  fun onTouchedUntouchedEventFired(): Observable<TouchedUntouchedRequest>
+  fun renderTouchedUntouchedList(uiModel: UiModel<List<LookUp>>)
+
+  fun onFeedbackEventFired(): Observable<FeedbackRequest>
+  fun renderFeedbackList(uiModel: UiModel<List<LookUp>>)
 }

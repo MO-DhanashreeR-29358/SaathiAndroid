@@ -86,6 +86,24 @@ public class MeetingApptModel implements Serializable {
     private String geoLatitude;
     private String pincode;
     private String isPotentialPMSProduct;
+    private String touchedUntouchedId;
+    private String feedbackId;
+
+    public String getTouchedUntouchedId() {
+        return touchedUntouchedId;
+    }
+
+    public void setTouchedUntouchedId(String touchedUntouchedId) {
+        this.touchedUntouchedId = touchedUntouchedId;
+    }
+
+    public String getFeedbackId() {
+        return feedbackId;
+    }
+
+    public void setFeedbackId(String feedbackId) {
+        this.feedbackId = feedbackId;
+    }
 
     public MeetingApptModel setProductList(List<CreateMeetingProductModel> productList) {
         this.productList = productList;
@@ -460,7 +478,8 @@ public class MeetingApptModel implements Serializable {
         json += ",\"DisplayType\":\"" + displayType + "\"";
         json += ",\"UCID\":\"" + getUcid() + "\"";
         json += ",\"ProductTypeID\":" + getProduct();
-
+        json += ",\"TouchedUntouchedID\":" + getTouchedUntouchedId();
+        json += ",\"FeedbackID\":" + getFeedbackId();
         json += "}";
 
         return json;
