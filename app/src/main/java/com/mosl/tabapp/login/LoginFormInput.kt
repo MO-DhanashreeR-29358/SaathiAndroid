@@ -7,7 +7,8 @@ import com.mosl.validator.data.ValidationResult
 
 data class LoginFormInput(
   val empCode: String,
-  val password: String
+  val password: String,
+  val isAllPermissionAllowed : Boolean
 )
 
 object LoginValidator : Validator<LoginFormInput, LoginInfo>() {
@@ -15,6 +16,7 @@ object LoginValidator : Validator<LoginFormInput, LoginInfo>() {
     val errorMessage: Int = when {
       input.empCode.isEmpty() -> R.string.msg_username_empty
       input.password.isEmpty() -> R.string.msg_password_empty
+      !input.isAllPermissionAllowed -> R.string.msg_permission
       else -> -1
     }
 

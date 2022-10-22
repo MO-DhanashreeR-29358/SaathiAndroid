@@ -12,6 +12,7 @@ interface LoginView : BaseView {
   fun onDoneClicked(): Observable<Int>
   fun getEmpCode(): String
   fun getPassword(): String
+  fun getIsAllowedAllPermission(): Boolean
   fun renderLogin(uiModel: UiModel<User>)
   fun setUserProperty(user: User?)
   fun renderReportsData(uiModel: UiModel<List<ReportType>>)

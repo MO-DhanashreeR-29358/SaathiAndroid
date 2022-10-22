@@ -10,9 +10,11 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
@@ -23,7 +25,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -139,13 +141,34 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     return binding.edPassword.text.toString()
   }
 
+  override fun getIsAllowedAllPermission(): Boolean {
+    if (ContextCompat.checkSelfPermission(
+        this.applicationContext,
+        Manifest.permission.ACCESS_FINE_LOCATION
+      )
+      === PackageManager.PERMISSION_GRANTED
+    ) {
+      return true
+    }else{
+      return false
+    }
+  }
+
+  @RequiresApi(VERSION_CODES.Q)
   override fun renderLogin(uiModel: UiModel<User>) {
     toggleProgressBar(uiModel.inProgress)
 //    Timber.d("User cache %s", userManager.user)
 
     uiModel.onFailure { error ->
       if (error is ValidationException) {
-        error.error.let { alert(getString(it.error!!)) }
+        error.error.let {
+          if (getString(it.error!!) == getString(R.string.msg_permission)) {
+            getLocationPermission()
+          } else {
+            alert(getString(it.error!!))
+          }
+        }
+
       } else {
         error.showOnFailurePopup()
       }
@@ -163,6 +186,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     }
     alertDialog.show()
   }
+
 
   private fun showConsentDialog() {
     val lp = LinearLayout.LayoutParams(
@@ -198,6 +222,20 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
             }
         }
         permissionCheckHelper.requestAllPermissions()
+      }else{
+        mLocationPermissionGranted = true
+      }
+      val intent = Intent()
+      val packageName: String = getPackageName()
+      val pm  = getSystemService(POWER_SERVICE) as PowerManager
+      if (VERSION.SDK_INT >= VERSION_CODES.M) {
+        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+          intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+        } else {
+          intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+          intent.data = Uri.parse("package:$packageName")
+        }
+        startActivity(intent)
       }
     }
     alertDialog.setNegativeButton(
@@ -242,6 +280,8 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     return true
   }
 
+
+
   private fun getLocationPermission() {
     /*
          * Request location permission, so that we can get the location of the
@@ -263,6 +303,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     }
   }
 
+
   fun isServicesOK(): Boolean {
     Log.d("TAG", "isServicesOK: checking google services version")
     val available =
@@ -283,6 +324,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     return false
   }
 
+  @RequiresApi(VERSION_CODES.M)
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,
@@ -297,12 +339,14 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
           && grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
           mLocationPermissionGranted = true
+
         }
       }
     }
   }
 
 
+  @RequiresApi(VERSION_CODES.Q)
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)
     Log.d("TAG", "onActivityResult: called.")
