@@ -32,11 +32,21 @@ public class SearchModelNew implements Serializable {
 
   private String branchCode;
 
+  public String getFlgReactivationClient() {
+    return flgReactivationClient;
+  }
+
+  public void setFlgReactivationClient(String flgReactivationClient) {
+    this.flgReactivationClient = flgReactivationClient;
+  }
+
+  private String flgReactivationClient;
+
   public SearchModelNew(String searchType, String leadId, String name, String mobileNo,
                         String email,
                         String UCID, String leadOwner, Integer oaoUserId, String sourceName,
                         String prospectSourceName, String prospectSourceDetails, String interestedIn,
-                        String clientCode, int createMeetingId, int diyCode, String branchCode) {
+                        String clientCode, int createMeetingId, int diyCode, String branchCode, String flgReactivationClient) {
     this.searchType = searchType;
     this.leadId = leadId;
     this.name = name;
@@ -53,6 +63,7 @@ public class SearchModelNew implements Serializable {
     this.createMeetingId = createMeetingId;
     this.diyCode = diyCode;
     this.branchCode = branchCode;
+    this.flgReactivationClient = flgReactivationClient;
   }
 
   public String getBranchCode() {
@@ -63,13 +74,14 @@ public class SearchModelNew implements Serializable {
   private int createMeetingId = 0;
 
   public SearchModelNew(String searchType, String empCode, String name, String businessProfileId,
-                        String businessProfileName, String productId) {
+                        String businessProfileName, String productId, String flgReactivationClient) {
     this.searchType = searchType;
     this.empCode = empCode;
     this.name = name;
     this.businessProfileId = businessProfileId;
     this.businessProfileName = businessProfileName;
     this.productId = productId;
+    this.flgReactivationClient = flgReactivationClient;
   }
 
   public void setBranchCode(String branchCode) {

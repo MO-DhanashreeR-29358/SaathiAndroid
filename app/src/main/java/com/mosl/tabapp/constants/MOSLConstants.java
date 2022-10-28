@@ -113,6 +113,7 @@ public interface MOSLConstants extends LabelConfig {
     String EMPLOYEE_CODE = "EmployeeCode";
     String MOBILE = "Mobile";
     String CREATE_MEETING_ID = "CreateMeeting";
+    String FLG_REACTIVATION_CLIENT = "flgReactivatedClient";
     //DefaultBusinessProfile
 
     //GetAllLookup API

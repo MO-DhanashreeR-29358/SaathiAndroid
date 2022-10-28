@@ -113,13 +113,15 @@ class Actionbar @JvmOverloads constructor(
                                     val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
                                     val businessProfileId = jsonObject.getString(PROFILE_ID)
                                     val productId = jsonObject.getString(PRODUCT_ID)
+                                    val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
                                     SearchModelNew(
                                         getSearchHint(),
                                         empCode,
                                         name,
                                         businessProfileId,
                                         businessProfile,
-                                        productId
+                                        productId,
+                                        flgReactivationClient
                                     )
                                 } else {
                                     val ucid = jsonObject.getString(UCID)
@@ -139,6 +141,7 @@ class Actionbar @JvmOverloads constructor(
                                     val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
                                     var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
                                     val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
+                                    val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
                                     SearchModelNew(
                                         getSearchHint(),
                                         leadid,
@@ -155,14 +158,15 @@ class Actionbar @JvmOverloads constructor(
                                         clientCode,
                                         createMeetingId,
                                         diyCode,
-                                        branchCode
+                                        branchCode,
+                                        flgReactivationClient
                                     )
                                 }
                             }
                         } else {
                             listOf(
                                 SearchModelNew(
-                                    "", "", NO_RECORDS_FOUND, "", "",
+                                    "", "", NO_RECORDS_FOUND, "", "","",
                                     ""
                                 )
                             )

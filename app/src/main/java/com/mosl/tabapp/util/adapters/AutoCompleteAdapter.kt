@@ -16,12 +16,7 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_LEAD
-import com.mosl.tabapp.constants.MOSLConstants.EMPLOYEE_CODE
-import com.mosl.tabapp.constants.MOSLConstants.LEADID
-import com.mosl.tabapp.constants.MOSLConstants.MOBILE
-import com.mosl.tabapp.constants.MOSLConstants.PRODUCT_ID
-import com.mosl.tabapp.constants.MOSLConstants.PROFILE_ID
-import com.mosl.tabapp.constants.MOSLConstants.UCID
+import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -142,6 +137,7 @@ class AutoCompleteAdapter(
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
+      bundle.putString(FLG_REACTIVATION_CLIENT, resultModel.flgReactivationClient)
       holderView.rlSetAppointment.setOnClickListener {
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       }

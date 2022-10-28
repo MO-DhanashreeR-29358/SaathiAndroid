@@ -67,4 +67,6 @@ object CreateMeetingConstants {
   const val MSG_INVALID_PINCODE_NUMBER = "Invalid pincode number"
   const val MSG_ENTER_CLIENT_CODE = "Enter Client Code"
   const val MSG_ENTER_CLIENT_NAME = "Enter Client Name"
+  const val MSG_SELECT_TOUCHED_UNTOUCHED = "Select Sub Touched Untouched"
+  const val MSG_SELECT_FEEDBACK = "Select Feedback"
 }

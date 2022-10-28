@@ -70,6 +70,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_M
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIONABLE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIVITY_TYPE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_FEEDBACK
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_DURATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_OBJECTIVE
@@ -77,15 +78,18 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MOBILE_NUMBER
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TOUCHED_UNTOUCHED
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_ACTIONABLE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_FEEDBACK
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_DURATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_LOCATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_OBJECTIVE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_MEETING_REASON
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_PRODUCT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_SUB_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TOUCHED_UNTOUCHED
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.SELECT_TRAVELLING_MODE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.hasAttendeeAdded
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
@@ -148,6 +152,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var isLocEn : Boolean? = null
     var currentDate : String = CRMAppUtil.getDateStr(Date(), dd_MM_yyyy)
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), dd_MM_yyyy)
+    var flgReactivationClient : String  = "0"
 
     override fun onViewCreated(
         view: View,
@@ -214,6 +219,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.rvTravellingList.adapter = travellingAdapter
         AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()?.employeeCode)
 
+    }
+
+    override fun extractArguments(bundle: Bundle) {
+        super.extractArguments(bundle)
+        flgReactivationClient = bundle.getString(MOSLConstants.FLG_REACTIVATION_CLIENT, "0") ?: "0"
     }
 
     override fun onDataSaved(): Observable<SaveRequestData> {
@@ -289,7 +299,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             isOnlyClient = clientDetail.isOnlyClient
             isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
             mainFromDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
-            uiSubject.onNext(CreateMeetingUiEvent.TouchedUntouchedRequest)
+            if(flgReactivationClient.equals("1")) {
+                binding.tilTouchedUntouched.visibility = View.VISIBLE
+                binding.tilFeedback.visibility = View.VISIBLE
+                uiSubject.onNext(CreateMeetingUiEvent.TouchedUntouchedRequest)
+            }else{
+                binding.tilTouchedUntouched.visibility = View.GONE
+                binding.tilFeedback.visibility = View.GONE
+            }
         }
     }
 
@@ -979,7 +996,19 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (binding.llSubcategory.visibility == View.VISIBLE && binding.etSubCategory.text!!.length <= 10) {
             binding.tilEtSubCategory.setErrorMessages(MSG_ATLEAST_TEN_CHARACTERS)
             false
-        } else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
+        }else if (binding.tilTouchedUntouched.visibility == View.VISIBLE && getSelectedSpinnerValue(
+                binding.spTouchedUntouched
+            ) == SELECT_TOUCHED_UNTOUCHED
+        ) {
+            binding.tilTouchedUntouched.setErrorMessages(MSG_SELECT_TOUCHED_UNTOUCHED)
+            false
+        } else if (binding.tilFeedback.visibility == View.VISIBLE && getSelectedSpinnerValue(
+                binding.spFeedback
+            ) == SELECT_FEEDBACK
+        ) {
+            binding.tilFeedback.setErrorMessages(MSG_SELECT_FEEDBACK)
+            false
+        }else if (enableLocationGroup && !permissionCheckHelper.locationPermission()) {
             permissionCheckHelper.requestLocation()
             false
         } else if (enableLocationGroup && !(requireContext().getSystemService(
