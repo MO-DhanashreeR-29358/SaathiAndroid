@@ -231,27 +231,9 @@ class CommonActivity : BaseActivity(),
          //   REQUEST_CODE_CUSTOM_PERMISSION
         //)
 
-        mDistaSdk.initOrganization( "MOSL",
-            object : OnTaskSuccessListener {
-                override fun onSuccess() {
-                    Toast.makeText(
-                        applicationContext,
-                        "initialize organization successfully !",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            },
-            object : OnTaskFailureListener {
-                override fun onFailure(message: String?) {
-                    Toast.makeText(
-                        applicationContext,
-                        message,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            })
 
 
+        if(!mDistaSdk.isLoggedIn) {
             mDistaSdk.doLoginCheckIn(
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
@@ -272,7 +254,7 @@ class CommonActivity : BaseActivity(),
                         ).show()
                     }
                 })
-
+        }
 
 
 
