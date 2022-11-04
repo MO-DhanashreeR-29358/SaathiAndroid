@@ -108,6 +108,8 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       leadId = leadID ?: "",
       meetingDuration = meetingDuration ?: "",
       pincode = pincode ?: "",
-      location = location ?: ""
+      location = location ?: "",
+      touchedUntouched = touchedUntouched ?: "",
+      feedback = feedback ?: ""
   )
 }

@@ -551,7 +551,6 @@
                 android:text="@string/text_label_comments"
                 android:textColor="@color/tv_color"
                 android:textSize="@dimen/txt_size"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvQueryDesc" />
@@ -569,6 +568,70 @@
                 app:layout_constraintStart_toEndOf="@id/guideline"
                 tool:text="data" />
 
+
+            <TextView
+                android:id="@+id/text_label_touchedUntouched"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/text_label_touched_untouched"
+                android:textColor="@color/tv_color"
+                android:textSize="@dimen/txt_size"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvComments" />
+
+            <TextView
+                android:id="@+id/tvTouchedUntouched"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size"
+                app:layout_constraintBaseline_toBaselineOf="@+id/text_label_touchedUntouched"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                tool:text="data" />
+
+            <TextView
+                android:id="@+id/text_label_feedback"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/text_label_feedback"
+                android:textColor="@color/tv_color"
+                android:textSize="@dimen/txt_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTouchedUntouched" />
+
+            <TextView
+                android:id="@+id/tvFeedback"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/txt_size"
+                app:layout_constraintBaseline_toBaselineOf="@+id/text_label_feedback"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/guideline"
+                tool:text="data" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/group_touched_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="text_label_touchedUntouched, tvTouchedUntouched, text_label_feedback, tvFeedback">
+
+            </androidx.constraintlayout.widget.Group>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline"

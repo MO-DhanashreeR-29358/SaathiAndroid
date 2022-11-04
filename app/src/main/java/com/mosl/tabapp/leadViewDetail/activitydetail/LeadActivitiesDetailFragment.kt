@@ -56,6 +56,14 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvAmount.text = it.amount
           tvGeoMeetingLocation.text = it.location
 
+          if(it.touchedUntouched.isNotEmpty() && it.feedback.isNotEmpty()){
+            groupTouchedFeedback.visibility = View.VISIBLE
+            tvTouchedUntouched.text = it.touchedUntouched
+            tvFeedback.text = it.feedback
+          }else{
+            groupTouchedFeedback.visibility = View.GONE
+          }
+
           when {
             it.attendeeEmployee.isNotEmpty() -> {
               val attendingArray = it.attendeeEmployee.trim()
@@ -65,6 +73,9 @@ class LeadActivitiesDetailFragment : CommonFragment() {
               tvAttendeeThird.text = attendingArray[2]
             }
           }
+
+
+
 
         }
       }

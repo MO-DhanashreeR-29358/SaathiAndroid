@@ -31,7 +31,9 @@ data class MeetingParcel(
   @JvmField val leadId: String,
   @JvmField val meetingDuration: String,
   @JvmField val pincode: String,
-  @JvmField val location: String
+  @JvmField val location: String,
+  @JvmField val touchedUntouched: String,
+  @JvmField val feedback: String
 ) : Parcelable
 
 fun Meeting.mapToMeetingParcel(): MeetingParcel {
@@ -61,6 +63,8 @@ fun Meeting.mapToMeetingParcel(): MeetingParcel {
       leadId = leadId,
       meetingDuration = meetingDuration,
       pincode = pincode,
-      location = location
+      location = location,
+      touchedUntouched = touchedUntouched,
+      feedback = feedback
   )
 }

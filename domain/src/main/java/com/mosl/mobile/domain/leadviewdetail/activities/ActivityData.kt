@@ -54,5 +54,7 @@ data class Meeting(
   @JvmField val leadId: String,
   @JvmField val meetingDuration: String,
   @JvmField val pincode: String,
-  @JvmField val location: String
+  @JvmField val location: String,
+  @JvmField val touchedUntouched: String,
+  @JvmField val feedback: String
 )

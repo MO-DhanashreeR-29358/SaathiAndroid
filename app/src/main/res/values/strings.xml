@@ -102,6 +102,8 @@
     <string name="text_label_meeting_description">Meeting Description</string>
     <string name="text_label_customer_service_remark">Customer Service Remark</string>
     <string name="text_label_comments">Comments</string>
+    <string name="text_label_touched_untouched">Touched Untouched</string>
+    <string name="text_label_feedback">Feedback</string>
     <string name="text_label_spinner_product">Product*</string>
     <string name="text_label_spinner_meeting_duration">Meeting Duration*</string>
     <string name="text_label_spinner_meeting_objective">Meeting Objective*</string>
@@ -329,8 +331,8 @@
     <string name="btn_reset">Reset</string>
     <string name="text_label_contact_us">Contact Us</string>
     <string name="text_label_support_queries">Support Related Queries</string>
-    <string name="text_label_tele_phone_1">91&#8211;22&#8211;39982515 /</string>
-    <string name="text_label_tele_phone_2">91&#8211;22&#8211;67490600</string>
+    <string name="text_label_tele_phone_1">022 6749 0666 /</string>
+    <string name="text_label_tele_phone_2">022 4054 8181</string>
     <string name="error_message_empty_query">Please enter query description</string>
     <string name="page_title_query">Insert Your Query</string>
     <string name="page_title_create_meeting">Create Meeting</string>

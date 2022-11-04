@@ -20,7 +20,8 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getEkycExpressApiUrl(): String {
-    return "https://ekycuat.motilaloswal.com/express/api/v1/"
+   return "https://ekycuat.motilaloswal.com/express/api/v1/"
+    //return "https://ekycuat.motilaloswal.com/superjetApi/api/v1/"
   }
 
   companion object {
