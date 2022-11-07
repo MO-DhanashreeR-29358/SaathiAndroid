@@ -58,20 +58,20 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
     DistaSDK.getInstance().initOrganization( "MOSL",
       object : OnTaskSuccessListener {
         override fun onSuccess() {
-          Toast.makeText(
-            applicationContext,
-            "initialize organization successfully !",
-            Toast.LENGTH_LONG
-          ).show()
+         // Toast.makeText(
+          //  applicationContext,
+           // "initialize organization successfully !",
+           // Toast.LENGTH_LONG
+          //).show()
         }
       },
       object : OnTaskFailureListener {
         override fun onFailure(message: String?) {
-          Toast.makeText(
-            applicationContext,
-            message,
-            Toast.LENGTH_LONG
-          ).show()
+          //Toast.makeText(
+          //  applicationContext,
+           // message,
+           // Toast.LENGTH_LONG
+          //).show()
         }
       })
 

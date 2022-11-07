@@ -238,20 +238,20 @@ class CommonActivity : BaseActivity(),
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
                     override fun onSuccess() {
-                        Toast.makeText(
-                            applicationContext,
-                            "User logged in successfully !",
-                            Toast.LENGTH_LONG
-                        ).show()
+                       // Toast.makeText(
+                        //    applicationContext,
+                        //    "User logged in successfully !",
+                         //   Toast.LENGTH_LONG
+                        //).show()
                     }
                 },
                 object : OnTaskFailureListener {
                     override fun onFailure(message: String?) {
-                        Toast.makeText(
-                            applicationContext,
-                            message,
-                            Toast.LENGTH_LONG
-                        ).show()
+                       // Toast.makeText(
+                        //    applicationContext,
+                        //    message,
+                        //    Toast.LENGTH_LONG
+                        //).show()
                     }
                 })
         }
@@ -819,40 +819,40 @@ class CommonActivity : BaseActivity(),
         mDistaSdk.logout(
             object : OnTaskSuccessListener {
                 override fun onSuccess() {
-                    Toast.makeText(
-                        applicationContext,
-                        "User logout successfully !",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    //Toast.makeText(
+                     //   applicationContext,
+                     //   "User logout successfully !",
+                      //  Toast.LENGTH_LONG
+                    //).show()
                 }
             },
             object : OnTaskFailureListener {
                 override fun onFailure(message: String?) {
-                    Toast.makeText(
-                        applicationContext,
-                        message,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    //Toast.makeText(
+                    //    applicationContext,
+                     //   message,
+                     //   Toast.LENGTH_LONG
+                    //).show()
                 }
             })
 
         mDistaSdk.checkout(
             object : OnTaskSuccessListener {
                 override fun onSuccess() {
-                    Toast.makeText(
-                        applicationContext,
-                        "User check out successfully !",
-                        Toast.LENGTH_LONG
-                    ).show()
+                   // Toast.makeText(
+                    //    applicationContext,
+                     //   "User check out successfully !",
+                     //   Toast.LENGTH_LONG
+                   // ).show()
                 }
             },
             object : OnTaskFailureListener {
                 override fun onFailure(message: String?) {
-                    Toast.makeText(
-                        applicationContext,
-                        message,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    //Toast.makeText(
+                     //   applicationContext,
+                     //   message,
+                    //    Toast.LENGTH_LONG
+                   // ).show()
                 }
             })
     }
