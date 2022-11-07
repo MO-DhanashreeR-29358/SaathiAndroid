@@ -171,16 +171,16 @@ ext.deps = [
         'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
         'EkycArtifactDependencies': [
-            'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha7",
-            'core'        : "EkycArtifacts:ekyccore:1.0.0-alpha2",
-            'api'         : "EkycArtifacts:ekycapi:1.0.0",
-            'data'        : "EkycArtifacts:ekycdata:1.0.0-alpha2",
-            'domain'      : "EkycArtifacts:ekycdomain:1.0.0",
-            'loginApi'    : "EkycArtifacts:ekycloginapi:1.0.0-alpha1",
-            'loginUi'     : "EkycArtifacts:ekycloginui:1.0.0-alpha3",
-            'mockData'    : "EkycArtifacts:ekycmockdata:0.0.6",
-            'coreUi'      : "EkycArtifacts:ekyccoreui:1.0.0-alpha2",
-            'appUser'     : "EkycArtifacts:ekycappuser:1.0.0-alpha2"
+                'app'        : "EkycArtifacts:ekycapp:1.0.0-alpha9",
+                'core'       : "EkycArtifacts:ekyccore:1.0.0-alpha3",
+                'api'        : "EkycArtifacts:ekycapi:1.0.1",
+                'data'       : "EkycArtifacts:ekycdata:1.0.0-alpha3",
+                'domain'     : "EkycArtifacts:ekycdomain:1.0.1",
+                'loginApi'   : "EkycArtifacts:ekycloginapi:1.0.0-alpha2",
+                'loginUi'    : "EkycArtifacts:ekycloginui:1.0.0-alpha4",
+                'mockData'   : "EkycArtifacts:ekycmockdata:0.0.7",
+                'coreUi'     : "EkycArtifacts:ekyccoreui:1.0.0-alpha3",
+                'appUser'    : "EkycArtifacts:ekycappuser:1.0.0-alpha3"
         ]
 
 ]
