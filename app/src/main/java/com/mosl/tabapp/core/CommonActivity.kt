@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -66,6 +68,10 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import mosl.rx_preferences.Preference
+import sdk.DistaSDK
+import sdk.interfaces.IDistaSDK
+import sdk.interfaces.OnTaskFailureListener
+import sdk.interfaces.OnTaskSuccessListener
 import timber.log.Timber
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -129,7 +135,7 @@ class CommonActivity : BaseActivity(),
     private lateinit var compressionLocationWorkId: UUID
     private lateinit var compressionDataSyncWorkId: UUID
     internal var snackbar: Snackbar? = null
-
+    private val REQUEST_CODE_CUSTOM_PERMISSION = 1153
     @Inject
     @field:RemoteConfigData
     lateinit var remoteCongigData: StringPreference
@@ -148,6 +154,8 @@ class CommonActivity : BaseActivity(),
      var editor: SharedPreferences.Editor? = null
      var twentyFourSevenCheck = false*/
     /**/
+
+    private lateinit var mDistaSdk : IDistaSDK
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -215,6 +223,40 @@ class CommonActivity : BaseActivity(),
             branchCodePreference.set(userManager.user.defaultBusinessProfile.branchCode)
             menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
         }
+
+        mDistaSdk = DistaSDK.getInstance()
+
+        //ActivityCompat.requestPermissions(
+         //   this, arrayOf(android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.CALL_PHONE,android.Manifest.permission.ACCESS_FINE_LOCATION),
+         //   REQUEST_CODE_CUSTOM_PERMISSION
+        //)
+
+
+
+        if(!mDistaSdk.isLoggedIn) {
+            mDistaSdk.doLoginCheckIn(
+                userManager.getUser()?.employeeCode,
+                object : OnTaskSuccessListener {
+                    override fun onSuccess() {
+                       // Toast.makeText(
+                        //    applicationContext,
+                        //    "User logged in successfully !",
+                         //   Toast.LENGTH_LONG
+                        //).show()
+                    }
+                },
+                object : OnTaskFailureListener {
+                    override fun onFailure(message: String?) {
+                       // Toast.makeText(
+                        //    applicationContext,
+                        //    message,
+                        //    Toast.LENGTH_LONG
+                        //).show()
+                    }
+                })
+        }
+
+
 
     }
 
@@ -578,6 +620,7 @@ class CommonActivity : BaseActivity(),
                         forcePreference.set(100)
                         stopService()
                         twentyFourSevenCheck.set(false)
+                        distaLogoutCheckout()
                         /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
                         editor?.commit()*/
                         openLogin()
@@ -770,6 +813,48 @@ class CommonActivity : BaseActivity(),
                 finish()
             }
         }
+    }
+
+    private fun distaLogoutCheckout(){
+        mDistaSdk.logout(
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                    //Toast.makeText(
+                     //   applicationContext,
+                     //   "User logout successfully !",
+                      //  Toast.LENGTH_LONG
+                    //).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    //Toast.makeText(
+                    //    applicationContext,
+                     //   message,
+                     //   Toast.LENGTH_LONG
+                    //).show()
+                }
+            })
+
+        mDistaSdk.checkout(
+            object : OnTaskSuccessListener {
+                override fun onSuccess() {
+                   // Toast.makeText(
+                    //    applicationContext,
+                     //   "User check out successfully !",
+                     //   Toast.LENGTH_LONG
+                   // ).show()
+                }
+            },
+            object : OnTaskFailureListener {
+                override fun onFailure(message: String?) {
+                    //Toast.makeText(
+                     //   applicationContext,
+                     //   message,
+                    //    Toast.LENGTH_LONG
+                   // ).show()
+                }
+            })
     }
 
     override fun erroMsgDialog(msg: String) {

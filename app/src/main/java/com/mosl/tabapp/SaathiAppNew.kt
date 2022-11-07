@@ -1,15 +1,29 @@
 package com.mosl.tabapp
 
+import android.R.attr
 import android.content.Context
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
+import processors.coreProcessors.eventReceivers.AbstractEventObserver.SESSION_EXPIRED
+import processors.coreProcessors.eventReceivers.EventBroadcast
+import processors.coreProcessors.eventReceivers.IEventObserver
+import sdk.DistaSDK
+import sdk.interfaces.OnTaskFailureListener
+import sdk.interfaces.OnTaskSuccessListener
+import services.SurveyUploaderService
+import utils.BaseApplication
+import utils.DistaApplication
+import utils.interfaces.IRepositoryUtils
 
-abstract class SaathiAppNew : DaggerApplication() {
+
+abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
   init {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
   }
@@ -29,6 +43,7 @@ abstract class SaathiAppNew : DaggerApplication() {
 
   override fun onCreate() {
     super.onCreate()
+      EventBroadcast.registerSessionExpiredObserver(this, this)
     init()
     CRMWebServiceHandler.initSaathiApi(this)
 
@@ -38,6 +53,29 @@ abstract class SaathiAppNew : DaggerApplication() {
     ).addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE = this
+    DistaApplication.newInstance(this)
+
+    DistaSDK.getInstance().initOrganization( "MOSL",
+      object : OnTaskSuccessListener {
+        override fun onSuccess() {
+         // Toast.makeText(
+          //  applicationContext,
+           // "initialize organization successfully !",
+           // Toast.LENGTH_LONG
+          //).show()
+        }
+      },
+      object : OnTaskFailureListener {
+        override fun onFailure(message: String?) {
+          //Toast.makeText(
+          //  applicationContext,
+           // message,
+           // Toast.LENGTH_LONG
+          //).show()
+        }
+      })
+
+
   }
 
   fun getDB(): AppDatabase? {
@@ -46,6 +84,7 @@ abstract class SaathiAppNew : DaggerApplication() {
 
   override fun attachBaseContext(base: Context) {
     super.attachBaseContext(base)
+    MultiDex.install(this)
   }
 
   abstract fun init()
@@ -55,4 +94,14 @@ abstract class SaathiAppNew : DaggerApplication() {
       appComponent
     } else super.getSystemService(name)
   }
+
+    override fun onEventReceived(eventName: String?, data: Boolean?) {
+      when (eventName) {
+
+        SESSION_EXPIRED -> {
+          IRepositoryUtils.pushAppStateToFirestore(INSTANCE, SESSION_EXPIRED)
+          BaseApplication.getBaseApplication().setAssetDetails(null)
+        }
+      }
+    }
 }
