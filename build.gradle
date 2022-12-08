@@ -21,8 +21,8 @@ buildscript {
     }
 }
 
-ext.versions = ["compileSdkVersion"   : 30,
-                "targetSdkVersion"    : 30,
+ext.versions = ["compileSdkVersion"   : 31,
+                "targetSdkVersion"    : 31,
                 "buildToolsVersion"   : "29.0.3",
                 'multidex'            : '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',
@@ -168,7 +168,7 @@ ext.deps = [
         'playService'             : "com.google.android.gms:play-services:${versions.firebase}",
         'compressor'              : "id.zelory:compressor:2.1.0",
         'location'                : "com.google.android.gms:play-services-location:16.0.0",
-        'work'                    : "androidx.work:work-runtime-ktx:2.3.4",
+        'work'                    : "androidx.work:work-runtime-ktx:2.7.1",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
         'EkycArtifactDependencies': [
                 'app'         : "EkycArtifacts:ekycapp:1.0.0-alpha10",

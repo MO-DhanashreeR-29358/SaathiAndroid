@@ -117,9 +117,12 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
   ))
 
   override fun getActivityRequest(): ActivityRequest {
+    if(mUcid.equals("null",ignoreCase = true)){
+      mUcid = "0"
+    }
     return ActivityRequest(
         leadId = leadId,
-        ucid = mUcid
+        ucid = mUcid.ifEmpty { "0" }
     )
   }
 

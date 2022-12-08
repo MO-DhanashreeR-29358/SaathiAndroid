@@ -86,6 +86,10 @@ public class CRMMOSLCommon {
 
         }
 
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionArrayList.add(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+        }
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionArrayList.add(Manifest.permission.ACCESS_BACKGROUND_LOCATION);
 

@@ -26,7 +26,7 @@ fun ActivityRequest.mapToAppointmentRequest(): AppointmentRequest {
           page = APPOINTMENT_PAGE,
           calculatedPage = CALCULATED_PAGE,
           totalCount = TOTAL_COUNT,
-          uCID = ucid
+          uCID = ucid.ifEmpty { "0" }
       ),
       filter = Filter(null, null, null, null, null, null, null),
       isAdminMode = true
@@ -41,7 +41,7 @@ fun ActivityRequest.mapToMeetingRequest(): MeetingRequest {
           page = MEETING_PAGE,
           calculatedPage = CALCULATED_PAGE,
           totalCount = TOTAL_COUNT,
-          uCID = ucid
+          uCID = ucid.ifEmpty { "0" }
       ),
       filter = Filter(null, null, null, null, null, null, null),
       isAdminMode = true

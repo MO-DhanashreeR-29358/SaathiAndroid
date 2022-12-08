@@ -131,7 +131,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             randomInt = Random.nextInt()
             val request = PostOTPForMeetingRequest(
-                employeeCode = userManager.getUser()!!.employeeCode.toInt(),
+                employeeCode = userManager.getUser()!!.employeeCode,
                 leadId = leadId,
                 uCID = mUCID,
                 oTP = binding.etOtp.text.toString(),

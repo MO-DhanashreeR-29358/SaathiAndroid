@@ -1,19 +1,27 @@
 package com.mosl.tabapp.core
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
+import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.location.LocationManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.os.PowerManager
+import android.provider.Settings
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -68,11 +76,13 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import mosl.rx_preferences.Preference
+import processors.coreProcessors.assetTracker.AssetTracker
 import sdk.DistaSDK
 import sdk.interfaces.IDistaSDK
 import sdk.interfaces.OnTaskFailureListener
 import sdk.interfaces.OnTaskSuccessListener
 import timber.log.Timber
+import utils.BaseApplication
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
@@ -136,6 +146,8 @@ class CommonActivity : BaseActivity(),
     private lateinit var compressionDataSyncWorkId: UUID
     internal var snackbar: Snackbar? = null
     private val REQUEST_CODE_CUSTOM_PERMISSION = 1153
+    private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
+    private val PERMISSIONS_REQUEST_ENABLE_GPS: Int = 1005
     @Inject
     @field:RemoteConfigData
     lateinit var remoteCongigData: StringPreference
@@ -231,7 +243,7 @@ class CommonActivity : BaseActivity(),
          //   REQUEST_CODE_CUSTOM_PERMISSION
         //)
 
-
+        checkPermissionOnDistaLoggedIn()
 
         if(!mDistaSdk.isLoggedIn) {
             mDistaSdk.doLoginCheckIn(
@@ -260,6 +272,91 @@ class CommonActivity : BaseActivity(),
 
     }
 
+    private fun checkPermissionOnDistaLoggedIn(){
+        if(mDistaSdk.isLoggedIn){
+            if(isLocationPermissionAllowed() && isBatteryPermissionAllowed() ){
+                AssetTracker.initialize(BaseApplication.getBaseApplication() )
+            }else{
+                if(!isLocationPermissionAllowed()) {
+                    ActivityCompat.requestPermissions(
+                        this@CommonActivity,
+                        arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ),
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                    )
+                }
+                if(!isBatteryPermissionAllowed()){
+                    val packageName: String = getPackageName()
+                    val pm  = getSystemService(POWER_SERVICE) as PowerManager
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (pm.isIgnoringBatteryOptimizations(packageName)) {
+                            intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+                        } else {
+                            intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                            intent.data = Uri.parse("package:$packageName")
+                        }
+                        startActivity(intent)
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun buildAlertMessageNoGps() {
+        val builder = AlertDialog.Builder(this@CommonActivity)
+        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id ->
+                val enableGpsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS)
+            }
+        val alert = builder.create()
+        alert.show()
+    }
+
+    fun isLocationEnabled(): Boolean {
+        val manager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps()
+            return false
+        }
+        return true
+    }
+
+    private fun isLocationPermissionAllowed() : Boolean{
+
+        if (ContextCompat.checkSelfPermission(
+                this@CommonActivity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                this@CommonActivity,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+           return true
+        }else {
+            return false
+        }
+
+
+    }
+
+    private fun isBatteryPermissionAllowed() : Boolean{
+        if (ContextCompat.checkSelfPermission(
+                this@CommonActivity,
+                Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+            )
+            == PackageManager.PERMISSION_GRANTED){
+           return true
+        }else{
+            return false
+        }
+    }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -288,6 +385,9 @@ class CommonActivity : BaseActivity(),
         }
         if (resultCode == BranchSelectNeeded) {
             menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
+        }
+        if(requestCode == PERMISSIONS_REQUEST_ENABLE_GPS){
+            checkPermissionOnDistaLoggedIn()
         }
         super.onActivityResult(requestCode, resultCode, data)
     }

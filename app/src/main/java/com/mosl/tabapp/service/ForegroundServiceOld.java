@@ -141,7 +141,7 @@ public class ForegroundServiceOld extends Service {
 
     PendingIntent pendingIntent =
         PendingIntent.getActivity(this, 0 /* Request code */, notificationIntent,
-            PendingIntent.FLAG_ONE_SHOT);
+            PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_IMMUTABLE );
 
     NotificationCompat.Builder notification =
         new NotificationCompat.Builder(this, CHANNEL_ID).setContentText(

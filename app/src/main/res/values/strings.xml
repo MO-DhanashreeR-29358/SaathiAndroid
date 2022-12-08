@@ -634,4 +634,6 @@
     <string name="lead_detail_asset_product">Asset Product</string>
     <string name="lead_detail_total_gain_losss">Total Gain/ Loss</string>
     <string name="lead_detail_available_limits">Available Limits</string>
+
+    <string name="leak_canary_display_activity_label">Leaks</string>
 </resources>
