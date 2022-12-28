@@ -120,6 +120,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         professionid = professionalId.key
         setProductID(selectedProductType.key)
         setPrimaryRM(primRM ?: user?.employeeCode)
+        setSecondaryRM(secondaryRM)
         setClientCode(null)
         setAssignedBy(user?.employeeCode)
         setAssignedByDate(CRMAppUtil.getDBDate())
@@ -142,7 +143,8 @@ private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduc
             assignedBy,
             assignedByDate,
             stageID,
-            statusID
+            statusID,
+            secondaryRM
         )
     )
 }

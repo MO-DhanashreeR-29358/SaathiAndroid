@@ -12,6 +12,7 @@ public class LeadCreationProductMapping {
     @SerializedName("AssignedByDate") private String assignedByDate;
     @SerializedName("StageID") private String stageID;
     @SerializedName("StatusID") private String statusID;
+    @SerializedName("SecondaryRM") private String secondaryRM;
 
     public String getInterestedIn() {
         return interestedIn;
@@ -75,6 +76,14 @@ public class LeadCreationProductMapping {
 
     public void setStatusID(String statusID) {
         this.statusID = statusID;
+    }
+
+    public String getSecondaryRM() {
+        return secondaryRM;
+    }
+
+    public void setSecondaryRM(String secondaryRM) {
+        this.secondaryRM = secondaryRM;
     }
 
     public String getLeadProductMapping() {

@@ -12,10 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager.LayoutParams
-import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
-import android.widget.TextView
+import android.widget.*
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding4.widget.checkedChanges
@@ -34,6 +32,8 @@ import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SelectBank
 import com.mosl.mobile.domain.bank.SelectBranch
 import com.mosl.mobile.user.annotation.BranchCode
+import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.DedupeModelResponse
@@ -157,12 +157,17 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     private var primaryRM: String? = null
+    private var secondaryRM: String? = ""
     private val searchList: CustomListPickerDialog by lazy {
+        CustomListPickerDialog(requireContext())
+    }
+    private val secondaryRMSearchList: CustomListPickerDialog by lazy {
         CustomListPickerDialog(requireContext())
     }
 
     private fun setupView() {
         setupScrollView()
+        setupAllianceSeconadaryRM()
         disableField(binding.llResAdd)
         disableField(binding.llOffAdd)
         binding.tvPersonalInfo.toggleIcon(binding.llPersonalInformation)
@@ -458,6 +463,46 @@ class LeadCreationFragment : CommonFragment(),
 
     }
 
+    private fun setupAllianceSeconadaryRM(){
+        if (userManager.user.isAllianceBusiness()) {
+            binding.llSearchSecondaryRM.isVisible = true
+            binding.actSecondaryRM.apply {
+                setHint(R.string.hint_lead_creation_secondary_rm)
+                setListener { secondaryRM = null }
+                setOnClickListener {
+                    requireActivity().window
+                        .setSoftInputMode(
+                            LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                                    or LayoutParams.SOFT_INPUT_ADJUST_PAN
+                        )
+                    secondaryRMSearchList.threshold = MOSLConstants.SEARCH_LENTH
+                    secondaryRMSearchList.show()
+                    secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm))
+                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
+                        override fun onListItemSelect(data: Parcelable) {
+                            val clientModel =
+                                data as EmployeeModel
+                            if (clientModel.isNoData) {
+                                return
+                            }
+                            binding.actSecondaryRM.setText(clientModel.attendeeName)
+                            secondaryRM = clientModel.attendeeCode
+                            secondaryRMSearchList.dismiss()
+                            binding.actSecondaryRM.setClearIconVisible(true)
+                        }
+
+                        override fun onSearchTextChanged(constraint: CharSequence) {
+                            subject.onNext(SecondaryRMSearchEvent(constraint.toString()))
+                        }
+                    }
+                    secondaryRMSearchList.setmListner(assingViewListner)
+                }
+            }
+        }else{
+            binding.llSearchSecondaryRM.isVisible = false
+        }
+    }
+
     private fun setupScrollView() {
         binding.scrollView.apply {
             descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
@@ -634,6 +679,9 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun onCategoryChanged(): Observable<Int> = binding.spCategory.itemSelections()
     override fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent> = subject.ofType()
+    override fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent> {
+      return  subject.ofType()
+    }
     override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
     override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()
     override fun onCreateButtonClicked(): Observable<Unit> = binding.btnCreate.clicks()
@@ -744,6 +792,25 @@ class LeadCreationFragment : CommonFragment(),
 
     }
 
+    override fun renderOnSecondaryRMSearchEventFire(uiModel: UiModel<List<EmployeeModel>>) {
+        toggleSecondaryRMSearchListProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
+            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
+            secondaryRMSearchList.setAdapter(attendeeAdapter)
+        }
+
+        uiModel.onSuccess {
+            val list = if (it.isEmpty()) {
+                listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
+            } else {
+                it
+            }
+            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
+            secondaryRMSearchList.setAdapter(attendeeAdapter)
+        }
+    }
+
     private fun toggleSearchListProgress(inProgress: Boolean) {
         when {
             inProgress -> {
@@ -754,6 +821,15 @@ class LeadCreationFragment : CommonFragment(),
         }
     }
 
+    private fun toggleSecondaryRMSearchListProgress(inProgress: Boolean) {
+        when {
+            inProgress -> {
+                hideKeyboard(binding.actSecondaryRM)
+                secondaryRMSearchList.showProgress(View.VISIBLE)
+            }
+            else -> secondaryRMSearchList.showProgress(View.GONE)
+        }
+    }
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
@@ -938,6 +1014,9 @@ class LeadCreationFragment : CommonFragment(),
                 31 -> {
                     binding.tilPan.setErrorMessages(getString(it))
                 }
+                32 -> {
+                    binding.tvSecondaryRmError.isVisible = true
+                }
                 else -> {
                 }
 
@@ -969,6 +1048,7 @@ class LeadCreationFragment : CommonFragment(),
             tlInterest.disableErrorMessages()
             tlProductType.disableErrorMessages()
             tlProfession.disableErrorMessages()
+            tvSecondaryRmError.isVisible = false
         }
     }
 
@@ -1248,7 +1328,8 @@ class LeadCreationFragment : CommonFragment(),
             branchCode = branchCodePreference.get(),
             referaalCode = binding.etReferaalCode.text.toString(),
             dob = binding.etDOB.text.toString(),
-            BankAccountNumber = binding.etAccountNumber.text.toString()
+            BankAccountNumber = binding.etAccountNumber.text.toString(),
+            secondaryRM = secondaryRM.toString()
         )
     }
 
@@ -1271,6 +1352,7 @@ class LeadCreationFragment : CommonFragment(),
         binding.spCity.adapter = null
         binding.spOffCity.adapter = null
         searchList.setAdapter(null)
+        secondaryRMSearchList.setAdapter(null)
     }
 
     override fun onDestroyView() {

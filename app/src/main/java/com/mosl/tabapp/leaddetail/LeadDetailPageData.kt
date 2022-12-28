@@ -112,7 +112,8 @@ data class AddProductData(
     @JvmField val isCrossSellingProduct: Boolean,
     @JvmField val isProdSpecEditDisabled: String,
     @JvmField val isProdDisabled: String,
-    @JvmField val prodSpecialist: String
+    @JvmField val prodSpecialist: String,
+    @JvmField val secondaryRm : String
 
 )
 

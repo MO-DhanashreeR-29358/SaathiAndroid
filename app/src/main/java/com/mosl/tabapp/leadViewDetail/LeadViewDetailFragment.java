@@ -1767,7 +1767,8 @@ public class LeadViewDetailFragment extends CommonFragment
                 item.isCrossSellingProduct,
                 stringOrEmpty(item.isProductSpecialistEditDisabled),
                 stringOrEmpty(item.isProductDisabled),
-                stringOrEmpty(item.productSpecialist)
+                stringOrEmpty(item.productSpecialist),
+                stringOrEmpty(item.secondaryRM)
         );
     }
 

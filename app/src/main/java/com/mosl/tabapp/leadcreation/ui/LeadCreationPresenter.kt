@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.bank.BankRepository
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.rxjava3.core.Observable
@@ -15,9 +16,10 @@ class LeadCreationPresenter @Inject constructor(
     view: LeadCreationView,
     val repository: LeadCreationRepository,
     val navigator: LeadCreationNavigator,
-    val bankRepository: BankRepository
+    val bankRepository: BankRepository,
+    val userManager: UserManagerImpl
 ) : BasePresenter<LeadCreationView>(view) {
-    private val validator = LeadCreationValidator()
+    private val validator = LeadCreationValidator(userManager)
 
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
@@ -131,6 +133,19 @@ class LeadCreationPresenter @Inject constructor(
             }
             .subscribe(view::renderOnAssignToSearchEventFire, Timber::e)
             .addTo(disposable)
+
+        view.onSecondaryRMSearchEventFired()
+            .debounce(1000, MILLISECONDS, dispatchers.main)
+            .map { it.searchText }
+            .filter { it.isNotEmpty() }
+            .distinctUntilChanged()
+            .switchMap {
+                repository.getEmployeeModelsFilterForSecondaryRM(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderOnSecondaryRMSearchEventFire, Timber::e)
+            .addTo(disposable)
+
 
         val refereeCodeObs = view.onRefereeCodeChanged()
             .debounce(1000, MILLISECONDS, dispatchers.main)

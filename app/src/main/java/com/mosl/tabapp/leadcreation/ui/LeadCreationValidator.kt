@@ -1,14 +1,17 @@
 package com.mosl.tabapp.leadcreation.ui
 
 import androidx.annotation.StringRes
+import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
+import javax.inject.Inject
 
-class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
+class LeadCreationValidator @Inject constructor(val userManager: UserManagerImpl) : Validator<LeadCreationUserInput, String>() {
 
     override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
         val identifier: Int
@@ -193,6 +196,11 @@ class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
                     input.branchCode == MOSLConstants.BRANCH_CODE_FSFBMAIN  -> {
                 identifier = 31
                 R.string.error_message_enter_pan
+            }
+            userManager.user.isAllianceBusiness() &&
+                    input.secondaryRM.isBlank() -> {
+                identifier = 32
+                R.string.error_message_enter_secondary_rm
             }
             else -> {
                 identifier = 0

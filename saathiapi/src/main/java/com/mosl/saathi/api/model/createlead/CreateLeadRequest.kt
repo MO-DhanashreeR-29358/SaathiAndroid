@@ -65,7 +65,8 @@ data class CreateLeadProduct(
   @SerializedName("AssignedBy") val assignedBy: String?,
   @SerializedName("AssignedByDate") val assignedByDate: String?,
   @SerializedName("StageID") val stageID: String,
-  @SerializedName("StatusID") val statusID: String
+  @SerializedName("StatusID") val statusID: String,
+  @SerializedName("SecondaryRM") val secondaryRM: String?
 )
     
     

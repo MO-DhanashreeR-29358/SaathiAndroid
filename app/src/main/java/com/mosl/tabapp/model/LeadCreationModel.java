@@ -237,6 +237,10 @@ public class LeadCreationModel implements Serializable {
         productMapping.setPrimaryRM(primaryRM);
     }
 
+    public void setSecondaryRM(String secondaryRM) {
+        productMapping.setSecondaryRM(secondaryRM);
+    }
+
     public void setClientCode(String clientCode) {
         productMapping.setClientCode(clientCode);
     }

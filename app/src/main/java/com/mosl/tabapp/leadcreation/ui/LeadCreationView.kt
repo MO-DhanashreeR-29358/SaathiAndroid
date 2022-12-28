@@ -49,7 +49,10 @@ interface LeadCreationView : BaseView {
   fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>)
 
   fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent>
+  fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent>
+
   fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
+  fun renderOnSecondaryRMSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
 
   fun onRefereeCodeChanged(): Observable<String>
   fun resetRefereeOnCodeChange()

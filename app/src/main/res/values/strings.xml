@@ -484,6 +484,7 @@
     <string name="hint_lead_creation_referee_email">Referee Email</string>
     <string name="hint_lead_creation_referee_mobile">Referee Mobile</string>
     <string name="hint_lead_creation_assign_to">Assign to</string>
+    <string name="hint_lead_creation_secondary_rm">Secondary RM*</string>
     <string name="hint_lead_creation_alternate_mobile">Alternate Mobile No</string>
     <string name="hint_lead_creation_email_id">Email Id</string>
     <string name="hint_lead_creation_address_one">Address 1</string>
@@ -528,6 +529,7 @@
     <string name="error_message_invalid_referaal_code">Invalid Referaal Code.</string>
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
+    <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_enter_email">Enter email id.</string>
     <string name="error_message_invalid_mobile">Invalid mobile number.</string>
     <string name="error_message_invalid_landline">Invalid Tel number.</string>
@@ -572,6 +574,7 @@
     <string name="lead_detail_modified_by">Modified By</string>
     <string name="lead_detail_source">Source</string>
     <string name="lead_detail_prospect_source">Prospect Source</string>
+    <string name="lead_detail_secondary_rm">Secondary RM</string>
     <string name="lead_detail_prospect_source_detail">Prospect Source Detail</string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>

@@ -50,5 +50,6 @@ data class LeadCreationUserInput(
     @JvmField val branchCode : String,
     @JvmField val referaalCode : String,
     @JvmField val BankAccountNumber : String,
-    @JvmField val dob : String
+    @JvmField val dob : String,
+    @JvmField val secondaryRM : String
 )

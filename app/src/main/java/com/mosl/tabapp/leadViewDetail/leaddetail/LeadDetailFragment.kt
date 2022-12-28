@@ -2108,6 +2108,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             leadDetailAddProductList.add(getLeadDetailAddProductModel(it))
         }
 
+        if( leadDetailAddProductList.size > 0){
+            binding.etSecondaryRM.setText(leadDetailAddProductList.get(0).secondaryRM)
+        }
+
         leadDetailAddProductAdapter =
             LeadDetailAddProductAdapter(
                 saathiApi,
@@ -2154,7 +2158,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             item.isCrossSellingProduct,
             stringOrEmpty(item.isProductSpecialistEditDisabled),
             stringOrEmpty(item.isProductDisabled),
-            stringOrEmpty(item.productSpecialist)
+            stringOrEmpty(item.productSpecialist),
+            stringOrEmpty(item.secondaryRM)
         )
     }
 
@@ -2178,7 +2183,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             item.isCrossSellingProduct,
             stringOrEmpty(item.isProdSpecEditDisabled),
             stringOrEmpty(item.isProdDisabled),
-            stringOrEmpty(item.prodSpecialist)
+            stringOrEmpty(item.prodSpecialist),
+            stringOrEmpty(item.secondaryRm)
         )
     }
 

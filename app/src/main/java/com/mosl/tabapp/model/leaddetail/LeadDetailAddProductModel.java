@@ -25,6 +25,7 @@ public class LeadDetailAddProductModel {
     private String isProSpeEditDisabled;
     private String isProductDisabled;
 	private String productSpecialistId;
+    private String secondaryRM;
     private List<CrossSellingProductsModel> CrossSellingProductsModelList = new ArrayList<>();
 
     public List<CrossSellingProductsModel> getCrossSellingProductsModelList() {
@@ -43,7 +44,7 @@ public class LeadDetailAddProductModel {
         String clientCode, String leadMappingProductId, boolean isDefault,
         List<CrossSellingProductsModel> CrossSellingProductsModelList,
 		boolean IsCrossSellingProduct, String isProSpeEditDisabled, String isProductDisabled,
-		String productSpecialistId) {
+		String productSpecialistId, String secondaryRM) {
         this.stageId = stageId;
         this.stageValue = stageValue;
         this.statusId = statusId;
@@ -62,6 +63,15 @@ public class LeadDetailAddProductModel {
         this.isProductDisabled = isProductDisabled;
         this.isProSpeEditDisabled = isProSpeEditDisabled;
 		this.productSpecialistId = productSpecialistId;
+        this.secondaryRM = secondaryRM;
+    }
+
+    public String getSecondaryRM() {
+        return secondaryRM;
+    }
+
+    public void setSecondaryRM(String secondaryRM) {
+        this.secondaryRM = secondaryRM;
     }
 
     public boolean isDefault() {

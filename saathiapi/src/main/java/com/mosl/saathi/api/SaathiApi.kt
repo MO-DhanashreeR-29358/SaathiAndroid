@@ -194,6 +194,11 @@ interface SaathiApi {
         @Body request: UserBusinessProfileRequest
     ): Observable<List<BusinessProfile>>
 
+    @POST("UserApi/GetUserBusinesprofileForSecondoryRM")
+    fun getUserBusinessProfileForSecondaryRM(
+        @Body request: UserBusinessProfileRequest
+    ): Observable<List<BusinessProfile>>
+
     @POST("CrossSellingProductMapping/GetCrossSellingProduct")
     fun getCrossSellingProduct(
         @Body request: CrossSellingProductRequest

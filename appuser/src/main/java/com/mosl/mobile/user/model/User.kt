@@ -90,4 +90,8 @@ data class User(
         return flag
     }
 
+    fun isAllianceBusiness(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("11") ?: false
+    }
+
 }

@@ -102,7 +102,8 @@ fun List<LeadProductMappingItem>.leadProductMappingItemsToAddProductDatas(): Lis
           isCrossSellingProduct = it.isCrossSellingProduct,
           isProdSpecEditDisabled = it.isProductSpecialistEditDisabled ?: emptyString(),
           isProdDisabled = it.isProductDisabled ?: emptyString(),
-          prodSpecialist = it.productSpecialist ?: emptyString()
+          prodSpecialist = it.productSpecialist ?: emptyString(),
+          secondaryRm = it.secondaryRM?: emptyString()
       )
     } catch (_: Exception) {
       null
