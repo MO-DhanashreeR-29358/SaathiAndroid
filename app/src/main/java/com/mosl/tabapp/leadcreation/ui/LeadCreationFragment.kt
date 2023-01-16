@@ -467,7 +467,13 @@ class LeadCreationFragment : CommonFragment(),
         if (userManager.user.isAllianceBusiness()) {
             binding.llSearchSecondaryRM.isVisible = true
             binding.actSecondaryRM.apply {
-                setHint(R.string.hint_lead_creation_secondary_rm)
+                userManager.getUser()?.apply {
+                    if (isAufsb()) {
+                        setHint(R.string.hint_lead_creation_secondary_rm_mo)
+                    } else {
+                        setHint(R.string.hint_lead_creation_secondary_rm)
+                    }
+                }
                 setListener { secondaryRM = null }
                 setOnClickListener {
                     requireActivity().window
@@ -476,9 +482,16 @@ class LeadCreationFragment : CommonFragment(),
                                     or LayoutParams.SOFT_INPUT_ADJUST_PAN
                         )
                     secondaryRMSearchList.threshold = MOSLConstants.SEARCH_LENTH
+                    secondaryRMSearchList.clearSearchText()
                     secondaryRMSearchList.show()
-                    secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm))
-                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
+                    userManager.getUser()?.apply {
+                        if (isAufsb()) {
+                            secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_mo_title))
+                        } else {
+                            secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_title))
+                        }
+                    }
+                        val assingViewListner: ListPickerListneable = object : ListPickerListneable {
                         override fun onListItemSelect(data: Parcelable) {
                             val clientModel =
                                 data as EmployeeModel

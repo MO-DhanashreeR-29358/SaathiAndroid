@@ -51,7 +51,10 @@ public interface MOSLConstants extends LabelConfig {
     String REPORT_PAGE_SIZE = "50";
     String DASHBOARD_REPORT_PAGE_SIZE = "100";
 
-    //Common
+    int SECTOR = 137;
+    int DESIGNATION = 136;
+    int NETWORTH = 138;
+
 
     String SOME_ERROR_OCCURED_PLEASE_RETRY = "Some error occurred, please retry";
     String SOME_SERVER_ERROR_OCCURRED =
@@ -147,6 +150,9 @@ public interface MOSLConstants extends LabelConfig {
     String SELECT_PRODUCT = "Select Product";
     String SELECT_PROFILE = "Select Profile";
     String SELECT_ACTIVITY_TYPE = "Select Activity Type";
+    String SELECT_SECTOR =  "Select Sector";
+    String SELECT_DESIGNATION =  "Select Designation";
+    String SELECT_NETWORTH =  "Select Networth";
     String SELECT_APPT_DATE_TYPE = "Appointment Date should be future Date";
     String SELECT_ACTIONABLES = "Select Actionables";
     String SELECT_CATEGORY = "Select Category";

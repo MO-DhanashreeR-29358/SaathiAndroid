@@ -84,7 +84,15 @@ data class LeadViewItem(
     @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: Int,
     @JvmField @SerializedName(
         "leadFieldValueModels"
-    ) val leadFieldValueModels: List<LeadFieldValueData>?
+    ) val leadFieldValueModels: List<LeadFieldValueData>?,
+    @JvmField @SerializedName("SectorID") val sectorId: String?,
+    @JvmField @SerializedName("Sector") val sector: String?,
+    @JvmField @SerializedName("DesigID") val desigId: String?,
+    @JvmField @SerializedName("Desig") val desig: String?,
+    @JvmField @SerializedName("NetworthID") val networthId: String?,
+    @JvmField @SerializedName("Networth") val networth: String?,
+    @JvmField @SerializedName("ReferralEmpCodeN") val referralEmpCode: String?,
+    @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?
 )
 
 data class LeadFieldSection(

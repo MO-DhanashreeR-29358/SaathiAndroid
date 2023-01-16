@@ -484,7 +484,10 @@
     <string name="hint_lead_creation_referee_email">Referee Email</string>
     <string name="hint_lead_creation_referee_mobile">Referee Mobile</string>
     <string name="hint_lead_creation_assign_to">Assign to</string>
-    <string name="hint_lead_creation_secondary_rm">Secondary RM*</string>
+    <string name="hint_lead_creation_secondary_rm">Secondary RM (Bank RM)*</string>
+    <string name="hint_lead_creation_secondary_rm_mo">Secondary RM (MO RM)*</string>
+    <string name="hint_lead_creation_secondary_rm_title">Secondary RM (Bank RM)</string>
+    <string name="hint_lead_creation_secondary_rm_mo_title">Secondary RM (MO RM)</string>
     <string name="hint_lead_creation_alternate_mobile">Alternate Mobile No</string>
     <string name="hint_lead_creation_email_id">Email Id</string>
     <string name="hint_lead_creation_address_one">Address 1</string>
@@ -581,6 +584,11 @@
     <string name="lead_detail_broking_profile">Broking Profile</string>
     <string name="lead_detail_ip_profile">IP Profile</string>
     <string name="lead_detail_final_profile">Final Profile</string>
+    <string name="lead_detail_final_sector">Sector</string>
+    <string name="lead_detail_final_designation">Designation</string>
+    <string name="lead_detail_final_networth">Networth</string>
+    <string name="lead_detail_referral_emp_code">Referral Employee Code</string>
+    <string name="lead_detail_referral_emp_name">Referral Emplyoee Name</string>
 
     <string name="lead_detail_contact_person">Contact Person</string>
     <string name="lead_detail_mobile_number">Mobile Number</string>

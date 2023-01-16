@@ -31,7 +31,15 @@ data class UpdateLeadRequest(
     @JvmField @SerializedName("contact") val contact: ContactRequest,
     @JvmField @SerializedName(
         "leadFieldValueModels"
-  ) val leadFieldValueModels: List<LeadFieldValueRequest>
+  ) val leadFieldValueModels: List<LeadFieldValueRequest>,
+    @JvmField @SerializedName("SectorID") val sectorId: String?,
+    @JvmField @SerializedName("Sector") val sector: String?,
+    @JvmField @SerializedName("DesigID") val desigId: String?,
+    @JvmField @SerializedName("Desig") val desig: String?,
+    @JvmField @SerializedName("NetworthID") val networthId: String?,
+    @JvmField @SerializedName("Networth") val networth: String?,
+    @JvmField @SerializedName("ReferralEmpCodeN") val referralEmpCode: String?,
+    @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?
 )
 
 data class LeadFieldValueRequest(

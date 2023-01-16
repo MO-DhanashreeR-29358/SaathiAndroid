@@ -42,8 +42,15 @@ data class LeadDetail(
     @JvmField val prospectReferName: String,
     @JvmField val leadProductMapping: List<LeadProductMappingItem>?,
     @JvmField val leadSourceId: Int, //Himanshu
-    @JvmField val contact: Contact? //Himanshu
-    // @JvmField val leadFieldValue: LeadFieldValue
+    @JvmField val contact: Contact?, //Himanshu
+    @JvmField val sectorId: String,
+    @JvmField val sectorName: String,
+    @JvmField val designationId: String,
+    @JvmField val designationName: String,
+    @JvmField val networthId: String,
+    @JvmField val networthName: String,
+    @JvmField val referralEmpCode: String,
+    @JvmField val referralEmpName: String
 )
 
 data class LeadProductMap(

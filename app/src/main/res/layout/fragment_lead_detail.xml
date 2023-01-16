@@ -1551,6 +1551,111 @@
                             app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/tv_sector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_final_sector"
+                        android:textColor="@color/text_color_personal"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:textSize="@dimen/_11sdp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_sector"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+                        <Spinner
+                            android:id="@+id/sp_sector"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_desig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_final_designation"
+                        android:textColor="@color/text_color_personal"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:textSize="@dimen/_11sdp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_desig"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+                        <Spinner
+                            android:id="@+id/sp_desig"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_networth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_final_networth"
+                        android:textColor="@color/text_color_personal"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:textSize="@dimen/_11sdp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_networth"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+                        <Spinner
+                            android:id="@+id/sp_networth"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilReferralEmpCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etReferralEmpCode"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_referral_emp_code"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilReferralEmpName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etReferralEmpName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_referral_emp_name"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -61,6 +61,14 @@ public class LeadDetailModel {
 	private String prospectRefereName = "";
 	private String prospectRefereMobile = "";
 	private String ProspectRefereEmail = "";
+	private String sectorId = "";
+	private String sector = "";
+	private String desigId = "";
+	private String desig = "";
+	private String networthId = "";
+	private String networth = "";
+	private String referralEmpCode = "";
+	private String referralEmpName = "";
 
 	public String getAlternateMobileNo() {
 		return alternateMobileNo;
@@ -535,5 +543,69 @@ public class LeadDetailModel {
 
 	public void setEkycMobileNo(String ekycMobileNo) {
 		EkycMobileNo = ekycMobileNo;
+	}
+
+	public String getSectorId() {
+		return sectorId;
+	}
+
+	public void setSectorId(String sectorId) {
+		this.sectorId = sectorId;
+	}
+
+	public String getSector() {
+		return sector;
+	}
+
+	public void setSector(String sector) {
+		this.sector = sector;
+	}
+
+	public String getDesigId() {
+		return desigId;
+	}
+
+	public void setDesigId(String desigId) {
+		this.desigId = desigId;
+	}
+
+	public String getDesig() {
+		return desig;
+	}
+
+	public void setDesig(String desig) {
+		this.desig = desig;
+	}
+
+	public String getNetworthId() {
+		return networthId;
+	}
+
+	public void setNetworthId(String networthId) {
+		this.networthId = networthId;
+	}
+
+	public String getNetworth() {
+		return networth;
+	}
+
+	public void setNetworth(String networth) {
+		this.networth = networth;
+	}
+
+	public String getReferralEmpCode() {
+		return referralEmpCode;
+	}
+
+	public void setReferralEmpCode(String referralEmpCode) {
+		this.referralEmpCode = referralEmpCode;
+	}
+
+	public String getReferralEmpName() {
+		return referralEmpName;
+	}
+
+	public void setReferralEmpName(String referralEmpName) {
+		this.referralEmpName = referralEmpName;
 	}
 }

@@ -71,8 +71,15 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       contact = contact,
       leadProductMapping = leadProductMapping,
       leadSourceId = leadSourceID,
-      isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true)
-
+      isReferee = !(refereeCode?.isEmpty() ?: true && refereeName?.isEmpty() ?: true),
+      sectorId = sectorId ?: emptyString(),
+      sectorName = sector ?: emptyString(),
+      designationId = desigId ?: emptyString(),
+      designationName = desig ?: emptyString(),
+      networthId = networthId ?: emptyString(),
+      networthName = networth ?: emptyString(),
+      referralEmpCode = referralEmpCode ?: emptyString(),
+      referralEmpName = referralEmpName ?: emptyString()
   )
 }
 

@@ -17,6 +17,7 @@ import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.getItems
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
@@ -99,6 +100,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var statusData = ArrayList<RowData>()
     private var stageData = ArrayList<RowData>()
 
+    private val arrSector = java.util.ArrayList<RowData>()
+    private val arrDesignation = java.util.ArrayList<RowData>()
+    private val arrNetworth = java.util.ArrayList<RowData>()
+
     private var selectedCityId = DEFAULT_SELECTION_ID
     private var selectedCityOffId = DEFAULT_SELECTION_ID
     private var selectedStateId = DEFAULT_SELECTION_ID
@@ -107,6 +112,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
+
+    private val sectorAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+    private val designationAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+    private val networthAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
 
     private val professionAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -230,6 +245,136 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 binding.ilBank.visibility = View.GONE
                 binding.ilBranch.visibility = View.GONE
             }
+        }
+
+        setSectorSpinner()
+        setDesignationSpinner()
+        setNetworthSpinner()
+    }
+
+    private fun setSectorSpinner() {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            val request = LookupRequest(
+                userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+                SECTOR,
+                null, null
+            )
+            val subscribe = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe { uiModelList -> renderSector(uiModelList) }
+        } else {
+            noInternetConnectionDialog()
+        }
+    }
+
+    private fun renderSector(
+        uiModel: UiModel<List<LookupItem>>
+    ) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess { data ->
+            arrSector.clear()
+            arrSector.add(
+                RowData(0, "-1", SELECT_SECTOR)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrSector.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spSector.adapter = sectorAdapter
+            sectorAdapter.setSpinnerData(binding.spSector, arrSector)
+            sectorAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun setDesignationSpinner() {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            val request = LookupRequest(
+                userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+                DESIGNATION,
+                null, null
+            )
+            val subscribe = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe { uiModelList -> renderDesignation(uiModelList) }
+        } else {
+            noInternetConnectionDialog()
+        }
+    }
+
+    private fun renderDesignation(
+        uiModel: UiModel<List<LookupItem>>
+    ) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess { data ->
+            arrDesignation.clear()
+            arrDesignation.add(
+                RowData(0, "-1", SELECT_DESIGNATION)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrDesignation.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spDesig.adapter = designationAdapter
+            designationAdapter.setSpinnerData(binding.spDesig, arrDesignation)
+            designationAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun setNetworthSpinner() {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            val request = LookupRequest(
+                userManager.getUser()!!.currentBusinessProfile.businessUnitId!!,
+                NETWORTH,
+                null, null
+            )
+            val subscribe = saathiApi.getAllLookup(request)
+                .compose(applyUiModel())
+                .subscribe { uiModelList -> renderNetworth(uiModelList) }
+        } else {
+            noInternetConnectionDialog()
+        }
+    }
+
+    private fun renderNetworth(
+        uiModel: UiModel<List<LookupItem>>
+    ) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess { data ->
+            arrNetworth.clear()
+            arrNetworth.add(
+                RowData(0, "-1", SELECT_NETWORTH)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrNetworth.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spNetworth.adapter = networthAdapter
+            networthAdapter.setSpinnerData(binding.spNetworth, arrNetworth)
+            networthAdapter.notifyDataSetChanged()
         }
     }
 
@@ -1553,7 +1698,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.secondaryRM = null
         leadDetailModel.leadDetailAddProductModels = leadDetailAddProductList
         leadDetailModel.leadFieldValueModels = getLeadFieldValues(mLeadFieldSectionModelList)
-
+        leadDetailModel.sectorId = (binding.spSector.selectedItem as RowData).key
+        leadDetailModel.sector = (binding.spSector.selectedItem as RowData).value
+        leadDetailModel.desigId = (binding.spDesig.selectedItem as RowData).key
+        leadDetailModel.desig = (binding.spDesig.selectedItem as RowData).value
+        leadDetailModel.networthId = (binding.spNetworth.selectedItem as RowData).key
+        leadDetailModel.networth = (binding.spNetworth.selectedItem as RowData).value
+        leadDetailModel.referralEmpCode = binding.etReferralEmpCode.text.toString().trim()
+        leadDetailModel.referralEmpName = binding.etReferralEmpName.text.toString().trim()
         return updateLead(leadDetailModel)
     }
 
@@ -1602,7 +1754,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.prospectRefereMobile, model.prospectRefereEmail,
             model.createdThrough, model.creationDate,
             contactRequest,
-            model.leadFieldValueModels
+            model.leadFieldValueModels,
+            model.sectorId,
+            model.sector,
+            model.desigId,
+            model.desig,
+            model.networthId,
+            model.networth,
+            model.referralEmpCode,
+            model.referralEmpName
         )
     }
 
@@ -1840,6 +2000,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             cbPrimaryAddress.isEnabled = status
             cbOffPrimaryAddress.isEnabled = status
             spPmsProduct.isEnabled = status
+            spSector.isEnabled = status
+            spDesig.isEnabled = status
+            spNetworth.isEnabled = status
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
                     enableField(llResAdd)
@@ -1972,6 +2135,23 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         dataFinalProfile?.let {
             binding.spFinalProfile.setSelection(it.position)
         }
+
+        val dataSector = RowData.getSpinnerRowDataById(sectorId, sectorAdapter)
+        dataSector?.let {
+            binding.spSector.setSelection(it.position)
+        }
+
+        val dataDesig = RowData.getSpinnerRowDataById(designationId, designationAdapter)
+        dataDesig?.let {
+            binding.spDesig.setSelection(it.position)
+        }
+        val dataNetworth = RowData.getSpinnerRowDataById(networthId, networthAdapter)
+        dataNetworth?.let {
+            binding.spNetworth.setSelection(it.position)
+        }
+
+        binding.etReferralEmpCode.setText(referralEmpCode)
+        binding.etReferralEmpName.setText(referralEmpName)
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()

@@ -96,6 +96,12 @@ public class CustomListPickerDialog extends Dialog implements TextWatcher, Adapt
 
     }
 
+    public void clearSearchText(){
+        if(mSearch != null){
+            mSearch.setText("");
+        }
+    }
+
     public int getThreshold() {
         return mThreshold;
     }
