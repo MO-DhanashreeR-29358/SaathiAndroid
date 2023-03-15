@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.assignto.SecondaryRmFilterRequest
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
@@ -152,10 +153,11 @@ class LeadCreationRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getEmployeeModelsFilterForSecondaryRM(text: String): Observable<List<EmployeeModel>> {
-        val profileRequest = UserBusinessProfileRequest(
+    override fun getEmployeeModelsFilterForSecondaryRM(text: String, branchCode : String): Observable<List<EmployeeModel>> {
+        val profileRequest = SecondaryRmFilterRequest(
             employeeCode = URLEncoder.encode(text, "utf-8"),
-            employeeName = URLEncoder.encode(text, "utf-8")
+            employeeName = URLEncoder.encode(text, "utf-8"),
+            branchCode = branchCode
         )
         return saathiApi.getUserBusinessProfileForSecondaryRM(profileRequest)
             .map {

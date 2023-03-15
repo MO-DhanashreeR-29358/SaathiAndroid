@@ -1,4 +1,4 @@
-package com.mosl.tabapp.clientsearch;
+package com.mosl.tabapp.bankmeeting.clientsearch;
 
 import android.content.Context;
 import android.os.Handler;

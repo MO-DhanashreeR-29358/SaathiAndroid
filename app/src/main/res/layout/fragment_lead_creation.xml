@@ -825,7 +825,7 @@
                             android:clickable="false"
                             android:drawableEnd="@drawable/ic_close_text"
                             android:focusable="false"
-                            android:hint="@string/hint_lead_creation_secondary_rm"
+                            android:hint="@string/hint_lead_creation_secondary_rm_title"
                             android:inputType="none"
                             android:textSize="@dimen/_13sdp" />
 

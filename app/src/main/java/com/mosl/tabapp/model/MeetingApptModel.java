@@ -467,7 +467,7 @@ public class MeetingApptModel implements Serializable {
             json += ",\"Amount\":\"" + getAmount() + "\"";
             json += ",\"Products\":" + getProductJson();
             json += ",\"GeoArea\":\"" + getGeoArea() + "\"";
-            json += ",\"GeoLongitude\":\"" + getGeoLatitude() + "\"";
+            json += ",\"GeoLongitude\":\"" + getGeoLongitude() + "\"";
             json += ",\"GeoLatitude\":\"" + getGeoLatitude() + "\"";
             json += ",\"IsPotentialPMSProduct\":\"" + getIsPotentialPMSProduct() + "\"";
             json += ",\"Pincode\":\"" + getPincode() + "\"";

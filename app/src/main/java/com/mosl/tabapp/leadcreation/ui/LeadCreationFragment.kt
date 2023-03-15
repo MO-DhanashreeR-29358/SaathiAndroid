@@ -469,13 +469,17 @@ class LeadCreationFragment : CommonFragment(),
             binding.actSecondaryRM.apply {
                 userManager.getUser()?.apply {
                     if (isAufsb()) {
-                        setHint(R.string.hint_lead_creation_secondary_rm_mo)
+                        setHint(R.string.hint_lead_creation_secondary_rm_mo_title)
                     } else {
-                        setHint(R.string.hint_lead_creation_secondary_rm)
+                        setHint(R.string.hint_lead_creation_secondary_rm_title)
                     }
                 }
                 setListener { secondaryRM = null }
                 setOnClickListener {
+                    if(getBranch()!!.branchId   == -1){
+                        Toast.makeText(requireContext(), "Please select branch ", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     requireActivity().window
                         .setSoftInputMode(
                             LayoutParams.SOFT_INPUT_ADJUST_RESIZE
@@ -1027,9 +1031,6 @@ class LeadCreationFragment : CommonFragment(),
                 31 -> {
                     binding.tilPan.setErrorMessages(getString(it))
                 }
-                32 -> {
-                    binding.tvSecondaryRmError.isVisible = true
-                }
                 else -> {
                 }
 
@@ -1061,7 +1062,6 @@ class LeadCreationFragment : CommonFragment(),
             tlInterest.disableErrorMessages()
             tlProductType.disableErrorMessages()
             tlProfession.disableErrorMessages()
-            tvSecondaryRmError.isVisible = false
         }
     }
 
@@ -1259,6 +1259,10 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onSuccess {
             branchAdapter.setSpinnerData(binding.spBranch, it)
         }
+    }
+
+    override fun renderBranchChange() {
+        binding.actSecondaryRM.setText("")
     }
 
     override fun getLeadCreationUserInput(): LeadCreationUserInput {

@@ -28,7 +28,7 @@ import com.mosl.mobile.domain.setappointment.lead.LookupItemResponse
 import com.mosl.mobile.domain.setappointment.lead.LookupRequestInput
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.tabapp.R
-import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.common.RowData.getSpinnerRowDataById

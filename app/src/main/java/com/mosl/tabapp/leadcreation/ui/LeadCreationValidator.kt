@@ -11,7 +11,7 @@ import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 import javax.inject.Inject
 
-class LeadCreationValidator @Inject constructor(val userManager: UserManagerImpl) : Validator<LeadCreationUserInput, String>() {
+class LeadCreationValidator : Validator<LeadCreationUserInput, String>() {
 
     override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
         val identifier: Int
@@ -196,11 +196,6 @@ class LeadCreationValidator @Inject constructor(val userManager: UserManagerImpl
                     input.branchCode == MOSLConstants.BRANCH_CODE_FSFBMAIN  -> {
                 identifier = 31
                 R.string.error_message_enter_pan
-            }
-            userManager.user.isAllianceBusiness() &&
-                    input.secondaryRM.isBlank() -> {
-                identifier = 32
-                R.string.error_message_enter_secondary_rm
             }
             else -> {
                 identifier = 0

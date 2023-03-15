@@ -19,7 +19,7 @@ class LeadCreationPresenter @Inject constructor(
     val bankRepository: BankRepository,
     val userManager: UserManagerImpl
 ) : BasePresenter<LeadCreationView>(view) {
-    private val validator = LeadCreationValidator(userManager)
+    private val validator = LeadCreationValidator()
 
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
@@ -38,6 +38,9 @@ class LeadCreationPresenter @Inject constructor(
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 
+        view.onBranchChange()
+            .subscribe {view.renderBranchChange()}
+            .addTo(disposable)
 
         view.onPrimaryCheckboxChanged()
             .skip(1)
@@ -140,7 +143,7 @@ class LeadCreationPresenter @Inject constructor(
             .filter { it.isNotEmpty() }
             .distinctUntilChanged()
             .switchMap {
-                repository.getEmployeeModelsFilterForSecondaryRM(it)
+                repository.getEmployeeModelsFilterForSecondaryRM(it, view.getBranch()!!.branchName)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderOnSecondaryRMSearchEventFire, Timber::e)

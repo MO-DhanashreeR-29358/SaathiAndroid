@@ -98,6 +98,8 @@ public class CustomListPickerDialog extends Dialog implements TextWatcher, Adapt
 
     public void clearSearchText(){
         if(mSearch != null){
+            mSearch.setListener(this);
+            mSearch.addTextChangedListener(this);
             mSearch.setText("");
         }
     }

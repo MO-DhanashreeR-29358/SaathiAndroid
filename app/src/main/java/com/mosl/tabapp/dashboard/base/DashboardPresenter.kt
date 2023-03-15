@@ -131,7 +131,8 @@ class DashboardPresenter @Inject constructor(
 
         view.onExistingRegistrationClicked()
             .subscribe {
-                ekycNavigator.openNewEkycApp(true, "")
+               // ekycNavigator.openNewEkycApp(true, "")
+                view.renderExistingApplication()
             }
             .addTo(disposable)
 

@@ -26,7 +26,7 @@ import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
-import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.RowData

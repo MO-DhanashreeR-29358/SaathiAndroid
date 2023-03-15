@@ -15,8 +15,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
@@ -33,7 +31,7 @@ import com.mosl.tabapp.bankmeeting.adapter.ClientNameAdapter
 import com.mosl.tabapp.bankmeeting.model.AddedBankEmployeeModel
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
 import com.mosl.tabapp.bankmeeting.model.MeetingClientName
-import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
@@ -45,7 +43,6 @@ import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import org.json.JSONObject
-import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat

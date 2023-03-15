@@ -32,7 +32,7 @@
                     android:hint="search"
                     android:inputType="textAutoComplete|textAutoCorrect"
                     android:paddingLeft="5dp" />-->
-                <com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+                <com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
                     android:id="@+id/etSearchAttendee"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

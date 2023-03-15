@@ -115,6 +115,7 @@ interface LeadCreationView : BaseView {
   fun getBank(): BankCodeModel?
   fun getBranch(): BranchCodeModel?
   fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>)
+  fun renderBranchChange()
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

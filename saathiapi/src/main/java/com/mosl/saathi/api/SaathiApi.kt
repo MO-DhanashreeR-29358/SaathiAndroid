@@ -4,6 +4,7 @@ import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
+import com.mosl.saathi.api.model.assignto.SecondaryRmFilterRequest
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.aubankmeeting.*
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
@@ -196,7 +197,7 @@ interface SaathiApi {
 
     @POST("UserApi/GetUserBusinesprofileForSecondoryRM")
     fun getUserBusinessProfileForSecondaryRM(
-        @Body request: UserBusinessProfileRequest
+        @Body request: SecondaryRmFilterRequest
     ): Observable<List<BusinessProfile>>
 
     @POST("CrossSellingProductMapping/GetCrossSellingProduct")
