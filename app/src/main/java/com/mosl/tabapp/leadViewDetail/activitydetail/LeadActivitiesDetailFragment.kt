@@ -55,6 +55,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvTravellingMode.text = it.travellingMode
           tvAmount.text = it.amount
           tvGeoMeetingLocation.text = it.location
+          tvGeoTag.text = it.geoTag
 
           if(it.touchedUntouched.isNotEmpty() && it.feedback.isNotEmpty()){
             groupTouchedFeedback.visibility = View.VISIBLE

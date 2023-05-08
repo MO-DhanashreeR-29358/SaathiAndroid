@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class MeetingResponse(
 
   @JvmField @SerializedName("MOBNO") val mOBNO: String?,
-  @JvmField @SerializedName("GeoTag") val geoTag: Any?,
+  @JvmField @SerializedName("GeoTag") val geoTag: String?,
   @JvmField @SerializedName("Category") val category: String?,
   @JvmField @SerializedName("Actionable") val actionable: String?,
   @JvmField @SerializedName("Product") val product: String?,

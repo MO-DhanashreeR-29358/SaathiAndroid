@@ -110,6 +110,7 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       pincode = pincode ?: "",
       location = location ?: "",
       touchedUntouched = touchedUntouched ?: "",
-      feedback = feedback ?: ""
+      feedback = feedback ?: "",
+      geoTag = geoTag ?: ""
   )
 }

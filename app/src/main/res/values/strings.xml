@@ -102,6 +102,7 @@
     <string name="text_label_meeting_description">Meeting Description</string>
     <string name="text_label_customer_service_remark">Customer Service Remark</string>
     <string name="text_label_comments">Comments</string>
+    <string name="text_label_geo_tag">Geo Tag Status\n(Meeting geo tag status will be validated with geo location after 20 mins)</string>
     <string name="text_label_touched_untouched">Touched Untouched</string>
     <string name="text_label_feedback">Feedback</string>
     <string name="text_label_spinner_product">Product*</string>
@@ -645,4 +646,8 @@
     <string name="lead_detail_available_limits">Available Limits</string>
 
     <string name="leak_canary_display_activity_label">Leaks</string>
+    <string name="button_label_save_location">Save</string>
+    <string name="text_label_note_long_press_marker">Long Press Marker</string>
+    <string name="text_label_selected_location">Selected Location</string>
+
 </resources>

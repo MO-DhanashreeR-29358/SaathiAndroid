@@ -80,7 +80,8 @@ data class User(
         if(!currentBusinessProfile.businessUnitId.equals("14")) {
             currentBusinessProfile.businessProfileName.apply {
                 //return this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")
-                if(this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")) {
+                if(this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")
+                    || this.equals("Key Account Manager")) {
                     flag = true
                 }
             }

@@ -1,5 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
+import com.mosl.tabapp.geoLocation.LocationItem
+
 sealed class CreateMeetingUiEvent {
   data class AttendeeItemClick(val position: Int) : CreateMeetingUiEvent()
   data class SplAttendeeItemClick(val position: Int) : CreateMeetingUiEvent()
@@ -13,4 +15,5 @@ sealed class CreateMeetingUiEvent {
 
   object TouchedUntouchedRequest : CreateMeetingUiEvent()
   object FeedbackRequest : CreateMeetingUiEvent()
+  data class OnLocationSaveClick(val data: LocationItem) : CreateMeetingUiEvent()
 }

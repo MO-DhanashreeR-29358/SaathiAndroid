@@ -337,6 +337,12 @@ class CreateMeetingPresenter @Inject constructor(
           )
         }
         .addTo(disposable)
+
+        view.onLocationSaveEventFired()
+            .subscribe {
+                view.renderLocationSave(it.data)
+            }
+            .addTo(disposable)
   }
 
     private fun getInputData(): MeetingApptModel {

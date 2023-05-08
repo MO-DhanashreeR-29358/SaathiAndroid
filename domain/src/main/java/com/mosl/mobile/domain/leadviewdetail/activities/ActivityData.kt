@@ -56,5 +56,6 @@ data class Meeting(
   @JvmField val pincode: String,
   @JvmField val location: String,
   @JvmField val touchedUntouched: String,
-  @JvmField val feedback: String
+  @JvmField val feedback: String,
+  @JvmField val geoTag: String
 )

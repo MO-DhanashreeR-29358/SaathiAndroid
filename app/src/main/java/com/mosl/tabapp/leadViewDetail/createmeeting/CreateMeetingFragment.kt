@@ -46,7 +46,7 @@ import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
 import com.mosl.tabapp.R.string
-import com.mosl.tabapp.clientsearch.DelayAutoCompleteTextView
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.common.FusedLocation
@@ -109,9 +109,12 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.geoLocation.LocationItem
+
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
-    FusedLocation.LatLongDispatcher, AddedAttendeeAdapter.ClickListenerHandler {
+     AddedAttendeeAdapter.ClickListenerHandler {
     lateinit var binding: FragCreateMeetingBinding
     private lateinit var attendeeAdapter: AttendeeAdapter
     private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
@@ -124,8 +127,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     @Inject
     lateinit var permissionCheckHelper: PermissionCheckHelperFragment
 
-    @Inject
-    lateinit var fusedLocation: FusedLocation
+    /* @Inject
+     lateinit var fusedLocation: FusedLocation*/
+
     private lateinit var productAdapter: ArrayAdapter<LookUp>
     private lateinit var categoryAdapter: ArrayAdapter<LookUp>
     private lateinit var subCategoryAdapter: ArrayAdapter<LookUp>
@@ -154,6 +158,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), dd_MM_yyyy)
     var flgReactivationClient : String  = "0"
 
+    var strLatitude : String = ""
+    var strLongitude : String = ""
+    var strAddress : String = ""
+    var isMockLocationEnabled : Boolean = false
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -166,7 +175,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         dataActionSubject.onNext(DataAction.Fetch)
 
         if (permissionCheckHelper.locationPermission()) {
-            fusedLocation.initDispatcher(this)
+            // fusedLocation.initDispatcher(this)
+            val dialog = GeoTaggingFragment()
+            dialog.setData(uiSubject)
+            dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+
         }
     }
 
@@ -232,6 +245,20 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun onSaveConfirmClick(): Observable<SaveConfirmClick> {
         return uiSubject.ofType()
+    }
+
+    override fun onLocationSaveEventFired(): Observable<OnLocationSaveClick> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderLocationSave(locationItem: LocationItem) {
+        strLatitude = locationItem.latitude
+        strLongitude = locationItem.longitude
+        strAddress = locationItem.address
+        isMockLocationEnabled = locationItem.isMockLocationEnabled
+        //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
+
+
     }
 
     override fun onTouchedUntouchedEventFired(): Observable<TouchedUntouchedRequest> {
@@ -766,7 +793,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         showAddedDialog(false)
     }
 
-    var location: Location? = null
+    //var location: Location? = null
 
     override fun onSendOTPClicked(): Observable<Unit> {
         return binding.btnSendOtp.clicks()
@@ -777,11 +804,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getLatitude(): String {
-        return if (enableLocationGroup) location?.latitude.toString() else ""
+        return  strLatitude
     }
 
     override fun getLongitude(): String {
-        return if (enableLocationGroup) location?.longitude.toString() else ""
+        return  strLongitude
     }
 
     override fun getAttendeeList(): List<AddedAttendee> {
@@ -816,8 +843,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 println("Geo area found ::: $geoArea")
             }
         }*/
-        if (enableLocationGroup) {
-            val geocoder = Geocoder(requireContext(), Locale.getDefault())
+
+            geoArea = strAddress
+            /*val geocoder = Geocoder(requireContext(), Locale.getDefault())
             try {
                 location?.apply {
                     val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
@@ -827,8 +855,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 }
             }catch (ex : Exception){
                 ex.printStackTrace()
-            }
-        }
+            }*/
+
         println("Geo area found ::: $geoArea")
         return geoArea
     }
@@ -1016,7 +1044,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             ) as LocationManager).isProviderEnabled(LocationManager.GPS_PROVIDER)
             && CRMMOSLCommon.hasGPSDevice(requireContext())
         ) {
-            fusedLocation.initDispatcher(this)
+            //fusedLocation.initDispatcher(this)
+            val dialog = GeoTaggingFragment()
+            dialog.setData(uiSubject)
+            dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+
             false
         } else true
         uiSubject.onNext(ValidationStatus(status))
@@ -1205,14 +1237,22 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun checkPermissionAndProceed() {
         if (checkPermission()) {
-            if (location != null) {
+            // Toast.makeText(requireContext(),"check permission succed",Toast.LENGTH_LONG).show()
+            if (strAddress.isNotEmpty() && strLatitude.isNotEmpty() && strLongitude.isNotEmpty()) {
+                //  Toast.makeText(requireContext(),"location != null, call SendOtpRequest",Toast.LENGTH_LONG).show()
+
                 uiSubject.onNext(SendOtpRequest)
             } else {
                 //fusedLocation.LocationUpdates()
                 isLocEn = false
 
                 if (permissionCheckHelper.locationPermission()) {
-                    fusedLocation.initDispatcher(this)
+                    //  Toast.makeText(requireContext(),"going to else in location != null",Toast.LENGTH_LONG).show()
+
+                    //fusedLocation.initDispatcher(this)
+                    val dialog = GeoTaggingFragment()
+                    dialog.setData(uiSubject)
+                    dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
         }
@@ -1243,6 +1283,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     private fun checkPermission(): Boolean {
         if (!permissionCheckHelper.locationPermission()) {
+            // Toast.makeText(requireContext(),"permissionCheckHelper.locationPermission() = false",Toast.LENGTH_LONG).show()
+
             /*if(VERSION.SDK_INT > VERSION_CODES.Q) {
                 if(checkMapServices()) {
                     if(!mLocationPermissionGranted) {
@@ -1254,6 +1296,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
             if(checkMapServices()) {
                 if(!mLocationPermissionGranted) {
+                    //  Toast.makeText(requireContext(),"mLocationPermissionGranted = false",Toast.LENGTH_LONG).show()
+
                     getLocationPermission()
                 }
             }
@@ -1265,7 +1309,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             )
             && CRMMOSLCommon.hasGPSDevice(requireContext())
         ) {
-            fusedLocation.initDispatcher(this)
+            // Toast.makeText(requireContext(),"call fusedLocation.initDispatcher",Toast.LENGTH_LONG).show()
+            val dialog = GeoTaggingFragment()
+            dialog.setData(uiSubject)
+            dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+            //fusedLocation.initDispatcher(this)
+
             return false
         }
         return true
@@ -1273,10 +1322,15 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     private fun checkMapServices(): Boolean {
         if (isServicesOK()) {
+            //  Toast.makeText(requireContext(),"isServicesOK() = true",Toast.LENGTH_LONG).show()
+
             if (isMapsEnabled()) {
+                //   Toast.makeText(requireContext(),"isMapsEnabled() = true",Toast.LENGTH_LONG).show()
                 return true
             }
         }
+        // Toast.makeText(requireContext(),"isMapsEnabled() = false",Toast.LENGTH_LONG).show()
+
         return false
     }
 
@@ -1321,6 +1375,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
                 PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
             )
+            //  Toast.makeText(requireContext(),"request for PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION",Toast.LENGTH_LONG).show()
+
         }
     }
 
@@ -1358,7 +1414,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 ) {
                     mLocationPermissionGranted = true
                     if (permissionCheckHelper.locationPermission()) {
-                        fusedLocation.initDispatcher(this)
+                        // fusedLocation.initDispatcher(this)
+                        val dialog = GeoTaggingFragment()
+                        dialog.setData(uiSubject)
+                        dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+
                     }
                 }
             }
@@ -1402,15 +1462,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return isSendOTPSuccesssful
     }
 
-    override fun onLatLongChanged(location: Location?) {
-        this.location = location
-
-        isLocEn?.let {
-            if(!it) {
-                uiSubject.onNext(SendOtpRequest)
-            }
-        }.also { isLocEn = true }
-    }
 
     override fun showToast() {
         Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG)
@@ -1443,10 +1494,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         Timber.i("Meeting JSon %s", meetingApptModel.json)
         if (enableLocationGroup) {
             if (checkPermission()) {
-                if (location != null) {
+                if (strLatitude.isNotEmpty()&& strLongitude.isNotEmpty()&& strAddress.isNotEmpty()) {
                     isMockLocation(meetingApptModel)
                 } else {
-                    fusedLocation.LocationUpdates()
+                    val dialog = GeoTaggingFragment()
+                    dialog.setData(uiSubject)
+                    dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
         } else {
@@ -1456,11 +1509,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun isMockLocation(meetingApptModel: MeetingApptModel) {
-        if (enableLocationGroup && CRMAppUtil.isLocationFromMockProvider(
-                requireContext(),
-                location
-            )
-        ) {
+        if (enableLocationGroup && isMockLocationEnabled ) {
             MSFDialog.alertDialog(
                 requireContext(), 0,
                 resources.getString(string.motilal_oswal),
