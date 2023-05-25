@@ -62,6 +62,7 @@ class HierarchyReportFragment : CommonFragment(),
   }
 
   private fun setUpView() {
+    hideAppTitle()
     binding.txtLables.text = arguments?.getString(STRING_TITLE)
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = HierarchyReportTableMapper.header(

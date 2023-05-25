@@ -46,6 +46,7 @@ class DigitalSalesKitFragment : CommonFragment(), DigitalSalesKitView {
         binding = FragmentDigitalSalesKitBinding.bind(view)
         categoryName = arguments?.getString(NAME).toString()
         categoryId = arguments?.getString(SYSTEM_NAME).toString()
+        hideAppTitle()
         binding.tvMenuName.text = categoryName
         setUpRecyclerView()
         setupData()

@@ -11,9 +11,9 @@ class AddressDetailModel(
     var address1: String,
     var address2: String,
     var address3: String,
-    var countryID: String,
-    var stateID: String,
-    var cityID: String,
+    var countryID: String = "0",
+    var stateID: String = "0",
+    var cityID: String = "0",
     var pincode: String,
     var isPrimary: Boolean,
     var businessUnitID: String

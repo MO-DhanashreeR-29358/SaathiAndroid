@@ -60,6 +60,8 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalModule
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalModule
+import com.mosl.tabapp.qrcode.QRCodeFragment
+import com.mosl.tabapp.qrcode.QRCodeModule
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.report.ReportFragment
@@ -193,4 +195,7 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [GeoTaggingModule::class])
     fun provideGeoTaggingFactory(): GeoTaggingFragment
+
+    @ContributesAndroidInjector(modules = [QRCodeModule::class])
+    fun provideQRCodeFragmentFactory(): QRCodeFragment
 }

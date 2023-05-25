@@ -229,12 +229,10 @@ class CommonActivity : BaseActivity(),
         }
         setupObservables()
         setBanner()
-        if (branchCodePreference.get().isNotEmpty()) {
-            menuTopSection(branchCodePreference.get())
-        } else {
-            branchCodePreference.set(userManager.user.defaultBusinessProfile.branchCode)
-            menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
-        }
+
+        branchCodePreference.set(userManager.user.defaultBusinessProfile.branchCode)
+        menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
+
 
         mDistaSdk = DistaSDK.getInstance()
 

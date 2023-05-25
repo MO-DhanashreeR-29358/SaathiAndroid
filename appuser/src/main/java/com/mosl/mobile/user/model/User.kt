@@ -80,13 +80,37 @@ data class User(
         if(!currentBusinessProfile.businessUnitId.equals("14")) {
             currentBusinessProfile.businessProfileName.apply {
                 //return this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")
-                if(this.equals("Sales") || this.equals("Retail Advisor") || this.equals("Prime Sales")
-                    || this.equals("Key Account Manager")) {
+                if(this.equals("Sales") ||
+                    this.equals("Retail Advisor") ||
+                    this.equals("Prime Sales")||
+                    this.equals("Key Account Manager")) {
                     flag = true
                 }
             }
         } else {
             flag = true
+        }
+        return flag
+    }
+    fun isShowORCode(): Boolean {
+        var flag: Boolean = false
+        if(currentBusinessProfile.businessUnitId.equals("1")) {
+            currentBusinessProfile.businessProfileName.apply {
+                if(this.equals("Sales") ||
+                    this.equals("Sales Manager") ||
+                    this.equals("Sales Team Leader")||
+                    this.equals("Team Leader Sales")||
+                    this.equals("Area Sales Manager") ||
+                    this.equals("Regional Sales Manager")||
+                    this.equals("Sales Regional Manager")||
+                    this.equals("Cluster Head")||
+                    this.equals("Regional Head")||
+                    this.equals("National Sales Head")||
+                    this.equals("Key Account Manager")||
+                    this.equals("National Head")) {
+                    flag = true
+                }
+            }
         }
         return flag
     }

@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
@@ -41,6 +43,7 @@ import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
+
 
 class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, DiyLinkClickListner {
     private lateinit var binding: FragLeadviewMainBinding
@@ -106,9 +109,11 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
             binding.vpLeadView
         ) { tab, position ->
             tab.text = tabArray[position]
+            tab.tag = position
         }.attach()
         binding.vpLeadView.isUserInputEnabled = false
-    }
+        binding.vpLeadView.currentItem = 0
+     }
 
     override fun extractArguments(bundle: Bundle) {
         super.extractArguments(bundle)

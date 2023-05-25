@@ -60,6 +60,7 @@ class BirthdayAnniversaryFragment : CommonFragment(), BirthdayAnniversaryView {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentBirthdayAnniversaryBinding.bind(view)
+    hideAppTitle()
     setUpRecyclerView()
     setUpView()
     presenter.start()

@@ -476,6 +476,13 @@ class WebviewFragment : CommonFragment() {
         parseArguments(args)
     }
 
+    override fun onStart() {
+        super.onStart()
+        setupView()
+        parseArguments(requireArguments())
+        start()
+    }
+
     companion object {
         const val URL = "url"
         const val PAGE_ID = "page_id"

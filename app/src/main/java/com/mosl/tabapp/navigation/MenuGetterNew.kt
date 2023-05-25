@@ -22,6 +22,7 @@ import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
+import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
@@ -44,6 +45,7 @@ object MenuGetterNew {
         val args = Bundle()
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
+            NavigationConstants.NAVIGATE_TO_QR_CODE -> QRCodeFragment()
             NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
             NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
@@ -153,6 +155,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_PENDING_ESIGN -> true
             NavigationConstants.NAVIGATE_TO_DELETE_REQUEST -> true
             NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> true
+            NavigationConstants.NAVIGATE_TO_QR_CODE -> true
             else -> return false
         }
     }

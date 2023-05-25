@@ -91,7 +91,7 @@ class ReportFragment : CommonFragment(),
   }
 
   private fun setUpView() {
-
+    hideAppTitle()
     branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spBranch.adapter = branchAdapter
     binding.txtLables.text = arguments?.getString(NAME)

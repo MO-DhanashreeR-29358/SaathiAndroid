@@ -746,5 +746,9 @@ interface SaathiApi {
         @Body request: CommonURLRequest
     ): Observable<CommonURLResponse>
 
-
+    @GET
+    @ExcludeWrapper
+    fun getQRCode(
+        @Url url: String
+    ): Observable<String>
 }

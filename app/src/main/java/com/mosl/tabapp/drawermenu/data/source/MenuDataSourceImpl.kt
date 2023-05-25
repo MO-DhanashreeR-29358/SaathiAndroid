@@ -2,6 +2,7 @@ package com.mosl.tabapp.drawermenu.data.source
 
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
+import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.tabapp.R
 import com.mosl.tabapp.drawermenu.data.BaseMenu
@@ -19,22 +20,22 @@ open class MenuDataSourceImpl @Inject constructor(
         digitalSalesKitMenu : List<DigitalSalesKitData>
     ): Observable<List<BaseMenu>> {
         return Observable.fromCallable {
-            val user = userManager.user
+           val user = userManager.user
             when {
                 user.isAufsb() -> {
-                    getAufsbUserMenu()
+                    getAufsbUserMenu(user.isShowORCode())
                 }
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser)
+                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isShowORCode())
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
                 }
                 else -> {
-                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser)
+                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
                 }
             }
         }
@@ -45,7 +46,8 @@ open class MenuDataSourceImpl @Inject constructor(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
-        isPrimeUser: Boolean
+        isPrimeUser: Boolean,
+        isShowQRCode: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
@@ -69,7 +71,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         } else {
             arrayListOf(
@@ -92,7 +94,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         }
     }
@@ -101,7 +103,8 @@ open class MenuDataSourceImpl @Inject constructor(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
-        isPrimeUser: Boolean
+        isPrimeUser: Boolean,
+        isShowQRCode: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
@@ -122,7 +125,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         } else {
             arrayListOf(
@@ -142,7 +145,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         }
     }
@@ -151,7 +154,8 @@ open class MenuDataSourceImpl @Inject constructor(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
-        isPrimeUser: Boolean
+        isPrimeUser: Boolean,
+        isShowQRCode: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
@@ -176,7 +180,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         } else {
             arrayListOf(
@@ -200,31 +204,35 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         }
     }
 
-    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean): List<BaseMenu> {
+    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean,isShowQRCode: Boolean): List<BaseMenu> {
         if (isPrimeUser) {
             add(3, getPrimeEntry())
+        }
+        if (isShowQRCode) {
+            add(1, getQRCode())
         }
         return this
     }
 
-    private fun getAufsbUserMenu(): List<BaseMenu> {
+    private fun getAufsbUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
         return arrayListOf(
             getDashboard(),
             getOpenAccount(),
             getDeleteRequest(),
             getLogout()
-        )
+        ).apply { checkForPrime(false,isShowQRCode) }
     }
 
     private fun getAuSalesBank(
         isCheckApproval: Boolean,
         digitalSalesKitList : List<DigitalSalesKitData>,
-        isPrimeUser: Boolean
+        isPrimeUser: Boolean,
+        isShowQRCode: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
@@ -245,7 +253,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         } else {
             arrayListOf(
@@ -265,7 +273,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser)
+                checkForPrime(isPrimeUser,isShowQRCode)
             }
         }
     }
@@ -359,6 +367,15 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_AU_BANK_MEETING_REPORT_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT
+        )
+    }
+
+    private fun getQRCode(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_qr_code,
+            label = R.string.MOSL_MENU_QR_CODE,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_QR_CODE
         )
     }
 

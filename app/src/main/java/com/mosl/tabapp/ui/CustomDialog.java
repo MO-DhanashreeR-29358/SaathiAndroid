@@ -87,7 +87,6 @@ public class CustomDialog extends Dialog {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                customDialogListener.dialogAction(MSFDialog.Action.CANCEL);
                 dismiss();
             }
         });

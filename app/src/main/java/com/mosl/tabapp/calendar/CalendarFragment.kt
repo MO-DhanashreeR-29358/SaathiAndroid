@@ -49,7 +49,7 @@ class CalendarFragment : CommonFragment(), CalendarFragmentView, OnDateSelectedL
     super.onViewCreated(view, savedInstanceState)
     binding = FragmentCalendarNewBinding.bind(view)
     setUpView()
-
+    hideAppTitle()
     presenter.start()
     dataActionSubject.onNext(DataAction.Fetch)
     setUpRecyclerView()

@@ -48,6 +48,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
         NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
         NavigationConstants.NAVIGATE_TO_DELETE_REQUEST,
+        NavigationConstants.NAVIGATE_TO_QR_CODE,
 
 })
 public @interface NavigationConstants {
@@ -96,4 +97,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_BRANCH_CODE = 43;
     int NAVIGATE_TO_DELETE_REQUEST = 44;
     int NAVIGATE_TO_DIGITAL_SALES_KIT = 45;
+    int NAVIGATE_TO_QR_CODE = 46;
 }

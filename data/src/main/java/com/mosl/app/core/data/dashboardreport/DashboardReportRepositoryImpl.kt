@@ -94,7 +94,16 @@ class DashboardReportRepositoryImpl @Inject constructor(
             headerData.add(header)
             try{
               val toDouble = json.get(header).toString().toDouble()
-              values.add(toDouble.toBigDecimal().toPlainString())
+              if(toDouble == 0.0){
+                values.add("")
+              }else {
+                if(json.get(header).toString().contains(".")){
+                  values.add(toDouble.toBigDecimal().toPlainString())
+                }else{
+                  values.add(json.get(header).toString())
+                }
+
+              }
 
             }catch (e: NumberFormatException){
               values.add(json.get(header).toString())

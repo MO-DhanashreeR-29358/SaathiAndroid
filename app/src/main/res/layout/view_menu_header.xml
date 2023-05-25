@@ -15,6 +15,7 @@
             android:layout_height="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/margin_medium"
             android:src="@drawable/ic_close"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/txtPartnerName"
             app:layout_constraintEnd_toEndOf="parent" />
 

@@ -4,6 +4,7 @@ import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import timber.log.Timber
 
 
@@ -33,11 +34,13 @@ fun Context.downloadDocument(url: String) {
 }
 
 fun Context.downloadImage(url: String): Long {
+    System.out.println(url.substring(url.lastIndexOf("/")+1,url.length));
     val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
     val request = DownloadManager.Request(Uri.parse(url))
         .setNotificationVisibility(
             DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED
         )
+        .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,url.substring(url.lastIndexOf("/")+1,url.length))
     val downloadReference = downloadManager.enqueue(request)
     Timber.d("Download Requested for Reference Id %d", downloadReference)
     return downloadReference
