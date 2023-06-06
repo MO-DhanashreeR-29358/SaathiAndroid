@@ -1970,6 +1970,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     private fun setEnableDisable(status: Boolean) {
+        var isEnabledEmailId = status
+        if(userManager.user.isValidateEmailIdFromLead() && status == true){
+            if(binding.etEmail.text.toString().isEmpty()){
+                isEnabledEmailId = true
+            }else{
+                isEnabledEmailId = false
+            }
+        }
         binding.apply {
             etLeadName.isEnabled = status
             etPanNumber.isEnabled = status
@@ -1987,7 +1995,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etAlternateMobileNumber.isEnabled = status
             etEkycMobileNumber.isEnabled = status
             etAlternateEmail.isEnabled = status
-            etEmail.isEnabled = status
+            etEmail.isEnabled = isEnabledEmailId
             etContactPerson.isEnabled = status
             etComments.isEnabled = status
             btnSubmit.isEnabled = status

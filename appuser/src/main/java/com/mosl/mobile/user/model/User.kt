@@ -119,4 +119,12 @@ data class User(
         return currentBusinessProfile.businessUnitId?.equals("11") ?: false
     }
 
+    fun isValidateEmailIdFromLead(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("14") ||
+            currentBusinessProfile.businessUnitId.equals("1")) {
+            flag = true
+        }
+        return flag
+    }
 }
