@@ -200,6 +200,11 @@ interface SaathiApi {
         @Body request: SecondaryRmFilterRequest
     ): Observable<List<BusinessProfile>>
 
+    @POST("UserApi/getWealthManagementRM")
+    fun getUserBusinessProfileForWMSecondaryRM(
+        @Body request: UserBusinessProfileRequest
+    ): Observable<List<BusinessProfile>>
+
     @POST("CrossSellingProductMapping/GetCrossSellingProduct")
     fun getCrossSellingProduct(
         @Body request: CrossSellingProductRequest

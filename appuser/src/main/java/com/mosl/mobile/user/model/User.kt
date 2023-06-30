@@ -119,6 +119,10 @@ data class User(
         return currentBusinessProfile.businessUnitId?.equals("11") ?: false
     }
 
+    fun isPCGBusiness(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("5") ?: false
+    }
+
     fun isValidateEmailIdFromLead(): Boolean {
         var flag = false
         if (currentBusinessProfile.businessUnitId.equals("14") ||

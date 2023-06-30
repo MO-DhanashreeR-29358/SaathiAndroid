@@ -165,6 +165,17 @@ class LeadCreationRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getEmployeeModelsFilterForWMSecondaryRM(text: String): Observable<List<EmployeeModel>> {
+        val profileRequest = UserBusinessProfileRequest(
+            employeeCode = URLEncoder.encode(text, "utf-8"),
+            employeeName = URLEncoder.encode(text, "utf-8")
+        )
+        return saathiApi.getUserBusinessProfileForWMSecondaryRM(profileRequest)
+            .map {
+                it.profilesToEmployeeModels(userManager.getUser())
+            }
+    }
+
     override fun getCountryRowDatas(): Observable<List<RowData>> {
         return saathiApi.getCountries()
             .map { it.countryItemsToRowDatas() }

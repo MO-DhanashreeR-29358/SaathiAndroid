@@ -50,6 +50,7 @@ interface LeadCreationView : BaseView {
 
   fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent>
   fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent>
+  fun onPCGSecondaryRMSearchEventFired(): Observable<PCGSecondaryRMSearchEvent>
 
   fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
   fun renderOnSecondaryRMSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)

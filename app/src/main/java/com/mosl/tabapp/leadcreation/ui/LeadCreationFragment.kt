@@ -168,6 +168,7 @@ class LeadCreationFragment : CommonFragment(),
     private fun setupView() {
         setupScrollView()
         setupAllianceSeconadaryRM()
+        setupWealthManagementCodeSeconadaryRM()
         disableField(binding.llResAdd)
         disableField(binding.llOffAdd)
         binding.tvPersonalInfo.toggleIcon(binding.llPersonalInformation)
@@ -520,6 +521,64 @@ class LeadCreationFragment : CommonFragment(),
         }
     }
 
+    private fun setupWealthManagementCodeSeconadaryRM(){
+        if (userManager.user.isPCGBusiness()) {
+            binding.chkWMCode.isVisible = true
+            if(binding.chkWMCode.isChecked ) {
+                binding.llSearchSecondaryRM.isVisible = true
+            }else {
+                binding.llSearchSecondaryRM.isVisible = false
+            }
+
+            binding.chkWMCode.setOnCheckedChangeListener { buttonView, isChecked ->
+                if(isChecked){
+                    binding.llSearchSecondaryRM.isVisible = true
+                }else{
+                    binding.llSearchSecondaryRM.isVisible = false
+                }
+            }
+            binding.actSecondaryRM.apply {
+                setHint(R.string.hint_lead_creation_secondary_rm_pcg_title)
+
+                setListener { secondaryRM = null }
+                setOnClickListener {
+
+                    requireActivity().window
+                        .setSoftInputMode(
+                            LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                                    or LayoutParams.SOFT_INPUT_ADJUST_PAN
+                        )
+                    secondaryRMSearchList.threshold = MOSLConstants.SEARCH_LENTH
+                    secondaryRMSearchList.clearSearchText()
+                    secondaryRMSearchList.show()
+                    secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_pcg_title))
+                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
+                        override fun onListItemSelect(data: Parcelable) {
+                            val clientModel =
+                                data as EmployeeModel
+                            if (clientModel.isNoData) {
+                                return
+                            }
+                            binding.actSecondaryRM.setText(clientModel.attendeeName)
+                            secondaryRM = clientModel.attendeeCode
+                            secondaryRMSearchList.dismiss()
+                            binding.actSecondaryRM.setClearIconVisible(true)
+                        }
+
+                        override fun onSearchTextChanged(constraint: CharSequence) {
+                            subject.onNext(PCGSecondaryRMSearchEvent(constraint.toString()))
+                        }
+                    }
+                    secondaryRMSearchList.setmListner(assingViewListner)
+                }
+            }
+        }else{
+            binding.chkWMCode.isVisible = false
+            binding.llSearchSecondaryRM.isVisible = false
+        }
+    }
+
+
     private fun setupScrollView() {
         binding.scrollView.apply {
             descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
@@ -698,6 +757,9 @@ class LeadCreationFragment : CommonFragment(),
     override fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent> = subject.ofType()
     override fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent> {
       return  subject.ofType()
+    }
+    override fun onPCGSecondaryRMSearchEventFired(): Observable<PCGSecondaryRMSearchEvent> {
+        return  subject.ofType()
     }
     override fun onPrimaryInfoClicked(): Observable<Unit> = binding.tvPersonalInfo.clicks()
     override fun onAdditionalInfoClicked(): Observable<Unit> = binding.tvAdditionInfo.clicks()

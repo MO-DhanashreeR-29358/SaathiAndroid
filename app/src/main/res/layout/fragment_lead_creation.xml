@@ -794,6 +794,17 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
+                    <androidx.appcompat.widget.AppCompatCheckBox
+                        android:id="@+id/chkWMCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/is_wealth_rm_label"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/llSearch">
+                    </androidx.appcompat.widget.AppCompatCheckBox>
+
                     <LinearLayout
                         android:id="@+id/llSearchSecondaryRM"
                         android:layout_width="match_parent"
@@ -805,7 +816,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/llSearch">
+                        app:layout_constraintTop_toBottomOf="@id/chkWMCode">
 
                         <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/srchImgSecRM"

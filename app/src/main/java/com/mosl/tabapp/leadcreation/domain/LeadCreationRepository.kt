@@ -17,6 +17,7 @@ interface LeadCreationRepository {
     fun getStageRowDatas(): Observable<List<RowData>>
     fun getEmployeeModelsFilterBy(text: String): Observable<List<EmployeeModel>>
     fun getEmployeeModelsFilterForSecondaryRM(text: String, branchCode : String): Observable<List<EmployeeModel>>
+    fun getEmployeeModelsFilterForWMSecondaryRM(text: String): Observable<List<EmployeeModel>>
     fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>>
     fun getCityRowDatas(selectedState: String): Observable<List<RowData>>
     fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
