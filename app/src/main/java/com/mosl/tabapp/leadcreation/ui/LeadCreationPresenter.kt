@@ -128,8 +128,7 @@ class LeadCreationPresenter @Inject constructor(
         view.onAssignToSearchEventFired()
             .debounce(1000, MILLISECONDS, dispatchers.main)
             .map { it.searchText }
-            .filter { it.isNotEmpty() }
-            .distinctUntilChanged()
+            .filter { it.isNotEmpty() && it.length >= 3}
             .switchMap {
                 repository.getEmployeeModelsFilterBy(it)
                     .compose(applyUiModel())
@@ -140,8 +139,7 @@ class LeadCreationPresenter @Inject constructor(
         view.onSecondaryRMSearchEventFired()
             .debounce(1000, MILLISECONDS, dispatchers.main)
             .map { it.searchText }
-            .filter { it.isNotEmpty() }
-            .distinctUntilChanged()
+            .filter { it.isNotEmpty() && it.length >= 3 }
             .switchMap {
                 repository.getEmployeeModelsFilterForSecondaryRM(it, view.getBranch()!!.branchName)
                     .compose(applyUiModel())
@@ -153,7 +151,6 @@ class LeadCreationPresenter @Inject constructor(
             .debounce(1000, MILLISECONDS, dispatchers.main)
             .map { it.searchText }
             .filter { it.isNotEmpty() && it.length >= 3 }
-            .distinctUntilChanged()
             .switchMap {
                 repository.getEmployeeModelsFilterForWMSecondaryRM(it)
                     .compose(applyUiModel())

@@ -121,11 +121,13 @@ public class CustomListPickerDialog extends Dialog implements TextWatcher, Adapt
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() >= mThreshold) {
+            Timber.d("Search count -- "+s.length());
             if (mListner != null) {
-
+                Timber.d("Search mListener count -- "+s.length());
                 mListner.onSearchTextChanged(s);
+                Timber.d("Search mListner count -- "+s.length());
             } else {
-                Timber.d("Please assing ListPickerListneable");
+                Timber.d("Search Please assing ListPickerListneable");
             }
         }else{
             //Todo dont show any thing
