@@ -36,7 +36,7 @@ public class LeadCreationModel implements Serializable {
     @SerializedName("ReferralEmpCode") private String referralEmpCode = "";
     @SerializedName("contact") private LeadCreationContact contact = new LeadCreationContact();
     @SerializedName("leadProductMapping") private LeadCreationProductMapping productMapping =
-        new LeadCreationProductMapping();
+            new LeadCreationProductMapping();
     private transient String profileID;
     private transient List<ContactDetailModel> contactDetailModels;
     private transient List<AddressDetailModel> addressDetailModels;
@@ -262,7 +262,7 @@ public class LeadCreationModel implements Serializable {
     }
 
     public void setAddresses(AddressDetailModel officeAddress,
-        AddressDetailModel residenceAddress) {
+                             AddressDetailModel residenceAddress) {
         contact.setAddresses(officeAddress, residenceAddress);
     }
 
@@ -315,7 +315,7 @@ public class LeadCreationModel implements Serializable {
     }
 
     public void setProductDetailModels(
-        List<LeadCreationProductMapping> productDetailModels) {
+            List<LeadCreationProductMapping> productDetailModels) {
         this.productDetailModels = productDetailModels;
     }
 
@@ -326,6 +326,10 @@ public class LeadCreationModel implements Serializable {
 
     public void setSameAsAbove(boolean sameAsAbove) {
         contact.setSameAsAbove(sameAsAbove);
+    }
+
+    public void setWMCodeCheck(boolean isWMCodeCheck) {
+        contact.setWMCodeCheck(isWMCodeCheck);
     }
 
     public String getLeadSourceDetails() {

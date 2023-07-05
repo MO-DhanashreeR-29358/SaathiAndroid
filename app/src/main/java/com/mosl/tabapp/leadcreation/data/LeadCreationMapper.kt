@@ -58,6 +58,7 @@ private fun LeadCreationContact.mapToCreateLeadContact(): CreateLeadContact {
         panNo,
         aadharNo,
         isSameAsAbove,
+        isWMCodeCheck,
         leadAddresses
     )
 }
@@ -83,6 +84,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
     return LeadCreationModel().apply {
         seteMail(emailId)
         setSameAsAbove(isSameAsChecked)
+        setWMCodeCheck(isWMCodeChecked)
         setAlternateEmail(alternateEmailId)
         setMobileNo(mobileNo)
         setLandLineNo(landlineNo)

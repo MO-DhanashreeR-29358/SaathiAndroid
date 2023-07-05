@@ -496,7 +496,7 @@ class LeadCreationFragment : CommonFragment(),
                             secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_title))
                         }
                     }
-                        val assingViewListner: ListPickerListneable = object : ListPickerListneable {
+                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
                         override fun onListItemSelect(data: Parcelable) {
                             val clientModel =
                                 data as EmployeeModel
@@ -522,12 +522,13 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     private fun setupWealthManagementCodeSeconadaryRM(){
-        if (userManager.user.isPCGBusiness()) {
-            binding.chkWMCode.isVisible = true
+        if (userManager.user.isPCG()) {
+            binding.wmcodecontainer.isVisible = true
             if(binding.chkWMCode.isChecked ) {
                 binding.llSearchSecondaryRM.isVisible = true
             }else {
                 binding.llSearchSecondaryRM.isVisible = false
+                binding.tvSecondaryRmError.isVisible = false
             }
 
             binding.chkWMCode.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -535,6 +536,7 @@ class LeadCreationFragment : CommonFragment(),
                     binding.llSearchSecondaryRM.isVisible = true
                 }else{
                     binding.llSearchSecondaryRM.isVisible = false
+                    binding.tvSecondaryRmError.isVisible = false
                 }
             }
             binding.actSecondaryRM.apply {
@@ -563,9 +565,13 @@ class LeadCreationFragment : CommonFragment(),
                             secondaryRM = clientModel.attendeeCode
                             secondaryRMSearchList.dismiss()
                             binding.actSecondaryRM.setClearIconVisible(true)
+                            binding.tvSecondaryRmError.isVisible = false
                         }
 
+
+
                         override fun onSearchTextChanged(constraint: CharSequence) {
+                            secondaryRM = null
                             subject.onNext(PCGSecondaryRMSearchEvent(constraint.toString()))
                         }
                     }
@@ -573,7 +579,7 @@ class LeadCreationFragment : CommonFragment(),
                 }
             }
         }else{
-            binding.chkWMCode.isVisible = false
+            binding.wmcodecontainer.isVisible = false
             binding.llSearchSecondaryRM.isVisible = false
         }
     }
@@ -756,7 +762,7 @@ class LeadCreationFragment : CommonFragment(),
     override fun onCategoryChanged(): Observable<Int> = binding.spCategory.itemSelections()
     override fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent> = subject.ofType()
     override fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent> {
-      return  subject.ofType()
+        return  subject.ofType()
     }
     override fun onPCGSecondaryRMSearchEventFired(): Observable<PCGSecondaryRMSearchEvent> {
         return  subject.ofType()
@@ -877,6 +883,7 @@ class LeadCreationFragment : CommonFragment(),
             val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
             val attendeeAdapter = AttendeeAdapter(requireContext(), list)
             secondaryRMSearchList.setAdapter(attendeeAdapter)
+            attendeeAdapter.notifyDataSetChanged()
         }
 
         uiModel.onSuccess {
@@ -887,6 +894,7 @@ class LeadCreationFragment : CommonFragment(),
             }
             val attendeeAdapter = AttendeeAdapter(requireContext(), list)
             secondaryRMSearchList.setAdapter(attendeeAdapter)
+            attendeeAdapter.notifyDataSetChanged()
         }
     }
 
@@ -1093,6 +1101,10 @@ class LeadCreationFragment : CommonFragment(),
                 31 -> {
                     binding.tilPan.setErrorMessages(getString(it))
                 }
+                32 -> {
+                    binding.tvSecondaryRmError.isVisible = true
+                    binding.tvSecondaryRmError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1124,6 +1136,7 @@ class LeadCreationFragment : CommonFragment(),
             tlInterest.disableErrorMessages()
             tlProductType.disableErrorMessages()
             tlProfession.disableErrorMessages()
+            tvSecondaryRmError.isVisible = false
         }
     }
 
@@ -1408,7 +1421,8 @@ class LeadCreationFragment : CommonFragment(),
             referaalCode = binding.etReferaalCode.text.toString(),
             dob = binding.etDOB.text.toString(),
             BankAccountNumber = binding.etAccountNumber.text.toString(),
-            secondaryRM = secondaryRM.toString()
+            secondaryRM = if(binding.actSecondaryRM.text.toString().isEmpty()) "" else secondaryRM.toString(),
+            isWMCodeChecked = binding.chkWMCode.isChecked
         )
     }
 

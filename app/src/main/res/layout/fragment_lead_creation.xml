@@ -794,16 +794,34 @@
                             android:visibility="gone" />
                     </LinearLayout>
 
-                    <androidx.appcompat.widget.AppCompatCheckBox
-                        android:id="@+id/chkWMCode"
+                    <LinearLayout
+                        android:id="@+id/wmcodecontainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="false"
-                        android:text="@string/is_wealth_rm_label"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llSearch">
-                    </androidx.appcompat.widget.AppCompatCheckBox>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/is_wealth_rm_label"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp"/>
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/chkWMCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:layout_marginLeft="10dp"
+                            android:visibility="visible"
+                            >
+                        </androidx.appcompat.widget.AppCompatCheckBox>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/llSearchSecondaryRM"
@@ -816,7 +834,7 @@
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/chkWMCode">
+                        app:layout_constraintTop_toBottomOf="@id/wmcodecontainer">
 
                         <androidx.appcompat.widget.AppCompatImageButton
                             android:id="@+id/srchImgSecRM"

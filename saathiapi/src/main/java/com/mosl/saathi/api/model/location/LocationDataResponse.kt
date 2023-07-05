@@ -13,7 +13,7 @@ data class LocationDataResponse(
     get() = status == true
 
   fun getMessage(): String {
-    return errors!!.get(0).message ?: "An Error Occurred"
+    return errors!![0].message ?: "An Error Occurred"
   }
 }
 

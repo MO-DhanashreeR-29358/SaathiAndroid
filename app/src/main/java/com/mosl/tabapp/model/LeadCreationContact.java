@@ -17,7 +17,16 @@ public class LeadCreationContact {
     @SerializedName("PanNumber") private String panNo;
     @SerializedName("AadharNumber") private String aadharNo;
     @SerializedName("IsSameAsAbove") private boolean sameAsAbove;
+    @SerializedName("WM_RMCheckFlag") private boolean WMCodeCheck;
     @SerializedName("contactAddress") private List<AddressDetailModel> addresses;
+
+    public boolean isWMCodeCheck() {
+        return WMCodeCheck;
+    }
+
+    public void setWMCodeCheck(boolean WMCodeCheck) {
+        this.WMCodeCheck = WMCodeCheck;
+    }
 
     public String getDob() {
         return dob;
@@ -120,7 +129,7 @@ public class LeadCreationContact {
     }
 
     public void setAddresses(AddressDetailModel officeAddress,
-        AddressDetailModel residenceAddress) {
+                             AddressDetailModel residenceAddress) {
         addresses = new ArrayList<>();
         addresses.add(officeAddress);
         addresses.add(residenceAddress);

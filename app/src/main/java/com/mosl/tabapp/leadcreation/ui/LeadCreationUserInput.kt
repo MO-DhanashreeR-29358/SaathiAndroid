@@ -51,5 +51,6 @@ data class LeadCreationUserInput(
     @JvmField val referaalCode : String,
     @JvmField val BankAccountNumber : String,
     @JvmField val dob : String,
-    @JvmField val secondaryRM : String
+    @JvmField val secondaryRM : String,
+    @JvmField val isWMCodeChecked: Boolean
 )

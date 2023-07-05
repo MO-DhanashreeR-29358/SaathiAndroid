@@ -19,7 +19,7 @@ class LeadCreationPresenter @Inject constructor(
     val bankRepository: BankRepository,
     val userManager: UserManagerImpl
 ) : BasePresenter<LeadCreationView>(view) {
-    private val validator = LeadCreationValidator()
+    private val validator = LeadCreationValidator(userManager.getUser()!!)
 
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
