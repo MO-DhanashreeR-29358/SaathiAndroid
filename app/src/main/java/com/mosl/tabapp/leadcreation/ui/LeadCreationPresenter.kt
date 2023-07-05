@@ -152,7 +152,7 @@ class LeadCreationPresenter @Inject constructor(
         view.onPCGSecondaryRMSearchEventFired()
             .debounce(1000, MILLISECONDS, dispatchers.main)
             .map { it.searchText }
-            .filter { it.isNotEmpty() }
+            .filter { it.isNotEmpty() && it.length >= 3 }
             .distinctUntilChanged()
             .switchMap {
                 repository.getEmployeeModelsFilterForWMSecondaryRM(it)

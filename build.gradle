@@ -16,7 +16,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:${android_plugin_version}"
         classpath "com.google.gms:google-services:$google_services_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.1.1'//Firebase Performance
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'//Firebase Performance
         classpath 'com.google.firebase:perf-plugin:1.4.1' //Firebase Performance
     }
 }
@@ -128,8 +128,8 @@ ext.deps = [
                 'messaging'      : "com.google.firebase:firebase-messaging:${versions.firebase}",
                 'preformance'    : 'com.google.firebase:firebase-perf:19.0.7',
                 'crashlytics_sdk': 'com.crashlytics.sdk.android:crashlytics:2.10.1',
-                'crashlytics'    : 'com.google.firebase:firebase-crashlytics:17.0.1',
-                'analytics'      : 'com.google.firebase:firebase-analytics:17.4.3',
+                'crashlytics'    : 'com.google.firebase:firebase-crashlytics:17.1.1',
+                'analytics'      : 'com.google.firebase:firebase-analytics:17.4.4',
                 'firestore'      : 'com.google.firebase:firebase-firestore:20.0.0',
                 'storage'        : 'com.google.firebase:firebase-storage:20.0.0',
                 'auth'           : 'com.google.firebase:firebase-auth:20.0.1',

@@ -61,7 +61,8 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
   private fun setData(values: ArrayList<String>): ArrayList<String> {
     val list: ArrayList<String> = ArrayList()
     list.add(values[0])
-    for (i in 1 until values.size) {
+    list.add(values[1])
+    for (i in 2 until values.size) {
       if (values[i] != "null" && values[i] != "" && !values[i].equals(
           "UnMapped",
           ignoreCase = true

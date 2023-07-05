@@ -571,7 +571,6 @@ class LeadCreationFragment : CommonFragment(),
 
 
                         override fun onSearchTextChanged(constraint: CharSequence) {
-                            secondaryRM = null
                             subject.onNext(PCGSecondaryRMSearchEvent(constraint.toString()))
                         }
                     }
