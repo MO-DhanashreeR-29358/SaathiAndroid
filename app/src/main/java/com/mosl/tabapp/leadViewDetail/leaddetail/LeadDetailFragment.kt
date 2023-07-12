@@ -10,6 +10,7 @@ import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.view.focusChanges
 import com.jakewharton.rxbinding4.view.touches
@@ -250,6 +251,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         setSectorSpinner()
         setDesignationSpinner()
         setNetworthSpinner()
+
+        if(userManager.getUser()!!.isShowRINRI()){
+            binding.ilClientType.isVisible = true
+        }else{
+            binding.ilClientType.isVisible = false
+        }
     }
 
     private fun setSectorSpinner() {
@@ -2118,6 +2125,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etSource.setText(sourceName)
 
         binding.etLeadCategory.setText(leadCategoryText)
+        binding.etClientType.setText(clientType)
         val dataProfession = RowData.getSpinnerRowDataByValue(profession, professionAdapter)
         dataProfession?.let {
             binding.spProfession.setSelection(it.position)

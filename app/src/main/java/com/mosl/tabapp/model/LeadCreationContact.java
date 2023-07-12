@@ -12,7 +12,18 @@ public class LeadCreationContact {
     @SerializedName("AlternateEmailId") private String alternateEmail;
     @SerializedName("AlternateMobileNo") private String alternateMobileNo;
     @SerializedName("Mobile") private String mobileNo;
+
+    @SerializedName("MobileRi") private String mobileNoRI;
     @SerializedName("LandlineNo") private String landLineNo;
+
+    public String getMobileNoRI() {
+        return mobileNoRI;
+    }
+
+    public void setMobileNoRI(String mobileNoRI) {
+        this.mobileNoRI = mobileNoRI;
+    }
+
     @SerializedName("EKYCMobileNo") private String ekycMobileNo;
     @SerializedName("PanNumber") private String panNo;
     @SerializedName("AadharNumber") private String aadharNo;

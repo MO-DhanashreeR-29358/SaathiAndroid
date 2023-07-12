@@ -17,6 +17,7 @@ data class LeadCreationUserInput(
     @JvmField val emailId: String,
     @JvmField val alternateEmailId: String,
     @JvmField val mobileNo: String,
+    @JvmField val mobileNoRI: String,
     @JvmField val alternateMobileNo: String,
     @JvmField val landlineNo: String,
     @JvmField val ekycMobileNo: String,
@@ -52,5 +53,8 @@ data class LeadCreationUserInput(
     @JvmField val BankAccountNumber : String,
     @JvmField val dob : String,
     @JvmField val secondaryRM : String,
-    @JvmField val isWMCodeChecked: Boolean
+    @JvmField val isWMCodeChecked: Boolean,
+    @JvmField val nriRiId : String,
+    @JvmField val nriRiValue : String,
+    @JvmField val countryStdCode : String
 )

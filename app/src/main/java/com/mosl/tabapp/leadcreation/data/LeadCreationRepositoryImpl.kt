@@ -22,7 +22,7 @@ import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.util.emptyString
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.functions.Function7
+import io.reactivex.rxjava3.functions.Function9
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -34,21 +34,25 @@ class LeadCreationRepositoryImpl @Inject constructor(
     override fun getLeadCreationPageData(): Observable<LeadCreationPageData> {
         return Observable.zip(
             getCategoryRowDatas(),
+            getClientTypeRowDatas(),
             getProfessionRowDatas(),
             getInterestInRowDatas(),
             getSourceRowDatas(),
             getStageRowDatas(),
             getCountryRowDatas(),
             getBankFilter(),
-            Function7 { listOfCategory, listOfProfession, listOfInterestIn, listOfSource, listOfStage, listOfCountry, listBank ->
+            getSTDCodeRowDatas(),
+            Function9 { listOfCategory,listOfClientType, listOfProfession, listOfInterestIn, listOfSource, listOfStage, listOfCountry, listBank, listStdCode ->
                 LeadCreationPageData(
                     categoryRowDatas = listOfCategory,
+                    clientTyoeRowDatas = listOfClientType,
                     professionRowDatas = listOfProfession,
                     interestInRowDatas = listOfInterestIn,
                     sourceRowDatas = listOfSource,
                     stageRowDatas = listOfStage,
                     countryRowDatas = listOfCountry,
-                    listBank = listBank
+                    listBank = listBank,
+                    countryStdCodeList = listStdCode
                 )
             }
         )
@@ -68,6 +72,17 @@ class LeadCreationRepositoryImpl @Inject constructor(
             lookupTypeId = MOSLConstants.LEADCATEGORY
         )
         return getRowDatas(categoryRequest)
+    }
+
+    private fun getClientTypeRowDatas(): Observable<List<RowData>> {
+        val categoryRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.CLIENTTYPE
+        )
+        return saathiApi.getAllLookup(categoryRequest)
+            .map { it.mapToClientTypeRowDatas() }
     }
 
     override fun getProfessionRowDatas(): Observable<List<RowData>> {
@@ -107,6 +122,11 @@ class LeadCreationRepositoryImpl @Inject constructor(
         )
         return saathiApi.getSourceList(sourceRequest)
             .map { it.mapToRowDataList() }
+    }
+
+    private fun getSTDCodeRowDatas(): Observable<List<RowData>> {
+        return saathiApi.getSTDCode()
+            .map { it.stdCodeItemsToRowDatas() }
     }
 
     override fun getStageRowDatas(): Observable<List<RowData>> {

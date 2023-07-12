@@ -460,6 +460,8 @@
     <string name="mock_location_label">Please Disable Mock Location!</string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
     <string name="lbl_lead_creation_category">Category*</string>
+    <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
+    <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>
     <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
@@ -535,6 +537,7 @@
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
+    <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
     <string name="error_message_invalid_mobile">Invalid mobile number.</string>
     <string name="error_message_invalid_landline">Invalid Tel number.</string>
@@ -567,6 +570,7 @@
     <string name="lead_detail_edit">Edit</string>
     <string name="lead_detail_lead_id">Lead Id</string>
     <string name="lead_detail_lead_category">Lead Category</string>
+    <string name="lead_detail_lead_client_type">Client Type</string>
     <string name="lead_detail_profession">Profession</string>
     <string name="lead_detail_lead_name">Individual Name</string>
     <string name="lead_detail_date_of_birth">Date of Birth</string>
@@ -654,4 +658,5 @@
     <string name="text_label_selected_location">Selected Location</string>
 
     <string name="qr_code_message">Please wait,\nQR Code will display here</string>
+    <string name="com.crashlytics.android.build_id">1</string>
 </resources>

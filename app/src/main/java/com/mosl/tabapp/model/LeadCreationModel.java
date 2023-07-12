@@ -37,7 +37,18 @@ public class LeadCreationModel implements Serializable {
     @SerializedName("contact") private LeadCreationContact contact = new LeadCreationContact();
     @SerializedName("leadProductMapping") private LeadCreationProductMapping productMapping =
             new LeadCreationProductMapping();
+
+    @SerializedName("NriRiID") private String nriRiID = "";
     private transient String profileID;
+
+    public String getNriRiID() {
+        return nriRiID;
+    }
+
+    public void setNriRiID(String nriRiID) {
+        this.nriRiID = nriRiID;
+    }
+
     private transient List<ContactDetailModel> contactDetailModels;
     private transient List<AddressDetailModel> addressDetailModels;
     private transient List<LeadCreationProductMapping> productDetailModels;
@@ -80,7 +91,9 @@ public class LeadCreationModel implements Serializable {
     public void setMobileNo(String mobileNo) {
         contact.setMobileNo(mobileNo);
     }
-
+    public void setMobileNoRi(String mobileNo) {
+        contact.setMobileNoRI(mobileNo);
+    }
     public void setLandLineNo(String landLineNo) {
         contact.setLandLineNo(landLineNo);
     }

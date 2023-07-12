@@ -133,6 +133,9 @@ interface SaathiApi {
     @POST("Country/GetCountryList")
     fun getCountries(): Observable<List<CountryItem>>
 
+    @POST("Master/GetSTDCode")
+    fun getSTDCode(): Observable<List<STDCodeItem>>
+
     @POST("StateProvince/GetStateProvinceList")
     fun getStateProvinces(
         @Body request: StateProvinceRequest

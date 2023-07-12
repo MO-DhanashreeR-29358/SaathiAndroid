@@ -42,6 +42,7 @@ class LeadCreationPresenter @Inject constructor(
             .subscribe {view.renderBranchChange()}
             .addTo(disposable)
 
+
         view.onPrimaryCheckboxChanged()
             .skip(1)
             .subscribe(view::renderOnPrimaryCheckboxChanges, Timber::e)
@@ -105,9 +106,9 @@ class LeadCreationPresenter @Inject constructor(
 
         view.onCategoryChanged()
             .filter(InvalidSelectionPredicate)
-            .skip(1)
+            //.skip(1)
             .map { view.getSelectedCategory() }
-            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
+            //.filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
             .map { it.showPotentialPopup }
             .subscribe(view::renderOnCategoryChange, Timber::e)
             .addTo(disposable)

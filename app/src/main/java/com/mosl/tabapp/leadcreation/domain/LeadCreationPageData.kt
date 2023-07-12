@@ -5,12 +5,14 @@ import com.mosl.tabapp.common.RowData
 
 data class LeadCreationPageData(
     @JvmField val categoryRowDatas: List<RowData>,
+    @JvmField val clientTyoeRowDatas: List<RowData>,
     @JvmField val professionRowDatas: List<RowData>,
     @JvmField val interestInRowDatas: List<RowData>,
     @JvmField val sourceRowDatas: List<RowData>,
     @JvmField val stageRowDatas: List<RowData>,
     @JvmField val countryRowDatas: List<RowData>,
-    @JvmField val listBank: List<BankCodeModel>
+    @JvmField val listBank: List<BankCodeModel>,
+    @JvmField val countryStdCodeList: List<RowData>
 
 )
 

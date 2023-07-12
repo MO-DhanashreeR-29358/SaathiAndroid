@@ -55,6 +55,7 @@ public interface MOSLConstants extends LabelConfig {
     int DESIGNATION = 136;
     int NETWORTH = 138;
 
+    int CLIENTTYPE = 140;
 
     String SOME_ERROR_OCCURED_PLEASE_RETRY = "Some error occurred, please retry";
     String SOME_SERVER_ERROR_OCCURRED =

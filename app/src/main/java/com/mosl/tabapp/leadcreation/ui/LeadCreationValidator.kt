@@ -204,6 +204,11 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 identifier = 32
                 R.string.error_message_enter_secondary_rm
             }
+            input.countryStdCode == "Select" && input.nriRiValue == "NRI" &&
+                    user.isShowRINRI()  -> {
+                identifier = 33
+                R.string.error_message_select_std_code
+            }
             else -> {
                 identifier = 0
                 null

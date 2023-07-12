@@ -79,6 +79,36 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/tvClientType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_client_type"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf = "@id/tl_category" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_client_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvClientType">
+
+                        <Spinner
+                            android:id="@+id/spClientType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
@@ -88,7 +118,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_category">
+                        app:layout_constraintTop_toBottomOf="@+id/tl_client_type">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etName"
@@ -351,6 +381,37 @@
                             app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/tvStdCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_std_code"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf = "@id/ilAlternateEmailId" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_std_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvStdCode">
+
+                        <Spinner
+                            android:id="@+id/spStdCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobile"
                         android:layout_width="match_parent"
@@ -359,7 +420,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilAlternateEmailId">
+                        app:layout_constraintTop_toBottomOf="@+id/tl_std_code">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMobile"

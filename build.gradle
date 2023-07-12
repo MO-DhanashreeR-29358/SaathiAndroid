@@ -13,7 +13,7 @@ buildscript {
         maven { url = uri("https://artifacts.netcore.co.in/artifactory/android") }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:${android_plugin_version}"
+        classpath "com.android.tools.build:gradle:$android_plugin_version"
         classpath "com.google.gms:google-services:$google_services_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.1'//Firebase Performance

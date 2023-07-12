@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager.LayoutParams
 import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
@@ -32,7 +33,6 @@ import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SelectBank
 import com.mosl.mobile.domain.bank.SelectBranch
 import com.mosl.mobile.user.annotation.BranchCode
-import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
@@ -69,7 +69,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
+
 
 class LeadCreationFragment : CommonFragment(),
     LeadCreationView {
@@ -80,6 +80,9 @@ class LeadCreationFragment : CommonFragment(),
     private val subject = PublishSubject.create<LeadCreationUiEvent>()
     private var isReferee = false
     private val categoryAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+    private val clientTypeAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
     private val professionAdapter: ArrayAdapter<RowData> by lazy {
@@ -128,6 +131,10 @@ class LeadCreationFragment : CommonFragment(),
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
+    private val stdCodeAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
 
@@ -169,6 +176,7 @@ class LeadCreationFragment : CommonFragment(),
         setupScrollView()
         setupAllianceSeconadaryRM()
         setupWealthManagementCodeSeconadaryRM()
+        setupRINRI()
         disableField(binding.llResAdd)
         disableField(binding.llOffAdd)
         binding.tvPersonalInfo.toggleIcon(binding.llPersonalInformation)
@@ -462,6 +470,20 @@ class LeadCreationFragment : CommonFragment(),
 
         }
 
+    }
+
+    private fun setupRINRI(){
+        if(userManager.user.isShowRINRI()){
+            binding.tvStdCode.isVisible = true
+            binding.tlStdCode.isVisible = true
+            binding.tvClientType.isVisible = true
+            binding.tlClientType.isVisible = true
+        }else{
+            binding.tvStdCode.isVisible = false
+            binding.tlStdCode.isVisible = false
+            binding.tvClientType.isVisible = false
+            binding.tlClientType.isVisible = false
+        }
     }
 
     private fun setupAllianceSeconadaryRM(){
@@ -828,6 +850,7 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
+            binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
             bankAdapter.setSpinnerData(binding.spBank, data.listBank)
             binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
             binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
@@ -835,6 +858,41 @@ class LeadCreationFragment : CommonFragment(),
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+            binding.spStdCode.setSpinnerData(stdCodeAdapter, data.countryStdCodeList)
+
+            binding.spCategory.setOnItemSelectedListener(object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
+                    when (getSelectedCategory().value) {
+                        "INDIVIDUAL", "Individual" -> {
+                            binding.ilContactPerson.gone()
+                        }
+                        else -> {
+                            binding.tilContactPerson.disableErrorMessages()
+                            binding.ilContactPerson.visible()
+
+                        }
+                    }
+                }
+               override fun onNothingSelected(parent: AdapterView<*>?) {}
+            })
+
+            binding.spClientType.setOnItemSelectedListener(object : OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
+                    val type = binding.spClientType.selectedItem as RowData
+                    when (type.value) {
+                        "NRI", "nri" -> {
+                            binding.tvStdCode.isVisible = true
+                            binding.tlStdCode.isVisible = true
+                        }
+                        else -> {
+                            binding.tvStdCode.isVisible = false
+                            binding.tlStdCode.isVisible = false
+
+                        }
+                    }
+                }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            })
         }
     }
 
@@ -1104,6 +1162,9 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvSecondaryRmError.isVisible = true
                     binding.tvSecondaryRmError.text = getString(it)
                 }
+                33 ->{
+                    binding.tlStdCode.setErrorMessages(getString(it))
+                }
                 else -> {
                 }
 
@@ -1339,6 +1400,8 @@ class LeadCreationFragment : CommonFragment(),
         binding.actSecondaryRM.setText("")
     }
 
+
+
     override fun getLeadCreationUserInput(): LeadCreationUserInput {
 
         val resAdd = AddressDetailModel(
@@ -1385,7 +1448,8 @@ class LeadCreationFragment : CommonFragment(),
                 ?: LeadCreationView.SELECT_ROW_DATA,
             emailId = binding.etEmailId.text.toString(),
             alternateEmailId = binding.etAlternateEmailId.text.toString(),
-            mobileNo = binding.etMobile.text.toString(),
+            mobileNo = getStdCode() + binding.etMobile.text.toString(),
+            mobileNoRI =  binding.etMobile.text.toString(),
             alternateMobileNo = binding.etAlternateMobno.text.toString(),
             landlineNo = binding.etLandLine.text.toString(),
             ekycMobileNo = binding.etEkycMobile.text.toString(),
@@ -1421,8 +1485,27 @@ class LeadCreationFragment : CommonFragment(),
             dob = binding.etDOB.text.toString(),
             BankAccountNumber = binding.etAccountNumber.text.toString(),
             secondaryRM = if(binding.actSecondaryRM.text.toString().isEmpty()) "" else secondaryRM.toString(),
-            isWMCodeChecked = binding.chkWMCode.isChecked
+            isWMCodeChecked = binding.chkWMCode.isChecked,
+            nriRiId = (binding.spClientType.selectedItem as RowData).key,
+            nriRiValue = (binding.spClientType.selectedItem as RowData).value,
+            countryStdCode =  (binding.spStdCode.selectedItem as RowData).value
         )
+    }
+
+    private fun getStdCode() : String{
+        val type = binding.spClientType.selectedItem as RowData
+        var code = ""
+        if(userManager.getUser()!!.isShowRINRI()) {
+            if (type.value.equals("NRI")) {
+                code = (binding.spStdCode.selectedItem as RowData).key ?: ""
+                if (code.isNotEmpty() && !code.equals("-1")) {
+                    code = code + "-"
+                } else {
+                    code = ""
+                }
+            }
+        }
+        return code
     }
 
     override fun isDataEmpty(): Boolean = true

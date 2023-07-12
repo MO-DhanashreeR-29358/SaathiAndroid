@@ -79,7 +79,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       networthId = networthId ?: emptyString(),
       networthName = networth ?: emptyString(),
       referralEmpCode = referralEmpCode ?: emptyString(),
-      referralEmpName = referralEmpName ?: emptyString()
+      referralEmpName = referralEmpName ?: emptyString(),
+      clientType = clientType ?: emptyString()
   )
 }
 

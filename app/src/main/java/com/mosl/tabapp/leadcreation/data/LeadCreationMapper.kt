@@ -38,7 +38,8 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         prospectRefereMobile = model.prospectRefereMobile,
         productMapping = listOfCreateLeadProduct,
         contact = leadContact,
-        referralEmpCode = model.referralEmpCode
+        referralEmpCode = model.referralEmpCode,
+        nriRiId = model.nriRiID
     )
 }
 
@@ -53,6 +54,7 @@ private fun LeadCreationContact.mapToCreateLeadContact(): CreateLeadContact {
         alternateEmail,
         alternateMobileNo,
         mobileNo,
+        mobileNoRI,
         landLineNo,
         ekycMobileNo,
         panNo,
@@ -87,6 +89,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         setWMCodeCheck(isWMCodeChecked)
         setAlternateEmail(alternateEmailId)
         setMobileNo(mobileNo)
+        setMobileNoRi(mobileNo)
         setLandLineNo(landlineNo)
         setEkycMobileNo(ekycMobileNo)
         setPanNo(panNo)
@@ -132,6 +135,8 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         contactDetailModels = arrayListOf<ContactDetailModel>()
         addressDetailModels = arrayListOf<AddressDetailModel>()
         productDetailModels = arrayListOf<LeadCreationProductMapping>()
+        nriRiID = nriRiId
+
     }
 }
 
@@ -164,6 +169,21 @@ internal fun List<LookupItem>.mapToRowDatas(): List<RowData> {
             null
         }
     }.addSelectRowData()
+}
+
+internal fun List<LookupItem>.mapToClientTypeRowDatas(): List<RowData> {
+    return mapIndexedNotNull { index: Int, lookupItem: LookupItem ->
+        try {
+            RowData(
+                index + 1,
+                "${lookupItem.lookUpid}",
+                lookupItem.lookUpName ?: "",
+                lookupItem.sysName ?: ""
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
 }
 
 internal fun List<SourceListItem>.mapToRowDataList(): List<RowData> {
@@ -246,6 +266,20 @@ internal fun List<CountryItem>.countryItemsToRowDatas(): List<RowData> {
             null
         }
     }
+}
+
+internal fun List<STDCodeItem>.stdCodeItemsToRowDatas(): List<RowData> {
+    return mapIndexedNotNull { index: Int, countryItem: STDCodeItem ->
+        try {
+            RowData(
+                index,
+                countryItem.STDCode ?: "",
+                countryItem.STDCodeDisplay
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }.addSelectRowData()
 }
 
 internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowData> {

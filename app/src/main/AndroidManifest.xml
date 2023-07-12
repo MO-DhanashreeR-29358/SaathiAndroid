@@ -52,6 +52,9 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme">
         <activity android:name=".settings.SettingActivity"></activity>
+
+        <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="true" />
+
         <activity
             android:name=".slider.SliderActivity"
             android:clearTaskOnLaunch="true"

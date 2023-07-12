@@ -131,4 +131,14 @@ data class User(
         }
         return flag
     }
+
+    fun isShowRINRI(): Boolean {
+        var flag = false
+        //UAT - 17, Live -18
+        if (currentBusinessProfile.businessUnitId.equals("17")  ||
+            currentBusinessProfile.businessUnitId.equals("18")) {
+            flag = true
+        }
+        return flag
+    }
 }
