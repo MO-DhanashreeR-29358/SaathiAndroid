@@ -254,6 +254,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         if(userManager.getUser()!!.isShowRINRI()){
             binding.ilClientType.isVisible = true
+            binding.etMobileNumber.filters = arrayOf(InputFilter.LengthFilter(20))
+            binding.etAlternateMobileNumber.filters = arrayOf(InputFilter.LengthFilter(20))
+            binding.etEkycMobileNumber.filters = arrayOf(InputFilter.LengthFilter(20))
         }else{
             binding.ilClientType.isVisible = false
         }

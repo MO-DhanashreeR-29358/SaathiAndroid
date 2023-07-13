@@ -22,7 +22,8 @@ data class User(
     @JvmField val defaultBusinessProfile: BusinessProfileRequest,
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,
     @JvmField var password: String,
-    @JvmField var isBank: Boolean
+    @JvmField var isBank: Boolean,
+    @JvmField var isQRDownload: Boolean
 
 ) {
     fun isAufsb(): Boolean {
@@ -89,28 +90,6 @@ data class User(
             }
         } else {
             flag = true
-        }
-        return flag
-    }
-    fun isShowORCode(): Boolean {
-        var flag: Boolean = false
-        if(currentBusinessProfile.businessUnitId.equals("1")) {
-            currentBusinessProfile.businessProfileName.apply {
-                if(this.equals("Sales") ||
-                    this.equals("Sales Manager") ||
-                    this.equals("Sales Team Leader")||
-                    this.equals("Team Leader Sales")||
-                    this.equals("Area Sales Manager") ||
-                    this.equals("Regional Sales Manager")||
-                    this.equals("Sales Regional Manager")||
-                    this.equals("Cluster Head")||
-                    this.equals("Regional Head")||
-                    this.equals("National Sales Head")||
-                    this.equals("Key Account Manager")||
-                    this.equals("National Head")) {
-                    flag = true
-                }
-            }
         }
         return flag
     }

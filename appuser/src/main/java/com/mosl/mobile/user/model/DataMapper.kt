@@ -22,7 +22,8 @@ fun LoginResponse.transform(
             isUseUrl,
             isRetrieveOTPEnable,
             isPrimeUser == "1",
-            isBank == "1"
+            isBank == "1",
+            isQRDownload  == "1"
         ),
         smtEnabled = smtEnabled
     )
@@ -48,7 +49,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
     isUseUrl: String?,
     isRetrieveOTPEnable: String?,
     isPrimeUser: Boolean,
-    isBank: Boolean
+    isBank: Boolean,
+    isQRDownload : Boolean
 
 ): User {
     val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
@@ -73,7 +75,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         defaultBusinessProfile = defaultBusinessProfile.transformDefaultBusinessProfile(),
         currentBusinessProfile = currentBusinessProfile.transformCurrentBusinessProfile(),
         password = password,
-        isBank = isBank
+        isBank = isBank,
+        isQRDownload = isQRDownload
     )
 }
 

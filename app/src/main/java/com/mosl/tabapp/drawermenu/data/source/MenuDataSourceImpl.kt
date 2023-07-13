@@ -23,19 +23,19 @@ open class MenuDataSourceImpl @Inject constructor(
            val user = userManager.user
             when {
                 user.isAufsb() -> {
-                    getAufsbUserMenu(user.isShowORCode())
+                    getAufsbUserMenu(user.isQRDownload)
                 }
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isShowORCode())
+                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isQRDownload)
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
+                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
+                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
                 }
                 else -> {
-                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isShowORCode())
+                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
                 }
             }
         }
