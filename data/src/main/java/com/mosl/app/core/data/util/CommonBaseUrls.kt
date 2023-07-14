@@ -6,4 +6,6 @@ interface CommonBaseUrls {
   fun getCRMCollateralUrl(): String
   fun getSalesStadiumPitchUrl(): String
   fun getEkycExpressApiUrl(): String
+
+  fun getQRCodeApiUrl(): String
 }

@@ -24,6 +24,10 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     //return "https://ekycuat.motilaloswal.com/superjetApi/api/v1/"
   }
 
+  override fun getQRCodeApiUrl(): String {
+    return "https://saathiuat.motilaloswal.com/saathi_plus/api/DrishtiTransfer/GenerateQrCode_API/?Empcode="
+  }
+
   companion object {
     const val SAATHI_BASE_URL = "https://saathiuat.motilaloswal.com:1023/api/"
   }
