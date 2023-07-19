@@ -139,6 +139,16 @@ class LeadCreationRepositoryImpl @Inject constructor(
             .map { it.stageItemsToRowDatas() }
     }
 
+    override fun getRealEstateStageRowDatas(): Observable<List<RowData>> {
+        val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" })
+        )
+        return saathiApi.getRealEstateStageList(stageRequest)
+            .map { it.realEstateStageItemsToRowDatas() }
+    }
+
     override fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>> {
         val productTypeRequest = LookupRequest(
             businessUnitId = requireNotNull(

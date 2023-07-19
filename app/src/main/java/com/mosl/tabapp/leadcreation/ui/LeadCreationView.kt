@@ -118,6 +118,8 @@ interface LeadCreationView : BaseView {
   fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>)
   fun renderBranchChange()
 
+  fun renderStageList(uiModel: UiModel<List<RowData>>)
+
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

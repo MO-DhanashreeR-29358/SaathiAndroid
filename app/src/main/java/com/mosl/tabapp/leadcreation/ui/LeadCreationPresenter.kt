@@ -80,7 +80,8 @@ class LeadCreationPresenter @Inject constructor(
             .subscribe { view.renderPrimaryInfoClick() }
             .addTo(disposable)
 
-        view.onInterestedProductSelected()
+        val interestedProdChange = view.onInterestedProductSelected().share()
+        interestedProdChange
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .map { view.getSelectedInterestedProduct() }
@@ -90,6 +91,30 @@ class LeadCreationPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe(view::renderProductTypeOnInterestedProductSelection, Timber::e)
+            .addTo(disposable)
+
+        interestedProdChange
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getSelectedInterestedProduct() }
+            .filter { rowData -> rowData.value == "Real Estate" }
+            .switchMap {
+                repository.getRealEstateStageRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderStageList, Timber::e)
+            .addTo(disposable)
+
+        interestedProdChange
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getSelectedInterestedProduct() }
+            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && rowData.value != "Real Estate" }
+            .switchMap {
+                repository.getStageRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderStageList, Timber::e)
             .addTo(disposable)
 
         view.onSourceSelected()

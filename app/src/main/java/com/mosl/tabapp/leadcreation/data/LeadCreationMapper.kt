@@ -213,7 +213,19 @@ internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
         }
     }
 }
-
+internal fun List<StageItem>.realEstateStageItemsToRowDatas(): List<RowData> {
+    return mapIndexedNotNull { index: Int, stageItem: StageItem ->
+        try {
+            RowData(
+                index + 1,
+                "${stageItem.stageID}",
+                stageItem.statusName
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+}
 internal fun List<LeadSourceItem>.leadSourceItemsToRowDatas(): List<RowData> {
     return mapIndexedNotNull { index: Int, leadSourceItem: LeadSourceItem ->
         try {

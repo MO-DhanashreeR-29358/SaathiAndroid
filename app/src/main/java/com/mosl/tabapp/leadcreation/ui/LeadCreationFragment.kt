@@ -1400,6 +1400,13 @@ class LeadCreationFragment : CommonFragment(),
         binding.actSecondaryRM.setText("")
     }
 
+    override fun renderStageList(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            binding.spStage.setSpinnerData(stageAdapter, it)
+        }
+    }
 
 
     override fun getLeadCreationUserInput(): LeadCreationUserInput {

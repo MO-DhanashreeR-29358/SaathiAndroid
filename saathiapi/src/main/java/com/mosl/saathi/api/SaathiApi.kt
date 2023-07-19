@@ -223,6 +223,11 @@ interface SaathiApi {
         @Body request: StageRequest
     ): Observable<List<StageItem>>
 
+    @POST("LeadStatus/GetProductStage")
+    fun getRealEstateStageList(
+        @Body request: StageRequest
+    ): Observable<List<StageItem>>
+
     @POST("Stage/GetStageMobileSelectList")
     fun getStageMobileList(
         @Body request: StageMobileRequest

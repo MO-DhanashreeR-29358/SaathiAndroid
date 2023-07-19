@@ -15,6 +15,8 @@ interface LeadCreationRepository {
     fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>>
     fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>>
     fun getStageRowDatas(): Observable<List<RowData>>
+    fun getRealEstateStageRowDatas(): Observable<List<RowData>>
+
     fun getEmployeeModelsFilterBy(text: String): Observable<List<EmployeeModel>>
     fun getEmployeeModelsFilterForSecondaryRM(text: String, branchCode : String): Observable<List<EmployeeModel>>
     fun getEmployeeModelsFilterForWMSecondaryRM(text: String): Observable<List<EmployeeModel>>

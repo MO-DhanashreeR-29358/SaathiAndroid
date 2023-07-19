@@ -8,6 +8,7 @@ data class StageItem(
   @JvmField @SerializedName("LastModifiedBy") val lastModifiedBy: Any,
   @JvmField @SerializedName("CreatedBy") val createdBy: Any,
   @JvmField @SerializedName("StageName") val stageName: String,
+  @JvmField @SerializedName("StatusName") val statusName: String,
   @JvmField @SerializedName("IdentifierPropertyName") val identifierPropertyName: String,
   @JvmField @SerializedName("StageID") val stageID: Int,
   @JvmField @SerializedName("BusinessUnitId") val businessUnitId: Int,

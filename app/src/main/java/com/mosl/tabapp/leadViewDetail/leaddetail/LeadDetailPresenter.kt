@@ -132,13 +132,16 @@ class LeadDetailPresenter @Inject constructor(
 
         view.interestedProductSelected()
             .switchMap {
-                repository.getStageRowDatas()
-                    .compose(applyUiModel())
+                if(it.selectedProduct.value.equals("Real Estate")){
+                    repository.getRealEstateStageRowDatas()
+                        .compose(applyUiModel())
+                }else {
+                    repository.getStageRowDatas()
+                        .compose(applyUiModel())
+                }
             }
             .subscribe(view::renderStage)
             .addTo(disposable)
-
-
 
 
         view.selectedStage()
