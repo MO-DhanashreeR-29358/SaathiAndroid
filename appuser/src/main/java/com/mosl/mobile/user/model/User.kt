@@ -112,11 +112,15 @@ data class User(
     }
 
     fun isShowRINRI(): Boolean {
-        var flag = false
+        //var flag = false
         //UAT - 17, Live -18
-        if (currentBusinessProfile.businessUnitId.equals("17")  ||
-            currentBusinessProfile.businessUnitId.equals("18")) {
-            flag = true
+        // if (currentBusinessProfile.businessUnitId.equals("17")  ||
+        //   currentBusinessProfile.businessUnitId.equals("18")) {
+        //    flag = true
+        //}
+        var flag = true
+        if (currentBusinessProfile.businessUnitId.equals("11")){
+            flag = false
         }
         return flag
     }
