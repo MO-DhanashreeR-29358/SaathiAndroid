@@ -99,14 +99,9 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 identifier = 34
                 R.string.error_message_invalid_nri_mobile
             }
-            input.mobileNo.length <= 10 && input.nriRiValue == "RI" && user.isShowRINRI() && !input.mobileNo.matches(
-                "^[6789]\\d{9}$".toRegex() ) -> {
-                identifier = 35
-                R.string.error_message_invalid_mobile
-            }
 
             input.mobileNo.length <= 10 && !input.mobileNo.matches(
-                "^[6789]\\d{9}$".toRegex() )  -> {
+                "^[6789]\\d{9}$".toRegex() ) && input.nriRiValue != "NRI"  -> {
                 identifier = 12
                 R.string.error_message_invalid_mobile
             }

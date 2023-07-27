@@ -260,6 +260,7 @@ class LeadCreationPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onCreateButtonClicked()
+            .doOnNext { Timber.i("Create button click") }
             .map { view.getLeadCreationUserInput() }
             .switchMap {
                 validator.validate(it)

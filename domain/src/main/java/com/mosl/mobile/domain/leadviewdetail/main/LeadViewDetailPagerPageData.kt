@@ -12,6 +12,7 @@ data class LeadDetail(
   @JvmField val oaoUserId: Int,
   @JvmField val diyCode: Int,
   @JvmField val diyLink: String,
+  @JvmField val clientType: String,
   @JvmField val leadProducts: List<LeadProduct>
 )
 
