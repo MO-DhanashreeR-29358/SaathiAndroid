@@ -16,6 +16,11 @@ import javax.inject.Inject
 class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, String>() {
 
     override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
+        var mob = input.mobileNo
+        if(input.mobileNo.isNotBlank()) {
+            mob = mob.replace("+", "")
+            mob = mob.replace("-", "").trim()
+        }
         val identifier: Int
         val errorMessageRes = when {
 
@@ -90,9 +95,18 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_enter_mobile
             }
 
+            mob.length < 8 && input.nriRiValue == "NRI" && user.isShowRINRI()  -> {
+                identifier = 34
+                R.string.error_message_invalid_nri_mobile
+            }
+            input.mobileNo.length <= 10 && input.nriRiValue == "RI" && user.isShowRINRI() && !input.mobileNo.matches(
+                "^[6789]\\d{9}$".toRegex() ) -> {
+                identifier = 35
+                R.string.error_message_invalid_mobile
+            }
+
             input.mobileNo.length <= 10 && !input.mobileNo.matches(
-                "^[6789]\\d{9}$".toRegex()
-            ) -> {
+                "^[6789]\\d{9}$".toRegex() )  -> {
                 identifier = 12
                 R.string.error_message_invalid_mobile
             }

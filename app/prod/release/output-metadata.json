@@ -10,9 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 229,
-      "versionName": "2.2.9",
-      "outputFile": "app-prodRelease-2.2.9.apk"
+      "versionCode": 231,
+      "versionName": "2.3.1",
+      "outputFile": "app-prodRelease-2.3.1.apk"
     }
   ]
 }

@@ -540,6 +540,7 @@
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
     <string name="error_message_invalid_mobile">Invalid mobile number.</string>
+    <string name="error_message_invalid_nri_mobile">Minimum length of Mobile No should be 8 digit.</string>
     <string name="error_message_invalid_landline">Invalid Tel number.</string>
     <string name="error_message_enter_pan">Enter PAN number.</string>
     <string name="error_message_invalid_pan">Invalid PAN number.</string>

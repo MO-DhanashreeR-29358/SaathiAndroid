@@ -113,6 +113,8 @@ class Actionbar @JvmOverloads constructor(
                                     val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
                                     val businessProfileId = jsonObject.getString(PROFILE_ID)
                                     val productId = jsonObject.getString(PRODUCT_ID)
+                                    val diyCode = jsonObject.getInt(DIY_CODE)
+                                    val isOAO = jsonObject.getInt(IS_OAO)
                                     val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
                                     SearchModelNew(
                                         getSearchHint(),
@@ -121,7 +123,9 @@ class Actionbar @JvmOverloads constructor(
                                         businessProfileId,
                                         businessProfile,
                                         productId,
-                                        flgReactivationClient
+                                        flgReactivationClient,
+                                        diyCode,
+                                        isOAO
                                     )
                                 } else {
                                     val ucid = jsonObject.getString(UCID)
@@ -138,6 +142,7 @@ class Actionbar @JvmOverloads constructor(
                                     val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
                                     val oaoUserId = jsonObject.getInt(OAOUSERID)
                                     val diyCode = jsonObject.getInt(DIY_CODE)
+                                    val isOAO = jsonObject.getInt(IS_OAO)
                                     val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
                                     var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
                                     val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
@@ -159,15 +164,16 @@ class Actionbar @JvmOverloads constructor(
                                         createMeetingId,
                                         diyCode,
                                         branchCode,
-                                        flgReactivationClient
+                                        flgReactivationClient,
+                                        isOAO
                                     )
                                 }
                             }
                         } else {
                             listOf(
                                 SearchModelNew(
-                                    "", "", NO_RECORDS_FOUND, "", "","",
-                                    ""
+                                    "", "", NO_RECORDS_FOUND, "", "","","", 0,
+                                    0
                                 )
                             )
                         }

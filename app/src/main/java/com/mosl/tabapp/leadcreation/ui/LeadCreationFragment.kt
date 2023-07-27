@@ -883,10 +883,14 @@ class LeadCreationFragment : CommonFragment(),
                         "NRI", "nri" -> {
                             binding.tvStdCode.isVisible = true
                             binding.tlStdCode.isVisible = true
+                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(15))
+                            binding.etMobile.setText("")
                         }
                         else -> {
                             binding.tvStdCode.isVisible = false
                             binding.tlStdCode.isVisible = false
+                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(10))
+                            binding.etMobile.setText("")
 
                         }
                     }
@@ -1164,6 +1168,12 @@ class LeadCreationFragment : CommonFragment(),
                 }
                 33 ->{
                     binding.tlStdCode.setErrorMessages(getString(it))
+                }
+                34 ->{
+                    binding.tilMobile.setErrorMessages(getString(it))
+                }
+                35 ->{
+                    binding.tilMobile.setErrorMessages(getString(it))
                 }
                 else -> {
                 }

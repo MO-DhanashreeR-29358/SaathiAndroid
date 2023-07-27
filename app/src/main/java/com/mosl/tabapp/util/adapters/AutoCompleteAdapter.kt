@@ -106,6 +106,7 @@ class AutoCompleteAdapter(
       } else {
         SEARCH_TYPE_LEAD
       }
+
       if (ekyMenuType == SEARCH_TYPE_LEAD || ekyMenuType == SEARCH_TYPE_CLIENT) {
         userManager.getUser()?.apply {
           if (this.isEkycEnable()) {
@@ -131,6 +132,21 @@ class AutoCompleteAdapter(
           holderView.rlSetAppointment.visibility = View.GONE
           holderView.rlCreateMeeting.visibility = View.GONE
           holderView.rlViewDetail.visibility = View.GONE
+        }
+      }
+
+      userManager.getUser()?.apply {
+        if (this.isShowRINRI()) {
+          if (!resultModel.isOAOShow) {
+            holderView.rlOpenAccount.visibility = View.GONE
+            holderView.rlOAOForm.visibility = View.GONE
+          }
+
+          if (resultModel.isDiyLinkValid) {
+            holderView.rlDiyLink.visibility = View.VISIBLE
+          } else {
+            holderView.rlDiyLink.visibility = View.GONE
+          }
         }
       }
 
