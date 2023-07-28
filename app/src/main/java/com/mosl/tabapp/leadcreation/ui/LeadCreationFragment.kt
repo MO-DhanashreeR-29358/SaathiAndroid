@@ -883,10 +883,14 @@ class LeadCreationFragment : CommonFragment(),
                         "NRI", "nri" -> {
                             binding.tvStdCode.isVisible = true
                             binding.tlStdCode.isVisible = true
+                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(15))
+                            binding.etMobile.setText("")
                         }
                         else -> {
                             binding.tvStdCode.isVisible = false
                             binding.tlStdCode.isVisible = false
+                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(10))
+                            binding.etMobile.setText("")
 
                         }
                     }
@@ -1165,6 +1169,12 @@ class LeadCreationFragment : CommonFragment(),
                 33 ->{
                     binding.tlStdCode.setErrorMessages(getString(it))
                 }
+                34 ->{
+                    binding.tilMobile.setErrorMessages(getString(it))
+                }
+                35 ->{
+                    binding.tilMobile.setErrorMessages(getString(it))
+                }
                 else -> {
                 }
 
@@ -1204,7 +1214,6 @@ class LeadCreationFragment : CommonFragment(),
         toggleProgressBar(uiModule.inProgress)
         removeErrorMessage()
         uiModule.onFailure {
-            //showOnFailurePopup(it)
             openSectionExpansion(binding.llPersonalInformation, binding.tvPersonalInfo)
             if (it is ValidationException) {
                 showErrorWithFocus(it.error)
@@ -1493,16 +1502,18 @@ class LeadCreationFragment : CommonFragment(),
             BankAccountNumber = binding.etAccountNumber.text.toString(),
             secondaryRM = if(binding.actSecondaryRM.text.toString().isEmpty()) "" else secondaryRM.toString(),
             isWMCodeChecked = binding.chkWMCode.isChecked,
-            nriRiId = (binding.spClientType.selectedItem as RowData).key,
-            nriRiValue = (binding.spClientType.selectedItem as RowData).value,
-            countryStdCode =  (binding.spStdCode.selectedItem as RowData).value
+            nriRiId = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).key else "",
+            nriRiValue = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).value else "",
+            countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else ""
         )
     }
 
+
     private fun getStdCode() : String{
-        val type = binding.spClientType.selectedItem as RowData
         var code = ""
         if(userManager.getUser()!!.isShowRINRI()) {
+            val type = binding.spClientType.selectedItem as RowData
+
             if (type.value.equals("NRI")) {
                 code = (binding.spStdCode.selectedItem as RowData).key ?: ""
                 if (code.isNotEmpty() && !code.equals("-1")) {

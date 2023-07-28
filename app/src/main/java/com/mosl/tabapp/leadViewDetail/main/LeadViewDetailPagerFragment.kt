@@ -54,6 +54,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var branchName: String? = null
     private var oaoUserId: Int = 0
     private var diyCode: Int = 0
+    private var clientType: String = ""
     private var diyLink: String = ""
     private var createMeetingId: Int = 0
     private var interestedIn: String? = null
@@ -165,6 +166,15 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 } else {
                     dialogBinding.ivOpenAccount.visibility = View.VISIBLE
                     dialogBinding.ivOaoForm.visibility = View.GONE
+                }
+            }
+
+            userManager.getUser()?.apply {
+                if (this.isShowRINRI()) {
+                    if (clientType.isNotEmpty() && clientType.equals("NRI")) {
+                        dialogBinding.ivOpenAccount.visibility = View.GONE
+                        dialogBinding.ivOaoForm.visibility = View.GONE
+                    }
                 }
             }
 
@@ -366,6 +376,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 oaoUserId = it.oaoUserId
                 diyCode = it.diyCode
                 diyLink = it.diyLink
+                clientType = it.clientType
                 it.leadProducts
                     .forEach {
                         interestedIn = it.interestedIn

@@ -17,6 +17,7 @@ public class SearchModelNew implements Serializable {
   private String UCID = "0";
   private Integer oaoUserId = 0;
   private Integer diyCode = 0;
+  private Integer isOAO = 0;
   private boolean expanded;
   private String sourceName;
   private String prospectSourceName;
@@ -46,7 +47,7 @@ public class SearchModelNew implements Serializable {
                         String email,
                         String UCID, String leadOwner, Integer oaoUserId, String sourceName,
                         String prospectSourceName, String prospectSourceDetails, String interestedIn,
-                        String clientCode, int createMeetingId, int diyCode, String branchCode, String flgReactivationClient) {
+                        String clientCode, int createMeetingId, int diyCode, String branchCode, String flgReactivationClient, int isOAO) {
     this.searchType = searchType;
     this.leadId = leadId;
     this.name = name;
@@ -62,6 +63,7 @@ public class SearchModelNew implements Serializable {
     this.clientCode = clientCode;
     this.createMeetingId = createMeetingId;
     this.diyCode = diyCode;
+    this.isOAO = isOAO;
     this.branchCode = branchCode;
     this.flgReactivationClient = flgReactivationClient;
   }
@@ -74,7 +76,7 @@ public class SearchModelNew implements Serializable {
   private int createMeetingId = 0;
 
   public SearchModelNew(String searchType, String empCode, String name, String businessProfileId,
-                        String businessProfileName, String productId, String flgReactivationClient) {
+                        String businessProfileName, String productId, String flgReactivationClient,int diyCode, int isOAO) {
     this.searchType = searchType;
     this.empCode = empCode;
     this.name = name;
@@ -82,6 +84,8 @@ public class SearchModelNew implements Serializable {
     this.businessProfileName = businessProfileName;
     this.productId = productId;
     this.flgReactivationClient = flgReactivationClient;
+    this.diyCode = diyCode;
+    this.isOAO = isOAO;
   }
 
   public void setBranchCode(String branchCode) {
@@ -270,5 +274,9 @@ public class SearchModelNew implements Serializable {
 
   public Boolean isDiyLinkValid() {
     return diyCode > 0;
+  }
+
+  public Boolean isOAOShow() {
+    return isOAO > 0;
   }
 }
