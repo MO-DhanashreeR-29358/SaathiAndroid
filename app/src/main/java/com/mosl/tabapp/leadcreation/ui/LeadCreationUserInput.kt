@@ -56,5 +56,6 @@ data class LeadCreationUserInput(
     @JvmField val isWMCodeChecked: Boolean,
     @JvmField val nriRiId : String,
     @JvmField val nriRiValue : String,
-    @JvmField val countryStdCode : String
+    @JvmField val countryStdCode : String,
+    @JvmField val expectedMargin : String
 )

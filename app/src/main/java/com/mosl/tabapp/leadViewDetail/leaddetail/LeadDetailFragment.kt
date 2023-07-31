@@ -2129,6 +2129,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         binding.etLeadCategory.setText(leadCategoryText)
         binding.etClientType.setText(clientType)
+        binding.etProductType.setText(productType)
+        binding.etExpectedMargin.setText(expectedMargin)
+
         val dataProfession = RowData.getSpinnerRowDataByValue(profession, professionAdapter)
         dataProfession?.let {
             binding.spProfession.setSelection(it.position)

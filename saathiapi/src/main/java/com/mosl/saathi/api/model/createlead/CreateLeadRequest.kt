@@ -26,7 +26,8 @@ data class CreateLeadRequest(
     @SerializedName("contact") private val contact: CreateLeadContact,
     @SerializedName("leadProductMapping") private val productMapping: List<CreateLeadProduct>,
     @SerializedName("ReferralEmpCode") val referralEmpCode: String = "",
-    @SerializedName("NriRiID") val nriRiId: String = ""
+    @SerializedName("NriRiID") val nriRiId: String = "",
+    @SerializedName("ExpectedMargin") val expectedMargin: String = ""
 )
 
 data class CreateLeadContact(

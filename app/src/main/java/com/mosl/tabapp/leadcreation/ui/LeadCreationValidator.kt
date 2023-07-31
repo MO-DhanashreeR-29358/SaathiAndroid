@@ -95,6 +95,12 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_enter_mobile
             }
 
+            input.countryStdCode == "Select" && input.nriRiValue == "NRI" &&
+                    user.isShowRINRI()  -> {
+                identifier = 33
+                R.string.error_message_select_std_code
+            }
+
             mob.length < 8 && input.nriRiValue == "NRI" && user.isShowRINRI()  -> {
                 identifier = 34
                 R.string.error_message_invalid_nri_mobile
@@ -208,16 +214,18 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 identifier = 31
                 R.string.error_message_enter_pan
             }
+            input.expectedMargin.isBlank() -> {
+                identifier = 35
+                R.string.error_message_expected_margin
+            }
+
             input.secondaryRM.isBlank() && input.isWMCodeChecked &&
                     user.isPCG()  -> {
                 identifier = 32
                 R.string.error_message_enter_secondary_rm
             }
-            input.countryStdCode == "Select" && input.nriRiValue == "NRI" &&
-                    user.isShowRINRI()  -> {
-                identifier = 33
-                R.string.error_message_select_std_code
-            }
+
+
             else -> {
                 identifier = 0
                 null

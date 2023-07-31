@@ -471,6 +471,7 @@
     <string name="hint_lead_creation_account_number">Bank Account Number</string>
     <string name="hint_lead_creation_referaal_code">Bank RM Employee Code</string>
     <string name="hint_lead_creation_mobile">Mobile*</string>
+    <string name="hint_lead_creation_expected_margin">Expected Margin*</string>
     <string name="text_lead_creation_source">Source*</string>
     <string name="text_lead_creation_stage">Stage*</string>
     <string name="text_lead_creation_status">Status</string>
@@ -529,6 +530,7 @@
     <string name="error_message_contact">Enter contact person</string>
     <string name="error_message_referee_code">Enter referee code</string>
     <string name="error_message_pincode">Invalid Pincode</string>
+    <string name="error_message_expected_margin">Enter Expected Margin</string>
     <string name="error_message_profession">Select Profession</string>
     <string name="error_message_interest">Select Interest In</string>
     <string name="error_message_product_type">Select ProductType</string>
@@ -585,6 +587,8 @@
     <string name="lead_detail_source">Source</string>
     <string name="lead_detail_prospect_source">Prospect Source</string>
     <string name="lead_detail_secondary_rm">Secondary RM</string>
+    <string name="lead_detail_product_type">Product Type</string>
+    <string name="lead_detail_expected_margin">Expected Margin</string>
     <string name="lead_detail_prospect_source_detail">Prospect Source Detail</string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>

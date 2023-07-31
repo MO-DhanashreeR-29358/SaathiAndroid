@@ -39,7 +39,8 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         productMapping = listOfCreateLeadProduct,
         contact = leadContact,
         referralEmpCode = model.referralEmpCode,
-        nriRiId = model.nriRiID
+        nriRiId = model.nriRiID,
+        expectedMargin = model.expMargin
     )
 }
 
@@ -136,6 +137,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         addressDetailModels = arrayListOf<AddressDetailModel>()
         productDetailModels = arrayListOf<LeadCreationProductMapping>()
         nriRiID = nriRiId
+        setExpectedMargin(expectedMargin)
 
     }
 }

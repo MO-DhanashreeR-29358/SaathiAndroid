@@ -39,7 +39,19 @@ public class LeadCreationModel implements Serializable {
             new LeadCreationProductMapping();
 
     @SerializedName("NriRiID") private String nriRiID = "";
+
+    @SerializedName("ExpectedMargin") private String expectedMargin = "";
+
     private transient String profileID;
+
+
+    public String getExpMargin() {
+        return expectedMargin;
+    }
+
+    public void setExpectedMargin(String expectedMargin) {
+        this.expectedMargin = expectedMargin;
+    }
 
     public String getNriRiID() {
         return nriRiID;

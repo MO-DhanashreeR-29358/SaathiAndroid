@@ -1173,7 +1173,7 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tilMobile.setErrorMessages(getString(it))
                 }
                 35 ->{
-                    binding.tilMobile.setErrorMessages(getString(it))
+                    binding.tilExpectedMargin.setErrorMessages(getString(it))
                 }
                 else -> {
                 }
@@ -1207,6 +1207,8 @@ class LeadCreationFragment : CommonFragment(),
             tlProductType.disableErrorMessages()
             tlProfession.disableErrorMessages()
             tvSecondaryRmError.isVisible = false
+            tlStdCode.disableErrorMessages()
+            tilExpectedMargin.disableErrorMessages()
         }
     }
 
@@ -1504,7 +1506,8 @@ class LeadCreationFragment : CommonFragment(),
             isWMCodeChecked = binding.chkWMCode.isChecked,
             nriRiId = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).key else "",
             nriRiValue = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).value else "",
-            countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else ""
+            countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else "",
+            expectedMargin = binding.etExpectedMargin.text.toString()
         )
     }
 
