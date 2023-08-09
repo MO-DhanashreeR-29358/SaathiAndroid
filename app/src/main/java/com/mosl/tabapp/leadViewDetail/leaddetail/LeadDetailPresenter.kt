@@ -4,6 +4,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailNavigator
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
@@ -24,7 +25,8 @@ class LeadDetailPresenter @Inject constructor(
     private val data: LeadDetailArgument,
     private val repository: LeadCreationRepository,
     private val detailRepository: LeadDetailRepository,
-    val navigator: LeadViewDetailNavigator
+    val navigator: LeadViewDetailNavigator,
+    val userManager: UserManagerImpl
 ) : BasePresenter<LeadDetailView>(view) {
     private val validator = UpdateLeadValidator()
     override fun start() {
@@ -132,7 +134,7 @@ class LeadDetailPresenter @Inject constructor(
 
         view.interestedProductSelected()
             .switchMap {
-                if(it.selectedProduct.value.equals("Real Estate")){
+                if(it.selectedProduct.value.equals("Real Estate") && !userManager.getUser()!!.isAllianceBusiness()){
                     repository.getRealEstateStageRowDatas()
                         .compose(applyUiModel())
                 }else {

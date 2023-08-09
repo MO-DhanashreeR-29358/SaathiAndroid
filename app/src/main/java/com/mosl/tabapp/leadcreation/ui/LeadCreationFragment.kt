@@ -8,6 +8,7 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -51,6 +52,7 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragmentLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
@@ -66,6 +68,7 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_lead_creation.spCity
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -177,6 +180,8 @@ class LeadCreationFragment : CommonFragment(),
         setupAllianceSeconadaryRM()
         setupWealthManagementCodeSeconadaryRM()
         setupRINRI()
+        binding.spCity.setDialogTitle("Search City")
+        binding.spOffCity.setDialogTitle("Search City")
         disableField(binding.llResAdd)
         disableField(binding.llOffAdd)
         binding.tvPersonalInfo.toggleIcon(binding.llPersonalInformation)
@@ -470,19 +475,25 @@ class LeadCreationFragment : CommonFragment(),
 
         }
 
+        //Expected margin feild should not display for Mo internationl user
+      if(userManager.getUser()!!.isMoInternationUser()){
+          binding.ilExpectedMargin.isVisible = false
+      }
     }
 
     private fun setupRINRI(){
         if(userManager.user.isShowRINRI()){
             binding.tvStdCode.isVisible = true
-            binding.tlStdCode.isVisible = true
+            binding.spStdCode.isVisible = true
+            binding.tvSTDError.isVisible = true
             binding.tvClientType.isVisible = true
-            binding.tlClientType.isVisible = true
+            binding.spClientType.isVisible = true
         }else{
             binding.tvStdCode.isVisible = false
-            binding.tlStdCode.isVisible = false
+            binding.spStdCode.isVisible = false
+            binding.tvSTDError.isVisible = false
             binding.tvClientType.isVisible = false
-            binding.tlClientType.isVisible = false
+            binding.spClientType.isVisible = false
         }
     }
 
@@ -810,10 +821,6 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun onOfficeStateSelected(): Observable<Int> =
         binding.spOffState.itemSelections()
-            .map {
-                binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
-                it
-            }
 
     override fun onCitySelected(): Observable<Int> = binding.spCity.itemSelections()
 
@@ -838,7 +845,7 @@ class LeadCreationFragment : CommonFragment(),
                 binding.ilContactPerson.gone()
             }
             else -> {
-                binding.tilContactPerson.disableErrorMessages()
+                binding.tvContactPersonError.setText("")
                 binding.ilContactPerson.visible()
 
             }
@@ -867,7 +874,7 @@ class LeadCreationFragment : CommonFragment(),
                             binding.ilContactPerson.gone()
                         }
                         else -> {
-                            binding.tilContactPerson.disableErrorMessages()
+                            binding.tvContactPersonError.setText("")
                             binding.ilContactPerson.visible()
 
                         }
@@ -882,15 +889,26 @@ class LeadCreationFragment : CommonFragment(),
                     when (type.value) {
                         "NRI", "nri" -> {
                             binding.tvStdCode.isVisible = true
-                            binding.tlStdCode.isVisible = true
-                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(15))
+                            binding.spStdCode.isVisible = true
+                            binding.tvSTDError.isVisible = true
+                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(14))
+                            binding.etAlternateMobno.filters = arrayOf(InputFilter.LengthFilter(14))
+                            binding.etEkycMobile.filters = arrayOf(InputFilter.LengthFilter(14))
                             binding.etMobile.setText("")
+                            binding.etAlternateMobno.setText("")
+                            binding.etEkycMobile.setText("")
                         }
                         else -> {
                             binding.tvStdCode.isVisible = false
-                            binding.tlStdCode.isVisible = false
+                            binding.spStdCode.isVisible = false
+                            binding.tvSTDError.isVisible = false
                             binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(10))
+                            binding.etAlternateMobno.filters = arrayOf(InputFilter.LengthFilter(10))
+                            binding.etEkycMobile.filters = arrayOf(InputFilter.LengthFilter(10))
                             binding.etMobile.setText("")
+                            binding.etAlternateMobno.setText("")
+                            binding.etEkycMobile.setText("")
+
 
                         }
                     }
@@ -998,6 +1016,10 @@ class LeadCreationFragment : CommonFragment(),
             Timber.i("RenderStateOffice=>>Called")
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
             binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
+            if (binding.cbSameAs.isChecked) {
+                binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
+                binding.spOffCity.setSelection(spCity.selectedItemPosition)
+            }
         }
     }
 
@@ -1006,6 +1028,7 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
+            binding.spOffCity.setSpinnerData(cityAdapterOff, it)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffState.setSelection(binding.spState.selectedItemPosition)
             }
@@ -1087,93 +1110,96 @@ class LeadCreationFragment : CommonFragment(),
         error.error?.let {
             when (error.identifier as Int) {
                 1 -> {
-                    binding.tlCategory.setErrorMessages(getString(it))
+                    binding.tvCategoryError.setText(getString(it))
                 }
                 27 -> {
-                    binding.tlBank.setErrorMessages(getString(it))
+                    binding.tvBankError.setText(getString(it))
                 }
                 28 -> {
-                    binding.tlBranch.setErrorMessages(getString(it))
+                    binding.tvBranchError.setText(getString(it))
                 }
                 2 -> {
                     val rowData = binding.spCategory.selectedItem as RowData
-                    binding.tilName.setErrorMessages(getString(it, rowData.value))
+                    binding.tvNameError.setText(getString(it, rowData.value))
                 }
                 3 -> {
-                    binding.tilName.setErrorMessages(getString(it))
+                    binding.tvNameError.setText(getString(it))
                 }
                 4, 5 -> {
-                    binding.tilContactPerson.setErrorMessages(getString(it))
+                    binding.tvContactPersonError.setText(getString(it))
                 }
                 6 -> {
-                    binding.tlInterest.setErrorMessages(getString(it))
+                    binding.tvInterestInError.setText(getString(it))
                 }
                 7 -> {
-                    binding.tlProductType.setErrorMessages(getString(it))
+                    binding.tvProductTypeError.setText(getString(it))
                 }
                 8 -> {
-                    binding.tilEmail.setErrorMessages(getString(it))
+                    binding.tvEmailError.setText(getString(it))
                 }
                 9, 10 -> {
-                    binding.tilAlternateEmail.setErrorMessages(getString(it))
+                    binding.tvAlternateEmailError.setText(getString(it))
                 }
                 11, 12 -> {
-                    binding.tilMobile.setErrorMessages(getString(it))
+                    binding.tvMobileError.setText(getString(it))
                 }
                 13, 14 -> {
-                    binding.tilAlternateMobile.setErrorMessages(getString(it))
+                    binding.tvAlternateMobnoError.setText(getString(it))
                 }
                 15 -> {
-                    binding.tilLand.setErrorMessages(getString(it))
+                    binding.tvLandLineError.setText(getString(it))
                 }
                 16 -> {
-                    binding.tilEkycMob.setErrorMessages(getString(it))
+                    binding.tvEkycMobileError.setText(getString(it))
                 }
                 17 -> {
-                    binding.tilPan.setErrorMessages(getString(it))
+                    binding.tvPANError.setText(getString(it))
                 }
                 18 -> {
-                    binding.tilAadhar.setErrorMessages(getString(it))
+                    binding.tvAadharError.setText(getString(it))
                 }
                 19 -> {
-                    binding.tilReferCode.setErrorMessages(getString(it))
+                    binding.tvReferCodeError.setText(getString(it))
                 }
                 20, 21 -> {
-                    binding.tilReferName.setErrorMessages(getString(it))
+                    binding.tvReferNameError.setText(getString(it))
                 }
                 22, 23 -> {
-                    binding.tilReferMob.setErrorMessages(getString(it))
+                    binding.tvReferMobError.setText(getString(it))
                 }
                 24 -> {
-                    binding.tilReferEmail.setErrorMessages(getString(it))
+                    binding.tvReferEmailError.setText(getString(it))
                 }
                 25 -> {
-                    binding.tilPin.setErrorMessages(getString(it))
+                    binding.tvPinError.setText(getString(it))
                 }
                 26 -> {
-                    binding.tilOffPin.setErrorMessages(getString(it))
+                    binding.tvOffPinError.setText(getString(it))
                 }
                 29 -> {
-                    binding.tilReferaalCode.setErrorMessages(getString(it))
+                    binding.tvReferralCodeError.setText(getString(it))
                 }
                 30 -> {
-                    binding.tilPan.setErrorMessages(getString(it))
+                    binding.tvPANError.setText(getString(it))
                 }
                 31 -> {
-                    binding.tilPan.setErrorMessages(getString(it))
+                    binding.tvPANError.setText(getString(it))
                 }
                 32 -> {
                     binding.tvSecondaryRmError.isVisible = true
                     binding.tvSecondaryRmError.text = getString(it)
                 }
                 33 ->{
-                    binding.tlStdCode.setErrorMessages(getString(it))
+                    binding.tvSTDError.setText(getString(it))
                 }
                 34 ->{
-                    binding.tilMobile.setErrorMessages(getString(it))
+                    binding.tvMobileError.setText(getString(it))
                 }
                 35 ->{
-                    binding.tilExpectedMargin.setErrorMessages(getString(it))
+                    binding.tvExpectedMarginError.setText(getString(it))
+                }
+                36 ->{
+                    binding.tvExpectedMarginError.setText(getString(it))
                 }
                 else -> {
                 }
@@ -1184,31 +1210,31 @@ class LeadCreationFragment : CommonFragment(),
 
     private fun removeErrorMessage() {
         binding.apply {
-            tlCategory.disableErrorMessages()
-            tlBank.disableErrorMessages()
-            tlBranch.disableErrorMessages()
-            tilName.disableErrorMessages()
-            tilContactPerson.disableErrorMessages()
-            tilEmail.disableErrorMessages()
-            tilAlternateEmail.disableErrorMessages()
-            tilAlternateMobile.disableErrorMessages()
-            tilMobile.disableErrorMessages()
-            tilLand.disableErrorMessages()
-            tilEkycMob.disableErrorMessages()
-            tilPan.disableErrorMessages()
-            tilAadhar.disableErrorMessages()
-            tilReferCode.disableErrorMessages()
-            tilReferName.disableErrorMessages()
-            tilReferEmail.disableErrorMessages()
-            tilReferMob.disableErrorMessages()
-            tilPin.disableErrorMessages()
-            tilOffPin.disableErrorMessages()
-            tlInterest.disableErrorMessages()
-            tlProductType.disableErrorMessages()
-            tlProfession.disableErrorMessages()
+            tvCategoryError.setText("")
+            tvBankError.setText("")
+            tvBranchError.setText("")
+            tvNameError.setText("")
+            tvContactPersonError.setText("")
+            tvEmailError.setText("")
+            tvAlternateEmailError.setText("")
+            tvAlternateMobnoError.setText("")
+            tvMobileError.setText("")
+            tvLandLineError.setText("")
+            tvEkycMobileError.setText("")
+            tvReferralCodeError.setText("")
+            tvPANError.setText("")
+            tvAadharError.setText("")
+            tvReferCodeError.setText("")
+            tvReferNameError.setText("")
+            tvReferEmailError.setText("")
+            tvReferMobError.setText("")
+            tvPinError.setText("")
+            tvOffPinError.setText("")
+            tvInterestInError.setText("")
+            tvProductTypeError.setText("")
             tvSecondaryRmError.isVisible = false
-            tlStdCode.disableErrorMessages()
-            tilExpectedMargin.disableErrorMessages()
+            tvSTDError.setText("")
+            tvExpectedMarginError.setText("")
         }
     }
 

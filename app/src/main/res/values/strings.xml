@@ -77,7 +77,7 @@
     <string name="TXT_EXISTING_APPLICATION">Resume previously saved application to complete the account opening process</string>
     <string name="mgs_update_address">Kindly update address and move lead to C3 Stage.</string>
     <string name="mgs_update_profile">Kindly update profile and move lead to C3 Stage.</string>
-    <string name="mgs_update_profile_address">Kindly update profile, address and move lead to C3 Stage.</string>
+    <string name="mgs_update_profile_address">Kindly update address and all Profile Fields(BrokingProfile, IPProfile, FinalProfile).</string>
 
     <string name="hint_text_employee_code">Employee Code</string>
     <string name="hint_text_password">Password</string>
@@ -531,6 +531,7 @@
     <string name="error_message_referee_code">Enter referee code</string>
     <string name="error_message_pincode">Invalid Pincode</string>
     <string name="error_message_expected_margin">Enter Expected Margin</string>
+    <string name="error_message_valid_expected_margin">Invalid Expected Margin</string>
     <string name="error_message_profession">Select Profession</string>
     <string name="error_message_interest">Select Interest In</string>
     <string name="error_message_product_type">Select ProductType</string>

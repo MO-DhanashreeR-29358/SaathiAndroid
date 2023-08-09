@@ -61,23 +61,26 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_category"
+                    <Spinner
+                        android:id="@+id/spCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvCategory">
+                        app:layout_constraintTop_toBottomOf="@id/tvCategory"/>
 
-                        <Spinner
-                            android:id="@+id/spCategory"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tvCategoryError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spCategory" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvClientType"
@@ -86,39 +89,32 @@
                         android:text="@string/lbl_lead_creation_client_type"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf = "@id/tl_category" />
+                        app:layout_constraintTop_toBottomOf = "@+id/tvCategoryError" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_client_type"
+
+                    <Spinner
+                        android:id="@+id/spClientType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvClientType">
+                        app:layout_constraintTop_toBottomOf="@id/tvClientType"/>
 
-                        <Spinner
-                            android:id="@+id/spClientType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_client_type">
+                        app:layout_constraintTop_toBottomOf="@+id/spClientType">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etName"
@@ -131,19 +127,20 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_name"
+                        <TextView
+                            android:id="@+id/tvNameError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilContactPerson"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -160,12 +157,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_contact_person"
+                        <TextView
+                            android:id="@+id/tvContactPersonError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -176,27 +174,30 @@
                         android:text="@string/lbl_lead_creation_profession"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ilContactPerson" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_profession"
+                    <Spinner
+                        android:id="@+id/spProfession"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvProfession">
+                        app:layout_constraintTop_toBottomOf="@+id/tvProfession"/>
+                    <TextView
+                        android:id="@+id/tvProfessionError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spProfession" />
 
-                        <Spinner
-                            android:id="@+id/spProfession"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvBank"
@@ -205,28 +206,32 @@
                         android:text="@string/lbl_lead_creation_bank"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_profession" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvProfessionError" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_Bank"
+
+                    <Spinner
+                        android:id="@+id/spBank"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBank">
+                        app:layout_constraintTop_toBottomOf="@+id/tvBank"/>
 
-                        <Spinner
-                            android:id="@+id/spBank"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                    <TextView
+                        android:id="@+id/tvBankError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spBank" />
 
                     <TextView
                         android:id="@+id/tvBranch"
@@ -235,34 +240,39 @@
                         android:text="@string/lbl_lead_creation_branch"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_Bank" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvBankError" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_Branch"
+
+                    <Spinner
+                        android:id="@+id/spBranch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBranch">
+                        app:layout_constraintTop_toBottomOf="@id/tvBranch"/>
 
-                        <Spinner
-                            android:id="@+id/spBranch"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tvBranchError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spBranch" />
 
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_bank"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:constraint_referenced_ids="tvBank,tvBranch,tl_Bank,tl_Branch" />
+                        app:constraint_referenced_ids="tvBank,tvBranch,spBank,spBranch, tvBankError, tvBranchError" />
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -271,27 +281,30 @@
                         android:text="@string/lbl_lead_creation_interested_in"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tl_Branch" />
+                        app:layout_constraintTop_toBottomOf="@id/tvBranchError" />
 
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_interest"
+                    <Spinner
+                        android:id="@+id/spInterestIn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvInterestIn">
+                        app:layout_constraintTop_toBottomOf="@id/tvInterestIn"/>
 
-                        <Spinner
-                            android:id="@+id/spInterestIn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tvInterestInError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spInterestIn" />
 
                     <TextView
                         android:id="@+id/tvProductType"
@@ -300,37 +313,41 @@
                         android:text="@string/lbl_lead_creation_product_type"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tl_interest" />
+                        app:layout_constraintTop_toBottomOf="@id/tvInterestInError" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_product_type"
+
+                    <Spinner
+                        android:id="@+id/spProductType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvProductType">
+                        app:layout_constraintTop_toBottomOf="@id/tvProductType"/>
 
-                        <Spinner
-                            android:id="@+id/spProductType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tvProductTypeError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spProductType" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tl_product_type">
+                        app:layout_constraintTop_toBottomOf="@id/tvProductTypeError">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etEmailId"
@@ -343,12 +360,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_email"
+                        <TextView
+                            android:id="@+id/tvEmailError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -356,7 +375,6 @@
                         android:id="@+id/ilAlternateEmailId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -373,12 +391,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_alternate_email"
+                        <TextView
+                            android:id="@+id/tvAlternateEmailError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -393,34 +413,36 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf = "@id/ilAlternateEmailId" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_std_code"
+                    <Spinner
+                        android:id="@+id/spStdCode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvStdCode">
+                        app:layout_constraintTop_toBottomOf="@id/tvStdCode"/>
 
-                        <Spinner
-                            android:id="@+id/spStdCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/tvSTDError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spStdCode" />
 
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_std_code">
+                        app:layout_constraintTop_toBottomOf="@+id/tvSTDError">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMobile"
@@ -433,19 +455,20 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_mobile"
+                        <TextView
+                            android:id="@+id/tvMobileError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateMobno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -462,12 +485,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_alternate_mobile"
+                        <TextView
+                            android:id="@+id/tvAlternateMobnoError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -475,7 +499,6 @@
                         android:id="@+id/ilLandLine"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -492,13 +515,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_land"
+                        <TextView
+                            android:id="@+id/tvLandLineError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>                    </com.google.android.material.textfield.TextInputLayout>
 
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -522,13 +545,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_ekyc_mob"
+                        <TextView
+                            android:id="@+id/tvEkycMobileError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilDOB"
@@ -553,12 +576,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_dob"
+                        <TextView
+                            android:id="@+id/tvDOBError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -581,12 +605,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_account_number"
+                        <TextView
+                            android:id="@+id/tvAccountNumberError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -610,12 +636,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_referaal_code"
+                        <TextView
+                            android:id="@+id/tvReferralCodeError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -639,12 +666,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_pan"
+                        <TextView
+                            android:id="@+id/tvPANError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -668,19 +696,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_aadhar"
+                        <TextView
+                            android:id="@+id/tvAadharError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_prospet_source_detail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -711,37 +734,31 @@
                         android:text="@string/text_lead_creation_prospect_source"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/spSource" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tl_prospect_source"
+
+                    <Spinner
+                        android:id="@+id/spProspectSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        app:errorTextAppearance="@style/error_appearance"
-                        app:hintEnabled="false"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvProspectSource">
+                        app:layout_constraintTop_toBottomOf="@+id/tvProspectSource"/>
 
-                        <Spinner
-                            android:id="@+id/spProspectSource"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/il_prospet_source_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tl_prospect_source">
+                        app:layout_constraintTop_toBottomOf="@+id/spProspectSource">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectSourceDetails"
@@ -760,7 +777,7 @@
                         android:id="@+id/ilExpectedMargin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -777,12 +794,13 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_ExpectedMargin"
+                        <TextView
+                            android:id="@+id/tvExpectedMarginError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -813,6 +831,7 @@
                         android:text="@string/text_lead_creation_status"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/spStage" />
@@ -890,7 +909,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llSearch">
 
@@ -965,7 +984,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/error_message_enter_secondary_rm"
                         android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_10sdp"
+                        android:textSize="@dimen/_5sdp"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
                         android:layout_marginStart="@dimen/_35sdp"
@@ -1029,12 +1048,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_refer_code"
+                        <TextView
+                            android:id="@+id/tvReferCodeError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -1072,12 +1093,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_refer_name"
+                        <TextView
+                            android:id="@+id/tvReferNameError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ProgressBar
@@ -1115,12 +1138,14 @@
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_refer_email"
+                        <TextView
+                            android:id="@+id/tvReferEmailError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1147,12 +1172,13 @@
 
                             />
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/til_refer_mob"
+                        <TextView
+                            android:id="@+id/tvReferMobError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:errorTextAppearance="@style/error_appearance"
-                            app:hintEnabled="false" />
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1406,12 +1432,14 @@
 
                                 />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/til_pin"
+                            <TextView
+                                android:id="@+id/tvPinError"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:errorTextAppearance="@style/error_appearance"
-                                app:hintEnabled="false" />
+                                android:textColor="@color/red_textcolor"
+                                android:textSize="@dimen/_11sdp"
+                                android:layout_marginTop="@dimen/_3sdp"/>
+
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -1419,7 +1447,7 @@
                         android:id="@+id/view_checkbox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:background="@drawable/textview_border"
                         android:padding="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -1479,7 +1507,7 @@
                             android:id="@+id/ilOffAdd1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
                             app:hintTextAppearance="@style/InputLayout"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -1626,12 +1654,13 @@
 
                                 />
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:id="@+id/til_off_pin"
+                            <TextView
+                                android:id="@+id/tvOffPinError"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:errorTextAppearance="@style/error_appearance"
-                                app:hintEnabled="false" />
+                                android:textColor="@color/red_textcolor"
+                                android:textSize="@dimen/_11sdp"
+                                android:layout_marginTop="@dimen/_3sdp"/>
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 

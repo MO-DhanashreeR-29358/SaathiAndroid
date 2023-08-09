@@ -75,6 +75,11 @@ class LeadViewDetailPagerPresenter @Inject constructor(
             .map { it.id }
             .share()
 
+        view.onUpdateCreateMeetingId()
+            .doOnNext { Timber.d("AAA onUpdateCreateMeetingId called")}
+            .subscribe { view.renderUpdateCreateMeetingId(it.id) }
+            .addTo(disposable)
+
         createMeetingObs
             .filter { it == 0 }
             .subscribe { navigator.navigateToCreateMeeting(view.getLeadId(), view.getUcid()) }

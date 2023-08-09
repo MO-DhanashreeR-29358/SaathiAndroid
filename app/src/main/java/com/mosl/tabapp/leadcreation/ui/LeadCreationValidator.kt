@@ -17,9 +17,8 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
 
     override fun execute(input: LeadCreationUserInput): ValidationResult<String> {
         var mob = input.mobileNo
-        if(input.mobileNo.isNotBlank()) {
-            mob = mob.replace("+", "")
-            mob = mob.replace("-", "").trim()
+        if(mob.isNotBlank() && mob.contains("-")) {
+            mob = mob.substringAfterLast("-").trim()
         }
         val identifier: Int
         val errorMessageRes = when {
@@ -214,9 +213,13 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 identifier = 31
                 R.string.error_message_enter_pan
             }
-            input.expectedMargin.isBlank() -> {
+            input.expectedMargin.isBlank() && !user.isMoInternationUser() -> {
                 identifier = 35
                 R.string.error_message_expected_margin
+            }
+            input.expectedMargin.isNotBlank() && input.expectedMargin.toInt() == 0 && !user.isMoInternationUser() -> {
+                identifier = 36
+                R.string.error_message_valid_expected_margin
             }
 
             input.secondaryRM.isBlank() && input.isWMCodeChecked &&

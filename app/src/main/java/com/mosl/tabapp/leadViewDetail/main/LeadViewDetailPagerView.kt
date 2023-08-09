@@ -14,26 +14,27 @@ interface LeadViewDetailPagerView : BaseView {
   fun onThreeVerticalDotsClicked(): Observable<Unit>
   fun showLeadViewDialog()
 
-  fun onShareLinkClicked(): Observable<ShareLinkClick>
+  fun onShareLinkClicked(): Observable<LeadViewDetailUiEvent.ShareLinkClick>
   fun renderOnShareLinkClick(leadId: String)
-  fun onSuggestMeClicked(): Observable<SuggestMeClick>
+  fun onSuggestMeClicked(): Observable<LeadViewDetailUiEvent.SuggestMeClick>
   fun renderOnSuggestMeClick(uiModel: UiModel<String>)
-  fun onCopyLinkClicked(): Observable<CopyLinkClick>
+  fun onCopyLinkClicked(): Observable<LeadViewDetailUiEvent.CopyLinkClick>
   fun renderOnCopyLinkClick()
-  fun onOaoFormClicked(): Observable<OaoFormClick>
-  fun onOpenAccountClicked(): Observable<OpenAccountClick>
+  fun onOaoFormClicked(): Observable<LeadViewDetailUiEvent.OaoFormClick>
+  fun onOpenAccountClicked(): Observable<LeadViewDetailUiEvent.OpenAccountClick>
   fun renderOpenAccountClick()
-  fun onCreateMeetingClicked(): Observable<CreateMeetingClick>
+  fun onCreateMeetingClicked(): Observable<LeadViewDetailUiEvent.CreateMeetingClick>
   fun renderCreateMeetingClick(id: Int)
-  fun onSetAppointmentClick(): Observable<SetAppointmentClick>
-  fun onCallClicked(): Observable<CallClick>
+  fun onSetAppointmentClick(): Observable<LeadViewDetailUiEvent.SetAppointmentClick>
+  fun onCallClicked(): Observable<LeadViewDetailUiEvent.CallClick>
   fun renderCallClick()
   fun getUcid(): String
   fun getLeadId(): String
-  fun onSMSClicked(): Observable<SMSClick>
-  fun onRetryClick(): Observable<RetryClick>
+  fun onSMSClicked(): Observable<LeadViewDetailUiEvent.SMSClick>
+  fun onRetryClick(): Observable<LeadViewDetailUiEvent.RetryClick>
   fun renderSMSClick()
-
+  fun onUpdateCreateMeetingId(): Observable<LeadViewDetailUiEvent.UpdateCreateMeetingId>
+  fun renderUpdateCreateMeetingId(id: Int)
 
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"

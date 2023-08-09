@@ -112,16 +112,22 @@ data class User(
     }
 
     fun isShowRINRI(): Boolean {
-        //var flag = false
-        //UAT - 17, Live -18
-        // if (currentBusinessProfile.businessUnitId.equals("17")  ||
-        //   currentBusinessProfile.businessUnitId.equals("18")) {
-        //    flag = true
-        //}
+        //Nri Ri option not visible for Retail -1, Alliance-11, Omni - 14
         var flag = true
-        if (currentBusinessProfile.businessUnitId.equals("11")){
+        if (currentBusinessProfile.businessUnitId.equals("11")
+            || currentBusinessProfile.businessUnitId.equals("1")
+            || currentBusinessProfile.businessUnitId.equals("14")){
             flag = false
         }
         return flag
     }
+    fun isMoInternationUser(): Boolean {
+        var flag = false
+        //UAT - 17, Live -18
+        if (currentBusinessProfile.businessUnitId.equals("18")) {
+            flag = true
+        }
+        return flag
+    }
+
 }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -44,6 +45,7 @@ import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
 import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
 import com.mosl.tabapp.leadViewDetail.*
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailUiEvent
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
@@ -64,21 +66,6 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
-import kotlin.collections.List
-import kotlin.collections.MutableList
-import kotlin.collections.emptyList
-import kotlin.collections.filter
-import kotlin.collections.find
-import kotlin.collections.forEach
-import kotlin.collections.hashMapOf
-import kotlin.collections.isNotEmpty
-import kotlin.collections.listOf
-import kotlin.collections.map
-import kotlin.collections.mapNotNull
-import kotlin.collections.mutableListOf
-import kotlin.collections.toMutableList
-import kotlin.collections.toTypedArray
 
 class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProductCallBack {
 
@@ -96,6 +83,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var status: String? = null
 
     private val subject = PublishSubject.create<LeadDetailUiEvent>()
+    private val mainSubject = LeadViewDetailUiEvent.getSubject()
 
     private var interestedData = emptyList<RowData>()
     private var statusData = ArrayList<RowData>()
@@ -254,12 +242,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         if(userManager.getUser()!!.isShowRINRI()){
             binding.ilClientType.isVisible = true
-            binding.etMobileNumber.filters = arrayOf(InputFilter.LengthFilter(26))
-            binding.etAlternateMobileNumber.filters = arrayOf(InputFilter.LengthFilter(26))
-            binding.etEkycMobileNumber.filters = arrayOf(InputFilter.LengthFilter(26))
+            binding.etMobileNumber.filters = arrayOf(InputFilter.LengthFilter(20))
         }else{
             binding.ilClientType.isVisible = false
         }
+
+        //Expected margin feild should not display for Mo internationl user
+        if(userManager.getUser()!!.isMoInternationUser()){
+            binding.ilExpectedMargin.isVisible = false
+        }
+
     }
 
     private fun setSectorSpinner() {
@@ -1779,7 +1771,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess {
+        uiModel.onSuccess{
+            Log.d("AAA MeetingID", it.createMeeting.toString())
+            mainSubject.onNext(LeadViewDetailUiEvent.RetryClick)
             leadUpdatedDialog()
         }
     }
@@ -2294,7 +2288,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     override fun updateProduct(leadDetailAddProductList: List<LeadDetailAddProductModel>) {
-        compareStageID(leadDetailAddProductList)
+         compareStageID(leadDetailAddProductList)
         this.leadDetailAddProductList =
             leadDetailAddProductList as ArrayList<LeadDetailAddProductModel>
     }

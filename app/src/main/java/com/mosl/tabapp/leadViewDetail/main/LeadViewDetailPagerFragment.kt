@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -56,7 +57,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var diyCode: Int = 0
     private var clientType: String = ""
     private var diyLink: String = ""
-    private var createMeetingId: Int = 0
+    public var createMeetingId: Int = 0
     private var interestedIn: String? = null
     private var ucId: String = "0"
     private var leadId: String = "0"
@@ -66,7 +67,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var prospectSourceName: String? = null
     private var prospectSourceDetail: String? = null
     private var initialPage = 0
-    private val subject = PublishSubject.create<LeadViewDetailUiEvent>()
+    private val subject = LeadViewDetailUiEvent.getSubject()
 
     private val tabArray: Array<String> by lazy {
         resources.getStringArray(
@@ -194,46 +195,46 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
             dialogBinding.ivOaoForm.setOnClickListener {
                 dismiss()
-                subject.onNext(OaoFormClick(oaoUserId))
+                subject.onNext(LeadViewDetailUiEvent.OaoFormClick(oaoUserId))
             }
             dialogBinding.ivOpenAccount.setOnClickListener {
                 dismiss()
-                subject.onNext(OpenAccountClick)
+                subject.onNext(LeadViewDetailUiEvent.OpenAccountClick)
             }
             dialogBinding.ivCreateMeeting.setOnClickListener {
                 dismiss()
-                subject.onNext(CreateMeetingClick(createMeetingId))
+                subject.onNext(LeadViewDetailUiEvent.CreateMeetingClick(createMeetingId))
             }
             dialogBinding.ivSetAppointment.setOnClickListener {
                 dismiss()
-                subject.onNext(SetAppointmentClick)
+                subject.onNext(LeadViewDetailUiEvent.SetAppointmentClick)
             }
             dialogBinding.ivCall.setOnClickListener {
                 dismiss()
-                subject.onNext(CallClick)
+                subject.onNext(LeadViewDetailUiEvent.CallClick)
             }
             dialogBinding.ivSms.setOnClickListener {
                 dismiss()
-                subject.onNext(SMSClick)
+                subject.onNext(LeadViewDetailUiEvent.SMSClick)
             }
             dialogBinding.ivClose.setOnClickListener { dismiss() }
             dialogBinding.ivShareLink.setOnClickListener {
                 dismiss()
-                subject.onNext(ShareLinkClick)
+                subject.onNext(LeadViewDetailUiEvent.ShareLinkClick)
             }
             dialogBinding.ivSuggestMe.setOnClickListener {
                 dismiss()
-                subject.onNext(SuggestMeClick)
+                subject.onNext(LeadViewDetailUiEvent.SuggestMeClick)
             }
             dialogBinding.ivCopyLink.setOnClickListener {
                 dismiss()
-                subject.onNext(CopyLinkClick)
+                subject.onNext(LeadViewDetailUiEvent.CopyLinkClick)
             }
         }
             .show()
     }
 
-    override fun onCreateMeetingClicked(): Observable<CreateMeetingClick> {
+    override fun onCreateMeetingClicked(): Observable<LeadViewDetailUiEvent.CreateMeetingClick> {
         return subject.ofType()
     }
 
@@ -248,7 +249,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         erroMsgDialog(message)
     }
 
-    override fun onCallClicked(): Observable<CallClick> {
+    override fun onCallClicked(): Observable<LeadViewDetailUiEvent.CallClick> {
         return subject.ofType()
     }
 
@@ -278,11 +279,11 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         return leadId
     }
 
-    override fun onSMSClicked(): Observable<SMSClick> {
+    override fun onSMSClicked(): Observable<LeadViewDetailUiEvent.SMSClick> {
         return subject.ofType()
     }
 
-    override fun onRetryClick(): Observable<RetryClick> {
+    override fun onRetryClick(): Observable<LeadViewDetailUiEvent.RetryClick> {
         return subject.ofType()
     }
 
@@ -298,15 +299,25 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         }
     }
 
-    override fun onSetAppointmentClick(): Observable<SetAppointmentClick> {
+    override fun onUpdateCreateMeetingId(): Observable<LeadViewDetailUiEvent.UpdateCreateMeetingId> {
         return subject.ofType()
     }
 
-    override fun onOaoFormClicked(): Observable<OaoFormClick> {
+    override fun renderUpdateCreateMeetingId(id: Int) {
+
+        createMeetingId = id
+        Log.d("AAA setted MeetingID", createMeetingId.toString())
+    }
+
+    override fun onSetAppointmentClick(): Observable<LeadViewDetailUiEvent.SetAppointmentClick> {
         return subject.ofType()
     }
 
-    override fun onOpenAccountClicked(): Observable<OpenAccountClick> {
+    override fun onOaoFormClicked(): Observable<LeadViewDetailUiEvent.OaoFormClick> {
+        return subject.ofType()
+    }
+
+    override fun onOpenAccountClicked(): Observable<LeadViewDetailUiEvent.OpenAccountClick> {
         return subject.ofType()
     }
 
@@ -319,7 +330,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         )
     }
 
-    override fun onShareLinkClicked(): Observable<ShareLinkClick> {
+    override fun onShareLinkClicked(): Observable<LeadViewDetailUiEvent.ShareLinkClick> {
         return subject.ofType()
     }
 
@@ -327,11 +338,11 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         renderDiyLink(leadId, this)
     }
 
-    override fun onSuggestMeClicked(): Observable<SuggestMeClick> {
+    override fun onSuggestMeClicked(): Observable<LeadViewDetailUiEvent.SuggestMeClick> {
         return subject.ofType()
     }
 
-    override fun onCopyLinkClicked(): Observable<CopyLinkClick> {
+    override fun onCopyLinkClicked(): Observable<LeadViewDetailUiEvent.CopyLinkClick> {
         return subject.ofType()
     }
 
@@ -450,7 +461,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
         leadId = args.getString(MOSLConstants.LEADID, "0") ?: "0"
         ucId = args.getString(MOSLConstants.UCID, "0") ?: "0"
         setupView()
-        subject.onNext(RetryClick)
+        subject.onNext(LeadViewDetailUiEvent.RetryClick)
     }
 
     companion object {
