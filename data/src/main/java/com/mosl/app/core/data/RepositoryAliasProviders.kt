@@ -17,6 +17,7 @@ import com.mosl.app.core.data.notification.NotificationRepositoryImpl
 import com.mosl.app.core.data.pendingapproval.PendingApprovalRepositoryImpl
 import com.mosl.app.core.data.pendingapproval.report.PendingForApprovalRepositoryImpl
 import com.mosl.app.core.data.productivity.ProductivityRepositoryImpl
+import com.mosl.app.core.data.reactivation.ReactivationRepositoryImpl
 import com.mosl.app.core.data.report.HierarchyReportRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
@@ -38,6 +39,7 @@ import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.pendingapproval.PendingApprovalRepository
 import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
 import com.mosl.mobile.domain.productivity.ProductivityRepository
+import com.mosl.mobile.domain.reactivation.ReactivationRepository
 import com.mosl.mobile.domain.report.HierarchyReportRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
@@ -116,4 +118,7 @@ interface RepositoryAliasProviders {
 
     @Binds
     fun bindLeadDetailRepository(repository: LeadDetailRepositoryImpl): LeadDetailRepository
+
+    @Binds
+    fun bindsReactivationRepository(repository: ReactivationRepositoryImpl): ReactivationRepository
 }

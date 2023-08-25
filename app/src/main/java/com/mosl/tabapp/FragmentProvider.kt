@@ -64,9 +64,8 @@ import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.qrcode.QRCodeModule
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
-import com.mosl.tabapp.reactivation.ReactivationSummaryFragment
-import com.mosl.tabapp.reactivation.ReactivationSummaryModule
-import com.mosl.tabapp.reactivation.ReactivationSummaryView
+import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
+import com.mosl.tabapp.reactivation.summary.ReactivationSummaryModule
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.ReportModule
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment

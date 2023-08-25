@@ -96,6 +96,8 @@ import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.saathi.api.model.query.QueryItem
 import com.mosl.saathi.api.model.query.QueryRequest
+import com.mosl.saathi.api.model.reactivation.ReactivationSummaryRequest
+import com.mosl.saathi.api.model.reactivation.ReactivationSummaryResponse
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
@@ -584,6 +586,11 @@ interface SaathiApi {
     fun getBranchByEmployeeCode(
         @Body request: BranchRequest
     ): Observable<SaathiCommonResponse<List<BranchItem>>>
+
+    @POST("SMSCampaign/ReactivationMappedClientReportList")
+    fun getReactivationSummary(
+        @Body request: ReactivationSummaryRequest
+    ): Observable<SaathiCommonResponse<ReactivationSummaryResponse>>
 
     @POST("Auth/Login")
     fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>
