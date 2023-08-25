@@ -32,6 +32,7 @@
     <string name="MOSL_MENU_SALES_STADIUM_PITCH_TXT">Sales Stadium Pitch</string>
     <string name="MOSL_MENU_PENDING_APPROVALS_TXT">My Pending Approvals</string>
     <string name="MOSL_MENU_SETTING">Settings</string>
+    <string name="MOSL_MENU_REACTIVATION">Reactivation Assigned Client</string>
     <string name="preference_location_summary">Location tracking needed for Conveyance</string>
     <string name="preference_location_title">24x7 Location Tracking</string>
     <string name="preff_24_7_key">checkTwentyFourSeven</string>

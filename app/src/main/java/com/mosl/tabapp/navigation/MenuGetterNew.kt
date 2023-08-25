@@ -24,6 +24,7 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
 import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.query.QueryFragment
+import com.mosl.tabapp.reactivation.ReactivationSummaryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
@@ -46,6 +47,7 @@ object MenuGetterNew {
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
             NavigationConstants.NAVIGATE_TO_QR_CODE -> QRCodeFragment()
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> ReactivationSummaryFragment()
             NavigationConstants.NAVIGATE_TO_CALENDAR -> CalendarFragment()
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
             NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
@@ -156,6 +158,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_DELETE_REQUEST -> true
             NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> true
             NavigationConstants.NAVIGATE_TO_QR_CODE -> true
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> true
             else -> return false
         }
     }

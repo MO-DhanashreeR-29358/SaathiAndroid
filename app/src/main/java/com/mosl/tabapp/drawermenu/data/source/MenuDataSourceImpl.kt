@@ -54,6 +54,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -78,6 +79,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -110,6 +112,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getSip(),
+                getReactivation(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -131,6 +134,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getSip(),
+                getReactivation(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -162,6 +166,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -187,6 +192,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -224,6 +230,7 @@ open class MenuDataSourceImpl @Inject constructor(
             getDashboard(),
             getOpenAccount(),
             getDeleteRequest(),
+            getReactivation(),
             getLogout()
         ).apply { checkForPrime(false,isShowQRCode) }
     }
@@ -239,6 +246,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
@@ -260,6 +268,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
+                getReactivation(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
@@ -544,4 +553,15 @@ open class MenuDataSourceImpl @Inject constructor(
             pageId = NavigationConstants.NAVIGATE_TO_LOGOUT
         )
     }
+
+    private fun getReactivation(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_most_guide,
+            label = R.string.MOSL_MENU_REACTIVATION,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY
+        )
+    }
+
+
 }
