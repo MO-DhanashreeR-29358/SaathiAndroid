@@ -3,6 +3,7 @@ package com.mosl.tabapp.reactivation.summary
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -26,6 +27,8 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
     @Inject
     lateinit var presenter: ReactivationSummaryPresenter
 
+    var currentStage : String = ""
+
     override fun getLayout(): Int {
         return R.layout.fragment_reactivation_summary
     }
@@ -34,7 +37,6 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         binding = FragmentReactivationSummaryBinding.bind(view)
         setupView()
         presenter.start()
-        dataActionSubject.onNext(DataAction.Fetch)
 
     }
 
@@ -88,6 +90,46 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
                 tvTraded.text = it.traded
                 tvRevenue.text = it.revenue
             }
+        }
+    }
+
+    override fun getCurrentStage(): String {
+        return currentStage
+    }
+
+    override fun onAssignedClick(): Observable<Unit> {
+        return binding.assignedContainer.clicks().map {
+            currentStage = "Assigned"
+        }
+    }
+
+    override fun onContactedClick(): Observable<Unit> {
+        return binding.contactedContainer.clicks().map {
+            currentStage = "Contacted"
+        }
+    }
+
+    override fun onNonContactedClick(): Observable<Unit> {
+        return binding.nonContactedContainer.clicks().map {
+            currentStage = "NonContacted"
+        }
+    }
+
+    override fun onReactivatedClientslick(): Observable<Unit> {
+        return binding.reactivatedClientsContainer.clicks().map {
+            currentStage = "ReactivatedClients"
+        }
+    }
+
+    override fun onTradedClick(): Observable<Unit> {
+        return binding.tradedContainer.clicks().map {
+            currentStage = "Traded"
+        }
+    }
+
+    override fun onRevenueClick(): Observable<Unit> {
+        return binding.revenueContainer.clicks().map {
+            currentStage = "Revenue"
         }
     }
 

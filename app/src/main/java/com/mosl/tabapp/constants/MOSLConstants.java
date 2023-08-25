@@ -283,5 +283,7 @@ public interface MOSLConstants extends LabelConfig {
 
     String STRING_MAP = "map";
     String STRING_TITLE = "title";
+    String REACTIVATION_PERIOD = "period_filter";
+    String REACTIVATION_TYPE = "reactivation_type";
 }
 

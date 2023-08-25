@@ -64,6 +64,8 @@ import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.qrcode.QRCodeModule
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment
+import com.mosl.tabapp.reactivation.detail.ReactivationDetailModule
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryModule
 import com.mosl.tabapp.report.ReportFragment
@@ -203,4 +205,7 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReactivationSummaryModule::class])
     fun provideReactivationSummaryFragmentFactory(): ReactivationSummaryFragment
+
+    @ContributesAndroidInjector(modules = [ReactivationDetailModule::class])
+    fun provideReactivationDetailFragmentFactory(): ReactivationDetailFragment
 }

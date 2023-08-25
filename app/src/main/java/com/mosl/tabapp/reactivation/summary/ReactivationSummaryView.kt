@@ -13,4 +13,12 @@ interface ReactivationSummaryView : BaseView {
     fun getSelectedPeriod(): FilterRowData
     fun renderOnPeriodChange(uiModel: UiModel<ReactivationSummaryItem>)
 
+    fun getCurrentStage(): String
+
+    fun onAssignedClick(): Observable<Unit>
+    fun onContactedClick(): Observable<Unit>
+    fun onNonContactedClick(): Observable<Unit>
+    fun onReactivatedClientslick(): Observable<Unit>
+    fun onTradedClick(): Observable<Unit>
+    fun onRevenueClick(): Observable<Unit>
 }

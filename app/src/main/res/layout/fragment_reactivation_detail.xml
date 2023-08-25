@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".reactivation.summary.ReactivationSummaryFragment"
+    android:padding="@dimen/_10sdp">
+
+    <TextView
+        android:id="@+id/txtFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Filter"
+        android:textSize="@dimen/_16sdp"
+        android:padding="@dimen/_10sdp">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/sp_period"
+        style="@style/DashbordSpinnerSelector"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layout_constraintStart_toEndOf="@+id/txtFilter"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtFilter"
+        android:layout_marginTop="@dimen/_10sdp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/assigned_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey_menu">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Assigned"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvAssigned"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/contacted_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Contacted"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvContacted"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/non_contacted_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey_menu">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Non Contacted"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvNonContacted"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/reactivated_clients_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Reactivated Clients"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvReactivatedClients"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/traded_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/light_grey_menu">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Traded"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvTraded"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/revenue_container"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="@dimen/_150sdp"
+                android:layout_height="match_parent"
+                android:text="Revenue"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+            <TextView
+                android:id="@+id/tvRevenue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/_16sdp">
+            </TextView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_light">
+        </View>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -99,4 +99,5 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_DIGITAL_SALES_KIT = 45;
     int NAVIGATE_TO_QR_CODE = 46;
     int NAVIGATE_TO_REACTIVATION_SUMMARY = 47;
+    int NAVIGATE_TO_REACTIVATION_DETAIL = 48;
 }
