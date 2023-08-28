@@ -36,12 +36,10 @@ class ReactivationSummaryPresenter @Inject constructor(
             view.onAssignedClick(),
             view.onContactedClick(),
             view.onNonContactedClick(),
-            view.onReactivatedClientslick(),
-            view.onTradedClick(),
-            view.onRevenueClick()
+            view.onReactivatedClientslick()
         )
 
-        onButtonClick
+        Observable.merge(onButtonClick, view.onTradedClick(), view.onRevenueClick())
             .subscribe {
                 val args = Bundle()
                 var navigationConstants = NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL

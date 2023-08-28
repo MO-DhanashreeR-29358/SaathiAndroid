@@ -16,6 +16,12 @@ class ReactivationDetailPresenter @Inject constructor(
 
     override fun start() {
 
-
+        onFetchCalled().
+                switchMap {
+                    repository.getReactivationDetail(view.getPeriodFilter(), view.getCurrentStage())
+                        .compose(applyUiModel())
+                }
+            .subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
     }
 }

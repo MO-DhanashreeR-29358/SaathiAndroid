@@ -27,7 +27,7 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
     @Inject
     lateinit var presenter: ReactivationSummaryPresenter
 
-    var currentStage : String = ""
+    var reactivationCurrentStage : String = ""
 
     override fun getLayout(): Int {
         return R.layout.fragment_reactivation_summary
@@ -94,42 +94,42 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
     }
 
     override fun getCurrentStage(): String {
-        return currentStage
+        return reactivationCurrentStage
     }
 
     override fun onAssignedClick(): Observable<Unit> {
         return binding.assignedContainer.clicks().map {
-            currentStage = "Assigned"
+            reactivationCurrentStage = "Assigned"
         }
     }
 
     override fun onContactedClick(): Observable<Unit> {
         return binding.contactedContainer.clicks().map {
-            currentStage = "Contacted"
+            reactivationCurrentStage = "Contacted"
         }
     }
 
     override fun onNonContactedClick(): Observable<Unit> {
         return binding.nonContactedContainer.clicks().map {
-            currentStage = "NonContacted"
+            reactivationCurrentStage = "NonContacted"
         }
     }
 
     override fun onReactivatedClientslick(): Observable<Unit> {
         return binding.reactivatedClientsContainer.clicks().map {
-            currentStage = "ReactivatedClients"
+            reactivationCurrentStage = "ReactivatedClients"
         }
     }
 
     override fun onTradedClick(): Observable<Unit> {
         return binding.tradedContainer.clicks().map {
-            currentStage = "Traded"
+            reactivationCurrentStage = "Traded"
         }
     }
 
     override fun onRevenueClick(): Observable<Unit> {
         return binding.revenueContainer.clicks().map {
-            currentStage = "Revenue"
+            reactivationCurrentStage = "Revenue"
         }
     }
 
