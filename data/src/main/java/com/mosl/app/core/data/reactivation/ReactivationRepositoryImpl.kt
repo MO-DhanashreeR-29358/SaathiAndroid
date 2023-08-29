@@ -80,7 +80,7 @@ class ReactivationRepositoryImpl @Inject constructor(
         list.add(values[0])
         for (i in 1 until values.size) {
             if (values[i] != "null" && values[i] != "")
-                list.add(values[i].toConvertDecimals())
+                    list.add(values[i])
             else if (values[i] == "null")
                 list.add(values[i].replace("null", ""))
             else list.add(values[i])

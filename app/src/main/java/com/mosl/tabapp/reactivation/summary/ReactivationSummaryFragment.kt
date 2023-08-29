@@ -45,13 +45,13 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spPeriod.adapter = periodAdapter
         var list : ArrayList<FilterRowData> = ArrayList()
-        val filter1 = FilterRowData(0,"Day","Day", "")
-        val filter2 = FilterRowData(1,"MTD","MTD", "")
-        val filter3 = FilterRowData(2,"01","01", "")
-        val filter4 = FilterRowData(3,"02","02", "")
-        val filter5 = FilterRowData(4,"03","03", "")
-        val filter6 = FilterRowData(5,"04","04", "")
-        val filter7 = FilterRowData(6,"Last Month","Last Month", "")
+        val filter1 = FilterRowData(0,"MTD","MTD", "")
+        val filter2 = FilterRowData(1,"YTD","YTD", "")
+        val filter7 = FilterRowData(2,"Last Month","Last Month", "")
+        val filter3 = FilterRowData(3,"01","01", "")
+        val filter4 = FilterRowData(4,"02","02", "")
+        val filter5 = FilterRowData(5,"03","03", "")
+        val filter6 = FilterRowData(6,"04","04", "")
         val filter8 = FilterRowData(7,"Last FY","Last FY", "")
         list.add(filter1)
         list.add(filter2)
@@ -111,7 +111,7 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
 
     override fun onNonContactedClick(): Observable<Unit> {
         return binding.nonContactedContainer.clicks().map {
-            reactivationCurrentStage = "NonContacted"
+            reactivationCurrentStage = "NotContacted"
         }
     }
 

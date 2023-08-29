@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="Filter"
-        android:textSize="@dimen/_16sdp"
+        android:textSize="@dimen/_15sdp"
         android:padding="@dimen/_10sdp">
     </TextView>
 
@@ -38,7 +38,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -51,8 +51,9 @@
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="match_parent"
                 android:text="Assigned"
+                android:paddingStart="@dimen/_10sdp"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvAssigned"
@@ -62,14 +63,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -82,8 +83,9 @@
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="match_parent"
                 android:text="Contacted"
+                android:paddingStart="@dimen/_10sdp"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvContacted"
@@ -93,14 +95,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -112,9 +114,10 @@
             <TextView
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="match_parent"
-                android:text="Non Contacted"
+                android:text="Not Contacted"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:paddingStart="@dimen/_10sdp"
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvNonContacted"
@@ -124,14 +127,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -144,8 +147,9 @@
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="match_parent"
                 android:text="Reactivated Clients"
+                android:paddingStart="@dimen/_10sdp"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvReactivatedClients"
@@ -155,14 +159,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -176,7 +180,8 @@
                 android:layout_height="match_parent"
                 android:text="Traded"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:paddingStart="@dimen/_10sdp"
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvTraded"
@@ -186,14 +191,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 
@@ -207,7 +212,8 @@
                 android:layout_height="match_parent"
                 android:text="Revenue"
                 android:gravity="center_vertical"
-                android:textSize="@dimen/_16sdp">
+                android:paddingStart="@dimen/_10sdp"
+                android:textSize="@dimen/_15sdp">
             </TextView>
             <TextView
                 android:id="@+id/tvRevenue"
@@ -217,14 +223,14 @@
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="@dimen/_16sdp">
+                android:textSize="@dimen/_15sdp">
             </TextView>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.5dp"
             android:background="@color/gray_light">
         </View>
 

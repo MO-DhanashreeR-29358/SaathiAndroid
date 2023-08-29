@@ -15,7 +15,7 @@ data class ReactivationSummaryData(
     val assigned: String,
     @JvmField @SerializedName("Contacted")
     val contacted: String,
-    @JvmField @SerializedName("NonContacted")
+    @JvmField @SerializedName("NotContacted")
     val nonContacted: String,
     @JvmField @SerializedName("ReactivatedClients")
     val reactivatedClients: String,
