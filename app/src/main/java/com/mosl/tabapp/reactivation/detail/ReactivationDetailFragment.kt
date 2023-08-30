@@ -43,6 +43,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
     private lateinit var tableRowAdapter: TableRowAdapter<ReactivationDetailTableRow>
     var strFeedBackOption:String=""
     var strFeedbackTxt:String=""
+    var refNo :String=""
     private val subject=ReactivationDetailUiEvent.getSubject()
     override fun getLayout(): Int {
         return R.layout.fragment_reactivation_detail
@@ -54,7 +55,6 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
         setupView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        fnFeedbackAlert()
     }
 
     override fun extractArguments(bundle: Bundle) {
@@ -71,7 +71,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
                 .apply {
             viewProvider.rowClickListener = { row, view ->
                 val reportData = tableRowAdapter.getItem(row).data
-                val refNo = getValue("RefNo", hasMap = reportData.hasMap)
+                refNo = getValue("RefNo", hasMap = reportData.hasMap)
                // reactivationPeriodFilter
                 //  reactivationPeriodFilter
                 // userManager.getUser()!!.employeeCode
@@ -176,7 +176,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
 
     override fun getFeedbackSubmitData(): ReactivationFeedbackItem {
         return ReactivationFeedbackItem(userManager.getUser()?.employeeCode?:"","MTD",strFeedBackOption,
-        "46722",strFeedbackTxt)
+            refNo,strFeedbackTxt)
     }
     override fun fnCallFeedbackSubmit(): Observable<ReactivationDetailUiEvent.onFeedbackSubmitCalled> {
         return subject.ofType()
