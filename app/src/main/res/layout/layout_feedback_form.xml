@@ -72,9 +72,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etRemark"
+                android:background="@drawable/login_edittext_border"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_120sdp"
-                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                android:layout_height="@dimen/_100sdp"
                 android:inputType="textNoSuggestions"
                 android:singleLine="false"
                 android:gravity="start"
