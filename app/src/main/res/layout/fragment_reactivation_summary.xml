@@ -5,16 +5,38 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".reactivation.summary.ReactivationSummaryFragment"
-    android:padding="@dimen/_10sdp">
+    >
+
+    <RelativeLayout
+        android:id="@+id/labelContainer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@color/titleBarBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txtLables"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:singleLine="true"
+            android:text="Reactivation Mapped Client Report"
+            android:textColor="@color/alternateTextColor"
+            android:textSize="@dimen/appTitleTextSize"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/txtFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelContainer"
         android:text="Filter"
         android:textSize="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:padding="@dimen/_10sdp">
     </TextView>
 
@@ -23,9 +45,9 @@
         style="@style/DashbordSpinnerSelector"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginTop="@dimen/_15sdp"
         app:layout_constraintStart_toEndOf="@+id/txtFilter"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/labelContainer"/>
 
 
     <LinearLayout

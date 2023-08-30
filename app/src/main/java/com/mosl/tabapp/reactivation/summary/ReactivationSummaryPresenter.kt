@@ -6,6 +6,7 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.reactivation.ReactivationRepository
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -26,8 +27,14 @@ class ReactivationSummaryPresenter @Inject constructor(
             .filter(InvalidSelectionPredicate)
             .map { view.getSelectedPeriod() }
             .switchMap {
-                repository.getReactivationSummary(it.value)
-                    .compose(applyUiModel())
+                if(userManager.user.isRetailSalesProfile()){
+                    repository.getReactivationSummaryForSales(it.value)
+                        .compose(applyUiModel())
+                }else{
+                    repository.getReactivationSummaryForTL(it.value)
+                        .compose(applyUiModel())
+                }
+
             }
             .subscribe(view::renderOnPeriodChange, Timber::e)
             .addTo(disposable)

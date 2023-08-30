@@ -12,6 +12,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
 import com.mosl.tabapp.databinding.FragmentReactivationDetailBinding
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
@@ -57,15 +58,30 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
         val mfAdapter =
             requireContext().createRowAdapter<ReactivationDetailTableRow>(dynamicHeaderRow)
                 .apply {
-//          viewProvider.rowClickListener = { row, view ->
-//            val reportData = tableRowAdapter.getItem(row).data
-//            navigateEvent.onNext(getAdditionalParameterMap(reportData.data[0]))
-//          }
+            viewProvider.rowClickListener = { row, view ->
+                val reportData = tableRowAdapter.getItem(row).data
+                val refNo = getValue("RefNo", hasMap = reportData.hasMap)
+               // reactivationPeriodFilter
+                //  reactivationPeriodFilter
+                // userManager.getUser()!!.employeeCode
                 }
+          }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
     }
 
+    private fun getValue(
+        vararg keys: String,
+        hasMap: Map<String, String>
+    ): String {
+        for (key in keys) {
+            val value: String? = hasMap[key]
+            if (value != null) {
+                return value
+            }
+        }
+        return "0"
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         presenter.stop()

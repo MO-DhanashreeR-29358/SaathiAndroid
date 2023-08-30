@@ -130,4 +130,13 @@ data class User(
         return flag
     }
 
+    fun isRetailSalesProfile(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("1") &&
+            currentBusinessProfile.businessProfileName.equals("Sales") ) {
+            flag = true
+        }
+        return flag
+    }
+
 }
