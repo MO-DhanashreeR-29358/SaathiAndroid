@@ -4,10 +4,13 @@ import io.reactivex.rxjava3.core.Observable
 
 
 interface ReactivationRepository {
-    fun getReactivationSummary(period : String): Observable<ReactivationSummaryItem>
+    fun getReactivationSummaryForSales(period : String): Observable<ReactivationSummaryItem>
 
-    fun getReactivationDetail(period : String, stage : String): Observable<ReactivationDetailCombo>
+    fun getReactivationSummaryForTL(period : String): Observable<ReactivationSummaryItem>
+
+    fun getReactivationDetailForSales(period : String, stage : String): Observable<ReactivationDetailCombo>
+
+    fun getReactivationAssignedHierarchyClientReportList(period : String): Observable<ReactivationDetailCombo>
 
     fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<String>
-
 }

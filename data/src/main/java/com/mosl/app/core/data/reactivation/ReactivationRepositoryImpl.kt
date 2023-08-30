@@ -24,14 +24,21 @@ class ReactivationRepositoryImpl @Inject constructor(
     val userManager: UserManagerImpl
 ) : ReactivationRepository {
 
-    override fun getReactivationSummary(period : String): Observable<ReactivationSummaryItem> {
+    override fun getReactivationSummaryForSales(period : String): Observable<ReactivationSummaryItem> {
         val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
         return saathiApi.getReactivationSummary(request).map {
             it.response?.data?.first()?.summaryItemResponseTransform()!!
         }
     }
 
-    override fun getReactivationDetail(
+    override fun getReactivationSummaryForTL(period: String): Observable<ReactivationSummaryItem> {
+        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
+        return saathiApi.getReactivationSummaryForTL(request).map {
+            it.response?.data?.first()?.summaryItemResponseTransform()!!
+        }
+    }
+
+    override fun getReactivationDetailForSales(
         period: String,
         stage: String
     ): Observable<ReactivationDetailCombo> {
@@ -46,8 +53,7 @@ class ReactivationRepositoryImpl @Inject constructor(
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
-                    val header = iterator.next()
-                        .toString()
+                    val header = iterator.next().toString()
                     colHeaders.add(ColHeader(header))
                 }
 
@@ -68,6 +74,49 @@ class ReactivationRepositoryImpl @Inject constructor(
                     data.add(ReactivationDetailData(setData(values)))
                 }
                 ReactivationDetailCombo(headers, data = data)
+
+            } else {
+                ReactivationDetailCombo(emptyList(), data = emptyList())
+            }
+        }
+    }
+
+    override fun getReactivationAssignedHierarchyClientReportList(
+        period: String
+    ): Observable<ReactivationDetailCombo> {
+        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
+        return saathiApi.getReactivationAssignedHierarchyClientReportList(request).map { response ->
+            val jsonObject = JSONObject(response)
+            val jsonArray = if (jsonObject.has("Response")) {
+                jsonObject.getJSONObject("Response").getJSONArray("Data")
+            } else null
+            if (jsonArray != null && jsonArray.length() > 0) {
+                val colHeaders: MutableList<ColHeader> = mutableListOf()
+                val first = jsonArray.getJSONObject(0)
+                val iterator = first.keys()
+                while (iterator.hasNext()) {
+                    val header = iterator.next().toString()
+                    colHeaders.add(ColHeader(header))
+                }
+
+                val headers = colHeaders.map {
+                    it.copy(index = response.indexOf(it.label))
+                }
+                    .sortedBy { it.index }
+                    .map { it.label }
+
+                val data: ArrayList<ReactivationDetailData> = ArrayList()
+                for (i in 0 until jsonArray.length()) {
+                    val json = jsonArray.getJSONObject(i)
+                    val values: ArrayList<String> = ArrayList()
+
+                    headers.forEach { header ->
+                        values.add(json.get(header).toString())
+                    }
+                    data.add(ReactivationDetailData(setData(values)))
+                }
+                ReactivationDetailCombo(headers, data = data)
+
             } else {
                 ReactivationDetailCombo(emptyList(), data = emptyList())
             }

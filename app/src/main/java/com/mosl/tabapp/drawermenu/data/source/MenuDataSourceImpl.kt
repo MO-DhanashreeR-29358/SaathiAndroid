@@ -29,13 +29,13 @@ open class MenuDataSourceImpl @Inject constructor(
                     getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isQRDownload)
                 }
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
+                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
                 }
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
+                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
                 }
                 else -> {
-                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload)
+                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
                 }
             }
         }
@@ -47,14 +47,14 @@ open class MenuDataSourceImpl @Inject constructor(
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
-        isShowQRCode: Boolean
+        isShowQRCode: Boolean,
+        isSHowReactivation : Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -72,14 +72,13 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -96,7 +95,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         }
     }
@@ -106,13 +105,13 @@ open class MenuDataSourceImpl @Inject constructor(
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
-        isShowQRCode: Boolean
+        isShowQRCode: Boolean,
+        isSHowReactivation : Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
                 getSip(),
-                getReactivation(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -128,13 +127,12 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
                 getSip(),
-                getReactivation(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -149,7 +147,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         }
     }
@@ -159,14 +157,14 @@ open class MenuDataSourceImpl @Inject constructor(
         digitalSalesKitList : List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
-        isShowQRCode: Boolean
+        isShowQRCode: Boolean,
+        isSHowReactivation : Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -185,14 +183,13 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getSip(),
                 getEModification(),
@@ -210,18 +207,23 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
             }
         }
     }
 
-    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean,isShowQRCode: Boolean): List<BaseMenu> {
+    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean,isShowQRCode: Boolean,
+                                                  isSHowReactivation : Boolean): List<BaseMenu> {
         if (isPrimeUser) {
             add(3, getPrimeEntry())
         }
         if (isShowQRCode) {
             add(1, getQRCode())
         }
+        if (isSHowReactivation) {
+            add(3, getReactivation())
+        }
+
         return this
     }
 
@@ -230,9 +232,8 @@ open class MenuDataSourceImpl @Inject constructor(
             getDashboard(),
             getOpenAccount(),
             getDeleteRequest(),
-            getReactivation(),
             getLogout()
-        ).apply { checkForPrime(false,isShowQRCode) }
+        ).apply { checkForPrime(false,isShowQRCode, false) }
     }
 
     private fun getAuSalesBank(
@@ -246,7 +247,6 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
@@ -261,14 +261,13 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, false)
             }
         } else {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
                 getDeleteRequest(),
-                getReactivation(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
@@ -282,7 +281,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode)
+                checkForPrime(isPrimeUser,isShowQRCode, false)
             }
         }
     }

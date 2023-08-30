@@ -2,7 +2,8 @@ package com.mosl.mobile.domain.reactivation
 
 
 data class ReactivationDetailData(
-    @JvmField val data: List<String>
+    @JvmField val data: List<String>,
+    @JvmField val hasMap: Map<String, String>
 )
 
 data class ReactivationDetailCombo(
