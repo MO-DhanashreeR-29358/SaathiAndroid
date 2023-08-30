@@ -7,4 +7,7 @@ interface ReactivationRepository {
     fun getReactivationSummary(period : String): Observable<ReactivationSummaryItem>
 
     fun getReactivationDetail(period : String, stage : String): Observable<ReactivationDetailCombo>
+
+    fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<String>
+
 }

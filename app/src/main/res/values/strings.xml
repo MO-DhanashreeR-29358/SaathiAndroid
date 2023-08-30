@@ -666,4 +666,6 @@
 
     <string name="qr_code_message">Please wait,\nQR Code will display here</string>
     <string name="com.crashlytics.android.build_id">1</string>
+    <string name="lbl_feedback">Edit Feedback/Remarks</string>
+    <string name="lbl_remark">Remarks</string>
 </resources>
