@@ -50,6 +50,7 @@ class ReactivationRepositoryImpl @Inject constructor(
             } else null
             if (jsonArray != null && jsonArray.length() > 0) {
                 val colHeaders: MutableList<ColHeader> = mutableListOf()
+                val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
@@ -70,8 +71,10 @@ class ReactivationRepositoryImpl @Inject constructor(
 
                     headers.forEach { header ->
                         values.add(json.get(header).toString())
+                        hasMap[header] = json.get(header)
+                            .toString()
                     }
-                   // need to check data.add(ReactivationDetailData(setData(values)))
+                    data.add(ReactivationDetailData(setData(values), hasMap))
                 }
                 ReactivationDetailCombo(headers, data = data)
 
@@ -92,6 +95,7 @@ class ReactivationRepositoryImpl @Inject constructor(
             } else null
             if (jsonArray != null && jsonArray.length() > 0) {
                 val colHeaders: MutableList<ColHeader> = mutableListOf()
+                val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
@@ -112,8 +116,10 @@ class ReactivationRepositoryImpl @Inject constructor(
 
                     headers.forEach { header ->
                         values.add(json.get(header).toString())
+                        hasMap[header] = json.get(header)
+                            .toString()
                     }
-                    // need to check data.add(ReactivationDetailData(setData(values)))
+                    data.add(ReactivationDetailData(setData(values), hasMap))
                 }
                 ReactivationDetailCombo(headers, data = data)
 
