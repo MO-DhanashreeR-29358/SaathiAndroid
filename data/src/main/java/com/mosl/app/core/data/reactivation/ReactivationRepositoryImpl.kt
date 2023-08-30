@@ -71,7 +71,7 @@ class ReactivationRepositoryImpl @Inject constructor(
                     headers.forEach { header ->
                         values.add(json.get(header).toString())
                     }
-                    data.add(ReactivationDetailData(setData(values)))
+                   // need to check data.add(ReactivationDetailData(setData(values)))
                 }
                 ReactivationDetailCombo(headers, data = data)
 
@@ -113,7 +113,7 @@ class ReactivationRepositoryImpl @Inject constructor(
                     headers.forEach { header ->
                         values.add(json.get(header).toString())
                     }
-                    data.add(ReactivationDetailData(setData(values)))
+                    // need to check data.add(ReactivationDetailData(setData(values)))
                 }
                 ReactivationDetailCombo(headers, data = data)
 
@@ -123,10 +123,10 @@ class ReactivationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getReactivationFeedback(request: ReactivationFeedbackItem): Observable<String> {
+    override fun getReactivationFeedback(request: ReactivationFeedbackItem): Observable<ReactivationFeedbackResponse> {
         val requestapi=ReactivationFeedbackRequest(request.employeeCode,request.period,request.currentStage,request.refNo,request.remarks)
         return  saathiApi.getFeedbackSubmit(requestapi).map { response->
-            Gson().toJson(response)
+            ReactivationFeedbackResponse(response.status,response.message)
         }
     }
 

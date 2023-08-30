@@ -12,5 +12,5 @@ interface ReactivationRepository {
 
     fun getReactivationAssignedHierarchyClientReportList(period : String): Observable<ReactivationDetailCombo>
 
-    fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<String>
+    fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<ReactivationFeedbackResponse>
 }

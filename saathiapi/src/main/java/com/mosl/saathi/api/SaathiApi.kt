@@ -612,7 +612,7 @@ interface SaathiApi {
     ): Observable<String>
 
     @POST("SMSCampaign/SaveReactivationList")
-    fun getFeedbackSubmit(@Body request: ReactivationFeedbackRequest):Observable<String>
+    fun getFeedbackSubmit(@Body request: ReactivationFeedbackRequest):Observable<SaathiCommonResponse<String>>
 
     @POST("Auth/Login")
     fun login(@Body loginRequest: LoginRequest): Observable<LoginResponse>

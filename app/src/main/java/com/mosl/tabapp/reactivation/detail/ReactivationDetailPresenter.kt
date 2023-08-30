@@ -1,7 +1,6 @@
 package com.mosl.tabapp.reactivation.detail
 
 import com.mosl.app.core.base.BasePresenter
-import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.reactivation.ReactivationRepository
 import com.mosl.mobile.user.login.UserManager
@@ -30,5 +29,16 @@ class ReactivationDetailPresenter @Inject constructor(
                 }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
+
+        view.fnCallFeedbackSubmit()
+            .map{
+                view.getFeedbackSubmitData()
+            }
+            .switchMap {
+                    repository.getReactivationFeedback(it) .compose(applyUiModel())
+                }
+            .subscribe {
+                view.renderFeedbackSubmit(it)
+            } .addTo(disposable)
     }
 }

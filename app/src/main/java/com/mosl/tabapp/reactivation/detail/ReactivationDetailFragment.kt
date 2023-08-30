@@ -1,6 +1,7 @@
 package com.mosl.tabapp.reactivation.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
@@ -12,19 +13,19 @@ import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.reactivation.ReactivationDetailCombo
+import com.mosl.mobile.domain.reactivation.ReactivationFeedbackItem
+import com.mosl.mobile.domain.reactivation.ReactivationFeedbackResponse
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
 import com.mosl.tabapp.databinding.FragmentReactivationDetailBinding
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
-import com.mosl.tabapp.util.SpinnerAdapterFactory
-import com.mosl.tabapp.util.setSpinnerData
 import com.mosl.tableview.rowadapter.TableRowAdapter
+import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 
@@ -42,6 +43,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
     private lateinit var tableRowAdapter: TableRowAdapter<ReactivationDetailTableRow>
     var strFeedBackOption:String=""
     var strFeedbackTxt:String=""
+    private val subject=ReactivationDetailUiEvent.getSubject()
     override fun getLayout(): Int {
         return R.layout.fragment_reactivation_detail
     }
@@ -163,11 +165,38 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
             else
                 {
                     tvRemarkError.visibility=View.GONE
+                    subject.onNext(ReactivationDetailUiEvent.onFeedbackSubmitCalled)
+                    builder.dismiss()
                 }
         }
         builder.setView(view)
         builder.setCanceledOnTouchOutside(false)
         builder.show()
+    }
+
+    override fun getFeedbackSubmitData(): ReactivationFeedbackItem {
+        return ReactivationFeedbackItem(userManager.getUser()?.employeeCode?:"","MTD",strFeedBackOption,
+        "46722",strFeedbackTxt)
+    }
+    override fun fnCallFeedbackSubmit(): Observable<ReactivationDetailUiEvent.onFeedbackSubmitCalled> {
+        return subject.ofType()
+    }
+
+    override fun renderFeedbackSubmit(uiModel: UiModel<ReactivationFeedbackResponse>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+           if(it.Status)
+           {
+
+           }
+            else
+           {
+               showErrorToast(it.Message)
+           }
+        }
     }
 
 }
