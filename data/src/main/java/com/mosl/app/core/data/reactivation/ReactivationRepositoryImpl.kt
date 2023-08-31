@@ -1,19 +1,18 @@
 package com.mosl.app.core.data.reactivation
 
+import com.google.gson.Gson
 import com.mosl.mobile.domain.branch.BranchItemResponse
 import com.mosl.mobile.domain.branch.BranchRepository
 import com.mosl.mobile.domain.productivity.ColHeader
 import com.mosl.mobile.domain.productivity.ProductivityCombo
 import com.mosl.mobile.domain.productivity.ProductivityData
-import com.mosl.mobile.domain.reactivation.ReactivationDetailCombo
-import com.mosl.mobile.domain.reactivation.ReactivationDetailData
-import com.mosl.mobile.domain.reactivation.ReactivationRepository
-import com.mosl.mobile.domain.reactivation.ReactivationSummaryItem
+import com.mosl.mobile.domain.reactivation.*
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.branch.BranchRequest
 import com.mosl.saathi.api.model.reactivation.ReactivationDetailRequest
+import com.mosl.saathi.api.model.reactivation.ReactivationFeedbackRequest
 import com.mosl.saathi.api.model.reactivation.ReactivationSummaryRequest
 import com.mosl.shared.util.toConvertDecimals
 import io.reactivex.rxjava3.core.Observable
@@ -127,6 +126,13 @@ class ReactivationRepositoryImpl @Inject constructor(
             } else {
                 ReactivationDetailCombo(emptyList(), data = emptyList())
             }
+        }
+    }
+
+    override fun getReactivationFeedback(request: ReactivationFeedbackItem): Observable<ReactivationFeedbackResponse> {
+        val requestapi=ReactivationFeedbackRequest(request.employeeCode,request.period,request.currentStage,request.refNo,request.remarks)
+        return  saathiApi.getFeedbackSubmit(requestapi).map { response->
+            ReactivationFeedbackResponse(response.status,response.message)
         }
     }
 

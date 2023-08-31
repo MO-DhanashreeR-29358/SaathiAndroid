@@ -4,7 +4,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 sealed class ReactivationDetailUiEvent {
     data class OnEditClick(val refNo: String) : ReactivationDetailUiEvent()
-
+    object onFeedbackSubmitCalled:ReactivationDetailUiEvent()
     companion object {
         @Volatile private var instance: PublishSubject<ReactivationDetailUiEvent>? = null
 

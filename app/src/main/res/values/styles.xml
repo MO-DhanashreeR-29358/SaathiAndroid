@@ -259,5 +259,8 @@
         <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/feedback_background</item>
+    </style>
     <!-- PopUpAnimation end -->
 </resources>
