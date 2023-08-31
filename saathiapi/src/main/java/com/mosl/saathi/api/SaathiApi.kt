@@ -607,7 +607,7 @@ interface SaathiApi {
     @ExcludeWrapper
     @POST("SMSCampaign/ReactivationAssignedHierarchyClientReportList")
     fun getReactivationAssignedHierarchyClientReportList(
-        @Body request: ReactivationSummaryRequest
+        @Body request: ReactivationDetailRequest
     ): Observable<String>
 
     @POST("Auth/Login")

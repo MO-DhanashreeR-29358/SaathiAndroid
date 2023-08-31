@@ -86,9 +86,9 @@ class ReactivationRepositoryImpl @Inject constructor(
     }
 
     override fun getReactivationAssignedHierarchyClientReportList(
-        period: String
+        period: String, stage : String
     ): Observable<ReactivationDetailCombo> {
-        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
+        val request = ReactivationDetailRequest(userManager.user.employeeCode, period, stage)
         return saathiApi.getReactivationAssignedHierarchyClientReportList(request).map { response ->
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {

@@ -23,7 +23,7 @@ class ReactivationDetailPresenter @Inject constructor(
                         repository.getReactivationDetailForSales(view.getPeriodFilter(), view.getCurrentStage())
                             .compose(applyUiModel())
                     }else{
-                        repository.getReactivationAssignedHierarchyClientReportList(view.getPeriodFilter())
+                        repository.getReactivationAssignedHierarchyClientReportList(view.getPeriodFilter(), view.getCurrentStage())
                             .compose(applyUiModel())
                     }
 

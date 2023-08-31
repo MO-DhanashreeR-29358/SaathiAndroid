@@ -10,5 +10,5 @@ interface ReactivationRepository {
 
     fun getReactivationDetailForSales(period : String, stage : String): Observable<ReactivationDetailCombo>
 
-    fun getReactivationAssignedHierarchyClientReportList(period : String): Observable<ReactivationDetailCombo>
+    fun getReactivationAssignedHierarchyClientReportList(period : String, stage : String): Observable<ReactivationDetailCombo>
 }
