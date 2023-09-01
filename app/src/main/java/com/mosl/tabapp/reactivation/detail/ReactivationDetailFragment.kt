@@ -64,6 +64,11 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
     }
 
     private fun setupView(){
+        if(userManager.getUser()?.isRetailSalesProfile() == true){
+           binding.txtLables.text = "Reactivation Mapped Client Detail Report"
+        }else{
+            binding.txtLables.text = "Reactivation Mapped Client Hierarchy Report"
+        }
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = ReactivationDetailTableMapper.header(requireContext()) as DynamicHeaderRow
         val mfAdapter =
@@ -71,11 +76,18 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
                 .apply {
             viewProvider.rowClickListener = { row, view ->
                 val reportData = tableRowAdapter.getItem(row).data
-                refNo = getValue("RefNo", hasMap = reportData.hasMap)
-               // reactivationPeriodFilter
-                //  reactivationPeriodFilter
-                // userManager.getUser()!!.employeeCode
+                if(userManager.getUser()?.isRetailSalesProfile() == true){
+                    refNo = getValue("RefNo", hasMap = reportData.hasMap)
+                    val isEditable = getValue("IsEditable", hasMap = reportData.hasMap)
+                    if(isEditable.equals("True",ignoreCase = true)){
+                        fnFeedbackAlert()
+                    }
+                }else{
+                    val employeeCode = getValue("EmployeeCode", hasMap = reportData.hasMap)
+                    val firstReportingTo = getValue("FirstReportingTo", hasMap = reportData.hasMap)
+                    subject.onNext(ReactivationDetailUiEvent.OnHierarchyRowClick(employeeCode,firstReportingTo))
                 }
+            }
           }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
@@ -165,7 +177,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
             else
                 {
                     tvRemarkError.visibility=View.GONE
-                    subject.onNext(ReactivationDetailUiEvent.onFeedbackSubmitCalled)
+                    subject.onNext(ReactivationDetailUiEvent.OnFeedbackSubmitCalled)
                     builder.dismiss()
                 }
         }
@@ -175,10 +187,10 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
     }
 
     override fun getFeedbackSubmitData(): ReactivationFeedbackItem {
-        return ReactivationFeedbackItem(userManager.getUser()?.employeeCode?:"","MTD",strFeedBackOption,
+        return ReactivationFeedbackItem(userManager.getUser()?.employeeCode?:"",reactivationPeriodFilter,strFeedBackOption,
             refNo,strFeedbackTxt)
     }
-    override fun fnCallFeedbackSubmit(): Observable<ReactivationDetailUiEvent.onFeedbackSubmitCalled> {
+    override fun fnCallFeedbackSubmit(): Observable<ReactivationDetailUiEvent.OnFeedbackSubmitCalled> {
         return subject.ofType()
     }
 
@@ -190,13 +202,22 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
         uiModel.onSuccess {
            if(it.Status)
            {
-
+               subject.onNext(ReactivationDetailUiEvent.RefreshDetailTable)
            }
             else
            {
                showErrorToast(it.Message)
            }
         }
+    }
+
+    override fun onHierarchyRowClick(): Observable<ReactivationDetailUiEvent.OnHierarchyRowClick> {
+        return  subject.ofType()
+    }
+
+
+    override fun onRefreshDetailTable(): Observable<ReactivationDetailUiEvent.RefreshDetailTable> {
+        return subject.ofType()
     }
 
 }

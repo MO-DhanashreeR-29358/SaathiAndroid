@@ -422,6 +422,7 @@ public class CRMAppUtil {
         columnName = columnName.replace("flg_Hierarchy", "Hierarchy");
         columnName = columnName.replace("flt_Hierarchy_empCode", "RM Name");
         columnName = columnName.replace("flt_Hierarchy_Branch_Code", "Branch Code");
+        columnName = columnName.replace("IsEditable", "Action");
         columnName = columnName.replace("_", " ");
 
         return columnName;

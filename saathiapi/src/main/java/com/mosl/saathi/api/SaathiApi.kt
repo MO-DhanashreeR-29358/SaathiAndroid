@@ -96,10 +96,7 @@ import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.saathi.api.model.query.QueryItem
 import com.mosl.saathi.api.model.query.QueryRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationDetailRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationFeedbackRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationSummaryRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationSummaryResponse
+import com.mosl.saathi.api.model.reactivation.*
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
@@ -603,6 +600,12 @@ interface SaathiApi {
     @POST("SMSCampaign/ReactivationMappedClientDetailReportList")
     fun getReactivationDetail(
         @Body request: ReactivationDetailRequest
+    ): Observable<String>
+
+    @ExcludeWrapper
+    @POST("SMSCampaign/ReactivationAssignedClientDetailReportList")
+    fun getReactivationDetailTL(
+        @Body request: ReactivationDetailTLRequest
     ): Observable<String>
 
     @ExcludeWrapper

@@ -12,6 +12,7 @@ import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.branch.BranchRequest
 import com.mosl.saathi.api.model.reactivation.ReactivationDetailRequest
+import com.mosl.saathi.api.model.reactivation.ReactivationDetailTLRequest
 import com.mosl.saathi.api.model.reactivation.ReactivationFeedbackRequest
 import com.mosl.saathi.api.model.reactivation.ReactivationSummaryRequest
 import com.mosl.shared.util.toConvertDecimals
@@ -50,12 +51,17 @@ class ReactivationRepositoryImpl @Inject constructor(
             } else null
             if (jsonArray != null && jsonArray.length() > 0) {
                 val colHeaders: MutableList<ColHeader> = mutableListOf()
-                val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
+
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
                     val header = iterator.next().toString()
-                    colHeaders.add(ColHeader(header))
+                    if(header == "BranchCode" || header == "Export" ||
+                        header == "Period" || header == "IsAdminMode" || header == "Status" ||
+                        header == "InApproval" || header == "ApprovalFieldList" ){
+                    }else{
+                        colHeaders.add(ColHeader(header))
+                    }
                 }
 
                 val headers = colHeaders.map {
@@ -68,9 +74,80 @@ class ReactivationRepositoryImpl @Inject constructor(
                 for (i in 0 until jsonArray.length()) {
                     val json = jsonArray.getJSONObject(i)
                     val values: ArrayList<String> = ArrayList()
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
 
                     headers.forEach { header ->
-                        values.add(json.get(header).toString())
+                        if(header == "IsEditable"){
+                            if(json.get(header).toString().equals("True", ignoreCase = true)){
+                                values.add("Edit")
+                            }else{
+                                values.add(" ")
+                            }
+                        }else{
+                            values.add(json.get(header).toString())
+                        }
+                        hasMap[header] = json.get(header)
+                            .toString()
+                    }
+                    data.add(ReactivationDetailData(setData(values), hasMap))
+                }
+                ReactivationDetailCombo(headers, data = data)
+
+            } else {
+                ReactivationDetailCombo(emptyList(), data = emptyList())
+            }
+        }
+    }
+
+    override fun getReactivationDetailForTL(
+        employeeCode: String,
+        firstReportingTo: String,
+        period: String,
+        stage: String
+    ): Observable<ReactivationDetailCombo> {
+        val request = ReactivationDetailTLRequest(employeeCode,firstReportingTo, period, stage)
+        return saathiApi.getReactivationDetailTL(request).map { response ->
+            val jsonObject = JSONObject(response)
+            val jsonArray = if (jsonObject.has("Response")) {
+                jsonObject.getJSONObject("Response").getJSONArray("Data")
+            } else null
+            if (jsonArray != null && jsonArray.length() > 0) {
+                val colHeaders: MutableList<ColHeader> = mutableListOf()
+
+                val first = jsonArray.getJSONObject(0)
+                val iterator = first.keys()
+                while (iterator.hasNext()) {
+                    val header = iterator.next().toString()
+                    if(header == "BranchCode" || header == "Export" ||
+                        header == "Period" || header == "IsAdminMode" || header == "Status" ||
+                        header == "InApproval" || header == "ApprovalFieldList" ){
+                    }else{
+                        colHeaders.add(ColHeader(header))
+                    }
+                }
+
+                val headers = colHeaders.map {
+                    it.copy(index = response.indexOf(it.label))
+                }
+                    .sortedBy { it.index }
+                    .map { it.label }
+
+                val data: ArrayList<ReactivationDetailData> = ArrayList()
+                for (i in 0 until jsonArray.length()) {
+                    val json = jsonArray.getJSONObject(i)
+                    val values: ArrayList<String> = ArrayList()
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
+
+                    headers.forEach { header ->
+                        if(header == "IsEditable"){
+                            if(json.get(header).toString().equals("True", ignoreCase = true)){
+                                values.add("Edit")
+                            }else{
+                                values.add(" ")
+                            }
+                        }else{
+                            values.add(json.get(header).toString())
+                        }
                         hasMap[header] = json.get(header)
                             .toString()
                     }
@@ -95,12 +172,17 @@ class ReactivationRepositoryImpl @Inject constructor(
             } else null
             if (jsonArray != null && jsonArray.length() > 0) {
                 val colHeaders: MutableList<ColHeader> = mutableListOf()
-                val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
+
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
                     val header = iterator.next().toString()
-                    colHeaders.add(ColHeader(header))
+                    if(header == "BranchCode" || header == "Export" ||
+                        header == "IsAdminMode" || header == "Status" ||
+                        header == "InApproval" || header == "ApprovalFieldList" ){
+                    }else{
+                        colHeaders.add(ColHeader(header))
+                    }
                 }
 
                 val headers = colHeaders.map {
@@ -113,9 +195,18 @@ class ReactivationRepositoryImpl @Inject constructor(
                 for (i in 0 until jsonArray.length()) {
                     val json = jsonArray.getJSONObject(i)
                     val values: ArrayList<String> = ArrayList()
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
 
                     headers.forEach { header ->
-                        values.add(json.get(header).toString())
+                        if(header == "IsEditable"){
+                            if(json.get(header).toString().equals("True", ignoreCase = true)){
+                                values.add("Edit")
+                            }else{
+                                values.add(" ")
+                            }
+                        }else{
+                            values.add(json.get(header).toString())
+                        }
                         hasMap[header] = json.get(header)
                             .toString()
                     }

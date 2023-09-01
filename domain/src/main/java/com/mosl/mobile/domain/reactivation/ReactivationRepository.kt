@@ -10,6 +10,8 @@ interface ReactivationRepository {
 
     fun getReactivationDetailForSales(period : String, stage : String): Observable<ReactivationDetailCombo>
 
+    fun getReactivationDetailForTL(employeeCode : String,firstReportingTo : String,period : String, stage : String): Observable<ReactivationDetailCombo>
+
     fun getReactivationAssignedHierarchyClientReportList(period : String, stage : String): Observable<ReactivationDetailCombo>
 
     fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<ReactivationFeedbackResponse>

@@ -14,6 +14,10 @@ interface ReactivationDetailView : BaseView {
     fun renderData(uiModel: UiModel<ReactivationDetailCombo>)
 
     fun getFeedbackSubmitData():ReactivationFeedbackItem
-    fun fnCallFeedbackSubmit():Observable<ReactivationDetailUiEvent.onFeedbackSubmitCalled>
+    fun fnCallFeedbackSubmit():Observable<ReactivationDetailUiEvent.OnFeedbackSubmitCalled>
     fun renderFeedbackSubmit(uiModel: UiModel<ReactivationFeedbackResponse>)
+
+    fun onHierarchyRowClick():Observable<ReactivationDetailUiEvent.OnHierarchyRowClick>
+
+    fun onRefreshDetailTable():Observable<ReactivationDetailUiEvent.RefreshDetailTable>
 }

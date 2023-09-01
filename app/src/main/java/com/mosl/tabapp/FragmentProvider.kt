@@ -66,6 +66,8 @@ import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailModule
+import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
+import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLModule
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryModule
 import com.mosl.tabapp.report.ReportFragment
@@ -208,4 +210,7 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReactivationDetailModule::class])
     fun provideReactivationDetailFragmentFactory(): ReactivationDetailFragment
+
+    @ContributesAndroidInjector(modules = [ReactivationDetailTLModule::class])
+    fun provideReactivationDetailTLFragmentFactory(): ReactivationDetailTLFragment
 }

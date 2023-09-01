@@ -4,7 +4,10 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 sealed class ReactivationDetailUiEvent {
     data class OnEditClick(val refNo: String) : ReactivationDetailUiEvent()
-    object onFeedbackSubmitCalled:ReactivationDetailUiEvent()
+    object OnFeedbackSubmitCalled:ReactivationDetailUiEvent()
+    data class OnHierarchyRowClick(val employeeCode: String, val firstReportingTo : String):ReactivationDetailUiEvent()
+    object RefreshDetailTable:ReactivationDetailUiEvent()
+
     companion object {
         @Volatile private var instance: PublishSubject<ReactivationDetailUiEvent>? = null
 

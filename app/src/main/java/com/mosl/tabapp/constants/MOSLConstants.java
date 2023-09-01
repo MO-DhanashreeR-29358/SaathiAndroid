@@ -285,5 +285,7 @@ public interface MOSLConstants extends LabelConfig {
     String STRING_TITLE = "title";
     String REACTIVATION_PERIOD = "period_filter";
     String REACTIVATION_TYPE = "reactivation_type";
+    String REACTIVATION_EMP_CODE = "emp_code";
+    String REACTIVATION_FIRST_REPORTING_TO = "first_reporting_to";
 }
 
