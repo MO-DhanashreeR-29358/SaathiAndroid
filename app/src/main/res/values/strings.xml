@@ -490,8 +490,8 @@
     <string name="hint_lead_creation_referee_email">Referee Email</string>
     <string name="hint_lead_creation_referee_mobile">Referee Mobile</string>
     <string name="hint_lead_creation_assign_to">Assign to</string>
-    <string name="hint_lead_creation_secondary_rm_title">Secondary RM (Bank RM)</string>
-    <string name="hint_lead_creation_secondary_rm_mo_title">Secondary RM (MO RM)</string>
+    <string name="hint_lead_creation_secondary_rm_title">Secondary RM (Bank RM)*</string>
+    <string name="hint_lead_creation_secondary_rm_mo_title">Secondary RM (MO RM)*</string>
     <string name="hint_lead_creation_secondary_rm_pcg_title">Secondary RM (WealthManager RM)</string>
     <string name="is_wealth_rm_label">Is this wealth RM</string>
     <string name="hint_lead_creation_alternate_mobile">Alternate Mobile No</string>

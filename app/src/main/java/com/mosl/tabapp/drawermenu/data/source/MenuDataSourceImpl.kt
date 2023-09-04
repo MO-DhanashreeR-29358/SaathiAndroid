@@ -221,7 +221,7 @@ open class MenuDataSourceImpl @Inject constructor(
             add(1, getQRCode())
         }
         if (isSHowReactivation) {
-            add(3, getReactivation())
+            add(4, getReactivation())
         }
 
         return this

@@ -228,6 +228,10 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_enter_secondary_rm
             }
 
+            input.secondaryRM.isBlank() &&  user.isAllianceBusiness() && input.selectedBank.bankName == "Au Bank" -> {
+                identifier = 37
+                R.string.error_message_enter_secondary_rm
+            }
 
             else -> {
                 identifier = 0

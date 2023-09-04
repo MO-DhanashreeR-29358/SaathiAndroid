@@ -910,6 +910,7 @@
                         android:orientation="horizontal"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/llSearch">
 
@@ -941,6 +942,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="5dp"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/wmcodecontainer">
@@ -984,7 +986,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/error_message_enter_secondary_rm"
                         android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_5sdp"
+                        android:textSize="@dimen/_11sdp"
                         android:layout_marginTop="5dp"
                         android:visibility="gone"
                         android:layout_marginStart="@dimen/_35sdp"

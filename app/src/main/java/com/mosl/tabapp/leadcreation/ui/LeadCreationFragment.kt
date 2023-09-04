@@ -501,15 +501,21 @@ class LeadCreationFragment : CommonFragment(),
         if (userManager.user.isAllianceBusiness()) {
             binding.llSearchSecondaryRM.isVisible = true
             binding.actSecondaryRM.apply {
+                var moRm :String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
+                var bankRm :String = getString(R.string.hint_lead_creation_secondary_rm_title)
                 userManager.getUser()?.apply {
                     if (isAufsb()) {
-                        setHint(R.string.hint_lead_creation_secondary_rm_mo_title)
+                        setHint(moRm)
                     } else {
-                        setHint(R.string.hint_lead_creation_secondary_rm_title)
+                        setHint(bankRm)
                     }
                 }
                 setListener { secondaryRM = null }
                 setOnClickListener {
+                    if(getBank()!!.bankId   == -1){
+                        Toast.makeText(requireContext(), "Please select bank ", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
                     if(getBranch()!!.branchId   == -1){
                         Toast.makeText(requireContext(), "Please select branch ", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
@@ -524,9 +530,9 @@ class LeadCreationFragment : CommonFragment(),
                     secondaryRMSearchList.show()
                     userManager.getUser()?.apply {
                         if (isAufsb()) {
-                            secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_mo_title))
+                            secondaryRMSearchList.setCustomTitle(moRm.replace("*", ""))
                         } else {
-                            secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_title))
+                            secondaryRMSearchList.setCustomTitle(bankRm.replace("*", ""))
                         }
                     }
                     val assingViewListner: ListPickerListneable = object : ListPickerListneable {
@@ -549,8 +555,6 @@ class LeadCreationFragment : CommonFragment(),
                     secondaryRMSearchList.setmListner(assingViewListner)
                 }
             }
-        }else{
-            binding.llSearchSecondaryRM.isVisible = false
         }
     }
 
@@ -610,9 +614,6 @@ class LeadCreationFragment : CommonFragment(),
                     secondaryRMSearchList.setmListner(assingViewListner)
                 }
             }
-        }else{
-            binding.wmcodecontainer.isVisible = false
-            binding.llSearchSecondaryRM.isVisible = false
         }
     }
 
@@ -1201,6 +1202,10 @@ class LeadCreationFragment : CommonFragment(),
                 36 ->{
                     binding.tvExpectedMarginError.setText(getString(it))
                 }
+                37 -> {
+                    binding.tvSecondaryRmError.isVisible = true
+                    binding.tvSecondaryRmError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1430,6 +1435,28 @@ class LeadCreationFragment : CommonFragment(),
 
         uiModel.onSuccess {
             branchAdapter.setSpinnerData(binding.spBranch, it)
+            if (userManager.user.isAllianceBusiness()) {
+                binding.actSecondaryRM.apply {
+                    var moRm: String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
+                    var bankRm: String = getString(R.string.hint_lead_creation_secondary_rm_title)
+                    userManager.getUser()?.apply {
+                        if (isAufsb()) {
+                            if (getBank()!!.bankName == "Au Bank") {
+                                setHint(moRm)
+                            } else {
+                                setHint(moRm.replace("*", ""))
+                            }
+
+                        } else {
+                            if (getBank()!!.bankName == "Au Bank") {
+                                setHint(bankRm)
+                            } else {
+                                setHint(bankRm.replace("*", ""))
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
