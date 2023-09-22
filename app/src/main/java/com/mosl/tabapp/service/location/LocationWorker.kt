@@ -124,10 +124,13 @@ class LocationWorker(
             val geocoder = Geocoder(context, Locale.getDefault())
 
             val addressList = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            if (addressList.size > 0) {
-                geoArea = addressList[0].getAddressLine(0)
-                geoPincode = addressList[0].postalCode ?: "000000"
-            }
+           if(addressList != null){
+               if (addressList.size > 0) {
+                   geoArea = addressList[0].getAddressLine(0)
+                   geoPincode = addressList[0].postalCode ?: "000000"
+               }
+           }
+
 
             val locationData = LocationData(
                 location.latitude.toString(),

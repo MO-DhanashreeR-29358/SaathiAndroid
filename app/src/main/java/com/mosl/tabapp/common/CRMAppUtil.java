@@ -422,7 +422,42 @@ public class CRMAppUtil {
         columnName = columnName.replace("flg_Hierarchy", "Hierarchy");
         columnName = columnName.replace("flt_Hierarchy_empCode", "RM Name");
         columnName = columnName.replace("flt_Hierarchy_Branch_Code", "Branch Code");
+        columnName = columnName.replace("_", " ");
+
+        return columnName;
+    }
+
+    public static String getRefreshReactivationColumnName(String columnName) {
+
         columnName = columnName.replace("IsEditable", "Action");
+        columnName = columnName.replace("ClientName", "Client Name");
+        columnName = columnName.replace("LeadId", "Lead Id");
+        columnName = columnName.replace("EmailId", "Email Id");
+        columnName = columnName.replace("AssignedDate", "Assigned Date");
+        columnName = columnName.replace("LastMeetingDate", "Last Meeting Date");
+        columnName = columnName.replace("SMName", "SM Name");
+        columnName = columnName.replace("ASMName", "ASM Name");
+        columnName = columnName.replace("RHName", "RH Name");
+        columnName = columnName.replace("FinalActivationDate", "Final Activation Date");
+        columnName = columnName.replace("ClientBranch", "Client Branch");
+        columnName = columnName.replace("CurrentStage", "Current Stage");
+        columnName = columnName.replace("RefNo", "Ref No");
+
+        columnName = columnName.replace("EmployeeCode", "Employee Code");
+        columnName = columnName.replace("EmployeeName", "Employee Name");
+        if(columnName.equals("FirstReportingTo")){
+            columnName = columnName.replace("FirstReportingTo", "First Reporting To");
+        }
+        if(columnName.equals("FirstReportingToName")){
+            columnName = columnName.replace("FirstReportingToName", "First Reporting To Name");
+        }
+        if(columnName.equals("ClientCode")){
+            columnName = columnName.replace("ClientCode", "Client Code");
+        }
+        if(columnName.equals("ClientCodeCount")){
+            columnName = columnName.replace("ClientCodeCount", "Client Code Count");
+        }
+
         columnName = columnName.replace("_", " ");
 
         return columnName;

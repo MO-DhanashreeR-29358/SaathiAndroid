@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelContainer"
-        android:text="Filter"
+        android:text="Period"
         android:textSize="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:padding="@dimen/_10sdp">

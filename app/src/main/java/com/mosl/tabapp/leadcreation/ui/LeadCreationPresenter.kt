@@ -38,9 +38,7 @@ class LeadCreationPresenter @Inject constructor(
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
 
-        view.onBranchChange()
-            .subscribe {view.renderBranchChange()}
-            .addTo(disposable)
+
 
 
         view.onPrimaryCheckboxChanged()

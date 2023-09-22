@@ -479,6 +479,50 @@ class LeadCreationFragment : CommonFragment(),
       if(userManager.getUser()!!.isMoInternationUser()){
           binding.ilExpectedMargin.isVisible = false
       }
+
+        binding.spBranch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                binding.actSecondaryRM.setText("")
+                binding.tvSecondaryRmError.isVisible = false
+
+                if (userManager.user.isAllianceBusiness()) {
+                    binding.actSecondaryRM.apply {
+                        var moRm: String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
+                        var bankRm: String = getString(R.string.hint_lead_creation_secondary_rm_title)
+                        userManager.getUser()?.apply {
+                            if (isAufsb()) {
+                                if (getBank()!!.bankName == "Au Bank") {
+                                    setHint(moRm)
+                                } else {
+                                    setHint(moRm.replace("*", ""))
+                                }
+
+                            } else {
+                                if (getBank()!!.bankName == "Au Bank") {
+                                    if(getBranch()!!.branchName == "AUSFBREF"){
+                                        setHint(bankRm.replace("*", ""))
+                                    }else{
+                                        setHint(bankRm)
+                                    }
+
+                                } else {
+                                    setHint(bankRm.replace("*", ""))
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+
+
+
     }
 
     private fun setupRINRI(){
@@ -542,7 +586,7 @@ class LeadCreationFragment : CommonFragment(),
                             if (clientModel.isNoData) {
                                 return
                             }
-                            binding.actSecondaryRM.setText(clientModel.attendeeName)
+                            binding.actSecondaryRM.setText(clientModel.attendeeCode + " - "+ clientModel.attendeeName)
                             secondaryRM = clientModel.attendeeCode
                             secondaryRMSearchList.dismiss()
                             binding.actSecondaryRM.setClearIconVisible(true)
@@ -943,6 +987,7 @@ class LeadCreationFragment : CommonFragment(),
             val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
             val attendeeAdapter = AttendeeAdapter(requireContext(), list)
             searchList.setAdapter(attendeeAdapter)
+            attendeeAdapter.notifyDataSetChanged()
         }
 
         uiModel.onSuccess {
@@ -953,6 +998,7 @@ class LeadCreationFragment : CommonFragment(),
             }
             val attendeeAdapter = AttendeeAdapter(requireContext(), list)
             searchList.setAdapter(attendeeAdapter)
+            attendeeAdapter.notifyDataSetChanged()
         }
 
     }
@@ -1206,6 +1252,10 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvSecondaryRmError.isVisible = true
                     binding.tvSecondaryRmError.text = getString(it)
                 }
+                38 -> {
+                    binding.tvSecondaryRmError.isVisible = true
+                    binding.tvSecondaryRmError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1435,6 +1485,8 @@ class LeadCreationFragment : CommonFragment(),
 
         uiModel.onSuccess {
             branchAdapter.setSpinnerData(binding.spBranch, it)
+
+
             if (userManager.user.isAllianceBusiness()) {
                 binding.actSecondaryRM.apply {
                     var moRm: String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
@@ -1462,6 +1514,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderBranchChange() {
         binding.actSecondaryRM.setText("")
+        binding.tvSecondaryRmError.isVisible = false
+
     }
 
     override fun renderStageList(uiModel: UiModel<List<RowData>>) {

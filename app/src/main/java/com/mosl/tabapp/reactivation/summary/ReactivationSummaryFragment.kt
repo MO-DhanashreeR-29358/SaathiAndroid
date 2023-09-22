@@ -48,10 +48,10 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         val filter1 = FilterRowData(0,"MTD","MTD", "")
         val filter2 = FilterRowData(1,"YTD","YTD", "")
         val filter7 = FilterRowData(2,"Last Month","Last Month", "")
-        val filter3 = FilterRowData(3,"01","01", "")
-        val filter4 = FilterRowData(4,"02","02", "")
-        val filter5 = FilterRowData(5,"03","03", "")
-        val filter6 = FilterRowData(6,"04","04", "")
+        val filter3 = FilterRowData(3,"Q1","Q1", "")
+        val filter4 = FilterRowData(4,"Q2","Q2", "")
+        val filter5 = FilterRowData(5,"Q3","Q3", "")
+        val filter6 = FilterRowData(6,"Q4","Q4", "")
         val filter8 = FilterRowData(7,"Last FY","Last FY", "")
         list.add(filter1)
         list.add(filter2)
@@ -111,13 +111,13 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
 
     override fun onNonContactedClick(): Observable<Unit> {
         return binding.nonContactedContainer.clicks().map {
-            reactivationCurrentStage = "NotContacted"
+            reactivationCurrentStage = "Not Contacted"
         }
     }
 
     override fun onReactivatedClientslick(): Observable<Unit> {
         return binding.reactivatedClientsContainer.clicks().map {
-            reactivationCurrentStage = "ReactivatedClients"
+            reactivationCurrentStage = "Reactivated"
         }
     }
 

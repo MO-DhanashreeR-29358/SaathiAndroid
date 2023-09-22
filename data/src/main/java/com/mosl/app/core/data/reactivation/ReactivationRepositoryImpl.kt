@@ -177,7 +177,7 @@ class ReactivationRepositoryImpl @Inject constructor(
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
                     val header = iterator.next().toString()
-                    if(header == "BranchCode" || header == "Export" ||
+                    if(header == "BranchCode" || header == "Export" || header == "Level" ||
                         header == "IsAdminMode" || header == "Status" ||
                         header == "InApproval" || header == "ApprovalFieldList" ){
                     }else{

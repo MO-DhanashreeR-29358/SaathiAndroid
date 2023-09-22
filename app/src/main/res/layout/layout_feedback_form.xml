@@ -75,8 +75,11 @@
                 android:background="@drawable/login_edittext_border"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
-                android:inputType="textNoSuggestions"
+                android:inputType="textNoSuggestions|textMultiLine"
                 android:singleLine="false"
+                android:maxLength="200"
+                android:maxLines ="5"
+                android:scrollHorizontally="false"
                 android:gravity="start"
                 android:textCursorDrawable="@null" />
 

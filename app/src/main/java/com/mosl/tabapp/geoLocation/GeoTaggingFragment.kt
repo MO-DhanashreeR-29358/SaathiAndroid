@@ -141,7 +141,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
     private fun getAddress(latLng: LatLng): String {
         try {
             val geocoder = Geocoder(mContext, Locale.getDefault())
-            val addresses: List<Address>
+            val addresses: List<Address>?
 
             addresses = geocoder.getFromLocation(
                 latLng.latitude,

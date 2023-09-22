@@ -161,8 +161,10 @@ class SettingFragment : PreferenceFragmentCompat() {
             }
 
             val prefLocation = findPreference<Preference>(getString(R.string.preference_loc_key))
-            if (addressList.size > 0 && !isLocationFromMockProvider(requireContext(), location)) {
-                prefLocation?.summary = addressList[0].getAddressLine(0)
+            if(addressList != null){
+                if (addressList.size > 0 && !isLocationFromMockProvider(requireContext(), location)) {
+                    prefLocation?.summary = addressList[0].getAddressLine(0)
+                }
             }
 
             Timber.d("lat n long %s%s", latitude, longitude)
