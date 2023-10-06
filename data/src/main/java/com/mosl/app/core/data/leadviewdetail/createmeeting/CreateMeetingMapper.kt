@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
+import com.mosl.saathi.api.model.createmeeting.ChipsEventResponse
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListResponse
@@ -20,7 +21,9 @@ object CreateMeetingMapper {
             currentStageSince = clientDetailItem.pendingDays ?: "",
             leadId = clientDetailItem.leadID,
             isOnlyClient = clientDetailItem.isOnlyClient,
-            isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: ""
+            isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: "",
+            sourceName = clientDetailItem.sourceName?: "",
+            prospectSource = clientDetailItem.prospectSource?: ""
         )
     }
 
@@ -56,7 +59,9 @@ object CreateMeetingMapper {
                 ?: "",
             leadId = leadViewItem.leadID,
             isPotentialPMSProduct = leadViewItem.isPotentialPMSProduct ?: "",
-            isOnlyClient = false
+            isOnlyClient = false,
+            sourceName = leadViewItem.sourceName?: "",
+            prospectSource = leadViewItem.prospectSource?: ""
         )
     }
 
@@ -102,5 +107,14 @@ object CreateMeetingMapper {
             status = status,
             errorMessage = error
         )
+    }
+
+    fun transformEventChipsList(
+        list: List<ChipsEventResponse>
+    ): List<String> {
+        return list.map {
+            it.eventName
+        }.addDefaultSelection("Select Event")
+
     }
 }

@@ -43,6 +43,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
 
           tvProduct.text = it.product
           tvActivityType.text = it.activityType
+          tvEVentName.text = it.eventName
           tvMeetingReason.text = it.meetingReason
           tvMeetingDuration.text = it.meetingDuration
           tvActionable.text = it.actionable

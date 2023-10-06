@@ -111,6 +111,7 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       location = location ?: "",
       touchedUntouched = touchedUntouched ?: "",
       feedback = feedback ?: "",
-      geoTag = geoTag ?: ""
+      geoTag = geoTag ?: "",
+      eventName = eventName ?: ""
   )
 }

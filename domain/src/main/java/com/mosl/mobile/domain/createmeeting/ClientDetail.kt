@@ -8,7 +8,9 @@ data class ClientDetail(
   @JvmField val branchcode: String,
   @JvmField val clientcode: String,
   @JvmField val isOnlyClient: Boolean,
-  @JvmField val isPotentialPMSProduct: String
+  @JvmField val isPotentialPMSProduct: String,
+  @JvmField val sourceName: String,
+  @JvmField val prospectSource: String
 )
 
 data class LookUp(

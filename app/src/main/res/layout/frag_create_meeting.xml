@@ -37,6 +37,29 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_chips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:errorTextAppearance="@style/error_appearance"
+            app:hintEnabled="false"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_chips"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_chips" />
+
+            <Spinner
+                android:id="@+id/spChips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_mobile_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

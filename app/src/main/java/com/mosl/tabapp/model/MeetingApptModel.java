@@ -88,6 +88,15 @@ public class MeetingApptModel implements Serializable {
     private String isPotentialPMSProduct;
     private String touchedUntouchedId;
     private String feedbackId;
+    private String meetingEventId;
+
+    public String getMeetingEventId() {
+        return meetingEventId;
+    }
+
+    public void setMeetingEventId(String meetingEventId) {
+        this.meetingEventId = meetingEventId;
+    }
 
     public String getTouchedUntouchedId() {
         return touchedUntouchedId;
@@ -480,6 +489,7 @@ public class MeetingApptModel implements Serializable {
         json += ",\"ProductTypeID\":" + getProduct();
         json += ",\"TouchedUntouchedID\":" + getTouchedUntouchedId();
         json += ",\"FeedbackID\":" + getFeedbackId();
+        json += ",\"MeetingEventId\":\"" + getMeetingEventId()+ "\"";
         json += "}";
 
         return json;

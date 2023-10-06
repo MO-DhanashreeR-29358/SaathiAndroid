@@ -75,6 +75,14 @@ class CreateMeetingPresenter @Inject constructor(
             .subscribe(view::renderMeetingReason)
             .addTo(disposable)
 
+        view.onChipsApiCall()
+            .switchMap {
+                repository.getChipsList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderChipsList)
+            .addTo(disposable)
+
         productSelectedObs.filter { it != CreateMeetingConstants.SELECT_PRODUCT }
             .subscribe {
                 view.getSelectedProduct()
@@ -401,6 +409,7 @@ class CreateMeetingPresenter @Inject constructor(
         data.geoLongitude = view.getLongitude()
         data.touchedUntouchedId = view.getSelectedTouchedUntouched()?.lookUpID.toString()
         data.feedbackId = view.getSelectedFeedback()?.lookUpID.toString()
+        data.meetingEventId = view.getSelectedEvent()
         return data
     }
 

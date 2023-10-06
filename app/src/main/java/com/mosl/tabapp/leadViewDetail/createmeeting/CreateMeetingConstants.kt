@@ -46,6 +46,7 @@ object CreateMeetingConstants {
   }
 
   const val MSG_SELECT_ACTIVITY_TYPE = "Select Activity Type"
+  const val MSG_SELECT_EVENT = "Select Event"
   const val MSG_SELECT_MOBILE_NUMBER = "Select Mobile Number For Verification Code"
   const val MSG_SELECT_PRODUCT = "Select Product"
   const val MSG_SELECT_ACTIONABLE = "Select Actionables"

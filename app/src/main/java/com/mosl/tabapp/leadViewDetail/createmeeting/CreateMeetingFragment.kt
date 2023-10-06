@@ -8,8 +8,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.location.Geocoder
-import android.location.Location
 import android.location.LocationManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
@@ -26,6 +24,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -49,7 +48,6 @@ import com.mosl.tabapp.R.string
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
-import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
@@ -111,6 +109,7 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.geoLocation.LocationItem
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_EVENT
 
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
@@ -145,6 +144,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var travellingModeAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
+    private lateinit var chipsAdapter: ArrayAdapter<String>
+
     private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
     private lateinit var mainFromDate: String
     override fun getLayout() = layout.frag_create_meeting
@@ -162,6 +163,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var strLongitude : String = ""
     var strAddress : String = ""
     var isMockLocationEnabled : Boolean = false
+    var strSourceName : String = ""
+    var strProspectSource : String = ""
 
     override fun onViewCreated(
         view: View,
@@ -191,6 +194,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spActivityType.adapter = activityAdapter
+
+        chipsAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spChips.adapter = chipsAdapter
+
         mobileNumberAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spMobileNumber.adapter = mobileNumberAdapter
 
@@ -261,6 +268,20 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     }
 
+    override fun onChipsApiCall(): Observable<CallChipsApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderChipsList(uiModel: UiModel<List<String>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure { showOnFailurePopup(it) }
+
+        uiModel.onSuccess {
+            chipsAdapter.setSpinnerData(binding.spChips, it)
+        }
+    }
+
     override fun onTouchedUntouchedEventFired(): Observable<TouchedUntouchedRequest> {
         return uiSubject.ofType()
     }
@@ -299,6 +320,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             val clientDetail = it.clientDetail
+            strSourceName = clientDetail.sourceName
+            strProspectSource = clientDetail.prospectSource
             binding.layoutTopSection.tvLeadId.text = clientDetail.leadId.toString()
             binding.layoutTopSection.tvCurrentStage.text = clientDetail.currentStage
             if (clientDetail.currentStageSince.isNotEmpty()) {
@@ -958,6 +981,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (getSelectedActivityType() == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
             binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
             false
+        } else  if(getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true) &&
+            userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
+            && strProspectSource.equals("BTL activity", ignoreCase = true)
+            && getSelectedEvent().equals("Select Event")){
+            binding.tilChips.setErrorMessages(MSG_SELECT_EVENT)
+            false
         } else if (getSelectedActivityType()?.isPersonalMeeting() == true && !currentDate.equals(selectedDate)) {
             alert("Can not set previous date for Activity type Personal meeting")
             false
@@ -1162,6 +1191,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return null
     }
 
+    override fun getSelectedEvent(): String? {
+        if (binding.spChips.selectedItem is String) {
+            return (binding.spChips.selectedItem as String)
+        }
+        return null
+    }
+
     override fun getMobileNumberType(): MobileListData? {
         if (binding.spMobileNumber.selectedItem is MobileListData) {
             return (binding.spMobileNumber.selectedItem as MobileListData)
@@ -1218,6 +1254,15 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.btnSendOtp.visibility = View.GONE
                 binding.tilMobileNumber.visibility = View.GONE
             }
+        }
+        if (show) {
+            if (userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
+                && strProspectSource.equals("BTL activity", ignoreCase = true) ){
+                uiSubject.onNext(CallChipsApi)
+                binding.tilChips.isVisible = true
+            }
+        }else{
+            binding.tilChips.isVisible = false
         }
         resetDataOnActivityTypeChange()
     }

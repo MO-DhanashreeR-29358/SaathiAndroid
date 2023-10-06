@@ -76,6 +76,10 @@ data class User(
         return currentBusinessProfile.businessUnitId?.equals("5") ?: false
     }
 
+    fun isOmni(): Boolean {
+        return currentBusinessProfile.businessUnitId?.equals("14") ?: false
+    }
+
     fun isRM(): Boolean {
         var flag: Boolean = false
         if(!currentBusinessProfile.businessUnitId.equals("14")) {

@@ -16,4 +16,6 @@ sealed class CreateMeetingUiEvent {
   object TouchedUntouchedRequest : CreateMeetingUiEvent()
   object FeedbackRequest : CreateMeetingUiEvent()
   data class OnLocationSaveClick(val data: LocationItem) : CreateMeetingUiEvent()
+
+  object CallChipsApi : CreateMeetingUiEvent()
 }

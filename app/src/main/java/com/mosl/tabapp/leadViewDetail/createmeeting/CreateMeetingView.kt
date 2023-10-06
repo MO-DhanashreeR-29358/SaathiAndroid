@@ -38,6 +38,7 @@ interface CreateMeetingView : BaseView {
   fun getSelectedMeetingObjective(): LookUp?
   fun getSelectedMeetingReason(): LookUp?
   fun getSelectedActivityType(): LookUp?
+  fun getSelectedEvent(): String?
   fun getMobileNumberType(): MobileListData?
   fun getSelectedProduct(): LookUp?
   fun getSelectedCategory(): LookUp?
@@ -118,4 +119,8 @@ interface CreateMeetingView : BaseView {
 
   fun onLocationSaveEventFired() : Observable<OnLocationSaveClick>
   fun renderLocationSave(locationItem: LocationItem)
+
+  fun onChipsApiCall(): Observable<CallChipsApi>
+  fun renderChipsList(uiModel: UiModel<List<String>>)
+
 }

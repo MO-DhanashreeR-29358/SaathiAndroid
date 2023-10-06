@@ -28,4 +28,6 @@ interface CreateMeetingRepository {
         ucid: String,
         leadId: String
     ): Observable<List<MobileListData>>
+    fun getChipsList(
+    ): Observable<List<String>>
 }

@@ -90,6 +90,7 @@
     <string name="text_label_attendee3">Attendee3</string>
     <string name="text_label_status">Status</string>
     <string name="text_label_activity_type">Activity Type</string>
+    <string name="text_label_event_name">Event Name</string>
     <string name="text_label_meeting_reason">Meeting Reason</string>
     <string name="txt_label_meeting_duration">Meeting Duration</string>
     <string name="text_label_actionable">Actionable</string>
@@ -409,6 +410,7 @@
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>
+    <string name="txt_lable_chips">Event*</string>
     <string name="txt_lable_mobile_number">Mobile Number*</string>
     <string name="txt_lable_meeting_date">Meeting Date</string>
     <string name="txt_lable_product">Product*</string>

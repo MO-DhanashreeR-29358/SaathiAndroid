@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapToSendOtpResponse
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformEventChipsList
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformMobileList
 import com.mosl.app.core.data.pendingapproval.report.mapToMultiUpdateApprovalresponse
 import com.mosl.mobile.domain.createmeeting.*
@@ -120,6 +121,11 @@ class CreateMeetingRepositoryImpl @Inject constructor(
     ): Observable<List<MobileListData>> {
         return saathiApi.getMobileList(MobileListRequest(leadId, ucid))
             .map { transformMobileList(it) }
+    }
+
+    override fun getChipsList(): Observable<List<String>> {
+        return saathiApi.getChipsList()
+            .map { transformEventChipsList(it) }
     }
 
     override fun getCustomerServiceData(): Observable<Pair<List<LookUp>, List<LookUp>>> {
