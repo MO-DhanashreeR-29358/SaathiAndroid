@@ -23,20 +23,25 @@ class ReactivationSummaryPresenter @Inject constructor(
 
     override fun start() {
 
-        view.onPeriodChanged()
-            .filter(InvalidSelectionPredicate)
-            .map { view.getSelectedPeriod() }
+        onFetchCalled()
+            .switchMap {
+                repository.getReactivationSourceList()
+                    .compose(applyUiModel())
+            }.subscribe(view::renderSourceList, Timber::e)
+            .addTo(disposable)
+
+        view.onSearchClick()
             .switchMap {
                 if(userManager.user.isRetailSalesProfile()){
-                    repository.getReactivationSummaryForSales(it.value)
+                    repository.getReactivationSummaryForSales(view.getSelectedPeriod().value, view.getSelectedSource())
                         .compose(applyUiModel())
                 }else{
-                    repository.getReactivationSummaryForTL(it.value)
+                    repository.getReactivationSummaryForTL(view.getSelectedPeriod().value, view.getSelectedSource())
                         .compose(applyUiModel())
                 }
 
             }
-            .subscribe(view::renderOnPeriodChange, Timber::e)
+            .subscribe(view::renderSearchClick, Timber::e)
             .addTo(disposable)
 
         val onButtonClick = Observable.merge(
@@ -52,6 +57,7 @@ class ReactivationSummaryPresenter @Inject constructor(
                 var navigationConstants = NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL
                 args.putString(MOSLConstants.REACTIVATION_TYPE, view.getCurrentStage())
                 args.putString(MOSLConstants.REACTIVATION_PERIOD, view.getSelectedPeriod().value)
+                args.putString(MOSLConstants.REACTIVATION_SOURCE, view.getSelectedSource())
                 navigator.openPage(
                     navigationConstants.toString(),
                     args,

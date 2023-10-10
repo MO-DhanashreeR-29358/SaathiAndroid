@@ -38,6 +38,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
 
     var reactivationPeriodFilter : String = ""
     var reactivationCurrentStage : String =""
+    var reactivationSource : String =""
 
     private lateinit var dynamicHeaderRow: DynamicHeaderRow
     private lateinit var tableRowAdapter: TableRowAdapter<ReactivationDetailTableRow>
@@ -61,6 +62,7 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
         super.extractArguments(bundle)
         reactivationPeriodFilter = bundle.getString(MOSLConstants.REACTIVATION_PERIOD, "") ?: ""
         reactivationCurrentStage = bundle.getString(MOSLConstants.REACTIVATION_TYPE, "") ?: ""
+        reactivationSource = bundle.getString(MOSLConstants.REACTIVATION_SOURCE, "") ?: ""
     }
 
     private fun setupView(){
@@ -116,6 +118,10 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
 
     override fun getCurrentStage(): String {
         return reactivationCurrentStage
+    }
+
+    override fun getSourceFilter(): String {
+        return reactivationSource
     }
 
     override fun renderData(uiModel: UiModel<ReactivationDetailCombo>) {

@@ -11,6 +11,7 @@ interface ReactivationDetailView : BaseView {
 
     fun getPeriodFilter() : String
     fun getCurrentStage() : String
+    fun getSourceFilter() : String
     fun renderData(uiModel: UiModel<ReactivationDetailCombo>)
 
     fun getFeedbackSubmitData():ReactivationFeedbackItem

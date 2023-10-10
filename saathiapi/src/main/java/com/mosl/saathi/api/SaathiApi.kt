@@ -591,6 +591,11 @@ interface SaathiApi {
         @Body request: ReactivationSummaryRequest
     ): Observable<SaathiCommonResponse<ReactivationSummaryResponse>>
 
+    @POST("SMSCampaign/SourceForReactivationMappedClients")
+    fun getReactivationSource(
+        @Body request: ReactivationSourceRequest
+    ): Observable<SaathiCommonResponse<List<ReactivationSourceResponse>>>
+
     @POST("SMSCampaign/ReactivationAssignedClientReportList")
     fun getReactivationSummaryForTL(
         @Body request: ReactivationSummaryRequest

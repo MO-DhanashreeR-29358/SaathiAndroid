@@ -25,10 +25,10 @@ class ReactivationDetailPresenter @Inject constructor(
         Observable.merge(onFetchCalled(), view.onRefreshDetailTable())
             .switchMap {
                     if(userManager.user.isRetailSalesProfile()){
-                        repository.getReactivationDetailForSales(view.getPeriodFilter(), view.getCurrentStage())
+                        repository.getReactivationDetailForSales(view.getPeriodFilter(), view.getCurrentStage(), view.getSourceFilter())
                             .compose(applyUiModel())
                     }else{
-                        repository.getReactivationAssignedHierarchyClientReportList(view.getPeriodFilter(), view.getCurrentStage())
+                        repository.getReactivationAssignedHierarchyClientReportList(view.getPeriodFilter(), view.getCurrentStage(), view.getSourceFilter())
                             .compose(applyUiModel())
                     }
 
@@ -55,6 +55,7 @@ class ReactivationDetailPresenter @Inject constructor(
                 args.putString(MOSLConstants.REACTIVATION_FIRST_REPORTING_TO, it.firstReportingTo)
                 args.putString(MOSLConstants.REACTIVATION_TYPE, view.getCurrentStage())
                 args.putString(MOSLConstants.REACTIVATION_PERIOD, view.getPeriodFilter())
+                args.putString(MOSLConstants.REACTIVATION_SOURCE, view.getSourceFilter())
                 navigator.openPage(
                     navigationConstants.toString(),
                     args,

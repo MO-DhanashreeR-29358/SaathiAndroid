@@ -84,6 +84,7 @@ class AttendeeAdapter(
 
   fun setErrorData(throwable: Throwable) {
     if (throwable is ServiceFailureException) {
+      resultList.clear()
       resultList.addAll(
           listOf(
               Attendee(
@@ -97,13 +98,9 @@ class AttendeeAdapter(
   }
 
   fun setResultList(results: List<Attendee>) {
-    if (results.isEmpty()) {
-      notifyDataSetInvalidated()
-    } else {
       resultList.clear()
       resultList.addAll(results)
       notifyDataSetChanged()
-    }
   }
 
   internal class HolderView(parent: View) {

@@ -10,6 +10,7 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.reactivation.ReactivationSummaryItem
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FilterRowData
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
 
     lateinit var binding : FragmentReactivationSummaryBinding
-
+    private lateinit var sourceAdapter: ArrayAdapter<String>
     @Inject
     lateinit var presenter: ReactivationSummaryPresenter
 
@@ -37,6 +38,7 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         binding = FragmentReactivationSummaryBinding.bind(view)
         setupView()
         presenter.start()
+        dataActionSubject.onNext(DataAction.Fetch)
 
     }
 
@@ -63,6 +65,9 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         list.add(filter8)
 
         periodAdapter.setSpinnerData(binding.spPeriod, list)
+
+        sourceAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spSource.adapter = sourceAdapter
     }
 
     override fun onDestroyView() {
@@ -70,15 +75,19 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         presenter.stop()
     }
 
-    override fun onPeriodChanged(): Observable<Int> {
-        return binding.spPeriod.itemSelections()
-    }
-
     override fun getSelectedPeriod(): FilterRowData {
         return binding.spPeriod.selectedItem as FilterRowData
     }
 
-    override fun renderOnPeriodChange(uiModel: UiModel<ReactivationSummaryItem>) {
+    override fun getSelectedSource(): String {
+        return binding.spSource.selectedItem as String
+    }
+
+    override fun onSearchClick(): Observable<Unit> {
+        return binding.btnSearch.clicks()
+    }
+
+    override fun renderSearchClick(uiModel: UiModel<ReactivationSummaryItem>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
@@ -90,6 +99,14 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
                 tvTraded.text = it.traded
                 tvRevenue.text = it.revenue
             }
+        }
+    }
+
+    override fun renderSourceList(uiModel: UiModel<List<String>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            sourceAdapter.setSpinnerData(binding.spSource, it)
         }
     }
 
