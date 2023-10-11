@@ -1192,7 +1192,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getSelectedEvent(): String? {
-        if (binding.spChips.selectedItem is String) {
+        if (binding.spChips.selectedItem is String && getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)) {
             return (binding.spChips.selectedItem as String)
         }
         return null
