@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="@dimen/_5sdp"
             android:singleLine="true"
-            android:text="Reactivation Mapped Client Report"
+            android:text="Reactivation Assigned Clients"
             android:textColor="@color/alternateTextColor"
             android:textSize="@dimen/appTitleTextSize"
             android:textStyle="bold" />
