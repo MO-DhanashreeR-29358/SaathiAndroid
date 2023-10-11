@@ -67,9 +67,9 @@ class ReactivationDetailFragment : CommonFragment(), ReactivationDetailView {
 
     private fun setupView(){
         if(userManager.getUser()?.isRetailSalesProfile() == true){
-           binding.txtLables.text = "Reactivation Mapped Client Detail Report"
+           binding.txtLables.text = "Reactivation Assigned Client Detail Report"
         }else{
-            binding.txtLables.text = "Reactivation Mapped Client Hierarchy Report"
+            binding.txtLables.text = "Reactivation Assigned Hierarchy Clients"
         }
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = ReactivationDetailTableMapper.header(requireContext()) as DynamicHeaderRow

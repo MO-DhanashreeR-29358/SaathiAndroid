@@ -70,6 +70,7 @@ class ReactivationDetailTLFragment : CommonFragment(), ReactivationDetailTLView 
     }
 
     private fun setupView(){
+        binding.txtLables.text = "Reactivation Assigned Clients Detail"
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = ReactivationDetailTableMapper.header(requireContext()) as DynamicHeaderRow
         val mfAdapter =
