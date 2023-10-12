@@ -63,7 +63,8 @@ class ReactivationRepositoryImpl @Inject constructor(
                     val header = iterator.next().toString()
                     if(header == "BranchCode" || header == "Export" ||
                         header == "Period" || header == "IsAdminMode" || header == "Status" ||
-                        header == "InApproval" || header == "ApprovalFieldList" ){
+                        header == "InApproval" || header == "ApprovalFieldList"
+                        || header == "EmployeeCode" || header == "FirstReportingTo"){
                     }else{
                         colHeaders.add(ColHeader(header))
                     }
@@ -125,7 +126,8 @@ class ReactivationRepositoryImpl @Inject constructor(
                     val header = iterator.next().toString()
                     if(header == "BranchCode" || header == "Export" ||
                         header == "Period" || header == "IsAdminMode" || header == "Status" ||
-                        header == "InApproval" || header == "ApprovalFieldList" ){
+                        header == "InApproval" || header == "ApprovalFieldList"
+                        || header == "EmployeeCode" || header == "FirstReportingTo"){
                     }else{
                         colHeaders.add(ColHeader(header))
                     }
