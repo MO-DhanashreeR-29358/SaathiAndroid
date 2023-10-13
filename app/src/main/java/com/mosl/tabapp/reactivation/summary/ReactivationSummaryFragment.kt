@@ -107,6 +107,7 @@ class ReactivationSummaryFragment : CommonFragment(), ReactivationSummaryView {
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
             sourceAdapter.setSpinnerData(binding.spSource, it)
+            binding.btnSearch.performClick()
         }
     }
 
