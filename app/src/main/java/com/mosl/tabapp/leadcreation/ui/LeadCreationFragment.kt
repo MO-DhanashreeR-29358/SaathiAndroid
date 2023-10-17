@@ -1256,6 +1256,9 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvSecondaryRmError.isVisible = true
                     binding.tvSecondaryRmError.text = getString(it)
                 }
+                39 -> {
+                    binding.tvEmailError.setText(getString(it))
+                }
                 else -> {
                 }
 

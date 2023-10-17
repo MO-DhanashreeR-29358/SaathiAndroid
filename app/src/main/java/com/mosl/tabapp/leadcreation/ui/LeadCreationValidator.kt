@@ -71,6 +71,11 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_product_type
             }
 
+            input.emailId.isBlank()  -> {
+                identifier = 39
+                R.string.error_message_enter_email
+            }
+
             input.emailId.isNotBlank() &&
                     input.emailId.invalidEmail() -> {
                 identifier = 8

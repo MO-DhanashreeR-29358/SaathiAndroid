@@ -287,5 +287,7 @@ public interface MOSLConstants extends LabelConfig {
     String REACTIVATION_TYPE = "reactivation_type";
     String REACTIVATION_EMP_CODE = "emp_code";
     String REACTIVATION_FIRST_REPORTING_TO = "first_reporting_to";
+
+    String ROOTED_DEVICE_MESSAGE = "Your device is rooted, You will not be able to use the application!!";
 }
 

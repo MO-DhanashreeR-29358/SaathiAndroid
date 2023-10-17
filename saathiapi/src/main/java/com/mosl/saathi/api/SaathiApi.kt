@@ -369,7 +369,7 @@ interface SaathiApi {
     fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
     @POST("Lead/GetEventListMeeting")
-    fun getChipsList(): Observable<List<ChipsEventResponse>>
+    fun getChipsList(@Body request: ChipsEventsRequest): Observable<List<ChipsEventResponse>>
 
     @POST("UserApi/AutoCompleteAttendee")
     fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>

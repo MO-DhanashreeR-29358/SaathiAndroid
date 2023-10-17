@@ -8,8 +8,13 @@ import androidx.viewpager.widget.ViewPager
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
+import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.ActivitySliderBinding
 import com.mosl.tabapp.splash.SplashActivity
+import com.mosl.tabapp.ui.MSFDialog
+import com.mosl.tabapp.util.RootDeviceHelper.isEmulator
+import com.mosl.tabapp.util.RootDeviceHelper.isRooted
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -31,6 +36,11 @@ class SliderActivity : LeanBaseActivity() {
         View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
     binding = ActivitySliderBinding.bind(findViewById(R.id.slider_root))
+
+    if (!isEmulator() && isRooted(applicationContext.packageManager)) {
+      showRootedMessage()
+      return
+    }
 
     if (userManager.isLoggedIn()) {
       launchSplash()
@@ -74,6 +84,18 @@ class SliderActivity : LeanBaseActivity() {
     val imageSliderAdapter = ImageSliderAdapter(this, imageList)
 
     binding.viewPager.adapter = imageSliderAdapter
+  }
+
+  private fun showRootedMessage() {
+    MSFDialog.alertDialog(
+      this@SliderActivity, 0,
+      applicationContext.resources.getString(R.string.motilal_oswal),
+      MOSLConstants.ROOTED_DEVICE_MESSAGE, MOSLConstants.OK, false
+    ) { action: MSFDialog.Action, _: Array<Any?>? ->
+      if (action == MSFDialog.Action.OK) {
+        finish()
+      }
+    }
   }
 
   private fun getItem(): Int {

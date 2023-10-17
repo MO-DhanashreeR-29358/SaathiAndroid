@@ -12,6 +12,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.createmeeting.ChipsEventsRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
@@ -124,7 +125,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
     }
 
     override fun getChipsList(): Observable<List<String>> {
-        return saathiApi.getChipsList()
+        return saathiApi.getChipsList(ChipsEventsRequest(userManager.getUser()!!.employeeCode))
             .map { transformEventChipsList(it) }
     }
 

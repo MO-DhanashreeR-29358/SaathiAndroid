@@ -497,7 +497,7 @@
     <string name="hint_lead_creation_secondary_rm_pcg_title">Secondary RM (WealthManager RM)</string>
     <string name="is_wealth_rm_label">Is this wealth RM</string>
     <string name="hint_lead_creation_alternate_mobile">Alternate Mobile No</string>
-    <string name="hint_lead_creation_email_id">Email Id</string>
+    <string name="hint_lead_creation_email_id">Email Id*</string>
     <string name="hint_lead_creation_address_one">Address 1</string>
     <string name="hint_lead_creation_address_two">Address 2</string>
     <string name="hint_lead_creation_address_three">Address 3</string>

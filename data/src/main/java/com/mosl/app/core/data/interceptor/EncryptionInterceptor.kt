@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.interceptor
 
+import android.util.Log
 import com.mosl.shared.Encryptor.AESEncryptor
 import okhttp3.*
 import okio.Buffer
@@ -23,6 +24,7 @@ class EncryptionInterceptor @Inject constructor(
 
       val mediaType = MediaType.parse("application/json; charset=utf-8")
       val strNewBody = encryptor.encrypt(strOldBody)
+      Log.d("EncryptedRequest11" , strNewBody)
       val body = RequestBody.create(mediaType, strNewBody)
       request = request.newBuilder()
         .method(request.method(), body)
