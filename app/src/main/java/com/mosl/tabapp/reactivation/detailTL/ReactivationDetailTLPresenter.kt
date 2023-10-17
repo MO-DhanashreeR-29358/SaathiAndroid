@@ -22,7 +22,8 @@ class ReactivationDetailTLPresenter @Inject constructor(
                 view.getEmpCode(),
                 view.getFirstReportingTo(),
                 view.getPeriodFilter(),
-                view.getCurrentStage())
+                view.getCurrentStage(),
+            view.getSourceFilter())
                 .compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)

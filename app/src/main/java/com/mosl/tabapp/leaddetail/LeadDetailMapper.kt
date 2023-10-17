@@ -228,8 +228,8 @@ fun ClientGainLossSummaryResponse.gainLossSummaryToClientProfitLoss(): ClientPro
 
   val limits = availableLimits.map {
     AvailableLimit(
-        cashType = it.cASH,
-        amount = it.aMOUNT
+        cashType = it.cASH ?: emptyString(),
+        amount = it.aMOUNT ?: emptyString()
     )
   }
   return ClientProfitLoss(

@@ -42,6 +42,7 @@ class ReactivationDetailTLFragment : CommonFragment(), ReactivationDetailTLView 
     var reactivationCurrentStage : String =""
     var reactivationEmpCode : String = ""
     var reactivationFirstReportingTo : String =""
+    var reactivationSource : String = ""
 
     private lateinit var dynamicHeaderRow: DynamicHeaderRow
     private lateinit var tableRowAdapter: TableRowAdapter<ReactivationDetailTableRow>
@@ -65,9 +66,11 @@ class ReactivationDetailTLFragment : CommonFragment(), ReactivationDetailTLView 
         reactivationCurrentStage = bundle.getString(MOSLConstants.REACTIVATION_TYPE, "") ?: ""
         reactivationEmpCode = bundle.getString(MOSLConstants.REACTIVATION_EMP_CODE, "") ?: ""
         reactivationFirstReportingTo = bundle.getString(MOSLConstants.REACTIVATION_FIRST_REPORTING_TO, "") ?: ""
+        reactivationSource = bundle.getString(MOSLConstants.REACTIVATION_SOURCE, "") ?: ""
     }
 
     private fun setupView(){
+        binding.txtLables.text = "Reactivation Assigned Clients Detail"
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = ReactivationDetailTableMapper.header(requireContext()) as DynamicHeaderRow
         val mfAdapter =
@@ -100,6 +103,10 @@ class ReactivationDetailTLFragment : CommonFragment(), ReactivationDetailTLView 
 
     override fun getFirstReportingTo(): String {
         return reactivationFirstReportingTo
+    }
+
+    override fun getSourceFilter(): String {
+        return reactivationSource
     }
 
     override fun renderData(uiModel: UiModel<ReactivationDetailCombo>) {

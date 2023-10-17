@@ -22,7 +22,7 @@
             android:layout_centerInParent="true"
             android:layout_marginStart="@dimen/_5sdp"
             android:singleLine="true"
-            android:text="Reactivation Mapped Client Report"
+            android:text="Reactivation Assigned Clients"
             android:textColor="@color/alternateTextColor"
             android:textSize="@dimen/appTitleTextSize"
             android:textStyle="bold" />
@@ -45,17 +45,49 @@
         style="@style/DashbordSpinnerSelector"
         android:layout_width="@dimen/_150sdp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_15sdp"
         app:layout_constraintStart_toEndOf="@+id/txtFilter"
-        app:layout_constraintTop_toBottomOf="@+id/labelContainer"/>
+        app:layout_constraintTop_toTopOf="@+id/txtFilter"
+        app:layout_constraintBottom_toBottomOf="@+id/txtFilter"/>
 
+    <TextView
+        android:id="@+id/txtSource"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtFilter"
+        android:text="Source"
+        android:textSize="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:padding="@dimen/_10sdp">
+    </TextView>
+
+    <Spinner
+        android:id="@+id/sp_source"
+        style="@style/DashbordSpinnerSelector"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/txtSource"
+        app:layout_constraintTop_toTopOf="@+id/txtSource"
+        app:layout_constraintBottom_toBottomOf="@+id/txtSource"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_highlight"
+        android:text="@string/str_search"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/sp_source"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtFilter"
+        app:layout_constraintTop_toBottomOf="@id/txtSource"
         android:layout_marginTop="@dimen/_10sdp">
 
         <View

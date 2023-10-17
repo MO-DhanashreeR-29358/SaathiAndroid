@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class AvailableLimitsItem(
 
-  @JvmField @SerializedName("AMOUNT") val aMOUNT: String,
+  @JvmField @SerializedName("AMOUNT") val aMOUNT: String?,
 
-  @JvmField @SerializedName("CASH") val cASH: String
+  @JvmField @SerializedName("CASH") val cASH: String?
 )

@@ -13,6 +13,7 @@ interface ReactivationDetailTLView : BaseView {
     fun getCurrentStage() : String
     fun getEmpCode() : String
     fun getFirstReportingTo() : String
+    fun getSourceFilter() : String
     fun renderData(uiModel: UiModel<ReactivationDetailCombo>)
 
 }

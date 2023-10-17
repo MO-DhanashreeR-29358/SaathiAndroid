@@ -11,10 +11,7 @@ import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.branch.BranchRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationDetailRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationDetailTLRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationFeedbackRequest
-import com.mosl.saathi.api.model.reactivation.ReactivationSummaryRequest
+import com.mosl.saathi.api.model.reactivation.*
 import com.mosl.shared.util.toConvertDecimals
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
@@ -25,15 +22,22 @@ class ReactivationRepositoryImpl @Inject constructor(
     val userManager: UserManagerImpl
 ) : ReactivationRepository {
 
-    override fun getReactivationSummaryForSales(period : String): Observable<ReactivationSummaryItem> {
-        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
+    override fun getReactivationSourceList(): Observable<List<String>> {
+        val request = ReactivationSourceRequest(userManager.user.employeeCode)
+        return saathiApi.getReactivationSource(request).map {
+            it.response?.transformSourceList()!!
+        }
+    }
+
+    override fun getReactivationSummaryForSales(period : String, source : String): Observable<ReactivationSummaryItem> {
+        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period, source)
         return saathiApi.getReactivationSummary(request).map {
             it.response?.data?.first()?.summaryItemResponseTransform()!!
         }
     }
 
-    override fun getReactivationSummaryForTL(period: String): Observable<ReactivationSummaryItem> {
-        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period)
+    override fun getReactivationSummaryForTL(period: String, source : String): Observable<ReactivationSummaryItem> {
+        val request = ReactivationSummaryRequest(userManager.user.employeeCode, period, source)
         return saathiApi.getReactivationSummaryForTL(request).map {
             it.response?.data?.first()?.summaryItemResponseTransform()!!
         }
@@ -41,9 +45,10 @@ class ReactivationRepositoryImpl @Inject constructor(
 
     override fun getReactivationDetailForSales(
         period: String,
-        stage: String
+        stage: String,
+        source : String
     ): Observable<ReactivationDetailCombo> {
-        val request = ReactivationDetailRequest(userManager.user.employeeCode, period, stage)
+        val request = ReactivationDetailRequest(userManager.user.employeeCode, period, stage, source)
         return saathiApi.getReactivationDetail(request).map { response ->
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {
@@ -58,7 +63,8 @@ class ReactivationRepositoryImpl @Inject constructor(
                     val header = iterator.next().toString()
                     if(header == "BranchCode" || header == "Export" ||
                         header == "Period" || header == "IsAdminMode" || header == "Status" ||
-                        header == "InApproval" || header == "ApprovalFieldList" ){
+                        header == "InApproval" || header == "ApprovalFieldList"
+                        || header == "EmployeeCode" || header == "FirstReportingTo"){
                     }else{
                         colHeaders.add(ColHeader(header))
                     }
@@ -103,9 +109,9 @@ class ReactivationRepositoryImpl @Inject constructor(
         employeeCode: String,
         firstReportingTo: String,
         period: String,
-        stage: String
+        stage: String, source : String
     ): Observable<ReactivationDetailCombo> {
-        val request = ReactivationDetailTLRequest(employeeCode,firstReportingTo, period, stage)
+        val request = ReactivationDetailTLRequest(employeeCode,firstReportingTo, period, stage, source)
         return saathiApi.getReactivationDetailTL(request).map { response ->
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {
@@ -120,7 +126,8 @@ class ReactivationRepositoryImpl @Inject constructor(
                     val header = iterator.next().toString()
                     if(header == "BranchCode" || header == "Export" ||
                         header == "Period" || header == "IsAdminMode" || header == "Status" ||
-                        header == "InApproval" || header == "ApprovalFieldList" ){
+                        header == "InApproval" || header == "ApprovalFieldList"
+                        || header == "EmployeeCode" || header == "FirstReportingTo"){
                     }else{
                         colHeaders.add(ColHeader(header))
                     }
@@ -162,9 +169,9 @@ class ReactivationRepositoryImpl @Inject constructor(
     }
 
     override fun getReactivationAssignedHierarchyClientReportList(
-        period: String, stage : String
+        period: String, stage : String, source : String
     ): Observable<ReactivationDetailCombo> {
-        val request = ReactivationDetailRequest(userManager.user.employeeCode, period, stage)
+        val request = ReactivationDetailRequest(userManager.user.employeeCode, period, stage, source)
         return saathiApi.getReactivationAssignedHierarchyClientReportList(request).map { response ->
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {
