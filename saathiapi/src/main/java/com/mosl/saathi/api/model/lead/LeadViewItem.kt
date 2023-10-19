@@ -95,7 +95,8 @@ data class LeadViewItem(
     @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?,
     @JvmField @SerializedName("ClientType") val clientType: String?,
     @JvmField @SerializedName("ProductType") val productType: String?,
-    @JvmField @SerializedName("ExpectedMargin") val expectedMargin: String?
+    @JvmField @SerializedName("ExpectedMargin") val expectedMargin: String?,
+    @JvmField @SerializedName("OAO") val isShowOAO: Int?
 )
 
 data class LeadFieldSection(

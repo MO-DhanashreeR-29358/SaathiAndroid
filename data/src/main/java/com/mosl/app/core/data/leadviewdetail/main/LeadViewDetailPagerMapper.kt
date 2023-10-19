@@ -38,7 +38,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
         diyCode = diyCode,
         diyLink = diyLink ?: "",
         leadProducts = leadProducts,
-        clientType = clientType?: ""
+        clientType = clientType?: "",
+        isShowOAO = isShowOAO?: 0
     )
 }
 

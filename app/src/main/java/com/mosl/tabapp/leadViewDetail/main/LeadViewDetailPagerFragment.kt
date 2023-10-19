@@ -67,6 +67,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var prospectSourceName: String? = null
     private var prospectSourceDetail: String? = null
     private var initialPage = 0
+    private var isShowOAO: Int = 0
+
     private val subject = LeadViewDetailUiEvent.getSubject()
 
     private val tabArray: Array<String> by lazy {
@@ -158,26 +160,35 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
             } else {
                 dialogBinding.ivSuggestMe.visibility = View.GONE
             }
-            if (userManager.getUser() != null && userManager.getUser()!!
+
+            if(isShowOAO == 0){
+                dialogBinding.ivOpenAccount.visibility = View.GONE
+                dialogBinding.ivOaoForm.visibility = View.GONE
+            }else{
+                dialogBinding.ivOpenAccount.visibility = View.VISIBLE
+                dialogBinding.ivOaoForm.visibility = View.VISIBLE
+
+                if (userManager.getUser() != null && userManager.getUser()!!
                     .isEkycEnable()
-            ) {
-                if (oaoUserId > 0) {
-                    dialogBinding.ivOpenAccount.visibility = View.GONE
-                    dialogBinding.ivOaoForm.visibility = View.VISIBLE
-                } else {
-                    dialogBinding.ivOpenAccount.visibility = View.VISIBLE
-                    dialogBinding.ivOaoForm.visibility = View.GONE
+                ) {
+                    if (oaoUserId > 0) {
+                        dialogBinding.ivOpenAccount.visibility = View.GONE
+                        dialogBinding.ivOaoForm.visibility = View.VISIBLE
+                    } else {
+                        dialogBinding.ivOpenAccount.visibility = View.VISIBLE
+                        dialogBinding.ivOaoForm.visibility = View.GONE
+                    }
                 }
             }
 
-            userManager.getUser()?.apply {
+            /*userManager.getUser()?.apply {
                 if (this.isShowRINRI()) {
                     if (clientType.isNotEmpty() && clientType.equals("NRI")) {
                         dialogBinding.ivOpenAccount.visibility = View.GONE
                         dialogBinding.ivOaoForm.visibility = View.GONE
                     }
                 }
-            }
+            }*/
 
             if (diyCode > 0) {
                 if (diyLink.isNotEmpty()) {
@@ -388,6 +399,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 diyCode = it.diyCode
                 diyLink = it.diyLink
                 clientType = it.clientType
+                isShowOAO = it.isShowOAO
                 it.leadProducts
                     .forEach {
                         interestedIn = it.interestedIn

@@ -108,17 +108,26 @@ class AutoCompleteAdapter(
       }
 
       if (ekyMenuType == SEARCH_TYPE_LEAD || ekyMenuType == SEARCH_TYPE_CLIENT) {
-        userManager.getUser()?.apply {
-          if (this.isEkycEnable()) {
-            if (resultModel.isOaoUserIdValid) {
-              holderView.rlOpenAccount.visibility = View.GONE
-              holderView.rlOAOForm.visibility = View.VISIBLE
-            } else {
-              holderView.rlOpenAccount.visibility = View.VISIBLE
-              holderView.rlOAOForm.visibility = View.GONE
+        if (!resultModel.isOAOShow) {
+          holderView.rlOpenAccount.visibility = View.GONE
+          holderView.rlOAOForm.visibility = View.GONE
+        }else {
+          holderView.rlOpenAccount.visibility = View.VISIBLE
+          holderView.rlOAOForm.visibility = View.VISIBLE
+
+          userManager.getUser()?.apply {
+            if (this.isEkycEnable()) {
+              if (resultModel.isOaoUserIdValid) {
+                holderView.rlOpenAccount.visibility = View.GONE
+                holderView.rlOAOForm.visibility = View.VISIBLE
+              } else {
+                holderView.rlOpenAccount.visibility = View.VISIBLE
+                holderView.rlOAOForm.visibility = View.GONE
+              }
             }
           }
         }
+
         if (resultModel.isDiyLinkValid) {
           holderView.rlDiyLink.visibility = View.VISIBLE
         } else {
@@ -126,26 +135,10 @@ class AutoCompleteAdapter(
         }
       }
 
-
       userManager.getUser()?.apply {
         if (this.isAufsb()) {
           holderView.rlSetAppointment.visibility = View.GONE
           holderView.rlCreateMeeting.visibility = View.GONE
-        }
-      }
-
-      userManager.getUser()?.apply {
-        if (this.isShowRINRI()) {
-          if (!resultModel.isOAOShow) {
-            holderView.rlOpenAccount.visibility = View.GONE
-            holderView.rlOAOForm.visibility = View.GONE
-          }
-
-          if (resultModel.isDiyLinkValid) {
-            holderView.rlDiyLink.visibility = View.VISIBLE
-          } else {
-            holderView.rlDiyLink.visibility = View.GONE
-          }
         }
       }
 

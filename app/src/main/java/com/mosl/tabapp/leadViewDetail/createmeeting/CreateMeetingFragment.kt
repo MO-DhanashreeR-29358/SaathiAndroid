@@ -981,9 +981,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (getSelectedActivityType() == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
             binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
             false
-        } else  if(getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true) &&
-            userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
-            && strProspectSource.equals("BTL activity", ignoreCase = true)
+        } else  if(userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
+            && isBTLProspectSource() == true
             && getSelectedEvent().equals("Select Event")){
             binding.tilChips.setErrorMessages(MSG_SELECT_EVENT)
             false
@@ -1192,7 +1191,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getSelectedEvent(): String? {
-        if (binding.spChips.selectedItem is String && getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)) {
+        if (binding.spChips.selectedItem is String ) {
             return (binding.spChips.selectedItem as String)
         }
         return null
@@ -1255,16 +1254,23 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.tilMobileNumber.visibility = View.GONE
             }
         }
-        if (show) {
-            if (userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
-                && strProspectSource.equals("BTL activity", ignoreCase = true) ){
+
+        if (userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
+                && isBTLProspectSource() == true ){
                 uiSubject.onNext(CallChipsApi)
                 binding.tilChips.isVisible = true
-            }
         }else{
             binding.tilChips.isVisible = false
         }
         resetDataOnActivityTypeChange()
+    }
+
+    private fun isBTLProspectSource(): Boolean{
+        if(strProspectSource.equals("BTL activity", ignoreCase = true) ||
+            strProspectSource.equals("BTL activity QR code", ignoreCase = true)){
+            return true
+        }
+        return false
     }
 
     override fun onMobileClick() {
