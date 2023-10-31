@@ -2025,6 +2025,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             spSector.isEnabled = status
             spDesig.isEnabled = status
             spNetworth.isEnabled = status
+            spLeadAccountType.isEnabled = status
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
                     enableField(llResAdd)

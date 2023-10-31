@@ -40,7 +40,8 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         contact = leadContact,
         referralEmpCode = model.referralEmpCode,
         nriRiId = model.nriRiID,
-        expectedMargin = model.expMargin
+        expectedMargin = model.expMargin,
+        leadAccountTypeId = model.leadAccountTypeId
     )
 }
 
