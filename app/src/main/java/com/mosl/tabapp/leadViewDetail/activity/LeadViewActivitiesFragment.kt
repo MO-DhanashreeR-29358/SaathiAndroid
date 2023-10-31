@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -39,6 +40,7 @@ import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import javax.inject.Inject
 
 class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
@@ -130,6 +132,8 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
+      Timber.d("LeadViewActivitiesFragment render showOnFailurePopup %s", it.message)
+      Timber.d("LeadViewActivitiesFragment render showOnFailurePopup %s", it.getErrorOnFailure().getResolvedMessage(requireContext()))
       showOnFailurePopup(it)
     }
 
@@ -187,6 +191,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
     toggleProgressBar(uiModel.inProgress)
 
     uiModel.onFailure {
+      Timber.d("LeadViewActivitiesFragment renderDeleteAppointment showOnFailurePopup %s", it.message)
       showOnFailurePopup(it)
     }
 

@@ -279,7 +279,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
     override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { error ->
-            showOnFailurePopup(error)
+            // showOnFailurePopup(error)
             chartClear()
             setDefaultValues(2)
         }
@@ -296,7 +296,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         selectSubBranch.add(0, SelectSubBranch)
 
         uiModel.onFailure { error ->
-            showOnFailurePopup(error)
+            // showOnFailurePopup(error)
             chartClear()
             setDefaultValues(3)
         }
@@ -376,7 +376,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         labelGroupAdapter.clear()
         lableItemList.clear()
         uiModel.onFailure { error ->
-            showOnFailurePopup(error)
+            //showOnFailurePopup(error)
             chartClear()
         }
 

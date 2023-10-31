@@ -17,7 +17,7 @@ fun TeamTargetInput.requestTransform(): TeamTargetRequest {
 fun AditionalParametersTeamTarget.apTransform(): APTeamTargetRequest {
   return APTeamTargetRequest(
     fltBankName, fltBankSubBrokerCode, fltBankBranchCode,
-    fltHierarchy, fltPeriod
+    fltHierarchy, fltPeriod?.replace("null", "MTD") ?: "MTD"
   )
 }
 

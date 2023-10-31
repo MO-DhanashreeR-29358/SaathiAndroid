@@ -952,6 +952,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     override fun renderSubmitProfile(uiModel: UiModel<ProfilingResponseModel>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
+            Timber.d("LeadProfilingFragment renderSubmitProfile showOnFailurePopup ${it.message}")
             showOnFailurePopup(it)
         }
 
@@ -981,6 +982,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("LeadProfilingFragment renderProfileParameters showOnFailurePopup ${it.message}")
             showOnFailurePopup(it)
         }
 

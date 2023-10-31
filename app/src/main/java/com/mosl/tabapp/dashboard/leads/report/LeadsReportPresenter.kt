@@ -10,6 +10,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import timber.log.Timber
 import java.io.Serializable
 import java.util.HashMap
 import javax.inject.Inject
@@ -28,7 +29,9 @@ class LeadsReportPresenter @Inject constructor(
         repository.getLeadWidget(getWidgetRequest()).compose(
           applyUiModel()
         )
-      }.subscribe(view::renderData)
+      }.subscribe{
+      Timber.d("LeadsReportPresenter onFetchCalled saathiApi.getLeadReportWidgetData")
+      view.renderData(it)}
       .addTo(disposable)
 
     view.cellEvent().subscribe {

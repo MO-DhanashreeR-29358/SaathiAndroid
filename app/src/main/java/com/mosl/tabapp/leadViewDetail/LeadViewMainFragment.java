@@ -53,6 +53,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.disposables.Disposable;
+import timber.log.Timber;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
@@ -248,6 +249,8 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderClientImage  showOnFailurePopup %s", error.getMessage());
+
             showOnFailurePopup(error);
             CRMAppUtil.setImage(new byte[0], ivLead, requireContext());
         }
@@ -281,6 +284,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         diyCode = 0;
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderClientViewByCommand  showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
         ClientDetailItem data = uiModel.data;
@@ -318,6 +322,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("LeadViewMainFragment renderLeadView  showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
         LeadViewItem data = uiModel.data;
@@ -543,6 +548,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("LeadViewMainFragment renderSuggestMe  showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
         RegisterProspectOnlineResponse data = uiModel.data;

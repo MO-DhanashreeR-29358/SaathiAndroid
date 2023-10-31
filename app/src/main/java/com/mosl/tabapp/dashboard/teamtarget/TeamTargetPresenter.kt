@@ -16,6 +16,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
@@ -83,7 +84,9 @@ class TeamTargetPresenter @Inject constructor(
             .switchMap {
                 repository.getTeamTargetWidget(it)
                     .compose(applyUiModel())
-            }.subscribe(view::renderData)
+            }.subscribe{
+                Timber.d("TeamTargetPresenter onPeriodChange saathiApi.getTeamTargetWidgetData")
+                view.renderData(it)}
             .addTo(disposable)
     }
 

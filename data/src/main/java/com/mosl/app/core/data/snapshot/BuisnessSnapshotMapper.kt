@@ -31,7 +31,7 @@ fun BusinessSnapInput.transformDashboardRequest(): BusinessSnapshotRequest {
 
 private fun BusinessSnapAdditionalParametersInput.additionalParametersTransform(): BusinessSnapAdditionalParameterRequest {
   return BusinessSnapAdditionalParameterRequest(
-    fltPeriod = fltPeriod,
+    fltPeriod = fltPeriod?.replace("null", "MTD") ?: "MTD" ,
     fltHierarchy = fltHierarchy,
     fltProspect = fltProspect,
     fltSelfBranch = fltSelfBranch

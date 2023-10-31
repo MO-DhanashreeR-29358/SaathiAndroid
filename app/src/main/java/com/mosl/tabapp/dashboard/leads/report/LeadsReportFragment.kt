@@ -58,7 +58,7 @@ class LeadsReportFragment : CommonFragment(), LeadsReportView, View.OnClickListe
   override fun renderData(uiModel: UiModel<LeadsReportModel>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
-      showOnFailurePopup(it)
+      //showOnFailurePopup(it)
       binding.table.visibility = View.GONE
       binding.tvNochart.visibility = View.VISIBLE
     }

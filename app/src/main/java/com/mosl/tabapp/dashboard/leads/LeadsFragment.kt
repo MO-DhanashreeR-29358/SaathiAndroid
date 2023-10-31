@@ -291,7 +291,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     toggleProgress(uiModel.inProgress)
 
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       chartClear()
     }
 

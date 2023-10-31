@@ -115,7 +115,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
   override fun renderData(uiModel: UiModel<List<TrendsChartModel>>) {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      // showOnFailurePopup(error)
       binding.includeChart.chart.clear()
     }
     uiModel.onSuccess {

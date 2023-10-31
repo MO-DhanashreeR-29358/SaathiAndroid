@@ -64,6 +64,7 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -275,6 +276,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderSector showOnFailurePopup %s", it.message)
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -317,6 +319,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderDesignation showOnFailurePopup %s", it.message)
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -359,6 +362,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderNetworth showOnFailurePopup %s", it.message)
+
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -425,7 +430,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderUpdateProfile showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess {
             if (it.first.isEmpty())
                 binding.tvProfile.text = it.second
@@ -522,6 +528,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun renderAddProduct(uiModel: UiModel<List<AddProductData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderAddProduct showOnFailurePopup %s", it.message)
+
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
@@ -1176,7 +1184,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderClientDetail(uiModel: UiModel<ClientDetail>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderClientDetail showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
 
             if (data.products.isNotEmpty()) {
@@ -1237,7 +1247,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderClientDetailWithPortfolioAndProfitLoss showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             data.detail.renderClient()
             data.portfolio.renderPortfolio()
@@ -1770,7 +1781,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>) {
         toggleProgress(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderUpdateDetail showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess{
             Log.d("AAA MeetingID", it.createMeeting.toString())
             mainSubject.onNext(LeadViewDetailUiEvent.RetryClick)
@@ -1901,6 +1913,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure {
             interestedData.toMutableList()
                 .clear()
+            Timber.d("LeadDetailFragment render showOnFailurePopup %s", it.message)
+
             showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
@@ -1954,7 +1968,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderLeadDetailAndProfession showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
             data.detail.renderLeadDetail()
@@ -2429,7 +2444,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderStateOnCountrySelection showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
             if (selectedStateId != DEFAULT_SELECTION_ID) {
@@ -2451,7 +2467,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadDetailFragment renderOfficeStateOnOfficeCountrySelection showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
             if (selectedStateOffId != DEFAULT_SELECTION_ID) {
@@ -2470,7 +2487,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {  Timber.d("LeadDetailFragment renderCityOnStateSelection showOnFailurePopup %s", it.message)
+            showOnFailurePopup(it) }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
             if (selectedCityId != DEFAULT_SELECTION_ID) {
@@ -2516,6 +2534,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             stageData.clear()
+            Timber.d("LeadDetailFragment renderStage showOnFailurePopup %s", it.message)
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
@@ -2530,6 +2549,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             statusData.clear()
+            Timber.d("LeadDetailFragment renderStatus showOnFailurePopup %s", it.message)
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
@@ -2609,6 +2629,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     override fun showFailureDialog(error: Throwable) {
+        Timber.d("LeadDetailFragment showFailureDialog showOnFailurePopup %s", error.message)
+
         showOnFailurePopup(error)
     }
 

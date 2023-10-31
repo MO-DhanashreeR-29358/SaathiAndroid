@@ -267,12 +267,55 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/spBranch" />
 
+                    <TextView
+                        android:id="@+id/tvAccountType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_account_type"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvBranchError" />
+
+
+                    <Spinner
+                        android:id="@+id/spAccountType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvAccountType"/>
+
+
+                    <TextView
+                        android:id="@+id/tvAccountTypeError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spAccountType" />
+
+
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_bank"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         app:constraint_referenced_ids="tvBank,tvBranch,spBank,spBranch, tvBankError, tvBranchError" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_account_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="tvAccountType,tvAccountTypeError,spAccountType" />
+
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -284,7 +327,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBranchError" />
+                        app:layout_constraintTop_toBottomOf="@id/tvAccountTypeError" />
 
                     <Spinner
                         android:id="@+id/spInterestIn"

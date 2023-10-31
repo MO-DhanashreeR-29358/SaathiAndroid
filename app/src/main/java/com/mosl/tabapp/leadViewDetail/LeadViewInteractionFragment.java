@@ -42,6 +42,7 @@ import java.util.Map;
 
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.Disposable;
+import timber.log.Timber;
 
 import static com.mosl.app.core.rx.RxDispatchers.applyUiModel;
 import static com.mosl.tabapp.common.CRMAppUtil.getRefreshColumnName;
@@ -163,6 +164,8 @@ public class LeadViewInteractionFragment extends CommonFragment
             error.printStackTrace();
             table.setVisibility(View.GONE);
             tvNochart.setVisibility(View.VISIBLE);
+            Timber.d("LeadViewInteractionFragment render showOnFailurePopup %s", error.getMessage());
+
             showOnFailurePopup(error);
         }
 

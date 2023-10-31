@@ -62,6 +62,7 @@ import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -104,6 +105,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
+    Timber.d("Something LoginActivity oncreate")
     disposables = CompositeDisposable()
     AndroidInjection.inject(this)
     setUpView()

@@ -11,6 +11,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -31,7 +32,9 @@ class BusinessSnapshotPresenter @Inject constructor(
         repository.getDashboardData(getWidgetRequest())
           .compose(applyUiModel())
       }
-      .subscribe(view::renderData)
+      .subscribe{
+        Timber.d("BusinessSnapshotPresenter onFilter1Change saathiApi.getBusinessSnapshotAdv")
+        view.renderData(it)}
       .addTo(disposable)
 
     view.onNavigateEvent().subscribe {

@@ -12,6 +12,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -27,7 +28,9 @@ class ClientsPresenter @Inject constructor(
             repository.getClientsWidget(getWidgetRequest())
                 .compose(applyUiModel())
         }
-            .subscribe(view::renderData)
+            .subscribe{
+                Timber.d("ClientsPresenter onFetchCalled saathiApi.getClientsWidgetData")
+                view.renderData(it)}
             .addTo(disposable)
 
         val bankChangeObsc = view.onBankChange().skip(1).share()
@@ -38,7 +41,9 @@ class ClientsPresenter @Inject constructor(
                 repository.getClientsWidget(getWidgetRequest())
                     .compose(applyUiModel())
             }
-            .subscribe(view::renderData)
+            .subscribe{
+                Timber.d("ClientsPresenter bankChangeObsc saathiApi.getClientsWidgetData")
+                view.renderData(it)}
             .addTo(disposable)
 
         val dataEvent = Observable.merge(view.onDataEvent(), view.onPeriodChange()).share()
@@ -46,7 +51,7 @@ class ClientsPresenter @Inject constructor(
         dataEvent.filter {
             view.getClientList().size > 0
         }.subscribe {
-            view.renderUI(view.getPeriod().text, view.getPeriod().value)
+            view.renderUI(view.getPeriod()?.text, view.getPeriod()?.value)
         }.addTo(disposable)
 
         view.onNaviagteEvent().subscribe {
@@ -63,7 +68,7 @@ class ClientsPresenter @Inject constructor(
             employeeCode = dashboardModel.employeeCode,
             addtionalParameters = APClientsInput(
                 fltBankName = view.getBank()?.text,
-                fltPeriod = view.getPeriod().value.toString(),
+                fltPeriod = view.getPeriod()?.value,
                 fltHierarchy = dashboardModel.dashboardFor
             )
         )

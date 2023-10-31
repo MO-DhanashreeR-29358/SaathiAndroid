@@ -80,7 +80,7 @@ class ClientsTradedYesterdayFragment : CommonFragment(), ClientsTradedYesterdayV
     toggleProgress(uiModel.inProgress)
     arrayListClient.clear()
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       clientHideProgress()
       binding.tvNochart.visibility = View.VISIBLE
       dataEvent.onNext(true)

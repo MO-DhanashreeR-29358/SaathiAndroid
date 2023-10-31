@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
 data class UpdateMeetingScreenData(
   @JvmField val meetingId: String,
   @JvmField val leadId: String,
-  @JvmField val date: String,
+  @JvmField val date: String?,
   @JvmField val time: String,
   @JvmField val product: String,
   @JvmField val ucid: String

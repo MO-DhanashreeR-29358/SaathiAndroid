@@ -22,7 +22,7 @@ data class Appointment(
   @JvmField val activityType: String,
   @JvmField val time: String,
   @JvmField val statusName: String,
-  @JvmField val date: String,
+  @JvmField val date: String?,
   @JvmField val leadId: String,
   @JvmField val repeatOnCode: String,
   @JvmField val ucid: String
@@ -50,7 +50,7 @@ data class Meeting(
   @JvmField val activityType: String,
   @JvmField val time: String,
   @JvmField val statusName: String,
-  @JvmField val date: String,
+  @JvmField val date: String?,
   @JvmField val leadId: String,
   @JvmField val meetingDuration: String,
   @JvmField val pincode: String,

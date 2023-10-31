@@ -4,24 +4,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.AlertDialog
+import android.app.Dialog
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.os.PowerManager
 import android.provider.Settings
 import android.view.View
 import android.view.View.OnClickListener
-import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -89,6 +85,7 @@ import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import kotlin.collections.set
 
+
 class CommonActivity : BaseActivity(),
     Navigator,
     ActivityDelegate,
@@ -145,9 +142,11 @@ class CommonActivity : BaseActivity(),
     private lateinit var compressionLocationWorkId: UUID
     private lateinit var compressionDataSyncWorkId: UUID
     internal var snackbar: Snackbar? = null
-    private val REQUEST_CODE_CUSTOM_PERMISSION = 1153
-    private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
+    private val APPLICATION_SETTING_REQUEST_CODE: Int = 1004
     private val PERMISSIONS_REQUEST_ENABLE_GPS: Int = 1005
+    private val BATTARY_PERMISSION_REQUEST_CODE: Int = 1006
+
+    private lateinit var dialog : AlertDialog
     @Inject
     @field:RemoteConfigData
     lateinit var remoteCongigData: StringPreference
@@ -190,6 +189,7 @@ class CommonActivity : BaseActivity(),
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.d("AAAAA Common Activity onCreate ")
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
         binding.actionBar.setNotification(OnClickListener {
@@ -201,9 +201,13 @@ class CommonActivity : BaseActivity(),
         binding.actionBar.autoCompleteAdapter.setErrorMsgDialogListener(this)
         hideAppTitle()
         setupMenuDrawer()
+        dialog = AlertDialog.Builder(this).create()
         if (savedInstanceState == null) {
+            Timber.d("AAA onCreate savedInstanceState == null")
             activityNavHelper.loadIntent(intent)
+            setBanner()
         } else {
+            Timber.d("AAA onCreate savedInstanceState != null")
             globalTitles =
                 savedInstanceState.getSerializable(PAGE_TITLES) as HashMap<String, AppTitle>
         }
@@ -228,36 +232,49 @@ class CommonActivity : BaseActivity(),
             startService(Intent(this@CommonActivity, ForegroundService::class.java))
         }
         setupObservables()
-        setBanner()
 
         branchCodePreference.set(userManager.user.defaultBusinessProfile.branchCode)
         menuTopSection(userManager.user.defaultBusinessProfile.branchCode)
 
-
         mDistaSdk = DistaSDK.getInstance()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            showPermissionWarningDialog()
+        }
+    }
 
-        //ActivityCompat.requestPermissions(
-         //   this, arrayOf(android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.CALL_PHONE,android.Manifest.permission.ACCESS_FINE_LOCATION),
-         //   REQUEST_CODE_CUSTOM_PERMISSION
-        //)
+    override fun onPause() {
+        super.onPause()
+        Timber.d("AAA onPause")
+    }
 
-        checkPermissionOnDistaLoggedIn()
+    override fun onStart() {
+        super.onStart()
+        Timber.d("AAA onStart")
+    }
 
-        if(!mDistaSdk.isLoggedIn) {
+    override fun onStop() {
+        super.onStop()
+        Timber.d("AAA onStop")
+    }
+
+    private fun distaLoginApiCall(){
+        if(mDistaSdk.isLoggedIn) {
+            AssetTracker.initialize(BaseApplication.getBaseApplication())
+        }else{
             mDistaSdk.doLoginCheckIn(
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
                     override fun onSuccess() {
-                       // Toast.makeText(
+                        // Toast.makeText(
                         //    applicationContext,
                         //    "User logged in successfully !",
-                         //   Toast.LENGTH_LONG
+                        //   Toast.LENGTH_LONG
                         //).show()
                     }
                 },
                 object : OnTaskFailureListener {
                     override fun onFailure(message: String?) {
-                       // Toast.makeText(
+                        // Toast.makeText(
                         //    applicationContext,
                         //    message,
                         //    Toast.LENGTH_LONG
@@ -266,41 +283,129 @@ class CommonActivity : BaseActivity(),
                 })
         }
 
-
-
     }
 
-    private fun checkPermissionOnDistaLoggedIn(){
-        if(mDistaSdk.isLoggedIn){
-            if(isLocationPermissionAllowed() && isBatteryPermissionAllowed() ){
-                AssetTracker.initialize(BaseApplication.getBaseApplication() )
-            }else{
-                if(!isLocationPermissionAllowed()) {
-                    ActivityCompat.requestPermissions(
-                        this@CommonActivity,
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ),
-                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
-                    )
-                }
-                if(!isBatteryPermissionAllowed()){
-                    val packageName: String = getPackageName()
-                    val pm  = getSystemService(POWER_SERVICE) as PowerManager
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (pm.isIgnoringBatteryOptimizations(packageName)) {
-                            intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-                        } else {
-                            intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                            intent.data = Uri.parse("package:$packageName")
+    // added for back ground location permission as DISTA needed this permission
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun showPermissionWarningDialog() {
+
+        if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
+            == PackageManager.PERMISSION_GRANTED
+            &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
+                    if(!dialog.isShowing) {
+                        dialog.setTitle("This app needs background location access")
+                        dialog.setMessage("The app needs Location permission. Please grant Location permission, else you won't be able to use the app.\n\nFor granting location permission, choose Permissions -> Location -> Allow all the time to continue.")
+                        dialog.setCancelable(false)
+                        dialog.setButton(
+                            Dialog.BUTTON_POSITIVE, "OK"
+                        ) { _, _ ->
+                            dialog.dismiss()
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                requestPermissions(
+                                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                                    1001
+                                )
+                            }
                         }
-                        startActivity(intent)
+                        dialog.show()
                     }
+
+                } else {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+                        if(!dialog.isShowing) {
+                            dialog.setTitle("This app needs background location access")
+                            dialog.setMessage("The app needs Location permission. Please grant Location permission, else you won't be able to use the app.\n\nFor granting location permission, choose Permissions -> Location -> Allow all the time to continue.")
+                            dialog.setCancelable(false)
+                            dialog.setButton(
+                                Dialog.BUTTON_POSITIVE, "OK"
+                            ) { _, _ ->
+                                dialog.dismiss()
+                                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                val uri: Uri = Uri.fromParts("package", packageName, null)
+                                intent.data = uri
+                                // This will take the user to a page where they have to click twice to drill down to grant the permission
+                                startActivityForResult(intent, APPLICATION_SETTING_REQUEST_CODE)
+                            }
+                            dialog.show()
+                        }
+                    }
+                }
+            }else{
+                distaLoginApiCall()
+            }
+        } else {
+            if (!shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) &&
+                !shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                requestPermissions(
+                    arrayOf(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                    ),
+                    1002
+                )
+            } else {
+                if(!dialog.isShowing) {
+                    dialog.setTitle("Functionality limited")
+                    dialog.setMessage("Since location access has not been granted, this app will not be able to discover beacons.  Please go to Settings -> Applications -> Permissions and grant location access to this app.")
+                    dialog.setCancelable(false)
+                    dialog.setButton(
+                        Dialog.BUTTON_POSITIVE, "OK"
+                    ) { _, _ ->
+                        dialog.dismiss()
+                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                        val uri: Uri = Uri.fromParts("package", packageName, null)
+                        intent.data = uri
+                        // This will take the user to a page where they have to click twice to drill down to grant the permission
+                        startActivityForResult(intent, APPLICATION_SETTING_REQUEST_CODE)
+                    }
+                    dialog.show()
                 }
             }
         }
 
+    }
+
+
+    // added for back ground location permission as DISTA needed this permission
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            Timber.d("AAA onRequestPermissionsResult")
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                distaLoginApiCall()
+            }
+    }
+
+    override fun onActivityResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?
+    ) {
+        Timber.d("AAA onActivityResult")
+        if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
+            val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
+            intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
+            startActivity(intent)
+        }
+        if (resultCode == BranchSelectNeeded) {
+            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
+        }
+        if(requestCode == APPLICATION_SETTING_REQUEST_CODE){
+            distaLoginApiCall()
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun buildAlertMessageNoGps() {
@@ -324,37 +429,6 @@ class CommonActivity : BaseActivity(),
         return true
     }
 
-    private fun isLocationPermissionAllowed() : Boolean{
-
-        if (ContextCompat.checkSelfPermission(
-                this@CommonActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
-                this@CommonActivity,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-           return true
-        }else {
-            return false
-        }
-
-
-    }
-
-    private fun isBatteryPermissionAllowed() : Boolean{
-        if (ContextCompat.checkSelfPermission(
-                this@CommonActivity,
-                Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-            )
-            == PackageManager.PERMISSION_GRANTED){
-           return true
-        }else{
-            return false
-        }
-    }
 
     private fun isForegroundServiceRunning(serviceClass: Class<*>): Boolean {
         val manager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -371,24 +445,6 @@ class CommonActivity : BaseActivity(),
         stopService(serviceIntent)
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?
-    ) {
-        if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
-            val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
-            intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
-            startActivity(intent)
-        }
-        if (resultCode == BranchSelectNeeded) {
-            menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
-        }
-        if(requestCode == PERMISSIONS_REQUEST_ENABLE_GPS){
-            checkPermissionOnDistaLoggedIn()
-        }
-        super.onActivityResult(requestCode, resultCode, data)
-    }
 
     private fun initBackgroundState() {
         val intent = Intent()
@@ -457,6 +513,10 @@ class CommonActivity : BaseActivity(),
                 mServiceConnection,
                 Context.BIND_AUTO_CREATE
             )
+        }
+        Timber.d("AAA onResume")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            showPermissionWarningDialog()
         }
     }
 
@@ -765,6 +825,7 @@ class CommonActivity : BaseActivity(),
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putSerializable(PAGE_TITLES, globalTitles)
+        Timber.tag("onSaveInstanceState: ").d("onSaveInstanceState: %s", globalTitles)
     }
 
     override fun authorizationDialog(listener: (AuthorizationState) -> Unit) {
@@ -954,6 +1015,9 @@ class CommonActivity : BaseActivity(),
                 }
             })
     }
+
+
+
 
     override fun erroMsgDialog(msg: String) {
         com.mosl.tabapp.ui.MSFDialog.alertDialog(

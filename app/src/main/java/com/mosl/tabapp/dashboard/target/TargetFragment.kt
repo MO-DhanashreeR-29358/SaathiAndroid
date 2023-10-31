@@ -271,7 +271,7 @@ class TargetFragment : CommonFragment(), TargetView {
   override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       chartClear()
       setDefaultValues(2)
     }
@@ -288,7 +288,7 @@ class TargetFragment : CommonFragment(), TargetView {
     selectSubBranch.add(0, SelectSubBranch)
 
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+      // showOnFailurePopup(error)
       chartClear()
       setDefaultValues(3)
     }
@@ -366,7 +366,7 @@ class TargetFragment : CommonFragment(), TargetView {
     labelGroupAdapter.clear()
     lableItemList.clear()
     uiModel.onFailure { error ->
-      showOnFailurePopup(error)
+     // showOnFailurePopup(error)
       chartClear()
     }
 

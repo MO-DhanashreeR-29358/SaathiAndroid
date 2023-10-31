@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding4.view.clicks
+import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -42,6 +43,7 @@ import com.mosl.tabapp.util.initiateMessage
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -379,12 +381,15 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
     override fun renderOnSuggestMeClick(uiModel: UiModel<String>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { Timber.d("LeadViewDetailPagerFragment renderOnSuggestMeClick showOnFailurePopup ${it.message}")
+            showOnFailurePopup(it) }
     }
 
     override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
+            Timber.d("LeadViewDetailPagerFragment renderLeadDetail showOnFailurePopup ${it.message}")
+            Timber.d("LeadViewDetailPagerFragment renderLeadDetail showOnFailurePopup ${it.getErrorOnFailure().getResolvedMessage(requireContext())}")
             showOnFailurePopup(it)
         }
 
@@ -427,6 +432,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     override fun renderClientDetailAndImage(uiModel: UiModel<ClientDetailAndImage>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
+            Timber.d("LeadViewDetailPagerFragment renderClientDetailAndImage showOnFailurePopup %s", it.message)
             showOnFailurePopup(it)
         }
 

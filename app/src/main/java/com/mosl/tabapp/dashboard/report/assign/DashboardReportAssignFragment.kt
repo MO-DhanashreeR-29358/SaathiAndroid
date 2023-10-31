@@ -164,7 +164,7 @@ class DashboardReportAssignFragment : CommonFragment(),
             binding.table.visibility = View.GONE
             binding.tvNochart.visibility = View.VISIBLE
             binding.llButton.visibility = View.GONE
-            showOnFailurePopup(it)
+            // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
