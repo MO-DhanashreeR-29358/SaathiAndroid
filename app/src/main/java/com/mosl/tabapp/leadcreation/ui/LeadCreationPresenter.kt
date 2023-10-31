@@ -279,6 +279,14 @@ class LeadCreationPresenter @Inject constructor(
             .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
             .addTo(disposable)
 
+        view.onCallAccountTypeFired()
+            .switchMap {
+                repository.getAccountTypeList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderAccountTypeList, Timber::e)
+            .addTo(disposable)
+
         view.onAdditionalInfoClicked()
             .subscribe { view.renderAdditionalInfoClick() }
             .addTo(disposable)

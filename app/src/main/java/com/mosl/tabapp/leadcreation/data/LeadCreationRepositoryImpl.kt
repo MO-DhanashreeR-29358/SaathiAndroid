@@ -263,6 +263,16 @@ class LeadCreationRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getAccountTypeList(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADACCOUNTTYPE
+        )
+        return getRowDatas(request)
+    }
+
     override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {
         val stateRequest = StateProvinceRequest(selectedCountry)
         return saathiApi.getStateProvinces(stateRequest)

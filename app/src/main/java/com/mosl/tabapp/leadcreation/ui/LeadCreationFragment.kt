@@ -137,7 +137,9 @@ class LeadCreationFragment : CommonFragment(),
     private val stdCodeAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
-
+    private val accountTypeAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
 
@@ -180,6 +182,7 @@ class LeadCreationFragment : CommonFragment(),
         setupAllianceSeconadaryRM()
         setupWealthManagementCodeSeconadaryRM()
         setupRINRI()
+
         binding.spCity.setDialogTitle("Search City")
         binding.spOffCity.setDialogTitle("Search City")
         disableField(binding.llResAdd)
@@ -514,6 +517,11 @@ class LeadCreationFragment : CommonFragment(),
                                 }
                             }
                         }
+                    }
+
+                    binding.groupAccountType.isVisible = getBranch()!!.branchName == "AUSFBMAIN"
+                    if(getBranch()!!.branchName == "AUSFBMAIN"){
+                        subject.onNext(CallAccountType)
                     }
                 }
 
@@ -1256,6 +1264,10 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvSecondaryRmError.isVisible = true
                     binding.tvSecondaryRmError.text = getString(it)
                 }
+                40 -> {
+                    binding.tvAccountTypeError.isVisible = true
+                    binding.tvAccountTypeError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1290,6 +1302,7 @@ class LeadCreationFragment : CommonFragment(),
             tvSecondaryRmError.isVisible = false
             tvSTDError.setText("")
             tvExpectedMarginError.setText("")
+            tvAccountTypeError.setText("")
         }
     }
 
@@ -1526,6 +1539,25 @@ class LeadCreationFragment : CommonFragment(),
         }
     }
 
+    override fun onCallAccountTypeFired(): Observable<CallAccountType> {
+       return subject.ofType()
+    }
+
+    override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            binding.spAccountType.setSpinnerData(accountTypeAdapter, it)
+        }
+    }
+
+    override fun getAccountTypeId(): String? {
+        if(binding.spAccountType.selectedItem != null){
+            return (binding.spAccountType.selectedItem as? RowData)?.key
+        }
+        return ""
+    }
+
 
     override fun getLeadCreationUserInput(): LeadCreationUserInput {
 
@@ -1614,7 +1646,8 @@ class LeadCreationFragment : CommonFragment(),
             nriRiId = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).key else "",
             nriRiValue = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).value else "",
             countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else "",
-            expectedMargin = binding.etExpectedMargin.text.toString()
+            expectedMargin = binding.etExpectedMargin.text.toString(),
+            accountTypeId = getAccountTypeId()
         )
     }
 

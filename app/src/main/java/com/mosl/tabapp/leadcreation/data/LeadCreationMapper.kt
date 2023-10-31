@@ -138,6 +138,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         productDetailModels = arrayListOf<LeadCreationProductMapping>()
         nriRiID = nriRiId
         setExpectedMargin(expectedMargin)
+        leadAccountTypeId = accountTypeId
 
     }
 }

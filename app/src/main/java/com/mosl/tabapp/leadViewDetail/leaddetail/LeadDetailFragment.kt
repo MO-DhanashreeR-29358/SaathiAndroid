@@ -64,6 +64,7 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.android.synthetic.main.crm_client_search_item.*
 import java.util.*
 import javax.inject.Inject
 
@@ -173,6 +174,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     private val cityAdapterOff: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
+    private val accountTypeAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
@@ -1568,6 +1573,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tlProspectRefereeMob.setErrorMessages(getString(it))
                 14 ->
                     binding.tlProspectRefereeEmail.setErrorMessages(getString(it))
+                15 ->
+                    binding.tlLeadAccountType.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1592,7 +1599,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlProspectRefereeName.disableErrorMessages()
             tlPin.disableErrorMessages()
             tlOffPin.disableErrorMessages()
-
+            tlLeadAccountType.disableErrorMessages()
         }
     }
 
@@ -1708,6 +1715,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.networth = (binding.spNetworth.selectedItem as RowData).value
         leadDetailModel.referralEmpCode = binding.etReferralEmpCode.text.toString().trim()
         leadDetailModel.referralEmpName = binding.etReferralEmpName.text.toString().trim()
+        leadDetailModel.accountTypeId = getAccountTypeId()
         return updateLead(leadDetailModel)
     }
 
@@ -1764,7 +1772,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.networthId,
             model.networth,
             model.referralEmpCode,
-            model.referralEmpName
+            model.referralEmpName,
+            model.accountTypeId
         )
     }
 
@@ -1922,6 +1931,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             interestedAdapter.addAll(data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+            binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, data.accountTypeRowDatas)
             binding.llEditLeadDetail.performClick()
         }
     }
@@ -2164,6 +2174,16 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         val dataNetworth = RowData.getSpinnerRowDataById(networthId, networthAdapter)
         dataNetworth?.let {
             binding.spNetworth.setSelection(it.position)
+        }
+
+        if(accountTypeName.isEmpty()){
+            binding.tvLeadAccountType.isVisible = false
+            binding.tlLeadAccountType.isVisible = false
+        }else{
+            val dataAccountType = RowData.getSpinnerRowDataByValue(accountTypeName, accountTypeAdapter)
+            dataAccountType?.let {
+                binding.spLeadAccountType.setSelection(it.position)
+            }
         }
 
         binding.etReferralEmpCode.setText(referralEmpCode)
@@ -2511,6 +2531,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         subject.ofType()
 
     override fun selectedStage(): Observable<SelectStageEvent> = subject.ofType()
+
+    override fun getAccountTypeId(): String? {
+        if(binding.spLeadAccountType.selectedItem != null && binding.tvLeadAccountType.isVisible == true){
+            return (binding.spLeadAccountType.selectedItem as? RowData)?.key
+        }
+        return ""
+    }
 
     override fun renderStage(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)

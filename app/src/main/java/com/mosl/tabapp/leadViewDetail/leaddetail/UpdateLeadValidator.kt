@@ -103,6 +103,11 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
                 R.string.error_message_invalid_email
             }
 
+            input.leadAccountTypeId.run { isNotBlank() && equals("-1") } -> {
+                identifier = 15
+                R.string.error_message_select_account_type
+            }
+
             else -> {
                 identifier = 0
                 null

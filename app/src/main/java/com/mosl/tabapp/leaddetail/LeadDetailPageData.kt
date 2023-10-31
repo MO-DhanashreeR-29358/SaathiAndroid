@@ -53,7 +53,8 @@ data class LeadDetail(
     @JvmField val referralEmpName: String,
     @JvmField val clientType: String,
     @JvmField val productType: String,
-    @JvmField val expectedMargin: String
+    @JvmField val expectedMargin: String,
+    @JvmField val accountTypeName: String
 )
 
 data class LeadProductMap(

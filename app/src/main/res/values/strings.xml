@@ -466,6 +466,7 @@
     <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
     <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>
+    <string name="lbl_lead_creation_account_type">Lead Account Type*</string>
     <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
     <string name="hint_lead_creation_land_line">Land Line</string>
@@ -543,6 +544,7 @@
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
+    <string name="error_message_select_account_type">Select Lead Account Type</string>
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
     <string name="error_message_invalid_mobile">Invalid mobile number.</string>
@@ -596,6 +598,7 @@
     <string name="lead_detail_prospect_source_detail">Prospect Source Detail</string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>
+    <string name="lead_detail_lead_account_type">Lead Account Type</string>
     <string name="lead_detail_broking_profile">Broking Profile</string>
     <string name="lead_detail_ip_profile">IP Profile</string>
     <string name="lead_detail_final_profile">Final Profile</string>

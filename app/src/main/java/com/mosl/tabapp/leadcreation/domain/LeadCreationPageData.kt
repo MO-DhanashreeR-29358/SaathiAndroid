@@ -22,7 +22,8 @@ data class LeadDetailPageData(
     @JvmField val ipProfileRowDatas: List<RowData>,
     @JvmField val finalProfileRowDatas: List<RowData>,
     @JvmField val interestInRowDatas: List<RowData>,
-    @JvmField val countryRowDatas: List<RowData>
+    @JvmField val countryRowDatas: List<RowData>,
+    @JvmField val accountTypeRowDatas: List<RowData>
 )
 
 data class SearchReferee(

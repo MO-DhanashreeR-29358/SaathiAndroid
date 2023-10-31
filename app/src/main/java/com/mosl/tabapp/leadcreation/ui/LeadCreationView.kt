@@ -120,6 +120,9 @@ interface LeadCreationView : BaseView {
 
   fun renderStageList(uiModel: UiModel<List<RowData>>)
 
+  fun onCallAccountTypeFired(): Observable<CallAccountType>
+  fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
+  fun getAccountTypeId() : String?
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

@@ -42,8 +42,17 @@ public class LeadCreationModel implements Serializable {
 
     @SerializedName("ExpectedMargin") private String expectedMargin = "";
 
+    @SerializedName("AccountTypeID") private String leadAccountTypeId = "";
+
     private transient String profileID;
 
+    public String getLeadAccountTypeId() {
+        return leadAccountTypeId;
+    }
+
+    public void setLeadAccountTypeId(String leadAccountTypeId) {
+        this.leadAccountTypeId = leadAccountTypeId;
+    }
 
     public String getExpMargin() {
         return expectedMargin;

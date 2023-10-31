@@ -41,4 +41,7 @@ interface LeadCreationRepository {
         profile: RowData,
         ucId: String
     ): Observable<Pair<String, String>>
+
+    fun getAccountTypeList(): Observable<List<RowData>>
+
 }

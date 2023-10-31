@@ -82,11 +82,10 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       referralEmpName = referralEmpName ?: emptyString(),
       clientType = clientType ?: emptyString(),
       productType = productType ?: emptyString(),
-      expectedMargin = expectedMargin?: emptyString()
+      expectedMargin = expectedMargin?: emptyString(),
+      accountTypeName = AccountTypeName?: emptyString()
   )
 }
-
-
 
 fun List<LeadProductMappingItem>.leadProductMappingItemsToAddProductDatas(): List<AddProductData> {
   return mapNotNull {

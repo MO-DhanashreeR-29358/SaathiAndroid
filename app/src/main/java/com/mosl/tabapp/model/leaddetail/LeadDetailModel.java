@@ -69,6 +69,15 @@ public class LeadDetailModel {
 	private String networth = "";
 	private String referralEmpCode = "";
 	private String referralEmpName = "";
+	private String accountTypeId = "";
+
+	public String getAccountTypeId() {
+		return accountTypeId;
+	}
+
+	public void setAccountTypeId(String accountTypeId) {
+		this.accountTypeId = accountTypeId;
+	}
 
 	public String getAlternateMobileNo() {
 		return alternateMobileNo;

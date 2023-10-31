@@ -39,7 +39,8 @@ data class UpdateLeadRequest(
     @JvmField @SerializedName("NetworthID") val networthId: String?,
     @JvmField @SerializedName("Networth") val networth: String?,
     @JvmField @SerializedName("ReferralEmpCodeN") val referralEmpCode: String?,
-    @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?
+    @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?,
+    @JvmField @SerializedName("AccountTypeID") val leadAccountTypeId: String
 )
 
 data class LeadFieldValueRequest(

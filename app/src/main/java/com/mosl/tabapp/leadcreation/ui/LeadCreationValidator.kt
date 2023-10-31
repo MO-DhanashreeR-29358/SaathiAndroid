@@ -245,6 +245,13 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_enter_secondary_rm
             }
 
+            input.accountTypeId == "-1"
+                    && user.isAllianceBusiness()
+                    && input.selectedBranch.branchName == "AUSFBMAIN" -> {
+                identifier = 40
+                R.string.error_message_select_account_type
+            }
+
             else -> {
                 identifier = 0
                 null

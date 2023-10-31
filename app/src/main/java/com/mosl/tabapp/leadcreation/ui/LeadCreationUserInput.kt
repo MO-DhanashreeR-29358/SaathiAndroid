@@ -57,5 +57,6 @@ data class LeadCreationUserInput(
     @JvmField val nriRiId : String,
     @JvmField val nriRiValue : String,
     @JvmField val countryStdCode : String,
-    @JvmField val expectedMargin : String
+    @JvmField val expectedMargin : String,
+    @JvmField val accountTypeId: String?
 )
