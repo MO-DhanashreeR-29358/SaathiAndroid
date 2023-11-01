@@ -25,6 +25,7 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
@@ -130,6 +131,8 @@ class ClientsFragment : CommonFragment(), ClientsView {
     override fun renderData(uiModel: UiModel<ClientItemResponseModel>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { error ->
+            Timber.d("ClientsFragment renderData showOnFailurePopup ${error.message}")
+
             showOnFailurePopup(error)
             clientHideProgress()
             arrayListClient.clear()

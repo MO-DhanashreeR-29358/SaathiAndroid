@@ -111,6 +111,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("DashboardFragment render showOnFailurePopup ${it.message}")
             showOnFailurePopup(it)
         }
 
@@ -534,6 +535,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("DashboardFragment renderIncentivePolicy showOnFailurePopup ${it.message}")
             showOnFailurePopup(it)
         }
 
@@ -584,6 +586,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("DashboardFragment renderIncentiveData showOnFailurePopup ${it.message}")
             showOnFailurePopup(it)
         }
 

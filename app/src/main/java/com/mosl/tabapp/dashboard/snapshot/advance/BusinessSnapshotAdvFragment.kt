@@ -19,6 +19,7 @@ import com.mosl.tabapp.model.dashboard.WidgetModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -76,6 +77,8 @@ class BusinessSnapshotAdvFragment : CommonFragment(), BusinessSnapshotAdvView {
     toggleProgress(uiModel.inProgress)
     arrayListClient.clear()
     uiModel.onFailure { error ->
+      Timber.d("BusinessSnapshotAdvFragment renderData showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       clientHideProgress()
       binding.tvNochart.visibility = View.VISIBLE

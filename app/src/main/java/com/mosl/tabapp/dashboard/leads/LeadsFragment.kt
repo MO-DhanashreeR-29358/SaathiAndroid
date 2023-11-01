@@ -41,6 +41,7 @@ import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
 import io.reactivex.rxjava3.core.Observable
+import timber.log.Timber
 
 class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
 
@@ -214,6 +215,8 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     toggleProgress(uiModel.inProgress)
 
     uiModel.onFailure { error ->
+      Timber.d("LeadsFragment renderBankFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(1)
@@ -228,6 +231,8 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
   override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure { error ->
+      Timber.d("LeadsFragment renderBranchFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(2)
@@ -245,6 +250,8 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     selectSubBranch.add(0, SelectSubBranch)
 
     uiModel.onFailure { error ->
+      Timber.d("LeadsFragment renderSubBranchFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(3)
@@ -291,6 +298,8 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
     toggleProgress(uiModel.inProgress)
 
     uiModel.onFailure { error ->
+      Timber.d("LeadsFragment renderData showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
     }

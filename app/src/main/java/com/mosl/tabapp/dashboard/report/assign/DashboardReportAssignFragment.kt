@@ -34,6 +34,7 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory.getDefaultAdapter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.set
@@ -164,6 +165,8 @@ class DashboardReportAssignFragment : CommonFragment(),
             binding.table.visibility = View.GONE
             binding.tvNochart.visibility = View.VISIBLE
             binding.llButton.visibility = View.GONE
+            Timber.d("DashboardReportAssignFragment renderLeadAssignStpList showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
@@ -224,6 +227,8 @@ class DashboardReportAssignFragment : CommonFragment(),
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure { error ->
+            Timber.d("DashboardReportAssignFragment multiUpdateApproval showOnFailurePopup ${error.message}")
+
             showOnFailurePopup(error)
         }
 

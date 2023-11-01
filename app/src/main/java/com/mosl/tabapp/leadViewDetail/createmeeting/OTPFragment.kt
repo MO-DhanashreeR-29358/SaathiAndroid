@@ -29,6 +29,7 @@ import com.mosl.tabapp.databinding.FragmentOtpBinding
 import com.mosl.tabapp.ui.MSFDialog
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -118,6 +119,8 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("OTPFragment renderResendOTP showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
         uiModel.onSuccess {
@@ -154,6 +157,8 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
         uiModel.onFailure {
             callBack.onSuccessResult(false)
+            Timber.d("OTPFragment renderOTPSubmit showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
@@ -174,6 +179,8 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
 
     fun showOnFailurePopup(t: Throwable) {
         val onFailure = getErrorOnFailure(t)
+        Timber.d("OTPFragment showOnFailurePopup showOnFailurePopup ${t.message}")
+
         showMessagePopup(onFailure)
     }
 

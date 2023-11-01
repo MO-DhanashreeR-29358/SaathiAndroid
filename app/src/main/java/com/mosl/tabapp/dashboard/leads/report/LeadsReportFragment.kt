@@ -17,6 +17,7 @@ import com.mosl.tabapp.model.dashboard.DashboardModel
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -58,6 +59,8 @@ class LeadsReportFragment : CommonFragment(), LeadsReportView, View.OnClickListe
   override fun renderData(uiModel: UiModel<LeadsReportModel>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure {
+      Timber.d("LeadsReportFragment renderData showOnFailurePopup ${it.message}")
+
       showOnFailurePopup(it)
       binding.table.visibility = View.GONE
       binding.tvNochart.visibility = View.VISIBLE

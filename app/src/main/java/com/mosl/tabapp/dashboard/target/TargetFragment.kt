@@ -43,6 +43,7 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -257,6 +258,8 @@ class TargetFragment : CommonFragment(), TargetView {
     toggleProgress(uiModel.inProgress)
 
     uiModel.onFailure { error ->
+      Timber.d("TargetFragment renderBankFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(1)
@@ -271,6 +274,8 @@ class TargetFragment : CommonFragment(), TargetView {
   override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
     toggleProgress(uiModel.inProgress)
     uiModel.onFailure { error ->
+      Timber.d("TargetFragment renderBranchFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(2)
@@ -288,6 +293,8 @@ class TargetFragment : CommonFragment(), TargetView {
     selectSubBranch.add(0, SelectSubBranch)
 
     uiModel.onFailure { error ->
+      Timber.d("TargetFragment renderSubBranchFilter showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
       setDefaultValues(3)
@@ -366,6 +373,8 @@ class TargetFragment : CommonFragment(), TargetView {
     labelGroupAdapter.clear()
     lableItemList.clear()
     uiModel.onFailure { error ->
+      Timber.d("TargetFragment renderData showOnFailurePopup ${error.message}")
+
       showOnFailurePopup(error)
       chartClear()
     }

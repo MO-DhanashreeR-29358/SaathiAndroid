@@ -275,7 +275,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     override fun renderChipsList(uiModel: UiModel<List<String>>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
 
         uiModel.onSuccess {
             chipsAdapter.setSpinnerData(binding.spChips, it)
@@ -289,7 +292,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     override fun renderTouchedUntouchedList(uiModel: UiModel<List<LookUp>>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderTouchedUntouchedList showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
 
         uiModel.onSuccess {
             touchedUntouchedAdapter.setSpinnerData(binding.spTouchedUntouched, it)
@@ -304,7 +310,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     override fun renderFeedbackList(uiModel: UiModel<List<LookUp>>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderFeedbackList showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
 
         uiModel.onSuccess {
             feedbackAdapter.setSpinnerData(binding.spFeedback, it)
@@ -315,6 +324,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("CreateMeetingFragment render showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
@@ -483,6 +494,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onFailure {
             binding.etLocation.setText("")
+            Timber.d("CreateMeetingFragment renderAddress showOnFailurePopup ${it.message}")
+
             if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
                 showOnFailurePopup(it)
             }
@@ -497,6 +510,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderMeetingReason showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
@@ -511,7 +526,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     override fun renderSubCategory(uiModel: UiModel<List<LookUp>>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderSubCategory showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
 
         uiModel.onSuccess {
             if (it.size > 1) {
@@ -529,6 +547,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderCustomerServiceData showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
@@ -1522,7 +1542,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     override fun renderOTP(uiModel: UiModel<SendOtpResponse>) {
         toggleProgress(uiModel.inProgress)
 
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderOTP showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
 
         uiModel.onSuccess {
             if(it.status ){
@@ -1601,6 +1624,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
+
             showOnFailurePopup(it)
         }
 
