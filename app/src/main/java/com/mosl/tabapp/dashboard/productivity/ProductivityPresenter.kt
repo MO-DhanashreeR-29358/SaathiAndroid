@@ -12,6 +12,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -27,7 +28,9 @@ class ProductivityPresenter @Inject constructor(
         repository.getDashboardData(getWidgetRequest())
           .compose(applyUiModel())
       }
-      .subscribe(view::renderData)
+      .subscribe{
+        Timber.d("ProductivityPresenter onFetchCalled saathiApi.getProductivity")
+        view.renderData(it)}
       .addTo(disposable)
 
     view.onShowMoreClick().subscribe {

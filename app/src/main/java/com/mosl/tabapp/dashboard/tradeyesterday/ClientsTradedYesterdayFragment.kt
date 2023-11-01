@@ -83,7 +83,7 @@ class ClientsTradedYesterdayFragment : CommonFragment(), ClientsTradedYesterdayV
     uiModel.onFailure { error ->
       Timber.d("ClientsTradedYesterdayFragment renderData showOnFailurePopup ${error.message}")
 
-      showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       clientHideProgress()
       binding.tvNochart.visibility = View.VISIBLE
       dataEvent.onNext(true)

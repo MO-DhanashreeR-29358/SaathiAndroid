@@ -301,6 +301,7 @@ class LeadsFragment : CommonFragment(), LeadsView, View.OnClickListener {
       Timber.d("LeadsFragment renderData showOnFailurePopup ${error.message}")
 
       showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       chartClear()
     }
 

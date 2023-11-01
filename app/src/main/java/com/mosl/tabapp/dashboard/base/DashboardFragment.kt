@@ -23,6 +23,7 @@ import com.mosl.tabapp.R.*
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
+import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
@@ -80,10 +81,12 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         super.onViewCreated(view, savedInstanceState)
         binding = FragDashboardBinding.bind(view)
         hideAppTitle()
+        setupViews()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        setupViews()
+
     }
+
 
     private fun setupViews() {
         binding.rlClientLeads.setOnClickListener(this)
@@ -112,7 +115,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
 
         uiModel.onFailure {
             Timber.d("DashboardFragment render showOnFailurePopup ${it.message}")
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -536,7 +539,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
 
         uiModel.onFailure {
             Timber.d("DashboardFragment renderIncentivePolicy showOnFailurePopup ${it.message}")
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -587,7 +590,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
 
         uiModel.onFailure {
             Timber.d("DashboardFragment renderIncentiveData showOnFailurePopup ${it.message}")
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {

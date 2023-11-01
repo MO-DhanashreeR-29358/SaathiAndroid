@@ -167,7 +167,7 @@ class DashboardReportAssignFragment : CommonFragment(),
             binding.llButton.visibility = View.GONE
             Timber.d("DashboardReportAssignFragment renderLeadAssignStpList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -229,7 +229,7 @@ class DashboardReportAssignFragment : CommonFragment(),
         uiModel.onFailure { error ->
             Timber.d("DashboardReportAssignFragment multiUpdateApproval showOnFailurePopup ${error.message}")
 
-            showOnFailurePopup(error)
+            //showOnFailurePopup(error)
         }
 
         uiModel.onSuccess { data ->

@@ -51,11 +51,15 @@ fun isLocationFromMockProvider(
     }
 }
 
-fun formatMonth(month: String): String {
-    val inputFormat: DateFormat = AppDateFormats.df_date10
-    val outputFormat: DateFormat = AppDateFormats.df_Date1
-    val date = inputFormat.parse(month)
-    return outputFormat.format(date)
+fun formatMonth(month: String?): String? {
+    return if(month.isNullOrEmpty()) {
+        ""
+    }else{
+        val inputFormat: DateFormat = AppDateFormats.df_date10
+        val outputFormat: DateFormat = AppDateFormats.df_Date1
+        val date = inputFormat.parse(month)
+        outputFormat.format(date)
+    }
 }
 
 @Suppress("DEPRECATION")

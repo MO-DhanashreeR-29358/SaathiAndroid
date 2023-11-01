@@ -106,8 +106,8 @@ class ClientsFragment : CommonFragment(), ClientsView {
         return binding.spBank.selectedItem as? FilterRowData
     }
 
-    override fun getPeriod(): FilterRowData {
-        return binding.spPeriod.selectedItem as FilterRowData
+    override fun getPeriod(): FilterRowData? {
+        return binding.spPeriod.selectedItem as? FilterRowData
     }
 
     override fun getWidgetSystemsName(): String? {
@@ -118,7 +118,9 @@ class ClientsFragment : CommonFragment(), ClientsView {
         val addtionalParameterMap: MutableMap<String, String> = HashMap()
         addtionalParameterMap.apply {
             getPeriod().let {
-                this[it.keyValue] = it.value
+                if (it != null) {
+                    this[it.keyValue] = it.value
+                }
             }
             getBank()?.let {
                 this[it.keyValue] = it.text
@@ -133,7 +135,7 @@ class ClientsFragment : CommonFragment(), ClientsView {
         uiModel.onFailure { error ->
             Timber.d("ClientsFragment renderData showOnFailurePopup ${error.message}")
 
-            showOnFailurePopup(error)
+            // showOnFailurePopup(error)
             clientHideProgress()
             arrayListClient.clear()
             binding.tvNochart.visibility = View.VISIBLE
@@ -176,7 +178,7 @@ class ClientsFragment : CommonFragment(), ClientsView {
         return familyCount
     }
 
-    override fun renderUI(text: String, value: String) {
+    override fun renderUI(text: String?, value: String?) {
         binding.tableLayout.removeAllViews()
 
         val inflater = requireActivity().layoutInflater
@@ -206,8 +208,10 @@ class ClientsFragment : CommonFragment(), ClientsView {
                     val addtionalParameters: MutableMap<String, String> = HashMap()
                     tvMtd.setOnClickListener {
                         addtionalParameters.putAll(getAddtionalParameterMap())
-                        addtionalParameters[MOSLConstants.COL_FILTER] =
-                            value.toUpperCase(locale = Locale.ENGLISH) + CNT
+                        if (value != null) {
+                            addtionalParameters[MOSLConstants.COL_FILTER] =
+                                value.toUpperCase(locale = Locale.ENGLISH) + CNT
+                        }
                         addtionalParameters[MOSLConstants.ROW_FILTER] =
                             tvFamilyStatus.text.toString()
                         if (tvMtd.text.toString() != "0") {
@@ -236,7 +240,7 @@ class ClientsFragment : CommonFragment(), ClientsView {
         return navigateEvent.ofType()
     }
 
-    private fun getTableHead(text: String): String {
+    private fun getTableHead(text: String?): String {
         return if (text.equals(MTD, ignoreCase = true)) {
             "MTD\nCount"
         } else {

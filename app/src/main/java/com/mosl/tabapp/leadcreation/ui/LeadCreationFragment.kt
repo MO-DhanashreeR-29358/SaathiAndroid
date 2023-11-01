@@ -8,7 +8,6 @@ import android.os.Parcelable
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -52,7 +51,6 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragmentLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
-import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
@@ -73,10 +71,8 @@ import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
-
 class LeadCreationFragment : CommonFragment(),
     LeadCreationView {
-
     @Inject
     internal lateinit var presenter: LeadCreationPresenter
     private lateinit var binding: FragmentLeadCreationBinding

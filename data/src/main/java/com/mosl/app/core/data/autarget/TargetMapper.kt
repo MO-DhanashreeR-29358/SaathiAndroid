@@ -25,7 +25,7 @@ fun TargetInput.requestTransform(): TargetRequest {
 fun AditionalParametersTarget.apTransform(): APTargetRequest {
     return APTargetRequest(
         fltBankName, fltBankSubBrokerCode, fltBankBranchCode,
-        fltHierarchy, fltPeriod
+        fltHierarchy, fltPeriod?.replace("null", "MTD") ?: "MTD"
     )
 }
 

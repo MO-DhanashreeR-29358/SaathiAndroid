@@ -19,7 +19,7 @@ fun LeadInput.requestTransform(): LeadRequest {
 fun AdditionalParametersInput.additionalParametersTransform(): AdditionalParametersRequest {
     return AdditionalParametersRequest(
         fltBankName, fltBankSubBrokerCode, fltBankBranchCode,
-        fltHierarchy, fltPeriod, fltProduct, fltProspect
+        fltHierarchy, fltPeriod?.replace("null", "MTD") ?: "MTD" , fltProduct, fltProspect
     )
 }
 

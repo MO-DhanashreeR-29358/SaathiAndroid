@@ -3,6 +3,8 @@ package com.mosl.shared.util;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
+
 import androidx.annotation.StringRes;
 
 /**
@@ -17,6 +19,7 @@ public class MSFDialog {
         String message, String buttonText, boolean cancelable, final DialogListener listener) {
         AlertDialog dialog = null;
         try {
+            Log.d("AlertDialog", message);
             dialog = new AlertDialog.Builder(context).setTitle(title)
                 .setMessage(message)
                 .setCancelable(cancelable)

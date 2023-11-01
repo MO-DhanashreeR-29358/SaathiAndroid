@@ -284,7 +284,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         uiModel.onFailure { error ->
             Timber.d("TeamTargetFragment renderBranchFilter showOnFailurePopup ${error.message}")
 
-            showOnFailurePopup(error)
+            //showOnFailurePopup(error)
             chartClear()
             setDefaultValues(2)
         }
@@ -303,7 +303,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         uiModel.onFailure { error ->
             Timber.d("TeamTargetFragment renderSubBranchFilter showOnFailurePopup ${error.message}")
 
-            showOnFailurePopup(error)
+            //showOnFailurePopup(error)
             chartClear()
             setDefaultValues(3)
         }
@@ -385,7 +385,7 @@ class TeamTargetFragment : CommonFragment(), TeamTargetView, View.OnClickListene
         uiModel.onFailure { error ->
             Timber.d("TeamTargetFragment renderData showOnFailurePopup ${error.message}")
 
-            showOnFailurePopup(error)
+            //showOnFailurePopup(error)
             chartClear()
         }
 

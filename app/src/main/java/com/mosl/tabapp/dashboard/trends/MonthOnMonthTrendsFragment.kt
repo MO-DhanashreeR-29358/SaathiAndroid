@@ -118,7 +118,7 @@ class MonthOnMonthTrendsFragment : CommonFragment(), MonthsOnMonthsView {
     uiModel.onFailure { error ->
       Timber.d("MonthOnMonthTrendsFragment renderData showOnFailurePopup ${error.message}")
 
-      showOnFailurePopup(error)
+      // showOnFailurePopup(error)
       binding.includeChart.chart.clear()
     }
     uiModel.onSuccess {

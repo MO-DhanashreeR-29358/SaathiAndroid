@@ -16,6 +16,7 @@ import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.RootDeviceHelper.isEmulator
 import com.mosl.tabapp.util.RootDeviceHelper.isRooted
 import dagger.android.AndroidInjection
+import timber.log.Timber
 import javax.inject.Inject
 
 class SliderActivity : LeanBaseActivity() {
@@ -30,6 +31,7 @@ class SliderActivity : LeanBaseActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+    Timber.d("Something SliderActivity oncreate")
     AndroidInjection.inject(this)
     if (Build.VERSION.SDK_INT >= 21) {
       window.decorView.systemUiVisibility =

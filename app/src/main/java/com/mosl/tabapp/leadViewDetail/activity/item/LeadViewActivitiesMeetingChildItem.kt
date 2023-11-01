@@ -20,7 +20,7 @@ class LeadViewActivitiesMeetingChildItem(
   ) {
     viewBinding.apply {
       try {
-        val dateArray = data.date.split(" ")
+        val dateArray = data.date!!.split(" ")
         tvMonthName.text = dateArray[1]
         tvMonthDate.text = dateArray[0]
         tvMonthYear.text = dateArray[2]

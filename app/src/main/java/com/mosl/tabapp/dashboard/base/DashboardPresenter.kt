@@ -10,6 +10,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import javax.inject.Inject
 
 class DashboardPresenter @Inject constructor(
@@ -76,7 +77,9 @@ class DashboardPresenter @Inject constructor(
                 )
                     .compose(applyUiModel())
             }
-            .subscribe { view.renderIncentiveData(it) }
+            .subscribe {
+                Timber.d("DashboardPresenter Incentive saathiApi.getIncentive")
+                view.renderIncentiveData(it) }
             .addTo(disposable)
 
         view.CurrentQuarterStatus()
@@ -86,7 +89,9 @@ class DashboardPresenter @Inject constructor(
                 )
                     .compose(applyUiModel())
             }
-            .subscribe { view.renderStatus(it) }
+            .subscribe {
+                Timber.d("DashboardPresenter CurrentQuarterStatus saathiApi.getDashboardData")
+                view.renderStatus(it) }
             .addTo(disposable)
 
         view.ActionableCount()
@@ -95,6 +100,7 @@ class DashboardPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe {
+                Timber.d("DashboardPresenter ActionableCount saathiApi.getActionableCount")
                 view.renderActionableCount(it)
             }
             .addTo(disposable)

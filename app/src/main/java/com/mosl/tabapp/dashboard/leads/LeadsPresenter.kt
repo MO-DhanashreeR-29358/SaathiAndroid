@@ -15,6 +15,7 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.io.Serializable
 import java.util.*
 import javax.inject.Inject
@@ -65,7 +66,10 @@ class LeadsPresenter @Inject constructor(
             .switchMap {
                 leadRepository.getLeadWidget(it)
                     .compose(applyUiModel())
-            }.subscribe(view::renderData).addTo(disposable)
+
+            }.subscribe{
+                Timber.d("LeadsPresenter onPeriodChange saathiApi.getLeadWidgetData")
+                view.renderData(it)}.addTo(disposable)
 
         view.onBarChartClick().subscribe { toNavigate(it.lable, it.xAxisValue) }
             .addTo(disposable)

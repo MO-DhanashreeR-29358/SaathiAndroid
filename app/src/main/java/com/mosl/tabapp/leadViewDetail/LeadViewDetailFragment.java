@@ -1268,6 +1268,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderCountries showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1310,6 +1311,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderStates showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1392,6 +1394,7 @@ public class LeadViewDetailFragment extends CommonFragment
         if (error != null) {
             arrCity.clear();
             arrOffCity.clear();
+            Timber.d("renderCities showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1481,6 +1484,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrProfession.clear();
+            Timber.d("renderProfession showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1524,6 +1528,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrInterested.clear();
+            Timber.d("renderInterests showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1562,6 +1567,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrStatus = new ArrayList<>();
+            Timber.d("renderStatus showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1595,6 +1601,7 @@ public class LeadViewDetailFragment extends CommonFragment
     private void renderLeads(UiModel<LeadViewItem> uiModel) {
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderLeads showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -1993,6 +2000,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderUpdateLead showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -2031,6 +2039,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrSelectProfile.clear();
+            Timber.d("renderLeadProfile showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -2402,6 +2411,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderInsertLeadMapping showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -2942,6 +2952,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrStage = new ArrayList<>();
+            Timber.d("renderStage showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -2992,6 +3003,7 @@ public class LeadViewDetailFragment extends CommonFragment
         Throwable error = uiModel.error;
         if (error != null) {
             arrStage = new ArrayList<>();
+            Timber.d("renderStageMobile showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -3123,6 +3135,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
         Throwable error = uiModel.error;
         if (error != null) {
+            Timber.d("renderClientDetail showOnFailurePopup %s", error.getMessage());
             showOnFailurePopup(error);
         }
 
@@ -3631,6 +3644,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
                 Throwable error = uiModel.error;
                 if (error != null) {
+                    Timber.d("renderUpdateProfile showOnFailurePopup %s", error.getMessage());
                     showOnFailurePopup(error);
                 }
 
@@ -3824,6 +3838,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
                                                     Throwable error = uiModel.error;
                                                     if (error != null) {
+                                                        Timber.d("saveLeadCrossSellingProduct showOnFailurePopup %s", error.getMessage());
                                                         showOnFailurePopup(error);
                                                     }
 
@@ -4124,6 +4139,8 @@ public class LeadViewDetailFragment extends CommonFragment
             Throwable error = uiModel.error;
             if (error != null) {
                 arrStatus = new ArrayList<>();
+                Timber.d("renderNewStatus showOnFailurePopup %s", error.getMessage());
+
                 showOnFailurePopup(error);
             }
 
@@ -4174,6 +4191,8 @@ public class LeadViewDetailFragment extends CommonFragment
             Throwable error = uiModel.error;
             if (error != null) {
                 arrCrossSellingProductId.clear();
+                Timber.d("renderNewCrossSellingProduct showOnFailurePopup %s", error.getMessage());
+
                 showOnFailurePopup(error);
             }
 
@@ -4228,6 +4247,8 @@ public class LeadViewDetailFragment extends CommonFragment
             Throwable error = uiModel.error;
             ArrayList<RowData> arrCrossSellingStatus;
             if (error != null) {
+                Timber.d("renderCrossSellingStatus showOnFailurePopup %s", error.getMessage());
+
                 showOnFailurePopup(error);
             }
 
@@ -4284,6 +4305,8 @@ public class LeadViewDetailFragment extends CommonFragment
                 llLowMarginAdd.removeAllViews();
                 lowMarginList.clear();
                 isLowMargin = false;
+                Timber.d("renderStageWiseConfiguration showOnFailurePopup %s", error.getMessage());
+
                 showOnFailurePopup(error);
             }
 
@@ -4595,6 +4618,8 @@ public class LeadViewDetailFragment extends CommonFragment
 
             Throwable error = uiModel.error;
             if (error != null) {
+                Timber.d("renderUpdateLeadProductMapping showOnFailurePopup %s", error.getMessage());
+
                 showOnFailurePopup(error);
             }
 

@@ -276,7 +276,7 @@ class TargetFragment : CommonFragment(), TargetView {
     uiModel.onFailure { error ->
       Timber.d("TargetFragment renderBranchFilter showOnFailurePopup ${error.message}")
 
-      showOnFailurePopup(error)
+      // showOnFailurePopup(error)
       chartClear()
       setDefaultValues(2)
     }
@@ -295,7 +295,7 @@ class TargetFragment : CommonFragment(), TargetView {
     uiModel.onFailure { error ->
       Timber.d("TargetFragment renderSubBranchFilter showOnFailurePopup ${error.message}")
 
-      showOnFailurePopup(error)
+      // showOnFailurePopup(error)
       chartClear()
       setDefaultValues(3)
     }
@@ -375,7 +375,7 @@ class TargetFragment : CommonFragment(), TargetView {
     uiModel.onFailure { error ->
       Timber.d("TargetFragment renderData showOnFailurePopup ${error.message}")
 
-      showOnFailurePopup(error)
+      //showOnFailurePopup(error)
       chartClear()
     }
 

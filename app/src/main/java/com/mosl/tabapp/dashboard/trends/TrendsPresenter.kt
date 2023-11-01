@@ -5,6 +5,7 @@ import com.mosl.mobile.domain.trends.TrendsInput
 import com.mosl.mobile.domain.trends.TrendsRepository
 import com.mosl.tabapp.model.dashboard.DashboardModel
 import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import javax.inject.Inject
 
 class TrendsPresenter @Inject constructor(
@@ -27,7 +28,9 @@ class TrendsPresenter @Inject constructor(
       .switchMap {
         repository.getTrendsWidget(it)
           .compose(applyUiModel())
-      }.subscribe(view::renderData)
+      }.subscribe{
+        Timber.d("TrendsPresenter widgetItemClickObsc saathiApi.getTrendsWidgetData")
+        view.renderData(it)}
       .addTo(disposable)
   }
 

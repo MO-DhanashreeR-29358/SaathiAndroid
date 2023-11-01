@@ -69,6 +69,7 @@ class SplashActivity : LeanBaseActivity() {
         setupView()
         forcePreferenceClear()
         handler.postDelayed({
+            Timber.d("Something Splash oncreate")
             checkNetwork()
         }, 2000)
     }

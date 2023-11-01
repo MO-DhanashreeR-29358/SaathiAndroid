@@ -61,7 +61,7 @@ class LeadsReportFragment : CommonFragment(), LeadsReportView, View.OnClickListe
     uiModel.onFailure {
       Timber.d("LeadsReportFragment renderData showOnFailurePopup ${it.message}")
 
-      showOnFailurePopup(it)
+      //showOnFailurePopup(it)
       binding.table.visibility = View.GONE
       binding.tvNochart.visibility = View.VISIBLE
     }

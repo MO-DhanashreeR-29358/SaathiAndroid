@@ -78,8 +78,7 @@ class BusinessSnapshotAdvFragment : CommonFragment(), BusinessSnapshotAdvView {
     arrayListClient.clear()
     uiModel.onFailure { error ->
       Timber.d("BusinessSnapshotAdvFragment renderData showOnFailurePopup ${error.message}")
-
-      showOnFailurePopup(error)
+     // showOnFailurePopup(error)
       clientHideProgress()
       binding.tvNochart.visibility = View.VISIBLE
       dataEvent.onNext(true)
