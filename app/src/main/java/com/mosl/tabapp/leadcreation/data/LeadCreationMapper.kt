@@ -139,7 +139,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         productDetailModels = arrayListOf<LeadCreationProductMapping>()
         nriRiID = nriRiId
         setExpectedMargin(expectedMargin)
-        leadAccountTypeId = accountTypeId
+        leadAccountTypeId = if(accountTypeId?.isEmpty() == true) "-1" else accountTypeId
 
     }
 }

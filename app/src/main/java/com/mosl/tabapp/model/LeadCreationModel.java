@@ -42,7 +42,7 @@ public class LeadCreationModel implements Serializable {
 
     @SerializedName("ExpectedMargin") private String expectedMargin = "";
 
-    @SerializedName("AccountTypeID") private String leadAccountTypeId = "";
+    @SerializedName("AccountTypeID") private String leadAccountTypeId = "-1";
 
     private transient String profileID;
 

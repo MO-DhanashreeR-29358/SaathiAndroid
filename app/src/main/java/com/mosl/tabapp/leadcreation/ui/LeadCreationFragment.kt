@@ -1548,7 +1548,8 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     override fun getAccountTypeId(): String? {
-        if(binding.spAccountType.selectedItem != null){
+        if(binding.spAccountType.selectedItem != null && getBranch() != null
+            && getBranch()!!.branchName == "AUSFBMAIN"){
             return (binding.spAccountType.selectedItem as? RowData)?.key
         }
         return ""
