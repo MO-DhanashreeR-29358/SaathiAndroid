@@ -24,8 +24,10 @@ class HorinzatalTrendsWidgetItem(
   override fun bind(viewBinding: HorinzontalWidgetItemBinding, position: Int) {
     val context = viewBinding.root.context
     viewBinding.apply {
-      val widgetModel = dashboardGroupModel.widgetList.get(0)
-      if (dashboardGroupModel.isSelected()) {
+      if(dashboardGroupModel.widgetList.size > 0){
+        val widgetModel = dashboardGroupModel.widgetList.get(0)
+
+        if (dashboardGroupModel.isSelected()) {
         tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.white))
         setImageUrl(widgetModel.getIconUrl2().replace(" ", "%20"), imageView, context)
         tvWidgetName.setText(dashboardGroupModel.displayName)
@@ -40,7 +42,7 @@ class HorinzatalTrendsWidgetItem(
         cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
       }
 
-      cardView.setOnClickListener {
+        cardView.setOnClickListener {
         if (dashboardGroupModel.displayName.isNotEmpty()) {
           publishSubject.onNext(
             TrendsWidgetUiEvent.ItemClick(
@@ -50,6 +52,7 @@ class HorinzatalTrendsWidgetItem(
         }
 
       }
+     }
     }
   }
 
