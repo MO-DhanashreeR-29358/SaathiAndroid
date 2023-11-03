@@ -49,5 +49,6 @@ data class ClientDetailItem(
   @JvmField @SerializedName("IsOnlyClient") val isOnlyClient: Boolean,
   @JvmField @SerializedName("CreateMeeting") val createMeetingId: Int,
   @JvmField @SerializedName("SourceName") val sourceName: String?,
-  @JvmField @SerializedName("ProspectSource") val prospectSource: String?
+  @JvmField @SerializedName("ProspectSource") val prospectSource: String?,
+  @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?
 )

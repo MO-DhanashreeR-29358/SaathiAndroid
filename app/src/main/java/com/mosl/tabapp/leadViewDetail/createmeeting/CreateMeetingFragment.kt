@@ -165,6 +165,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var isMockLocationEnabled : Boolean = false
     var strSourceName : String = ""
     var strProspectSource : String = ""
+    var strActivateOTPInApp : String = ""
 
     override fun onViewCreated(
         view: View,
@@ -331,6 +332,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             val clientDetail = it.clientDetail
+            strActivateOTPInApp = it.clientDetail.activateOTPInApp
             strSourceName = clientDetail.sourceName
             strProspectSource = clientDetail.prospectSource
             binding.layoutTopSection.tvLeadId.text = clientDetail.leadId.toString()
@@ -1265,7 +1267,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun toggleOTPVisibility(show: Boolean) {
         enableDisableField(binding.llLocationGroup, show)
-        if (userManager.user.isRM()) {
+        if (strActivateOTPInApp.equals("Yes", ignoreCase = true)) {
             if (show) {
                 binding.btnSendOtp.visibility = View.VISIBLE
                 binding.tilMobileNumber.visibility = View.VISIBLE
@@ -1273,10 +1275,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.btnSendOtp.visibility = View.GONE
                 binding.tilMobileNumber.visibility = View.GONE
             }
+        }else{
+            binding.btnSendOtp.visibility = View.GONE
+            binding.tilMobileNumber.visibility = View.GONE
         }
 
-        if (userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
-                && isBTLProspectSource() == true ){
+        if (userManager.getUser()?.isOmni() == true && strSourceName == "Manual" && isBTLProspectSource()){
                 uiSubject.onNext(CallChipsApi)
                 binding.tilChips.isVisible = true
         }else{

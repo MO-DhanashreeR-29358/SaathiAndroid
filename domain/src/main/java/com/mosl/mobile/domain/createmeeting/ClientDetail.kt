@@ -10,7 +10,8 @@ data class ClientDetail(
   @JvmField val isOnlyClient: Boolean,
   @JvmField val isPotentialPMSProduct: String,
   @JvmField val sourceName: String,
-  @JvmField val prospectSource: String
+  @JvmField val prospectSource: String,
+  @JvmField val activateOTPInApp: String
 )
 
 data class LookUp(

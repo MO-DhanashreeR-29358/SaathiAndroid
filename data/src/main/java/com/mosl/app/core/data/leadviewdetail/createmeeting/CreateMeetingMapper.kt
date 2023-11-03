@@ -23,7 +23,8 @@ object CreateMeetingMapper {
             isOnlyClient = clientDetailItem.isOnlyClient,
             isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: "",
             sourceName = clientDetailItem.sourceName?: "",
-            prospectSource = clientDetailItem.prospectSource?: ""
+            prospectSource = clientDetailItem.prospectSource?: "",
+            activateOTPInApp = clientDetailItem.ActivateOTPInApp?: ""
         )
     }
 
@@ -61,7 +62,8 @@ object CreateMeetingMapper {
             isPotentialPMSProduct = leadViewItem.isPotentialPMSProduct ?: "",
             isOnlyClient = false,
             sourceName = leadViewItem.sourceName?: "",
-            prospectSource = leadViewItem.prospectSource?: ""
+            prospectSource = leadViewItem.prospectSource?: "",
+            activateOTPInApp = leadViewItem.ActivateOTPInApp?: ""
         )
     }
 
