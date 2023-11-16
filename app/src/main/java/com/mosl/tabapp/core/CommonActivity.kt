@@ -547,7 +547,7 @@ class CommonActivity : BaseActivity(),
 
                         userManager.getUser()
                             ?.apply {
-                                if (remoteConfigModel.isConfigured && !this.isAufsb() && !this.isAuBankSalesSupport()) {
+                                if (remoteConfigModel.isConfigured && !this.isAufsb() && !this.isAuBankSalesSupport() && !this.isBandhanSales()) {
                                     openBanner(remoteConfigModel)
                                 }
                             }
@@ -586,7 +586,7 @@ class CommonActivity : BaseActivity(),
         quickAction.addActionItem(acCleint)
         userManager.getUser()
             ?.apply {
-                if (!this.isAufsb()) {
+                if (!this.isAufsb() || !this.isBandhanSales()) {
                     quickAction.addActionItem(acDadhBoard)
                 }
             }

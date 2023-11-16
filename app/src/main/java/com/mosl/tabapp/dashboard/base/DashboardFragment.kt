@@ -95,7 +95,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         binding.rlBusinessSnapshotHead.setOnClickListener(this)
         binding.rlTeamTargetAchievement.setOnClickListener(this)
         binding.rlPerformanceAndIncentivesHeader.setOnClickListener(this)
-        if (userManager.getUser()!!.isAufsb()) {
+        if (userManager.getUser()!!.isAufsb() || userManager.getUser()!!.isBandhanSales() ) {
             binding.layoutAufsb.lldashboardAufsb.visibility = View.VISIBLE
             binding.ivActionableInsights.visibility = View.GONE
             binding.tvMain.visibility = View.GONE

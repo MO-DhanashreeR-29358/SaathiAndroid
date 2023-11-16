@@ -389,7 +389,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         ImageView ivOaoForm = dialog.findViewById(R.id.ivOaoForm);
         ImageView ivSuggestMe = dialog.findViewById(R.id.ivSuggestMe);
         View view3 = dialog.findViewById(R.id.view3);
-        if (userManager.getUser() != null && userManager.getUser().isAufsb()) {
+        if (userManager.getUser() != null && userManager.getUser().isAufsb() || userManager.getUser().isBandhanSales()) {
             ivCreateMeeting.setVisibility(View.GONE);
             ivSetAppointment.setVisibility(View.GONE);
             ivSuggestMe.setVisibility(View.GONE);

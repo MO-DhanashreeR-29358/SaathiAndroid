@@ -96,6 +96,9 @@ class LeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
+        if(request.leadAccountTypeId.isEmpty()){
+            request.leadAccountTypeId = "-1"
+        }
         return saathiApi.updateLead(request)
     }
 

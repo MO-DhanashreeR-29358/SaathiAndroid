@@ -148,7 +148,8 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             if (userManager.getUser() != null && userManager.getUser()!!
-                    .isAufsb()
+                    .isAufsb() || userManager.getUser()!!
+                    .isBandhanSales()
             ) {
                 dialogBinding.ivCreateMeeting.visibility = View.GONE
                 dialogBinding.ivSetAppointment.visibility = View.GONE

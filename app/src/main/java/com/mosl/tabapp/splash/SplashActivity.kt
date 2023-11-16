@@ -341,7 +341,7 @@ class SplashActivity : LeanBaseActivity() {
     }
 
     private fun setUserPreferenceData(user: User) {
-        if (user.isAufsb()) {
+        if (user.isAufsb() || user.isBandhanSales()) {
             openCommonActivity()
         } else {
             fetchReportTypes()

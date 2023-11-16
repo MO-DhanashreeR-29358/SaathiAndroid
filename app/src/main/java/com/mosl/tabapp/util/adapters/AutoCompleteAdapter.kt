@@ -136,7 +136,7 @@ class AutoCompleteAdapter(
       }
 
       userManager.getUser()?.apply {
-        if (this.isAufsb()) {
+        if (this.isAufsb() || this.isBandhanSales()) {
           holderView.rlSetAppointment.visibility = View.GONE
           holderView.rlCreateMeeting.visibility = View.GONE
         }

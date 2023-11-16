@@ -143,4 +143,7 @@ data class User(
         return flag
     }
 
+    fun isBandhanSales(): Boolean {
+        return currentBusinessProfile.businessProfileName?.equals("Bandhan Sales") ?: false
+    }
 }

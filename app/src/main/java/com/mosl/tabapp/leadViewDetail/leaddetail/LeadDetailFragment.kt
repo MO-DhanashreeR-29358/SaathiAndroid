@@ -2552,7 +2552,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun selectedStage(): Observable<SelectStageEvent> = subject.ofType()
 
     override fun getAccountTypeId(): String? {
-        if(binding.spLeadAccountType.selectedItem != null && binding.tvLeadAccountType.isVisible == true){
+        if(binding.spLeadAccountType.selectedItem != null && binding.tvLeadAccountType.isVisible){
             return (binding.spLeadAccountType.selectedItem as? RowData)?.key
         }
         return ""

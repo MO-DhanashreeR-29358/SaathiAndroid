@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.CertificatePinner;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -92,11 +93,14 @@ public class CRMWebServiceHandler {
 
     private static SaathiApi saathiApi;
 
-    private static OkHttpClient.Builder createOkHttpClient() {
-
-        return new OkHttpClient.Builder()
+    private static OkHttpClient.Builder createOkHttpClient(CertificatePinner certPinner) {
+        OkHttpClient.Builder builder =  new OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS);
+        if (certPinner != null) {
+            builder.certificatePinner(certPinner);
+        }
+        return builder;
     }
 
     private static SaathiApi buildSaathiApi(Context context) {
@@ -109,7 +113,7 @@ public class CRMWebServiceHandler {
 
         CertPinProvider certPinProvider = CertPinProviderImpl.INSTANCE;
 
-        OkHttpClient client = createOkHttpClient()
+        OkHttpClient client = createOkHttpClient(certPinProvider.getPinner())
                 .addInterceptor(new HeaderInterceptor(context))
                 .addInterceptor(new AuthorizationInterceptor(context))
                 .addInterceptor(loggingInterceptor)

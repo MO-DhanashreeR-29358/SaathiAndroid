@@ -49,7 +49,7 @@
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
-        android:usesCleartextTraffic="true"
+        android:usesCleartextTraffic="false"
         tools:replace="android:theme">
         <activity android:name=".settings.SettingActivity"></activity>
 

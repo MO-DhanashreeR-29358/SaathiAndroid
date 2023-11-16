@@ -21,6 +21,16 @@
         app:layout_constraintTop_toTopOf="@+id/ivCreateMeeting" />
 
     <View
+        android:id="@+id/view00"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/ivShareLink"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCreateMeeting" />
+
+    <View
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -60,6 +70,7 @@
         android:layout_margin="8dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -72,6 +83,7 @@
         android:layout_margin="8dp"
         android:paddingBottom="5dp"
         android:paddingTop="5dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/view1"
         app:layout_constraintStart_toStartOf="@id/view1"
         app:layout_constraintTop_toTopOf="parent"
@@ -149,10 +161,9 @@
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/ivCall"
         app:layout_constraintEnd_toStartOf="@id/ivCopyLink"
         app:layout_constraintStart_toStartOf="@id/view2"
-        app:layout_constraintTop_toTopOf="@id/ivCall"
+        app:layout_constraintTop_toBottomOf="@+id/ivOaoForm"
         app:srcCompat="@drawable/ic_share_link" />
 
     <androidx.appcompat.widget.AppCompatImageView

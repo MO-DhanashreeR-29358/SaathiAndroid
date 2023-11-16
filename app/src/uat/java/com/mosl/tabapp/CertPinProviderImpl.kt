@@ -13,7 +13,8 @@ object CertPinProviderImpl : CertPinProvider {
             .add(
                 "*.motilaloswal.com",
                 "sha256/zUIraRNo+4JoAYA7ROeWjARtIoN4rIEbCpfCRQT6N6A=",
-                "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E="
+                "sha256/r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=",
+                "sha256/4jQdZdahTbw/WEh4cZEG/LcXh7LGlblu4dhZ1tPlaXc="
             )
             .build()
     }

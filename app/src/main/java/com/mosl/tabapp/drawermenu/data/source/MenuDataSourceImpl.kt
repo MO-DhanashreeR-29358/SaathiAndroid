@@ -22,7 +22,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return Observable.fromCallable {
            val user = userManager.user
             when {
-                user.isAufsb() -> {
+                user.isAufsb() || user.isBandhanSales() -> {
                     getAufsbUserMenu(user.isQRDownload)
                 }
                 user.isAuBankSalesSupport() -> {
