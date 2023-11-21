@@ -313,7 +313,8 @@ class SplashActivity : LeanBaseActivity() {
         disposables.add(
             Observable.fromCallable {
                 LoginInfo(
-                    userManager.getUser()!!.employeeCode, userManager.getUser()!!.password
+                    userManager.getUser()!!.employeeCode, userManager.getUser()!!.password,
+                    Utility.getAppVersionCode(applicationContext).toString()
                 )
             }.switchMap { input ->
                 loginRepository.login(input)

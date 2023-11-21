@@ -22,8 +22,11 @@ open class MenuDataSourceImpl @Inject constructor(
         return Observable.fromCallable {
            val user = userManager.user
             when {
-                user.isAufsb() || user.isBandhanSales() -> {
+                user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
+                }
+                user.isBandhanSales() -> {
+                    getBandhanUserMenu(user.isQRDownload)
                 }
                 user.isAuBankSalesSupport() -> {
                     getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isQRDownload)
@@ -235,7 +238,14 @@ open class MenuDataSourceImpl @Inject constructor(
             getLogout()
         ).apply { checkForPrime(false,isShowQRCode, false) }
     }
-
+    private fun getBandhanUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
+        return arrayListOf(
+            getDashboard(),
+            getBandhanOpenAccount(),
+            getDeleteRequest(),
+            getLogout()
+        ).apply { checkForPrime(false,isShowQRCode, false) }
+    }
     private fun getAuSalesBank(
         isCheckApproval: Boolean,
         digitalSalesKitList : List<DigitalSalesKitData>,
@@ -409,6 +419,28 @@ open class MenuDataSourceImpl @Inject constructor(
                     label = R.string.MOSL_MENU_PENDING_ESIGN_TXT,
                     enabled = true,
                     pageId = NavigationConstants.NAVIGATE_TO_PENDING_ESIGN,
+                    navigateKey = ""
+                )
+            )
+        )
+    }
+
+    private fun getBandhanOpenAccount(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_update_ekyc,
+            label = R.string.MOSL_MENU_EKYC_TXT,
+            enabled = true,
+            children = arrayListOf(
+                ChildMenu(
+                    label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
+                    enabled = true,
+                    pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
                     navigateKey = ""
                 )
             )

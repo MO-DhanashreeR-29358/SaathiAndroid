@@ -10,9 +10,9 @@
     {
       "type": "SINGLE",
       "filters": [],
-      "versionCode": 200,
-      "versionName": "2.0.0",
-      "outputFile": "app-uatRelease-2.0.0.apk"
+      "versionCode": 701,
+      "versionName": "7.0.1",
+      "outputFile": "app-uatRelease-7.0.1.apk"
     }
   ]
 }

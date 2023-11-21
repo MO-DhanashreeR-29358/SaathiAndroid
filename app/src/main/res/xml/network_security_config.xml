@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">motilaloswal.com</domain>
+        <pin-set>
+            <pin digest="SHA-256">zUIraRNo+4JoAYA7ROeWjARtIoN4rIEbCpfCRQT6N6A=</pin>
+            <pin digest="SHA-256">r/mIkG3eEpVdm+u/ko/cwxzOMo1bk4TyHIlByibiA5E=</pin>
+            <pin digest="SHA-256">4jQdZdahTbw/WEh4cZEG/LcXh7LGlblu4dhZ1tPlaXc=</pin>
+            <pin digest="SHA-256">SXBYISpTUynqc/luYeFJrZtM01FDF4Il9BynZGcPPGo=</pin>
+        </pin-set>
+    </domain-config>
+</network-security-config>

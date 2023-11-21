@@ -15,6 +15,7 @@ import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.RootDeviceHelper.isEmulator
 import com.mosl.tabapp.util.RootDeviceHelper.isRooted
+import com.mosl.tabapp.util.rootbeer.RootBeer
 import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
@@ -39,7 +40,9 @@ class SliderActivity : LeanBaseActivity() {
     }
     binding = ActivitySliderBinding.bind(findViewById(R.id.slider_root))
 
-    if (!isEmulator() && isRooted(applicationContext.packageManager)) {
+     val rootBeer = RootBeer(this)
+
+    if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
       showRootedMessage()
       return
     }

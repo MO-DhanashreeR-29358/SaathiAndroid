@@ -26,7 +26,7 @@ class AppUserRepositoryImpl @Inject constructor(
         request.empCode,
         LoginRequest(
             request.empCode, request.password, ipAddress = getLocalIpAddress(),
-            macAddress = getDeviceID(context.contentResolver)
+            macAddress = getDeviceID(context.contentResolver), appVersion = request.appVersion
         )
     )
         .map { response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform(request.password) }

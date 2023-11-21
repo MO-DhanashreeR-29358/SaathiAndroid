@@ -95,7 +95,7 @@ class LeadCreationPresenter @Inject constructor(
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .map { view.getSelectedInterestedProduct() }
-            .filter { rowData -> rowData.value == "Real Estate" && !userManager.getUser()!!.isAllianceBusiness() }
+            .filter { rowData -> rowData.value == "Real Estate - Physical" && !userManager.getUser()!!.isAllianceBusiness() }
             .switchMap {
                 repository.getRealEstateStageRowDatas()
                     .compose(applyUiModel())
@@ -107,7 +107,7 @@ class LeadCreationPresenter @Inject constructor(
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .map { view.getSelectedInterestedProduct() }
-            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && rowData.value != "Real Estate"
+            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY && rowData.value != "Real Estate - Physical"
                     && !userManager.getUser()!!.isAllianceBusiness()}
             .switchMap {
                 repository.getStageRowDatas()

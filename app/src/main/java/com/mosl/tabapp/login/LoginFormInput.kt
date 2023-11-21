@@ -1,6 +1,7 @@
 package com.mosl.tabapp.login
 
 import com.mosl.mobile.user.model.LoginInfo
+import com.mosl.shared.util.Utility
 import com.mosl.tabapp.R
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
@@ -8,7 +9,8 @@ import com.mosl.validator.data.ValidationResult
 data class LoginFormInput(
   val empCode: String,
   val password: String,
-  val isAllPermissionAllowed : Boolean
+  val isAllPermissionAllowed : Boolean,
+  val appVersion : String
 )
 
 object LoginValidator : Validator<LoginFormInput, LoginInfo>() {
@@ -26,7 +28,8 @@ object LoginValidator : Validator<LoginFormInput, LoginInfo>() {
       withData(
           LoginInfo(
               empCode = input.empCode,
-              password = input.password
+              password = input.password,
+              appVersion = input.appVersion
           )
       )
     }

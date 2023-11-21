@@ -136,7 +136,7 @@ class LeadDetailPresenter @Inject constructor(
 
         view.interestedProductSelected()
             .switchMap {
-                if(it.selectedProduct.value.equals("Real Estate") && !userManager.getUser()!!.isAllianceBusiness()){
+                if(it.selectedProduct.value.equals("Real Estate - Physical") && !userManager.getUser()!!.isAllianceBusiness()){
                     repository.getRealEstateStageRowDatas()
                         .compose(applyUiModel())
                 }else {

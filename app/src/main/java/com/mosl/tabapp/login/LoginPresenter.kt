@@ -18,7 +18,7 @@ class LoginPresenter @Inject constructor(
     disposable.add(Observable.merge(view.onLoginClicked(), view.onDoneClicked())
         .map<LoginFormInput> {
           LoginFormInput(
-              view.getEmpCode(), view.getPassword(), view.getIsAllowedAllPermission()
+              view.getEmpCode(), view.getPassword(), view.getIsAllowedAllPermission(),view.getAppVersion()
           )
         }
         .switchMap { input ->

@@ -8,5 +8,6 @@ data class LoginRequest(
   @SerializedName("IPAddress") @JvmField val ipAddress: String,
   @SerializedName("ClientInfo") @JvmField val clientInfo: String = "Android",
   @SerializedName("Macaddress") @JvmField val macAddress: String,
-  @SerializedName("AppId") @JvmField val appId: String = "2"
+  @SerializedName("AppId") @JvmField val appId: String = "2",
+  @SerializedName("AppVersion") @JvmField val appVersion: String = "0"
 )

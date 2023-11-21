@@ -49,6 +49,7 @@ import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
 import com.mosl.navigator.Navigator
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
+import com.mosl.shared.util.Utility
 import com.mosl.shared.util.isEmulator
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
@@ -141,6 +142,10 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
 
   override fun getPassword(): String {
     return binding.edPassword.text.toString()
+  }
+
+  override fun getAppVersion(): String {
+    return Utility.getAppVersionCode(applicationContext).toString()
   }
 
   override fun getIsAllowedAllPermission(): Boolean {
