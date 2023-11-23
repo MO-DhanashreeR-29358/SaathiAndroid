@@ -6,7 +6,10 @@ import android.app.ActivityManager
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.NotificationManager
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
@@ -14,6 +17,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import android.text.Html
 import android.view.View
 import android.view.View.OnClickListener
 import androidx.annotation.RequiresApi
@@ -302,7 +306,11 @@ class CommonActivity : BaseActivity(),
                 if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
                     if(!dialog.isShowing) {
                         dialog.setTitle("This app needs background location access")
-                        dialog.setMessage("The app needs Location permission. Please grant Location permission, else you won't be able to use the app.\n\nFor granting location permission, choose Permissions -> Location -> Allow all the time to continue.")
+                        dialog.setMessage(
+                            Html.fromHtml("Location data (collected from Field Resource App): Saathi is a processor of Client data and is collecting and using this data on behalf of the Client."
+                                + "<BR><BR>Saathi collects the Field Resource Location Data when the Saathi app is running in the foreground (app open and on-screen) or background (app open but not on-screen) of their mobile device."
+                                + "<BR><BR>Saathi collects location data from Field Resources for allocations, compliance and optimizations. Please refer to <a href='https://saathi.motilaloswal.com/apps/privacypolicy.html'>https://saathi.motilaloswal.com/apps/privacypolicy.html</a> for more details."
+                            ) )
                         dialog.setCancelable(false)
                         dialog.setButton(
                             Dialog.BUTTON_POSITIVE, "OK"
@@ -322,7 +330,11 @@ class CommonActivity : BaseActivity(),
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                         if(!dialog.isShowing) {
                             dialog.setTitle("This app needs background location access")
-                            dialog.setMessage("The app needs Location permission. Please grant Location permission, else you won't be able to use the app.\n\nFor granting location permission, choose Permissions -> Location -> Allow all the time to continue.")
+                            dialog.setMessage(
+                                Html.fromHtml("Location data (collected from Field Resource App): Saathi is a processor of Client data and is collecting and using this data on behalf of the Client."
+                                        + "<BR><BR>Saathi collects the Field Resource Location Data when the Saathi app is running in the foreground (app open and on-screen) or background (app open but not on-screen) of their mobile device."
+                                        + "<BR><BR>Saathi collects location data from Field Resources for allocations, compliance and optimizations. Please refer to <a href='https://saathi.motilaloswal.com/apps/privacypolicy.html'>https://saathi.motilaloswal.com/apps/privacypolicy.html</a> for more details."
+                            ))
                             dialog.setCancelable(false)
                             dialog.setButton(
                                 Dialog.BUTTON_POSITIVE, "OK"
