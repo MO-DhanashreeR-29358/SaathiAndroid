@@ -138,6 +138,7 @@ class LeadCreationFragment : CommonFragment(),
     }
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
+    private lateinit var chipsAdapter: ArrayAdapter<String>
 
     private val selectedList = ArrayList<RowData>()
 
@@ -524,6 +525,9 @@ class LeadCreationFragment : CommonFragment(),
             }
 
         }
+
+        chipsAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spChips.adapter = chipsAdapter
 
 
 
@@ -1644,7 +1648,9 @@ class LeadCreationFragment : CommonFragment(),
             nriRiValue = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).value else "",
             countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else "",
             expectedMargin = binding.etExpectedMargin.text.toString(),
-            accountTypeId = getAccountTypeId()
+            accountTypeId = getAccountTypeId(),
+            ChipsEventId = binding.spChips.selectedItem as String,
+            isChipsVisible = binding.groupChips.isVisible
         )
     }
 
@@ -1686,6 +1692,40 @@ class LeadCreationFragment : CommonFragment(),
         binding.spOffCity.adapter = null
         searchList.setAdapter(null)
         secondaryRMSearchList.setAdapter(null)
+    }
+
+    override fun onChipsApiCall(): Observable<CallChipsApi> {
+        return subject.ofType()
+    }
+
+    override fun renderChipsList(uiModel: UiModel<List<String>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it) }
+
+        uiModel.onSuccess {
+            chipsAdapter.setSpinnerData(binding.spChips, it)
+        }
+    }
+
+    override fun onProspectSourceChanged(): Observable<Int> {
+        return binding.spProspectSource.itemSelections()
+    }
+
+    override fun getSelectedProspectSource(): RowData {
+      return  binding.spProspectSource.selectedItem as RowData
+    }
+
+    override fun renderOnProspectSourceChange(isBTL: Boolean) {
+        if(isBTL){
+            binding.groupChips.isVisible = true
+            subject.onNext(CallChipsApi)
+        }else{
+            binding.groupChips.isVisible = false
+        }
     }
 
     override fun onDestroyView() {

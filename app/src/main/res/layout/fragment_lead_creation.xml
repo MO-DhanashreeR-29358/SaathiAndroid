@@ -316,6 +316,13 @@
                         android:visibility="gone"
                         app:constraint_referenced_ids="tvAccountType,tvAccountTypeError,spAccountType" />
 
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_chips"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="tvChips,spChips,tvChipsError" />
+
 
                     <TextView
                         android:id="@+id/tvInterestIn"
@@ -792,6 +799,40 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvProspectSource"/>
 
+                    <TextView
+                        android:id="@+id/tvChips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_lable_chips"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spProspectSource" />
+
+
+                    <Spinner
+                        android:id="@+id/spChips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvChips"/>
+
+                    <TextView
+                        android:id="@+id/tvChipsError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/spChips"/>
+
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/il_prospet_source_detail"
@@ -801,7 +842,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/spProspectSource">
+                        app:layout_constraintTop_toBottomOf="@+id/tvChipsError">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etProspectSourceDetails"

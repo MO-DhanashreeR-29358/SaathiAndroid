@@ -327,5 +327,12 @@ class LeadCreationPresenter @Inject constructor(
             .subscribe { navigator.navigateToLeadViewPager(it.leadId) }
             .addTo(disposable)
 
+        view.onProspectSourceChanged()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedProspectSource() }
+            .map { it.value == "BTL Activity" || it.value == "BTL activity QR code" }
+            .subscribe(view::renderOnProspectSourceChange, Timber::e)
+            .addTo(disposable)
+
     }
 }

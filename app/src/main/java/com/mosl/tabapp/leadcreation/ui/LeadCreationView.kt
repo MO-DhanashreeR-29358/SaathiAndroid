@@ -124,6 +124,13 @@ interface LeadCreationView : BaseView {
   fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
   fun getAccountTypeId() : String?
 
+  fun onChipsApiCall(): Observable<CallChipsApi>
+  fun renderChipsList(uiModel: UiModel<List<String>>)
+
+  fun onProspectSourceChanged(): Observable<Int>
+  fun getSelectedProspectSource(): RowData
+  fun renderOnProspectSourceChange(isBTL: Boolean)
+
   companion object {
     const val INVALID_SELECTION_KEY = "-1"
     val SELECT_ROW_DATA = RowData(0, "-1", "Select")

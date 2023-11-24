@@ -58,5 +58,7 @@ data class LeadCreationUserInput(
     @JvmField val nriRiValue : String,
     @JvmField val countryStdCode : String,
     @JvmField val expectedMargin : String,
-    @JvmField val accountTypeId: String?
+    @JvmField val accountTypeId: String?,
+    @JvmField val ChipsEventId: String?,
+    @JvmField val isChipsVisible: Boolean
 )
