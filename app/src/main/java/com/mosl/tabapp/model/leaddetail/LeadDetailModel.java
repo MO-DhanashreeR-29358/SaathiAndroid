@@ -70,6 +70,15 @@ public class LeadDetailModel {
 	private String referralEmpCode = "";
 	private String referralEmpName = "";
 	private String accountTypeId = "";
+	private String chipsEventId = "";
+
+	public String getChipsEventId() {
+		return chipsEventId;
+	}
+
+	public void setChipsEventId(String chipsEventId) {
+		this.chipsEventId = chipsEventId;
+	}
 
 	public String getAccountTypeId() {
 		return accountTypeId;

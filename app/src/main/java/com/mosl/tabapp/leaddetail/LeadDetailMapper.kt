@@ -83,7 +83,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       clientType = clientType ?: emptyString(),
       productType = productType ?: emptyString(),
       expectedMargin = expectedMargin?: emptyString(),
-      accountTypeName = AccountTypeName?: emptyString()
+      accountTypeName = AccountTypeName?: emptyString(),
+      ChipEventId = ChipEventId?: emptyString()
   )
 }
 

@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadcreation.data
 
 import com.mosl.app.core.data.bank.banckCodeTransform
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.user.login.UserManager
@@ -11,6 +12,7 @@ import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.*
+import com.mosl.saathi.api.model.createmeeting.ChipsEventsRequest
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
@@ -274,6 +276,11 @@ class LeadCreationRepositoryImpl @Inject constructor(
             lookupTypeId = MOSLConstants.LEADACCOUNTTYPE
         )
         return getRowDatas(request)
+    }
+
+    override fun getChipsList(): Observable<List<RowData>> {
+        return saathiApi.getChipsList(ChipsEventsRequest(userManager.getUser()!!.employeeCode))
+            .map { it.chipsItemsToRowDatas() }
     }
 
     override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {

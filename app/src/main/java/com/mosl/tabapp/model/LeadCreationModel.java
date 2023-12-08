@@ -44,7 +44,17 @@ public class LeadCreationModel implements Serializable {
 
     @SerializedName("AccountTypeID") private String leadAccountTypeId = "-1";
 
+    @SerializedName("ChipsEventIdName") private String chipsEventIdName = "";
+
     private transient String profileID;
+
+    public String getChipsEventIdName() {
+        return chipsEventIdName;
+    }
+
+    public void setChipsEventIdName(String chipsEventIdName) {
+        this.chipsEventIdName = chipsEventIdName;
+    }
 
     public String getLeadAccountTypeId() {
         return leadAccountTypeId;

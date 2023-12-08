@@ -181,7 +181,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private val accountTypeAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
-
+    private val chipsAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
     private val defaultSelectionList = ArrayList<RowData>()
 
     override fun getLayout(): Int = R.layout.fragment_lead_detail
@@ -1586,6 +1588,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tlProspectRefereeEmail.setErrorMessages(getString(it))
                 15 ->
                     binding.tlLeadAccountType.setErrorMessages(getString(it))
+                16 ->
+                    binding.tlEventName.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1611,6 +1615,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlPin.disableErrorMessages()
             tlOffPin.disableErrorMessages()
             tlLeadAccountType.disableErrorMessages()
+            tlEventName.disableErrorMessages()
         }
     }
 
@@ -1727,6 +1732,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.referralEmpCode = binding.etReferralEmpCode.text.toString().trim()
         leadDetailModel.referralEmpName = binding.etReferralEmpName.text.toString().trim()
         leadDetailModel.accountTypeId = getAccountTypeId()
+        leadDetailModel.chipsEventId = getChipsEventId()
         return updateLead(leadDetailModel)
     }
 
@@ -1784,7 +1790,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.networth,
             model.referralEmpCode,
             model.referralEmpName,
-            model.accountTypeId
+            model.accountTypeId,
+            model.chipsEventId
         )
     }
 
@@ -1946,6 +1953,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
             binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, data.accountTypeRowDatas)
+            binding.spEvent.setSpinnerData(chipsAdapter, data.chipsRowDatas)
             binding.llEditLeadDetail.performClick()
         }
     }
@@ -2007,6 +2015,15 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 isEnabledEmailId = false
             }
         }
+
+        var isEnableEvent = status
+        if((binding.spEvent.selectedItem as RowData).key == "-1" && status == true){
+                isEnableEvent = true
+         }else{
+                isEnableEvent = false
+         }
+
+
         binding.apply {
             etLeadName.isEnabled = status
             etPanNumber.isEnabled = status
@@ -2032,6 +2049,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             spBrokingProfile.isEnabled = status
             spIpProfile.isEnabled = status
             spFinalProfile.isEnabled = status
+            spEvent.isEnabled = isEnableEvent
             spProfession.isEnabled = status
             cbSameAs.isEnabled = status
             cbPrimaryAddress.isEnabled = status
@@ -2204,6 +2222,20 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         binding.etReferralEmpCode.setText(referralEmpCode)
         binding.etReferralEmpName.setText(referralEmpName)
+
+        if (userManager.getUser()?.isOmni()  == true &&
+            sourceName.equals("Manual") && (prospectSource.equals("BTL Activity") ||
+                    prospectSource.equals("BTL activity QR code"))){
+            binding.tvEventName.isVisible = true
+            binding.tlEventName.isVisible = true
+            val dataChips = RowData.getSpinnerRowDataById(ChipEventId, chipsAdapter)
+            dataChips?.let {
+                binding.spEvent.setSelection(it.position)
+            }
+        }else{
+            binding.tvEventName.isVisible = false
+            binding.tlEventName.isVisible = false
+        }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()
@@ -2554,6 +2586,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun getAccountTypeId(): String? {
         if(binding.spLeadAccountType.selectedItem != null && binding.tvLeadAccountType.isVisible){
             return (binding.spLeadAccountType.selectedItem as? RowData)?.key
+        }
+        return ""
+    }
+
+    override fun getChipsEventId(): String? {
+        if(binding.spEvent.selectedItem != null && binding.tlEventName.isVisible){
+            return (binding.spEvent.selectedItem as? RowData)?.key
         }
         return ""
     }

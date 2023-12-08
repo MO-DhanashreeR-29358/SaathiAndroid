@@ -91,3 +91,13 @@ data class CommanResponse(
   @JvmField val status: Boolean,
   @JvmField val errorMessage: String
 )
+
+data class ChipsEvent(
+  @JvmField val eventId: String,
+  @JvmField val eventName: String
+) {
+  override fun toString(): String {
+    return eventName
+  }
+
+}

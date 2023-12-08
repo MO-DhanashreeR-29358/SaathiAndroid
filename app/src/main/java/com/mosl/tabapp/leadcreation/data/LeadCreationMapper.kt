@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadcreation.data
 import com.mosl.app.core.data.util.safeMap
 import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.createlead.*
+import com.mosl.saathi.api.model.createmeeting.ChipsEventResponse
 import com.mosl.saathi.api.model.lead.*
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
@@ -41,7 +42,8 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         referralEmpCode = model.referralEmpCode,
         nriRiId = model.nriRiID,
         expectedMargin = model.expMargin,
-        leadAccountTypeId = model.leadAccountTypeId
+        leadAccountTypeId = model.leadAccountTypeId,
+        chipsEventIdName = model.chipsEventIdName
     )
 }
 
@@ -140,6 +142,7 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         nriRiID = nriRiId
         setExpectedMargin(expectedMargin)
         leadAccountTypeId = if(accountTypeId?.isEmpty() == true) "-1" else accountTypeId
+        chipsEventIdName = ChipsEventId
 
     }
 }
@@ -305,6 +308,20 @@ internal fun List<StateProvinceItem>.stateProvinceItemsToRowDatas(): List<RowDat
                 index + 1,
                 "${stateProvinceItem.stateId}",
                 stateProvinceItem.stateName
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }.addSelectRowData()
+}
+
+internal fun List<ChipsEventResponse>.chipsItemsToRowDatas(): List<RowData> {
+    return mapIndexedNotNull { index: Int, chipsItem: ChipsEventResponse ->
+        try {
+            RowData(
+                index + 1,
+                chipsItem.eventName,
+                chipsItem.eventNameText
             )
         } catch (_: Exception) {
             null

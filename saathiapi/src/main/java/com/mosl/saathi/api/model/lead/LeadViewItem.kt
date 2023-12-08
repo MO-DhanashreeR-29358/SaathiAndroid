@@ -98,7 +98,8 @@ data class LeadViewItem(
     @JvmField @SerializedName("ExpectedMargin") val expectedMargin: String?,
     @JvmField @SerializedName("OAO") val isShowOAO: Int?,
     @JvmField @SerializedName("AccountTypeName") val AccountTypeName: String?,
-    @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?
+    @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?,
+    @JvmField @SerializedName("ChipEventId") val ChipEventId: String?
 )
 
 data class LeadFieldSection(

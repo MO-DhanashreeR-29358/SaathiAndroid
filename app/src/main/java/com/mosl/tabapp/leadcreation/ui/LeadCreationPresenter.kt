@@ -334,5 +334,12 @@ class LeadCreationPresenter @Inject constructor(
             .subscribe(view::renderOnProspectSourceChange, Timber::e)
             .addTo(disposable)
 
+        view.onChipsApiCall()
+            .switchMap {
+                repository.getChipsList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderChipsList)
+            .addTo(disposable)
     }
 }

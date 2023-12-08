@@ -104,7 +104,9 @@ class DashboardReportPresenter @Inject constructor(
       ?.apply {
         if (this.value.isNotEmpty()) {
           additionalMap[COL_FILTER] = this.value
+            additionalMap[FLT_PERIOD] = this.value
         }
+
       }
     view.getTypeFilter()
       ?.apply {
@@ -192,6 +194,7 @@ class DashboardReportPresenter @Inject constructor(
     const val FILTER_LIST = "filter_list"
     const val SPINNER_LIST = "spinner_list"
     const val FLT_DATE = "flt_date"
+    const val FLT_PERIOD = "flt_period"
     const val COL_FILTER = "colfilter"
     const val ROW_FILTER = "rowfilter"
     const val ACTIONABLE = "Actionable"

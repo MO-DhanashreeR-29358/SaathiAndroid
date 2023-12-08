@@ -125,7 +125,7 @@ interface LeadCreationView : BaseView {
   fun getAccountTypeId() : String?
 
   fun onChipsApiCall(): Observable<CallChipsApi>
-  fun renderChipsList(uiModel: UiModel<List<String>>)
+  fun renderChipsList(uiModel: UiModel<List<RowData>>)
 
   fun onProspectSourceChanged(): Observable<Int>
   fun getSelectedProspectSource(): RowData

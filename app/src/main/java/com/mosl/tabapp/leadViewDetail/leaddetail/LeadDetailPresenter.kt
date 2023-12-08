@@ -15,7 +15,7 @@ import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
 import com.mosl.tabapp.leaddetail.LeadDetailRepository
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.functions.Function7
+import io.reactivex.rxjava3.functions.Function8
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -83,13 +83,15 @@ class LeadDetailPresenter @Inject constructor(
                     repository.getInterestInRowDatas(),
                     repository.getCountryRowDatas(),
                     repository.getAccountTypeList(),
-                    Function7 { listOfProfile: List<RowData>, listOfBrokingProfile: List<RowData>,
+                    repository.getChipsList(),
+                    Function8 { listOfProfile: List<RowData>, listOfBrokingProfile: List<RowData>,
                                 listOfIpProfile: List<RowData>, listOfFinalProfile: List<RowData>,
                                 listOfInterest: List<RowData>, listOfCountry: List<RowData>,
-                                listOfAccountType: List<RowData>->
+                                listOfAccountType: List<RowData>,
+                                listOfChipsEvent: List<RowData>->
                         LeadDetailPageData(
                             listOfProfile, listOfBrokingProfile,
-                            listOfIpProfile, listOfFinalProfile, listOfInterest, listOfCountry,listOfAccountType
+                            listOfIpProfile, listOfFinalProfile, listOfInterest, listOfCountry,listOfAccountType,listOfChipsEvent
                         )
                     }
                 )

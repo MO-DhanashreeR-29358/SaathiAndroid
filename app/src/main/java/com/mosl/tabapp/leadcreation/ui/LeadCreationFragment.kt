@@ -138,7 +138,10 @@ class LeadCreationFragment : CommonFragment(),
     }
     private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
     private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
-    private lateinit var chipsAdapter: ArrayAdapter<String>
+
+    private val chipsAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
 
     private val selectedList = ArrayList<RowData>()
 
@@ -526,8 +529,7 @@ class LeadCreationFragment : CommonFragment(),
 
         }
 
-        chipsAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-        binding.spChips.adapter = chipsAdapter
+
 
 
 
@@ -1268,6 +1270,10 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvAccountTypeError.isVisible = true
                     binding.tvAccountTypeError.text = getString(it)
                 }
+                41 -> {
+                    binding.tvChipsError.isVisible = true
+                    binding.tvChipsError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1303,6 +1309,7 @@ class LeadCreationFragment : CommonFragment(),
             tvSTDError.setText("")
             tvExpectedMarginError.setText("")
             tvAccountTypeError.setText("")
+            tvChipsError.setText("")
         }
     }
 
@@ -1649,11 +1656,17 @@ class LeadCreationFragment : CommonFragment(),
             countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else "",
             expectedMargin = binding.etExpectedMargin.text.toString(),
             accountTypeId = getAccountTypeId(),
-            ChipsEventId = binding.spChips.selectedItem as String,
+            ChipsEventId = getChipsEventId(),
             isChipsVisible = binding.groupChips.isVisible
         )
     }
 
+    private fun getChipsEventId(): String? {
+        if(binding.spChips.selectedItem != null && binding.spChips.isVisible){
+            return (binding.spChips.selectedItem as? RowData)?.key
+        }
+        return ""
+    }
 
     private fun getStdCode() : String{
         var code = ""
@@ -1698,7 +1711,7 @@ class LeadCreationFragment : CommonFragment(),
         return subject.ofType()
     }
 
-    override fun renderChipsList(uiModel: UiModel<List<String>>) {
+    override fun renderChipsList(uiModel: UiModel<List<RowData>>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
@@ -1707,7 +1720,7 @@ class LeadCreationFragment : CommonFragment(),
             showOnFailurePopup(it) }
 
         uiModel.onSuccess {
-            chipsAdapter.setSpinnerData(binding.spChips, it)
+            binding.spChips.setSpinnerData(chipsAdapter, it)
         }
     }
 
@@ -1720,7 +1733,7 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     override fun renderOnProspectSourceChange(isBTL: Boolean) {
-        if(isBTL){
+        if(isBTL && userManager.getUser()?.isOmni() == true){
             binding.groupChips.isVisible = true
             subject.onNext(CallChipsApi)
         }else{

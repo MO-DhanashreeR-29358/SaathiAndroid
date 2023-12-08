@@ -107,7 +107,10 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
                 identifier = 15
                 R.string.error_message_select_account_type
             }
-
+            input.ChipsEventIdName.run { isNotBlank() && equals("-1") } -> {
+                identifier = 16
+                R.string.error_message_select_event
+            }
             else -> {
                 identifier = 0
                 null

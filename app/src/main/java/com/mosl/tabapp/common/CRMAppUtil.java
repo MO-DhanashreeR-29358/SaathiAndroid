@@ -12,18 +12,23 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.Formatter;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.target.Target;
 import com.mosl.tabapp.R;
 
 import java.net.InetAddress;
@@ -38,6 +43,8 @@ import java.util.regex.Pattern;
 
 import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER;
 import static com.mosl.tabapp.constants.MOSLConstants.FILE_UPLOAD_SIZE_LIMT;
+
+import timber.log.Timber;
 
 /**
  * Created by Pramod on 20-01-2016.
@@ -392,10 +399,25 @@ public class CRMAppUtil {
 
     public static void setImageUrl(String imageUrl, final ImageView imageView,
         final Context context) {
+
+
         Glide.with(context).load(imageUrl).asBitmap().placeholder(R.drawable.ic_white).
             centerCrop()
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
+            .listener(new RequestListener<String, Bitmap>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                    Timber.tag("Glide Image").d("Glide Image Error :%s", e.getMessage());
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+
+                    return false;
+                }
+            })
             .into(new BitmapImageViewTarget(imageView) {
                 @Override
                 protected void setResource(Bitmap resource) {

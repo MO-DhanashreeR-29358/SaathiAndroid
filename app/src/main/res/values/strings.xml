@@ -545,6 +545,7 @@
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_select_account_type">Select Lead Account Type</string>
+    <string name="error_message_select_event">Select Event</string>
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
     <string name="error_message_invalid_mobile">Invalid mobile number.</string>
@@ -598,6 +599,7 @@
     <string name="lead_detail_prospect_source_detail">Prospect Source Detail</string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>
+    <string name="lead_detail_event_name">Event Name</string>
     <string name="lead_detail_lead_account_type">Lead Account Type</string>
     <string name="lead_detail_broking_profile">Broking Profile</string>
     <string name="lead_detail_ip_profile">IP Profile</string>

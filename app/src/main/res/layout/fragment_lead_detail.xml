@@ -863,6 +863,33 @@
                             app:hintEnabled="false" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <TextView
+                        android:id="@+id/tv_event_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_event_name"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_event_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/spEvent"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProspectSourceDetail"
                         android:layout_width="match_parent"

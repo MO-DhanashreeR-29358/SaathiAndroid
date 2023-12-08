@@ -20,6 +20,7 @@ import android.provider.Settings
 import android.text.Html
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -553,6 +554,9 @@ class CommonActivity : BaseActivity(),
                 if (task.isSuccessful) {
                     val saathiInit =
                         remoteConfig.getString(getString(R.string.saathi_init))
+                    //alert("Banner response : $saathiInit")
+                   // Toast.makeText(this@CommonActivity, "Banner response : $saathiInit", Toast.LENGTH_LONG).show()
+                  //  Timber.d("OkHttp Banner response : %s", saathiInit)
                     if (saathiInit != null && !saathiInit.isEmpty()) {
                         remoteConfigModel =
                             gson.fromJson(saathiInit, RemoteConfigModel::class.java)

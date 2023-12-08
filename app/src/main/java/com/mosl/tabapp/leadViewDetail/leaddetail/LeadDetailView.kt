@@ -129,6 +129,7 @@ interface LeadDetailView : BaseView {
     fun renderStatus(uiModel: UiModel<List<RowData>>)
     fun selectedStage(): Observable<SelectStageEvent>
     fun getAccountTypeId() : String?
+    fun getChipsEventId() : String?
 
     companion object {
         const val INVALID_SELECTION_KEY = "-1"

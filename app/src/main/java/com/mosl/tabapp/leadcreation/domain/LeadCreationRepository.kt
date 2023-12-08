@@ -44,4 +44,6 @@ interface LeadCreationRepository {
 
     fun getAccountTypeList(): Observable<List<RowData>>
 
+    fun getChipsList(
+    ): Observable<List<RowData>>
 }

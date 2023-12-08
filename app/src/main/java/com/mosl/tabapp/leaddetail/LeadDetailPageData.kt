@@ -54,7 +54,8 @@ data class LeadDetail(
     @JvmField val clientType: String,
     @JvmField val productType: String,
     @JvmField val expectedMargin: String,
-    @JvmField val accountTypeName: String
+    @JvmField val accountTypeName: String,
+    @JvmField val ChipEventId: String
 )
 
 data class LeadProductMap(
