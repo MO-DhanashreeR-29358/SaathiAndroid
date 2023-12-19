@@ -46,7 +46,27 @@ public class LeadCreationModel implements Serializable {
 
     @SerializedName("ChipsEventIdName") private String chipsEventIdName = "";
 
+    @SerializedName("IsBandhanBankEmp") private String  IsBandhanBankEmployee = "";
+    @SerializedName("BandhanBankEmployeeCode") private String  BandhanBankEmployeeCode = "";
+
+
     private transient String profileID;
+
+    public String getIsBandhanBankEmployee() {
+        return IsBandhanBankEmployee;
+    }
+
+    public void setIsBandhanBankEmployee(String isBandhanBankEmployee) {
+        IsBandhanBankEmployee = isBandhanBankEmployee;
+    }
+
+    public String getBandhanBankEmployeeCode() {
+        return BandhanBankEmployeeCode;
+    }
+
+    public void setBandhanBankEmployeeCode(String bandhanBankEmployeeCode) {
+        BandhanBankEmployeeCode = bandhanBankEmployeeCode;
+    }
 
     public String getChipsEventIdName() {
         return chipsEventIdName;

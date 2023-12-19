@@ -260,6 +260,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.ilExpectedMargin.isVisible = false
         }
 
+        binding.chkBandhanBank.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                binding.ilBandhanBankRM.isVisible = true
+            }else{
+                binding.ilBandhanBankRM.isVisible = false
+                binding.tvBandhanBankRMError.isVisible = false
+                binding.etBandhanBankRM.setText("")
+                binding.tvBandhanBankRMError.text = ""
+            }
+        }
+
     }
 
     private fun setSectorSpinner() {
@@ -1590,6 +1601,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tlLeadAccountType.setErrorMessages(getString(it))
                 16 ->
                     binding.tlEventName.setErrorMessages(getString(it))
+                17 -> {
+                    binding.tvBandhanBankRMError.isVisible = true
+                    binding.tvBandhanBankRMError.text = getString(it)
+                }
                 else -> {
                 }
             }
@@ -1616,6 +1631,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlOffPin.disableErrorMessages()
             tlLeadAccountType.disableErrorMessages()
             tlEventName.disableErrorMessages()
+            tvBandhanBankRMError.text = ""
         }
     }
 
@@ -1733,6 +1749,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.referralEmpName = binding.etReferralEmpName.text.toString().trim()
         leadDetailModel.accountTypeId = getAccountTypeId()
         leadDetailModel.chipsEventId = getChipsEventId()
+        leadDetailModel.isBandhanBankEmp = if(binding.chkBandhanBank.isChecked) "Yes" else "No"
+        leadDetailModel.bandhanBankEmp = binding.etBandhanBankRM.text.toString()
         return updateLead(leadDetailModel)
     }
 
@@ -1791,7 +1809,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.referralEmpCode,
             model.referralEmpName,
             model.accountTypeId,
-            model.chipsEventId
+            model.chipsEventId,
+            model.isBandhanBankEmp,
+            model.bandhanBankEmp
         )
     }
 
@@ -2059,6 +2079,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             spDesig.isEnabled = status
             spNetworth.isEnabled = status
             spLeadAccountType.isEnabled = status
+            chkBandhanBank.isEnabled = status
+            etBandhanBankRM.isEnabled = status
+
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
                     enableField(llResAdd)
@@ -2235,6 +2258,18 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }else{
             binding.tvEventName.isVisible = false
             binding.tlEventName.isVisible = false
+        }
+
+        if (userManager.getUser()?.isAllianceBusiness()  == true &&
+            branchName == "BANBMAIN"
+        ){
+            binding.bandhanBankContainer.isVisible = true
+            binding.chkBandhanBank.isChecked = isBandhanBankEmp == "Yes"
+            if(binding.chkBandhanBank.isChecked){
+                binding.ilBandhanBankRM.isVisible = true
+            }
+            binding.etBandhanBankRM.setText(bandhanBankEmpCode)
+
         }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {

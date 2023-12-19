@@ -918,6 +918,63 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <LinearLayout
+                        android:id="@+id/bandhanBankContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/is_bandhan_bank_rm_label"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12sdp"/>
+
+                        <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/chkBandhanBank"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:layout_marginLeft="10dp"
+                            android:visibility="visible"
+                            >
+                        </androidx.appcompat.widget.AppCompatCheckBox>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilBandhanBankRM"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintTextAppearance="@style/InputLayout"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etBandhanBankRM"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                            android:hint="@string/hint_lead_creation_bb_rm"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <TextView
+                            android:id="@+id/tvBandhanBankRMError"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilSecondaryRM"
                         android:layout_width="match_parent"

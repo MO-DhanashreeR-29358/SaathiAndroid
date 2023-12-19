@@ -28,7 +28,7 @@ class LeadDetailPresenter @Inject constructor(
     val navigator: LeadViewDetailNavigator,
     val userManager: UserManagerImpl
 ) : BasePresenter<LeadDetailView>(view) {
-    private val validator = UpdateLeadValidator()
+    private val validator = UpdateLeadValidator(userManager.getUser()!!)
     override fun start() {
         val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
             .share()

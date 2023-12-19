@@ -71,6 +71,24 @@ public class LeadDetailModel {
 	private String referralEmpName = "";
 	private String accountTypeId = "";
 	private String chipsEventId = "";
+	private String isBandhanBankEmp = "";
+	private String bandhanBankEmp = "";
+
+	public String getIsBandhanBankEmp() {
+		return isBandhanBankEmp;
+	}
+
+	public void setIsBandhanBankEmp(String isBandhanBankEmp) {
+		this.isBandhanBankEmp = isBandhanBankEmp;
+	}
+
+	public String getBandhanBankEmp() {
+		return bandhanBankEmp;
+	}
+
+	public void setBandhanBankEmp(String bandhanBankEmp) {
+		this.bandhanBankEmp = bandhanBankEmp;
+	}
 
 	public String getChipsEventId() {
 		return chipsEventId;

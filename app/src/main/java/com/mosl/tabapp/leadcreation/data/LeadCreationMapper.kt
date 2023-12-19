@@ -43,7 +43,9 @@ internal infix fun LeadCreationUserInput.mapToCreateLeadRequest(user: User?): Cr
         nriRiId = model.nriRiID,
         expectedMargin = model.expMargin,
         leadAccountTypeId = model.leadAccountTypeId,
-        chipsEventIdName = model.chipsEventIdName
+        chipsEventIdName = model.chipsEventIdName,
+        IsBandhanBankEmployee = model.isBandhanBankEmployee,
+        BandhanBankEmployeeCode = model.bandhanBankEmployeeCode
     )
 }
 
@@ -143,6 +145,8 @@ private fun LeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreat
         setExpectedMargin(expectedMargin)
         leadAccountTypeId = if(accountTypeId?.isEmpty() == true) "-1" else accountTypeId
         chipsEventIdName = ChipsEventId
+        isBandhanBankEmployee = isBandhanBankEmp
+        bandhanBankEmployeeCode = BandhanBankEmpCode
 
     }
 }

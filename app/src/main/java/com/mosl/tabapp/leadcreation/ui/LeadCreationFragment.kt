@@ -182,6 +182,7 @@ class LeadCreationFragment : CommonFragment(),
         setupAllianceSeconadaryRM()
         setupWealthManagementCodeSeconadaryRM()
         setupRINRI()
+        setupBandhanBankRM()
 
         binding.spCity.setDialogTitle("Search City")
         binding.spOffCity.setDialogTitle("Search City")
@@ -523,6 +524,10 @@ class LeadCreationFragment : CommonFragment(),
                     if(getBranch()!!.branchName == "AUSFBMAIN"){
                         subject.onNext(CallAccountType)
                     }
+
+                    binding.bandhanBankContainer.isVisible = getBranch()!!.branchName == "BANBMAIN"
+                    binding.chkBandhanBank.isChecked = false
+
                 }
 
             }
@@ -671,6 +676,24 @@ class LeadCreationFragment : CommonFragment(),
         }
     }
 
+    private fun setupBandhanBankRM(){
+        if( getBranch() != null
+            && getBranch()!!.branchName == "BANBMAIN"){
+            binding.bandhanBankContainer.isVisible = true
+            binding.ilBandhanBankRM.isVisible = binding.chkBandhanBank.isChecked
+        }
+
+        binding.chkBandhanBank.setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked){
+                binding.ilBandhanBankRM.isVisible = true
+            }else{
+                binding.ilBandhanBankRM.isVisible = false
+                binding.tvBandhanBankRMError.isVisible = false
+                binding.etBandhanBankRM.setText("")
+                binding.tvBandhanBankRMError.text = ""
+            }
+        }
+    }
 
     private fun setupScrollView() {
         binding.scrollView.apply {
@@ -1274,6 +1297,10 @@ class LeadCreationFragment : CommonFragment(),
                     binding.tvChipsError.isVisible = true
                     binding.tvChipsError.text = getString(it)
                 }
+                42 -> {
+                    binding.tvBandhanBankRMError.isVisible = true
+                    binding.tvBandhanBankRMError.text = getString(it)
+                }
                 else -> {
                 }
 
@@ -1310,6 +1337,7 @@ class LeadCreationFragment : CommonFragment(),
             tvExpectedMarginError.setText("")
             tvAccountTypeError.setText("")
             tvChipsError.setText("")
+            tvBandhanBankRMError.setText("")
         }
     }
 
@@ -1657,7 +1685,9 @@ class LeadCreationFragment : CommonFragment(),
             expectedMargin = binding.etExpectedMargin.text.toString(),
             accountTypeId = getAccountTypeId(),
             ChipsEventId = getChipsEventId(),
-            isChipsVisible = binding.groupChips.isVisible
+            isChipsVisible = binding.groupChips.isVisible,
+            isBandhanBankEmp = if(binding.chkBandhanBank.isChecked) "Yes" else "No",
+            BandhanBankEmpCode = binding.etBandhanBankRM.text.toString()
         )
     }
 

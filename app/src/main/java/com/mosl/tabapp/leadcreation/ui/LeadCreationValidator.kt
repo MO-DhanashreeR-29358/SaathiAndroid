@@ -257,6 +257,14 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_select_event
             }
 
+            input.isBandhanBankEmp == "Yes"
+                    && user.isAllianceBusiness()
+                    && input.selectedBranch.branchName == "BANBMAIN" &&
+                    input.BandhanBankEmpCode.isBlank()  -> {
+                identifier = 42
+                R.string.error_message_enter_bbemp
+            }
+
             else -> {
                 identifier = 0
                 null

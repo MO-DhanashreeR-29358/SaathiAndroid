@@ -29,7 +29,9 @@ data class CreateLeadRequest(
     @SerializedName("NriRiID") val nriRiId: String = "",
     @SerializedName("ExpectedMargin") val expectedMargin: String = "",
     @SerializedName("AccountTypeID") val leadAccountTypeId: String = "-1",
-    @SerializedName("ChipsEventIdName") val chipsEventIdName: String? = ""
+    @SerializedName("ChipsEventIdName") val chipsEventIdName: String? = "",
+    @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String? = "",
+    @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String? = ""
 )
 
 data class CreateLeadContact(

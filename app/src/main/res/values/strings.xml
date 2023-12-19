@@ -469,6 +469,7 @@
     <string name="lbl_lead_creation_account_type">Lead Account Type*</string>
     <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
+    <string name="hint_lead_creation_bb_rm">Bandhan Bank Employee Code*</string>
     <string name="hint_lead_creation_land_line">Land Line</string>
     <string name="hint_lead_creation_ekyc_mobile">Ekyc Mobile No</string>
     <string name="hint_lead_creation_dob">Date of Birth</string>
@@ -497,6 +498,7 @@
     <string name="hint_lead_creation_secondary_rm_mo_title">Secondary RM (MO RM)*</string>
     <string name="hint_lead_creation_secondary_rm_pcg_title">Secondary RM (WealthManager RM)</string>
     <string name="is_wealth_rm_label">Is this wealth RM</string>
+    <string name="is_bandhan_bank_rm_label">Is a customer bandhan bank employee</string>
     <string name="hint_lead_creation_alternate_mobile">Alternate Mobile No</string>
     <string name="hint_lead_creation_email_id">Email Id</string>
     <string name="hint_lead_creation_address_one">Address 1</string>
@@ -545,6 +547,7 @@
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_select_account_type">Select Lead Account Type</string>
+    <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>
     <string name="error_message_select_event">Select Event</string>
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>

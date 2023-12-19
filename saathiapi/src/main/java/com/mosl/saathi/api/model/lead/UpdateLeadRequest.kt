@@ -41,7 +41,9 @@ data class UpdateLeadRequest(
     @JvmField @SerializedName("ReferralEmpCodeN") val referralEmpCode: String?,
     @JvmField @SerializedName("ReferralEmpName") val referralEmpName: String?,
     @JvmField @SerializedName("AccountTypeID") var leadAccountTypeId: String,
-    @JvmField @SerializedName("ChipsEventIdName") var ChipsEventIdName: String
+    @JvmField @SerializedName("ChipsEventIdName") var ChipsEventIdName: String,
+    @JvmField @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String? = "",
+    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String
 )
 
 data class LeadFieldValueRequest(

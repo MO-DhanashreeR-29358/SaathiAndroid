@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
 import androidx.annotation.StringRes
+import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
@@ -9,7 +10,7 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 
-class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
+class UpdateLeadValidator (val user: User) : Validator<UpdateLeadRequest, String>() {
     override fun execute(input: UpdateLeadRequest): ValidationResult<String> {
         val contact = input.contact
         val identifier: Int
@@ -110,6 +111,12 @@ class UpdateLeadValidator : Validator<UpdateLeadRequest, String>() {
             input.ChipsEventIdName.run { isNotBlank() && equals("-1") } -> {
                 identifier = 16
                 R.string.error_message_select_event
+            }
+            input.IsBandhanBankEmployee == "Yes"
+                    && user.isAllianceBusiness()  &&
+                    input.BandhanBankEmployeeCode.isBlank()  -> {
+                identifier = 17
+                R.string.error_message_enter_bbemp
             }
             else -> {
                 identifier = 0

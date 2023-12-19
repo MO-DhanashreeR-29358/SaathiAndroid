@@ -84,7 +84,9 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       productType = productType ?: emptyString(),
       expectedMargin = expectedMargin?: emptyString(),
       accountTypeName = AccountTypeName?: emptyString(),
-      ChipEventId = ChipEventId?: emptyString()
+      ChipEventId = ChipEventId?: emptyString(),
+      isBandhanBankEmp = IsBandhanBankEmployee?: emptyString(),
+      bandhanBankEmpCode = BandhanBankEmployeeCode?: emptyString()
   )
 }
 

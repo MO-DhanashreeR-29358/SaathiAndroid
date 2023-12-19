@@ -60,5 +60,7 @@ data class LeadCreationUserInput(
     @JvmField val expectedMargin : String,
     @JvmField val accountTypeId: String?,
     @JvmField val ChipsEventId: String?,
-    @JvmField val isChipsVisible: Boolean
+    @JvmField val isChipsVisible: Boolean,
+    @JvmField val isBandhanBankEmp: String?,
+    @JvmField val BandhanBankEmpCode: String
 )

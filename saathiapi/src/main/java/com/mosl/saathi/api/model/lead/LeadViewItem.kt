@@ -99,7 +99,9 @@ data class LeadViewItem(
     @JvmField @SerializedName("OAO") val isShowOAO: Int?,
     @JvmField @SerializedName("AccountTypeName") val AccountTypeName: String?,
     @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?,
-    @JvmField @SerializedName("ChipEventId") val ChipEventId: String?
+    @JvmField @SerializedName("ChipEventId") val ChipEventId: String?,
+    @JvmField @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String?,
+    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String?
 )
 
 data class LeadFieldSection(
