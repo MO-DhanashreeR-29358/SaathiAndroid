@@ -1062,9 +1062,9 @@
                             android:id="@+id/etBandhanBankRM"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 "
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
                             android:hint="@string/hint_lead_creation_bb_rm"
-                            android:inputType="textNoSuggestions"
+                            android:inputType="textFilter"
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textCursorDrawable="@null" />
