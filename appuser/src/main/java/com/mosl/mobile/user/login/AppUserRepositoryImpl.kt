@@ -49,17 +49,17 @@ class AppUserRepositoryImpl @Inject constructor(
 
   override fun fetchReportTypes(): Observable<List<ReportType>> {
     return saathiApi.fetchReportTypes()
-        .map { response -> response.response?.transformReportData() }
+        .map { response -> response.response?.transformReportData()!! }
   }
 
     override fun fetchDigitalSalesKitParentMenu(): Observable<List<DigitalSalesKitData>> {
         return saathiApi.GetCategoryforMobileParentMenuList()
-            .map { response -> response.response?.transformDigitalSalesKitData() }
+            .map { response -> response.response?.transformDigitalSalesKitData()!! }
     }
 
     override fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>> {
         return saathiApi.GetCategoryforMobileChildMenuList()
-            .map { response -> response.response?.transformDigitalSalesKitData() }
+            .map { response -> response.response?.transformDigitalSalesKitData()!! }
     }
 
     override fun logout(logoutInfo: LogoutInfo): Observable<Boolean> {

@@ -123,6 +123,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
+            tools:replace="android:value"
             android:value="AIzaSyBMQAiQWGdFOTRPecAwybutD8O7XMdUhiQ" />
         <!--<meta-data
             android:name="com.google.android.geo.API_KEY"

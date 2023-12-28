@@ -18,7 +18,7 @@ fun <T> SaathiCommonResponse<T>.getData(): T {
   throw ServiceFailureException(getMessage())
 }
 
-internal fun <T> applyUiModel(): ObservableTransformer<T, UiModel<T>> {
+internal fun <T : Any> applyUiModel(): ObservableTransformer<T, UiModel<T>> {
   return ObservableTransformer { observable ->
     observable.map { UiModel.success(it) }
         .onErrorReturn { UiModel.error(it) }
