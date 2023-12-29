@@ -1003,9 +1003,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (getSelectedActivityType() == CreateMeetingConstants.SELECT_ACTIVITY_TYPE) {
             binding.tilActivityType.setErrorMessages(MSG_SELECT_ACTIVITY_TYPE)
             false
-        } else  if(userManager.getUser()?.isOmni() == true && strSourceName.equals("Manual")
-            && isBTLProspectSource() == true
-            && getSelectedEvent().equals("Select Event")){
+        } else  if(userManager.getUser()?.EventListRequired == true && strSourceName == "Manual" && isBTLProspectSource() && getSelectedEvent().equals("Select Event")){
             binding.tilChips.setErrorMessages(MSG_SELECT_EVENT)
             false
         } else if (getSelectedActivityType()?.isPersonalMeeting() == true && !currentDate.equals(selectedDate)) {
@@ -1280,7 +1278,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             binding.tilMobileNumber.visibility = View.GONE
         }
 
-        if (userManager.getUser()?.isOmni() == true && strSourceName == "Manual" && isBTLProspectSource()){
+        if (userManager.getUser()?.EventListRequired == true && strSourceName == "Manual" && isBTLProspectSource()){
                 uiSubject.onNext(CallChipsApi)
                 binding.tilChips.isVisible = true
         }else{

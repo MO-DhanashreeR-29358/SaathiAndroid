@@ -4,15 +4,12 @@ apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion rootProject.ext.versions.compileSdkVersion
-  buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
-  defaultConfig {
-    minSdkVersion 26
+    defaultConfig {
+    minSdkVersion 15
     targetSdkVersion rootProject.ext.versions.targetSdkVersion
-    versionCode 1
-    versionName "1.0"
 
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
 
   buildTypes {
@@ -26,6 +23,7 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+    namespace 'com.mosl.mobile.user'
 }
 
 dependencies {
