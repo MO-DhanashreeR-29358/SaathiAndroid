@@ -11,6 +11,7 @@ data class LoginResponse(
     @SerializedName("IsPrimeUser") @JvmField val isPrimeUser: String,
     @SerializedName("IsBank") @JvmField val isBank: String,
     @SerializedName("IsQRDownload") @JvmField val isQRDownload: String,
+    @SerializedName("EventListRequired") @JvmField val EventListRequired: String,
     @SerializedName("User") @JvmField val user: User
 ) {
 

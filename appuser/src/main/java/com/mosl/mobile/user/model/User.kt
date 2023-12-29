@@ -23,7 +23,8 @@ data class User(
     @JvmField val currentBusinessProfile: CurrentBusinessProfileRequest,
     @JvmField var password: String,
     @JvmField var isBank: Boolean,
-    @JvmField var isQRDownload: Boolean
+    @JvmField var isQRDownload: Boolean,
+    @JvmField var EventListRequired: Boolean
 
 ) {
     fun isAufsb(): Boolean {

@@ -1763,7 +1763,7 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     override fun renderOnProspectSourceChange(isBTL: Boolean) {
-        if(isBTL && userManager.getUser()?.isOmni() == true){
+        if(isBTL && userManager.getUser()?.EventListRequired == true){
             binding.groupChips.isVisible = true
             subject.onNext(CallChipsApi)
         }else{

@@ -32,17 +32,11 @@ def gitTimestamp() {
 
 android {
     packagingOptions {
-        exclude "META-INF/domain.kotlin_module"
-        exclude "META-INF/rxkotlin.kotlin_module"
-        exclude "META-INF/coreui_release.kotlin_module"
-        exclude "META-INF/core_release.kotlin_module"
-        exclude "META-INF/appuser_release.kotlin_module"
-        exclude "META-INF/loginui_release.kotlin_module"
-        exclude "META-INF/data_release.kotlin_module"
-        exclude "META-INF/rxbinding_release.kotlin_module"
+        resources {
+            excludes += ['META-INF/domain.kotlin_module', 'META-INF/rxkotlin.kotlin_module', 'META-INF/coreui_release.kotlin_module', 'META-INF/core_release.kotlin_module', 'META-INF/appuser_release.kotlin_module', 'META-INF/loginui_release.kotlin_module', 'META-INF/data_release.kotlin_module', 'META-INF/rxbinding_release.kotlin_module']
+        }
     }
     compileSdkVersion rootProject.ext.versions.compileSdkVersion
-    buildToolsVersion rootProject.ext.versions.buildToolsVersion
 
     Properties versionProps = new Properties()
     versionProps.load(new FileInputStream(file('../version.properties')))
@@ -146,10 +140,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
+    lint {
         checkReleaseBuilds false
     }
+    namespace 'com.mosl.tabapp'
+
 }
 
 dependencies {
@@ -275,7 +270,6 @@ dependencies {
     // Architecture components
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
     kapt "androidx.lifecycle:lifecycle-compiler:2.3.1"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 // Kotlin Coroutines

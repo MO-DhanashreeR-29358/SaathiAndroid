@@ -64,7 +64,6 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.android.synthetic.main.crm_client_search_item.*
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -2246,7 +2245,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         binding.etReferralEmpCode.setText(referralEmpCode)
         binding.etReferralEmpName.setText(referralEmpName)
 
-        if (userManager.getUser()?.isOmni()  == true &&
+        if (userManager.getUser()?.EventListRequired  == true &&
             sourceName.equals("Manual") && (prospectSource.equals("BTL Activity") ||
                     prospectSource.equals("BTL activity QR code"))){
             binding.tvEventName.isVisible = true
