@@ -399,6 +399,7 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
     return ""
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onActivityResult(
     requestCode: Int,
     resultCode: Int,
@@ -409,6 +410,7 @@ class DocumentFragment : CommonFragment(), DocumentView, ImageUploadCallback {
     imageUploadHelper.onActivityResult(requestCode, resultCode, data)
   }
 
+  @Deprecated("Deprecated in Java")
   override fun onRequestPermissionsResult(
     requestCode: Int,
     permissions: Array<out String>,

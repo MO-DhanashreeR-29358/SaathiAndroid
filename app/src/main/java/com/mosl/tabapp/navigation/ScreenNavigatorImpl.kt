@@ -92,6 +92,7 @@ class ScreenNavigatorImpl @Inject constructor(
     openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
   }
 
+  @Deprecated("prefer openPage(NavigationRequest)")
   override fun openPage(entry: NavigationEntry) {
     processNavigation(entry)
   }

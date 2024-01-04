@@ -203,6 +203,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         activity?.stopService(serviceIntent)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -220,6 +221,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != FusedLocation.REQUEST_CHECK_SETTINGS)
             super.onActivityResult(requestCode, resultCode, data)

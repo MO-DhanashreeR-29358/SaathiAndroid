@@ -49,7 +49,7 @@ class DashboardReportPresenter @Inject constructor(
       .subscribe(view::renderData)
       .addTo(disposable)
 
-    Observable.just(data.label)
+    Observable.just(data.label.toString())
       .subscribeOn(Schedulers.io())
       .subscribe {
         view.renderLabel(it)

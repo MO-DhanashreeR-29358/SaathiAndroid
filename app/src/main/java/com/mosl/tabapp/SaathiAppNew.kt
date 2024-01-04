@@ -11,15 +11,14 @@ import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
+import ma.dista.utils.DistaApplication
 import processors.coreProcessors.eventReceivers.AbstractEventObserver.SESSION_EXPIRED
 import processors.coreProcessors.eventReceivers.EventBroadcast
 import processors.coreProcessors.eventReceivers.IEventObserver
 import sdk.DistaSDK
 import sdk.interfaces.OnTaskFailureListener
 import sdk.interfaces.OnTaskSuccessListener
-import services.SurveyUploaderService
 import utils.BaseApplication
-import utils.DistaApplication
 import utils.interfaces.IRepositoryUtils
 
 
@@ -100,7 +99,7 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
 
         SESSION_EXPIRED -> {
           IRepositoryUtils.pushAppStateToFirestore(INSTANCE, SESSION_EXPIRED)
-          BaseApplication.getBaseApplication().setAssetDetails(null)
+          BaseApplication.getBaseApplication().setAssetDetails(false,null)
         }
       }
     }

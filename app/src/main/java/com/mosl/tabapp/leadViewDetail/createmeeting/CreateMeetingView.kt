@@ -31,17 +31,17 @@ interface CreateMeetingView : BaseView {
   fun onProductSelected(): Observable<Int>
   fun onCategorySelected(): Observable<Int>
   fun onSendOTPClicked(): Observable<Unit>
-  fun getSelectedMeetingLocation(): LookUp?
-  fun getSelectedTravellingMode(): LookUp?
+  fun getSelectedMeetingLocation(): LookUp
+  fun getSelectedTravellingMode(): LookUp
   fun getSelectedActionable(): LookUp?
   fun getSelectedMeetingDuration(): LookUp?
   fun getSelectedMeetingObjective(): LookUp?
-  fun getSelectedMeetingReason(): LookUp?
-  fun getSelectedActivityType(): LookUp?
+  fun getSelectedMeetingReason(): LookUp
+  fun getSelectedActivityType(): LookUp
   fun getSelectedEvent(): String?
-  fun getMobileNumberType(): MobileListData?
-  fun getSelectedProduct(): LookUp?
-  fun getSelectedCategory(): LookUp?
+  fun getMobileNumberType(): MobileListData
+  fun getSelectedProduct(): LookUp
+  fun getSelectedCategory(): LookUp
   fun getSelectedTouchedUntouched(): LookUp?
   fun getSelectedFeedback(): LookUp?
   fun getSelectedSubCategory(): LookUp?

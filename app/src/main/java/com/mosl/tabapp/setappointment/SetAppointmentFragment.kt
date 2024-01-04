@@ -45,8 +45,6 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_set_appiontment.*
-import kotlinx.android.synthetic.main.lms_top_section_update.*
 import timber.log.Timber
 import java.net.URLEncoder
 import java.util.*
@@ -138,7 +136,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
   }
 
   private fun getLeadByIdFromServer(strLeadId: String) {
-    CRMAppUtil.setImage(ByteArray(0), ivLead, requireContext())
+    CRMAppUtil.setImage(ByteArray(0), binding.includeLmsTopSectionUpdate.ivLead, requireContext())
     subject.onNext(LeadView(strLeadId))
   }
 
@@ -191,9 +189,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
     uiModel.onSuccess {
       val byt = Base64.decode(it, Base64.DEFAULT)
       when {
-        byt != null -> CRMAppUtil.setImage(byt, ivLead, requireContext())
+        byt != null -> CRMAppUtil.setImage(byt, binding.includeLmsTopSectionUpdate.ivLead, requireContext())
         else -> CRMAppUtil.setImage(
-          ByteArray(0), ivLead,
+          ByteArray(0), binding.includeLmsTopSectionUpdate.ivLead,
           requireContext()
         )
       }
@@ -362,12 +360,12 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
   private fun setProductListener() {
     disposable.add(
-      spSelectProduct.itemSelections()
+      binding.spSelectProduct.itemSelections()
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .subscribe { xyz ->
           binding.tvselectproducterror.setVisibility(View.GONE)
-          productCodeStr = (spSelectProduct.selectedItem as RowData).key
+          productCodeStr = (binding.spSelectProduct.selectedItem as RowData).key
         })
   }
 
@@ -403,12 +401,12 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
   private fun setWeekDayListener() {
     disposable.add(
-      spSelectWeekDay.itemSelections<SpinnerAdapter>()
+      binding.spSelectWeekDay.itemSelections<SpinnerAdapter>()
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .subscribe {
-          tvRepeatWeekdayError.visibility = View.GONE
-          weekDayCodeStr = (spSelectWeekDay.selectedItem as RowData).key
+          binding.tvRepeatWeekdayError.visibility = View.GONE
+          weekDayCodeStr = (binding.spSelectWeekDay.selectedItem as RowData).key
         }
     )
   }
@@ -506,7 +504,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       arrAdapRepeteMode.notifyDataSetChanged()
       val productData = getSpinnerRowDataById(meetingApptModel?.repeatOnCode, arrAdapRepeteMode)
       if (productData != null) {
-        spRepeateOn.setSelection(productData.position)
+        binding.spRepeateOn.setSelection(productData.position)
       }
       setRepeatOnListener()
     }
@@ -518,7 +516,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
   private fun setRepeatOnListener() {
     disposable.add(
-      spRepeateOn.itemSelections()
+      binding.spRepeateOn.itemSelections()
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .subscribe { position ->
@@ -565,7 +563,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       val productData =
         getSpinnerRowDataById(meetingApptModel?.repeatEveryWeekCode, arrAdapSelectWeek)
       if (productData != null) {
-        spRepeateWeek.setSelection(productData.position)
+        binding.spRepeateWeek.setSelection(productData.position)
       }
       setRepeatWeekListener()
     }
@@ -577,12 +575,12 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
   private fun setRepeatWeekListener() {
     disposable.add(
-      spRepeateWeek.itemSelections()
+      binding.spRepeateWeek.itemSelections()
         .filter(InvalidSelectionPredicate)
         .skip(1)
         .subscribe { xyz ->
-          tvRepeatTypeSpError.visibility = View.GONE
-          weekCodeStr = (spRepeateWeek.selectedItem as RowData).key
+          binding.tvRepeatTypeSpError.visibility = View.GONE
+          weekCodeStr = (binding.spRepeateWeek.selectedItem as RowData).key
         })
   }
 
@@ -759,8 +757,8 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
       //TODO SwitchRepeateOn check
       when {
-        spRepeateOn.selectedItemPosition > 0 -> {
-          val tmp = spRepeateOn.selectedItem
+        binding.spRepeateOn.selectedItemPosition > 0 -> {
+          val tmp = binding.spRepeateOn.selectedItem
           when (tmp) {
             is RowData -> {
               val a = tmp
@@ -868,11 +866,11 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
   private fun validateForm(): Boolean {
     try {
-      val splitstartDate = stringArray(tvStartDateTime.text.toString())
+      val splitstartDate = stringArray(binding.tvStartDateTime.text.toString())
       val newstartDate = splitstartDate.split("-".toRegex())
         .dropLastWhile { it.isEmpty() }
         .toTypedArray()
-      val splitEndDate = stringArray(tvEndDateTime.text.toString())
+      val splitEndDate = stringArray(binding.tvEndDateTime.text.toString())
       val newEndDate = splitEndDate.split("-".toRegex())
         .dropLastWhile { it.isEmpty() }
         .toTypedArray()
@@ -923,7 +921,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
             return false
           }
         }
-      }
+
 
       //Do this only if you select repete <code></code>
       when {
@@ -960,7 +958,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
           return false
         }
       }
-
+      }
       return true
     } catch (e: Exception) {
       e.printStackTrace()
@@ -1175,21 +1173,21 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       if (mainFromDateEndDate != null) {
         fromDat = CRMAppUtil.getDate(mainFromDateEndDate, "yyyy-MM-dd")
         fromPostingDateEndDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd")
-        tvEndDateTime.text = String.format(
+        binding.tvEndDateTime.text = String.format(
           "%s %d:%d:00", fromPostingDateEndDate, hourEndDate,
           minuteEndDate
         )
       }
-      val splitStartDate = stringArray(tvStartDateTime.text.toString())
+      val splitStartDate = stringArray(binding.tvStartDateTime.text.toString())
       try {
         val newStartDate = splitStartDate.split("-".toRegex())
           .dropLastWhile { it.isEmpty() }
           .toTypedArray()
-        val splitEndDate = stringArray(tvEndDateTime.text.toString())
+        val splitEndDate = stringArray(binding.tvEndDateTime.text.toString())
         val newEndDate = splitEndDate.split("-".toRegex())
           .dropLastWhile { it.isEmpty() }
           .toTypedArray()
-        tvEndDateTimeDisplay.setText(
+        binding.tvEndDateTimeDisplay.setText(
           CRMAppUtil.getDBDate(
             CRMAppUtil.getDBDateObj(
               Integer.parseInt(newEndDate[0]),
@@ -1214,11 +1212,11 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
             .show()
           else -> {
             dialogDateTime.dismiss()
-            tvEndDateError.visibility = View.GONE
+            binding.tvEndDateError.visibility = View.GONE
           }
         }
         when {
-          endDate.time > startDate.time -> tvEndDateError.visibility = View.GONE
+          endDate.time > startDate.time -> binding.tvEndDateError.visibility = View.GONE
         }
       } catch (e: Exception) {
         Timber.d(e)
@@ -1451,20 +1449,20 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       if (mainFromDate != null) {
         fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
         fromPostingDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd")
-        tvApppointmentDateTime.setText(
+        binding.tvApppointmentDateTime.setText(
           String.format(
             "%s %d:%d:00", fromPostingDate, hour,
             minute
           )
         )//Replaced with  T>> -
-        tvAPPDateError.visibility = View.GONE
+        binding.tvAPPDateError.visibility = View.GONE
       }
-      val meetingDate = stringArray(tvApppointmentDateTime.getText().toString())
+      val meetingDate = stringArray(binding.tvApppointmentDateTime.getText().toString())
       try {
         val newstartDate = meetingDate.split("-".toRegex())
           .dropLastWhile { it.isEmpty() }
           .toTypedArray()
-        tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(
+        binding.tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(
           CRMAppUtil.getDBDateObj(
             Integer.parseInt(newstartDate[0]),
             Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
@@ -1477,7 +1475,7 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
 
 
       dialogDateTime.dismiss()
-      tvStartDateError.setVisibility(View.GONE)
+      binding.tvStartDateError.setVisibility(View.GONE)
     }
 
     dialogDateTime.show()

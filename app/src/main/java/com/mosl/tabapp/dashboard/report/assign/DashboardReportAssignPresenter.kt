@@ -37,7 +37,7 @@ class DashboardReportAssignPresenter @Inject constructor(
             }
             .addTo(disposable)
 
-        Observable.just(data.label)
+        Observable.just(data.label.toString())
             .subscribeOn(Schedulers.io())
             .subscribe {
                 view.renderLabel(it)
@@ -51,12 +51,10 @@ class DashboardReportAssignPresenter @Inject constructor(
         view.onDataValidated()
             .filter { it.boolean }
             .map {
-                view.getEmployeeFilter()?.value?.let { it1 -> getSTPLeadTransferRequest(it1) }
+                 getSTPLeadTransferRequest(view.getEmployeeFilter()?.value!!)
             }.switchMap {
-                it?.let { it1 ->
-                    repository.getStpLeadTransfer(it1)
-                        .compose(applyUiModel())
-                }
+                repository.getStpLeadTransfer(it!!)
+                    .compose(applyUiModel())
             }.subscribe(view::multiUpdateApproval).addTo(disposable)
 
         view.onSelectedApprovalList().subscribe {

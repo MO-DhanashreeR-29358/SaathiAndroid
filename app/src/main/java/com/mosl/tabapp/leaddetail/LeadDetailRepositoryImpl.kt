@@ -94,7 +94,7 @@ class LeadDetailRepositoryImpl @Inject constructor(
 
         return saathiApi.getClientSummary(
             url = "https://login.motilaloswal.com/Partner/PartnerMobileWebServices.asmx/GetClientSummary",
-            userId = userManager.user?.userId,
+            userId = userManager.user.userId,
             ucid = ucId
         )
             .map {

@@ -29,19 +29,19 @@ class FcmTokenSyncHelper @Inject constructor(
       )
     }
         .flatMap { it ->
-          gson.toJson(it)
-              ?.let { request ->
-                if (request == fcmTokenRequest.get()) {
-                  Observable.just("NoNeed")
-                } else {
+            gson.toJson(it)
+                ?.let { request ->
+                    if (request == fcmTokenRequest.get()) {
+                        Observable.just("NoNeed")
+                    } else {
 
-                  saathiApi.updateFCMToken(it)
-                      .filter { t -> t.isSuccess() }
-                      .map { t -> t.message }
-                      .doOnNext { fcmTokenRequest.set(request) }
+                        saathiApi.updateFCMToken(it)
+                            .filter { t -> t.isSuccess() }
+                            .map { t -> t.message }
+                            .doOnNext { fcmTokenRequest.set(request) }
 
-                }
-              }
+                    }
+                }!!
         }
         .subscribeOn(Schedulers.io())
   }

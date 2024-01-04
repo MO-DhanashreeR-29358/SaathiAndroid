@@ -13,7 +13,7 @@ class CalendarRepositoryImpl @Inject constructor(
   override fun postCalenderByDate(requestInput: CalenderRequestInput): Observable<List<CalenderItemResponse>> {
     val calendarRequest = requestInput.mapCalendarRequest()
     return saathiApi.postCalenderByDate(calendarRequest).map {
-        it?.calendarItemResponseTransform()
+        it.calendarItemResponseTransform()
     }
   }
 }

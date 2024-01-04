@@ -41,7 +41,7 @@ class SetAppointmentRepositoryImpl @Inject constructor(
   override fun getClientImage(id: String): Observable<String> {
     return saathiApi.getClientImage(ClientImageRequest(id))
       .map {
-        it.response
+        it.response.toString()
       }
   }
 
