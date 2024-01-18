@@ -252,7 +252,7 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
                 R.string.error_message_select_account_type
             }
             (input.ChipsEventId == "-1"
-                    && user.isOmni()) && input.isChipsVisible -> {
+                    && user.EventListRequired) && input.isChipsVisible -> {
                 identifier = 41
                 R.string.error_message_select_event
             }
