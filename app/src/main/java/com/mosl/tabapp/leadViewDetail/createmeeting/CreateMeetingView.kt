@@ -41,7 +41,7 @@ interface CreateMeetingView : BaseView {
   fun getSelectedEvent(): String?
   fun getMobileNumberType(): MobileListData
   fun getSelectedProduct(): LookUp
-  fun getSelectedCategory(): LookUp
+  fun getSelectedCategory(): LookUp?
   fun getSelectedTouchedUntouched(): LookUp?
   fun getSelectedFeedback(): LookUp?
   fun getSelectedSubCategory(): LookUp?

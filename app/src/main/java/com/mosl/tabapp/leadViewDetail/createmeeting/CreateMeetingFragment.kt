@@ -1151,7 +1151,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.spProduct.itemSelections()
     }
 
-    override fun getSelectedCategory(): LookUp {
+    override fun getSelectedCategory(): LookUp? {
         return getSelectedSpinnerValue(binding.spCategory)
     }
 
@@ -1163,8 +1163,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return getSelectedSpinnerValue(binding.spFeedback)
     }
 
-    private fun getSelectedSpinnerValue(spinner: Spinner): LookUp {
-        return spinner.selectedItem as LookUp
+    private fun getSelectedSpinnerValue(spinner: Spinner): LookUp? {
+        if (spinner.selectedItem is LookUp) {
+            return (spinner.selectedItem as LookUp)
+        }
+        return null
     }
 
     override fun getSelectedMeetingLocation(): LookUp {
