@@ -263,4 +263,14 @@
         <item name="android:windowBackground">@drawable/feedback_background</item>
     </style>
     <!-- PopUpAnimation end -->
+
+    <style name="AppTheme.PrimaryButton" parent="Theme.AppCompat.Light">
+        <item name="android:background">@drawable/btn_primary_background</item>
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Inverse</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Button.Inverse" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+
 </resources>

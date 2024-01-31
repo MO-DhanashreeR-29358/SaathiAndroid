@@ -8,4 +8,5 @@ interface CommonBaseUrls {
   fun getEkycExpressApiUrl(): String
 
   fun getQRCodeApiUrl(): String
+  fun getMyZoneApiUrl(): String
 }

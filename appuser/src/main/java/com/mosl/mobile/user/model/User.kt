@@ -24,8 +24,8 @@ data class User(
     @JvmField var password: String,
     @JvmField var isBank: Boolean,
     @JvmField var isQRDownload: Boolean,
-    @JvmField var EventListRequired: Boolean
-
+    @JvmField var EventListRequired: Boolean,
+    @JvmField val collectionOfficer: Boolean = false
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"

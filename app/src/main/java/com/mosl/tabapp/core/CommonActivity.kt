@@ -20,7 +20,6 @@ import android.provider.Settings
 import android.text.Html
 import android.view.View
 import android.view.View.OnClickListener
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -42,6 +41,7 @@ import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
+import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.annotation.BranchCode
@@ -51,11 +51,14 @@ import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
+import com.mosl.mobile.user.model.ProfileInfo
 import com.mosl.navigator.*
 import com.mosl.shared.BranchSelectNeeded
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
+import com.mosl.tabapp.attendancedialog.AttendanceHelper
+import com.mosl.tabapp.attendancedialog.UserLocationHelper
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.constants.MOSLConstants
@@ -91,7 +94,7 @@ import javax.inject.Inject
 import kotlin.collections.set
 
 
-class CommonActivity : BaseActivity(),
+class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
     Navigator,
     ActivityDelegate,
     QuickAction.OnActionItemClickListener,
@@ -137,6 +140,9 @@ class CommonActivity : BaseActivity(),
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
 
     @Inject
+    lateinit var attendanceHelper: AttendanceHelper
+
+    @Inject
     lateinit var shortcutHelper: ShortcutHelper
     private var searchType = SEARCH_TYPE_LEAD
 
@@ -170,6 +176,9 @@ class CommonActivity : BaseActivity(),
      var editor: SharedPreferences.Editor? = null
      var twentyFourSevenCheck = false*/
     /**/
+    internal var isUserLogin = false
+    @Inject
+    lateinit var userLocationHelper: UserLocationHelper
 
     private lateinit var mDistaSdk : IDistaSDK
 
@@ -245,6 +254,11 @@ class CommonActivity : BaseActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             showPermissionWarningDialog()
         }
+        showAttendancePopupIfNotMarked()
+    }
+
+    fun showAttendancePopupIfNotMarked() {
+        attendanceHelper.handleAttendanceAndLocation(this)
     }
 
     override fun onPause() {
@@ -254,6 +268,8 @@ class CommonActivity : BaseActivity(),
 
     override fun onStart() {
         super.onStart()
+        userLocationHelper.start()
+
         Timber.d("AAA onStart")
     }
 
@@ -1056,5 +1072,18 @@ class CommonActivity : BaseActivity(),
         const val ID_LEAD = 1
         const val ID_CLEINT = 2
         const val ID_EMP = 3
+    }
+
+    override fun exit() {
+        finish()
+    }
+
+    override fun setInTime(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("set in time called")
+        if (uiModel.isSuccess) {
+
+            isUserLogin = true
+            userLocationHelper.stop()
+        }
     }
 }

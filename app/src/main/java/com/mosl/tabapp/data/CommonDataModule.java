@@ -1,9 +1,11 @@
 package com.mosl.tabapp.data;
 
 import com.mosl.app.core.data.RepositoryAliasProviders;
+import com.mosl.app.core.data.attendance.AttendanceRepositoryImpl;
 import com.mosl.app.core.data.location.LocationRepositoryImpl;
 import com.mosl.app.core.data.util.BaseDataModule;
 import com.mosl.app.core.data.util.CertPinProvider;
+import com.mosl.mobile.domain.attendance.AttendanceRepository;
 import com.mosl.mobile.data.util.CommonBaseUrls;
 import com.mosl.mobile.domain.location.LocationRepository;
 import com.mosl.tabapp.CertPinProviderImpl;
@@ -42,4 +44,7 @@ public abstract class CommonDataModule {
 
     @Binds abstract LeadDetailRepository bindLeadDetailRepository(
         LeadDetailRepositoryImpl repository);
+
+    @Binds abstract AttendanceRepository bindAttendanceRepository(
+            AttendanceRepositoryImpl repository);
 }

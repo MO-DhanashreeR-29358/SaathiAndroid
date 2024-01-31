@@ -154,7 +154,7 @@ dependencies {
     implementation project(':shared')
     implementation project(':domain')
 
-
+    implementation deps.lottie
     implementation deps.androidx.material
     implementation deps.androidx.appcompat
     implementation deps.androidx.cardview

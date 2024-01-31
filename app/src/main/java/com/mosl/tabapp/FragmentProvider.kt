@@ -1,6 +1,8 @@
 package com.mosl.tabapp
 
 import com.mosl.mobile.pdf.OTPModule
+import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment
+import com.mosl.tabapp.attendancedialog.AttendanceDialogModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
@@ -213,4 +215,7 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReactivationDetailTLModule::class])
     fun provideReactivationDetailTLFragmentFactory(): ReactivationDetailTLFragment
+
+    @ContributesAndroidInjector(modules = [AttendanceDialogModule::class])
+    fun provideAttendanceFragmentFactory(): AttendanceDialogFragment
 }

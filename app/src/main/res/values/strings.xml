@@ -678,4 +678,13 @@
     <string name="com.crashlytics.android.build_id">1</string>
     <string name="lbl_feedback">Edit Feedback/Remarks</string>
     <string name="lbl_remark">Remarks</string>
+
+    <string name="select_your_mood_for_sign_in">Select your mood to sign in</string>
+    <string name="text_label_hi">Hi</string>
+    <string name="text_label_welcome">Welcome To </string>
+    <string name="text_label_your_sigin_time">Your Sign-In time Is </string>
+    <string name="saathi">Saathi</string>
+    <string name="text_label_sign_out_msg">Are You sure you wants to Sign Out</string>
+    <string name="mock_location_enabled">Mock location enabled. Please uninstall mock location apps to continue.</string>
+    <string name="exit">Exit</string>
 </resources>

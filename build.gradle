@@ -182,7 +182,8 @@ ext.deps = [
                 'mockData' : "EkycArtifacts:ekycmockdata:0.0.7",
                 'coreUi' : "EkycArtifacts:ekyccoreui:1.0.0-alpha3",
                 'appUser' : "EkycArtifacts:ekycappuser:1.0.0-alpha3"
-        ]
+        ],
+        'lottie'                 : "com.airbnb.android:lottie:3.0.6"
 
 ]
 

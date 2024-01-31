@@ -69,4 +69,12 @@
 
     <dimen name="menuIcons">@dimen/_24sdp</dimen>
     <dimen name="menu_icons_size">@dimen/_48sdp</dimen>
+
+    <dimen name="dialogbox_padding">50dp</dimen>
+    <dimen name="attendance_dialog_bar_width">100dp</dimen>
+    <dimen name="attendance_dialog_bar_height">5dp</dimen>
+    <dimen name="attendance_dialog_bottom">40dp</dimen>
+    <dimen name="dim_attendance_icon">60dp</dimen>
+    <dimen name="dialog_button_height">40dp</dimen>
+
 </resources>
