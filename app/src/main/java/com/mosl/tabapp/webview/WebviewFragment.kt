@@ -344,7 +344,7 @@ class WebviewFragment : CommonFragment() {
         uiModel.onSuccess {
             when (it.second) {
 
-                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID -> {
+                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID, COLLATERAL_ID -> {
                     it.first?.apply { bannerNavigator.openUrlInAppCrome(this.replace(" ", "%20")) }
                 }
                 else -> it.first?.apply {

@@ -748,6 +748,9 @@ class CommonActivity : BaseActivity(),
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION) {
                     gotoEkycExpressPage(true, WebviewFragment.RESUME_LAS_APPLICATION_ID)
                     binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SALES_BROCHURE) {
+                    gotoEkycExpressPage(false, WebviewFragment.COLLATERAL_ID)
+                    binding.drawerLayout.closeDrawers()
                 }
 
                 activityNavHelper.onMenuClicked(menu)
