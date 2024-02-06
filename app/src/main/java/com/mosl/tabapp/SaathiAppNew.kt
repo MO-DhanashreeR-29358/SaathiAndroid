@@ -11,7 +11,6 @@ import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
-import ma.dista.utils.DistaApplication
 import processors.coreProcessors.eventReceivers.AbstractEventObserver.SESSION_EXPIRED
 import processors.coreProcessors.eventReceivers.EventBroadcast
 import processors.coreProcessors.eventReceivers.IEventObserver
@@ -19,6 +18,7 @@ import sdk.DistaSDK
 import sdk.interfaces.OnTaskFailureListener
 import sdk.interfaces.OnTaskSuccessListener
 import utils.BaseApplication
+import utils.DistaSDKInitializer
 import utils.interfaces.IRepositoryUtils
 
 
@@ -52,7 +52,7 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
     ).addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE = this
-    DistaApplication.newInstance(this)
+    DistaSDKInitializer.Companion.newInstance(this)
 
     DistaSDK.getInstance().initOrganization( "MOSL",
       object : OnTaskSuccessListener {
