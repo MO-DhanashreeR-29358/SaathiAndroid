@@ -250,5 +250,8 @@
     <color name="clr_text_color">#999999</color>
     <color name="clr_border">#D9D9D9</color>
     <color name="clr_yellow_border">#FCAF17</color>
+    <color name="clr_btn_yellow">#FCAF17</color>
+    <color name="clr_btn_gray">#E1E5EC</color>
+    <color name="clr_btn_reset">#666666</color>
 
 </resources>
