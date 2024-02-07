@@ -1,18 +1,32 @@
 package com.mosl.tabapp.reactivation.createrequestReactivationDetails
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.mosl.app.core.events.DataAction
+import com.mosl.tabapp.R
+import com.mosl.tabapp.databinding.LayoutReactivationViewDetailsBinding
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class ReactivationDetailsFragment : BottomSheetDialogFragment() ,ReactivationDetailsView{
     protected val dataActionSubject: PublishSubject<DataAction> = PublishSubject.create()
-    lateinit var binding: LayoutEditEquityDialogBinding
+    lateinit var binding: LayoutReactivationViewDetailsBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         isCancelable = true
-        return inflater.inflate(R.layout.layout_edit_equity_dialog, container, false)
+        return inflater.inflate(R.layout.layout_reactivation_view_details, container, false)
     }
 
     override fun onAttach(context: Context) {
@@ -22,7 +36,7 @@ class ReactivationDetailsFragment : BottomSheetDialogFragment() ,ReactivationDet
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = LayoutEditEquityDialogBinding.bind(view)
+        binding = LayoutReactivationViewDetailsBinding.bind(view)
         // presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
         (dialog as BottomSheetDialog).behavior.state = BottomSheetBehavior.STATE_EXPANDED

@@ -263,4 +263,14 @@
         <item name="android:windowBackground">@drawable/feedback_background</item>
     </style>
     <!-- PopUpAnimation end -->
+    <style name="EkycAppBottomSheetDialogTheme"
+        parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+    <style name="CustomBottomSheetStyle"
+        parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottomsheet</item>
+    </style>
 </resources>
