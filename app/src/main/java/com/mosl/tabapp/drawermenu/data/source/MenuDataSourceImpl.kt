@@ -60,6 +60,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -84,6 +86,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -115,6 +119,8 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -136,6 +142,8 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -170,6 +178,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -195,6 +205,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -260,6 +272,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
@@ -281,6 +295,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 getSip(),
+                getDormantReactivationCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
@@ -591,6 +607,24 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_REACTIVATION,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY
+        )
+    }
+
+    private fun getReactivationCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_reactivation_req,
+            label = R.string.MOSL_MENU_REACTIVATION_REQ,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE
+        )
+    }
+
+    private fun getDormantReactivationCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_DORMANT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_DORMANT
         )
     }
 

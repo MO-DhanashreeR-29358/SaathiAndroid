@@ -54,6 +54,9 @@
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
     <string name="MOSL_MENU_SIP">SIP</string>
+    <string name="MOSL_MENU_DORMANT">Dormant Reactivation </string>
+    <string name="MOSL_MENU_REACTIVATION_REQ">Reactivation Request
+Page </string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>
@@ -678,4 +681,13 @@
     <string name="com.crashlytics.android.build_id">1</string>
     <string name="lbl_feedback">Edit Feedback/Remarks</string>
     <string name="lbl_remark">Remarks</string>
+    <string name="lbl_reactivation_head">Reactivation Request Page</string>
+    <string name="lbl_enter_client_code">Enter Client Code</string>
+    <string name="lbl_search_client">Search Client Code</string>
+    <string name="lbl_view_client">View Client Details</string>
+    <string name="lbl_select_file">Select File To Upload</string>
+    <string name="lbl_upload">Upload</string>
+    <string name="lbl_remarkt">Remark</string>
+    <string name="lbl_actual_date">Actual Activation Date</string>
+    <string name="lbl_actual_hint">Enter Actual Activation Date</string>
 </resources>

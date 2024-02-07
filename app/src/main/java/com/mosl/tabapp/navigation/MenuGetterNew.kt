@@ -24,6 +24,7 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
 import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.query.QueryFragment
+import com.mosl.tabapp.reactivation.createrequestReactivation.CreateRequestReactivationFragment
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment
 import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
@@ -112,6 +113,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
             NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
             NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> DigitalSalesKitFragment()
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE ->CreateRequestReactivationFragment()
+                NavigationConstants.NAVIGATE_TO_DORMANT -> CreateRequestReactivationFragment()
             else -> null
         }
     }
@@ -165,6 +168,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> true
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL -> true
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL_TL -> true
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE -> true
+            NavigationConstants.NAVIGATE_TO_DORMANT -> true
             else -> return false
         }
     }

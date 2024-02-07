@@ -49,6 +49,8 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
         NavigationConstants.NAVIGATE_TO_DELETE_REQUEST,
         NavigationConstants.NAVIGATE_TO_QR_CODE,
+        NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE,
+        NavigationConstants.NAVIGATE_TO_DORMANT
 
 })
 public @interface NavigationConstants {
@@ -101,4 +103,6 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_REACTIVATION_SUMMARY = 47;
     int NAVIGATE_TO_REACTIVATION_DETAIL = 48;
     int NAVIGATE_TO_REACTIVATION_DETAIL_TL = 49;
+    int NAVIGATE_TO_REACTIVATION_CREATE =50;
+    int NAVIGATE_TO_DORMANT=51;
 }
