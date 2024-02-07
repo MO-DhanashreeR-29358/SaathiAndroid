@@ -694,4 +694,16 @@ Page </string>
     <string name="lbl_view_client_details">View Client Details</string>
     <string name="lbl_react_client_name">Client Name</string>
     <string name="lbl_react_final_seg">Final Segment</string>
+    <string name="lbl_react_sub_seg">Sub-segment</string>
+    <string name="lbl_react_branch">Branch</string>
+    <string name="lbl_react_final_act_date">Final Activation Date</string>
+    <string name="lbl_react_last_trade_Date">Last Traded Date</string>
+    <string name="lbl_react_crm_code">Current RM code</string>
+    <string name="lbl_react_crm_name">Current RM Name</string>
+    <string name="lbl_react_map_advisor">Mapped Advisor Code</string>
+    <string name="lbl_react_map_name">Mapped Advisor Name</string>
+    <string name="lbl_react_margin">Margin</string>
+    <string name="lbl_react_margin_col">Margin Collection</string>
+    <string name="lbl_react_tgs">TGS/Edumo</string>
+    <string name="lbl_react_close">Close</string>
 </resources>
