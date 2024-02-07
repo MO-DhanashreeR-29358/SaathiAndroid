@@ -91,6 +91,7 @@ class WebviewFragment : CommonFragment() {
         hideAppTitle()
         binding.progressBar.max = 100
         binding.webView.webViewClient = object : WebViewClient() {
+            @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(
                 view: WebView,
                 url: String
@@ -262,6 +263,7 @@ class WebviewFragment : CommonFragment() {
         )
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (requestCode != INPUT_FILE_REQUEST_CODE || mFilePathCallback == null) {
@@ -342,7 +344,7 @@ class WebviewFragment : CommonFragment() {
         uiModel.onSuccess {
             when (it.second) {
 
-                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID -> {
+                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID, COLLATERAL_ID -> {
                     it.first?.apply { bannerNavigator.openUrlInAppCrome(this.replace(" ", "%20")) }
                 }
                 else -> it.first?.apply {

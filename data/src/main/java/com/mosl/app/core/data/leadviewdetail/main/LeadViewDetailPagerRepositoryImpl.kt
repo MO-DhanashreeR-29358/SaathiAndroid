@@ -50,7 +50,7 @@ class LeadViewDetailPagerRepositoryImpl @Inject constructor(
     val request = ClientImageRequest(id)
     return saathiApi.getClientImage(request)
         .map {
-          it.response
+          it.response.toString()
         }
   }
 
@@ -61,7 +61,7 @@ class LeadViewDetailPagerRepositoryImpl @Inject constructor(
     val request = RegisterProspectOnlineRequest(leadId, ucId)
     return saathiApi.getRegisterProspectOnline(request)
         .map {
-          it.encryptedURL
+          it.encryptedURL.toString()
         }
   }
 }

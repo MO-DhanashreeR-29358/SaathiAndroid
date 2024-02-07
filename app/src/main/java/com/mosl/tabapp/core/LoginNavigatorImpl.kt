@@ -43,6 +43,7 @@ class LoginNavigatorImpl @Inject constructor(
   override fun openHome() {
   }
 
+  @Deprecated("prefer openPage(NavigationRequest)")
   override fun openPage(entry: NavigationEntry) {
     processNavigation(entry)
   }

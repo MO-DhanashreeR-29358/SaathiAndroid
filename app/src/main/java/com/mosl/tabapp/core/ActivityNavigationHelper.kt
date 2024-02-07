@@ -285,7 +285,7 @@ class ActivityNavigationHelper @Inject constructor(
                     )
                 )
                     .map {
-                        it.url?.apply { this.replace(" ", "%20") }
+                        it.url?.apply { this.replace(" ", "%20") }.toString()
                     }
             }
             WebviewFragment.EXISTING_APPLICATIONS_ID -> {
@@ -295,7 +295,7 @@ class ActivityNavigationHelper @Inject constructor(
                         branchCode, null
                     )
                 ).map {
-                    it.url?.apply { this.replace(" ", "%20") }
+                    it.url?.apply { this.replace(" ", "%20") }.toString()
                 }
             }
             WebviewFragment.E_MODIFICATION_ID -> {
@@ -305,7 +305,7 @@ class ActivityNavigationHelper @Inject constructor(
                         null, null
                     )
                 ).map {
-                    it.url?.apply { this.replace(" ", "%20") }
+                    it.url?.apply { this.replace(" ", "%20") }.toString()
                 }
             }
             WebviewFragment.NEW_LAS_APPLICATION_ID -> {
@@ -315,7 +315,7 @@ class ActivityNavigationHelper @Inject constructor(
                         null, null
                     )
                 ).map {
-                    it.url?.apply { this.replace("", "%20") }
+                    it.url?.apply { this.replace("", "%20") }.toString()
                 }
             }
             WebviewFragment.RESUME_LAS_APPLICATION_ID -> {
@@ -325,7 +325,17 @@ class ActivityNavigationHelper @Inject constructor(
                         null, null
                     )
                 ).map {
-                    it.url?.apply { this.replace("", "%20") }
+                    it.url?.apply { this.replace("", "%20") }.toString()
+                }
+            }
+            WebviewFragment.COLLATERAL_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(
+                        WebviewFragment.COLLATERAL_KEY, null,
+                        null, null
+                    )
+                ).map {
+                    it.url?.apply { this.replace("", "%20") }.toString()
                 }
             }
             else -> {
@@ -336,7 +346,7 @@ class ActivityNavigationHelper @Inject constructor(
                         null, null
                     )
                 ).map {
-                    it.url?.apply { this.replace(" ", "%20") }
+                    it.url?.apply { this.replace(" ", "%20") }.toString()
                 }
             }
 

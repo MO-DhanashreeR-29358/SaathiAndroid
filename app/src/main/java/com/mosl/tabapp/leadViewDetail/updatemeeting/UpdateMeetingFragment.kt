@@ -201,21 +201,21 @@ class UpdateMeetingFragment : CommonFragment(), UpdateMeetingView, OnEditorActio
   override fun onCategoryTextChanged(): Observable<String> {
     return binding.etCategory.afterTextChangeEvents()
         .map {
-          it.editable?.toString()
+          it.editable?.toString().toString()
         }
   }
 
   override fun onSubCategoryTextChanged(): Observable<String> {
     return binding.etSubCategory.afterTextChangeEvents()
         .map {
-          it.editable?.toString()
+          it.editable?.toString().toString()
         }
   }
 
   override fun onMeetingDescriptionTextChanged(): Observable<String> {
     return binding.etMeetingDescription.afterTextChangeEvents()
         .map {
-          it.editable?.toString()
+          it.editable?.toString().toString()
         }
   }
 

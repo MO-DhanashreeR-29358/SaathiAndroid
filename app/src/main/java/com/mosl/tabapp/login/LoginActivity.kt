@@ -149,20 +149,15 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   }
 
   override fun getIsAllowedAllPermission(): Boolean {
-    if (ContextCompat.checkSelfPermission(
+    return (ContextCompat.checkSelfPermission(
         this.applicationContext,
         Manifest.permission.ACCESS_FINE_LOCATION
-      )
-      === PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+    )
+            === PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
         this.applicationContext,
         Manifest.permission.ACCESS_COARSE_LOCATION
-      )
-      === PackageManager.PERMISSION_GRANTED
-    ) {
-      return true
-    }else{
-      return false
-    }
+    )
+            === PackageManager.PERMISSION_GRANTED)
   }
 
   @RequiresApi(VERSION_CODES.Q)
@@ -222,32 +217,26 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       editor.putBoolean(resources.getString(R.string.consent_value), true)
       editor.commit()
       dialog.dismiss()
-      if (VERSION.SDK_INT >= VERSION_CODES.M) {
-        if(VERSION.SDK_INT > VERSION_CODES.Q) {
-            if(checkMapServices()) {
-                if(mLocationPermissionGranted) {
-                    //Toast.makeText(this@LoginActivity, "Location permitted", Toast.LENGTH_SHORT).show()
-                } else {
-                    getLocationPermission()
-                }
-            }
-        }
-        permissionCheckHelper.requestAllPermissions()
-      }else{
-        mLocationPermissionGranted = true
+      if(VERSION.SDK_INT > VERSION_CODES.Q) {
+          if(checkMapServices()) {
+              if(mLocationPermissionGranted) {
+                  //Toast.makeText(this@LoginActivity, "Location permitted", Toast.LENGTH_SHORT).show()
+              } else {
+                  getLocationPermission()
+              }
+          }
       }
+      permissionCheckHelper.requestAllPermissions()
       val intent = Intent()
       val packageName: String = getPackageName()
       val pm  = getSystemService(POWER_SERVICE) as PowerManager
-      if (VERSION.SDK_INT >= VERSION_CODES.M) {
-        if (pm.isIgnoringBatteryOptimizations(packageName)) {
-          intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
-        } else {
-          intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-          intent.data = Uri.parse("package:$packageName")
-        }
-        startActivity(intent)
+      if (pm.isIgnoringBatteryOptimizations(packageName)) {
+        intent.action = Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS
+      } else {
+        intent.action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+        intent.data = Uri.parse("package:$packageName")
       }
+      startActivity(intent)
     }
     alertDialog.setNegativeButton(
         "Cancel"
@@ -332,7 +321,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
       //an error occured but we can resolve it
       Log.d("TAG", "isServicesOK: an error occured but we can fix it")
       val dialog: Dialog = GoogleApiAvailability.getInstance()
-        .getErrorDialog(this@LoginActivity, available, ERROR_DIALOG_REQUEST)
+          .getErrorDialog(this@LoginActivity, available, ERROR_DIALOG_REQUEST)!!
       dialog.show()
     } else {
       Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show()
@@ -346,6 +335,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     permissions: Array<out String>,
     grantResults: IntArray
   ) {
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     mLocationPermissionGranted = false
     when (requestCode) {
       PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION -> {
@@ -362,6 +352,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   }
 
 
+  @Deprecated("Deprecated in Java")
   @RequiresApi(VERSION_CODES.Q)
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
     super.onActivityResult(requestCode, resultCode, data)

@@ -583,7 +583,7 @@ interface SaathiApi {
     @POST("Meeting/GetMeetingByDate")
     fun postCalenderByDate(
         @Body request: CalenderRequest
-    ): Observable<List<CalenderItem>?>
+    ): Observable<List<CalenderItem>>
 
     @POST("Branch/GetBranchsByEmployeeCode")
     fun getBranchByEmployeeCode(

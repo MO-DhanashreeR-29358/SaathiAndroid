@@ -97,7 +97,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         handler = Handler(Looper.getMainLooper())
     }
 
-    override fun onMarkerDragEnd(p0: Marker?) {
+    override fun onMarkerDragEnd(p0: Marker) {
         p0?.let {
             val start = Location("start")
             start.latitude = mCurrentLocation?.latitude ?: 0.0
@@ -175,10 +175,10 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
 
     }
 
-    override fun onMarkerDragStart(p0: Marker?) {
+    override fun onMarkerDragStart(p0: Marker) {
     }
 
-    override fun onMarkerDrag(p0: Marker?) {
+    override fun onMarkerDrag(p0: Marker) {
         p0?.let {
             //            Location.distanceBetween(-34.0, 151.0, it.position.latitude, it.position.longitude, null)
         }
@@ -196,6 +196,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         countDownTimer?.cancel()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
 
     }
@@ -467,7 +468,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                 .title("Marker Address")
                 .snippet(getAddress(latLng))
                 .draggable(true)
-        )
+        )!!
         val cameraPos = CameraPosition.Builder()
             .target(latLng).zoom(15f)
             .build()

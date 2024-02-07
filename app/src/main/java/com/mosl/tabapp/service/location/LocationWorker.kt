@@ -103,11 +103,9 @@ class LocationWorker(
                 ) != PackageManager.PERMISSION_GRANTED
             ) else {
                 getFusedLocationProviderClient(context).requestLocationUpdates(
-                    mLocationRequest, object : LocationCallback() {
-                        override fun onLocationResult(locationResult: LocationResult?) {
-                            if (locationResult != null) {
-                                onLocationChanged(locationResult.lastLocation)
-                            }
+                    mLocationRequest!!, object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            locationResult.lastLocation?.let { onLocationChanged(it) }
                         }
                     }, Looper.myLooper()
                 )
@@ -148,13 +146,15 @@ class LocationWorker(
                 lastLocationTime.set(AppDateFormats.DF_JSON_DATE9.format(Utility.getCurrentDisplayDate()))
                 val db1 = SaathiAppNew.get()
                     .getDB()
-                Observable.just(db1)
-                    .subscribeOn(Schedulers.io())
-                    .subscribe { db ->
-                        db?.daoAccess()
-                            ?.insertLocationList(locationData)
-                    }
-                    .addTo(disposable)
+                if (db1 != null) {
+                    Observable.just(db1)
+                        .subscribeOn(Schedulers.io())
+                        .subscribe { db ->
+                            db?.daoAccess()
+                                ?.insertLocationList(locationData)
+                        }
+                        .addTo(disposable)
+                }
 
                 Timber.tag("Location Data entered")
                     .d(locationData.toString())

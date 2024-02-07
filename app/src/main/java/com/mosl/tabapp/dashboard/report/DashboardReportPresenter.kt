@@ -49,7 +49,7 @@ class DashboardReportPresenter @Inject constructor(
       .subscribe(view::renderData)
       .addTo(disposable)
 
-    Observable.just(data.label)
+    Observable.just(data.label.toString())
       .subscribeOn(Schedulers.io())
       .subscribe {
         view.renderLabel(it)
@@ -145,7 +145,8 @@ class DashboardReportPresenter @Inject constructor(
         val args = Bundle()
         val navigationConstants: Int = NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER
         args.putString(MOSLConstants.LEAD_ID, leadID)
-        args.putString(MOSLConstants.UCID, ucid)
+        val ucIdNew =  if (ucid.equals("null", ignoreCase = true)) "0" else ucid
+        args.putString(MOSLConstants.UCID, ucIdNew)
         navigator.openPage(
             navigationConstants.toString(),
             args,

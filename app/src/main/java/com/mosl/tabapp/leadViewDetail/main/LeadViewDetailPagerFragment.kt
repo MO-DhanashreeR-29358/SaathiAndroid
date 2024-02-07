@@ -166,7 +166,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
             if(isShowOAO == 0){
                 dialogBinding.ivOpenAccount.visibility = View.GONE
-                dialogBinding.ivOaoForm.visibility = View.GONE
+                dialogBinding.ivOaoForm.visibility = View.INVISIBLE
             }else{
                 dialogBinding.ivOpenAccount.visibility = View.VISIBLE
                 dialogBinding.ivOaoForm.visibility = View.VISIBLE
@@ -179,7 +179,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                         dialogBinding.ivOaoForm.visibility = View.VISIBLE
                     } else {
                         dialogBinding.ivOpenAccount.visibility = View.VISIBLE
-                        dialogBinding.ivOaoForm.visibility = View.GONE
+                        dialogBinding.ivOaoForm.visibility = View.INVISIBLE
                     }
                 }
             }

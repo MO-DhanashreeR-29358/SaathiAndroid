@@ -282,7 +282,7 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
         if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
         }else{
-            mDistaSdk.doLoginCheckIn(
+            mDistaSdk.doLoginCheckIn(this,
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
                     override fun onSuccess() {
@@ -416,6 +416,7 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
             }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(
         requestCode: Int,
         resultCode: Int,
@@ -763,6 +764,9 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION) {
                     gotoEkycExpressPage(true, WebviewFragment.RESUME_LAS_APPLICATION_ID)
                     binding.drawerLayout.closeDrawers()
+                } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SALES_BROCHURE) {
+                    gotoEkycExpressPage(false, WebviewFragment.COLLATERAL_ID)
+                    binding.drawerLayout.closeDrawers()
                 }
 
                 activityNavHelper.onMenuClicked(menu)
@@ -933,6 +937,7 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
         ) //To change body of created functions use File | Settings | File Templates.
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawers()

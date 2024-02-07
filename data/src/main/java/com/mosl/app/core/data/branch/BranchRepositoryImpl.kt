@@ -17,7 +17,7 @@ class BranchRepositoryImpl @Inject constructor(
     override fun getBranch(): Observable<List<BranchItemResponse>> {
         val branchRequest = BranchRequest(userManager.user.employeeCode)
         return saathiApi.getBranchByEmployeeCode(branchRequest).map {
-            it.response?.branchItemResponseTransform()
+            it.response?.branchItemResponseTransform()!!
         }
     }
 

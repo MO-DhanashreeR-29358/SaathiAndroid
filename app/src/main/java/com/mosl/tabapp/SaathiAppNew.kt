@@ -17,9 +17,8 @@ import processors.coreProcessors.eventReceivers.IEventObserver
 import sdk.DistaSDK
 import sdk.interfaces.OnTaskFailureListener
 import sdk.interfaces.OnTaskSuccessListener
-import services.SurveyUploaderService
 import utils.BaseApplication
-import utils.DistaApplication
+import utils.DistaSDKInitializer
 import utils.interfaces.IRepositoryUtils
 
 
@@ -53,7 +52,7 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
     ).addMigrations(MIGRATION_1_2)
         .build()
     INSTANCE = this
-    DistaApplication.newInstance(this)
+    DistaSDKInitializer.Companion.newInstance(this)
 
     DistaSDK.getInstance().initOrganization( "MOSL",
       object : OnTaskSuccessListener {
@@ -100,7 +99,7 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
 
         SESSION_EXPIRED -> {
           IRepositoryUtils.pushAppStateToFirestore(INSTANCE, SESSION_EXPIRED)
-          BaseApplication.getBaseApplication().setAssetDetails(null)
+          BaseApplication.getBaseApplication().setAssetDetails(false,null)
         }
       }
     }

@@ -66,7 +66,6 @@ import com.mosl.validator.data.ValidationError
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_lead_creation.spCity
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -861,7 +860,7 @@ class LeadCreationFragment : CommonFragment(),
     override fun onPincodeChanged(): Observable<String> {
         return binding.etPincode.afterTextChangeEvents()
             .map {
-                it.editable?.toString()
+                it.editable?.toString().toString()
             }
     }
 
@@ -1098,7 +1097,7 @@ class LeadCreationFragment : CommonFragment(),
             binding.spOffCity.setSpinnerData(cityAdapterOff, selectedList)
             if (binding.cbSameAs.isChecked) {
                 binding.spOffCity.setSpinnerData(cityAdapterOff, cityAdapter.getItems())
-                binding.spOffCity.setSelection(spCity.selectedItemPosition)
+                binding.spOffCity.setSelection(binding.spCity.selectedItemPosition)
             }
         }
     }
