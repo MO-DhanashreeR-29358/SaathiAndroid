@@ -23,7 +23,6 @@ import com.mosl.tabapp.R.*
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
-import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
@@ -37,6 +36,7 @@ import com.mosl.tabapp.dashboard.target.TargetFragment
 import com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment
 import com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment
 import com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment
+import com.mosl.tabapp.databinding.FragDashboardAufsbBinding
 import com.mosl.tabapp.databinding.FragDashboardBinding
 import com.mosl.tabapp.databinding.ItemTableRowBinding
 import com.mosl.tabapp.model.TypeActionableFilterModel
@@ -55,16 +55,15 @@ import com.mosl.tabapp.webview.WebviewFragment
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
-import kotlinx.android.synthetic.main.frag_dashboard_aufsb.view.*
 import org.json.JSONObject
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener {
     internal lateinit var binding: FragDashboardBinding
+    internal lateinit var bindingAusfbDhshboard: FragDashboardAufsbBinding
 
     @Inject
     lateinit var presenter: DashboardPresenter
@@ -80,6 +79,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     ) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragDashboardBinding.bind(view)
+        bindingAusfbDhshboard = binding.layoutAufsb
         hideAppTitle()
         setupViews()
         presenter.start()
@@ -947,7 +947,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
 
     override fun onEmailClicked(): Observable<String> {
         return binding.layoutAufsb.llEmail.clicks().map {
-            binding.layoutAufsb.llEmail.tv_email.text.toString()
+            getString(string.TXT_AUFSB_GMAIL)
         }
     }
 

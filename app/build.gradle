@@ -3,12 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.firebase.firebase-perf'
-
-androidExtensions {
-    experimental = true
-}
+apply plugin: 'kotlin-parcelize'
 
 def gitSha() {
     def p = 'git rev-parse --short HEAD'.execute([], project.rootDir)
@@ -192,6 +188,10 @@ dependencies {
     implementation deps.firebase.crashlytics
     implementation deps.firebase.crashlytics_sdk
     implementation deps.firebase.analytics
+    implementation deps.firebase.storage
+    implementation deps.firebase.firestore
+    implementation deps.firebase.auth
+    implementation deps.firebase.database
 
     // stetho
     debugImplementation deps.stetho.stetho
@@ -200,7 +200,7 @@ dependencies {
     implementation deps.room.runtime
     kapt deps.room.compiler
     //  kapt deps.dataBindCompiler
-    implementation deps.kotlin
+    // implementation deps.kotlin
     implementation deps.location
     implementation deps.maps
     //workmanager
@@ -264,7 +264,8 @@ dependencies {
         exclude group: 'MofslArtifacts'
     }
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
     implementation "androidx.core:core-ktx:1.6.0"
     kapt 'com.android.databinding:compiler:3.1.4'
     // Architecture components
@@ -275,14 +276,23 @@ dependencies {
 // Kotlin Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
-
+    
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
     implementation fileTree(dir: 'libs', include: ['*.aar'])
 
-    implementation 'com.google.firebase:firebase-firestore:21.4.3'
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
-
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+
+    kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0")
+
+    // Google Play Service
+    api 'com.google.android.gms:play-services-base:18.2.0'
+    api 'com.google.android.gms:play-services-places:17.0.0'
+    api 'com.google.maps.android:android-maps-utils:0.5'
+    api 'com.google.android.gms:play-services-auth:20.6.0'
+    api 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
+
+    implementation 'com.google.firebase:firebase-iid:21.1.0'
 }
 kapt {
     javacOptions {

@@ -1165,23 +1165,17 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     private fun getSelectedSpinnerValue(spinner: Spinner): LookUp? {
         if (spinner.selectedItem is LookUp) {
-            return spinner.selectedItem as LookUp
+            return (spinner.selectedItem as LookUp)
         }
         return null
     }
 
-    override fun getSelectedMeetingLocation(): LookUp? {
-        if (binding.spMeetingLocation.selectedItem is LookUp) {
-            return (binding.spMeetingLocation.selectedItem as LookUp)
-        }
-        return null
+    override fun getSelectedMeetingLocation(): LookUp {
+        return (binding.spMeetingLocation.selectedItem as LookUp)
     }
 
-    override fun getSelectedTravellingMode(): LookUp? {
-        if (binding.spTravellingMode.selectedItem is LookUp) {
-            return (binding.spTravellingMode.selectedItem as LookUp)
-        }
-        return null
+    override fun getSelectedTravellingMode(): LookUp {
+        return (binding.spTravellingMode.selectedItem as LookUp)
     }
 
     override fun getSelectedMeetingDuration(): LookUp? {
@@ -1196,18 +1190,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return getSelectedSpinnerValue(binding.spSubCategory)
     }
 
-    override fun getSelectedMeetingReason(): LookUp? {
-        if (binding.spMeetingReason.selectedItem is LookUp) {
-            return binding.spMeetingReason.selectedItem as LookUp
-        }
-        return null
+    override fun getSelectedMeetingReason(): LookUp {
+        return binding.spMeetingReason.selectedItem as LookUp
     }
 
-    override fun getSelectedActivityType(): LookUp? {
-        if (binding.spActivityType.selectedItem is LookUp) {
-            return (binding.spActivityType.selectedItem as LookUp)
-        }
-        return null
+    override fun getSelectedActivityType(): LookUp {
+        return (binding.spActivityType.selectedItem as LookUp)
     }
 
     override fun getSelectedEvent(): String? {
@@ -1217,18 +1205,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return null
     }
 
-    override fun getMobileNumberType(): MobileListData? {
-        if (binding.spMobileNumber.selectedItem is MobileListData) {
-            return (binding.spMobileNumber.selectedItem as MobileListData)
-        }
-        return null
+    override fun getMobileNumberType(): MobileListData {
+        return (binding.spMobileNumber.selectedItem as MobileListData)
     }
 
-    override fun getSelectedProduct(): LookUp? {
-        if (binding.spProduct.selectedItem is LookUp) {
-            return (binding.spProduct.selectedItem as LookUp)
-        }
-        return null
+    override fun getSelectedProduct(): LookUp {
+        return (binding.spProduct.selectedItem as LookUp)
     }
 
     override fun getSelectedActionable(): LookUp? {
@@ -1465,7 +1447,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             //an error occured but we can resolve it
             Log.d("TAG", "isServicesOK: an error occured but we can fix it")
             val dialog: Dialog = GoogleApiAvailability.getInstance()
-                .getErrorDialog(requireActivity(), available, ERROR_DIALOG_REQUEST)
+                .getErrorDialog(requireActivity(), available, ERROR_DIALOG_REQUEST)!!
             dialog.show()
         } else {
             Toast.makeText(requireContext(), "You can't make map requests", Toast.LENGTH_SHORT).show()
@@ -1473,6 +1455,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return false
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -1499,6 +1482,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("TAG", "onActivityResult: called.")

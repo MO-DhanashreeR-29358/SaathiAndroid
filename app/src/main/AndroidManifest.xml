@@ -49,7 +49,7 @@
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
         android:usesCleartextTraffic="false"
-        tools:replace="android:theme"
+        tools:replace="android:theme,android:label"
         android:networkSecurityConfig="@xml/network_security_config">
 
         <activity android:name=".settings.SettingActivity"></activity>
@@ -122,6 +122,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
+            tools:replace="android:value"
             android:value="AIzaSyBMQAiQWGdFOTRPecAwybutD8O7XMdUhiQ" />
         <!--<meta-data
             android:name="com.google.android.geo.API_KEY"

@@ -276,6 +276,9 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
+-keep public class * implements ma.dista.utils.DistaApplication {
+   public static <methods>;
+}
 
 
 

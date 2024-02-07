@@ -35,7 +35,6 @@ import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
-import com.mosl.tabapp.webview.WebviewFragment.Companion.COLLATERAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.DELETE_REQUEST_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
@@ -57,10 +56,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> PendingApprovalFragment()
             NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY -> BirthdayAnniversaryFragment()
             NavigationConstants.NAVIGATE_TO_QUERY -> QueryFragment()
-            NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> WebviewFragment().apply {
-                args.putString(WebviewFragment.PAGE_ID, COLLATERAL_ID)
-                arguments = args
-            }
+
             NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> WebviewFragment().apply {
                 args.putString(WebviewFragment.PAGE_ID, STADIUM_PITCH_ID)
                 arguments = args

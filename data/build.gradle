@@ -62,4 +62,6 @@ dependencies {
   implementation project(':appuser')
   implementation project(':shared')
   implementation project(':domain')
+
+  kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0")
 }

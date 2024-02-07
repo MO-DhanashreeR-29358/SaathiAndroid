@@ -151,9 +151,9 @@ class CreateMeetingPresenter @Inject constructor(
         view.onCategorySelected()
             .filter(InvalidSelectionPredicate)
             .skip(1)
-            .map { view.getSelectedCategory() }
             .switchMap {
-                repository.getLookup(SUBCATEGORY, null, it?.lookUpID.toString())
+                val str = view.getSelectedCategory()?.lookUpID.toString() ?: ""
+                repository.getLookup(SUBCATEGORY, null, str)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderSubCategory)
@@ -178,9 +178,9 @@ class CreateMeetingPresenter @Inject constructor(
         view.onCategorySelected()
             .filter(InvalidSelectionPredicate)
             .skip(1)
-            .map { view.getSelectedCategory() }
             .switchMap {
-                repository.getLookup(SUBCATEGORY, null, it?.lookUpID.toString())
+                val str = view.getSelectedCategory()?.lookUpID?.toString() ?: ""
+                repository.getLookup(SUBCATEGORY, null, str)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderSubCategory)
