@@ -691,4 +691,7 @@ Page </string>
     <string name="lbl_actual_date">Actual Activation Date</string>
     <string name="lbl_actual_hint">Enter Actual Activation Date</string>
     <string name="lbl_reset">Reset</string>
+    <string name="lbl_view_client_details">View Client Details</string>
+    <string name="lbl_react_client_name">Client Name</string>
+    <string name="lbl_react_final_seg">Final Segment</string>
 </resources>

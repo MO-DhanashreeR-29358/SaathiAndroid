@@ -7,6 +7,7 @@ import com.mosl.tabapp.core.CommonFragment
 import javax.inject.Inject
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.FragmentCreateRequestReactivationBinding
+import com.mosl.tabapp.reactivation.createrequestReactivationDetails.ReactivationDetailsFragment
 
 class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactivationView {
 
@@ -31,7 +32,8 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
 
     private fun setupView()
     {
-
+            val showPopup=ReactivationDetailsFragment()
+            showPopup.show(childFragmentManager,"leadDetailsview")
     }
 
 }
