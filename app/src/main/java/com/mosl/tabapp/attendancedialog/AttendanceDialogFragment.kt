@@ -18,18 +18,19 @@ import androidx.fragment.app.DialogFragment
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable.INFINITE
 import com.jakewharton.rxbinding4.view.clicks
+import com.mosl.app.core.data.error.ErrorUtils
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.shared.util.AppDateFormats
+import com.mosl.shared.util.DateParser
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.FragmentAttendanceDialogBinding
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import com.mosl.shared.util.DateParser
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -210,15 +211,17 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
 
     override fun renderSubmitResponse(uiModel: UiModel<String>) {
         showProgress(uiModel.inProgress)
+
         uiModel.onFailure { error ->
             binding.tvErrorMsg.apply {
                 text = error.message
                 visibility = View.VISIBLE
-                Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(),  ErrorUtils.getErrorOnFailure(error)
+                    .getResolvedMessage(context), Toast.LENGTH_SHORT)
                     .show()
                 dismiss()
                 // (requireActivity() as CommonActivity).getProfileInfo()
-                screenNavigator.openHome()
+                //screenNavigator.openHome()
             }
         }
 

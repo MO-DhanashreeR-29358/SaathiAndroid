@@ -256,4 +256,5 @@
     <color name="button_primary_background_color">#fca517</color>
     <color name="button_primary_disabled_background_color">#BDBDBD</color>
     <color name="colorPrimaryAttendance">#fca517</color>
+    <color name="light_blue_700">#0091ea</color>
 </resources>

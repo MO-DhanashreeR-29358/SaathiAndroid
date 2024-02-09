@@ -7,4 +7,4 @@ data class BranchLocationResponse(
   @JvmField @SerializedName("Longitude") val longitude: String?,
   @JvmField @SerializedName("BranchName") val branchName: String,
   @JvmField @SerializedName("BranchId") val branchId: Int
-)
+): HrmsErrorResponse()

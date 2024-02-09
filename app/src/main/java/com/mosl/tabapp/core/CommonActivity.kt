@@ -6,10 +6,7 @@ import android.app.ActivityManager
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
@@ -20,6 +17,7 @@ import android.provider.Settings
 import android.text.Html
 import android.view.View
 import android.view.View.OnClickListener
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
@@ -32,6 +30,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.error.ErrorUtils
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
@@ -59,6 +58,8 @@ import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
 import com.mosl.tabapp.attendancedialog.AttendanceHelper
 import com.mosl.tabapp.attendancedialog.UserLocationHelper
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment.ARG_OTP_DATA
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.constants.MOSLConstants
@@ -77,6 +78,10 @@ import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.webview.WebviewFragment
+import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
+import com.mosl.user.data.login.VerifyAction
+import com.mosl.user.domain.model.GenerateOTP
+import com.mosl.user.login.MyZoneUserManagerImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import mosl.rx_preferences.Preference
@@ -113,6 +118,9 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
 
     @Inject
     lateinit var loginRepository: LoginRepositoryImpl
+
+    @Inject
+    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
 
     @Inject
     lateinit var fragmentResolver: FragmentResolver
@@ -181,6 +189,9 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
     lateinit var userLocationHelper: UserLocationHelper
 
     private lateinit var mDistaSdk : IDistaSDK
+
+    @Inject
+    lateinit var myZoneUserManager: MyZoneUserManagerImpl
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -254,10 +265,56 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             showPermissionWarningDialog()
         }
-        showAttendancePopupIfNotMarked()
+
+        myZoneAttendanceLogic()
+
     }
 
-    fun showAttendancePopupIfNotMarked() {
+    private fun myZoneAttendanceLogic(){
+        if (myZoneUserManager.isLoggedIn()) {
+            showAttendancePopupIfNotMarked()
+        }else{
+            myZoneLoginProcess()
+        }
+    }
+
+    private fun myZoneLoginProcess(){
+        disposable.add(
+            myZoneLoginRepository.userAuthentication(userManager.user.mobile)
+                .compose(applyUiModel())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { uiModel ->
+                    uiModel.onFailure {
+                        showOnFailurePopup(it)
+                    }
+
+                    uiModel.data?.let {
+                        openVerifyOTPFragment(userManager.user.mobile, it)
+                    }
+
+                }
+        )
+    }
+
+    private fun openVerifyOTPFragment(
+        mobileNo: String,
+        generateOTP: GenerateOTP
+    ) {
+        val dialogFragment = VerifyDialogFragment()
+        val bundle = Bundle()
+        bundle.putSerializable(
+            ARG_OTP_DATA, VerifyAction(
+                mobileNumber = mobileNo,
+                requestId = generateOTP.requestId, otp = generateOTP.oTP
+            )
+        )
+        dialogFragment.arguments = bundle
+        dialogFragment.show(supportFragmentManager, "")
+        myZoneLoginRepository.start()
+
+    }
+
+     fun showAttendancePopupIfNotMarked() {
         attendanceHelper.handleAttendanceAndLocation(this)
     }
 
@@ -714,6 +771,8 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
                 }
             }
             .addTo(disposable)
+
+
     }
 
     private fun openMenuDrawer() {
@@ -817,6 +876,7 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
                         distaLogoutCheckout()
                         /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
                         editor?.commit()*/
+                        doMyZoneLogout()
                         openLogin()
                     }
 
@@ -825,6 +885,20 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
                     }
                 })
     }
+
+    private fun doMyZoneLogout() {
+        disposable.add(
+            myZoneLoginRepository.logoutUser(R.string.successfully_logout)
+                .toSingleDefault(true)
+                .toObservable()
+                .compose(applyUiModel())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { uiModel ->
+                    toggleProgressBar(uiModel.inProgress)
+                    twentyFourSevenCheck.set(false)
+                })
+    }
+
 
     private fun openLogin() {
         //open image slider instead of splash

@@ -22,7 +22,7 @@
                 android:layout_height="@dimen/dim_attendance_icon"
                 android:layout_gravity="center"
                 android:paddingTop="@dimen/padding_extra_small"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/icon_app_saathi" />
 
             <TextView
                 android:id="@+id/txt_name"
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_label_your_sigin_time"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_collection_officer_message"
@@ -73,7 +73,7 @@
                 android:gravity="center"
                 android:text="Mark Attendance In Marshal App"
                 android:textColor="@color/text_color_primary_black"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:visibility="gone" />
 
@@ -103,7 +103,7 @@
                 android:layout_marginEnd="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_large"
                 android:text="@string/btn_submit"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="16sp" />
 
             <include
                 android:id="@+id/linear_mark_attendance"
@@ -126,7 +126,7 @@
                 android:layout_weight="1"
                 android:text="@string/txt_label_date"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -138,7 +138,7 @@
                 android:gravity="end"
                 android:text="@string/txt_label_time"
                 android:textColor="@color/white"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -156,7 +156,7 @@
                 android:layout_margin="@dimen/margin_small"
                 android:gravity="end"
                 android:textColor="@color/text_color_red"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 </layout>

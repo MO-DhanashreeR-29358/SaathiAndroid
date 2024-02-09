@@ -76,5 +76,7 @@
     <dimen name="attendance_dialog_bottom">40dp</dimen>
     <dimen name="dim_attendance_icon">60dp</dimen>
     <dimen name="dialog_button_height">40dp</dimen>
+    <dimen name="layout_minimum_width">256dp</dimen>
+    <dimen name="progress_bar_size">48dp</dimen>
 
 </resources>

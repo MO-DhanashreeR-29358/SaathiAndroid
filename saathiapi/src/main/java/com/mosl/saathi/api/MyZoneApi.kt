@@ -116,7 +116,14 @@ import okhttp3.RequestBody
 import retrofit2.http.*
 
 interface MyZoneApi {
+    @POST("api/auth/otp")
+    fun generateOTP(@Body body: GenerateOtpRequest): Observable<GenerateOtpResponse>
 
+    @POST("api/auth/validate")
+    fun validateOTP(@Body body: ValidateOtpRequest): Observable<ValidateOtpResponse>
+
+    @GET("api/app/logout")
+    fun logout(): Observable<String>
 
     @GET("api/app/profile")
     fun getProfile(
@@ -134,4 +141,12 @@ interface MyZoneApi {
 
     @POST("HrmsApi/api/AddAttendancePopupLog")
     fun logAttendancePopShown(@Body body: LogAttendancePopUpShownRequest): Observable<String>
+
+    @Headers(NO_TOKEN)
+    @POST("auth/refresh")
+    fun getRefreshToken(@Body tokenRequest: TokenRequest): Observable<TokenResponse>
+
+    companion object {
+        const val NO_TOKEN = "No-Token: true"
+    }
 }

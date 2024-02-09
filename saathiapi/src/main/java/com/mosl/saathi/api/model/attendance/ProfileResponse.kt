@@ -12,4 +12,4 @@ data class ProfileResponse(
   @JvmField @SerializedName("RedirectUrl") val redirectUrl: String,
   @JvmField @SerializedName("JoiningDate") val joiningDate: String,
   @JvmField @SerializedName("IsInitialDeclaration") val isInitialDeclaration: Boolean
-)
+): HrmsErrorResponse()

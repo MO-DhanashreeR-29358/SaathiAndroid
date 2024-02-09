@@ -50,11 +50,11 @@ class UserLocationHelper @Inject constructor(
         )
     private val settingsClient: SettingsClient = LocationServices.getSettingsClient(activity)
     private var locationCallback: LocationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult?) {
-            locationResult ?: return
+        override fun onLocationResult(locationResult: LocationResult) {
             locationResult.lastLocation?.let {
                 locationEvent.onNext(it)
             }
+            super.onLocationResult(locationResult)
         }
     }
     private val locationSettingsRequest: LocationSettingsRequest = LocationSettingsRequest.Builder()

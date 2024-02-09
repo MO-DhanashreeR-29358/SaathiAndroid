@@ -2,6 +2,8 @@ package com.mosl.app.core.data;
 
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
+import com.mosl.app.core.data.meta.MyZoneAPIClient;
+import com.mosl.app.core.data.meta.MyZoneAPIRetrofit;
 import com.mosl.mobile.data.util.CommonBaseUrls;
 import com.mosl.saathi.api.MyZoneApi;
 import com.mosl.saathi.api.SaathiApi;
@@ -22,8 +24,8 @@ import retrofit2.Retrofit;
     }
 
     @Provides @Singleton
-    static MyZoneApi provideMyZoneApi(@InternalAPIClient OkHttpClient internalOkClient,
-                                      @InternalAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+    static MyZoneApi provideMyZoneApi(@MyZoneAPIClient OkHttpClient internalOkClient,
+                                      @MyZoneAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
         return builder.client(internalOkClient).baseUrl(apiBaseUrls.getMyZoneApiUrl())
                 .build()
                 .create(MyZoneApi.class);
