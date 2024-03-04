@@ -266,7 +266,9 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
             showPermissionWarningDialog()
         }
 
-        myZoneAttendanceLogic()
+        if (userManager.user.isRetail()) {
+            myZoneAttendanceLogic()
+        }
 
     }
 
