@@ -699,4 +699,6 @@
     <string name="btn_confirm">Confirm</string>
     <string name="department_ids_key">department_ids</string>
     <string name="successfully_logout">Successfully logout</string>
+
+    <string name="mark_attendance">Mark Your Attendance Here</string>
 </resources>
