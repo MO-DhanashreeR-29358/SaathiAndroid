@@ -2036,11 +2036,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
 
         var isEnableEvent = status
-        if((binding.spEvent.selectedItem as RowData).key == "-1" && status == true){
+        if(binding.spEvent.selectedItem != null && binding.tlEventName.isVisible) {
+            if ((binding.spEvent.selectedItem as RowData).key == "-1" && status == true) {
                 isEnableEvent = true
-         }else{
+            } else {
                 isEnableEvent = false
-         }
+            }
+        }
 
 
         binding.apply {
