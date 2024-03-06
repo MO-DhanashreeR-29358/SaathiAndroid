@@ -79,7 +79,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         password = password,
         isBank = isBank,
         isQRDownload = isQRDownload,
-        EventListRequired = EventListRequired
+        EventListRequired = EventListRequired,
+        myZoneProfile = myZoneProfile?: ""
     )
 }
 

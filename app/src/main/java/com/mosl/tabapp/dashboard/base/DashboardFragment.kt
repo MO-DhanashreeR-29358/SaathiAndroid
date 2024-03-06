@@ -8,21 +8,29 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboard.*
+import com.mosl.mobile.user.login.user
+import com.mosl.mobile.user.model.ProfileInfo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.*
+import com.mosl.tabapp.attendancedialog.AttendanceHelper
+import com.mosl.tabapp.attendancedialog.UserLocationHelper
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
+import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
@@ -52,6 +60,11 @@ import com.mosl.tabapp.util.downloadImage
 import com.mosl.tabapp.util.initialEmail
 import com.mosl.tabapp.util.initiateCall
 import com.mosl.tabapp.webview.WebviewFragment
+import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
+import com.mosl.user.data.login.VerifyAction
+import com.mosl.user.domain.model.GenerateOTP
+import com.mosl.user.login.MyZoneUserManagerImpl
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -61,7 +74,7 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.set
 
-class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener {
+class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener, AttendanceHelper.ClickListener {
     internal lateinit var binding: FragDashboardBinding
     internal lateinit var bindingAusfbDhshboard: FragDashboardAufsbBinding
 
@@ -72,7 +85,15 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
     private var productId = ""
     private var employeeCode = ""
     override fun getLayout() = R.layout.frag_dashboard
-
+    @Inject
+    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
+    @Inject
+    lateinit var userLocationHelper: UserLocationHelper
+    @Inject
+    lateinit var myZoneUserManager: MyZoneUserManagerImpl
+    @Inject
+    lateinit var attendanceHelper: AttendanceHelper
+    internal var isUserLogin = false
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -84,9 +105,87 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         setupViews()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
+        markAttendanceButtonClick()
+    }
+
+    private fun markAttendanceButtonClick(){
+        binding.btnMarkAttendance.isVisible = false
+        if (userManager.user.isRetail() && userManager.user.isAttendanceAllowed()) {
+            binding.btnMarkAttendance.isVisible = true
+         }
+        binding.btnMarkAttendance.setOnClickListener {
+            myZoneAttendanceLogic()
+        }
+    }
+
+    private fun myZoneAttendanceLogic(){
+        if (myZoneUserManager.isLoggedIn()) {
+            showAttendancePopupIfNotMarked()
+        }else{
+            myZoneLoginProcess()
+        }
+    }
+
+    private fun myZoneLoginProcess(){
+        disposable.add(
+                myZoneLoginRepository.userAuthentication(userManager.user.mobile)
+                        .compose(applyUiModel())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { uiModel ->
+                            toggleProgressBar(uiModel.inProgress)
+                            uiModel.onFailure {
+                                showOnFailurePopup(it)
+                            }
+
+                            uiModel.data?.let {
+                                openVerifyOTPFragment(userManager.user.mobile, it)
+                            }
+
+                        }
+        )
+    }
+
+    private fun openVerifyOTPFragment(
+            mobileNo: String,
+            generateOTP: GenerateOTP
+    ) {
+        val dialogFragment = VerifyDialogFragment()
+        val bundle = Bundle()
+        bundle.putSerializable(
+                VerifyDialogFragment.ARG_OTP_DATA, VerifyAction(
+                mobileNumber = mobileNo,
+                requestId = generateOTP.requestId, otp = generateOTP.oTP
+        )
+        )
+        dialogFragment.arguments = bundle
+        dialogFragment.show(childFragmentManager, "")
+        myZoneLoginRepository.start()
 
     }
 
+    override fun onStart() {
+        super.onStart()
+
+
+        Timber.d("AAA onStart")
+    }
+    fun showAttendancePopupIfNotMarked() {
+        attendanceHelper.handleAttendanceAndLocation(this)
+    }
+    override fun exit() {
+        requireActivity().finish()
+    }
+
+    override fun setInTime(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("set in time called")
+        if (uiModel.isSuccess) {
+
+            isUserLogin = true
+            userLocationHelper.stop()
+            Toast.makeText(requireContext(), "Attendance already marked.", Toast.LENGTH_SHORT)
+                    .show()
+        }
+    }
 
     private fun setupViews() {
         binding.rlClientLeads.setOnClickListener(this)
@@ -679,6 +778,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener 
         }
 
     }
+
 
     override fun renderStatus(uiModel: UiModel<String>) {
         toggleProgress(uiModel.inProgress)

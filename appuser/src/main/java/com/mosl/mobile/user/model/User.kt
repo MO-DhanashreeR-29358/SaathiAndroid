@@ -25,7 +25,8 @@ data class User(
     @JvmField var isBank: Boolean,
     @JvmField var isQRDownload: Boolean,
     @JvmField var EventListRequired: Boolean,
-    @JvmField val collectionOfficer: Boolean = false
+    @JvmField val collectionOfficer: Boolean = false,
+    @JvmField var myZoneProfile: String
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
@@ -146,5 +147,14 @@ data class User(
 
     fun isBandhanSales(): Boolean {
         return currentBusinessProfile.businessProfileName?.equals("Bandhan Sales") ?: false
+    }
+
+    fun isAttendanceAllowed(): Boolean {
+        var flag = false
+        if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
+                myZoneProfile.equals("Key Account Manager", ignoreCase = true)) {
+            flag = true
+        }
+        return flag
     }
 }

@@ -33,6 +33,7 @@ import com.mosl.core.annotations.DepartmentIds;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.attendancedialog.AttendanceHelper;
 import com.mosl.tabapp.core.CommonActivity;
+import com.mosl.tabapp.dashboard.base.DashboardFragment;
 import com.mosl.tabapp.databinding.FragmentVerifyOtpBinding;
 import com.mosl.user.domain.model.GenerateOTP;
 import com.mosl.user.domain.model.User;
@@ -188,8 +189,7 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
             }
             if (hasDeptId || deptIdData.size() == 0) {
                 //showToast("Login Successful.");
-
-                ((CommonActivity) requireActivity()).showAttendancePopupIfNotMarked();
+                ((DashboardFragment) getParentFragment()).showAttendancePopupIfNotMarked();
                 dismissAllowingStateLoss();
             } else {
                 showPopup();

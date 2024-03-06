@@ -99,7 +99,7 @@ import javax.inject.Inject
 import kotlin.collections.set
 
 
-class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
+class CommonActivity : BaseActivity(),
     Navigator,
     ActivityDelegate,
     QuickAction.OnActionItemClickListener,
@@ -119,8 +119,6 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
     @Inject
     lateinit var loginRepository: LoginRepositoryImpl
 
-    @Inject
-    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
 
     @Inject
     lateinit var fragmentResolver: FragmentResolver
@@ -147,8 +145,6 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
 
-    @Inject
-    lateinit var attendanceHelper: AttendanceHelper
 
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
@@ -184,14 +180,13 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
      var editor: SharedPreferences.Editor? = null
      var twentyFourSevenCheck = false*/
     /**/
-    internal var isUserLogin = false
-    @Inject
-    lateinit var userLocationHelper: UserLocationHelper
+
 
     private lateinit var mDistaSdk : IDistaSDK
-
     @Inject
-    lateinit var myZoneUserManager: MyZoneUserManagerImpl
+    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
+    @Inject
+    lateinit var userLocationHelper: UserLocationHelper
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -266,64 +261,8 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
             showPermissionWarningDialog()
         }
 
-        if (userManager.user.isRetail()) {
-            myZoneAttendanceLogic()
-        }
-
     }
 
-    private fun myZoneAttendanceLogic(){
-        if (myZoneUserManager.isLoggedIn()) {
-            showAttendancePopupIfNotMarked()
-        }else{
-            myZoneLoginProcess()
-        }
-    }
-
-    private fun myZoneLoginProcess(){
-        disposable.add(
-            myZoneLoginRepository.userAuthentication(userManager.user.mobile)
-                .compose(applyUiModel())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { uiModel ->
-                    uiModel.onFailure {
-                        showOnFailurePopup(it)
-                    }
-
-                    uiModel.data?.let {
-                        openVerifyOTPFragment(userManager.user.mobile, it)
-                    }
-
-                }
-        )
-    }
-
-    private fun openVerifyOTPFragment(
-        mobileNo: String,
-        generateOTP: GenerateOTP
-    ) {
-        val dialogFragment = VerifyDialogFragment()
-        val bundle = Bundle()
-        bundle.putSerializable(
-            ARG_OTP_DATA, VerifyAction(
-                mobileNumber = mobileNo,
-                requestId = generateOTP.requestId, otp = generateOTP.oTP
-            )
-        )
-        dialogFragment.arguments = bundle
-        dialogFragment.show(supportFragmentManager, "")
-        myZoneLoginRepository.start()
-
-    }
-
-     fun showAttendancePopupIfNotMarked() {
-        attendanceHelper.handleAttendanceAndLocation(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Timber.d("AAA onPause")
-    }
 
     override fun onStart() {
         super.onStart()
@@ -332,8 +271,16 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
         Timber.d("AAA onStart")
     }
 
+    override fun onPause() {
+        super.onPause()
+        Timber.d("AAA onPause")
+    }
+
+
+
     override fun onStop() {
         super.onStop()
+        userLocationHelper.stop()
         Timber.d("AAA onStop")
     }
 
@@ -1155,16 +1102,5 @@ class CommonActivity : BaseActivity(), AttendanceHelper.ClickListener,
         const val ID_EMP = 3
     }
 
-    override fun exit() {
-        finish()
-    }
 
-    override fun setInTime(uiModel: UiModel<ProfileInfo>) {
-        Timber.d("set in time called")
-        if (uiModel.isSuccess) {
-
-            isUserLogin = true
-            userLocationHelper.stop()
-        }
-    }
 }
