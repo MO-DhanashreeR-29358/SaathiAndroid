@@ -6,9 +6,11 @@ import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
+import com.mosl.saathi.api.model.login.ValidateLoginRequest
 import com.mosl.saathi.api.model.logout.LogoutRequest
+import com.mosl.saathi.api.model.otp.GenerateOtpRequest
+import com.mosl.saathi.api.model.otp.ValidateOtpRequest
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
-import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
@@ -71,4 +73,51 @@ class AppUserRepositoryImpl @Inject constructor(
     return saathiApi.logout(request)
         .map { true }
   }
+
+    override fun fnValidateLogin(objValidateLoingPostModel: ValidateLoginPostModel): Observable<ValidateLoingResponseModel> {
+            val  request=ValidateLoginRequest(
+                ipaddress=objValidateLoingPostModel.ipaddress,
+                isPersistance=objValidateLoingPostModel.isPersistance,
+                 employeeCode=objValidateLoingPostModel.employeeCode,
+                macaddress=objValidateLoingPostModel.macaddress,
+                appId=objValidateLoingPostModel.appId,
+                clientinfo=objValidateLoingPostModel.clientinfo,
+                password=objValidateLoingPostModel.password
+            )
+        return saathiApi.fnValidateLogin(request)
+            .map {
+                it.response?.transformnewlogin()!!
+            }
+    }
+
+    override fun fnCallOtp(objGenerateOtpPostModel: GenerateOtpPostModel): Observable<String> {
+            val request= GenerateOtpRequest(
+                ipaddress=objGenerateOtpPostModel.ipaddress,
+                isPersistance=objGenerateOtpPostModel.isPersistance,
+                employeeCode=objGenerateOtpPostModel.employeeCode,
+                macaddress=objGenerateOtpPostModel.macaddress,
+                appId=objGenerateOtpPostModel.appId,
+                clientinfo=objGenerateOtpPostModel.clientinfo,
+                password=objGenerateOtpPostModel.password
+            )
+        return saathiApi.fnGenerateOtp(request).map {
+            it.response?:""
+        }
+    }
+
+    override fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel): Observable<LoginResponse> {
+        val reques=ValidateOtpRequest(
+            ipaddress=objValidateOtpPostModel.ipaddress,
+            isPersistance=objValidateOtpPostModel.isPersistance,
+            employeeCode=objValidateOtpPostModel.employeeCode,
+            macaddress=objValidateOtpPostModel.macaddress,
+            appId=objValidateOtpPostModel.appId,
+            clientinfo=objValidateOtpPostModel.clientinfo,
+            password=objValidateOtpPostModel.password,
+            oTP = objValidateOtpPostModel.oTP
+        )
+        return saathiApi.fnValidateOtp(reques).map {
+                response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform(objValidateOtpPostModel.password?:"")
+        }
+    }
 }

@@ -40,10 +40,12 @@ import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
+import com.mosl.mobile.user.model.ValidateLoingResponseModel
 import com.mosl.navigator.AppTitle
 import com.mosl.navigator.AuthorizationState
 import com.mosl.navigator.FragmentNavigationEntry
@@ -58,11 +60,13 @@ import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.databinding.ActivityLoginNewBinding
 import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
+import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
 import com.mosl.tabapp.permission.PermissionCheckHelper
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -100,6 +104,11 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   lateinit var disposables: CompositeDisposable
   @Inject
   lateinit var loginRepository: LoginRepositoryImpl
+
+  private val subject = PublishSubject.create<LoginActivityUiEvent>()
+
+  val isCallOtp:Boolean=false
+
   override fun getLayout(): Int {
     return R.layout.activity_login_new
   }
@@ -125,6 +134,8 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     if (!sharedPreferences.getBoolean(getString(R.string.consent_value), false)) {
       showDiscloserDilog()
     }
+
+
   }
 
   override fun onLoginClicked(): Observable<Unit> {
@@ -528,5 +539,30 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   }
 
   override fun onLatLongChanged(location: Location?) {
+  }
+
+  override fun fnRenderNewLogin(uiModdel: UiModel<ValidateLoingResponseModel>) {
+    toggleProgressBar(uiModdel.inProgress)
+    uiModdel.onSuccess {
+      subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)
+    }
+    uiModdel.onFailure {error->
+      error.showOnFailurePopup()
+    }
+  }
+
+  override fun fnGenerateOtp(): Observable<LoginActivityUiEvent.OnCallGenerateOtp> {
+      return subject.ofType()
+  }
+
+  override fun renderGenerateOtp(uiModel: UiModel<String>) {
+    toggleProgressBar(uiModel.inProgress)
+    uiModel.onSuccess {
+      val otpBottomSheet=OtpVerificationFragment()
+      otpBottomSheet.show(supportFragmentManager, "otpView")
+    }
+    uiModel.onFailure {error->
+      error.showOnFailurePopup()
+    }
   }
 }

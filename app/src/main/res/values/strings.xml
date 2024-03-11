@@ -678,4 +678,9 @@
     <string name="com.crashlytics.android.build_id">1</string>
     <string name="lbl_feedback">Edit Feedback/Remarks</string>
     <string name="lbl_remark">Remarks</string>
+
+    <string name="sathi_otp_label">Enter Mobile OTP</string>
+    <string name="sathi_counter_label">00:59</string>
+
+    <string name="sathi_btn_proceed_label">Proceed</string>
 </resources>

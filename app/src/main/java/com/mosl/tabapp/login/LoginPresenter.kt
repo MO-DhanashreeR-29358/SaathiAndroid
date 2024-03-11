@@ -2,9 +2,9 @@ package com.mosl.tabapp.login
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.mobile.user.login.LoginRepository
+import com.mosl.mobile.user.model.GenerateOtpPostModel
+import com.mosl.mobile.user.model.ValidateLoginPostModel
 import com.mosl.tabapp.core.LoginNavigator
-import io.reactivex.rxjava3.core.Observable
-import timber.log.Timber
 import javax.inject.Inject
 
 class LoginPresenter @Inject constructor(
@@ -15,6 +15,26 @@ class LoginPresenter @Inject constructor(
 ) : BasePresenter<LoginView>(view) {
 
   override fun start() {
+     view.onLoginClicked()
+          .switchMap {
+              loginRepository.fnValidateLogin(ValidateLoginPostModel(
+                  ipaddress = "192.168.62.99",  isPersistance = false, employeeCode = "10640", macaddress = "123456789",
+                 appId = 2,clientinfo = "IE 1234567",password = "mosl_123"
+              )).compose(applyUiModel())
+          }.subscribe{
+            view.fnRenderNewLogin(it)
+         }
+
+      view.fnGenerateOtp().
+              switchMap {
+                  loginRepository.fnCallOtp(GenerateOtpPostModel(
+                      ipaddress = "192.168.62.99",  isPersistance = false, employeeCode = "10640", macaddress = "123456789",
+                      appId = 2,clientinfo = "IE 1234567",password = "mosl_123"
+                  )).compose(applyUiModel())
+              }.subscribe {
+                  view.renderGenerateOtp(it)
+      }
+
     disposable.add(Observable.merge(view.onLoginClicked(), view.onDoneClicked())
         .map<LoginFormInput> {
           LoginFormInput(
