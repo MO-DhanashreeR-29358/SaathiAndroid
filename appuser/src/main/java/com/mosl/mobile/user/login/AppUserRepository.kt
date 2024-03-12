@@ -17,9 +17,9 @@ interface AppUserRepository {
   fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>>
   fun logout(logoutInfo: LogoutInfo): Observable<Boolean>
 
-  fun fnValidateLogin(objValidateLoingPostModel: ValidateLoginPostModel):Observable<ValidateLoingResponseModel>
+  fun fnValidateLogin(objValidateLoingPostModel: LoginInfo):Observable<ValidateLoingResponseModel>
 
-  fun fnCallOtp(objGenerateOtpPostModel: GenerateOtpPostModel):Observable<String>
+  fun fnCallOtp(objGenerateOtpPostModel: LoginInfo):Observable<String>
 
   fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel):Observable<LoginResponse>
 }

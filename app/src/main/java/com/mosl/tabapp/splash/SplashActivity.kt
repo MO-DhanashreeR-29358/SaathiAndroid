@@ -153,8 +153,9 @@ class SplashActivity : LeanBaseActivity() {
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onSuccess {
-
+            userManager.fnSetIsOtpEnable(it.isOtpRequired == "true")
             val msg = it.msg
+
             when (it.statusCode) {
                 0 -> MSFDialog.alertDialog(
                     this@SplashActivity, 0,

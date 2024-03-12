@@ -74,15 +74,16 @@ class AppUserRepositoryImpl @Inject constructor(
         .map { true }
   }
 
-    override fun fnValidateLogin(objValidateLoingPostModel: ValidateLoginPostModel): Observable<ValidateLoingResponseModel> {
+    override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
             val  request=ValidateLoginRequest(
-                ipaddress=objValidateLoingPostModel.ipaddress,
-                isPersistance=objValidateLoingPostModel.isPersistance,
-                 employeeCode=objValidateLoingPostModel.employeeCode,
-                macaddress=objValidateLoingPostModel.macaddress,
-                appId=objValidateLoingPostModel.appId,
-                clientinfo=objValidateLoingPostModel.clientinfo,
-                password=objValidateLoingPostModel.password
+                ipaddress=getLocalIpAddress(),
+                isPersistance=false,
+                 employeeCode=objValidateLoingPostModel.empCode,
+                macaddress=getDeviceID(context.contentResolver),
+                appId="2",
+                clientinfo="Android",
+                password=objValidateLoingPostModel.password,
+                appVersion = objValidateLoingPostModel.appVersion
             )
         return saathiApi.fnValidateLogin(request)
             .map {
@@ -90,15 +91,16 @@ class AppUserRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun fnCallOtp(objGenerateOtpPostModel: GenerateOtpPostModel): Observable<String> {
+    override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {
             val request= GenerateOtpRequest(
-                ipaddress=objGenerateOtpPostModel.ipaddress,
-                isPersistance=objGenerateOtpPostModel.isPersistance,
-                employeeCode=objGenerateOtpPostModel.employeeCode,
-                macaddress=objGenerateOtpPostModel.macaddress,
-                appId=objGenerateOtpPostModel.appId,
-                clientinfo=objGenerateOtpPostModel.clientinfo,
-                password=objGenerateOtpPostModel.password
+                ipaddress=getLocalIpAddress(),
+                isPersistance=false,
+                employeeCode=objGenerateOtpPostModel.empCode,
+                macaddress=getDeviceID(context.contentResolver),
+                appId="2",
+                clientinfo="Android",
+                password=objGenerateOtpPostModel.password,
+                appVersion = objGenerateOtpPostModel.appVersion
             )
         return saathiApi.fnGenerateOtp(request).map {
             it.response?:""
@@ -107,12 +109,12 @@ class AppUserRepositoryImpl @Inject constructor(
 
     override fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel): Observable<LoginResponse> {
         val reques=ValidateOtpRequest(
-            ipaddress=objValidateOtpPostModel.ipaddress,
-            isPersistance=objValidateOtpPostModel.isPersistance,
+            ipaddress=getLocalIpAddress(),
+            isPersistance=false,
             employeeCode=objValidateOtpPostModel.employeeCode,
-            macaddress=objValidateOtpPostModel.macaddress,
-            appId=objValidateOtpPostModel.appId,
-            clientinfo=objValidateOtpPostModel.clientinfo,
+            macaddress=getDeviceID(context.contentResolver),
+            appId="2",
+            clientinfo="Android",
             password=objValidateOtpPostModel.password,
             oTP = objValidateOtpPostModel.oTP
         )

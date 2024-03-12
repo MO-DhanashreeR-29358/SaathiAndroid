@@ -18,9 +18,9 @@ interface LoginRepository {
 
   fun logout(): Completable
 
-  fun fnValidateLogin(objValidateLoingPostModel: ValidateLoginPostModel):Observable<ValidateLoingResponseModel>
+  fun fnValidateLogin(objValidateLoingPostModel: LoginInfo):Observable<ValidateLoingResponseModel>
 
-  fun fnCallOtp(objGenerateOtpPostModel: GenerateOtpPostModel):Observable<String>
+  fun fnCallOtp(objGenerateOtpPostModel: LoginInfo):Observable<String>
 
   fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel):Observable<User>
 }

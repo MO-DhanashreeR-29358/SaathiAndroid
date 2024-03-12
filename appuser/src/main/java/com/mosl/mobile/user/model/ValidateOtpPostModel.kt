@@ -18,4 +18,5 @@ data class ValidateOtpPostModel(
     @JvmField val  oTP: String? = null,
 
     @JvmField val  password: String? = null
+
 )

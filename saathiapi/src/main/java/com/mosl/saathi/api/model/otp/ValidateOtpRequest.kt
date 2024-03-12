@@ -17,7 +17,7 @@ data class ValidateOtpRequest(
 	@JvmField val  macaddress: String? = null,
 
 	@SerializedName("AppId")
-	@JvmField val  appId: Int? = null,
+	@JvmField val  appId: String? = null,
 
 	@SerializedName("clientinfo")
 	@JvmField val  clientinfo: String? = null,

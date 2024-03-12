@@ -8,18 +8,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.ErrorState
+import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.core.utils.alert
 import com.mosl.app.coreui.base.BaseFragment
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.ekycexpress.user.model.emptyString
+import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.ResumeOtp
 import com.mosl.mobile.user.model.Status
 import com.mosl.mobile.user.model.User
@@ -30,14 +35,17 @@ import com.mosl.tabapp.login.LoginActivityUiEvent
 import com.mosl.tabapp.login.otpverification.OtpVerificationView.Companion.RETRY_COUNTER_INTERVAL_SECONDS
 import com.mosl.tabapp.login.otpverification.OtpVerificationView.Companion.TOTAL_RETRY_TIME_SECONDS
 import com.mosl.tabapp.login.otpverification.helper.otptextview.OTPListener
+import com.mosl.validator.exception.ValidationException
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.addTo
-import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import com.mosl.commons.rx.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import io.reactivex.rxjava3.kotlin.addTo
 
 class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, OTPListener {
 
@@ -45,7 +53,9 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     @Inject
     lateinit var presenter: OtpVerificationPresenter
     protected val dataActionSubject: PublishSubject<DataAction> = PublishSubject.create()
-    private val subject = PublishSubject.create<LoginActivityUiEvent>()
+    private val subject = LoginActivityUiEvent.getLoginUIEvent()
+    val disposable = CompositeDisposable()
+    var objLoginInfo: LoginInfo?=null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -95,6 +105,13 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
 
     }
 
+    override fun fnGetLoginData(): LoginInfo {
+        return objLoginInfo?: LoginInfo("","","")
+    }
+     fun fnSetData(_objLoginInfo:LoginInfo)
+    {
+        objLoginInfo=LoginInfo(_objLoginInfo.empCode,_objLoginInfo.password,_objLoginInfo.appVersion)
+    }
     override fun startTimer() {
         val counter = TOTAL_RETRY_TIME_SECONDS - RETRY_COUNTER_INTERVAL_SECONDS
 
@@ -120,21 +137,30 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         if (enable){
             binding.ekycJetOtpError.text = emptyString
             binding.tvResendOtp.isEnabled = enable
-            parentFragment?.requireContext()?.getColor(com.mosl.ekycexpress.login.R.color.ekyc_bright_orange)?.let {
+            binding.tvResendOtp.setTextColor(resources.getColor(R.color.light_red))
+          /*  parentFragment?.requireContext()?.getColor(R.color.light_red)?.let {
                 binding.tvResendOtp.setTextColor(
                     it
                 )
-            }
+            }*/
         }else{
             binding.tvResendOtp.isEnabled = enable
-            parentFragment?.requireContext()?.getColor(com.mosl.ekycexpress.login.R.color.ekyc_text_color_grey)?.let {
+            binding.tvResendOtp.setTextColor(resources.getColor(R.color.button_grey))
+            /*parentFragment?.requireContext()?.getColor(R.color.button_grey)?.let {
                 binding.tvResendOtp.setTextColor(
                     it
                 )
-            }
+            }*/
         }
     }
 
+    override fun onInteractionListener() {
+        Timber.i("Otp Sheet 1 ${binding.ekycJetOtpView.otp.toString()}")
+        if (binding.ekycJetOtpError.text.isNullOrEmpty().not()){
+            binding.ekycJetOtpError.text = emptyString
+        }
+
+    }
     override fun onOTPComplete(otp: String) {
 
         if (otp.length == 4){
@@ -154,7 +180,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         (parentFragment as BaseFragment).toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure {
-            //showValidationError(it.message.orEmpty())
+            showValidationError(it.message.orEmpty())
         }
 
         uiModel.onSuccess {
@@ -170,8 +196,8 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
 
     override fun getOtp(): ValidateOtpPostModel {
         return  ValidateOtpPostModel(
-            ipaddress = "192.168.62.99",  isPersistance = false, employeeCode = "10640", macaddress = "123456789",
-            appId = 2,clientinfo = "IE 1234567", oTP="12345", password="mosl_123"
+            ipaddress = "",  isPersistance = false, employeeCode = objLoginInfo?.empCode , macaddress = "",
+            appId = 2,clientinfo = "", oTP=binding.ekycJetOtpView.otp.toString(), password=objLoginInfo?.password
         )
     }
     override fun fnOnProccedClicked(): Observable<Unit> {
@@ -181,10 +207,26 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
 
     override fun fnRenderValidateOtp(uiModel: UiModel<User>) {
         uiModel.onSuccess {
-
+            binding.ekycJetbtnProceed.isEnabled = true
+            dismiss()
+                subject.onNext(LoginActivityUiEvent.OnOtpSucess(it))
         }
-        uiModel.onFailure {error->
-           Log.d("error","otp error")
+        uiModel.onFailure {
+            binding.ekycJetbtnProceed.isEnabled = true
+            if (it is ValidationException) {
+                val error = it.error.message
+                showValidationError(error.orEmpty())
+            } else {
+                val message = it.getErrorOnFailure().message
+                if (message.isNullOrEmpty().not()) {
+                    showValidationError(message.orEmpty())
+                }
+            }
         }
     }
+
+    private fun showValidationError(error: String){
+        binding.ekycJetOtpError.text = error
+    }
+
 }

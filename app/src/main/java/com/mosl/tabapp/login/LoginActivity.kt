@@ -20,6 +20,7 @@ import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
@@ -43,6 +44,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.ReportType
 import com.mosl.mobile.user.model.User
 import com.mosl.mobile.user.model.ValidateLoingResponseModel
@@ -77,6 +79,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   private val ERROR_DIALOG_REQUEST: Int = 203
   private val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: Int = 1004
   var mLocationPermissionGranted = false
+
   lateinit var binding: ActivityLoginNewBinding
 
   @Inject
@@ -105,9 +108,9 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   @Inject
   lateinit var loginRepository: LoginRepositoryImpl
 
-  private val subject = PublishSubject.create<LoginActivityUiEvent>()
+  private val subject =LoginActivityUiEvent.getLoginUIEvent()
 
-  val isCallOtp:Boolean=false
+  var isCallOtp:Boolean=false
 
   override fun getLayout(): Int {
     return R.layout.activity_login_new
@@ -118,10 +121,10 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     Timber.d("Something LoginActivity oncreate")
     disposables = CompositeDisposable()
     AndroidInjection.inject(this)
-    setUpView()
     fusedLocation.initDispatcher(this)
     binding = ActivityLoginNewBinding.bind(findViewById(R.id.login_root))
     presenter.start()
+    setUpView()
   }
 
   private fun setUpView() {
@@ -134,17 +137,55 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     if (!sharedPreferences.getBoolean(getString(R.string.consent_value), false)) {
       showDiscloserDilog()
     }
+    isCallOtp=userManager.isOtpEnable()
 
+    binding.btnLogin.setOnClickListener {
+      if(isCallOtp)
+      {
+        subject.onNext(LoginActivityUiEvent.OnCallOtpLogin)
+      }
+      else
+      {
+        subject.onNext(LoginActivityUiEvent.OnCallLogin)
+      }
+    }
+binding.edPassword.setOnEditorActionListener { v, actionId, event ->
+  if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
+    if(isCallOtp)
+    {
+      subject.onNext(LoginActivityUiEvent.OnCallOtpLogin)
+    }
+    else
+    {
+      subject.onNext(LoginActivityUiEvent.OnCallLogin)
+    }
+  }
+  false
+}
 
   }
 
-  override fun onLoginClicked(): Observable<Unit> {
-    return binding.btnLogin.clicks()
+  override fun fnCallLogin(): Observable<LoginActivityUiEvent.OnCallLogin> {
+     return subject.ofType()
   }
 
-  override fun onDoneClicked(): Observable<Int> {
-    return binding.edPassword.editorActions { event -> event == EditorInfo.IME_ACTION_DONE }
+  override fun fnCallOtpLogin(): Observable<LoginActivityUiEvent.OnCallOtpLogin> {
+    return  subject.ofType()
   }
+
+  override fun fnGetLoginData(): LoginInfo {
+    return LoginInfo(
+      getEmpCode(),getPassword(),getAppVersion()
+    )
+  }
+
+//  override fun onLoginClicked(): Observable<Unit> {
+//    return binding.btnLogin.clicks()
+//  }
+//
+//  override fun onDoneClicked(): Observable<Int> {
+//    return binding.edPassword.editorActions { event -> event == EditorInfo.IME_ACTION_DONE }
+//  }
 
   override fun getEmpCode(): String {
     return binding.edEmpCode.text?.trim()
@@ -388,6 +429,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   }
 
   override fun renderReportsData(uiModel: UiModel<List<ReportType>>) {
+    toggleProgressBar(uiModel.inProgress)
     uiModel.onSuccess {
       if (it.isNotEmpty()) {
         for (reportTypeResponse in it) {
@@ -559,10 +601,15 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     toggleProgressBar(uiModel.inProgress)
     uiModel.onSuccess {
       val otpBottomSheet=OtpVerificationFragment()
+      otpBottomSheet.fnSetData(fnGetLoginData())
       otpBottomSheet.show(supportFragmentManager, "otpView")
     }
     uiModel.onFailure {error->
       error.showOnFailurePopup()
     }
+  }
+
+  override fun fnOnOtpSucess(): Observable<LoginActivityUiEvent.OnOtpSucess> {
+    return  subject.ofType()
   }
 }

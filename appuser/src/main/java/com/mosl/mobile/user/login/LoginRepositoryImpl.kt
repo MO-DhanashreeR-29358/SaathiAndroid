@@ -61,10 +61,10 @@ class LoginRepositoryImpl @Inject constructor(
         .subscribeOn(Schedulers.io())
   }
 
-  override fun fnValidateLogin(objValidateLoingPostModel: ValidateLoginPostModel): Observable<ValidateLoingResponseModel> {
+  override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
     return  userRepository.fnValidateLogin(objValidateLoingPostModel)
   }
-  override fun fnCallOtp(objGenerateOtpPostModel: GenerateOtpPostModel): Observable<String> {
+  override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {
   return  userRepository.fnCallOtp(objGenerateOtpPostModel)
   }
 

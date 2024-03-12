@@ -17,11 +17,13 @@ data class GenerateOtpRequest(
 	@JvmField val macaddress: String? = null,
 
 	@SerializedName("AppId")
-	@JvmField val appId: Int? = null,
+	@JvmField val appId: String? = null,
 
 	@SerializedName("clientinfo")
 	@JvmField val clientinfo: String? = null,
 
 	@SerializedName("Password")
-	@JvmField val password: String? = null
+	@JvmField val password: String? = null,
+	@SerializedName("AppVersion") @JvmField val appVersion: String = "0"
+
 )

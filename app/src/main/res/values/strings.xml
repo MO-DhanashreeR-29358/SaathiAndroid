@@ -683,4 +683,5 @@
     <string name="sathi_counter_label">00:59</string>
 
     <string name="sathi_btn_proceed_label">Proceed</string>
+    <string name="sathi_otp_error">Please enter OTP</string>
 </resources>

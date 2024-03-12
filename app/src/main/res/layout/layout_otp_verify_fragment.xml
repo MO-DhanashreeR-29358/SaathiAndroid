@@ -66,7 +66,7 @@
         android:paddingTop="@dimen/ekyc_padding_large"
         android:text="@string/ekyc_text_label_resend_otp"
         android:textSize="@dimen/ekyc_text_size_normal"
-        android:textColor="@color/ekyc_bright_orange"
+        android:textColor="@color/light_red"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@id/ekycJetOtpView"
         app:layout_constraintTop_toBottomOf="@id/ekycJetOtpError" />
