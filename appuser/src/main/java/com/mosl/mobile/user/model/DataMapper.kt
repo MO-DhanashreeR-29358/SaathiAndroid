@@ -147,7 +147,7 @@ fun ValidateLoginResponse.transformnewlogin():  ValidateLoingResponseModel{
 
    authState=authState,
 
-   twoWayAuth=twoWayAuth
+   twoWayAuth=twoWayAuth,
     )
 }
 

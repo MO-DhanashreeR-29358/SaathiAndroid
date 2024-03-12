@@ -506,6 +506,10 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
     val errorOnFailure = this.getErrorOnFailure()
     alert(message = errorOnFailure.getResolvedMessage(applicationContext))
   }
+  fun fnShowAlert(strMessage:String)
+  {
+    alert(message=strMessage)
+  }
 
   fun toggleProgressBar(inProgress: Boolean) {
     if (inProgress) {
@@ -601,7 +605,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
     toggleProgressBar(uiModel.inProgress)
     uiModel.onSuccess {
       val otpBottomSheet=OtpVerificationFragment()
-      otpBottomSheet.fnSetData(fnGetLoginData())
+      otpBottomSheet.fnSetData(fnGetLoginData(),it)
       otpBottomSheet.show(supportFragmentManager, "otpView")
     }
     uiModel.onFailure {error->

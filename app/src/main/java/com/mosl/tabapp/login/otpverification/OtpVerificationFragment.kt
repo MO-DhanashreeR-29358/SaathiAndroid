@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -41,6 +42,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import com.mosl.commons.rx.ofType
+import com.mosl.tabapp.login.LoginActivity
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -56,6 +58,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     private val subject = LoginActivityUiEvent.getLoginUIEvent()
     val disposable = CompositeDisposable()
     var objLoginInfo: LoginInfo?=null
+    var strOtpMessage:String=""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -102,15 +105,25 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     }
     private fun fnSetView()
     {
-
+            if(strOtpMessage.isNotEmpty())
+            {
+                binding.tvEnterOtpMsg.setText(strOtpMessage.substringBefore(" |"))
+                binding.tvEnterOtpMsg.isVisible=true
+            }
+        else
+        {
+            binding.tvEnterOtpMsg.setText("")
+                binding.tvEnterOtpMsg.isVisible=false
+            }
     }
 
     override fun fnGetLoginData(): LoginInfo {
         return objLoginInfo?: LoginInfo("","","")
     }
-     fun fnSetData(_objLoginInfo:LoginInfo)
+     fun fnSetData(_objLoginInfo:LoginInfo,strotpmessage:String)
     {
         objLoginInfo=LoginInfo(_objLoginInfo.empCode,_objLoginInfo.password,_objLoginInfo.appVersion)
+        strOtpMessage=strotpmessage
     }
     override fun startTimer() {
         val counter = TOTAL_RETRY_TIME_SECONDS - RETRY_COUNTER_INTERVAL_SECONDS
@@ -177,15 +190,23 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     }
 
     override fun renderResend(uiModel: UiModel<ResumeOtp>) {
-        (parentFragment as BaseFragment).toggleProgressBar(uiModel.inProgress)
+        (activity as LoginActivity ).toggleProgressBar(uiModel.inProgress)
 
         uiModel.onFailure {
-            showValidationError(it.message.orEmpty())
+            if (it is ValidationException) {
+                val error = it.error.message
+                showValidationError(error.orEmpty())
+            } else {
+                val message = it.getErrorOnFailure().message
+                if (message.isNullOrEmpty().not()) {
+                    showValidationError(message.orEmpty())
+                }
+            }
         }
 
         uiModel.onSuccess {
             if (it.status != Status.SUCCESS) {
-                (parentFragment as BaseFragment).showMessagePopup(ErrorModel(it.message, ErrorState.SERVICE_ERROR))
+                (activity as LoginActivity ).fnShowAlert(it.message)
                 return
             }
             binding.ekycJetOtpView.setOTP(emptyString)

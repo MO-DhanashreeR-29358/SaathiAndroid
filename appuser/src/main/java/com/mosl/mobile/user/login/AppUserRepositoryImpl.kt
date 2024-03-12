@@ -1,6 +1,7 @@
 package com.mosl.mobile.user.login
 
 import android.content.Context
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
@@ -87,7 +88,13 @@ class AppUserRepositoryImpl @Inject constructor(
             )
         return saathiApi.fnValidateLogin(request)
             .map {
-                it.response?.transformnewlogin()!!
+                if (it.status) {
+                    it.response?.transformnewlogin()?:ValidateLoingResponseModel()
+
+                } else {
+                    throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+                }
+
             }
     }
 
@@ -103,7 +110,13 @@ class AppUserRepositoryImpl @Inject constructor(
                 appVersion = objGenerateOtpPostModel.appVersion
             )
         return saathiApi.fnGenerateOtp(request).map {
-            it.response?:""
+            if (it.status) {
+                it.response?:it.message
+
+            } else {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+            }
+
         }
     }
 
