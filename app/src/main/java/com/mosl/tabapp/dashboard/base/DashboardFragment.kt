@@ -12,6 +12,7 @@ import androidx.core.view.isVisible
 import com.getbase.floatingactionbutton.FloatingActionButton
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
+import com.mosl.app.core.data.error.ErrorUtils
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.rx.applyUiModel
@@ -30,7 +31,6 @@ import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
-import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
@@ -134,7 +134,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                         .subscribe { uiModel ->
                             toggleProgressBar(uiModel.inProgress)
                             uiModel.onFailure {
-                                showOnFailurePopup(it)
+                                alert(ErrorUtils.getErrorOnFailure(it)
+                                        .getResolvedMessage(context))
                             }
 
                             uiModel.data?.let {
