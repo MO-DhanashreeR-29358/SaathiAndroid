@@ -26,7 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jakewharton.rxbinding4.view.RxView;
 import com.jakewharton.rxbinding4.widget.RxTextView;
-import com.mosl.app.core.error.ErrorUtils;
+import com.mosl.app.core.data.error.ErrorUtils;
 import com.mosl.app.core.events.DataAction;
 import com.mosl.commons.data.UiModel;
 import com.mosl.core.annotations.DepartmentIds;
@@ -168,6 +168,7 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
 
         if (uiModel.isError()) {
             Throwable error = uiModel.error;
+
             showErrorMessage(error);
         }
 

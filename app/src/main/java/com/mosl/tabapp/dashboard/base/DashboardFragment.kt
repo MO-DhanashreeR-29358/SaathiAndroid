@@ -187,6 +187,17 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
         }
     }
 
+    override fun setMessageForAttendanceTypeThree(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("set in time called")
+        if (uiModel.isSuccess) {
+
+            isUserLogin = true
+            userLocationHelper.stop()
+            Toast.makeText(requireContext(), "Attendance facility is not available for this user.", Toast.LENGTH_SHORT)
+                    .show()
+        }
+    }
+
     private fun setupViews() {
         binding.rlClientLeads.setOnClickListener(this)
         binding.rlTargetAchievementADV.setOnClickListener(this)

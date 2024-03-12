@@ -92,6 +92,14 @@ class AttendanceHelper @Inject constructor(
             .subscribe {
                 clickListener.setInTime(it)
             })
+
+        disposable.add(latLngObservable
+                .filter { t -> t.first.attendanceType == 3 }
+                .map { it -> it.first }
+                .compose<UiModel<ProfileInfo>>(applyUiModel<ProfileInfo>())
+                .subscribe {
+                    clickListener.setMessageForAttendanceTypeThree(it)
+                })
     }
 
     fun OfficeLocation.distance(userLocation: LatLng): Double {
@@ -211,6 +219,8 @@ class AttendanceHelper @Inject constructor(
     interface ClickListener {
         fun exit()
         fun setInTime(uiModel: UiModel<ProfileInfo>)
+
+        fun setMessageForAttendanceTypeThree(uiModel: UiModel<ProfileInfo>)
     }
 
     override fun skipClick(status: Boolean) {
