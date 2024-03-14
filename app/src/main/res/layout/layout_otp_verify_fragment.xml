@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="@dimen/ekyc_padding_large"
-        android:text="@string/ekyc_text_label_resend_otp"
+        android:text="@string/sathi_resend_otp"
         android:textSize="@dimen/ekyc_text_size_normal"
         android:textColor="@color/light_red"
         android:visibility="visible"
