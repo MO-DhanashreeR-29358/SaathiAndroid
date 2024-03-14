@@ -89,7 +89,7 @@ class AppUserRepositoryImpl @Inject constructor(
         return saathiApi.fnValidateLogin(request)
             .map {
                 if (it.status) {
-                    it.response?.transformnewlogin()?:ValidateLoingResponseModel()
+                    it.response?.transformnewlogin(it.message)?:ValidateLoingResponseModel(strMessage = it.message)
 
                 } else {
                     throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())

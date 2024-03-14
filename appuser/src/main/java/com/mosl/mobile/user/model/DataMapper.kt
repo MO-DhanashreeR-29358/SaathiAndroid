@@ -119,7 +119,7 @@ fun List<DigitalSalesKitMenu>.transformDigitalSalesKitData(): List<DigitalSalesK
     }
 }
 
-fun ValidateLoginResponse.transformnewlogin():  ValidateLoingResponseModel{
+fun ValidateLoginResponse.transformnewlogin(_strMessage:String):  ValidateLoingResponseModel{
     return  ValidateLoingResponseModel(
         eventListRequired=eventListRequired,
 
@@ -148,6 +148,7 @@ fun ValidateLoginResponse.transformnewlogin():  ValidateLoingResponseModel{
    authState=authState,
 
    twoWayAuth=twoWayAuth,
+        strMessage=_strMessage
     )
 }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -59,6 +60,8 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     val disposable = CompositeDisposable()
     var objLoginInfo: LoginInfo?=null
     var strOtpMessage:String=""
+    private val handler = Handler()
+    var intCount:String ="1"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -107,8 +110,11 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     {
             if(strOtpMessage.isNotEmpty())
             {
+                intCount=strOtpMessage.substringAfter(":-")
                 binding.tvEnterOtpMsg.setText(strOtpMessage.substringBefore(" |"))
                 binding.tvEnterOtpMsg.isVisible=true
+                binding.tvCounterOtp.setText("$intCount / 3 OTP Sent")
+
             }
         else
         {
@@ -211,6 +217,19 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
             }
             binding.ekycJetOtpView.setOTP(emptyString)
             binding.ekycJetOtpError.text = emptyString
+            if(it.message.isNotEmpty())
+            {
+                intCount=it.message.substringAfter(":-")
+                binding.tvEnterOtpMsg.setText(it.message.substringBefore(" |"))
+                binding.tvEnterOtpMsg.isVisible=true
+                binding.tvCounterOtp.setText("$intCount / 3 OTP Sent")
+
+            }
+            else
+            {
+                binding.tvEnterOtpMsg.setText("")
+                binding.tvEnterOtpMsg.isVisible=false
+            }
             //startOtpListener()
         }
     }
@@ -229,8 +248,12 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     override fun fnRenderValidateOtp(uiModel: UiModel<User>) {
         uiModel.onSuccess {
             binding.ekycJetbtnProceed.isEnabled = true
-            dismiss()
+            binding.tvEnterOtpMsg.text="OTP Validated"
+            handler.postDelayed({
+                dismiss()
                 subject.onNext(LoginActivityUiEvent.OnOtpSucess(it))
+            }, 1000)
+
         }
         uiModel.onFailure {
             binding.ekycJetbtnProceed.isEnabled = true

@@ -22,9 +22,9 @@ interface LoginView : BaseView {
 
   fun fnRenderNewLogin(uiModdel:UiModel<ValidateLoingResponseModel>)
 
-  fun fnGenerateOtp():Observable<LoginActivityUiEvent.OnCallGenerateOtp>
+ /* fun fnGenerateOtp():Observable<LoginActivityUiEvent.OnCallGenerateOtp>
 
-  fun renderGenerateOtp(uiModel:UiModel<String>)
+  fun renderGenerateOtp(uiModel:UiModel<String>)*/
 
   fun fnCallLogin():Observable<LoginActivityUiEvent.OnCallLogin>
 

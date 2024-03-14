@@ -30,5 +30,6 @@ data class ValidateLoingResponseModel(
 
     @JvmField val authState: Int? = null,
 
-    @JvmField val twoWayAuth: Int? = null
+    @JvmField val twoWayAuth: Int? = null,
+    @JvmField val strMessage:String?=null
 )

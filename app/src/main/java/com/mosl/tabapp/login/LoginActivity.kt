@@ -590,14 +590,17 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   override fun fnRenderNewLogin(uiModdel: UiModel<ValidateLoingResponseModel>) {
     toggleProgressBar(uiModdel.inProgress)
     uiModdel.onSuccess {
-      subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)
+     /* subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)*/
+      val otpBottomSheet=OtpVerificationFragment()
+      otpBottomSheet.fnSetData(fnGetLoginData(),it.strMessage?:"")
+      otpBottomSheet.show(supportFragmentManager, "otpView")
     }
     uiModdel.onFailure {error->
       error.showOnFailurePopup()
     }
   }
 
-  override fun fnGenerateOtp(): Observable<LoginActivityUiEvent.OnCallGenerateOtp> {
+  /*override fun fnGenerateOtp(): Observable<LoginActivityUiEvent.OnCallGenerateOtp> {
       return subject.ofType()
   }
 
@@ -611,7 +614,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
     uiModel.onFailure {error->
       error.showOnFailurePopup()
     }
-  }
+  }*/
 
   override fun fnOnOtpSucess(): Observable<LoginActivityUiEvent.OnOtpSucess> {
     return  subject.ofType()
