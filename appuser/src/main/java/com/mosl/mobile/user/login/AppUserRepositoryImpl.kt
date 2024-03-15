@@ -111,7 +111,7 @@ class AppUserRepositoryImpl @Inject constructor(
             )
         return saathiApi.fnGenerateOtp(request).map {
             if (it.status) {
-                it.response?:it.message
+                it.message?:it.message
 
             } else {
                 throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())

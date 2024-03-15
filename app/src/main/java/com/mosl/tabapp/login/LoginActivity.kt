@@ -591,9 +591,15 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
     toggleProgressBar(uiModdel.inProgress)
     uiModdel.onSuccess {
      /* subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)*/
-      val otpBottomSheet=OtpVerificationFragment()
-      otpBottomSheet.fnSetData(fnGetLoginData(),it.strMessage?:"")
-      otpBottomSheet.show(supportFragmentManager, "otpView")
+      try {
+        val otpBottomSheet = OtpVerificationFragment()
+        otpBottomSheet.fnSetData(fnGetLoginData(), it.strMessage ?: "")
+        otpBottomSheet.show(supportFragmentManager.beginTransaction(), "otpView")
+      }
+      catch (ex:Exception)
+      {
+        ex.printStackTrace()
+      }
     }
     uiModdel.onFailure {error->
       error.showOnFailurePopup()

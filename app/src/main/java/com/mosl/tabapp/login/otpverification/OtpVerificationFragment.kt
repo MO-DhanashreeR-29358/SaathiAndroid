@@ -49,6 +49,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import io.reactivex.rxjava3.kotlin.addTo
+import java.lang.Exception
 
 class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, OTPListener {
 
@@ -59,9 +60,11 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     private val subject = LoginActivityUiEvent.getLoginUIEvent()
     val disposable = CompositeDisposable()
     var objLoginInfo: LoginInfo?=null
-    var strOtpMessage:String=""
+
     private val handler = Handler()
     var intCount:String ="1"
+    var strOtpMessage:String=""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -95,6 +98,9 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
     override fun getTheme(): Int {
         return R.style.EkycAppBottomSheetDialogTheme
     }
@@ -132,23 +138,31 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         strOtpMessage=strotpmessage
     }
     override fun startTimer() {
-        val counter = TOTAL_RETRY_TIME_SECONDS - RETRY_COUNTER_INTERVAL_SECONDS
+        try {
+            val counter = TOTAL_RETRY_TIME_SECONDS - RETRY_COUNTER_INTERVAL_SECONDS
 
-        Observable.interval(RETRY_COUNTER_INTERVAL_SECONDS, TimeUnit.SECONDS)
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnNext { toggleResend(false) }
-            .take(TOTAL_RETRY_TIME_SECONDS)
-            .doOnComplete {
-                toggleResend(true)
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { sec ->
-                val remainingSec = counter - sec
-                binding.tvCounter.apply {
-                    text = "00:${String.format("%02d",remainingSec)}"
+            Observable.interval(RETRY_COUNTER_INTERVAL_SECONDS, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext { toggleResend(false) }
+                .take(TOTAL_RETRY_TIME_SECONDS)
+                .doOnComplete {
+                    toggleResend(true)
                 }
-                binding.tvCounter.visibility = if (remainingSec > 0) View.VISIBLE else View.INVISIBLE
-            }.addTo(disposable)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { sec ->
+                    val remainingSec = counter - sec
+                    binding.tvCounter.apply {
+                        text = "00:${String.format("%02d", remainingSec)}"
+                    }
+                    binding.tvCounter.visibility =
+                        if (remainingSec > 0) View.VISIBLE else View.INVISIBLE
+                }.addTo(disposable)
+        }
+        catch (ex:Exception)
+        {
+            ex.printStackTrace()
+            Log.d("error",ex.message.toString())
+        }
 
     }
 
@@ -257,6 +271,8 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         }
         uiModel.onFailure {
             binding.ekycJetbtnProceed.isEnabled = true
+            binding.tvEnterOtpMsg.setText("")
+            binding.tvEnterOtpMsg.isVisible=false
             if (it is ValidationException) {
                 val error = it.error.message
                 showValidationError(error.orEmpty())

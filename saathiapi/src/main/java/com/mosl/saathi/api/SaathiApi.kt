@@ -88,6 +88,7 @@ import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.otp.GenerateOtpRequest
+import com.mosl.saathi.api.model.otp.GenerateOtpResponse
 import com.mosl.saathi.api.model.otp.ValidateOtpRequest
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
@@ -642,7 +643,7 @@ interface SaathiApi {
     @POST("Auth/ValidateLogin")
     fun fnValidateLogin(@Body objValidateLoginRequest:ValidateLoginRequest ):Observable<SaathiCommonResponse<ValidateLoginResponse>>
     @POST("Auth/GenerateOTP")
-    fun fnGenerateOtp(@Body objGenerateOtpRequest: GenerateOtpRequest):Observable<SaathiCommonResponse<String>>
+    fun fnGenerateOtp(@Body objGenerateOtpRequest: GenerateOtpRequest):Observable<SaathiCommonResponse<GenerateOtpResponse>>
 
     @POST("Auth/ValidateOTP")
     fun fnValidateOtp(@Body objValidateOtpRequest: ValidateOtpRequest):Observable<LoginResponse>
