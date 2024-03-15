@@ -29,7 +29,8 @@ import okhttp3.Response;
 
     @Inject
     MyZoneHeaderInterceptor(@ServerTime LongPreference serverTimePref, AppInfo appInfo) {
-        this.userAgent = "MyzOne 2.0/Android/3.0.37(3037)";
+        this.userAgent = appInfo.toString();
+        //this.userAgent = "MyzOne 2.0/Android/3.0.37(3037)";
         this.serverTimePref = serverTimePref;
     }
 

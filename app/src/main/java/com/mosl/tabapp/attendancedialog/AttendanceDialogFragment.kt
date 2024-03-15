@@ -26,13 +26,15 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.DateParser
 import com.mosl.tabapp.R
+import com.mosl.tabapp.core.CommonActivity
+import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.databinding.FragmentAttendanceDialogBinding
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.*
+import java.util.Date
 import javax.inject.Inject
 
 class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
@@ -178,7 +180,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
             }
         }
         binding.tvSkip.setOnClickListener {
-            skipListener.skipClick(true)
+            skipListener.skipClick(false)
            // (requireActivity() as CommonActivity).getProfileInfo()
             dismiss()
         }
@@ -228,6 +230,10 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
         uiModel.data?.let {
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
                 .show()
+
+            //showToast("Login Successful.");
+            // Dista login method calls here after successful attendance mark
+            // (activity as CommonActivity?)!!.showPermissionWarningDialog()
             dismiss()
         }
     }

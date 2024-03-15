@@ -314,7 +314,7 @@ class CommonActivity : BaseActivity(),
 
     // added for back ground location permission as DISTA needed this permission
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun showPermissionWarningDialog() {
+    public fun showPermissionWarningDialog() {
 
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -551,9 +551,7 @@ class CommonActivity : BaseActivity(),
             )
         }
         Timber.d("AAA onResume")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showPermissionWarningDialog()
-        }
+        showPermissionWarningDialog()
     }
 
     /* override fun onStop() {

@@ -10,6 +10,7 @@ import com.google.gson.Gson
 import com.mosl.app.core.data.util.LocationUtil
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
+import com.mosl.commons.data.onFailure
 import com.mosl.mobile.domain.attendance.AttendanceRepository
 import com.mosl.mobile.domain.attendance.LatLng
 import com.mosl.mobile.domain.attendance.model.OfficeLocation
@@ -110,6 +111,10 @@ class AttendanceHelper @Inject constructor(
     }
 
     private fun showAttendancePopupGeoFancing(uiModel: UiModel<UserLocationInfo>) {
+
+        uiModel.onFailure {
+            userLocationHelper.stop()
+        }
         uiModel.data?.let { data ->
 
             val supportFragmentManager = activity.supportFragmentManager
@@ -142,6 +147,9 @@ class AttendanceHelper @Inject constructor(
     }
 
     private fun showAttendancePopupWFH(uiModel: UiModel<kotlin.Pair<List<OfficeLocation>, LatLng>>) {
+        uiModel.onFailure {
+            userLocationHelper.stop()
+        }
         uiModel.data?.let { data ->
             var nearestOffice = OfficeLocation(0.0, 0.0, 1, "")
             try {
