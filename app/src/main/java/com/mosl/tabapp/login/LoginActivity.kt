@@ -592,9 +592,11 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
     uiModdel.onSuccess {
      /* subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)*/
       try {
-        val otpBottomSheet = OtpVerificationFragment()
-        otpBottomSheet.fnSetData(fnGetLoginData(), it.strMessage ?: "")
-        otpBottomSheet.show(supportFragmentManager.beginTransaction(), "otpView")
+       runOnUiThread {
+         val otpBottomSheet = OtpVerificationFragment()
+         otpBottomSheet.fnSetData(fnGetLoginData(), it.strMessage ?: "")
+         otpBottomSheet.show(supportFragmentManager.beginTransaction(), "otpView")
+       }
       }
       catch (ex:Exception)
       {

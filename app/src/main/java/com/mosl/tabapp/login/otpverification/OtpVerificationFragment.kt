@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.ErrorState
@@ -120,6 +121,8 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
                 binding.tvEnterOtpMsg.setText(strOtpMessage.substringBefore(" |"))
                 binding.tvEnterOtpMsg.isVisible=true
                 binding.tvCounterOtp.setText("$intCount / 3 OTP Sent")
+                Log.d("fnsetView method",strOtpMessage)
+                Log.d("Set view Called",intCount)
 
             }
         else
@@ -132,10 +135,11 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     override fun fnGetLoginData(): LoginInfo {
         return objLoginInfo?: LoginInfo("","","")
     }
-     fun fnSetData(_objLoginInfo:LoginInfo,strotpmessage:String)
+     fun fnSetData(_objLoginInfo:LoginInfo,_strotpmessage:String)
     {
         objLoginInfo=LoginInfo(_objLoginInfo.empCode,_objLoginInfo.password,_objLoginInfo.appVersion)
-        strOtpMessage=strotpmessage
+        strOtpMessage=_strotpmessage
+        Log.d("Set Data Called",strOtpMessage+" user data"+Gson().toJson(objLoginInfo))
     }
     override fun startTimer() {
         try {
