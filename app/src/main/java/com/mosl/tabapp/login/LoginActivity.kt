@@ -127,6 +127,12 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     setUpView()
   }
 
+  override fun onDestroy() {
+    presenter.stop()
+    super.onDestroy()
+
+  }
+
   private fun setUpView() {
     sharedPreferences = this.getSharedPreferences(
         resources.getString(R.string.consent_check),
@@ -142,6 +148,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     binding.btnLogin.setOnClickListener {
       if(isCallOtp)
       {
+
         subject.onNext(LoginActivityUiEvent.OnCallOtpLogin)
       }
       else
@@ -153,6 +160,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
     if(isCallOtp)
     {
+
       subject.onNext(LoginActivityUiEvent.OnCallOtpLogin)
     }
     else

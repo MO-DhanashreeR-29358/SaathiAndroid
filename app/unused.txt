@@ -30070,10 +30070,11 @@ com.mosl.saathi.api.model.clientviewhistory.Request:
     public final com.mosl.saathi.api.model.clientviewhistory.Request copy(java.lang.Integer,java.lang.Object,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Object,java.lang.Object,java.lang.String,java.lang.Integer,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object)
     public static synthetic com.mosl.saathi.api.model.clientviewhistory.Request copy$default(com.mosl.saathi.api.model.clientviewhistory.Request,java.lang.Integer,java.lang.Object,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Object,java.lang.Object,java.lang.String,java.lang.Integer,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Object,int,java.lang.Object)
 com.mosl.saathi.api.model.common.ApiError:
-    public void <init>(java.lang.String)
-    public final java.lang.String component1()
-    public final com.mosl.saathi.api.model.common.ApiError copy(java.lang.String)
-    public static synthetic com.mosl.saathi.api.model.common.ApiError copy$default(com.mosl.saathi.api.model.common.ApiError,java.lang.String,int,java.lang.Object)
+    public void <init>(int,java.lang.String)
+    public final int component1()
+    public final java.lang.String component2()
+    public final com.mosl.saathi.api.model.common.ApiError copy(int,java.lang.String)
+    public static synthetic com.mosl.saathi.api.model.common.ApiError copy$default(com.mosl.saathi.api.model.common.ApiError,int,java.lang.String,int,java.lang.Object)
 com.mosl.saathi.api.model.common.ExtraDataCommonResponse:
     public void <init>(com.mosl.saathi.api.model.common.ExtraDataInner,boolean,java.lang.String,java.lang.String,java.util.List)
     public final com.mosl.saathi.api.model.common.ExtraDataInner component1()
@@ -35866,6 +35867,7 @@ com.mosl.tabapp.login.otpverification.OtpVerificationFragment:
     public final java.lang.String getStrOtpMessage()
     public io.reactivex.rxjava3.core.Observable onOtpEntered()
     public final void setIntCount(java.lang.String)
+    public final void setIsshowTimer(boolean)
     public final void setObjLoginInfo(com.mosl.mobile.user.model.LoginInfo)
     public final void setPresenter(com.mosl.tabapp.login.otpverification.OtpVerificationPresenter)
     public final void setStrOtpMessage(java.lang.String)
@@ -71568,8 +71570,6 @@ com.google.firebase.messaging.FcmBroadcastProcessor:
     public static com.google.android.gms.tasks.Task startMessagingService()
 com.google.firebase.messaging.FcmExecutors
 com.google.firebase.messaging.FcmLifecycleCallbacks$$InternalSyntheticLambda$2$348ab2a8a7861551043bd0d650dd517698d1015644e9e4cf7d23ef7d875bcabe$0
-com.google.firebase.messaging.FcmLifecycleCallbacks:
-    public static void logNotificationOpen(android.content.Intent)
 com.google.firebase.messaging.FirebaseMessaging$$InternalSyntheticLambda$1$4129b2b0f58baa0162adc62d5d13cb6ee168e7dea6203ca70986ddada3915739$3
 com.google.firebase.messaging.FirebaseMessaging$$InternalSyntheticLambda$1$dc164ae5a8b797d10f3f88c338d4aa3375390e03b0a13483792f7da7ff16993f$0
 com.google.firebase.messaging.FirebaseMessaging$$InternalSyntheticLambda$2$851b8622709bd138677510031bd78adeeebdd3b7deb5ce2e8cac723b174e95ff$0:
@@ -81880,6 +81880,7 @@ com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl:
     public final io.reactivex.rxjava3.core.Observable getLeadDetail()
     public final io.reactivex.rxjava3.core.Observable getLeadEmpForAssign()
     public final io.reactivex.rxjava3.core.Observable getLeadEmpForProduct()
+com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$151fdec31bf6c5e8dd4aff5dde93e9ead6cebc554657f9a79fc6846f9b24179d$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$1
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$0
@@ -81901,7 +81902,7 @@ com.mosl.tabapp.login.LoginActivity:
     public final com.mosl.tabapp.common.FusedLocation getFusedLocation()
     public final com.mosl.mobile.user.login.LoginRepositoryImpl getLoginRepository()
     public static com.mosl.tabapp.permission.PermissionCheckHelper getPermissionCheckHelper()
-    public static com.mosl.tabapp.login.LoginPresenter getPresenter()
+    public final com.mosl.tabapp.login.LoginPresenter getPresenter()
     public final android.content.SharedPreferences getSharedPreferences()
     public final com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
@@ -81980,7 +81981,8 @@ com.mosl.tabapp.login.otpverification.OtpVerificationFragment$startTimer$3:
 com.mosl.tabapp.login.otpverification.OtpVerificationFragment:
     public static void fnSetData()
     public static void fnSetView()
-    public static com.mosl.tabapp.login.otpverification.OtpVerificationPresenter getPresenter()
+    public static boolean getIsshowTimer()
+    public final com.mosl.tabapp.login.otpverification.OtpVerificationPresenter getPresenter()
     public final void onInteractionListener()
     public static void setBinding$14()
     public final void showValidationError(java.lang.String)

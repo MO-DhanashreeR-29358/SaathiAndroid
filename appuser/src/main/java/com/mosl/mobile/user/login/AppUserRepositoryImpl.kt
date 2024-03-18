@@ -76,6 +76,7 @@ class AppUserRepositoryImpl @Inject constructor(
   }
 
     override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
+
             val  request=ValidateLoginRequest(
                 ipaddress=getLocalIpAddress(),
                 isPersistance=false,
@@ -92,7 +93,7 @@ class AppUserRepositoryImpl @Inject constructor(
                     it.response?.transformnewlogin(it.message)?:ValidateLoingResponseModel(strMessage = it.message)
 
                 } else {
-                    throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+                    throw ServiceFailureException(it.errors?.firstOrNull()?.code.toString()?:"", it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
                 }
 
             }

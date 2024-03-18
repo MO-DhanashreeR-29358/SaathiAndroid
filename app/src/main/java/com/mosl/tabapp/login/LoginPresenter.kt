@@ -58,14 +58,6 @@ class LoginPresenter @Inject constructor(
             view.fnRenderNewLogin(it)
          }.addTo(disposable)
 
-     /* view.fnGenerateOtp()
-          .map{
-              view.fnGetLoginData()
-          }.switchMap {
-                  loginRepository.fnCallOtp(it).compose(applyUiModel())
-              }.subscribe {
-                  view.renderGenerateOtp(it)
-      }.addTo(disposable)*/
 
       view.fnOnOtpSucess()
           .switchMap {

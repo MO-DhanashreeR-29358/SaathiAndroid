@@ -21,6 +21,7 @@ import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.error.ErrorState
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.utils.alert
 import com.mosl.app.coreui.base.BaseFragment
 import com.mosl.commons.data.UiModel
@@ -65,6 +66,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     private val handler = Handler()
     var intCount:String ="1"
     var strOtpMessage:String=""
+    var isshowTimer:Boolean=true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -100,6 +102,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     }
 
     override fun onDestroy() {
+        presenter.stop()
         super.onDestroy()
     }
     override fun getTheme(): Int {
@@ -147,10 +150,13 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
 
             Observable.interval(RETRY_COUNTER_INTERVAL_SECONDS, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext { toggleResend(false) }
+                .doOnNext { if(isshowTimer)
+                {toggleResend(false)} }
                 .take(TOTAL_RETRY_TIME_SECONDS)
                 .doOnComplete {
-                    toggleResend(true)
+                    if(isshowTimer) {
+                        toggleResend(true)
+                    }
                 }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { sec ->
@@ -158,8 +164,14 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
                     binding.tvCounter.apply {
                         text = "00:${String.format("%02d", remainingSec)}"
                     }
-                    binding.tvCounter.visibility =
-                        if (remainingSec > 0) View.VISIBLE else View.INVISIBLE
+                    if(isshowTimer)
+                    {
+                        binding.tvCounter.visibility = if (remainingSec > 0) View.VISIBLE else View.INVISIBLE
+                    }
+                    else
+                    {
+                        binding.tvCounter.isVisible=false
+                    }
                 }.addTo(disposable)
         }
         catch (ex:Exception)
@@ -283,6 +295,12 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
             } else {
                 val message = it.getErrorOnFailure().message
                 if (message.isNullOrEmpty().not()) {
+                    if(message.equals("Your account has been blocked due to 3 Invalid OTP attempts.Please try again after 10 minutes.",false))
+                    {
+                        isshowTimer=false
+                        binding.tvResendOtp.isVisible=false
+                        binding.tvCounter.isVisible=false
+                    }
                     showValidationError(message.orEmpty())
                 }
             }
