@@ -279,6 +279,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
         uiModel.onSuccess {
             binding.ekycJetbtnProceed.isEnabled = true
             binding.tvEnterOtpMsg.text="OTP Validated"
+            binding.tvEnterOtpMsg.isVisible = true
             handler.postDelayed({
                 dismiss()
                 subject.onNext(LoginActivityUiEvent.OnOtpSucess(it))

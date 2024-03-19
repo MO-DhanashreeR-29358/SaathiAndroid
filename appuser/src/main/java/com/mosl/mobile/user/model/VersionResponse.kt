@@ -6,7 +6,7 @@ data class VersionResponse(
   @JvmField val url: String?,
   @JvmField val newEkyc: Int,
   @JvmField val newEkycUrl: String,
-  @JvmField val isOtpRequired:String
+  @JvmField val isOtpRequired:String?
 ) {
   fun hasUrl(): Boolean {
     return url.isNullOrEmpty() && url.isNullOrBlank()
