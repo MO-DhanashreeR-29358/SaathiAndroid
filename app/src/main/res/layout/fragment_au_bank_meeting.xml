@@ -299,10 +299,26 @@
                     style="@style/Widget.AppCompat.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_50sdp"
-                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 _-"
+                    android:inputType="number"
+                    android:digits="0123456789"
+                    android:maxLength="10"
+                    android:text=""
                     android:hint="@string/text_hint_label_enter_bank_branch_other"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_bank_branch_label_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/text_lable_other_bank_info"
+                android:background="@color/lead_total_back"
+                android:textColor="@color/hyper_link"
+                android:textSize="@dimen/_12sdp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/il_bank_branch_other" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -313,7 +329,7 @@
                 app:hintEnabled="false"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/il_bank_branch_other">
+                app:layout_constraintTop_toBottomOf="@+id/tv_bank_branch_label_info">
 
                 <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_sub_broker"

@@ -76,4 +76,18 @@ class UserCacheImpl @Inject internal constructor(
             else -> null
         }
     }
+
+    override fun fnSetisOtpEnable(isOtpRequired:Boolean)
+    {
+        var isOtp="0"
+        if(isOtpRequired)
+        {
+            isOtp="1"
+        }
+            userStore.isOtpRequired.set(isOtp)
+    }
+
+    override fun isOtpEnable(): Boolean {
+        return userStore.isOtpRequired.get() == "1"
+    }
 }

@@ -5,7 +5,10 @@ import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.ApiEndpoints.AppVersionEndPoint
+import com.mosl.saathi.api.ApiEndpoints.GenerateOTP
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
+import com.mosl.saathi.api.ApiEndpoints.ValidateLogin
+import com.mosl.saathi.api.ApiEndpoints.ValidateOTP
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
 import okhttp3.Interceptor
@@ -29,7 +32,7 @@ class HeaderInterceptor @Inject constructor(
 
     val builder = original.newBuilder()
 
-    if (chain.request().url().pathSegments().last() != LoginEndPoint && chain.request().url().pathSegments().last() != AppVersionEndPoint) {
+    if (chain.request().url().pathSegments().last() != LoginEndPoint && chain.request().url().pathSegments().last() != AppVersionEndPoint && chain.request().url().pathSegments().last()!= ValidateLogin &&  chain.request().url().pathSegments().last()!= GenerateOTP && chain.request().url().pathSegments().last()!=ValidateOTP) {
       val user = userManager.user
       builder.header(API_HEADER_CONTENT_TYPE, encryptor.encrypt(API_HEADER_CONTENT_TYPE_VALUE))
       builder.header(API_HEADER_CLIENT_INFO, encryptor.encrypt(API_HEADER_CLIENT_INFO_VALUE))

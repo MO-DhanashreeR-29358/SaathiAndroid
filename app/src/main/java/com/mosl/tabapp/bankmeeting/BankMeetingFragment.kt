@@ -235,11 +235,13 @@ class BankMeetingFragment : CommonFragment() {
                 if (getSelectedBankBranch().value == "Others") {
                     binding.apply {
                         ilBankBranchOther.visibility = View.VISIBLE
+                        tvBankBranchLabelInfo.visibility = View.VISIBLE
                         resetError()
                     }
 
                 } else {
                     binding.ilBankBranchOther.visibility = View.GONE
+                    binding.tvBankBranchLabelInfo.visibility = View.GONE
                 }
             } catch (ex: Exception) {
                 ex.printStackTrace()

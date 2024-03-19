@@ -7,7 +7,8 @@ data class VersionResponse(
   @JvmField @SerializedName("msg") val msg: String,
   @JvmField @SerializedName("URL") val url: String?,
   @JvmField @SerializedName("NEWEKYC") val newEkyc: Int,
-  @JvmField @SerializedName("NEWEKYCURL") val newEkycUrl: String
+  @JvmField @SerializedName("NEWEKYCURL") val newEkycUrl: String,
+  @JvmField @SerializedName("IsOTPRequired") val isOtpRequired:String
 ) {
   fun hasUrl(): Boolean {
     return !url.isNullOrEmpty() && !url.isNullOrBlank()
