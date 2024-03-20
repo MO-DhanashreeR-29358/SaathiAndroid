@@ -7,8 +7,11 @@ import com.mosl.navigator.FragmentTransitionHelper;
 import com.mosl.navigator.FragmentTransitionHelperImpl;
 import com.mosl.navigator.NavigationCallback;
 import com.mosl.navigator.Navigator;
+import com.mosl.tabapp.FragmentProvider;
+import com.mosl.tabapp.LoginFragmentProvider;
 import com.mosl.tabapp.core.LoginNavigator;
 import com.mosl.tabapp.core.LoginNavigatorImpl;
+import com.mosl.tabapp.navigation.NavigatorAliasProviders;
 import com.mosl.tabapp.permission.PermissionCheckHelper;
 import dagger.Binds;
 import dagger.Module;
@@ -16,7 +19,8 @@ import dagger.Provides;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-@Module public abstract class LoginActivityModule {
+@Module(includes = LoginFragmentProvider.class)
+public abstract class LoginActivityModule {
 	@Provides static NavigationCallback provideNavigationCallback() {
 		return new NavigationCallback() {
 			@Override public void onPageOpened(@NotNull Fragment fragment, boolean addedToStack) {

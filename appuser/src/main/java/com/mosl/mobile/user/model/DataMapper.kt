@@ -3,6 +3,7 @@ package com.mosl.mobile.user.model
 import com.mosl.saathi.api.model.login.BusinessProfile
 import com.mosl.saathi.api.model.login.CurrentBusinessProfile
 import com.mosl.saathi.api.model.login.LoginResponse
+import com.mosl.saathi.api.model.login.ValidateLoginResponse
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import com.mosl.saathi.api.model.splash.ReportTypeResponse
@@ -38,7 +39,8 @@ fun VersionResponse.transform(
         msg = msg,
         url = url,
         newEkyc = newEkyc,
-        newEkycUrl = newEkycUrl
+        newEkycUrl = newEkycUrl,
+        isOtpRequired =isOtpRequired
     )
 }
 
@@ -116,3 +118,39 @@ fun List<DigitalSalesKitMenu>.transformDigitalSalesKitData(): List<DigitalSalesK
         parentId = it.parentId,pdfPath = it.pdfPath)
     }
 }
+
+fun ValidateLoginResponse.transformnewlogin(_strMessage:String):  ValidateLoingResponseModel{
+    return  ValidateLoingResponseModel(
+        eventListRequired=eventListRequired,
+
+   isUseUrl=isUseUrl,
+
+   isEKYCRevamp=isEKYCRevamp,
+
+   isChequeApprovalEnable=isChequeApprovalEnable,
+
+   user=user,
+
+   isPrimeUser=isPrimeUser,
+
+   isBank=isBank,
+
+   isEkycEnable=isEkycEnable,
+
+   isAUShadowAccountEnable=isAUShadowAccountEnable,
+
+   sMTEnabled=sMTEnabled,
+
+   isRetriveOTPEnable=isRetriveOTPEnable,
+
+   isQRDownload=isQRDownload,
+
+   authState=authState,
+
+   twoWayAuth=twoWayAuth,
+        strMessage=_strMessage
+    )
+}
+
+
+

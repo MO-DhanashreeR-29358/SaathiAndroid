@@ -2,7 +2,6 @@ package com.mosl.mobile.user.login
 
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
-import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 
@@ -18,4 +17,10 @@ interface LoginRepository {
   fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>>
 
   fun logout(): Completable
+
+  fun fnValidateLogin(objValidateLoingPostModel: LoginInfo):Observable<ValidateLoingResponseModel>
+
+  fun fnCallOtp(objGenerateOtpPostModel: LoginInfo):Observable<String>
+
+  fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel):Observable<User>
 }

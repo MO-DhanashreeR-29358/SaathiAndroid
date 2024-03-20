@@ -42,10 +42,10 @@ class SliderActivity : LeanBaseActivity() {
 
      val rootBeer = RootBeer(this)
 
-  /*  if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
+    if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
       showRootedMessage()
       return
-    }*/
+    }
 
     if (userManager.isLoggedIn()) {
       launchSplash()

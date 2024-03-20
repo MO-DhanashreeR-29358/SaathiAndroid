@@ -267,10 +267,29 @@
         parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
-        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/ekyc_bright_orange</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+
     <style name="CustomBottomSheetStyle"
         parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bg_bottomsheet</item>
+        <item name="android:background">@drawable/saathi_shape_round_dialog</item>
+    </style>
+    <style name="Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/ekyc_text_color_black</item>
+        <item name="android:paddingBottom">@dimen/_8sdp</item>
+    </style>
+
+    <style name="Ekyc.JetApp.MyApp.Widget.Button.Upload.Filled" parent="Widget.AppCompat.Button">
+        <item name="borderlessButtonStyle">@attr/borderlessButtonStyle</item>
+        <item name="android:background">@drawable/sathi_button_upload_filled_bg</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/ekyc_white</item>
+        <item name="android:textSize">@dimen/ekyc_text_size_large</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
 </resources>

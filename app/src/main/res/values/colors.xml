@@ -245,6 +245,8 @@
 
     <color name="menu_header_background_color">#414143</color>
     <color name="text_color_disabled">#42000000</color>
+    <color name="sathi_red_textcolor">#DA0000</color>
+
     <color name="clr_heading">#424242</color>
     <color name="clr_astrik">#FF0000</color>
     <color name="clr_text_color">#999999</color>
