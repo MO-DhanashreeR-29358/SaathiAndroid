@@ -1,5 +1,6 @@
 package com.mosl.mobile.user.login
 
+import android.util.Log
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
@@ -64,6 +65,20 @@ class LoginRepositoryImpl @Inject constructor(
 
   override fun getProfileInfo(): Observable<ProfileInfo> {
     return userRepository.getProfileInfo()
+  }
+
+
+  override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
+    Log.d("validate login","called")
+    return  userRepository.fnValidateLogin(objValidateLoingPostModel)
+  }
+  override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {
+  return  userRepository.fnCallOtp(objGenerateOtpPostModel)
+  }
+
+  override fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel): Observable<User> {
+  return  userRepository.fnCallValidateOtp(objValidateOtpPostModel)
+    .map { response -> saveLoginResponse(response) }
   }
 
 }

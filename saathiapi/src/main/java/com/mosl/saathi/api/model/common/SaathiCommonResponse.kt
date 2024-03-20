@@ -18,5 +18,6 @@ data class SaathiCommonResponse<T>(
 }
 
 data class ApiError(
+  @JvmField @SerializedName("Code") val code: Int,
     @JvmField @SerializedName("Message") val message: String
 )

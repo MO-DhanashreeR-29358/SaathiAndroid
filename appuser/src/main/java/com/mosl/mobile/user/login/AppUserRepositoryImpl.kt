@@ -1,13 +1,17 @@
 package com.mosl.mobile.user.login
 
 import android.content.Context
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.MyZoneApi
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
+import com.mosl.saathi.api.model.login.ValidateLoginRequest
 import com.mosl.saathi.api.model.logout.LogoutRequest
+import com.mosl.saathi.api.model.otp.GenerateOtpRequest
+import com.mosl.saathi.api.model.otp.ValidateOtpRequest
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
 import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
@@ -74,6 +78,68 @@ class AppUserRepositoryImpl @Inject constructor(
     return saathiApi.logout(request)
         .map { true }
   }
+
+    override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
+
+            val  request=ValidateLoginRequest(
+                ipaddress=getLocalIpAddress(),
+                isPersistance=false,
+                 employeeCode=objValidateLoingPostModel.empCode,
+                macaddress=getDeviceID(context.contentResolver),
+                appId="2",
+                clientinfo="Android",
+                password=objValidateLoingPostModel.password,
+                appVersion = objValidateLoingPostModel.appVersion
+            )
+        return saathiApi.fnValidateLogin(request)
+            .map {
+                if (it.status) {
+                    it.response?.transformnewlogin(it.message)?:ValidateLoingResponseModel(strMessage = it.message)
+
+                } else {
+                    throw ServiceFailureException(it.errors?.firstOrNull()?.code.toString()?:"", it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+                }
+
+            }
+    }
+
+    override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {
+            val request= GenerateOtpRequest(
+                ipaddress=getLocalIpAddress(),
+                isPersistance=false,
+                employeeCode=objGenerateOtpPostModel.empCode,
+                macaddress=getDeviceID(context.contentResolver),
+                appId="2",
+                clientinfo="Android",
+                password=objGenerateOtpPostModel.password,
+                appVersion = objGenerateOtpPostModel.appVersion
+            )
+        return saathiApi.fnGenerateOtp(request).map {
+            if (it.status) {
+                it.message?:it.message
+
+            } else {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+            }
+
+        }
+    }
+
+    override fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel): Observable<LoginResponse> {
+        val reques=ValidateOtpRequest(
+            ipaddress=getLocalIpAddress(),
+            isPersistance=false,
+            employeeCode=objValidateOtpPostModel.employeeCode,
+            macaddress=getDeviceID(context.contentResolver),
+            appId="2",
+            clientinfo="Android",
+            password=objValidateOtpPostModel.password,
+            oTP = objValidateOtpPostModel.oTP
+        )
+        return saathiApi.fnValidateOtp(reques).map {
+                response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform(objValidateOtpPostModel.password?:"")
+        }
+    }
 
     override fun getProfileInfo(): Observable<ProfileInfo> {
         return myZoneApi.getProfile()

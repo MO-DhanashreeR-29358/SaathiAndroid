@@ -58,6 +58,8 @@ import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
+import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
+import com.mosl.tabapp.login.otpverification.OtpVerificationModule
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -217,6 +219,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReactivationDetailTLModule::class])
     fun provideReactivationDetailTLFragmentFactory(): ReactivationDetailTLFragment
+
+
 
     @ContributesAndroidInjector(modules = [AttendanceDialogModule::class])
     fun provideAttendanceFragmentFactory(): AttendanceDialogFragment

@@ -18,6 +18,8 @@ interface UserManager {
 
   fun setDigitalSalesKitMenuList(reportMenuList: List<DigitalSalesKitData>)
   fun getDigitalSalesKitMenuList(): List<DigitalSalesKitData>
+  fun fnSetIsOtpEnable(isOtpEnable:Boolean)
+  fun isOtpEnable():Boolean
 }
 
 val UserManager.user: User

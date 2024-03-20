@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    android:padding="@dimen/_14sdp"
+    >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ekycClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/colorBlack"
+        app:srcCompat="@drawable/ic_close"/>
+
+    <TextView
+        android:id="@+id/tv_enter_otp"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/ekyc_text_size_normal"
+        android:layout_marginTop="@dimen/ekyc_max_margin"
+        android:text="@string/sathi_otp_label"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_enter_otp_msg"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/light_green"
+        android:textSize="@dimen/ekyc_text_size_small"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter_otp" />
+
+    <com.mosl.tabapp.login.otpverification.helper.otptextview.OtpTextView
+        android:id="@+id/ekycJetOtpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter_otp_msg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/ekyc_text_color_black"
+        app:bar_margin_bottom="0dp"
+        app:box_margin_right="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        app:height="@dimen/_50sdp"
+        app:hide_otp="false"
+        app:length="6"
+        app:bar_enabled="true"
+        app:bar_height="@dimen/_2sdp"
+        app:bar_active_color="@color/ekyc_bright_orange"
+        app:otp_text_size="@dimen/ekyc_text_size_medium"/>
+
+    <TextView
+        android:id="@+id/ekycJetOtpError"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/ekyc_text_size_normal"
+        android:textColor="@color/sathi_red_textcolor"
+        app:layout_constraintTop_toBottomOf="@id/ekycJetOtpView"
+        app:layout_constraintStart_toStartOf="@id/ekycJetOtpView"
+        />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_resend_otp"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/ekyc_padding_normal"
+        android:text="@string/sathi_resend_otp"
+        android:textSize="@dimen/ekyc_text_size_normal"
+        android:textColor="@color/light_red"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/ekycJetOtpView"
+        app:layout_constraintTop_toBottomOf="@id/ekycJetOtpError" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_counter"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/ekyc_padding_normal"
+        android:text="@string/sathi_counter_label"
+        android:textSize="@dimen/ekyc_text_size_normal"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/ekycJetOtpView"
+        app:layout_constraintTop_toBottomOf="@id/ekycJetOtpError" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_counter_otp"
+        style="@style/Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/ekyc_padding_normal"
+        android:text="@string/sathi_count_label"
+        android:textSize="@dimen/ekyc_text_size_normal"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/ekycJetOtpView"
+        app:layout_constraintTop_toBottomOf="@id/tv_counter" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ekycJetbtnProceed"
+        style="@style/Ekyc.JetApp.MyApp.Widget.Button.Upload.Filled"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:scaleType="fitXY"
+        android:stateListAnimator="@null"
+        android:text="@string/sathi_btn_proceed_label"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_counter_otp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -83,9 +83,14 @@ import com.mosl.saathi.api.model.location.LocationDataResponse
 import com.mosl.saathi.api.model.location.LocationRequest
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.LoginResponse
+import com.mosl.saathi.api.model.login.ValidateLoginRequest
+import com.mosl.saathi.api.model.login.ValidateLoginResponse
 import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
+import com.mosl.saathi.api.model.otp.GenerateOtpRequest
+import com.mosl.saathi.api.model.otp.GenerateOtpResponse
+import com.mosl.saathi.api.model.otp.ValidateOtpRequest
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryByEmployeeItem
 import com.mosl.saathi.api.model.pendingapproval.ApprovalSummaryCountItem
 import com.mosl.saathi.api.model.pendingapproval.PendingApprovalRequest
@@ -113,6 +118,7 @@ import com.mosl.saathi.api.model.webview.CommonURLResponse
 import com.mosl.saathi.api.model.webview.IncentiveReportRequest
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface SaathiApi {
@@ -634,6 +640,14 @@ interface SaathiApi {
 
     @POST("Auth/UpdateFCMToken")
     fun updateFCMToken(@Body fcmTokenRequest: FcmTokenRequest): Observable<FcmTokenResponse>
+
+    @POST("Auth/ValidateLogin")
+    fun fnValidateLogin(@Body objValidateLoginRequest:ValidateLoginRequest ):Observable<SaathiCommonResponse<ValidateLoginResponse>>
+    @POST("Auth/GenerateOTP")
+    fun fnGenerateOtp(@Body objGenerateOtpRequest: GenerateOtpRequest):Observable<SaathiCommonResponse<GenerateOtpResponse>>
+
+    @POST("Auth/ValidateOTP")
+    fun fnValidateOtp(@Body objValidateOtpRequest: ValidateOtpRequest):Observable<LoginResponse>
 
     @POST("Prospect/RegisterProspectOnline")
     fun registerProspectOnline(@Body prospectRequest: ProspectRequest): Observable<SaathiCommonResponse<List<ProspectResponse>>>
