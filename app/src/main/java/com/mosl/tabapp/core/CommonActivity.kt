@@ -284,10 +284,10 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAA onStop")
     }
 
-    private fun distaLoginApiCall(){
-        if(mDistaSdk.isLoggedIn) {
+    public fun distaLoginApiCall(){
+        // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
-        }else{
+        // }else{
             mDistaSdk.doLoginCheckIn(this,
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
@@ -308,7 +308,7 @@ class CommonActivity : BaseActivity(),
                         //).show()
                     }
                 })
-        }
+        // }
 
     }
 

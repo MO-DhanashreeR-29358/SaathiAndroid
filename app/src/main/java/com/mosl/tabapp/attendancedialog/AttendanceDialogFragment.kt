@@ -233,7 +233,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
 
             //showToast("Login Successful.");
             // Dista login method calls here after successful attendance mark
-            // (activity as CommonActivity?)!!.showPermissionWarningDialog()
+             (activity as CommonActivity?)!!.distaLoginApiCall()
             dismiss()
         }
     }

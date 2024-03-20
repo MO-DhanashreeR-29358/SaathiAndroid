@@ -31,6 +31,7 @@ import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.MONTH_ON_MONTH_ACCOUNT_REVENUE
 import com.mosl.tabapp.constants.MOSLConstants.PERFORMANCE_INCENTIVE
+import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
@@ -185,6 +186,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
             userLocationHelper.stop()
             Toast.makeText(requireContext(), "Attendance already marked.", Toast.LENGTH_SHORT)
                     .show()
+            // Dista login method calls here after successful attendance mark
+            (activity as CommonActivity?)!!.distaLoginApiCall()
         }
     }
 
