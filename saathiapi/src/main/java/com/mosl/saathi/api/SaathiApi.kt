@@ -818,4 +818,13 @@ interface SaathiApi {
     fun getQRCode(
         @Url url: String
     ): Observable<String>
+
+    @POST("SMSCampaign/ReactivationClientCodeSearch")
+    fun fnReactivationClientSearch(@Body request : ReactivationClientSearchREquest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
+
+    @POST("SMSCampaign/SaveMinenableDays")
+    fun fnGetDays(@Body request: ReactivationMinDateRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
+
+    @POST("SMSCampaign/MarginDatafromActualDate")
+    fun fnGetActualMargin(@Body request: ReactivationActualMarginRequest):Observable<ResponseBody>
 }

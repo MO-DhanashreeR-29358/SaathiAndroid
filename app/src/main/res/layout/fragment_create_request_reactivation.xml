@@ -55,6 +55,7 @@
                     android:text="Reactivation Request"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
+                    android:checked="true"
                     android:textSize="@dimen/_14ssp" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
@@ -63,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:fontFamily="@font/lato_reg"
-                    android:text="RM ChangeRequest"
+                    android:text="RM Change Request"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
                     android:textSize="@dimen/_14ssp" />
@@ -125,6 +126,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat">
 
                 <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/edtClientCode"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/_2sdp"
@@ -138,6 +140,7 @@
                     android:textSize="@dimen/_14ssp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgSearchClient"
                     android:layout_width="@dimen/_18sdp"
                     android:layout_height="@dimen/_18sdp"
                     android:layout_gravity="center"

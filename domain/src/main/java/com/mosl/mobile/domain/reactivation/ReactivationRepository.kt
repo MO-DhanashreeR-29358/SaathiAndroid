@@ -17,4 +17,10 @@ interface ReactivationRepository {
     fun getReactivationAssignedHierarchyClientReportList(period : String, stage : String, source : String): Observable<ReactivationDetailCombo>
 
     fun getReactivationFeedback(request:ReactivationFeedbackItem):Observable<ReactivationFeedbackResponse>
+
+    fun fnGetSearchClientCode(objReactivationClientSearchPostModel: ReactivationClientSearchPostModel):Observable<List<ReactivationClientSearchResponseModel>>
+
+    fun fnGetMinDate(objReactivationMinDatePostModel: ReactivationMinDatePostModel):Observable<String>
+
+    fun fnGetActualMargin(objReactivationActualMarginPostModel:ReactivationActualMarginPostModel):Observable<String>
 }

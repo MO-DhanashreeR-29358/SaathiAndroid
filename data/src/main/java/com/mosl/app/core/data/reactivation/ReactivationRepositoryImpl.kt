@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.reactivation
 
 import com.google.gson.Gson
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.branch.BranchItemResponse
 import com.mosl.mobile.domain.branch.BranchRepository
 import com.mosl.mobile.domain.productivity.ColHeader
@@ -234,6 +235,45 @@ class ReactivationRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun fnGetSearchClientCode(objReactivationClientSearchPostModel: ReactivationClientSearchPostModel): Observable<List<ReactivationClientSearchResponseModel>>{
+        val request=ReactivationClientSearchREquest(objReactivationClientSearchPostModel.employeeCode,objReactivationClientSearchPostModel.clientCode,
+            objReactivationClientSearchPostModel.requestTypeFlag,objReactivationClientSearchPostModel.branchShift)
+        return  saathiApi.fnReactivationClientSearch(request).map {
+            if(it.status)
+            {
+                it.response?.transformReactivationClientSearchList()!!
+            }
+            else
+            {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+            }
+
+        }
+    }
+
+    override fun fnGetMinDate(objReactivationMinDatePostModel: ReactivationMinDatePostModel): Observable<String> {
+        val request=ReactivationMinDateRequest(objReactivationMinDatePostModel.requestorRMCode)
+        return saathiApi.fnGetDays(request).map {
+            if(it.status)
+            {
+                it.response?.firstOrNull()?.startDate?:""
+            }
+            else
+            {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+            }
+        }
+    }
+
+    override fun fnGetActualMargin(objReactivationActualMarginPostModel: ReactivationActualMarginPostModel): Observable<String> {
+        val request=ReactivationActualMarginRequest(objReactivationActualMarginPostModel.businessUnitId,objReactivationActualMarginPostModel.clientCode,objReactivationActualMarginPostModel.actualActivationDate)
+        return saathiApi.fnGetActualMargin(request)
+            .map {
+            it.string().toString()
+        }
+    }
     private fun setData(values: ArrayList<String>): ArrayList<String> {
         val list: ArrayList<String> = ArrayList()
         list.add(values[0])
