@@ -17,13 +17,13 @@ class CreateRequestReactivationPresenter @Inject constructor(
 ):BasePresenter<CreateRequestReactivationView>(view){
     override fun start() {
 
-        /*onFetchCalled()
-            .switchMap {
+
+           /* .switchMap {
                 repository.fnGetActualMargin(ReactivationActualMarginPostModel("1","RET6800","19/03/2024 00:00:00")).compose(applyUiModel())
             }.subscribe {
                 view.fnRenderActualmargin(it)
-            }*/
-        view.fnOnCallMinDate()
+            }**/
+        onFetchCalled()
             .switchMap {
                 repository.fnGetMinDate(ReactivationMinDatePostModel(userManager.user.employeeCode)).compose(applyUiModel())
             }.subscribe{
@@ -39,6 +39,16 @@ class CreateRequestReactivationPresenter @Inject constructor(
                 }.compose(applyUiModel())
             }.subscribe {
                 view.fnRenderClientSearch(it)
+            }
+
+        view.fnOnViewClientDetailClick()
+            .subscribe {
+                view.fnRenderViewClientDetailsClick()
+            }
+
+        view.fnOnUploadDocClick()
+            .subscribe {
+                view.fnOpenFileSelet()
             }
 
     }

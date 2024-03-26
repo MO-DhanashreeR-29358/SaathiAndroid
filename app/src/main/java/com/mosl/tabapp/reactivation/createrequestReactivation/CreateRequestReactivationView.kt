@@ -13,10 +13,15 @@ interface CreateRequestReactivationView :BaseView {
     fun fnGetData(): ReactivationClientSearchPostModel
     fun fnRenderClientSearch(uiModel: UiModel<List<ReactivationClientSearchResponseModel>>)
 
-    fun fnOnCallMinDate():Observable<CreateReacivationUiEvent.OnCallMinDate>
 
     fun fnRenderMinDate(uiModel: UiModel<String>)
 
+    fun fnOnViewClientDetailClick():Observable<Unit>
+    fun fnRenderViewClientDetailsClick()
+
     fun fnRenderActualmargin(uiModel: UiModel<String>)
+
+    fun fnOnUploadDocClick():Observable<Unit>
+    fun fnOpenFileSelet()
 
 }

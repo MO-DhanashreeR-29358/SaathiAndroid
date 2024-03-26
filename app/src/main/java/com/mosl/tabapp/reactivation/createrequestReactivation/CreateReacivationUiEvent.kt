@@ -5,6 +5,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 sealed class CreateReacivationUiEvent
 {
     object OnCallMinDate:CreateReacivationUiEvent()
+    object OnFileUpload:CreateReacivationUiEvent()
     companion object {
         @Volatile private var instance: PublishSubject<CreateReacivationUiEvent>? = null
 
