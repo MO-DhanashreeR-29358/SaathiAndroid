@@ -48,6 +48,9 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
     lateinit var userManager: UserManager
 
     @Inject
+    lateinit var userLocationHelper: UserLocationHelper
+
+    @Inject
     lateinit var screenNavigator: ScreenNavigatorImpl
     val dataActionSubject = PublishSubject.create<DataAction>()
     lateinit var skipListener: SkipListener
@@ -180,7 +183,8 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
             }
         }
         binding.tvSkip.setOnClickListener {
-            skipListener.skipClick(false)
+            skipListener.skipClick(true)
+            userLocationHelper.stop()
            // (requireActivity() as CommonActivity).getProfileInfo()
             dismiss()
         }
@@ -215,6 +219,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
         showProgress(uiModel.inProgress)
 
         uiModel.onFailure { error ->
+            userLocationHelper.stop()
             binding.tvErrorMsg.apply {
                 text = error.message
                 visibility = View.VISIBLE
@@ -228,6 +233,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
         }
 
         uiModel.data?.let {
+            userLocationHelper.stop()
             Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
                 .show()
 

@@ -45,25 +45,24 @@ class AttendanceHelper @Inject constructor(
 
 
     fun handleAttendanceAndLocation(clickListener: ClickListener) {
-        attendanceFragment = AttendanceDialogFragment()
-        this.clickListener = clickListener
-        showMockDialogIfLocationFromMockProvider()
+            attendanceFragment = AttendanceDialogFragment()
+            this.clickListener = clickListener
+            showMockDialogIfLocationFromMockProvider()
 
-        val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
-            .filter { location ->
-                !MockLocationDetector.isLocationFromMockProvider(
-                    activity,
-                    location
-                ) && !checkSkipStatus
-            }
-            .map { loc -> LatLng(loc.latitude, loc.longitude) }
-            .switchMap<Pair<ProfileInfo, LatLng>> { location ->
-                loginRepo.getProfileInfo()
-                    .map { Pair.create(it, location) }
-            }
-            .share()
-        handleAttendanceData(attendanceObs)
-
+            val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
+                .filter { location ->
+                    !MockLocationDetector.isLocationFromMockProvider(
+                        activity,
+                        location
+                    )
+                }
+                .map { loc -> LatLng(loc.latitude, loc.longitude) }
+                .switchMap<Pair<ProfileInfo, LatLng>> { location ->
+                    loginRepo.getProfileInfo()
+                        .map { Pair.create(it, location) }
+                }
+                .share()
+            handleAttendanceData(attendanceObs)
     }
 
     private fun handleAttendanceData(latLngObservable: Observable<Pair<ProfileInfo, LatLng>>) {
