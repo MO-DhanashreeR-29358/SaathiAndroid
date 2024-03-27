@@ -118,6 +118,16 @@ class UpdateLeadValidator (val user: User) : Validator<UpdateLeadRequest, String
                 identifier = 17
                 R.string.error_message_enter_bbemp
             }
+            user.isAllianceBusiness()  &&
+                    input.auBankName.isBlank()  -> {
+                identifier = 18
+                R.string.error_message_enter_au_bank_name
+            }
+            user.isAllianceBusiness()  &&
+                    input.auBankBranchCode.isBlank()  -> {
+                identifier = 19
+                R.string.error_message_enter_au_branch_code
+            }
             else -> {
                 identifier = 0
                 null

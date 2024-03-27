@@ -57,7 +57,9 @@ data class LeadDetail(
     @JvmField val accountTypeName: String,
     @JvmField val ChipEventId: String,
     @JvmField val isBandhanBankEmp: String,
-    @JvmField val bandhanBankEmpCode: String
+    @JvmField val bandhanBankEmpCode: String,
+    @JvmField val auBankName: String,
+    @JvmField val auBankBranchCode: String
 )
 
 data class LeadProductMap(
