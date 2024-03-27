@@ -1,6 +1,7 @@
 package com.mosl.tabapp.reactivation.createrequestReactivation
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -202,4 +203,18 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
     override fun fnOpenFileSelet() {
         saathiFileUploader.openFileChooser("")
     }
+
+    override fun onSelectedFileEventFired(): Observable<SaathiUploadUiSubject.SelectedFileEvent> {
+       return FileUploadsubject.ofType()
+    }
+
+    override fun onSelectedImageEventFired(): Observable<SaathiUploadUiSubject.SelectedImageEvent> {
+        return FileUploadsubject.ofType()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        saathiFileUploader.onActivityResult(requestCode, resultCode, data)
+    }
+
 }

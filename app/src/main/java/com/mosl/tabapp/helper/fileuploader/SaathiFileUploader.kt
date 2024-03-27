@@ -76,45 +76,21 @@ class SaathiFileUploader(private val fragment:com.mosl.app.coreui.base.BaseFragm
             }
             photoFile?.also {
                 val dataDir = (context.applicationContext).applicationInfo.dataDir
-                val authority = if (dataDir != null && (dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("dev.debug"))
-                ) {
-                    INVESTOR_INTERNAL_DEBUG
-                } else if (dataDir != null &&
-                    dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("internal.debug")
-                ) {
-                    TRADER_INTERNAL_DEBUG
-                } else if (dataDir != null && (dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("dev"))
-                ) {
-                    INVESTOR_INTERNAL_RELEASE
-                } else if (dataDir != null
-                    && dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("internal")
-                ) {
-                    TRADER_INTERNAL_RELEASE
-                } else if (dataDir != null &&
-                    dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("mobile.debug")
-                ) {
-                    INVESTOR_PRODUCTION_DEBUG
-                } else if (dataDir != null &&
-                    dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("com.debug")
-                ) {
-                    TRADER_PRODUCTION_DEBUG
-                } else if (dataDir != null && dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("mobile")
-                ) {
-                    INVESTOR_PRODUCTION_RELEASE
-                } else if(dataDir != null && dataDir.toLowerCase(Locale.ENGLISH)
-                        .contains("uat.debug"))
+                val authority =  if(dataDir != null && dataDir.toLowerCase(Locale.ENGLISH)
+                        .contains("tabapp.uat.debug"))
                     {
                             SAATHI_UAT_DEBUG
                     }
-                else {
-                    TRADER_PRODUCTION_RELEASE
+                else if(dataDir != null && dataDir.toLowerCase(Locale.ENGLISH)
+                    .contains("tabapp.uat"))
+                {
+                    SAATHI_UAT_RELEASE
+                }else if(dataDir != null && dataDir.toLowerCase(Locale.ENGLISH)
+                        .contains("tabapp.debug"))
+                {
+                    SAATHI_PRODUCTION_DEBUG
+                }else {
+                    SAATHI_PRODUCTION_RELEASE
                 }
                 val photoURI: Uri = FileProvider.getUriForFile(context, authority, it)
                 selectedImageUri = photoURI
@@ -348,6 +324,9 @@ class SaathiFileUploader(private val fragment:com.mosl.app.coreui.base.BaseFragm
         const val INVESTOR_PRODUCTION_DEBUG = "com.mosl.mobile.debug.fileprovider"
         const val INVESTOR_PRODUCTION_RELEASE = "com.mosl.mobile.fileprovider"
         const val SAATHI_UAT_DEBUG="com.mosl.tabapp.uat.debug.fileprovider"
+        const val SAATHI_UAT_RELEASE="com.mosl.tabapp.uat"
+        const val SAATHI_PRODUCTION_DEBUG="com.mosl.tabapp.debug"
+        const val SAATHI_PRODUCTION_RELEASE="com.mosl.tabapp"
         const val FILE_UPLOAD_SIZE_LIMT = 10
         const val FILE_LARGE_MESSAGE =
             "Please upload image less than $FILE_UPLOAD_SIZE_LIMT MB"

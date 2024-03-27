@@ -2,6 +2,7 @@ package com.mosl.tabapp.reactivation.createrequestReactivation
 
 import android.util.Log
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.reactivation.ReactivationActualMarginPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationClientSearchPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationMinDatePostModel
@@ -28,7 +29,8 @@ class CreateRequestReactivationPresenter @Inject constructor(
                 repository.fnGetMinDate(ReactivationMinDatePostModel(userManager.user.employeeCode)).compose(applyUiModel())
             }.subscribe{
                 view.fnRenderMinDate(it)
-            }
+            }.addTo(disposable)
+
             view.fnOnSearchClientClick()
                 .map {
                     view.fnGetData()
@@ -39,17 +41,27 @@ class CreateRequestReactivationPresenter @Inject constructor(
                 }.compose(applyUiModel())
             }.subscribe {
                 view.fnRenderClientSearch(it)
-            }
+            }.addTo(disposable)
 
         view.fnOnViewClientDetailClick()
             .subscribe {
                 view.fnRenderViewClientDetailsClick()
-            }
+            }.addTo(disposable)
 
         view.fnOnUploadDocClick()
             .subscribe {
                 view.fnOpenFileSelet()
-            }
+            }.addTo(disposable)
+
+        view.onSelectedFileEventFired()
+            .subscribe {
+                Log.d("in presenter",it.uriString)
+            }.addTo(disposable)
+
+        view.onSelectedImageEventFired()
+            .subscribe {
+                Log.d("in presenter",it.uriString)
+            }.addTo(disposable)
 
     }
 }
