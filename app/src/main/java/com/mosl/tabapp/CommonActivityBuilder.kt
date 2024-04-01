@@ -12,10 +12,11 @@ import com.mosl.tabapp.slider.SliderActivity
 import com.mosl.tabapp.slider.SliderActivityModule
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.splash.SplashActivityModule
+import com.mosl.user.AppUserModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
-@Module(includes = [UserModule::class])
+@Module(includes = [UserModule::class, AppUserModule::class])
 abstract class CommonActivityBuilder {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [SplashActivityModule::class])

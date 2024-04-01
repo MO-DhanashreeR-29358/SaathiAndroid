@@ -4,6 +4,7 @@ import android.R.attr
 import android.content.Context
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.room.Room
 import com.mosl.app.core.utils.matchesService
@@ -20,6 +21,7 @@ import sdk.interfaces.OnTaskSuccessListener
 import utils.BaseApplication
 import utils.DistaSDKInitializer
 import utils.interfaces.IRepositoryUtils
+import javax.inject.Inject
 
 
 abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
@@ -30,6 +32,8 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
   lateinit var appComponent: AppComponent
   private val DATABASE_NAME = "location_db"
   private var appDatabase: AppDatabase? = null
+  @Inject
+  lateinit var applicationObserver: ApplicationObserver
 
   companion object {
     lateinit var INSTANCE: SaathiAppNew
@@ -45,6 +49,11 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
       EventBroadcast.registerSessionExpiredObserver(this, this)
     init()
     CRMWebServiceHandler.initSaathiApi(this)
+
+       ProcessLifecycleOwner.get()
+        .lifecycle
+       .addObserver(applicationObserver)
+
 
     appDatabase = Room.databaseBuilder(
         applicationContext,

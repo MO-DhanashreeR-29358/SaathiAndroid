@@ -692,4 +692,27 @@
     <string name="sathi_otp_error">Please enter OTP</string>
     <string name="sathi_resend_otp">Regenerate OTP</string>
 
+
+    <string name="select_your_mood_for_sign_in">Select your mood to sign in</string>
+    <string name="text_label_hi">Hi</string>
+    <string name="text_label_welcome">Welcome To </string>
+    <string name="text_label_your_sigin_time">Your Sign-In time Is </string>
+    <string name="saathi">Saathi</string>
+    <string name="text_label_sign_out_msg">Are You sure you wants to Sign Out</string>
+    <string name="mock_location_enabled">Mock location enabled. Please uninstall mock location apps to continue.</string>
+    <string name="exit">Exit</string>
+
+    <string name="txt_enter_the_otp">Enter the OTP Received</string>
+    <string name="reading_otp">Reading OTP &#8230;</string>
+    <string name="txt_didnot_receive_otp">Did Not receive otp?</string>
+    <string name="text_label_welcome_user">Welcome %1$s</string>
+    <string name="text_label_read_sms_permission_message">SMS read permission is required to read OTP. Continue.</string>
+    <string name="button_label_yes">Yes</string>
+    <string name="button_label_no">No</string>
+    <string name="txt_otp">OTP</string>
+    <string name="btn_confirm">Confirm</string>
+    <string name="department_ids_key">department_ids</string>
+    <string name="successfully_logout">Successfully logout</string>
+
+    <string name="mark_attendance">Mark Your Attendance Here</string>
 </resources>

@@ -23,4 +23,6 @@ interface LoginRepository {
   fun fnCallOtp(objGenerateOtpPostModel: LoginInfo):Observable<String>
 
   fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel):Observable<User>
+
+  fun getProfileInfo(): Observable<ProfileInfo>
 }

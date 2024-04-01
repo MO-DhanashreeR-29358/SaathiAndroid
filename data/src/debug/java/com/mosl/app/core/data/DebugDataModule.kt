@@ -2,9 +2,12 @@ package com.mosl.app.core.data
 
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor
 import com.mosl.app.core.data.interceptor.HeaderInterceptor
+import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor
 import com.mosl.app.core.data.meta.InternalAPIClient
+import com.mosl.app.core.data.meta.MyZoneAPIClient
 import com.mosl.app.core.data.util.CertPinProvider
 import com.mosl.app.core.data.util.HttpListenerFactory
+import com.mosl.user.AuthorizationInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -86,4 +89,22 @@ class DebugDataModule {
             .build()
     }
 
+    @Provides
+    @Singleton
+    @MyZoneAPIClient
+    fun provideMyZoneAPIOkHttpClient(
+        @Named("BaseOkClient") okHttpClient: OkHttpClient,
+        loggingInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: MyZoneHeaderInterceptor,
+        listenerFactory: HttpListenerFactory,
+       authorizationInterceptor: AuthorizationInterceptor
+    ): OkHttpClient {
+        return okHttpClient.newBuilder()
+            .addInterceptor(headerInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .eventListenerFactory(listenerFactory)
+            .addInterceptor(authorizationInterceptor)
+            .build()
+    }
 }

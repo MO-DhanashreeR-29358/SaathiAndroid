@@ -44,7 +44,7 @@ class SliderActivity : LeanBaseActivity() {
 
     /*if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
       showRootedMessage()
-      return
+      return 
     }*/
 
     if (userManager.isLoggedIn()) {

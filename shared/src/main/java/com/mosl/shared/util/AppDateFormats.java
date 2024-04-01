@@ -81,4 +81,14 @@ public class AppDateFormats {
 
   private static final String date10 = "MM/dd/yyyy";
   public static final DateFormat df_date10 = new SimpleDateFormat(date10, Locale.ENGLISH);
+
+	private static final String time12 = "hh:mm a";
+	public static final DateFormat df_Time12 = new SimpleDateFormat(time12, Locale.ENGLISH);
+
+	private static final String date3 = "dd/MM/yyyy";
+	public static final DateFormat df_Date3 = new SimpleDateFormat(date3, Locale.ENGLISH);
+
+	private static final String time25 = "MM/dd/yyyy hh:mm:ss a zzzz";
+	public static final DateFormat df_Time25 = new SimpleDateFormat(time25, Locale.ENGLISH);
+
 }
