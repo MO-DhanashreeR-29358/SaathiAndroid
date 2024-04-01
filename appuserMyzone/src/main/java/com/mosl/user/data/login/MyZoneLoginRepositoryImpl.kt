@@ -1,5 +1,6 @@
 package com.mosl.user.data.login
 
+import android.annotation.SuppressLint
 import android.util.Log
 import com.mosl.saathi.api.MyZoneApi
 import com.mosl.saathi.api.model.attendance.GenerateOtpRequest
@@ -47,6 +48,9 @@ class MyZoneLoginRepositoryImpl @Inject constructor(
                         expiresIn = it.expiresOn
                     )
                 )
+                Log.d("MyZoneData", "Validate otp token : " + it.token)
+                Log.d("MyZoneData" , "Validate otp refreshToken " + it.refreshToken)
+                Log.d("MyZoneData ", "Validate otp expiresOn : " +  it.expiresOn.toString())
                 userManager.saveUser(DataMapper.transformData(it, action.mobileNumber))
                 userManager.getUser()!!
             }
@@ -111,6 +115,7 @@ class MyZoneLoginRepositoryImpl @Inject constructor(
             userManager.onUserChanged().subscribe {
                 when (it) {
                     is UserEvent.LoggedIn -> {
+                        Log.d("MyZoneData", "onUserChanged called ")
                         tokenManager.start()
                     }
                     is UserEvent.LoggedOut -> {
@@ -132,6 +137,7 @@ class MyZoneLoginRepositoryImpl @Inject constructor(
         disposable.add(tokenEventObs.filter { it == GetAccessToken }
             .map { tokenManager.tokens }
             .switchMap { tokens ->
+                Log.d("MyZoneData", "getRefreshToken called ")
                 hrmsApi.getRefreshToken(
                     TokenRequest(
                         token = tokens.first,
@@ -141,16 +147,21 @@ class MyZoneLoginRepositoryImpl @Inject constructor(
                     .compose(UiModelHelper.applyUiModel())
             }.doOnError { tokenManager.logoutNeeded() }.subscribe { result ->
                 result.data?.let {
-                    Log.d("save access token %s", it.toString())
+
+                    Log.d("MyZoneData", "Validate otp token : " + it.token)
+                    Log.d("MyZoneData" , "Validate otp refreshToken " + it.refreshToken)
+                    Log.d("MyZoneData ", "Validate otp expiresOn : " +  it.expiresOn.toString())
                     tokenManager.saveAccessToken(DataMapper.transformTokenDate(it))
                     tokenManager.tokenSaved()
                 }
                 result.error?.let {
+                    Log.d("MyZoneData", "getRefreshToken error called ")
                     tokenManager.logoutNeeded()
                 }
             })
 
         if (userManager.isLoggedIn()) {
+            Log.d("MyZoneData", "userManager.isLoggedIn() called ")
             tokenManager.start()
         }
     }

@@ -143,7 +143,7 @@ interface MyZoneApi {
     fun logAttendancePopShown(@Body body: LogAttendancePopUpShownRequest): Observable<String>
 
     @Headers(NO_TOKEN)
-    @POST("auth/refresh")
+    @POST("api/auth/refresh")
     fun getRefreshToken(@Body tokenRequest: TokenRequest): Observable<TokenResponse>
 
     companion object {

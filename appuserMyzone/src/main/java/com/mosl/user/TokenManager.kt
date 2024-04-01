@@ -136,10 +136,12 @@ class TokenManager @Inject constructor(
             .doOnNext(LoggerConsumer)
             .map { it }
             .debounce(2000L, MILLISECONDS)
-            .doOnNext { Log.d("TokenManager","Call /token Event") }
+            .doOnNext { Log.d("MyZoneData","Call /token Event") }
 //            .distinctUntilChanged()
-            .subscribe({ tokenEventsSubject.onNext(GetAccessToken) },
-                { Log.d("TokenManager","TokenManagerSequence Failed $it") })
+            .subscribe({
+              Log.d("MyZoneData", "TokenManager onExpiredObs called ")
+              tokenEventsSubject.onNext(GetAccessToken) },
+                { Log.d("MyZoneData","TokenManagerSequence Failed $it") })
     )
   }
 

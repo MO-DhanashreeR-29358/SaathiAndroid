@@ -32,8 +32,8 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
   lateinit var appComponent: AppComponent
   private val DATABASE_NAME = "location_db"
   private var appDatabase: AppDatabase? = null
- // @Inject
-  //lateinit var applicationObserver: ApplicationObserver
+  @Inject
+  lateinit var applicationObserver: ApplicationObserver
 
   companion object {
     lateinit var INSTANCE: SaathiAppNew
@@ -50,9 +50,9 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
     init()
     CRMWebServiceHandler.initSaathiApi(this)
 
-      // ProcessLifecycleOwner.get()
-      //  .lifecycle
-    // .addObserver(applicationObserver)
+       ProcessLifecycleOwner.get()
+        .lifecycle
+       .addObserver(applicationObserver)
 
 
     appDatabase = Room.databaseBuilder(

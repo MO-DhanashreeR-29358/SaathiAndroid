@@ -162,7 +162,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
         )
         dialogFragment.arguments = bundle
         dialogFragment.show(childFragmentManager, "")
-        myZoneLoginRepository.start()
+
 
     }
 
@@ -181,6 +181,13 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
 
     override fun setInTime(uiModel: UiModel<ProfileInfo>) {
         Timber.d("set in time called")
+        uiModel.onFailure {
+            Timber.d("set in time called" + it.message)
+        }
+        uiModel.data?.let {
+            Timber.d("set in time called" + it.attendanceCount.toString() + " " + it.attendanceType.toString())
+        }
+
         if (uiModel.isSuccess) {
 
             isUserLogin = true
@@ -193,7 +200,13 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
     }
 
     override fun setMessageForAttendanceTypeThree(uiModel: UiModel<ProfileInfo>) {
-        Timber.d("set in time called")
+        Timber.d("setMessageForAttendanceTypeThree called")
+        uiModel.onFailure {
+            Timber.d("setMessageForAttendanceTypeThree called" + it.message)
+        }
+        uiModel.data?.let {
+            Timber.d("setMessageForAttendanceTypeThree called" + it.attendanceCount.toString() + " " + it.attendanceType.toString())
+        }
         if (uiModel.isSuccess) {
 
             isUserLogin = true
