@@ -27,4 +27,8 @@ interface CreateRequestReactivationView :BaseView {
     fun onSelectedFileEventFired(): Observable<SaathiUploadUiSubject.SelectedFileEvent>
 
     fun onSelectedImageEventFired(): Observable<SaathiUploadUiSubject.SelectedImageEvent>
+    fun fnOnUpdateClick():Observable<Unit>
+
+    fun fnOnResetClick():Observable<Unit>
+    fun fnRenderReset()
 }

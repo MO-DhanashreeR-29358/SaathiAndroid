@@ -19,17 +19,17 @@ class CreateRequestReactivationPresenter @Inject constructor(
     override fun start() {
 
 
-           /* .switchMap {
-                repository.fnGetActualMargin(ReactivationActualMarginPostModel("1","RET6800","19/03/2024 00:00:00")).compose(applyUiModel())
+        onFetchCalled().switchMap {
+                repository.fnGetActualMargin(ReactivationActualMarginPostModel("1","RET6800","19/03/2024")).compose(applyUiModel())
             }.subscribe {
                 view.fnRenderActualmargin(it)
-            }**/
-        onFetchCalled()
-            .switchMap {
+            }
+
+           /* .switchMap {
                 repository.fnGetMinDate(ReactivationMinDatePostModel(userManager.user.employeeCode)).compose(applyUiModel())
             }.subscribe{
                 view.fnRenderMinDate(it)
-            }.addTo(disposable)
+            }.addTo(disposable)*/
 
             view.fnOnSearchClientClick()
                 .map {
@@ -62,6 +62,11 @@ class CreateRequestReactivationPresenter @Inject constructor(
             .subscribe {
                 Log.d("in presenter",it.uriString)
             }.addTo(disposable)
+
+        view.fnOnResetClick().
+                subscribe {
+                    view.fnRenderReset()
+                }.addTo(disposable)
 
     }
 }

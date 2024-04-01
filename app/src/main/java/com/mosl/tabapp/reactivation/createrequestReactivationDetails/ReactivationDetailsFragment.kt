@@ -88,6 +88,13 @@ class ReactivationDetailsFragment : BottomSheetDialogFragment() ,ReactivationDet
             //edtMarginCollection.setText(objReactivationClientSearchResponseModel?.marginco)
 
         }
+        binding.btnClosePopup.setOnClickListener {
+            dismiss()
+        }
+        binding.appCompatImageView3.setOnClickListener {
+            dismiss()
+        }
+
 
     }
 }

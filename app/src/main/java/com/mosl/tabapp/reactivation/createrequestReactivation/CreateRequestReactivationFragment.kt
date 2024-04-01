@@ -3,9 +3,13 @@ package com.mosl.tabapp.reactivation.createrequestReactivation
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.error.getErrorOnFailure
@@ -81,6 +85,22 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         binding.edtDateActual.setOnClickListener {
             fnShowCalender()
         }
+        binding.edtClientCode.addTextChangedListener (object:TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(s?.isEmpty() == true)
+                {
+                    objReactivationClientSearchResponseModel=null
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+        })
     }
 
     private fun fnShowCalender()
@@ -142,19 +162,17 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
     override fun fnRenderClientSearch(uiModel: UiModel<List<ReactivationClientSearchResponseModel>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
+            binding.txtSearchError.isVisible=false
             objReactivationClientSearchResponseModel=it.firstOrNull()
-
         }
 
         uiModel.onFailure {
             if (it is ValidationException) {
                 val error = it.error.message
-                showErrorToast(error.orEmpty())
+                binding.txtSearchError.setText(error.orEmpty())
+                binding.txtSearchError.isVisible=true
             } else {
-                val message = it.getErrorOnFailure().message
-                if (message.isNullOrEmpty().not()) {
-                    showErrorToast(message.orEmpty())
-                }
+                showOnFailurePopup(it)
             }
         }
     }
@@ -217,4 +235,17 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         saathiFileUploader.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun fnOnUpdateClick(): Observable<Unit> {
+        return binding.btnUpdateLead.clicks()
+    }
+
+    override fun fnOnResetClick(): Observable<Unit> {
+        return binding.btnResetLead.clicks()
+    }
+
+    override fun fnRenderReset() {
+        binding.edtClientCode.setText("")
+        binding.edtDateActual.setText("")
+        binding.appCompatEditText.setText("")
+    }
 }

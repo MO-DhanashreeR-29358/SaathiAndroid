@@ -148,6 +148,20 @@
                     android:src="@drawable/ic_search_reactivation" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtSearchError"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:text=""
+                android:visibility="gone"
+                android:textSize="@dimen/_14ssp"
+                android:textColor="@color/clr_astrik"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat2"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"
@@ -159,7 +173,7 @@
                 android:background="@drawable/bg_reactivation_white_yellow_border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat2">
+                app:layout_constraintTop_toBottomOf="@+id/txtSearchError">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/appCompatImageView"
@@ -341,6 +355,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/edtDateActual">
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_update_lead"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
@@ -353,7 +368,7 @@
                     android:textSize="@dimen/_14ssp" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_edit_lead"
+                    android:id="@+id/btn_reset_lead"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginStart="@dimen/_5sdp"
