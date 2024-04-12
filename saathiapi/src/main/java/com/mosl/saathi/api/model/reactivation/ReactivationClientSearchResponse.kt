@@ -41,7 +41,7 @@ data class ReactivationClientSearchResponse(
 	@JvmField val  clientName: String? = null,
 
 	@SerializedName("TGS_Edumo_Revenue")
-	@JvmField val  tGSEdumoRevenue: Any? = null,
+	@JvmField val  tGSEdumoRevenue: String? = null,
 
 	@SerializedName("SubSegment")
 	@JvmField val  subSegment: String? = null,
@@ -65,7 +65,7 @@ data class ReactivationClientSearchResponse(
 	@JvmField val  lastTradedDate: String? = null,
 
 	@SerializedName("TotalMarginCollected")
-	@JvmField val  totalMarginCollected: Any? = null,
+	@JvmField val  totalMarginCollected: String? = null,
 
 	@SerializedName("ActualActivationDate")
 	@JvmField val  actualActivationDate: Any? = null,
@@ -89,7 +89,7 @@ data class ReactivationClientSearchResponse(
 	@JvmField val  unutilizedVP: String? = null,
 
 	@SerializedName("StockMarginCollected")
-	@JvmField val  stockMarginCollected: Any? = null,
+	@JvmField val  stockMarginCollected: String? = null,
 
 	@SerializedName("RequestorRMCode")
 	@JvmField val  requestorRMCode: Any? = null,
@@ -110,7 +110,7 @@ data class ReactivationClientSearchResponse(
 	@JvmField val  mappedAdvisorVertical: String? = null,
 
 	@SerializedName("CashMarginCollected")
-	@JvmField val  cashMarginCollected: Any? = null,
+	@JvmField val  cashMarginCollected: String? = null,
 
 	@SerializedName("LedgerBalance")
 	@JvmField val  ledgerBalance: String? = null,

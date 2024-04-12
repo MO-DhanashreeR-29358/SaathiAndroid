@@ -22,5 +22,5 @@ interface ReactivationRepository {
 
     fun fnGetMinDate(objReactivationMinDatePostModel: ReactivationMinDatePostModel):Observable<String>
 
-    fun fnGetActualMargin(objReactivationActualMarginPostModel:ReactivationActualMarginPostModel):Observable<String>
+    fun fnGetActualMargin(objReactivationActualMarginPostModel:ReactivationActualMarginPostModel):Observable<List<ReactivationClientSearchResponseModel>>
 }

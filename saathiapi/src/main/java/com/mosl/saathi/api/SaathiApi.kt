@@ -826,5 +826,5 @@ interface SaathiApi {
     fun fnGetDays(@Body request: ReactivationMinDateRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
 
     @POST("SMSCampaign/MarginDatafromActualDate")
-    fun fnGetActualMargin(@Body request: ReactivationActualMarginRequest):Observable<ResponseBody>
+    fun fnGetActualMargin(@Body request: ReactivationActualMarginRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
 }

@@ -85,7 +85,8 @@ class ReactivationDetailsFragment : BottomSheetDialogFragment() ,ReactivationDet
             edtMappedAdvisor.setText(objReactivationClientSearchResponseModel?.mappedAdvisorCode?:"")
             edtMappedAdvisorName.setText(objReactivationClientSearchResponseModel?.mappedAdvisorName?:"")
             edtMargin.setText(objReactivationClientSearchResponseModel?.marginLast15Days?:"")
-            //edtMarginCollection.setText(objReactivationClientSearchResponseModel?.marginco)
+            edtMarginCollection.setText(objReactivationClientSearchResponseModel?.totalMarginCollected?:"")
+            edtTgs.setText(objReactivationClientSearchResponseModel?.tGSEdumoRevenue?:"")
 
         }
         binding.btnClosePopup.setOnClickListener {

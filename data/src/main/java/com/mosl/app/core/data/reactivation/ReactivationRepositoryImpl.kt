@@ -1,19 +1,12 @@
 package com.mosl.app.core.data.reactivation
 
-import com.google.gson.Gson
 import com.mosl.app.core.exception.ServiceFailureException
-import com.mosl.mobile.domain.branch.BranchItemResponse
-import com.mosl.mobile.domain.branch.BranchRepository
 import com.mosl.mobile.domain.productivity.ColHeader
-import com.mosl.mobile.domain.productivity.ProductivityCombo
-import com.mosl.mobile.domain.productivity.ProductivityData
 import com.mosl.mobile.domain.reactivation.*
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.branch.BranchRequest
 import com.mosl.saathi.api.model.reactivation.*
-import com.mosl.shared.util.toConvertDecimals
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
 import javax.inject.Inject
@@ -267,11 +260,19 @@ class ReactivationRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fnGetActualMargin(objReactivationActualMarginPostModel: ReactivationActualMarginPostModel): Observable<String> {
+    override fun fnGetActualMargin(objReactivationActualMarginPostModel: ReactivationActualMarginPostModel): Observable<List<ReactivationClientSearchResponseModel>> {
         val request=ReactivationActualMarginRequest(objReactivationActualMarginPostModel.businessUnitId,objReactivationActualMarginPostModel.clientCode,objReactivationActualMarginPostModel.actualActivationDate)
         return saathiApi.fnGetActualMargin(request)
             .map {
-            it.string().toString()
+                if(it.status)
+                {
+                    it.response?.transformReactivationClientSearchList()!!
+                }
+                else
+                {
+                    throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+                }
         }
     }
     private fun setData(values: ArrayList<String>): ArrayList<String> {

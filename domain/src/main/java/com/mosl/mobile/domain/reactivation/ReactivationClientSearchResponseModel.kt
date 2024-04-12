@@ -1,95 +1,95 @@
 package com.mosl.mobile.domain.reactivation
 
 data class ReactivationClientSearchResponseModel(
-    @JvmField val  creationDate: Any? = null,
+    @JvmField var  creationDate: Any? = null,
 
-    @JvmField val  lastModifiedBy: Any? = null,
+    @JvmField var  lastModifiedBy: Any? = null,
 
-    @JvmField val  finalActivationDate365: String? = null,
+    @JvmField var  finalActivationDate365: String? = null,
 
-    @JvmField val  valuePackLast15Days: String? = null,
+    @JvmField var  valuePackLast15Days: String? = null,
 
-    @JvmField val  finalSegment: String? = null,
+    @JvmField var  finalSegment: String? = null,
 
-    @JvmField val  finalActivationDate: String? = null,
+    @JvmField var  finalActivationDate: String? = null,
 
-    @JvmField val  currentRMCode: String? = null,
+    @JvmField var  currentRMCode: String? = null,
 
-    @JvmField val  metInLast30Days: String? = null,
+    @JvmField var  metInLast30Days: String? = null,
 
-    @JvmField val  clientVerticalSameAsRMVertical: String? = null,
+    @JvmField var  clientVerticalSameAsRMVertical: String? = null,
 
-    @JvmField val  marginLast15Days: String? = null,
+    @JvmField var  marginLast15Days: String? = null,
 
-    @JvmField val  startDate: String? = null,
+    @JvmField var  startDate: String? = null,
 
-    @JvmField val  clientName: String? = null,
+    @JvmField var  clientName: String? = null,
 
-    @JvmField val  tGSEdumoRevenue: Any? = null,
+    @JvmField var  tGSEdumoRevenue: String? = null,
 
-    @JvmField val  subSegment: String? = null,
+    @JvmField var  subSegment: String? = null,
 
-    @JvmField val  currentRMName: String? = null,
+    @JvmField var  currentRMName: String? = null,
 
-    @JvmField val  remarks: Any? = null,
+    @JvmField var  remarks: Any? = null,
 
-    @JvmField val  branch: String? = null,
+    @JvmField var  branch: String? = null,
 
-    @JvmField val  requestTypeFlag: Any? = null,
+    @JvmField var  requestTypeFlag: Any? = null,
 
-    @JvmField val  lastTradedDate180: String? = null,
+    @JvmField var  lastTradedDate180: String? = null,
 
-    @JvmField val  lastTradedDate: String? = null,
+    @JvmField var  lastTradedDate: String? = null,
 
-    @JvmField val  totalMarginCollected: Any? = null,
+    @JvmField var  totalMarginCollected: String? = null,
 
-    @JvmField val  actualActivationDate: Any? = null,
+    @JvmField var  actualActivationDate: Any? = null,
 
-    @JvmField val  lastMarginDate: String? = null,
+    @JvmField var  lastMarginDate: String? = null,
 
-    @JvmField val  rMVertical: String? = null,
+    @JvmField var  rMVertical: String? = null,
 
-    @JvmField val  createdBy: Any? = null,
+    @JvmField var  createdBy: Any? = null,
 
-    @JvmField val  mappedAdvisorCode: String? = null,
+    @JvmField var  mappedAdvisorCode: String? = null,
 
-    @JvmField val  zone: String? = null,
+    @JvmField var  zone: String? = null,
 
-    @JvmField val  unutilizedVP: String? = null,
+    @JvmField var  unutilizedVP: String? = null,
 
-    @JvmField val  stockMarginCollected: Any? = null,
+    @JvmField var  stockMarginCollected: String? = null,
 
-    @JvmField val  requestorRMCode: Any? = null,
+    @JvmField var  requestorRMCode: Any? = null,
 
-    @JvmField val  marginProofFileName: Any? = null,
+    @JvmField var  marginProofFileName: Any? = null,
 
-    @JvmField val  businessUnitId: Any? = null,
+    @JvmField var  businessUnitId: Any? = null,
 
-    @JvmField val  reactivationType: Int? = null,
+    @JvmField var  reactivationType: Int? = null,
 
-    @JvmField val  minMarginVP: String? = null,
+    @JvmField var  minMarginVP: String? = null,
 
-    @JvmField val  mappedAdvisorVertical: String? = null,
+    @JvmField var  mappedAdvisorVertical: String? = null,
 
-    @JvmField val  cashMarginCollected: Any? = null,
+    @JvmField var  cashMarginCollected: String? = null,
 
-    @JvmField val  ledgerBalance: String? = null,
+    @JvmField var  ledgerBalance: String? = null,
 
-    @JvmField val  requestTypeDesc: Any? = null,
+    @JvmField var  requestTypeDesc: Any? = null,
 
-    @JvmField val  clientCode: String? = null,
+    @JvmField var  clientCode: String? = null,
 
-    @JvmField val  lastModificationDate: Any? = null,
+    @JvmField var  lastModificationDate: Any? = null,
 
-    @JvmField val  region: String? = null,
+    @JvmField var  region: String? = null,
 
-    @JvmField val  id: Int? = null,
+    @JvmField var  id: Int? = null,
 
-    @JvmField val  mappedAdvisorName: String? = null,
+    @JvmField var  mappedAdvisorName: String? = null,
 
-    @JvmField val  dPBalance: String? = null,
+    @JvmField var  dPBalance: String? = null,
 
-    @JvmField val  errorMessage: Any? = null,
+    @JvmField var  errorMessage: Any? = null,
 
-    @JvmField val  branchShift: Any? = null
+    @JvmField var  branchShift: Any? = null
 )

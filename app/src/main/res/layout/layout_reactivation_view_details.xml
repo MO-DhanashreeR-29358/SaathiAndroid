@@ -80,6 +80,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtClientName"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -104,6 +105,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtFinalSegment"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -128,6 +130,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtsubSegment"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -152,6 +155,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtBranch"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -176,6 +180,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtFinalActDate"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -200,6 +205,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtLastTradeDate"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -224,6 +230,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCurrentRM"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -248,6 +255,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCurrentRMName"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -272,6 +280,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMappedAdvisor"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -296,6 +305,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMappedAdvisorName"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -320,6 +330,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMargin"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -344,6 +355,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMarginCollection"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"
@@ -368,6 +380,7 @@
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtTgs"
+                        android:enabled="false"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_40sdp"
                         android:layout_marginTop="@dimen/_5sdp"

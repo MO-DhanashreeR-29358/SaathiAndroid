@@ -7,12 +7,9 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
-import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -27,6 +24,7 @@ import com.mosl.tabapp.databinding.FragmentCreateRequestReactivationBinding
 import com.mosl.validator.exception.ValidationException
 import io.reactivex.rxjava3.core.Observable
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.reactivation.ReactivationActualMarginPostModel
 import com.mosl.tabapp.helper.fileuploader.SaathiFileUploader
 import com.mosl.tabapp.helper.fileuploader.SaathiUploadUiSubject
 import com.mosl.tabapp.reactivation.createrequestReactivationDetails.ReactivationDetailsFragment
@@ -43,7 +41,8 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
 
     @Inject
     lateinit var presenter: CreateRequestReactivationPresenter
-    var strSelectedOption:String=""
+    var strSelectedOption:String="Reactivation Request"
+    var strSelectedDate:String=""
     var objReactivationClientSearchResponseModel:ReactivationClientSearchResponseModel?=null
     private val subject =CreateReacivationUiEvent.getSubject()
     private val calendar = Calendar.getInstance()
@@ -142,8 +141,13 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         val maxYear = LocalDate.now().year
         calendar.set(maxYear, maxMonth-1,maxDay )
         datePickerDialog.datePicker.maxDate=calendar.timeInMillis
-        // Show
-        // the DatePicker dialog
+
+        datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
+            strSelectedDate="$year-$month-$dayOfMonth"
+            binding.edtDateActual.setText("$dayOfMonth-$month-$year")
+            subject.onNext(CreateReacivationUiEvent.OnCallActualMargin)
+        }
+
         datePickerDialog.show()
     }
 
@@ -203,10 +207,20 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         }
     }
 
-    override fun fnRenderActualmargin(uiModel: UiModel<String>) {
+    override fun fnGetMarginPostData(): ReactivationActualMarginPostModel {
+        return ReactivationActualMarginPostModel("1",binding.edtClientCode.text.toString(),strSelectedDate)
+    }
+    override fun fnCallActualMargin(): Observable<CreateReacivationUiEvent.OnCallActualMargin> {
+        return subject.ofType()
+    }
+
+    override fun fnRenderActualmargin(uiModel: UiModel<List<ReactivationClientSearchResponseModel>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
-            Log.d("Response",it)
+            objReactivationClientSearchResponseModel?.cashMarginCollected=it.firstOrNull()?.cashMarginCollected
+            objReactivationClientSearchResponseModel?.stockMarginCollected=it.firstOrNull()?.stockMarginCollected
+            objReactivationClientSearchResponseModel?.tGSEdumoRevenue=it.firstOrNull()?.tGSEdumoRevenue
+            objReactivationClientSearchResponseModel?.totalMarginCollected=it.firstOrNull()?.totalMarginCollected
         }
 
         uiModel.onFailure {

@@ -2,6 +2,7 @@ package com.mosl.tabapp.reactivation.createrequestReactivation
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.reactivation.ReactivationActualMarginPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationClientSearchPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationClientSearchResponseModel
 import com.mosl.tabapp.helper.fileuploader.SaathiUploadUiSubject
@@ -20,7 +21,9 @@ interface CreateRequestReactivationView :BaseView {
     fun fnOnViewClientDetailClick():Observable<Unit>
     fun fnRenderViewClientDetailsClick()
 
-    fun fnRenderActualmargin(uiModel: UiModel<String>)
+    fun fnGetMarginPostData(): ReactivationActualMarginPostModel
+    fun fnCallActualMargin():Observable<CreateReacivationUiEvent.OnCallActualMargin>
+    fun fnRenderActualmargin(uiModel: UiModel<List<ReactivationClientSearchResponseModel>>)
 
     fun fnOnUploadDocClick():Observable<Unit>
     fun fnOpenFileSelet()
