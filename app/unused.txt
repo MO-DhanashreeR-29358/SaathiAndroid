@@ -78968,7 +78968,7 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public static void showMockDialogIfLocationFromMockProvider()
     public static void showMockLocationDialog$app_uatRelease()
 com.mosl.tabapp.attendancedialog.MockLocationDetector
-com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$0
+com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$0
 com.mosl.tabapp.attendancedialog.UserLocationHelper$Companion
 com.mosl.tabapp.attendancedialog.UserLocationHelper:
     public static final com.mosl.tabapp.attendancedialog.UserLocationHelper$Companion Companion

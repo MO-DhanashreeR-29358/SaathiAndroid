@@ -3,8 +3,8 @@
 # min_api: 26
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.0"}
-# pg_map_id: 328e1a3
-# pg_map_hash: SHA-256 328e1a367bacc72462e566e3b84fe2861204dc37e1bd56d5c2b0c6e621bc2439
+# pg_map_id: bb20df6
+# pg_map_hash: SHA-256 bb20df62b39162c851fd0ca9176bb8cfdb4588091d4e28c9e2fa4de9f794e06c
 a.a.a.c -> a.a:
 # {"id":"sourceFile","fileName":"SourceFile"}
 a.a.a.d -> a.b:
@@ -109410,83 +109410,83 @@ base.activities.BaseActivity$$ExternalSyntheticLambda2 -> q2.b:
     64:74:java.lang.Object com.google.firebase.heartbeatinfo.DefaultHeartBeatController$$InternalSyntheticLambda$4$d2b4f2df40074a1405d34ce38bb33f024d67941767e1126d385afb81ea386c58$0.create$bridge(com.google.firebase.components.ComponentContainer):0:0 -> create
       # {"id":"com.android.tools.r8.synthesized"}
     23:29:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):130:130 -> onFailure
-    23:29:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    23:29:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     30:35:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):132:132 -> onFailure
-    30:35:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    30:35:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     36:39:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):133:133 -> onFailure
-    36:39:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    36:39:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     40:51:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):132:132 -> onFailure
-    40:51:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    40:51:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     52:59:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):153:153 -> onFailure
-    52:59:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    52:59:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     60:62:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):136:136 -> onFailure
-    60:62:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    60:62:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     63:70:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):141:141 -> onFailure
-    63:70:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    63:70:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     71:72:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):142:142 -> onFailure
-    71:72:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    71:72:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     73:82:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):143:143 -> onFailure
-    73:82:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    73:82:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     83:86:void com.mosl.tabapp.common.FusedLocation.lambda$startLocationUpdates$1(java.lang.Exception):146:146 -> onFailure
-    83:86:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    83:86:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
-    87:90:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0:0 -> onFailure
+    87:90:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0:0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     91:98:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):0:0 -> onFailure
-    91:98:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    91:98:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     99:102:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):136:136 -> onFailure
-    99:102:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    99:102:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     103:119:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):137:137 -> onFailure
-    103:119:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    103:119:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     120:122:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):153:153 -> onFailure
-    120:122:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    120:122:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     123:128:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):154:154 -> onFailure
-    123:128:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    123:128:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     129:131:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):155:155 -> onFailure
-    129:131:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    129:131:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     132:142:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):156:156 -> onFailure
-    132:142:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    132:142:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     143:145:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):139:139 -> onFailure
-    143:145:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    143:145:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     146:147:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):144:144 -> onFailure
-    146:147:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    146:147:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     148:155:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):145:145 -> onFailure
-    148:155:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    148:155:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     156:159:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates$lambda$3(com.mosl.tabapp.attendancedialog.UserLocationHelper,java.lang.Exception):147:147 -> onFailure
-    156:159:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    156:159:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
-    160:163:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0:0 -> onFailure
+    160:163:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0:0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     164:171:void utils.workManagerUtils.workers.AssetLocationTrackerWorker.filterAndStoreLocationLocally$lambda$4(utils.workManagerUtils.workers.AssetLocationTrackerWorker,java.lang.Exception):0:0 -> onFailure
-    164:171:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    164:171:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     172:174:void utils.workManagerUtils.workers.AssetLocationTrackerWorker.filterAndStoreLocationLocally$lambda$4(utils.workManagerUtils.workers.AssetLocationTrackerWorker,java.lang.Exception):201:201 -> onFailure
-    172:174:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    172:174:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     175:182:void utils.workManagerUtils.workers.AssetLocationTrackerWorker.filterAndStoreLocationLocally$lambda$4(utils.workManagerUtils.workers.AssetLocationTrackerWorker,java.lang.Exception):202:202 -> onFailure
-    175:182:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    175:182:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
     183:194:void utils.workManagerUtils.workers.AssetLocationTrackerWorker.filterAndStoreLocationLocally$lambda$4(utils.workManagerUtils.workers.AssetLocationTrackerWorker,java.lang.Exception):204:204 -> onFailure
-    183:194:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
+    183:194:void com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$1.onFailure$bridge(java.lang.Exception):0 -> onFailure
       # {"id":"com.android.tools.r8.synthesized"}
 base.activities.BaseActivity$$ExternalSyntheticLambda3 -> q2.c:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
@@ -428675,543 +428675,468 @@ com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$ExternalSyntheticLamb
     0:65535:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.<init>(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment):0:0 -> <init>
     0:65535:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.$r8$init$synthetic(java.lang.Object,int):0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    28:30:void com.mosl.tabapp.settings.SettingActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.settings.SettingActivity,android.view.View):0:0 -> onClick
-    28:30:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    26:28:void com.mosl.tabapp.settings.SettingActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.settings.SettingActivity,android.view.View):0:0 -> onClick
+    26:28:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    31:34:void com.mosl.tabapp.settings.SettingActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.settings.SettingActivity,android.view.View):20:20 -> onClick
-    31:34:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    29:32:void com.mosl.tabapp.settings.SettingActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.settings.SettingActivity,android.view.View):20:20 -> onClick
+    29:32:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    35:42:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    33:40:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    43:45:void com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment.fnFeedbackAlert$lambda$4(androidx.appcompat.app.AlertDialog,android.view.View):0:0 -> onClick
-    43:45:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    41:43:void com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment.fnFeedbackAlert$lambda$4(androidx.appcompat.app.AlertDialog,android.view.View):0:0 -> onClick
+    41:43:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    46:49:void com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment.fnFeedbackAlert$lambda$4(androidx.appcompat.app.AlertDialog,android.view.View):173:173 -> onClick
-    46:49:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    44:47:void com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment.fnFeedbackAlert$lambda$4(androidx.appcompat.app.AlertDialog,android.view.View):173:173 -> onClick
+    44:47:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    50:55:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    48:53:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    56:58:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):0:0 -> onClick
-    56:58:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    54:56:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):0:0 -> onClick
+    54:56:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    59:74:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):46:46 -> onClick
-    59:74:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    57:72:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):46:46 -> onClick
+    57:72:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    75:80:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    75:80:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
-    75:80:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    73:78:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    73:78:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
+    73:78:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    81:92:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47:47 -> onClick
-    81:92:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    79:90:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47:47 -> onClick
+    79:90:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    93:101:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
-    93:101:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
-    93:101:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    91:99:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
+    91:99:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
+    91:99:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    102:111:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):48:48 -> onClick
-    102:111:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    100:109:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):48:48 -> onClick
+    100:109:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    112:120:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49:49 -> onClick
-    112:120:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    110:118:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49:49 -> onClick
+    110:118:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    121:128:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    121:128:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49 -> onClick
-    121:128:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    119:126:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    119:126:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49 -> onClick
+    119:126:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    129:143:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49:49 -> onClick
-    129:143:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    127:141:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49:49 -> onClick
+    127:141:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    144:149:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):51:51 -> onClick
-    144:149:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    142:147:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):51:51 -> onClick
+    142:147:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    150:150:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    148:148:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":889,"3":890,"6":891}}
-    889:889:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
-    889:889:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    890:890:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
-    890:890:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    891:891:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
-    891:891:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    151:153:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":811,"3":812,"6":813}}
+    811:811:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
+    811:811:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    812:812:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
+    812:812:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    813:813:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
+    813:813:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    149:151:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    154:157:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    154:157:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52 -> onClick
-    154:157:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    152:155:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    152:155:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52 -> onClick
+    152:155:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    158:164:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
-    158:164:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    156:162:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52:52 -> onClick
+    156:162:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    165:168:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):50:50 -> onClick
-    165:168:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    163:166:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):50:50 -> onClick
+    163:166:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    169:172:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):54:54 -> onClick
-    169:172:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    167:170:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):54:54 -> onClick
+    167:170:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    173:176:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    173:176:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52 -> onClick
-    173:176:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    171:174:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    171:174:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):52 -> onClick
+    171:174:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    177:181:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    177:181:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49 -> onClick
-    177:181:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    175:179:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    175:179:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):49 -> onClick
+    175:179:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    182:185:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
-    182:185:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
-    182:185:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    180:183:java.lang.String com.mosl.tabapp.qrcode.QRCodeFragment.getStrUrl():32:32 -> onClick
+    180:183:void com.mosl.tabapp.qrcode.QRCodeFragment.onViewCreated$lambda$0(com.mosl.tabapp.qrcode.QRCodeFragment,android.view.View):47 -> onClick
+    180:183:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    186:191:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    184:189:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    192:194:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.onViewCreated$lambda$0(com.mosl.tabapp.login.otpverification.OtpVerificationFragment,android.view.View):0:0 -> onClick
-    192:194:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    190:192:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.onViewCreated$lambda$0(com.mosl.tabapp.login.otpverification.OtpVerificationFragment,android.view.View):0:0 -> onClick
+    190:192:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    195:198:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.onViewCreated$lambda$0(com.mosl.tabapp.login.otpverification.OtpVerificationFragment,android.view.View):93:93 -> onClick
-    195:198:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    193:196:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.onViewCreated$lambda$0(com.mosl.tabapp.login.otpverification.OtpVerificationFragment,android.view.View):93:93 -> onClick
+    193:196:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    199:204:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    197:202:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    205:207:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):0:0 -> onClick
-    205:207:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    203:205:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):0:0 -> onClick
+    203:205:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    208:211:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):149:149 -> onClick
-    208:211:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    206:209:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):149:149 -> onClick
+    206:209:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    212:219:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):152:152 -> onClick
-    212:219:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    210:217:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):152:152 -> onClick
+    210:217:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    220:227:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):156:156 -> onClick
-    220:227:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    218:225:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):156:156 -> onClick
+    218:225:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    228:231:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    226:229:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    232:239:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):503:503 -> onClick
-    232:239:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    230:237:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):503:503 -> onClick
+    230:237:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    240:250:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):504:504 -> onClick
-    240:250:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    238:248:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):504:504 -> onClick
+    238:248:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    251:254:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):506:506 -> onClick
-    251:254:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    249:252:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):506:506 -> onClick
+    249:252:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    255:266:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):509:509 -> onClick
-    255:266:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    253:264:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):509:509 -> onClick
+    253:264:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    267:274:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):510:510 -> onClick
-    267:274:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    265:272:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):510:510 -> onClick
+    265:272:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    275:277:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):511:511 -> onClick
-    275:277:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    273:275:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):511:511 -> onClick
+    273:275:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    278:288:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):512:512 -> onClick
-    278:288:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    276:286:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):512:512 -> onClick
+    276:286:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    289:292:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):513:513 -> onClick
-    289:292:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    287:290:void com.mosl.tabapp.leadViewDetail.LeadViewMainFragment.lambda$leadViewDialog$10(android.view.View):513:513 -> onClick
+    287:290:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    293:298:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    291:296:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    299:301:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):0:0 -> onClick
-    299:301:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    297:299:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):0:0 -> onClick
+    297:299:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    302:305:com.xwray.groupie.ExpandableGroup com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.getExpandableGroup$app_uatRelease():16:16 -> onClick
-    302:305:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27 -> onClick
-    302:305:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    300:303:com.xwray.groupie.ExpandableGroup com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.getExpandableGroup$app_uatRelease():16:16 -> onClick
+    300:303:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27 -> onClick
+    300:303:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    306:308:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27:27 -> onClick
-    306:308:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    304:306:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27:27 -> onClick
+    304:306:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    309:311:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):28:28 -> onClick
-    309:311:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    307:309:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):28:28 -> onClick
+    307:309:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    312:319:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):29:29 -> onClick
-    312:319:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    310:317:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):29:29 -> onClick
+    310:317:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    320:323:com.xwray.groupie.ExpandableGroup com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.getExpandableGroup$app_uatRelease():16:16 -> onClick
-    320:323:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27 -> onClick
-    320:323:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    318:321:com.xwray.groupie.ExpandableGroup com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.getExpandableGroup$app_uatRelease():16:16 -> onClick
+    318:321:void com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem.bind$lambda$1$lambda$0(com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem,android.view.View):27 -> onClick
+    318:321:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    324:329:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    322:327:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    330:332:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):0:0 -> onClick
-    330:332:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    328:330:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):0:0 -> onClick
+    328:330:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    333:336:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36:36 -> onClick
-    333:336:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    331:334:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36:36 -> onClick
+    331:334:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    337:342:boolean kotlin.text.StringsKt__StringsJVMKt.equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object):53:53 -> onClick
-    337:342:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36 -> onClick
-    337:342:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    335:340:boolean kotlin.text.StringsKt__StringsJVMKt.equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object):53:53 -> onClick
+    335:340:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36 -> onClick
+    335:340:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    343:346:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36:36 -> onClick
-    343:346:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    341:344:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36:36 -> onClick
+    341:344:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    347:352:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
-    347:352:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36 -> onClick
-    347:352:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    345:350:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
+    345:350:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):36 -> onClick
+    345:350:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    353:368:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):37:37 -> onClick
-    353:368:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    351:366:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):37:37 -> onClick
+    351:366:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    369:381:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):39:39 -> onClick
-    369:381:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    367:379:void com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.teamtarget.TeamTargetSummaryCountItem,android.view.View):39:39 -> onClick
+    367:379:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    382:387:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    380:385:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    388:390:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):0:0 -> onClick
-    388:390:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    386:388:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):0:0 -> onClick
+    386:388:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    391:394:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36:36 -> onClick
-    391:394:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    389:392:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36:36 -> onClick
+    389:392:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    395:400:boolean kotlin.text.StringsKt__StringsJVMKt.equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object):53:53 -> onClick
-    395:400:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36 -> onClick
-    395:400:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    393:398:boolean kotlin.text.StringsKt__StringsJVMKt.equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object):53:53 -> onClick
+    393:398:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36 -> onClick
+    393:398:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    401:404:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36:36 -> onClick
-    401:404:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    399:402:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36:36 -> onClick
+    399:402:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    405:410:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
-    405:410:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36 -> onClick
-    405:410:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    403:408:boolean kotlin.text.StringsKt__StringsKt.contains$default(java.lang.CharSequence,java.lang.CharSequence,boolean,int,java.lang.Object):1144:1144 -> onClick
+    403:408:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):36 -> onClick
+    403:408:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    411:426:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):37:37 -> onClick
-    411:426:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    409:424:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):37:37 -> onClick
+    409:424:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    427:439:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):39:39 -> onClick
-    427:439:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    425:437:void com.mosl.tabapp.dashboard.target.TargetSummaryCountItem.bind$lambda$1$lambda$0(com.mosl.tabapp.dashboard.target.TargetSummaryCountItem,android.view.View):39:39 -> onClick
+    425:437:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    440:445:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    438:443:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    446:448:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):0:0 -> onClick
-    446:448:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    444:446:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):0:0 -> onClick
+    444:446:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    449:452:int com.mosl.tabapp.dashboard.clients.ClientsFragment.getFamilyCount():178:178 -> onClick
-    449:452:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):191 -> onClick
-    449:452:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    447:450:int com.mosl.tabapp.dashboard.clients.ClientsFragment.getFamilyCount():178:178 -> onClick
+    447:450:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):191 -> onClick
+    447:450:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    453:462:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):192:192 -> onClick
-    453:462:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    451:460:void com.mosl.tabapp.dashboard.clients.ClientsFragment.renderUI$lambda$8$lambda$7(com.mosl.tabapp.dashboard.clients.ClientsFragment,android.view.View):192:192 -> onClick
+    451:460:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    463:468:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    461:466:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    469:471:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):0:0 -> onClick
-    469:471:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    467:469:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):0:0 -> onClick
+    467:469:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    472:475:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.dashboard.base.DashboardFragment.getUserLocationHelper():92:92 -> onClick
-    472:475:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    472:475:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    472:475:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    470:473:com.mosl.user.login.MyZoneUserManagerImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneUserManager():94:94 -> onClick
+    470:473:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
+    470:473:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    470:473:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    476:481:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93:93 -> onClick
-    476:481:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    476:481:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    476:481:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    474:481:boolean com.mosl.user.login.MyZoneUserManagerImpl.isLoggedIn():46:46 -> onClick
+    474:481:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
+    474:481:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    474:481:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    482:483:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():176:176 -> onClick
-    482:483:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93 -> onClick
-    482:483:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    482:483:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    482:483:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    482:485:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():125:125 -> onClick
+    482:485:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    482:485:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    484:494:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():175:175 -> onClick
-    484:494:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93 -> onClick
-    484:494:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    484:494:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    484:494:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    486:487:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():132:132 -> onClick
+    486:487:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    486:487:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    486:487:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    495:502:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():127:127 -> onClick
-    495:502:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onClick
-    495:502:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    495:502:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    495:502:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    488:491:com.mosl.user.data.login.MyZoneLoginRepositoryImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneLoginRepository():90:90 -> onClick
+    488:491:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
+    488:491:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    488:491:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    488:491:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    503:511:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():128:128 -> onClick
-    503:511:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onClick
-    503:511:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    503:511:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    503:511:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    492:503:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133:133 -> onClick
+    492:503:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    492:503:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    492:503:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    512:520:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():135:135 -> onClick
-    512:520:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onClick
-    512:520:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    512:520:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    512:520:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    504:506:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):0:0 -> onClick
+    504:506:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
+    504:506:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    504:506:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    504:506:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    521:522:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():176:176 -> onClick
-    521:522:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():95 -> onClick
-    521:522:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    521:522:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    521:522:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    507:517:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):60:60 -> onClick
+    507:517:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
+    507:517:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    507:517:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    507:517:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    523:533:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():175:175 -> onClick
-    523:533:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():95 -> onClick
-    523:533:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    523:533:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    523:533:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    534:537:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():190:190 -> onClick
-    534:537:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onClick
-    534:537:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    534:537:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    534:537:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    518:528:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):61:61 -> onClick
+    518:528:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
+    518:528:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    518:528:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    518:528:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    538:543:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():193:193 -> onClick
-    538:543:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onClick
-    538:543:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    538:543:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    538:543:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    529:536:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():134:134 -> onClick
+    529:536:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    529:536:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    529:536:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    544:546:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():189:189 -> onClick
-    544:546:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onClick
-    544:546:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    544:546:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    544:546:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    537:544:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():135:135 -> onClick
+    537:544:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    537:544:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    537:544:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    547:550:com.mosl.user.login.MyZoneUserManagerImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneUserManager():94:94 -> onClick
-    547:550:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
-    547:550:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    547:550:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    545:553:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():136:136 -> onClick
+    545:553:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    545:553:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    545:553:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    551:558:boolean com.mosl.user.login.MyZoneUserManagerImpl.isLoggedIn():46:46 -> onClick
-    551:558:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
-    551:558:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    551:558:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    554:559:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():132:132 -> onClick
+    554:559:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    554:559:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    554:559:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    559:562:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():125:125 -> onClick
-    559:562:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    559:562:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    560:565:com.mosl.user.data.login.MyZoneLoginRepositoryImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneLoginRepository():90:90 -> onClick
+    560:565:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
+    560:565:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
+    560:565:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    560:565:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    563:564:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():132:132 -> onClick
-    563:564:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    563:564:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    563:564:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    566:569:com.mosl.user.login.MyZoneUserManagerImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneUserManager():94:94 -> onClick
+    566:569:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
+    566:569:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
+    566:569:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    565:568:com.mosl.user.data.login.MyZoneLoginRepositoryImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneLoginRepository():90:90 -> onClick
-    565:568:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
-    565:568:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    565:568:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    565:568:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    570:575:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    569:580:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133:133 -> onClick
-    569:580:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    569:580:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    569:580:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    576:578:void com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.onRetryClick$lambda$0(com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment,android.view.View):0:0 -> onClick
+    576:578:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    581:583:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):0:0 -> onClick
-    581:583:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
-    581:583:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    581:583:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    581:583:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    579:586:void com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.onRetryClick$lambda$0(com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment,android.view.View):37:37 -> onClick
+    579:586:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    584:594:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):60:60 -> onClick
-    584:594:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
-    584:594:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    584:594:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    584:594:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    587:594:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    595:605:io.reactivex.rxjava3.core.Observable com.mosl.user.data.login.MyZoneLoginRepositoryImpl.userAuthentication(java.lang.String):61:61 -> onClick
-    595:605:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
-    595:605:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    595:605:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    595:605:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    595:597:void com.mosl.tabapp.core.CommonActivity.showConnectivityIssueSnackbar$lambda$11(com.google.android.material.snackbar.Snackbar,android.view.View):0:0 -> onClick
+    595:597:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    606:613:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():134:134 -> onClick
-    606:613:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    606:613:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    606:613:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    598:601:void com.google.android.material.snackbar.BaseTransientBottomBar.dismiss():653:653 -> onClick
+    598:601:void com.google.android.material.snackbar.Snackbar.dismiss():127 -> onClick
+    598:601:void com.mosl.tabapp.core.CommonActivity.showConnectivityIssueSnackbar$lambda$11(com.google.android.material.snackbar.Snackbar,android.view.View):987 -> onClick
+    598:601:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    614:621:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():135:135 -> onClick
-    614:621:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    614:621:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    614:621:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    602:607:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    622:630:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():136:136 -> onClick
-    622:630:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    622:630:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    622:630:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    608:610:void com.mosl.tabapp.branch.BranchActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.branch.BranchActivity,android.view.View):0:0 -> onClick
+    608:610:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    631:636:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():132:132 -> onClick
-    631:636:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    631:636:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    631:636:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    611:614:void com.mosl.tabapp.branch.BranchActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.branch.BranchActivity,android.view.View):55:55 -> onClick
+    611:614:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    637:642:com.mosl.user.data.login.MyZoneLoginRepositoryImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneLoginRepository():90:90 -> onClick
-    637:642:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneLoginProcess():133 -> onClick
-    637:642:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():127 -> onClick
-    637:642:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    637:642:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    615:620:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    643:646:com.mosl.user.login.MyZoneUserManagerImpl com.mosl.tabapp.dashboard.base.DashboardFragment.getMyZoneUserManager():94:94 -> onClick
-    643:646:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():124 -> onClick
-    643:646:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    643:646:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    621:623:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):0:0 -> onClick
+    621:623:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    647:650:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.dashboard.base.DashboardFragment.getUserLocationHelper():92:92 -> onClick
-    647:650:void com.mosl.tabapp.dashboard.base.DashboardFragment.myZoneAttendanceLogic():123 -> onClick
-    647:650:void com.mosl.tabapp.dashboard.base.DashboardFragment.markAttendanceButtonClick$lambda$0(com.mosl.tabapp.dashboard.base.DashboardFragment,android.view.View):118 -> onClick
-    647:650:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    624:630:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():178:178 -> onClick
+    624:630:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    624:630:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    651:656:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    631:633:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():179:179 -> onClick
+    631:633:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    631:633:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    657:659:void com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.onRetryClick$lambda$0(com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment,android.view.View):0:0 -> onClick
-    657:659:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    634:639:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
+    634:639:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    634:639:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    660:667:void com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment.onRetryClick$lambda$0(com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment,android.view.View):37:37 -> onClick
-    660:667:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    640:640:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    668:675:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":811,"3":812,"6":813}}
+    811:811:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
+    811:811:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    811:811:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    812:812:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
+    812:812:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    812:812:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    813:813:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
+    813:813:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    813:813:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    641:642:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    676:678:void com.mosl.tabapp.core.CommonActivity.showConnectivityIssueSnackbar$lambda$11(com.google.android.material.snackbar.Snackbar,android.view.View):0:0 -> onClick
-    676:678:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    643:653:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():183:183 -> onClick
+    643:653:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    643:653:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    679:682:void com.google.android.material.snackbar.BaseTransientBottomBar.dismiss():653:653 -> onClick
-    679:682:void com.google.android.material.snackbar.Snackbar.dismiss():127 -> onClick
-    679:682:void com.mosl.tabapp.core.CommonActivity.showConnectivityIssueSnackbar$lambda$11(com.google.android.material.snackbar.Snackbar,android.view.View):987 -> onClick
-    679:682:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    654:655:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182:182 -> onClick
+    654:655:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    654:655:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    683:688:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    656:657:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View):98:98 -> onClick
+    656:657:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182 -> onClick
+    656:657:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    656:657:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    689:691:void com.mosl.tabapp.branch.BranchActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.branch.BranchActivity,android.view.View):0:0 -> onClick
-    689:691:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    658:663:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View,java.lang.Object):111:111 -> onClick
+    658:663:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View):98 -> onClick
+    658:663:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182 -> onClick
+    658:663:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    658:663:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    692:695:void com.mosl.tabapp.branch.BranchActivity.onCreate$lambda$1$lambda$0(com.mosl.tabapp.branch.BranchActivity,android.view.View):55:55 -> onClick
-    692:695:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    696:701:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    702:704:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):0:0 -> onClick
-    702:704:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    705:711:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():178:178 -> onClick
-    705:711:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    705:711:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    712:714:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():179:179 -> onClick
-    712:714:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    712:714:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    715:720:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
-    715:720:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    715:720:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    721:721:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-      # {"id":"com.android.tools.r8.outlineCallsite","positions":{"1":889,"3":890,"6":891}}
-    889:889:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
-    889:889:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    889:889:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    890:890:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
-    890:890:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    890:890:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    891:891:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():180:180 -> onClick
-    891:891:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    891:891:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-    722:723:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    724:734:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():183:183 -> onClick
-    724:734:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    724:734:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    735:736:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182:182 -> onClick
-    735:736:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    735:736:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    737:738:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View):98:98 -> onClick
-    737:738:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182 -> onClick
-    737:738:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    737:738:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    739:744:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View,java.lang.Object):111:111 -> onClick
-    739:744:com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding com.mosl.tabapp.databinding.DialogBirthdayAnniversaryNewBinding.bind(android.view.View):98 -> onClick
-    739:744:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():182 -> onClick
-    739:744:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    739:744:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
-      # {"id":"com.android.tools.r8.synthesized"}
-    745:746:android.view.View androidx.databinding.ViewDataBinding.getRoot():578:578 -> onClick
-    745:746:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():188 -> onClick
+    664:665:android.view.View androidx.databinding.ViewDataBinding.getRoot():578:578 -> onClick
+    664:665:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():188 -> onClick
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
-    745:746:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    745:746:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    664:665:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    664:665:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    747:749:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():188:188 -> onClick
-    747:749:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    747:749:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    666:668:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():188:188 -> onClick
+    666:668:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    666:668:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    750:759:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():189:189 -> onClick
-    750:759:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    750:759:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    669:678:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():189:189 -> onClick
+    669:678:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    669:678:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    760:762:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():192:192 -> onClick
-    760:762:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    760:762:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    679:681:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():192:192 -> onClick
+    679:681:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    679:681:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    763:772:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():195:195 -> onClick
-    763:772:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    763:772:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    682:691:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():195:195 -> onClick
+    682:691:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    682:691:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    773:782:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():199:199 -> onClick
-    773:782:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    773:782:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    692:701:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():199:199 -> onClick
+    692:701:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    692:701:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    783:793:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():202:202 -> onClick
-    783:793:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    783:793:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    702:712:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():202:202 -> onClick
+    702:712:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    702:712:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    794:803:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():206:206 -> onClick
-    794:803:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    794:803:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    713:722:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():206:206 -> onClick
+    713:722:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    713:722:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    804:813:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():212:212 -> onClick
-    804:813:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    804:813:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    723:732:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():212:212 -> onClick
+    723:732:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    723:732:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    814:817:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():217:217 -> onClick
-    814:817:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
-    814:817:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    733:736:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.showPopupDialog():217:217 -> onClick
+    733:736:void com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary.bind$lambda$1$lambda$0(com.mosl.tabapp.birthdayanniversary.item.ItemBirthdayAnniversary,android.view.View):78 -> onClick
+    733:736:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    818:823:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    737:742:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    824:826:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):0:0 -> onClick
-    824:826:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    743:745:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):0:0 -> onClick
+    743:745:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    827:830:com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$SkipListener com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getSkipListener():56:56 -> onClick
-    827:830:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186 -> onClick
-    827:830:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    746:749:com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$SkipListener com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getSkipListener():56:56 -> onClick
+    746:749:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186 -> onClick
+    746:749:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    831:833:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186:186 -> onClick
-    831:833:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    750:752:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186:186 -> onClick
+    750:752:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    834:837:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getUserLocationHelper():51:51 -> onClick
-    834:837:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187 -> onClick
-    834:837:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    753:756:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getUserLocationHelper():51:51 -> onClick
+    753:756:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187 -> onClick
+    753:756:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    838:840:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187:187 -> onClick
-    838:840:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    757:759:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187:187 -> onClick
+    757:759:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    841:844:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):189:189 -> onClick
-    841:844:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    760:765:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):189:189 -> onClick
+    760:765:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    845:850:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getUserLocationHelper():51:51 -> onClick
-    845:850:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187 -> onClick
-    845:850:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    766:771:com.mosl.tabapp.attendancedialog.UserLocationHelper com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getUserLocationHelper():51:51 -> onClick
+    766:771:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):187 -> onClick
+    766:771:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    851:854:com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$SkipListener com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getSkipListener():56:56 -> onClick
-    851:854:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186 -> onClick
-    851:854:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    772:775:com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$SkipListener com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.getSkipListener():56:56 -> onClick
+    772:775:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.renderEmpAction$lambda$6(com.mosl.tabapp.attendancedialog.AttendanceDialogFragment,android.view.View):186 -> onClick
+    772:775:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    855:863:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
+    776:784:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    864:876:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):56:56 -> onClick
-    864:876:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    785:797:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):56:56 -> onClick
+    785:797:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    877:881:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):57:57 -> onClick
-    877:881:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    798:802:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):57:57 -> onClick
+    798:802:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    882:884:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):58:58 -> onClick
-    882:884:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    803:805:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):58:58 -> onClick
+    803:805:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    885:888:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):59:59 -> onClick
-    885:888:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
+    806:810:void services.WalkingIconService.lambda$onStartCommand$0(android.view.View):59:59 -> onClick
+    806:810:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
 com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$SkipListener -> com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$a:
 # {"id":"sourceFile","fileName":"AttendanceDialogFragment.kt"}
@@ -441000,8 +440925,53 @@ com.mosl.tabapp.core.CommonActivity -> com.mosl.tabapp.core.CommonActivity:
     6:8:void onSaveInstanceState(android.os.Bundle):883:883 -> onSaveInstanceState
     9:17:void onSaveInstanceState(android.os.Bundle):884:884 -> onSaveInstanceState
     18:35:void onSaveInstanceState(android.os.Bundle):885:885 -> onSaveInstanceState
-    1:8:void onStart():268:268 -> onStart
-    9:12:void onStart():271:271 -> onStart
+    1:3:void onStart():268:268 -> onStart
+    4:7:void setUserLocationHelper(com.mosl.tabapp.attendancedialog.UserLocationHelper):189:189 -> onStart
+    4:7:com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper():189 -> onStart
+    4:7:void onStart():269 -> onStart
+    8:15:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93:93 -> onStart
+    8:15:void onStart():269 -> onStart
+    16:17:void setMService(com.mosl.tabapp.service.ForegroundService):176:176 -> onStart
+    16:17:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():176 -> onStart
+    16:17:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93 -> onStart
+    16:17:void onStart():269 -> onStart
+    18:28:void setRemoteConfigModel(com.mosl.tabapp.data.RemoteConfigModel):175:175 -> onStart
+    18:28:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():175 -> onStart
+    18:28:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():93 -> onStart
+    18:28:void onStart():269 -> onStart
+    29:36:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():127:127 -> onStart
+    29:36:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onStart
+    29:36:void onStart():269 -> onStart
+    37:45:void setScreenNavigator(com.mosl.tabapp.navigation.ScreenNavigatorImpl):128:128 -> onStart
+    37:45:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():128 -> onStart
+    37:45:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onStart
+    37:45:void onStart():269 -> onStart
+    46:54:void setTokenPref(mosl.rx_preferences.Preference):135:135 -> onStart
+    46:54:void com.mosl.tabapp.attendancedialog.UserLocationHelper.startLocationUpdates():135 -> onStart
+    46:54:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():94 -> onStart
+    46:54:void onStart():269 -> onStart
+    55:56:void setMService(com.mosl.tabapp.service.ForegroundService):176:176 -> onStart
+    55:56:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():176 -> onStart
+    55:56:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():95 -> onStart
+    55:56:void onStart():269 -> onStart
+    57:66:void setRemoteConfigModel(com.mosl.tabapp.data.RemoteConfigModel):175:175 -> onStart
+    57:66:boolean com.mosl.tabapp.attendancedialog.UserLocationHelper.checkPermissions():175 -> onStart
+    57:66:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():95 -> onStart
+    57:66:void onStart():269 -> onStart
+    67:70:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():190:190 -> onStart
+    67:70:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onStart
+    67:70:void onStart():269 -> onStart
+    71:76:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():193:193 -> onStart
+    71:76:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onStart
+    71:76:void onStart():269 -> onStart
+    77:83:void setUserLocationHelper(com.mosl.tabapp.attendancedialog.UserLocationHelper):189:189 -> onStart
+    77:83:void com.mosl.tabapp.attendancedialog.UserLocationHelper.requestPermissions():189 -> onStart
+    77:83:void com.mosl.tabapp.attendancedialog.UserLocationHelper.start():96 -> onStart
+    77:83:void onStart():269 -> onStart
+    84:89:void onStart():271:271 -> onStart
+    90:94:void setUserLocationHelper(com.mosl.tabapp.attendancedialog.UserLocationHelper):189:189 -> onStart
+    90:94:com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper():189 -> onStart
+    90:94:void onStart():269 -> onStart
     1:3:void onStop():282:282 -> onStop
     4:7:void setUserLocationHelper(com.mosl.tabapp.attendancedialog.UserLocationHelper):189:189 -> onStop
     4:7:com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper():189 -> onStop
@@ -444640,8 +444610,7 @@ com.mosl.tabapp.dashboard.base.DashboardFragment -> com.mosl.tabapp.dashboard.ba
     246:251:com.mosl.tabapp.databinding.FragDashboardAufsbBinding com.mosl.tabapp.databinding.FragDashboardAufsbBinding.bind(android.view.View):111:111 -> onViewCreated
     246:251:com.mosl.tabapp.databinding.FragDashboardBinding com.mosl.tabapp.databinding.FragDashboardBinding.bind(android.view.View):451 -> onViewCreated
     246:251:void onViewCreated(android.view.View,android.os.Bundle):103 -> onViewCreated
-    252:262:void myZoneAttendanceLogic():123:123 -> onViewCreated
-    252:262:com.mosl.tabapp.databinding.FragDashboardAufsbBinding com.mosl.tabapp.databinding.FragDashboardAufsbBinding.bind(android.view.View,java.lang.Object):123 -> onViewCreated
+    252:262:com.mosl.tabapp.databinding.FragDashboardAufsbBinding com.mosl.tabapp.databinding.FragDashboardAufsbBinding.bind(android.view.View,java.lang.Object):123:123 -> onViewCreated
     252:262:com.mosl.tabapp.databinding.FragDashboardAufsbBinding com.mosl.tabapp.databinding.FragDashboardAufsbBinding.bind(android.view.View):111 -> onViewCreated
     252:262:com.mosl.tabapp.databinding.FragDashboardBinding com.mosl.tabapp.databinding.FragDashboardBinding.bind(android.view.View):451 -> onViewCreated
     252:262:void onViewCreated(android.view.View,android.os.Bundle):103 -> onViewCreated
@@ -445015,8 +444984,7 @@ com.mosl.tabapp.dashboard.base.DashboardFragment -> com.mosl.tabapp.dashboard.ba
     1496:1503:void onViewCreated(android.view.View,android.os.Bundle):107 -> onViewCreated
     1504:1512:void com.mosl.tabapp.dashboard.base.DashboardPresenter.start():122:122 -> onViewCreated
     1504:1512:void onViewCreated(android.view.View,android.os.Bundle):107 -> onViewCreated
-    1513:1521:void myZoneAttendanceLogic():123:123 -> onViewCreated
-    1513:1521:void com.mosl.tabapp.dashboard.base.DashboardPresenter.start():123 -> onViewCreated
+    1513:1521:void com.mosl.tabapp.dashboard.base.DashboardPresenter.start():123:123 -> onViewCreated
     1513:1521:void onViewCreated(android.view.View,android.os.Bundle):107 -> onViewCreated
     1522:1533:void myZoneAttendanceLogic():127:127 -> onViewCreated
     1522:1533:void com.mosl.tabapp.dashboard.base.DashboardPresenter.start():127 -> onViewCreated

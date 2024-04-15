@@ -120,7 +120,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
     }
 
     private fun myZoneAttendanceLogic(){
-        userLocationHelper.start()
+
         if (myZoneUserManager.isLoggedIn()) {
             showAttendancePopupIfNotMarked()
         }else{

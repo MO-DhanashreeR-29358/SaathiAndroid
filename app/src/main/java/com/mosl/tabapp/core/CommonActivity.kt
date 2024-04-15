@@ -266,7 +266,7 @@ class CommonActivity : BaseActivity(),
 
     override fun onStart() {
         super.onStart()
-       // userLocationHelper.start()
+        userLocationHelper.start()
 
         Timber.d("AAA onStart")
     }
