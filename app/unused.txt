@@ -23433,11 +23433,15 @@ com.mosl.app.core.data.MOSLResponseWrapper:
 com.mosl.app.core.data.MOSLResponseWrapper_Factory:
     public static com.mosl.app.core.data.MOSLResponseWrapper newInstance()
 com.mosl.app.core.data.RepositoryAliasProviders
+com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocation$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocations$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$markOutAttendance$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl:
+    public final double distance(com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
+    public final int getALLOWED_RADIUS()
     public final android.content.Context getContext()
     public final com.mosl.data.attendance.AttendanceMapper getMapper()
+    public io.reactivex.rxjava3.core.Observable getNearestOfficeLocation(com.mosl.mobile.domain.attendance.LatLng)
     public io.reactivex.rxjava3.core.Observable getNearestOfficeLocations(com.mosl.mobile.domain.attendance.LatLng)
     public final com.mosl.saathi.api.SaathiApi getSaathiApi()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
@@ -27956,6 +27960,7 @@ com.mosl.mobile.domain.attendance.AppInfo:
     public final com.mosl.mobile.domain.attendance.AppInfo copy(java.lang.String,java.lang.String,java.lang.String,int)
     public static synthetic com.mosl.mobile.domain.attendance.AppInfo copy$default(com.mosl.mobile.domain.attendance.AppInfo,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
 com.mosl.mobile.domain.attendance.AttendanceRepository:
+    public abstract io.reactivex.rxjava3.core.Observable getNearestOfficeLocation(com.mosl.mobile.domain.attendance.LatLng)
     public abstract io.reactivex.rxjava3.core.Observable getNearestOfficeLocations(com.mosl.mobile.domain.attendance.LatLng)
     public abstract io.reactivex.rxjava3.core.Observable logAttendancePopup(java.lang.String)
     public abstract io.reactivex.rxjava3.core.Observable markEmpAttendance(com.mosl.mobile.domain.attendance.model.MarkAttendanceData)
@@ -27983,12 +27988,7 @@ com.mosl.mobile.domain.attendance.model.OfficeLocation:
     public static synthetic com.mosl.mobile.domain.attendance.model.OfficeLocation copy$default(com.mosl.mobile.domain.attendance.model.OfficeLocation,double,double,int,java.lang.String,int,java.lang.Object)
 com.mosl.mobile.domain.attendance.model.SelfApproval
 com.mosl.mobile.domain.attendance.model.SelfAttendance
-com.mosl.mobile.domain.attendance.model.UserLocationInfo:
-    public final double component1()
-    public final com.mosl.mobile.domain.attendance.model.OfficeLocation component2()
-    public final com.mosl.mobile.domain.attendance.LatLng component3()
-    public final com.mosl.mobile.domain.attendance.model.UserLocationInfo copy(double,com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
-    public static synthetic com.mosl.mobile.domain.attendance.model.UserLocationInfo copy$default(com.mosl.mobile.domain.attendance.model.UserLocationInfo,double,com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng,int,java.lang.Object)
+com.mosl.mobile.domain.attendance.model.UserLocationInfo
 com.mosl.mobile.domain.bank.BankCodeModel:
     public final int component1()
     public final java.lang.String component2()
@@ -33271,6 +33271,7 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public final com.mosl.tabapp.navigation.ScreenNavigatorImpl getScreenNavigator()
     public final com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
+    private final void showAttendancePopupGeoFancing(com.mosl.commons.data.UiModel)
 com.mosl.tabapp.attendancedialog.AttendanceHelper_Factory
 com.mosl.tabapp.attendancedialog.AttendancePageData:
     public final java.lang.String component1()
@@ -74600,8 +74601,6 @@ com.mosl.app.core.data.MOSLResponseWrapper:
 com.mosl.app.core.data.MOSLResponseWrapper_Factory:
     public static com.mosl.app.core.data.MOSLResponseWrapper_Factory create()
     public static com.mosl.app.core.data.MOSLResponseWrapper get()
-com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocation$1:
-    public static com.mosl.mobile.domain.attendance.model.UserLocationInfo apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getOfficeLocationList$1:
     public static kotlin.Pair apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$markEmpAttendance$1:
@@ -74609,13 +74608,12 @@ com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$markEmpAttendance$1:
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$officeLocation$1:
     public final java.util.List apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl:
+    public final int ALLOWED_RADIUS
     public final android.content.Context context
     public final com.mosl.data.attendance.AttendanceMapper mapper
-    public static double distance(com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
-    public static int getALLOWED_RADIUS()
     public static io.reactivex.rxjava3.core.Observable logAttendancePopup()
     public static io.reactivex.rxjava3.core.Observable markEmpAttendance()
-    public final io.reactivex.rxjava3.core.Observable officeLocation()
+    public static io.reactivex.rxjava3.core.Observable officeLocation()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl_Factory:
     public static com.mosl.app.core.data.attendance.AttendanceRepositoryImpl get()
     public static com.mosl.ekycexpress.interceptor.HeaderInterceptor get()
@@ -78936,19 +78934,11 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceAndLocation$at
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceAndLocation$attendanceObs$3:
     public final io.reactivex.rxjava3.core.ObservableSource apply$4()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$10:
-    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$11:
-    public final void accept$1()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$12:
-    public final boolean test$14()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$13:
-    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$14:
     public final void accept$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$1:
     public final boolean test$14()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$2:
-    public final com.mosl.mobile.domain.attendance.LatLng apply$1()
+    public static com.mosl.mobile.domain.attendance.LatLng apply$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$3:
     public final io.reactivex.rxjava3.core.ObservableSource apply$4()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$4:
@@ -78956,13 +78946,13 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$4:
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$5:
     public final boolean test$14()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$6:
-    public final com.mosl.mobile.domain.attendance.LatLng apply$1()
+    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$7:
-    public final io.reactivex.rxjava3.core.ObservableSource apply$4()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$8:
     public final void accept$1()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$9:
+com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$8:
     public final boolean test$14()
+com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$9:
+    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$showMockDialogIfLocationFromMockProvider$1:
     public final boolean test$13()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$showMockDialogIfLocationFromMockProvider$2:
@@ -78971,8 +78961,8 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public boolean checkSkipStatus
     public final com.google.gson.Gson gson
     public final com.mosl.tabapp.navigation.ScreenNavigatorImpl screenNavigator
-    public static double distance()
     public static androidx.appcompat.app.AppCompatActivity getActivity()
+    public final com.mosl.tabapp.attendancedialog.AttendanceDialogFragment getAttendanceFragment()
     public static com.mosl.mobile.domain.attendance.AttendanceRepository getAttendanceRepo()
     public final com.mosl.tabapp.attendancedialog.AttendanceHelper$ClickListener getClickListener()
     public static com.mosl.mobile.user.login.LoginRepository getLoginRepo()
@@ -78980,12 +78970,11 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public static void handleAttendanceData()
     public static void setAttendanceFragment()
     public static void setClickListener()
-    public static void showAttendancePopupGeoFancing()
     public static void showAttendancePopupWFH()
     public static void showMockDialogIfLocationFromMockProvider()
     public static void showMockLocationDialog$app_uatRelease()
 com.mosl.tabapp.attendancedialog.MockLocationDetector
-com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$2$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$0
+com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$0
 com.mosl.tabapp.attendancedialog.UserLocationHelper$Companion
 com.mosl.tabapp.attendancedialog.UserLocationHelper:
     public static final com.mosl.tabapp.attendancedialog.UserLocationHelper$Companion Companion

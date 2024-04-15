@@ -120,7 +120,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
     }
 
     private fun myZoneAttendanceLogic(){
-        userLocationHelper.start()
+
         if (myZoneUserManager.isLoggedIn()) {
             showAttendancePopupIfNotMarked()
         }else{
@@ -199,19 +199,13 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
         }
     }
 
-    override fun setMessageForAttendanceTypeThree(uiModel: UiModel<ProfileInfo>) {
-        Timber.d("setMessageForAttendanceTypeThree called")
-        uiModel.onFailure {
-            Timber.d("setMessageForAttendanceTypeThree called" + it.message)
-        }
-        uiModel.data?.let {
-            Timber.d("setMessageForAttendanceTypeThree called" + it.attendanceCount.toString() + " " + it.attendanceType.toString())
-        }
-        if (uiModel.isSuccess) {
+    override fun setMessageForAttendanceNotAllowed(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("setMessageForAttendanceNotAllowed called")
 
+        if (uiModel.isSuccess) {
             isUserLogin = true
             userLocationHelper.stop()
-            Toast.makeText(requireContext(), "Attendance facility is not available for this user.", Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(), "Attendance facility is not available, You have to mark your attendance from myZone App.", Toast.LENGTH_SHORT)
                     .show()
         }
     }
