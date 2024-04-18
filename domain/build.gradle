@@ -1,12 +1,33 @@
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+
+android {
+    compileSdkVersion rootProject.ext.versions.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion rootProject.ext.versions.targetSdkVersion
+
+        /*javaCompileOptions {
+          annotationProcessorOptions {
+            includeCompileClasspath = true
+          }
+        }*/
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace 'com.mosl.saathi.domain'
+}
 
 dependencies {
     implementation deps.rx.java
     implementation deps.dagger.core
     implementation deps.kotlin
     implementation deps.androidx.annotation
+    implementation deps.androidx.appcompat
 }
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"

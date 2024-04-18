@@ -5,6 +5,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.reactivation.ReactivationActualMarginPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationClientSearchPostModel
 import com.mosl.mobile.domain.reactivation.ReactivationClientSearchResponseModel
+import com.mosl.mobile.domain.reactivation.ReactivationSubmitPostModel
 import com.mosl.tabapp.helper.fileuploader.SaathiUploadUiSubject
 import io.reactivex.rxjava3.core.Observable
 
@@ -30,8 +31,13 @@ interface CreateRequestReactivationView :BaseView {
     fun onSelectedFileEventFired(): Observable<SaathiUploadUiSubject.SelectedFileEvent>
 
     fun onSelectedImageEventFired(): Observable<SaathiUploadUiSubject.SelectedImageEvent>
-    fun fnOnUpdateClick():Observable<Unit>
 
+    fun fnRenderImageSelect(strFileUrl:String)
+
+    fun fnGetReactivationPostModel():ReactivationSubmitPostModel
+    fun fnOnUpdateClick():Observable<Unit>
+    fun  fnRenderUpdate(uiModel: UiModel<String>)
     fun fnOnResetClick():Observable<Unit>
     fun fnRenderReset()
+
 }

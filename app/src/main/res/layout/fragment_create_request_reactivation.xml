@@ -245,6 +245,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3">
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txt_file_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -287,7 +288,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/appCompatEditText"
+                android:id="@+id/edtRemark"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_75sdp"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -322,7 +323,7 @@
                 android:textFontWeight="400"
                 android:textSize="@dimen/_14ssp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatEditText" />
+                app:layout_constraintTop_toBottomOf="@+id/edtRemark" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/edtDateActual"

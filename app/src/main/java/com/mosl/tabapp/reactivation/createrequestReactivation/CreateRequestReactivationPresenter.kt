@@ -1,5 +1,6 @@
 package com.mosl.tabapp.reactivation.createrequestReactivation
 
+import android.content.Context
 import android.util.Log
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
@@ -14,7 +15,8 @@ import javax.inject.Inject
 class CreateRequestReactivationPresenter @Inject constructor(
     view:CreateRequestReactivationView,
     val repository: ReactivationRepository,
-    val userManager: UserManager
+    val userManager: UserManager,
+    val context: Context
 ):BasePresenter<CreateRequestReactivationView>(view){
     override fun start() {
 
@@ -59,18 +61,30 @@ class CreateRequestReactivationPresenter @Inject constructor(
 
         view.onSelectedFileEventFired()
             .subscribe {
-                Log.d("in presenter",it.uriString)
+                view.fnRenderImageSelect(it.uriString)
             }.addTo(disposable)
 
         view.onSelectedImageEventFired()
             .subscribe {
-                Log.d("in presenter",it.uriString)
+                view.fnRenderImageSelect(it.uriString)
             }.addTo(disposable)
 
         view.fnOnResetClick().
                 subscribe {
                     view.fnRenderReset()
                 }.addTo(disposable)
+
+        view.fnOnUpdateClick()
+            .map { view.fnGetReactivationPostModel() }
+            .switchMap {
+                input->
+                ReactivationSubmitValidator.validate(input).flatMap {
+                    repository.fnGetSubmitReactivation(it,context)
+                }.compose(applyUiModel())
+            }
+            .subscribe {
+                view.fnRenderUpdate(it)
+            }.addTo(disposable)
 
     }
 }

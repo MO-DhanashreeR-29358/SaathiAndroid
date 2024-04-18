@@ -827,4 +827,7 @@ interface SaathiApi {
 
     @POST("SMSCampaign/MarginDatafromActualDate")
     fun fnGetActualMargin(@Body request: ReactivationActualMarginRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
+
+    @POST("SMSCampaign/InsertReactivationWithFile")
+    fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
 }

@@ -1,6 +1,8 @@
 package com.mosl.mobile.domain.reactivation
 
 import io.reactivex.rxjava3.core.Observable
+import android.content.Context
+
 
 
 interface ReactivationRepository {
@@ -23,4 +25,6 @@ interface ReactivationRepository {
     fun fnGetMinDate(objReactivationMinDatePostModel: ReactivationMinDatePostModel):Observable<String>
 
     fun fnGetActualMargin(objReactivationActualMarginPostModel:ReactivationActualMarginPostModel):Observable<List<ReactivationClientSearchResponseModel>>
+
+    fun fnGetSubmitReactivation(objReactivationSubmitPostModel: ReactivationSubmitPostModel,context: Context):Observable<String>
 }

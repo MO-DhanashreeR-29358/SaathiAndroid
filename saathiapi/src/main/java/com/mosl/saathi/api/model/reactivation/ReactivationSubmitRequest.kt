@@ -4,30 +4,30 @@ import com.google.gson.annotations.SerializedName
 
 data class ReactivationSubmitRequest(
 
-	@field:SerializedName("TGS_Edumo_Revenue")
-	val tGSEdumoRevenue: String? = null,
+	@SerializedName("TGS_Edumo_Revenue")
+	@JvmField val tGSEdumoRevenue: String? = null,
 
-	@field:SerializedName("Remarks")
-	val remarks: String? = null,
+	@SerializedName("Remarks")
+	@JvmField val remarks: String? = null,
 
-	@field:SerializedName("MarginProofFileName")
-	val marginProofFileName: String? = null,
+	@SerializedName("MarginProofFileName")
+	@JvmField val marginProofFileName: String? = null,
 
-	@field:SerializedName("ClientCode")
-	val clientCode: String? = null,
+	@SerializedName("ClientCode")
+	@JvmField val clientCode: String? = null,
 
-	@field:SerializedName("RequestTypeFlag")
-	val requestTypeFlag: String? = null,
+	@SerializedName("RequestTypeFlag")
+	@JvmField val requestTypeFlag: String? = null,
 
-	@field:SerializedName("ActualActivationDate")
-	val actualActivationDate: String? = null,
+	@SerializedName("ActualActivationDate")
+	@JvmField val actualActivationDate: String? = null,
 
-	@field:SerializedName("DocumentName")
-	val documentName: String? = null,
+	@SerializedName("DocumentName")
+	@JvmField val documentName: String? = null,
 
-	@field:SerializedName("TotalMarginCollected")
-	val totalMarginCollected: String? = null,
+	@SerializedName("TotalMarginCollected")
+	@JvmField val totalMarginCollected: String? = null,
 
-	@field:SerializedName("Base64FileString")
-	val base64FileString: String? = null
+	@SerializedName("Base64FileString")
+	@JvmField val base64FileString: String? = null
 )

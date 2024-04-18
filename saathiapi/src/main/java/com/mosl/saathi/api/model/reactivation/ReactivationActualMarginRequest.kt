@@ -8,11 +8,11 @@ data class ReactivationActualMarginRequest(
 	val employeeCode: String? = null,*/
 
 	@SerializedName("BusinessUnitId")
-	val businessUnitId: String? = null,
+	@JvmField val businessUnitId: String? = null,
 
 	@SerializedName("ClientCode")
-	val clientCode: String? = null,
+	@JvmField val clientCode: String? = null,
 
 	@SerializedName("ActualActivationDate")
-	val actualActivationDate: String? = null
+	@JvmField val actualActivationDate: String? = null
 )

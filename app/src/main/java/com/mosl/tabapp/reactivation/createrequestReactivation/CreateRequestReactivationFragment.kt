@@ -1,39 +1,45 @@
 package com.mosl.tabapp.reactivation.createrequestReactivation
 
 import android.app.DatePickerDialog
+import android.content.ContentResolver
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import androidx.core.view.isVisible
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
+import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.reactivation.ReactivationClientSearchPostModel
-import com.mosl.mobile.domain.reactivation.ReactivationClientSearchResponseModel
-import com.mosl.mobile.user.login.user
-import com.mosl.tabapp.core.CommonFragment
-import javax.inject.Inject
-import com.mosl.tabapp.R
-import com.mosl.tabapp.databinding.FragmentCreateRequestReactivationBinding
-import com.mosl.validator.exception.ValidationException
-import io.reactivex.rxjava3.core.Observable
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.reactivation.ReactivationActualMarginPostModel
+import com.mosl.mobile.domain.reactivation.ReactivationClientSearchPostModel
+import com.mosl.mobile.domain.reactivation.ReactivationClientSearchResponseModel
+import com.mosl.mobile.domain.reactivation.ReactivationSubmitPostModel
+import com.mosl.mobile.user.login.user
+import com.mosl.tabapp.R
+import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.databinding.FragmentCreateRequestReactivationBinding
 import com.mosl.tabapp.helper.fileuploader.SaathiFileUploader
 import com.mosl.tabapp.helper.fileuploader.SaathiUploadUiSubject
 import com.mosl.tabapp.reactivation.createrequestReactivationDetails.ReactivationDetailsFragment
+import com.mosl.validator.exception.ValidationException
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.io.File
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import javax.inject.Inject
 
 class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactivationView {
 
@@ -49,6 +55,9 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
      var formatedDate:LocalDate?=null
     lateinit var saathiFileUploader: SaathiFileUploader
     protected val FileUploadsubject: PublishSubject<SaathiUploadUiSubject> = PublishSubject.create<SaathiUploadUiSubject>()
+
+    var strSelectedFile:String=""
+
     override fun getLayout(): Int {
        return R.layout.fragment_create_request_reactivation
     }
@@ -110,16 +119,15 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         val minYear = formatedDate?.year
         val datePickerDialog = DatePickerDialog(
             requireContext(), {DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                // Create a new Calendar instance to hold the selected date
                 val selectedDate = Calendar.getInstance()
-                // Set the selected date using the values received from the DatePicker dialog
                 selectedDate.set(year, monthOfYear, dayOfMonth)
-                // Create a SimpleDateFormat to format the date as "dd/MM/yyyy"
-                val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-                // Format the selected date into a string
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val dateFormatdsiplay = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
                 val formattedDate = dateFormat.format(selectedDate.time)
-                // Update the TextView to display the selected date with the "Selected Date: " prefix
-                showSuccessToast(formattedDate)
+                val formattedDateDisp=dateFormatdsiplay.format(selectedDate.time)
+                strSelectedDate=formattedDate
+                binding.edtDateActual.setText(formattedDateDisp)
+                subject.onNext(CreateReacivationUiEvent.OnCallActualMargin)
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -141,13 +149,6 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         val maxYear = LocalDate.now().year
         calendar.set(maxYear, maxMonth-1,maxDay )
         datePickerDialog.datePicker.maxDate=calendar.timeInMillis
-
-        datePickerDialog.setOnDateSetListener { view, year, month, dayOfMonth ->
-            strSelectedDate="$year-$month-$dayOfMonth"
-            binding.edtDateActual.setText("$dayOfMonth-$month-$year")
-            subject.onNext(CreateReacivationUiEvent.OnCallActualMargin)
-        }
-
         datePickerDialog.show()
     }
 
@@ -244,22 +245,76 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         return FileUploadsubject.ofType()
     }
 
+    override fun fnRenderImageSelect(strFileUrl: String) {
+        strSelectedFile=strFileUrl
+        val objFile =File(strSelectedFile)
+        binding.txtFileName.setText(objFile.name+".jpg")
+
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         saathiFileUploader.onActivityResult(requestCode, resultCode, data)
     }
 
+    override fun fnGetReactivationPostModel(): ReactivationSubmitPostModel {
+        val objFile =File(strSelectedFile)
+        return ReactivationSubmitPostModel(
+            tGSEdumoRevenue=objReactivationClientSearchResponseModel?.tGSEdumoRevenue?.substringBefore(".")?:"0",
+
+         remarks=binding.edtRemark.text.toString(),
+
+         marginProofFileName=objFile.name+".jpg",
+
+         clientCode=binding.edtClientCode.text.toString(),
+
+         requestTypeFlag=strSelectedOption,
+
+         actualActivationDate=strSelectedDate,
+
+         documentName=objFile.name+".jpg",
+
+         totalMarginCollected=objReactivationClientSearchResponseModel?.totalMarginCollected?:"0",
+
+         uriString=strSelectedFile
+        )
+    }
     override fun fnOnUpdateClick(): Observable<Unit> {
         return binding.btnUpdateLead.clicks()
     }
 
+    override fun fnRenderUpdate(uiModel: UiModel<String>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onSuccess {
+            alert(it)
+            objReactivationClientSearchResponseModel=null
+            binding.edtClientCode.setText("")
+            binding.edtDateActual.setText("")
+            binding.edtRemark.setText("")
+            binding.txtFileName.setText("Upload")
+            strSelectedFile=""
+               }
+
+        uiModel.onFailure {
+
+            if (it is ValidationException) {
+                val error = it.error.message
+               alert(error?:"")
+            } else {
+                showOnFailurePopup(it)
+            }
+        }
+    }
     override fun fnOnResetClick(): Observable<Unit> {
         return binding.btnResetLead.clicks()
     }
 
     override fun fnRenderReset() {
+        objReactivationClientSearchResponseModel=null
         binding.edtClientCode.setText("")
         binding.edtDateActual.setText("")
-        binding.appCompatEditText.setText("")
+        binding.edtRemark.setText("")
+        binding.txtFileName.setText("Upload")
+        strSelectedFile=""
     }
 }
