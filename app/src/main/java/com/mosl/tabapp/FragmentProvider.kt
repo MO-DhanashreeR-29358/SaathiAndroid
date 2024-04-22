@@ -1,6 +1,10 @@
 package com.mosl.tabapp
 
 import com.mosl.mobile.pdf.OTPModule
+import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment
+import com.mosl.tabapp.attendancedialog.AttendanceDialogModule
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyOtpModule
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.banner.BannerFragment
@@ -54,6 +58,8 @@ import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
+import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
+import com.mosl.tabapp.login.otpverification.OtpVerificationModule
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -213,4 +219,12 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [ReactivationDetailTLModule::class])
     fun provideReactivationDetailTLFragmentFactory(): ReactivationDetailTLFragment
+
+
+
+    @ContributesAndroidInjector(modules = [AttendanceDialogModule::class])
+    fun provideAttendanceFragmentFactory(): AttendanceDialogFragment
+
+    @ContributesAndroidInjector(modules = [VerifyOtpModule::class])
+    fun provideVerifyDialogFragmentFactory(): VerifyDialogFragment
 }

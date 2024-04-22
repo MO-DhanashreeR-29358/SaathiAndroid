@@ -72,6 +72,14 @@ class UserManagerImpl @Inject constructor(
   override fun getDigitalSalesKitMenuList(): List<DigitalSalesKitData> {
     return digitalSalesKitMenuList
   }
+
+  override fun fnSetIsOtpEnable(isOtpEnable: Boolean) {
+    userCache.fnSetisOtpEnable(isOtpEnable)
+  }
+
+  override fun isOtpEnable(): Boolean {
+    return userCache.isOtpEnable()
+  }
   /*override fun isLoggedIn(): Boolean {
     return user != null
   }*/

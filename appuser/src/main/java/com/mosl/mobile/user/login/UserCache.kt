@@ -21,4 +21,6 @@ interface UserCache {
 
   fun setDigitalSalesKitMenuList(reportMenuList: List<DigitalSalesKitData>)
   fun getDigitalSalesKitMenuList(): List<DigitalSalesKitData>
+  fun fnSetisOtpEnable(isOtpRequired:Boolean)
+  fun isOtpEnable():Boolean
 }

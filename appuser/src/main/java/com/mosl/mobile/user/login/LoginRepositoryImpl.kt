@@ -1,20 +1,21 @@
 package com.mosl.mobile.user.login
 
+import android.util.Log
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.model.splash.DigitalSalesKitData
-import com.mosl.saathi.api.model.splash.DigitalSalesKitMenu
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LoginRepositoryImpl @Inject constructor(
   internal val userRepository: AppUserRepository,
-  internal val userManager: UserManagerImpl
+  internal val userManager: UserManagerImpl,
 ) : LoginRepository {
   override fun versionCheck(version: VersionInfo): Observable<VersionResponse> {
     return userRepository.versionCheck(version)
@@ -61,4 +62,23 @@ class LoginRepositoryImpl @Inject constructor(
     }
         .subscribeOn(Schedulers.io())
   }
+
+  override fun getProfileInfo(): Observable<ProfileInfo> {
+    return userRepository.getProfileInfo()
+  }
+
+
+  override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
+    Log.d("validate login","called")
+    return  userRepository.fnValidateLogin(objValidateLoingPostModel)
+  }
+  override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {
+  return  userRepository.fnCallOtp(objGenerateOtpPostModel)
+  }
+
+  override fun fnCallValidateOtp(objValidateOtpPostModel: ValidateOtpPostModel): Observable<User> {
+  return  userRepository.fnCallValidateOtp(objValidateOtpPostModel)
+    .map { response -> saveLoginResponse(response) }
+  }
+
 }

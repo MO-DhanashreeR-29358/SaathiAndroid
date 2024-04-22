@@ -60,6 +60,7 @@ dependencies {
 
   implementation project(':saathiapi')
   implementation project(':appuser')
+  implementation project(':appuserMyzone')
   implementation project(':shared')
   implementation project(':domain')
 
