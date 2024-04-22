@@ -1,20 +1,20 @@
 package com.mosl.tabapp
 
 import com.facebook.stetho.Stetho
-import com.squareup.leakcanary.LeakCanary
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
+import leakcanary.LeakCanary
 import timber.log.Timber
 
 class SaathiAppImpl : SaathiAppNew() {
   override fun init() {
-    if (LeakCanary.isInAnalyzerProcess(this)) {
+    //if (LeakCanary.isInAnalyzerProcess(this)) {
       //This process is dedicated to LeakCanary for heap analysis.
       //You should not init your app in this process.
-      return
-    }
-    LeakCanary.install(this)
+   //   return
+   // }
+   // LeakCanary.install(this)
     Stetho.initializeWithDefaults(this)
 
     Timber.plant(object : Timber.DebugTree() {

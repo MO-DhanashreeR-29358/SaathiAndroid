@@ -6,10 +6,7 @@ import android.app.ActivityManager
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.NotificationManager
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
@@ -33,6 +30,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
 import com.mosl.annotations.FcmToken
 import com.mosl.app.core.data.MOSLResponseWrapper
+import com.mosl.app.core.data.error.ErrorUtils
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
@@ -42,6 +40,7 @@ import com.mosl.app.core.prefs.StringPreference
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.base.ActivityDelegate
 import com.mosl.app.coreui.base.BaseActivity
+import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.user.annotation.BranchCode
@@ -51,11 +50,16 @@ import com.mosl.mobile.user.annotation.TwentyFourSevenCheck
 import com.mosl.mobile.user.login.LoginRepositoryImpl
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
+import com.mosl.mobile.user.model.ProfileInfo
 import com.mosl.navigator.*
 import com.mosl.shared.BranchSelectNeeded
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
 import com.mosl.tabapp.R
+import com.mosl.tabapp.attendancedialog.AttendanceHelper
+import com.mosl.tabapp.attendancedialog.UserLocationHelper
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
+import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment.ARG_OTP_DATA
 import com.mosl.tabapp.banner.BannerScreenData
 import com.mosl.tabapp.branch.BranchActivity
 import com.mosl.tabapp.constants.MOSLConstants
@@ -74,6 +78,10 @@ import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.webview.WebviewFragment
+import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
+import com.mosl.user.data.login.VerifyAction
+import com.mosl.user.domain.model.GenerateOTP
+import com.mosl.user.login.MyZoneUserManagerImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import mosl.rx_preferences.Preference
@@ -111,6 +119,7 @@ class CommonActivity : BaseActivity(),
     @Inject
     lateinit var loginRepository: LoginRepositoryImpl
 
+
     @Inject
     lateinit var fragmentResolver: FragmentResolver
     var globalTitles = HashMap<String, AppTitle>()
@@ -135,6 +144,7 @@ class CommonActivity : BaseActivity(),
 
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
+
 
     @Inject
     lateinit var shortcutHelper: ShortcutHelper
@@ -171,7 +181,12 @@ class CommonActivity : BaseActivity(),
      var twentyFourSevenCheck = false*/
     /**/
 
+
     private lateinit var mDistaSdk : IDistaSDK
+    @Inject
+    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
+    @Inject
+    lateinit var userLocationHelper: UserLocationHelper
 
     override fun getLayout(): Int {
         return R.layout.activity_commonbase
@@ -245,6 +260,15 @@ class CommonActivity : BaseActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             showPermissionWarningDialog()
         }
+
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        userLocationHelper.start()
+
+        Timber.d("AAA onStart")
     }
 
     override fun onPause() {
@@ -252,20 +276,18 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAA onPause")
     }
 
-    override fun onStart() {
-        super.onStart()
-        Timber.d("AAA onStart")
-    }
+
 
     override fun onStop() {
         super.onStop()
+        userLocationHelper.stop()
         Timber.d("AAA onStop")
     }
 
-    private fun distaLoginApiCall(){
-        if(mDistaSdk.isLoggedIn) {
+    public fun distaLoginApiCall(){
+        // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
-        }else{
+        // }else{
             mDistaSdk.doLoginCheckIn(this,
                 userManager.getUser()?.employeeCode,
                 object : OnTaskSuccessListener {
@@ -286,13 +308,13 @@ class CommonActivity : BaseActivity(),
                         //).show()
                     }
                 })
-        }
+        // }
 
     }
 
     // added for back ground location permission as DISTA needed this permission
     @RequiresApi(Build.VERSION_CODES.M)
-    private fun showPermissionWarningDialog() {
+    public fun showPermissionWarningDialog() {
 
         if (ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)
             == PackageManager.PERMISSION_GRANTED
@@ -529,9 +551,7 @@ class CommonActivity : BaseActivity(),
             )
         }
         Timber.d("AAA onResume")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            showPermissionWarningDialog()
-        }
+        showPermissionWarningDialog()
     }
 
     /* override fun onStop() {
@@ -698,6 +718,8 @@ class CommonActivity : BaseActivity(),
                 }
             }
             .addTo(disposable)
+
+
     }
 
     private fun openMenuDrawer() {
@@ -801,6 +823,7 @@ class CommonActivity : BaseActivity(),
                         distaLogoutCheckout()
                         /*editor?.putBoolean(TWENTY_FOUR_SEVEN_CHECK, false)
                         editor?.commit()*/
+                        doMyZoneLogout()
                         openLogin()
                     }
 
@@ -809,6 +832,20 @@ class CommonActivity : BaseActivity(),
                     }
                 })
     }
+
+    private fun doMyZoneLogout() {
+        disposable.add(
+            myZoneLoginRepository.logoutUser(R.string.successfully_logout)
+                .toSingleDefault(true)
+                .toObservable()
+                .compose(applyUiModel())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { uiModel ->
+                    toggleProgressBar(uiModel.inProgress)
+                    twentyFourSevenCheck.set(false)
+                })
+    }
+
 
     private fun openLogin() {
         //open image slider instead of splash
@@ -1062,4 +1099,6 @@ class CommonActivity : BaseActivity(),
         const val ID_CLEINT = 2
         const val ID_EMP = 3
     }
+
+
 }

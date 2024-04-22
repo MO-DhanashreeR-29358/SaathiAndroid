@@ -2,9 +2,12 @@ package com.mosl.app.core.data;
 
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor;
 import com.mosl.app.core.data.interceptor.HeaderInterceptor;
+import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
+import com.mosl.app.core.data.meta.MyZoneAPIClient;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.data.util.HttpListenerFactory;
+import com.mosl.user.AuthorizationInterceptor;
 
 import java.util.concurrent.TimeUnit;
 
@@ -64,6 +67,23 @@ public abstract class DataModule {
                 .addInterceptor(encryptionInterceptor)
                 .eventListenerFactory(listenerFactory)
                 //.addInterceptor(loggingInterceptor)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    @MyZoneAPIClient
+    static OkHttpClient provideMyZoneAPIOkHttpClient(
+            @Named("BaseOkClient") OkHttpClient okHttpClient,
+            HttpLoggingInterceptor loggingInterceptor,
+            MyZoneHeaderInterceptor headerInterceptor,
+            HttpListenerFactory listenerFactory,
+            AuthorizationInterceptor authorizationInterceptor ) {
+        return okHttpClient.newBuilder()
+                .addInterceptor(headerInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .eventListenerFactory(listenerFactory)
+                .addInterceptor(authorizationInterceptor)
                 .build();
     }
 

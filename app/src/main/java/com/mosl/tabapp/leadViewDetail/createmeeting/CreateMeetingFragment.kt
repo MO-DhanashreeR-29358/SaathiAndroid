@@ -53,6 +53,7 @@ import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
 import com.mosl.tabapp.constants.MoslConstant.dd_MM_yyyy
 import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
+import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductAdapter
@@ -185,6 +186,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
         }
+
+        (activity as CommonActivity?)!!.distaLoginApiCall()
     }
 
     private fun setupViews() {

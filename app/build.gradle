@@ -29,7 +29,7 @@ def gitTimestamp() {
 android {
     packagingOptions {
         resources {
-            excludes += ['META-INF/domain.kotlin_module', 'META-INF/rxkotlin.kotlin_module', 'META-INF/coreui_release.kotlin_module', 'META-INF/core_release.kotlin_module', 'META-INF/appuser_release.kotlin_module', 'META-INF/loginui_release.kotlin_module', 'META-INF/data_release.kotlin_module', 'META-INF/rxbinding_release.kotlin_module']
+            excludes += ['META-INF/domain.kotlin_module', 'META-INF/rxkotlin.kotlin_module', 'META-INF/coreui_release.kotlin_module', 'META-INF/core_release.kotlin_module', 'META-INF/appuser_release.kotlin_module','META-INF/appuserMyzone_release.kotlin_module', 'META-INF/loginui_release.kotlin_module', 'META-INF/data_release.kotlin_module', 'META-INF/rxbinding_release.kotlin_module']
         }
     }
     compileSdkVersion rootProject.ext.versions.compileSdkVersion
@@ -103,6 +103,7 @@ android {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
+            proguardFile 'proguard-conceal.pro'
             proguardFile 'proguard-crashlytics.pro'
             proguardFile 'proguard-gson.pro'
             proguardFile 'proguard-slidingpanel.pro'
@@ -143,14 +144,16 @@ android {
 
 }
 
+
 dependencies {
     implementation project(':appuser')
+    implementation project(':appuserMyzone')
     implementation project(':data')
     implementation project(':saathiapi')
     implementation project(':shared')
     implementation project(':domain')
 
-
+    implementation deps.lottie
     implementation deps.androidx.material
     implementation deps.androidx.appcompat
     implementation deps.androidx.cardview

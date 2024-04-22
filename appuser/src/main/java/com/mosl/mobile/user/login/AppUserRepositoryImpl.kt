@@ -5,6 +5,7 @@ import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
+import com.mosl.saathi.api.MyZoneApi
 import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.ValidateLoginRequest
@@ -16,12 +17,15 @@ import com.mosl.saathi.api.model.splash.VersionRequest
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.*
 import javax.inject.Inject
 
 class AppUserRepositoryImpl @Inject constructor(
-  val saathiApi: SaathiApi,
-  val encryptor: AESEncryptor,
-  val context: Context
+    val saathiApi: SaathiApi,
+    val myZoneApi: MyZoneApi,
+    val encryptor: AESEncryptor,
+    val context: Context
 ) : AppUserRepository {
 
   override fun login(request: LoginInfo): Observable<LoginResponse> {
@@ -136,4 +140,20 @@ class AppUserRepositoryImpl @Inject constructor(
                 response: com.mosl.saathi.api.model.login.LoginResponse -> response.transform(objValidateOtpPostModel.password?:"")
         }
     }
+
+    override fun getProfileInfo(): Observable<ProfileInfo> {
+        return myZoneApi.getProfile()
+            .map {
+                ProfileInfo(
+                    inTime = Date()/*DateParser.parseToInTime(it.inTime)*/,
+                    attendanceCount = it.attendanceCount,
+                    webviewUrl = it.redirectUrl,
+                    attendanceType = it.attendanceType,
+                    joiningDate = it.joiningDate,
+                    isInitialDeclaration = it.isInitialDeclaration
+                )
+            }
+            .subscribeOn(Schedulers.newThread())
+    }
+
 }

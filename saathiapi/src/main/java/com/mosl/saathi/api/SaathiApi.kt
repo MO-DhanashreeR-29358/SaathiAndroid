@@ -6,6 +6,7 @@ import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.assignto.SecondaryRmFilterRequest
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
+import com.mosl.saathi.api.model.attendance.*
 import com.mosl.saathi.api.model.aubankmeeting.*
 import com.mosl.saathi.api.model.aubankmeetingreport.MeetingReportRequest
 import com.mosl.saathi.api.model.birthdayanniversary.BirthdayAnniversaryItem

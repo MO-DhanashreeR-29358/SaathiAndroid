@@ -28,8 +28,8 @@ ext.versions = ["compileSdkVersion"   : 33,
                 'multidex'            : '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',
                 'sdp'                 : '1.0.6',
-                'dagger'              : '2.42',
-                'leakCanary'          : '1.6.3',
+                'dagger'              : '2.23.1',
+                'leakCanary'          : '2.10',
                 'okHttp'              : '3.12.2',
                 'circleimageview'     : '2.2.0',
                 'glide'               : '3.7.0',
@@ -183,7 +183,8 @@ ext.deps = [
                 'mockData' : "EkycArtifacts:ekycmockdata:0.0.7",
                 'coreUi' : "EkycArtifacts:ekyccoreui:1.0.0-alpha3",
                 'appUser' : "EkycArtifacts:ekycappuser:1.0.0-alpha3"
-        ]
+        ],
+        'lottie'                 : "com.airbnb.android:lottie:3.0.6"
 
 ]
 
@@ -216,6 +217,7 @@ allprojects {
             }
         }
     }
+
 }
 
 task clean(type: Delete) {

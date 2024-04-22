@@ -257,4 +257,15 @@
     <color name="clr_btn_reset">#666666</color>
     <color name="cl_bg_edit_text">#EFF1F5</color>
     <color name="clr_border_edit_text">#ECECEC</color>
+    <color name="text_color_primary_black">#dd000000</color>
+    <color name="text_color_secondary_black">#89000000</color>
+    <color name="alternate_background">#f0f0f0</color>
+    <color name="text_color_header">#25375b</color>
+    <color name="color_negative">@color/red</color>
+    <color name="text_color_red">#DA0000</color>
+    <color name="button_text_color">@color/white</color>
+    <color name="button_primary_background_color">#fca517</color>
+    <color name="button_primary_disabled_background_color">#BDBDBD</color>
+    <color name="colorPrimaryAttendance">#fca517</color>
+    <color name="light_blue_700">#0091ea</color>
 </resources>

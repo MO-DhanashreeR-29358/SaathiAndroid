@@ -11,6 +11,7 @@ data class User(
   @SerializedName("Mobile") @JvmField val mobile: String?,
   @SerializedName("Email") @JvmField val email: String?,
   @SerializedName("Token") @JvmField val token: String?,
+  @SerializedName("Profile") @JvmField val myZoneProfile: String?,
   @SerializedName("UserTypeSeq") @JvmField val userTypeSequence: String?,
   @SerializedName("DefaultBusinessProfile") @JvmField val defaultBusinessProfile: BusinessProfile,
   @SerializedName(

@@ -16,6 +16,7 @@ interface AppUserRepository {
   fun fetchDigitalSalesKitParentMenu(): Observable<List<DigitalSalesKitData>>
   fun fetchDigitalSalesKitChildMenu(): Observable<List<DigitalSalesKitData>>
   fun logout(logoutInfo: LogoutInfo): Observable<Boolean>
+  fun getProfileInfo(): Observable<ProfileInfo>
 
   fun fnValidateLogin(objValidateLoingPostModel: LoginInfo):Observable<ValidateLoingResponseModel>
 

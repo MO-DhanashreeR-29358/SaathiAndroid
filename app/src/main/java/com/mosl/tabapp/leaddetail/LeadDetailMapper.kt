@@ -86,7 +86,9 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       accountTypeName = AccountTypeName?: emptyString(),
       ChipEventId = ChipEventId?: emptyString(),
       isBandhanBankEmp = IsBandhanBankEmployee?: emptyString(),
-      bandhanBankEmpCode = BandhanBankEmployeeCode?: emptyString()
+      bandhanBankEmpCode = BandhanBankEmployeeCode?: emptyString(),
+      auBankName = auBankName?: emptyString(),
+      auBankBranchCode = auBankBranchCode ?: emptyString()
   )
 }
 
