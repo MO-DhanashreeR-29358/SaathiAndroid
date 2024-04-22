@@ -453,6 +453,13 @@ class WebviewFragment : CommonFragment() {
                     CommonURLRequest(DELETE_REQUEST_KEY, null, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
+                DORMANT_REQUEST_ID->{
+                    return saathiApiNew.getEkycExpressUrl(
+                        CommonURLRequest(DORMANT_REQUEST_KEY, null, null, null)
+                    ).map { Pair(it.url, webViewRequest.id) }
+                }
+
+
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null, null)
@@ -517,5 +524,9 @@ class WebviewFragment : CommonFragment() {
         const val PRIME_ENTRY_KEY = "PrimeEntry"
         const val DELETE_REQUEST_ID = "15"
         const val DELETE_REQUEST_KEY = "LEADUPDATEUTILITY"
+        const val DORMANT_REQUEST_ID="16"
+        const val DORMANT_REQUEST_KEY="Reactivation"
+
+
     }
 }

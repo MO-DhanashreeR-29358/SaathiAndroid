@@ -36,6 +36,7 @@ import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.DELETE_REQUEST_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.DORMANT_REQUEST_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
@@ -110,7 +111,10 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
             NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> DigitalSalesKitFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE ->CreateRequestReactivationFragment()
-                NavigationConstants.NAVIGATE_TO_DORMANT -> CreateRequestReactivationFragment()
+                NavigationConstants.NAVIGATE_TO_DORMANT ->  WebviewFragment().apply {
+                    args.putString(WebviewFragment.PAGE_ID, DORMANT_REQUEST_ID)
+                    arguments = args
+                }
             else -> null
         }
     }
