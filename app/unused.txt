@@ -23433,16 +23433,14 @@ com.mosl.app.core.data.MOSLResponseWrapper:
 com.mosl.app.core.data.MOSLResponseWrapper_Factory:
     public static com.mosl.app.core.data.MOSLResponseWrapper newInstance()
 com.mosl.app.core.data.RepositoryAliasProviders
-com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocation$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocations$1
+com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getOfficeLocationList$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$markOutAttendance$1
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl:
-    public final double distance(com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
-    public final int getALLOWED_RADIUS()
     public final android.content.Context getContext()
     public final com.mosl.data.attendance.AttendanceMapper getMapper()
-    public io.reactivex.rxjava3.core.Observable getNearestOfficeLocation(com.mosl.mobile.domain.attendance.LatLng)
     public io.reactivex.rxjava3.core.Observable getNearestOfficeLocations(com.mosl.mobile.domain.attendance.LatLng)
+    public io.reactivex.rxjava3.core.Observable getOfficeLocationList(com.mosl.mobile.domain.attendance.LatLng)
     public final com.mosl.saathi.api.SaathiApi getSaathiApi()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
     public io.reactivex.rxjava3.core.Observable markOutAttendance(com.mosl.mobile.domain.attendance.model.MarkAttendanceData)
@@ -27960,8 +27958,8 @@ com.mosl.mobile.domain.attendance.AppInfo:
     public final com.mosl.mobile.domain.attendance.AppInfo copy(java.lang.String,java.lang.String,java.lang.String,int)
     public static synthetic com.mosl.mobile.domain.attendance.AppInfo copy$default(com.mosl.mobile.domain.attendance.AppInfo,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
 com.mosl.mobile.domain.attendance.AttendanceRepository:
-    public abstract io.reactivex.rxjava3.core.Observable getNearestOfficeLocation(com.mosl.mobile.domain.attendance.LatLng)
     public abstract io.reactivex.rxjava3.core.Observable getNearestOfficeLocations(com.mosl.mobile.domain.attendance.LatLng)
+    public abstract io.reactivex.rxjava3.core.Observable getOfficeLocationList(com.mosl.mobile.domain.attendance.LatLng)
     public abstract io.reactivex.rxjava3.core.Observable logAttendancePopup(java.lang.String)
     public abstract io.reactivex.rxjava3.core.Observable markEmpAttendance(com.mosl.mobile.domain.attendance.model.MarkAttendanceData)
     public abstract io.reactivex.rxjava3.core.Observable markOutAttendance(com.mosl.mobile.domain.attendance.model.MarkAttendanceData)
@@ -27988,7 +27986,12 @@ com.mosl.mobile.domain.attendance.model.OfficeLocation:
     public static synthetic com.mosl.mobile.domain.attendance.model.OfficeLocation copy$default(com.mosl.mobile.domain.attendance.model.OfficeLocation,double,double,int,java.lang.String,int,java.lang.Object)
 com.mosl.mobile.domain.attendance.model.SelfApproval
 com.mosl.mobile.domain.attendance.model.SelfAttendance
-com.mosl.mobile.domain.attendance.model.UserLocationInfo
+com.mosl.mobile.domain.attendance.model.UserLocationInfo:
+    public final double component1()
+    public final com.mosl.mobile.domain.attendance.model.OfficeLocation component2()
+    public final com.mosl.mobile.domain.attendance.LatLng component3()
+    public final com.mosl.mobile.domain.attendance.model.UserLocationInfo copy(double,com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
+    public static synthetic com.mosl.mobile.domain.attendance.model.UserLocationInfo copy$default(com.mosl.mobile.domain.attendance.model.UserLocationInfo,double,com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng,int,java.lang.Object)
 com.mosl.mobile.domain.bank.BankCodeModel:
     public final int component1()
     public final java.lang.String component2()
@@ -33266,12 +33269,13 @@ com.mosl.tabapp.attendancedialog.AttendanceDialogView:
     public abstract io.reactivex.rxjava3.core.Observable onSubmitClick()
     public abstract void renderEmpAction(java.lang.String)
 com.mosl.tabapp.attendancedialog.AttendanceHelper:
+    public final double distance(com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
     public final io.reactivex.rxjava3.disposables.CompositeDisposable getDisposable()
     public final com.google.gson.Gson getGson()
     public final com.mosl.tabapp.navigation.ScreenNavigatorImpl getScreenNavigator()
     public final com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
-    private final void showAttendancePopupGeoFancing(com.mosl.commons.data.UiModel)
+    private final void showAttendancePopupWFH(com.mosl.commons.data.UiModel)
 com.mosl.tabapp.attendancedialog.AttendanceHelper_Factory
 com.mosl.tabapp.attendancedialog.AttendancePageData:
     public final java.lang.String component1()
@@ -74601,16 +74605,16 @@ com.mosl.app.core.data.MOSLResponseWrapper:
 com.mosl.app.core.data.MOSLResponseWrapper_Factory:
     public static com.mosl.app.core.data.MOSLResponseWrapper_Factory create()
     public static com.mosl.app.core.data.MOSLResponseWrapper get()
-com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getOfficeLocationList$1:
-    public static kotlin.Pair apply()
+com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocation$1:
+    public static com.mosl.mobile.domain.attendance.model.UserLocationInfo apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$markEmpAttendance$1:
     public static java.lang.String apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$officeLocation$1:
     public final java.util.List apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl:
-    public final int ALLOWED_RADIUS
     public final android.content.Context context
     public final com.mosl.data.attendance.AttendanceMapper mapper
+    public static int getALLOWED_RADIUS()
     public static io.reactivex.rxjava3.core.Observable logAttendancePopup()
     public static io.reactivex.rxjava3.core.Observable markEmpAttendance()
     public static io.reactivex.rxjava3.core.Observable officeLocation()
@@ -74671,7 +74675,7 @@ com.mosl.app.core.data.dashboard.DashboardMapper:
 com.mosl.app.core.data.dashboard.DashboardRepositoryImpl$getActionableCount$1:
     public static com.mosl.mobile.domain.dashboard.ActionableCount apply()
 com.mosl.app.core.data.dashboard.DashboardRepositoryImpl$getActionableCount$2:
-    public static kotlin.Pair apply$1()
+    public static kotlin.Pair apply()
 com.mosl.app.core.data.dashboard.DashboardRepositoryImpl$getDashboardMetaData$1:
     public final java.util.List apply()
 com.mosl.app.core.data.dashboard.DashboardRepositoryImpl$getIncentive$1:
@@ -75535,9 +75539,9 @@ com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$getNsdlKraEsignRequest$1:
 com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$getNsdlKraEsignResponse$1:
     public final java.lang.String apply$14()
 com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$getOfflineEmudraUrl$1:
-    public final kotlin.Pair apply$2()
+    public final kotlin.Pair apply$1()
 com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$getOfflineKraEmudraUrl$1:
-    public final kotlin.Pair apply$2()
+    public final kotlin.Pair apply$1()
 com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$getPushDataInDrishti$1:
     public final com.mosl.ekycexpress.esign.DrishtiModel apply()
 com.mosl.ekycexpress.data.esign.EsignRepositoryImpl$offlineEsignStatus$1:
@@ -76710,9 +76714,9 @@ com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$19:
 com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$1:
     public final io.reactivex.rxjava3.core.Observable apply$26()
 com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$20:
-    public static kotlin.Pair apply$3()
+    public static kotlin.Pair apply$2()
 com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$21:
-    public static kotlin.Pair apply$4()
+    public static kotlin.Pair apply$3()
 com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$22:
     public final void accept$15()
 com.mosl.ekycexpress.offer.pay.PayOfferPresenter$start$2:
@@ -76971,17 +76975,17 @@ com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$27:
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$28:
     public final void accept$3()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$29:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$2:
     public final boolean test$7()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$30:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$31:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$32:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$33:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$34:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$35:
@@ -77011,9 +77015,9 @@ com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$45:
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$46:
     public final void accept$8()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$47:
-    public static kotlin.Pair apply$6()
+    public static kotlin.Pair apply$5()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$48$1:
-    public static kotlin.Pair apply$7()
+    public static kotlin.Pair apply$6()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$48:
     public static io.reactivex.rxjava3.core.Observable apply$42()
 com.mosl.ekycexpress.upload.fragments.aadharCard.AadharCardPresenter$start$49:
@@ -77071,7 +77075,7 @@ com.mosl.ekycexpress.upload.fragments.bankStatement.BankStatementPresenter$start
 com.mosl.ekycexpress.upload.fragments.bankStatement.BankStatementPresenter$start$15:
     public final void accept()
 com.mosl.ekycexpress.upload.fragments.bankStatement.BankStatementPresenter$start$16:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.bankStatement.BankStatementPresenter$start$17:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.bankStatement.BankStatementPresenter$start$18:
@@ -77165,7 +77169,7 @@ com.mosl.ekycexpress.upload.fragments.cheque.ChequePresenter$start$10:
 com.mosl.ekycexpress.upload.fragments.cheque.ChequePresenter$start$11:
     public static void accept$21()
 com.mosl.ekycexpress.upload.fragments.cheque.ChequePresenter$start$12:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.cheque.ChequePresenter$start$13:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.cheque.ChequePresenter$start$14:
@@ -77235,7 +77239,7 @@ com.mosl.ekycexpress.upload.fragments.panCard.PanCardPresenter$start$11:
 com.mosl.ekycexpress.upload.fragments.panCard.PanCardPresenter$start$12:
     public final void accept$3()
 com.mosl.ekycexpress.upload.fragments.panCard.PanCardPresenter$start$13:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.panCard.PanCardPresenter$start$14:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.panCard.PanCardPresenter$start$15:
@@ -77302,7 +77306,7 @@ com.mosl.ekycexpress.upload.fragments.pansign.PanSignPresenter$start$15:
 com.mosl.ekycexpress.upload.fragments.pansign.PanSignPresenter$start$16:
     public final void accept$3()
 com.mosl.ekycexpress.upload.fragments.pansign.PanSignPresenter$start$17:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.ekycexpress.upload.fragments.pansign.PanSignPresenter$start$18:
     public final void accept$15()
 com.mosl.ekycexpress.upload.fragments.pansign.PanSignPresenter$start$19:
@@ -78970,7 +78974,7 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public static void handleAttendanceData()
     public static void setAttendanceFragment()
     public static void setClickListener()
-    public static void showAttendancePopupWFH()
+    public static void showAttendancePopupGeoFancing()
     public static void showMockDialogIfLocationFromMockProvider()
     public static void showMockLocationDialog$app_uatRelease()
 com.mosl.tabapp.attendancedialog.MockLocationDetector
@@ -79215,7 +79219,7 @@ com.mosl.tabapp.banner.BannerPresenter$start$8:
 com.mosl.tabapp.banner.BannerPresenter$start$9:
     public final boolean test$15()
 com.mosl.tabapp.banner.BannerPresenter$start$bannerImageClickObs$1:
-    public final kotlin.Pair apply$5()
+    public final kotlin.Pair apply$4()
 com.mosl.tabapp.banner.BannerPresenter:
     public static final synthetic com.mosl.app.core.base.BaseView access$getView$p$2()
     public static com.mosl.tabapp.banner.BannerScreenData getData()
@@ -81541,7 +81545,7 @@ com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter$start$11:
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter$start$12:
     public final void accept$50()
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter$start$13:
-    public static kotlin.Pair apply$8()
+    public static kotlin.Pair apply$7()
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter$start$14:
     public final io.reactivex.rxjava3.core.ObservableSource apply$25()
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter$start$15:
@@ -82139,7 +82143,6 @@ com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment:
     public static void handlingWhenSameAsCheckboxClickedAndUnChecked()
     public static void leadUpdatedDialog()
     public static void profileVisibility()
-    public final void removeErrorMessage()
     public static final void renderAddProduct$lambda$23$lambda$22()
     public static void renderClient()
     public static void renderContact$1()
@@ -82728,7 +82731,7 @@ com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl$getStatusRowDatas$1
 com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl$transferLeadForMobile$1:
     public static com.mosl.tabapp.leadcreation.domain.TransferLead apply()
 com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl$updateProfile$1:
-    public static kotlin.Pair apply$9()
+    public static kotlin.Pair apply$8()
 com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl:
     public static final com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl$Companion Companion
     public static final synthetic com.mosl.tabapp.common.RowData access$getSELECT_ROW_DATA$cp()
@@ -82937,7 +82940,7 @@ com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter$start$113:
 com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter$start$114:
     public final void accept$8()
 com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter$start$115:
-    public static kotlin.Pair apply$10()
+    public static kotlin.Pair apply$9()
 com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter$start$116:
     public final io.reactivex.rxjava3.core.ObservableSource apply$25()
 com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter$start$117:
@@ -84615,33 +84618,33 @@ com.mosl.tabapp.webview.WebViewRequest:
 com.mosl.tabapp.webview.WebviewFragment$$InternalSyntheticLambda$1$6355d92fe8c00e92a59ec626624896f620d77127fb2823f6c3c43128736957aa$0
 com.mosl.tabapp.webview.WebviewFragment$Companion
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$10:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$11:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$12:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$13:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$14:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$1:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$2:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$3:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$4:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$5:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$6:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$7:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$8:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$9:
-    public final kotlin.Pair apply$11()
+    public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$start$1:
     public final boolean test$29()
 com.mosl.tabapp.webview.WebviewFragment$start$2:
@@ -84842,7 +84845,7 @@ com.mosl.user.data.login.MyZoneLoginRepositoryImpl$start$3:
 com.mosl.user.data.login.MyZoneLoginRepositoryImpl$start$4:
     public final boolean test$31()
 com.mosl.user.data.login.MyZoneLoginRepositoryImpl$start$5:
-    public static kotlin.Pair apply$12()
+    public static kotlin.Pair apply$11()
 com.mosl.user.data.login.MyZoneLoginRepositoryImpl$start$6:
     public final io.reactivex.rxjava3.core.ObservableSource apply$25()
 com.mosl.user.data.login.MyZoneLoginRepositoryImpl$start$7:

@@ -67,24 +67,24 @@ class AttendanceHelper @Inject constructor(
 
     private fun handleAttendanceData(latLngObservable: Observable<Pair<ProfileInfo, LatLng>>) {
 
-       /* disposable.add(latLngObservable
-            .filter { t -> t.first.attendanceType == 1 && t.first.attendanceCount != 1 }
+        // user that have biometric assigned will show attendance popup forcible
+       disposable.add(latLngObservable
+            .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
             .map { t -> t.second }
             .switchMap { location ->
                 attendanceRepo.getNearestOfficeLocation(location)
                     .compose(applyUiModel())
             }
-            .subscribe(this::showAttendancePopupGeoFancing))*/
+            .subscribe(this::showAttendancePopupGeoFancing))
 
-        // user that have biometric assigned will show attendance popup forcible
-        disposable.add(latLngObservable
+        /* disposable.add(latLngObservable
             .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
             .map { t -> t.second }
             .switchMap { location ->
                 attendanceRepo.getOfficeLocationList(location)
                     .compose(applyUiModel())
             }
-            .subscribe(this::showAttendancePopupWFH))
+            .subscribe(this::showAttendancePopupWFH))*/
 
         disposable.add(latLngObservable
             .filter { t -> t.first.attendanceCount == 1 }
