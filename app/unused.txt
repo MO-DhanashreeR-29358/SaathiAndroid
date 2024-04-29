@@ -33032,7 +33032,7 @@ com.mosl.shared.util.Utility:
     public static java.lang.String getDate(java.util.Date,java.lang.String)
     public static java.lang.String getUuid(android.content.Context)
 com.mosl.tabapp.ActivityBuilder
-com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_uatRelease
+com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_prodRelease
 com.mosl.tabapp.AppComponent:
     public abstract void inject(com.mosl.tabapp.SaathiAppImpl)
 com.mosl.tabapp.ApplicationModule
@@ -33048,11 +33048,11 @@ com.mosl.tabapp.ApplicationObserver_Factory:
 com.mosl.tabapp.BR
 com.mosl.tabapp.BuildConfig
 com.mosl.tabapp.CommonActivityBuilder
-com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_uatRelease
-com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_uatRelease
-com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_uatRelease
-com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_uatRelease
-com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_uatRelease
+com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_prodRelease
+com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_prodRelease
+com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_prodRelease
+com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_prodRelease
+com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_prodRelease
 com.mosl.tabapp.CommonUiModel:
     public void <init>()
 com.mosl.tabapp.DataBinderMapperImpl$InnerBrLookup
@@ -33403,7 +33403,7 @@ com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew$MeetingReportTabl
 com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew_MembersInjector
 com.mosl.tabapp.banner.BannerFragment:
     public final io.reactivex.rxjava3.subjects.PublishSubject getDataActionSubject()
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.banner.BannerPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.banner.BannerPresenter)
 com.mosl.tabapp.banner.BannerFragment_MembersInjector:
     private final javax.inject.Provider presenterProvider
     public void <init>(javax.inject.Provider)
@@ -33670,12 +33670,12 @@ com.mosl.tabapp.core.ActivityNavigationHelper:
     public static final java.lang.String DASHBOARD
     public static final java.lang.String LEADVIEW
     public static final java.lang.String PENDINGAPPROVAL
-    public final com.mosl.tabapp.banner.BannerNavigator getBannerNavigator$app_uatRelease()
-    public final com.mosl.tabapp.ekyc.EkycNavigator getEkycNavigator$app_uatRelease()
+    public final com.mosl.tabapp.banner.BannerNavigator getBannerNavigator$app_prodRelease()
+    public final com.mosl.tabapp.ekyc.EkycNavigator getEkycNavigator$app_prodRelease()
     public final com.mosl.navigator.Navigator getNavigator()
     public final com.mosl.saathi.api.SaathiApi getSaathiApi()
-    public final com.mosl.navigator.BaseNavigator getScreenNavigator$app_uatRelease()
-    public final com.mosl.mobile.user.login.UserManagerImpl getUserManager$app_uatRelease()
+    public final com.mosl.navigator.BaseNavigator getScreenNavigator$app_prodRelease()
+    public final com.mosl.mobile.user.login.UserManagerImpl getUserManager$app_prodRelease()
     public static synthetic void openEkycApp$default(com.mosl.tabapp.core.ActivityNavigationHelper,boolean,java.lang.String,int,java.lang.Object)
 com.mosl.tabapp.core.ActivityNavigationHelper_Factory:
     public static com.mosl.tabapp.core.ActivityNavigationHelper newInstance(com.mosl.navigator.BaseNavigator,com.mosl.tabapp.ekyc.EkycNavigator,com.mosl.mobile.user.login.UserManagerImpl,com.mosl.tabapp.banner.BannerNavigator,com.mosl.navigator.Navigator,com.mosl.saathi.api.SaathiApi)
@@ -33766,8 +33766,8 @@ com.mosl.tabapp.core.CommonActivity_MembersInjector:
     public synthetic bridge void injectMembers(java.lang.Object)
 com.mosl.tabapp.core.CommonFragment:
     protected final void closedSectionExpansion(android.view.View,android.widget.TextView)
-    public final void setNavigator$app_uatRelease(com.mosl.tabapp.navigation.ScreenNavigatorImpl)
-    public final void setUserManager$app_uatRelease(com.mosl.mobile.user.login.UserManagerImpl)
+    public final void setNavigator$app_prodRelease(com.mosl.tabapp.navigation.ScreenNavigatorImpl)
+    public final void setUserManager$app_prodRelease(com.mosl.mobile.user.login.UserManagerImpl)
 com.mosl.tabapp.core.CommonFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -33891,15 +33891,15 @@ com.mosl.tabapp.dashboard.base.DashboardFragment:
     public static final java.lang.String TRENDS_TITLE
     public static final java.lang.String YTD
     public final android.os.Bundle getArgs()
-    public final com.mosl.tabapp.databinding.FragDashboardAufsbBinding getBindingAusfbDhshboard$app_uatRelease()
+    public final com.mosl.tabapp.databinding.FragDashboardAufsbBinding getBindingAusfbDhshboard$app_prodRelease()
     public final io.reactivex.rxjava3.subjects.PublishSubject getSubject()
-    public final boolean isUserLogin$app_uatRelease()
+    public final boolean isUserLogin$app_prodRelease()
     public final void setAttendanceHelper(com.mosl.tabapp.attendancedialog.AttendanceHelper)
     public final void setMyZoneLoginRepository(com.mosl.user.data.login.MyZoneLoginRepositoryImpl)
     public final void setMyZoneUserManager(com.mosl.user.login.MyZoneUserManagerImpl)
     public final void setPresenter(com.mosl.tabapp.dashboard.base.DashboardPresenter)
     public final void setUserLocationHelper(com.mosl.tabapp.attendancedialog.UserLocationHelper)
-    public final void setUserLogin$app_uatRelease(boolean)
+    public final void setUserLogin$app_prodRelease(boolean)
 com.mosl.tabapp.dashboard.base.DashboardFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -33941,18 +33941,18 @@ com.mosl.tabapp.dashboard.clients.ClientsFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.clients.ClientsFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.clients.ClientsModule module
     public void <init>(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.clients.ClientsView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.clients.ClientsModule module
     public void <init>(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.clients.ClientsModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.clients.ClientsPresenter:
@@ -33994,18 +33994,18 @@ com.mosl.tabapp.dashboard.leads.LeadsFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.leads.LeadsFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.leads.LeadsModule module
     public void <init>(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.leads.LeadsView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.leads.LeadsModule module
     public void <init>(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.leads.LeadsModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.leads.LeadsPresenter:
@@ -34032,18 +34032,18 @@ com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.leads.report.LeadsReportModule module
     public void <init>(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.leads.report.LeadsReportView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.leads.report.LeadsReportModule module
     public void <init>(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.leads.report.LeadsReportModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.leads.report.LeadsReportPresenter:
@@ -34077,18 +34077,18 @@ com.mosl.tabapp.dashboard.productivity.ProductivityFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.productivity.ProductivityFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.productivity.ProductivityModule module
     public void <init>(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.productivity.productivityView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.productivity.ProductivityModule module
     public void <init>(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.productivity.ProductivityModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.productivity.ProductivityPresenter:
@@ -34120,18 +34120,18 @@ com.mosl.tabapp.dashboard.report.DashboardReportFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.report.DashboardReportFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.DashboardReportModule module
     public void <init>(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.DashboardReportData get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.DashboardReportModule module
     public void <init>(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.DashboardReportModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.DashboardReportView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.report.DashboardReportPresenter:
@@ -34193,18 +34193,18 @@ com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment_MembersInj
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule module
     public void <init>(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.DashboardReportData get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule module
     public void <init>(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignlView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter:
@@ -34254,18 +34254,18 @@ com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment_Memb
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule module
     public void <init>(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportData get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule module
     public void <init>(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportPresenter:
@@ -34288,20 +34288,20 @@ com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment_MembersInjector:
     public void injectMembers(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule:
-    public final com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView provideBusinessSnapshotAdvView$app_uatRelease(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment)
-com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotAdvView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_uatReleaseFactory:
+    public final com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView provideBusinessSnapshotAdvView$app_prodRelease(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment)
+com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotAdvView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule module
     public void <init>(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule module
     public void <init>(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotPresenter:
@@ -34327,18 +34327,18 @@ com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment_MembersIn
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule module
     public void <init>(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule module
     public void <init>(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvPresenter:
@@ -34364,18 +34364,18 @@ com.mosl.tabapp.dashboard.target.TargetLableItem:
     public final com.mosl.tabapp.dashboard.target.TargetView getAuTargetView()
     public final android.content.Context getContext()
     public final com.mosl.mobile.domain.target.Table1ItemModel getItemModel()
-com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.target.TargetModule module
     public void <init>(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.target.TargetView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.target.TargetModule module
     public void <init>(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.target.TargetModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.target.TargetPresenter:
@@ -34422,18 +34422,18 @@ com.mosl.tabapp.dashboard.teamtarget.TeamTargetLableItem:
     public final com.mosl.tabapp.dashboard.teamtarget.TeamTargetView getAuTargetView()
     public final android.content.Context getContext()
     public final com.mosl.mobile.domain.teamtarget.TeamTableItemModel getItemModel()
-com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule module
     public void <init>(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.teamtarget.TeamTargetView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule module
     public void <init>(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.teamtarget.TeamTargetPresenter:
@@ -34478,18 +34478,18 @@ com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment_MembersI
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule module
     public void <init>(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayView get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule module
     public void <init>(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayPresenter:
@@ -34515,18 +34515,18 @@ com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule module
     public void <init>(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
     public com.mosl.tabapp.model.dashboard.DashboardModel get()
     public synthetic bridge java.lang.Object get()
-com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_uatReleaseFactory:
+com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule module
     public void <init>(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
-    public static com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_uatReleaseFactory create(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
+    public static com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_prodReleaseFactory create(com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule,javax.inject.Provider)
     public com.mosl.tabapp.dashboard.trends.MonthsOnMonthsView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.dashboard.trends.TrendsPresenter:
@@ -35334,11 +35334,11 @@ com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment_MembersInject
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule module
     public void <init>(com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule,javax.inject.Provider)
-    public static com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule,javax.inject.Provider)
+    public static com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule,javax.inject.Provider)
     public com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitPresenter_Factory
@@ -35368,7 +35368,7 @@ com.mosl.tabapp.geoLocation.GeoTaggingFragment:
     public final void setLocation(android.location.Location)
     public final void setMapMarkerExists(boolean)
     public final void setMockLocationEnabled(boolean)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.geoLocation.GeoTaggingPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.geoLocation.GeoTaggingPresenter)
     public final void setUiSubject(io.reactivex.rxjava3.subjects.PublishSubject)
     public final void setValidDistance(boolean)
 com.mosl.tabapp.geoLocation.GeoTaggingFragment_MembersInjector:
@@ -35468,7 +35468,7 @@ com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment$Companion:
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment:
     public static final synthetic java.lang.String access$getLeadId$cp()
     public static final synthetic java.lang.String access$getMUcid$cp()
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter)
 com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -35692,8 +35692,8 @@ com.mosl.tabapp.leadViewDetail.document.DocumentFragment:
     public android.app.Dialog dialog
     public final android.app.Dialog getDialog()
     public final void setDialog(android.app.Dialog)
-    public final void setImageUploadHelper$app_uatRelease(com.mosl.tabapp.permission.ImageUploadHelper)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.document.DocumentPresenter)
+    public final void setImageUploadHelper$app_prodRelease(com.mosl.tabapp.permission.ImageUploadHelper)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.document.DocumentPresenter)
 com.mosl.tabapp.leadViewDetail.document.DocumentFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -35756,11 +35756,11 @@ com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule module
     public void <init>(com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule,javax.inject.Provider)
-    public static com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule,javax.inject.Provider)
+    public static com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule,javax.inject.Provider)
     public com.mosl.tabapp.leadViewDetail.history.MappingHistoryView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.leadViewDetail.history.MappingHistoryPresenter_Factory
@@ -35785,7 +35785,7 @@ com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment:
     public io.reactivex.rxjava3.core.Observable onClientPortfolioDetailClicked()
     public io.reactivex.rxjava3.core.Observable onLeadDetailClicked()
     public void renderClientDetail(com.mosl.commons.data.UiModel)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailPresenter)
 com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -35870,7 +35870,7 @@ com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment:
     public static final java.lang.String PROFILE_ADDRESS
     public final int getCreateMeetingId()
     public final void setCreateMeetingId(int)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerPresenter)
 com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -35918,7 +35918,7 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment:
     private static final int RADIO_BUTTON
     private static final int TEXT_BOX
     public final java.lang.String prefix(int)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter)
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -35943,29 +35943,29 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule_GetLeadIdFactory:
     public java.lang.String get()
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter_Factory
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AddedAttendeeAdapter:
-    public final java.util.List getAttendeeModelList$app_uatRelease()
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setAttendeeModelList$app_uatRelease(java.util.List)
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final java.util.List getAttendeeModelList$app_prodRelease()
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setAttendeeModelList$app_prodRelease(java.util.List)
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AddedSplAttendeeAdapter:
-    public final java.util.List getAttendeeModelList$app_uatRelease()
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setAttendeeModelList$app_uatRelease(java.util.List)
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final java.util.List getAttendeeModelList$app_prodRelease()
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setAttendeeModelList$app_prodRelease(java.util.List)
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AttendeeAdapter$HolderView:
-    public final void setLinaerLayout$app_uatRelease(android.widget.LinearLayout)
-    public final void setTvAttendeeName$app_uatRelease(android.widget.TextView)
+    public final void setLinaerLayout$app_prodRelease(android.widget.LinearLayout)
+    public final void setTvAttendeeName$app_prodRelease(android.widget.TextView)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AttendeeAdapter:
-    public final android.content.Context getContext$app_uatRelease()
-    public final void setContext$app_uatRelease(android.content.Context)
+    public final android.content.Context getContext$app_prodRelease()
+    public final void setContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$SplAttendeeAdapter$HolderView:
     public final void setLinaerLayout(android.widget.LinearLayout)
     public final void setTvAttendeeName(android.widget.TextView)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$SplAttendeeAdapter$getFilter$1:
-    public final android.widget.Filter$FilterResults getFilterResults$app_uatRelease()
+    public final android.widget.Filter$FilterResults getFilterResults$app_prodRelease()
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$SplAttendeeAdapter:
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$onCategoryTextChanged$1
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$onMeetingDescriptionTextChanged$1
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$onSubCategoryTextChanged$1
@@ -35976,7 +35976,7 @@ com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment:
     public void renderCategoryTextChanged(java.lang.String)
     public void renderMeetingDescriptionTextChanged(java.lang.String)
     public void renderSubCategoryTextChanged(java.lang.String)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingPresenter)
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -36066,7 +36066,7 @@ com.mosl.tabapp.leadcreation.ui.LeadCreationFragment:
     public io.reactivex.rxjava3.core.Observable onBranchChange()
     public void renderBranchChange()
     public final void setBranchCodePreference(com.mosl.app.core.prefs.StringPreference)
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter)
     private final void setSpinnerDataWithSelection(android.widget.Spinner,android.widget.ArrayAdapter,java.util.List,com.mosl.tabapp.common.RowData)
 com.mosl.tabapp.leadcreation.ui.LeadCreationFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
@@ -36500,8 +36500,8 @@ com.mosl.tabapp.login.otpverification.helper.otptextview.OtpTextView:
     public final void showError()
     public final void showSuccess()
 com.mosl.tabapp.login.otpverification.helper.otptextview.Utils:
-    public final int getPixelsSp$app_uatRelease(android.content.Context,float)
-    public final int getPixelsSp$app_uatRelease(android.content.Context,int)
+    public final int getPixelsSp$app_prodRelease(android.content.Context,float)
+    public final int getPixelsSp$app_prodRelease(android.content.Context,int)
 com.mosl.tabapp.model.AddedAttendeeModel:
     private java.lang.String attendeeProfileName
     public java.lang.String getAttendeeProfileName()
@@ -36819,7 +36819,7 @@ com.mosl.tabapp.navigation.ScreenNavigatorImpl_Factory:
     public static com.mosl.tabapp.navigation.ScreenNavigatorImpl newInstance(androidx.appcompat.app.AppCompatActivity,com.mosl.navigator.NavigationHelper,com.mosl.mobile.user.login.UserManager,com.mosl.navigator.Navigator,com.mosl.tabapp.util.EkycHelper)
 com.mosl.tabapp.notification.NotificationFragment:
     public static final java.lang.String ERROR_MSG
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.notification.NotificationPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.notification.NotificationPresenter)
 com.mosl.tabapp.notification.NotificationFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -36832,7 +36832,7 @@ com.mosl.tabapp.notification.NotificationFragment_MembersInjector:
     public void injectMembers(com.mosl.tabapp.notification.NotificationFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
 com.mosl.tabapp.notification.NotificationItem:
-    public final com.mosl.mobile.domain.notification.NotificationResponseData getModel$app_uatRelease()
+    public final com.mosl.mobile.domain.notification.NotificationResponseData getModel$app_prodRelease()
 com.mosl.tabapp.notification.NotificationModule
 com.mosl.tabapp.notification.NotificationPresenter:
     public static final java.lang.String BIRTHDAY
@@ -36845,7 +36845,7 @@ com.mosl.tabapp.notification.NotificationUiEvent$ItemClick:
     public final com.mosl.tabapp.notification.NotificationUiEvent$ItemClick copy(java.lang.String)
     public static synthetic com.mosl.tabapp.notification.NotificationUiEvent$ItemClick copy$default(com.mosl.tabapp.notification.NotificationUiEvent$ItemClick,java.lang.String,int,java.lang.Object)
 com.mosl.tabapp.pendingApproval.PendingApprovalFragment:
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.pendingApproval.PendingApprovalPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.pendingApproval.PendingApprovalPresenter)
 com.mosl.tabapp.pendingApproval.PendingApprovalFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -36858,7 +36858,7 @@ com.mosl.tabapp.pendingApproval.PendingApprovalFragment_MembersInjector:
     public void injectMembers(com.mosl.tabapp.pendingApproval.PendingApprovalFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
 com.mosl.tabapp.pendingApproval.PendingApprovalItem:
-    public final com.mosl.mobile.domain.pendingapproval.ApprovalSummaryByEmployeeItemModel getModel$app_uatRelease()
+    public final com.mosl.mobile.domain.pendingapproval.ApprovalSummaryByEmployeeItemModel getModel$app_prodRelease()
 com.mosl.tabapp.pendingApproval.PendingApprovalModule
 com.mosl.tabapp.pendingApproval.PendingApprovalPresenter_Factory
 com.mosl.tabapp.pendingApproval.PendingApprovalUiEvent$ItemClick:
@@ -36947,7 +36947,7 @@ com.mosl.tabapp.qrcode.QRCodePresenter_Factory
 com.mosl.tabapp.query.QueryFragment:
     public static final java.lang.String TELE_PHONE_1
     public static final java.lang.String TELE_PHONE_2
-    public final io.reactivex.rxjava3.subjects.PublishSubject getUiEventSubject$app_uatRelease()
+    public final io.reactivex.rxjava3.subjects.PublishSubject getUiEventSubject$app_prodRelease()
     public final void setPresenter(com.mosl.tabapp.query.QueryPresenter)
 com.mosl.tabapp.query.QueryFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
@@ -37058,11 +37058,11 @@ com.mosl.tabapp.report.ReportFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.report.ReportFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.report.ReportModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.report.ReportModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.report.ReportModule module
     public void <init>(com.mosl.tabapp.report.ReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.report.ReportModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.report.ReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.report.ReportModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.report.ReportModule,javax.inject.Provider)
     public com.mosl.tabapp.report.ReportView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.report.ReportPresenter:
@@ -37090,11 +37090,11 @@ com.mosl.tabapp.report.hierarchy.HierarchyReportFragment_MembersInjector:
     public static dagger.MembersInjector create(javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider,javax.inject.Provider)
     public void injectMembers(com.mosl.tabapp.report.hierarchy.HierarchyReportFragment)
     public synthetic bridge void injectMembers(java.lang.Object)
-com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_uatReleaseFactory:
+com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_prodReleaseFactory:
     private final javax.inject.Provider fragmentProvider
     private final com.mosl.tabapp.report.hierarchy.HierarchyReportModule module
     public void <init>(com.mosl.tabapp.report.hierarchy.HierarchyReportModule,javax.inject.Provider)
-    public static com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_uatReleaseFactory create(com.mosl.tabapp.report.hierarchy.HierarchyReportModule,javax.inject.Provider)
+    public static com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_prodReleaseFactory create(com.mosl.tabapp.report.hierarchy.HierarchyReportModule,javax.inject.Provider)
     public com.mosl.tabapp.report.hierarchy.HierarchyReportView get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.report.hierarchy.HierarchyReportPresenter:
@@ -37192,28 +37192,28 @@ com.mosl.tabapp.service.location.LocationWorker_MembersInjector:
     public void injectMembers(com.mosl.tabapp.service.location.LocationWorker)
     public synthetic bridge void injectMembers(java.lang.Object)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$AddedAttendeeAdapter:
-    public final java.util.List getAttendeeModelList$app_uatRelease()
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setAttendeeModelList$app_uatRelease(java.util.List)
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final java.util.List getAttendeeModelList$app_prodRelease()
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setAttendeeModelList$app_prodRelease(java.util.List)
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$AddedSplAttendeeAdapter:
-    public final java.util.List getAttendeeModelList$app_uatRelease()
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setAttendeeModelList$app_uatRelease(java.util.List)
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final java.util.List getAttendeeModelList$app_prodRelease()
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setAttendeeModelList$app_prodRelease(java.util.List)
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$AttendeeAdapter$HolderView:
     public final void setLinearLayout(android.widget.LinearLayout)
     public final void setTvAttendeeName(android.widget.TextView)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$AttendeeAdapter:
-    public final android.content.Context getContext$app_uatRelease()
-    public final void setContext$app_uatRelease(android.content.Context)
+    public final android.content.Context getContext$app_prodRelease()
+    public final void setContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$SplAttendeeAdapter$HolderView:
     public final void setTvAttendeeName(android.widget.TextView)
 com.mosl.tabapp.setappointment.SetAppointmentFragment$SplAttendeeAdapter:
-    public final android.content.Context getMContext$app_uatRelease()
-    public final void setMContext$app_uatRelease(android.content.Context)
+    public final android.content.Context getMContext$app_prodRelease()
+    public final void setMContext$app_prodRelease(android.content.Context)
 com.mosl.tabapp.setappointment.SetAppointmentFragment:
-    public final void setPresenter$app_uatRelease(com.mosl.tabapp.setappointment.SetAppointmentPresenter)
+    public final void setPresenter$app_prodRelease(com.mosl.tabapp.setappointment.SetAppointmentPresenter)
 com.mosl.tabapp.setappointment.SetAppointmentFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -37272,7 +37272,7 @@ com.mosl.tabapp.settings.SettingActivity:
 com.mosl.tabapp.settings.SettingActivity_MembersInjector
 com.mosl.tabapp.settings.SettingFragment:
     public final com.mosl.tabapp.service.ForegroundService getMService()
-    public final void setFusedLocation$app_uatRelease(com.mosl.tabapp.common.FusedLocation)
+    public final void setFusedLocation$app_prodRelease(com.mosl.tabapp.common.FusedLocation)
     public final void setTwentyFourSevenCheck(com.mosl.app.core.prefs.BooleanPreference)
 com.mosl.tabapp.settings.SettingFragmentModule:
     public void <init>()
@@ -37284,7 +37284,7 @@ com.mosl.tabapp.settings.SettingFragmentModule_ProvideSettingsFragmentFactory:
     public com.mosl.tabapp.common.FusedLocation get()
     public synthetic bridge java.lang.Object get()
 com.mosl.tabapp.settings.SettingFragmentProvider
-com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease
+com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_prodRelease
 com.mosl.tabapp.settings.SettingFragment_MembersInjector:
     private final javax.inject.Provider fusedLocationProvider
     private final javax.inject.Provider twentyFourSevenCheckProvider
@@ -37493,7 +37493,7 @@ com.mosl.tabapp.webview.WebviewFragment:
     public static final java.lang.String URL
     public static final synthetic int access$getFILECHOOSER_RESULTCODE$p(com.mosl.tabapp.webview.WebviewFragment)
     public static final synthetic void access$setMUploadMessage$p(com.mosl.tabapp.webview.WebviewFragment,android.webkit.ValueCallback)
-    public final io.reactivex.rxjava3.subjects.PublishSubject getSubject$app_uatRelease()
+    public final io.reactivex.rxjava3.subjects.PublishSubject getSubject$app_prodRelease()
     static synthetic void loadUrl$default(com.mosl.tabapp.webview.WebviewFragment,java.lang.String,boolean,int,java.lang.Object)
     public final void setBannerNavigator(com.mosl.tabapp.banner.BannerNavigator)
     public final void setBranchCodePreference(com.mosl.app.core.prefs.StringPreference)
@@ -77876,8 +77876,8 @@ com.mosl.shared.util.DateParser:
 com.mosl.shared.util.StringStuffKt
 com.mosl.shared.util.Utility:
     public static java.lang.String stringOrEmpty()
-com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_uatRelease$CommonActivitySubcomponent$Factory
-com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_uatRelease$CommonActivitySubcomponent
+com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_prodRelease$CommonActivitySubcomponent$Factory
+com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_prodRelease$CommonActivitySubcomponent
 com.mosl.tabapp.AppComponent$Builder
 com.mosl.tabapp.ApplicationObserver$Companion
 com.mosl.tabapp.ApplicationObserver:
@@ -77885,16 +77885,16 @@ com.mosl.tabapp.ApplicationObserver:
     public static boolean appInForeground
     public static void <clinit>()
 com.mosl.tabapp.ApplicationObserver_Factory
-com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_uatRelease$BranchActivitySubcomponent$Factory
-com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_uatRelease$BranchActivitySubcomponent
-com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_uatRelease$LoginActivitySubcomponent$Factory
-com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_uatRelease$LoginActivitySubcomponent
-com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_uatRelease$SettingActivitySubcomponent$Factory
-com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_uatRelease$SettingActivitySubcomponent
-com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_uatRelease$SliderActivitySubcomponent$Factory
-com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_uatRelease$SliderActivitySubcomponent
-com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_uatRelease$SplashActivitySubcomponent$Factory
-com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_uatRelease$SplashActivitySubcomponent
+com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_prodRelease$BranchActivitySubcomponent$Factory
+com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_prodRelease$BranchActivitySubcomponent
+com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_prodRelease$LoginActivitySubcomponent$Factory
+com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_prodRelease$LoginActivitySubcomponent
+com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_prodRelease$SettingActivitySubcomponent$Factory
+com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_prodRelease$SettingActivitySubcomponent
+com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_prodRelease$SliderActivitySubcomponent$Factory
+com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_prodRelease$SliderActivitySubcomponent
+com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_prodRelease$SplashActivitySubcomponent$Factory
+com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_prodRelease$SplashActivitySubcomponent
 com.mosl.tabapp.CommonUiModel
 com.mosl.tabapp.CommonUiModel_ProvideShortcutHelperFactory
 com.mosl.tabapp.DaggerAppComponent$10:
@@ -77908,19 +77908,19 @@ com.mosl.tabapp.DaggerAppComponent$2:
 com.mosl.tabapp.DaggerAppComponent$3:
     public static com.mosl.ekycexpress.ActivityBuilder_BindCommonActivity$ekyc_app_release$CommonActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$4:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_uatRelease$SplashActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_prodRelease$SplashActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$5:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_uatRelease$LoginActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_prodRelease$LoginActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$6:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_uatRelease$SliderActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_prodRelease$SliderActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$7:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_uatRelease$SettingActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_prodRelease$SettingActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$8:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_uatRelease$BranchActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_prodRelease$BranchActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$9:
-    public static com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_uatRelease$CommonActivitySubcomponent$Factory get()
+    public static com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_prodRelease$CommonActivitySubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$AB_BCA$_R_CommonActivitySubcomponentFactory:
-    public static com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_uatRelease$CommonActivitySubcomponent create()
+    public static com.mosl.tabapp.ActivityBuilder_BindCommonActivity$app_prodRelease$CommonActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$AB_BCA$_R_CommonActivitySubcomponentImpl$10:
     public static com.mosl.tabapp.FragmentProvider_ProvideLeadViewDetailFactory$LeadViewDetailFragmentSubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$AB_BCA$_R_CommonActivitySubcomponentImpl$11:
@@ -78530,14 +78530,14 @@ com.mosl.tabapp.DaggerAppComponent$AB_BCA$___CommonActivitySubcomponentImpl:
     public static void inject$69()
     public static com.mosl.ekycexpress.core.CommonActivity injectCommonActivity()
 com.mosl.tabapp.DaggerAppComponent$BranchActivitySubcomponentFactory:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_uatRelease$BranchActivitySubcomponent create()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindBranchActivity$app_prodRelease$BranchActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$BranchActivitySubcomponentImpl:
     public static com.mosl.tabapp.branch.BranchPresenter getBranchPresenter()
     public static void inject$70()
     public static com.mosl.tabapp.branch.BranchActivity injectBranchActivity()
 com.mosl.tabapp.DaggerAppComponent$Builder
 com.mosl.tabapp.DaggerAppComponent$CAB_BLA$_R_LoginActivitySubcomponentFactory:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_uatRelease$LoginActivitySubcomponent create()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindLoginActivity$app_prodRelease$LoginActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$CAB_BLA$_R_LoginActivitySubcomponentImpl$1:
     public static com.mosl.tabapp.LoginFragmentProvider_ProvideOtpVerificationFragmentFactory$OtpVerificationFragmentSubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$CAB_BLA$_R_LoginActivitySubcomponentImpl$OtpVerificationFragmentSubcomponentFactory:
@@ -78611,7 +78611,7 @@ com.mosl.tabapp.DaggerAppComponent$CAB_BLA$___LoginActivitySubcomponentImpl:
     public static void inject$78()
     public static com.mosl.ekycexpress.login.core.LoginActivity injectLoginActivity()
 com.mosl.tabapp.DaggerAppComponent$CAB_BSA$_R_SplashActivitySubcomponentFactory:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_uatRelease$SplashActivitySubcomponent create()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSplashActivity$app_prodRelease$SplashActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$CAB_BSA$_R_SplashActivitySubcomponentImpl:
     public final androidx.constraintlayout.motion.widget.KeyCache getFirebaseHelper()
     public static void inject$79()
@@ -78632,11 +78632,11 @@ com.mosl.tabapp.DaggerAppComponent$MessageReceiverIntentServiceSubcomponentImpl:
     public static void inject$82()
     public static com.mosl.tabapp.service.MessageReceiverIntentService injectMessageReceiverIntentService()
 com.mosl.tabapp.DaggerAppComponent$SettingActivitySubcomponentFactory:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_uatRelease$SettingActivitySubcomponent create()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSettingActivity$app_prodRelease$SettingActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$SettingActivitySubcomponentImpl$1:
-    public static com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease$SettingFragmentSubcomponent$Factory get()
+    public static com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_prodRelease$SettingFragmentSubcomponent$Factory get()
 com.mosl.tabapp.DaggerAppComponent$SettingActivitySubcomponentImpl$SettingFragmentSubcomponentFactory:
-    public static com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease$SettingFragmentSubcomponent create()
+    public static com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_prodRelease$SettingFragmentSubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$SettingActivitySubcomponentImpl$SettingFragmentSubcomponentImpl:
     public final com.mosl.tabapp.common.FusedLocation getFusedLocation()
     public static void inject$83()
@@ -78648,7 +78648,7 @@ com.mosl.tabapp.DaggerAppComponent$SettingActivitySubcomponentImpl:
     public static void inject$84()
     public static com.mosl.tabapp.settings.SettingActivity injectSettingActivity()
 com.mosl.tabapp.DaggerAppComponent$SliderActivitySubcomponentFactory:
-    public static com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_uatRelease$SliderActivitySubcomponent create()
+    public static com.mosl.tabapp.CommonActivityBuilder_BindSliderActivity$app_prodRelease$SliderActivitySubcomponent create()
 com.mosl.tabapp.DaggerAppComponent$SliderActivitySubcomponentImpl:
     public static void inject$85()
     public static com.mosl.tabapp.slider.SliderActivity injectSliderActivity()
@@ -78928,7 +78928,7 @@ com.mosl.tabapp.attendancedialog.AttendanceDialogPresenter:
     public static final synthetic com.mosl.app.core.base.BaseView access$getView$p()
     public static com.mosl.app.core.data.attendance.AttendanceRepositoryImpl getRepository()
     public final void start()
-com.mosl.tabapp.attendancedialog.AttendanceHelper$$InternalSyntheticLambda$1$af6ec4ab4c37d603506888f27958ea9ee827a0161588e50d2e4a303d114cd495$0
+com.mosl.tabapp.attendancedialog.AttendanceHelper$$InternalSyntheticLambda$1$36a580cffc32f16f15266cffaa5ffb2698b94dd21dfebb5817a83a05adf3ba66$0
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceAndLocation$attendanceObs$1:
     public final boolean test$13()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceAndLocation$attendanceObs$2:
@@ -78976,7 +78976,7 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public static void setClickListener()
     public static void showAttendancePopupGeoFancing()
     public static void showMockDialogIfLocationFromMockProvider()
-    public static void showMockLocationDialog$app_uatRelease()
+    public static void showMockLocationDialog$app_prodRelease()
 com.mosl.tabapp.attendancedialog.MockLocationDetector
 com.mosl.tabapp.attendancedialog.UserLocationHelper$$InternalSyntheticLambda$1$6eb61390bffd3d5ca210c1a94707a78fc1e417f785e91319e7d90a60d3c668bc$0
 com.mosl.tabapp.attendancedialog.UserLocationHelper$Companion
@@ -79187,10 +79187,10 @@ com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew:
     public static void sendEmail()
     public final void setUpView()
 com.mosl.tabapp.banner.BannerFragment:
-    public final com.mosl.tabapp.databinding.FragmentBannerBinding getBinding$app_uatRelease()
-    public final com.mosl.tabapp.banner.BannerPresenter getPresenter$app_uatRelease()
+    public final com.mosl.tabapp.databinding.FragmentBannerBinding getBinding$app_prodRelease()
+    public final com.mosl.tabapp.banner.BannerPresenter getPresenter$app_prodRelease()
     public final void loadBannerImage()
-    public static void setBinding$app_uatRelease()
+    public static void setBinding$app_prodRelease()
 com.mosl.tabapp.banner.BannerFragment_MembersInjector
 com.mosl.tabapp.banner.BannerModule
 com.mosl.tabapp.banner.BannerModule_ProvideBannerScreenDataFactory
@@ -79515,9 +79515,9 @@ com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$1$52950a7a08ba7fec1
 com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$1$52950a7a08ba7fec1e796d809b9634221ffef1d9fb701793d4716de97ce3bd47$2
 com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$1$a4cc1a5b4b69e6055b5a49b3b68f4515008ebffcc8bdbd3c080b8ae8efe98e86$1
 com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$1$a4cc1a5b4b69e6055b5a49b3b68f4515008ebffcc8bdbd3c080b8ae8efe98e86$2
-com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$2$21945a6bb16daf18bbb0d7248e9cf4bf5be1934224859858c8e03562ac9fa64b$0
 com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$2$3be9f973f9c36359c82c3d6b7e2e29dd47c8508020ca2b62305a4dbf23fe5f98$0
 com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$2$9b91c07b9f4a65452f422221edd2f8a259314321cb1875517acea27c7599358b$0
+com.mosl.tabapp.core.CommonActivity$$InternalSyntheticLambda$2$ef2f8b683a7b42b53af6698493bc320eaa06f3154e992dd6eba284e3439e70e8$0
 com.mosl.tabapp.core.CommonActivity$Companion
 com.mosl.tabapp.core.CommonActivity$doLogout$1:
     public final void accept$1()
@@ -79562,7 +79562,7 @@ com.mosl.tabapp.core.CommonActivity:
     public final com.mosl.tabapp.data.RemoteConfigModel getRemoteConfigModel()
     public static com.mosl.app.core.prefs.StringPreference getRemoteCongigData()
     public final com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper()
-    public static com.google.android.material.snackbar.Snackbar getSnackbar$app_uatRelease()
+    public static com.google.android.material.snackbar.Snackbar getSnackbar$app_prodRelease()
     public final mosl.rx_preferences.Preference getTokenPref()
     public final com.mosl.app.core.prefs.BooleanPreference getTwentyFourSevenCheck()
     public final com.mosl.tabapp.attendancedialog.UserLocationHelper getUserLocationHelper()
@@ -79578,10 +79578,10 @@ com.mosl.tabapp.core.CommonActivity:
     public static void setBinding$5()
     public final void setMService()
     public static void setRemoteConfigModel()
-    public static void setSnackbar$app_uatRelease()
+    public static void setSnackbar$app_prodRelease()
     public static void setupMenuDrawer()
     public static void setupObservables()
-    public static com.google.android.material.snackbar.Snackbar showConnectivityIssueSnackbar$app_uatRelease()
+    public static com.google.android.material.snackbar.Snackbar showConnectivityIssueSnackbar$app_prodRelease()
     public final void showOnFailurePopup(java.lang.Throwable)
     public final void stopService()
     public final void toggleProgressBar(boolean)
@@ -79638,9 +79638,9 @@ com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment:
     public static final com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment$Companion Companion
     public static void <clinit>()
     public final com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightPresenter getPresenter()
-    public final com.mosl.groupiex.section.DataManagerSection getSection$app_uatRelease()
+    public final com.mosl.groupiex.section.DataManagerSection getSection$app_prodRelease()
     public static void setBinding$6()
-    public static void setSection$app_uatRelease()
+    public static void setSection$app_prodRelease()
     public final void setupViews()
 com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment_MembersInjector
 com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightHelperKt
@@ -79701,8 +79701,8 @@ com.mosl.tabapp.dashboard.base.DashboardFragment:
     public static void openVerifyOTPFragment()
     public static void renderCurrentQuarterStatus()
     public static void renderPerformance()
-    public static void setBinding$app_uatRelease$1()
-    public static void setBindingAusfbDhshboard$app_uatRelease()
+    public static void setBinding$app_prodRelease$1()
+    public static void setBindingAusfbDhshboard$app_prodRelease()
     public static void setIcon()
     public final void setupViews()
     public static void updateCount()
@@ -79801,8 +79801,8 @@ com.mosl.tabapp.dashboard.clients.ClientsFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.clients.ClientsFragment_MembersInjector
 com.mosl.tabapp.dashboard.clients.ClientsModule
-com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideClientsView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.clients.ClientsModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.clients.ClientsPresenter$Companion
 com.mosl.tabapp.dashboard.clients.ClientsPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$2()
@@ -79837,8 +79837,8 @@ com.mosl.tabapp.dashboard.leads.LeadsFragment:
     public static void stackedBarData()
 com.mosl.tabapp.dashboard.leads.LeadsFragment_MembersInjector
 com.mosl.tabapp.dashboard.leads.LeadsModule
-com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideAuLeadView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.leads.LeadsModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.leads.LeadsPresenter$start$10:
     public static void accept$38()
 com.mosl.tabapp.dashboard.leads.LeadsPresenter$start$1:
@@ -79875,8 +79875,8 @@ com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment:
     public static void setDashboardModel()
 com.mosl.tabapp.dashboard.leads.report.LeadsReportFragment_MembersInjector
 com.mosl.tabapp.dashboard.leads.report.LeadsReportModule
-com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideAuLeadView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.leads.report.LeadsReportModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.leads.report.LeadsReportPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$2()
 com.mosl.tabapp.dashboard.leads.report.LeadsReportPresenter$start$2:
@@ -79923,8 +79923,8 @@ com.mosl.tabapp.dashboard.productivity.ProductivityFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.productivity.ProductivityFragment_MembersInjector
 com.mosl.tabapp.dashboard.productivity.ProductivityModule
-com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideBusinessSnapshotView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.productivity.ProductivityModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.productivity.ProductivityPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$7()
 com.mosl.tabapp.dashboard.productivity.ProductivityPresenter$start$2:
@@ -79954,8 +79954,8 @@ com.mosl.tabapp.dashboard.report.DashboardReportFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.report.DashboardReportFragment_MembersInjector
 com.mosl.tabapp.dashboard.report.DashboardReportModule
-com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideDashboardReport$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.report.DashboardReportModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.report.DashboardReportPresenter$Companion
 com.mosl.tabapp.dashboard.report.DashboardReportPresenter$start$1:
     public final com.mosl.mobile.domain.dashboardreport.DashboardReportRequest apply()
@@ -79996,8 +79996,8 @@ com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignFragment_MembersInjector
 com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule
-com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideDashboardReport$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter$Companion
 com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignPresenter$start$10:
     public final void accept$1()
@@ -80061,8 +80061,8 @@ com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportFragment_MembersInjector
 com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule
-com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideDashboardHierarchyReport$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportPresenter$start$1:
     public final com.mosl.mobile.domain.dashboardreport.DashboardReportRequest apply()
 com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportPresenter$start$2:
@@ -80087,8 +80087,8 @@ com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotFragment_MembersInjector
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule
-com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideBusinessSnapshotView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$3()
 com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotPresenter$start$2:
@@ -80109,8 +80109,8 @@ com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvFragment_MembersInjector
 com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule
-com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideBusinessSnapshotAdvView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$2()
 com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvPresenter$start$2:
@@ -80150,8 +80150,8 @@ com.mosl.tabapp.dashboard.target.TargetLableItem:
     private static int getLayout$com$mosl$tabapp$dashboard$target$TargetLableItem()
     private static int getLayout$com$mosl$tabapp$dashboard$teamtarget$TeamTargetLableItem()
 com.mosl.tabapp.dashboard.target.TargetModule
-com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.target.TargetModule_ProvideAuLeadView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.target.TargetModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.target.TargetPresenter$start$11:
     public static com.mosl.mobile.domain.target.TargetInput apply()
 com.mosl.tabapp.dashboard.target.TargetPresenter$start$12:
@@ -80212,8 +80212,8 @@ com.mosl.tabapp.dashboard.teamtarget.TeamTargetFragment:
     public static void summaryCountView()
 com.mosl.tabapp.dashboard.teamtarget.TeamTargetLableItem
 com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule
-com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideAuLeadView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.teamtarget.TeamTargetModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.teamtarget.TeamTargetPresenter$Companion
 com.mosl.tabapp.dashboard.teamtarget.TeamTargetPresenter$start$11:
     public static com.mosl.mobile.domain.teamtarget.TeamTargetInput apply()
@@ -80266,8 +80266,8 @@ com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayFragment_MembersInjector
 com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule
-com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideClientsTradedYesterdayView$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayModule_ProvideDashBoardModel$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$2()
 com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayPresenter$start$2:
@@ -80302,8 +80302,8 @@ com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment:
     public final void setUpView()
 com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsFragment_MembersInjector
 com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule
-com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_uatReleaseFactory
-com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_uatReleaseFactory
+com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideDashBoardModel$app_prodReleaseFactory
+com.mosl.tabapp.dashboard.trends.MonthOnMonthTrendsModule_ProvideMonthMonthTrendsView$app_prodReleaseFactory
 com.mosl.tabapp.dashboard.trends.TrendsPresenter$start$1:
     public static void accept$49()
 com.mosl.tabapp.dashboard.trends.TrendsPresenter$start$2:
@@ -81118,7 +81118,7 @@ com.mosl.tabapp.drawermenu.DrawerMenuView:
     public static io.reactivex.rxjava3.core.Observable onCloseClicked()
     public static io.reactivex.rxjava3.core.Observable onMenuClicked()
     public static void refreshHeader()
-    public static void render$app_uatRelease()
+    public static void render$app_prodRelease()
     public static void selectItem()
     public static void selectItem$1()
 com.mosl.tabapp.drawermenu.DrawerMenuView_MembersInjector
@@ -81149,7 +81149,7 @@ com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment:
     public final void setUpRecyclerView()
 com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitFragment_MembersInjector
 com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule
-com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitPresenter$start$1:
     public final void accept$3()
 com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitPresenter$start$2:
@@ -81164,9 +81164,9 @@ com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem$$InternalSyntheticLambda$
 com.mosl.tabapp.drawermenu.item.BaseMenuExpandableItem:
     public final void bind$21()
     public static void collapse()
-    public final com.xwray.groupie.ExpandableGroup getExpandableGroup$app_uatRelease()
+    public final com.xwray.groupie.ExpandableGroup getExpandableGroup$app_prodRelease()
     public final boolean isExpanded()
-    public static void setExpandableGroup$app_uatRelease()
+    public static void setExpandableGroup$app_prodRelease()
 com.mosl.tabapp.drawermenu.item.BaseMenuItem:
     public final void bind$21()
 com.mosl.tabapp.drawermenu.item.ChildMenuItem:
@@ -81187,8 +81187,8 @@ com.mosl.tabapp.geoLocation.GeoTaggingFragment:
     public final com.mosl.tabapp.common.FusedLocation getFusedLocation()
     public final android.os.Handler getHandler()
     public static android.location.Location getLocation()
-    public final com.mosl.tabapp.geoLocation.GeoTaggingPresenter getPresenter$app_uatRelease()
-    public static void setBinding$app_uatRelease$2()
+    public final com.mosl.tabapp.geoLocation.GeoTaggingPresenter getPresenter$app_prodRelease()
+    public static void setBinding$app_prodRelease$2()
     public static void setLocationManager()
     public static void setMContext()
     public final void startTimer()
@@ -81531,7 +81531,7 @@ com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment:
     public androidx.viewpager.widget.ViewPager pager
     public static synthetic void $r8$lambda$0NJJWLTIumPTQwq5KudSDCBzGM0()
     public static void <clinit>()
-    public static com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesPresenter getPresenter$app_prodRelease()
     public static final com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment newInstance()
     public static void openLeadViewDialog()
     public static final void renderDeleteAppointment$lambda$16$lambda$12()
@@ -81590,14 +81590,14 @@ com.mosl.tabapp.leadViewDetail.activity.MeetingParcel$Creator:
     public static com.mosl.tabapp.leadViewDetail.activity.MeetingParcel[] newArray()
 com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesAppointmentChildItem:
     public final void bind$24()
-    public static com.mosl.mobile.domain.leadviewdetail.activities.Appointment getData$app_uatRelease()
+    public static com.mosl.mobile.domain.leadviewdetail.activities.Appointment getData$app_prodRelease()
 com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem$$InternalSyntheticLambda$1$4e3cb3230f6422d1dd784c3e9eb4ba3365d80ee8affd73d8d0aeeb080d6323f7$0
 com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesItem:
     public static void bind$25()
     public static com.mosl.tabapp.databinding.ItemLeadViewActivitiesBinding initBinding()
 com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem:
     public final void bind$24()
-    public static com.mosl.mobile.domain.leadviewdetail.activities.Meeting getData$app_uatRelease()
+    public static com.mosl.mobile.domain.leadviewdetail.activities.Meeting getData$app_prodRelease()
 com.mosl.tabapp.leadViewDetail.activity.item.SingleTextItem:
     public static void bind$26()
 com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment$Companion
@@ -81884,9 +81884,9 @@ com.mosl.tabapp.leadViewDetail.document.DocumentFragment:
     public static java.lang.CharSequence getBase64String()
     public static com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsItemData getDocumentById()
     public static java.lang.String[] getFileTypeArray()
-    public final com.mosl.tabapp.permission.ImageUploadHelper getImageUploadHelper$app_uatRelease()
+    public final com.mosl.tabapp.permission.ImageUploadHelper getImageUploadHelper$app_prodRelease()
     public final java.lang.String getLeadId()
-    public static com.mosl.tabapp.leadViewDetail.document.DocumentPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.leadViewDetail.document.DocumentPresenter getPresenter$app_prodRelease()
     public final java.lang.String getUcid()
     public static varargs boolean hasAllPermission(android.content.Context,java.lang.String[])
     public static boolean isFileAllowed()
@@ -81953,7 +81953,7 @@ com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment:
     public final void setViewPager(androidx.viewpager.widget.ViewPager)
 com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment_MembersInjector
 com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
-com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.leadViewDetail.history.MappingHistoryPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$36()
 com.mosl.tabapp.leadViewDetail.history.MappingHistoryPresenter$start$2:
@@ -82132,7 +82132,7 @@ com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment:
     public final java.util.List getLeadFieldValues()
     public final android.widget.ArrayAdapter getNetworthAdapter()
     public final android.widget.ArrayAdapter getPmsProductAdapter()
-    public final com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailPresenter getPresenter$app_uatRelease()
+    public final com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailPresenter getPresenter$app_prodRelease()
     public final android.widget.ArrayAdapter getProfessionAdapter()
     public final android.widget.ArrayAdapter getProfileAdapter()
     public final android.widget.ArrayAdapter getSectorAdapter()
@@ -82433,7 +82433,7 @@ com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment:
     public static final com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment$Companion Companion
     public java.lang.String clientType
     public static void <clinit>()
-    public final com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerPresenter getPresenter$app_uatRelease()
+    public final com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerPresenter getPresenter$app_prodRelease()
     public static java.lang.String[] getTabArray()
     public static void setupPager()
 com.mosl.tabapp.leadViewDetail.main.LeadViewDetailPagerFragment_MembersInjector
@@ -82519,7 +82519,7 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment:
     public static void <clinit>()
     public static final synthetic java.lang.String access$getLeadId$p()
     public static java.lang.String getExtraView()
-    public static com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter getPresenter$app_prodRelease()
     public final java.util.ArrayList getSelectedAnswersJson()
     public final void setViewPager(androidx.viewpager.widget.ViewPager)
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment_MembersInjector
@@ -82560,8 +82560,8 @@ com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AddedSplAtten
     public android.content.Context mContext
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AttendeeAdapter$HolderView:
     public final synthetic com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AttendeeAdapter this$0
-    public static android.widget.LinearLayout getLinaerLayout$app_uatRelease()
-    public static android.widget.TextView getTvAttendeeName$app_uatRelease()
+    public static android.widget.LinearLayout getLinaerLayout$app_prodRelease()
+    public static android.widget.TextView getTvAttendeeName$app_prodRelease()
 com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment$AttendeeAdapter:
     public android.view.LayoutInflater inflater
     public final com.mosl.tabapp.model.EmployeeModel getItem(int)
@@ -82615,7 +82615,7 @@ com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment:
     public static void addedSplAttendeeDialog()
     public static void attendeeDialog()
     public static void category()
-    public final com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingPresenter getPresenter$app_uatRelease()
+    public final com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingPresenter getPresenter$app_prodRelease()
     public static void meetingDuration$1()
     public static void meetingReason()
     public static void renderActionables()
@@ -82872,7 +82872,7 @@ com.mosl.tabapp.leadcreation.ui.LeadCreationFragment:
     public final android.widget.ArrayAdapter getCountryAdapter()
     public final android.widget.ArrayAdapter getCountryAdapterOff()
     public static android.widget.ArrayAdapter getInterestInAdapter()
-    public final com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter getPresenter$app_uatRelease()
+    public final com.mosl.tabapp.leadcreation.ui.LeadCreationPresenter getPresenter$app_prodRelease()
     public static android.widget.ArrayAdapter getProductTypeAdapter()
     public final android.widget.ArrayAdapter getProfessionAdapter()
     public static android.widget.ArrayAdapter getProspectSourceAdapter()
@@ -83367,7 +83367,7 @@ com.mosl.tabapp.login.otpverification.helper.otptextview.Utils:
     public static final com.mosl.tabapp.login.otpverification.helper.otptextview.Utils INSTANCE
     public static void <clinit>()
     public void <init>()
-    public static int getPixels$app_uatRelease()
+    public static int getPixels$app_prodRelease()
 com.mosl.tabapp.model.AddedAttendeeModel:
     public static boolean attendedUser
     public static java.lang.String attendeeUserType
@@ -83791,7 +83791,7 @@ com.mosl.tabapp.notification.NotificationFragment$Companion
 com.mosl.tabapp.notification.NotificationFragment:
     public static final com.mosl.tabapp.notification.NotificationFragment$Companion Companion
     public static void <clinit>()
-    public static com.mosl.tabapp.notification.NotificationPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.notification.NotificationPresenter getPresenter$app_prodRelease()
     public final void setUpRecyclerView()
     public final void setUpView()
 com.mosl.tabapp.notification.NotificationFragment_MembersInjector
@@ -83818,7 +83818,7 @@ com.mosl.tabapp.notification.NotificationPresenter:
     public final void start()
 com.mosl.tabapp.pendingApproval.PendingApprovalFragment$$InternalSyntheticLambda$1$d89e92d5b59495d9477d9df5e794c3794ab2993a7ed1de140243d1ae7a31e188$0
 com.mosl.tabapp.pendingApproval.PendingApprovalFragment:
-    public static com.mosl.tabapp.pendingApproval.PendingApprovalPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.pendingApproval.PendingApprovalPresenter getPresenter$app_prodRelease()
     public final void setUpRecyclerView()
     public final void setUpView()
 com.mosl.tabapp.pendingApproval.PendingApprovalFragment_MembersInjector
@@ -84115,7 +84115,7 @@ com.mosl.tabapp.report.ReportFragment:
     public final void setUpView()
 com.mosl.tabapp.report.ReportFragment_MembersInjector
 com.mosl.tabapp.report.ReportModule
-com.mosl.tabapp.report.ReportModule_ProvideView$app_uatReleaseFactory
+com.mosl.tabapp.report.ReportModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.report.ReportPresenter$$InternalSyntheticLambda$1$cddf0eee9964388dcab96e882b67883a51cfdc00c2d46b2f79d012757a4d0aca$0
 com.mosl.tabapp.report.ReportPresenter$Companion
 com.mosl.tabapp.report.ReportPresenter$start$1:
@@ -84151,8 +84151,8 @@ com.mosl.tabapp.report.hierarchy.HierarchyReportFragment:
     public final void setUpView()
 com.mosl.tabapp.report.hierarchy.HierarchyReportFragment_MembersInjector
 com.mosl.tabapp.report.hierarchy.HierarchyReportModule:
-    public static com.mosl.tabapp.report.hierarchy.HierarchyReportView provideView$app_uatRelease()
-com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_uatReleaseFactory
+    public static com.mosl.tabapp.report.hierarchy.HierarchyReportView provideView$app_prodRelease()
+com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.report.hierarchy.HierarchyReportPresenter$Companion
 com.mosl.tabapp.report.hierarchy.HierarchyReportPresenter$start$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$36()
@@ -84295,7 +84295,7 @@ com.mosl.tabapp.setappointment.SetAppointmentFragment:
     public static void getAppointmentDetailsFromServer()
     public final void getClientDetail()
     public static void getLeadByIdFromServer$1()
-    public static com.mosl.tabapp.setappointment.SetAppointmentPresenter getPresenter$app_uatRelease()
+    public static com.mosl.tabapp.setappointment.SetAppointmentPresenter getPresenter$app_prodRelease()
     public static void resetForm()
     public static void selectDateAppointment()
     public static void selectDateAppointmentEndTime()
@@ -84418,8 +84418,8 @@ com.mosl.tabapp.settings.SettingFragment:
 com.mosl.tabapp.settings.SettingFragmentModule$Companion
 com.mosl.tabapp.settings.SettingFragmentModule
 com.mosl.tabapp.settings.SettingFragmentModule_ProvideSettingsFragmentFactory
-com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease$SettingFragmentSubcomponent$Factory
-com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease$SettingFragmentSubcomponent
+com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_prodRelease$SettingFragmentSubcomponent$Factory
+com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_prodRelease$SettingFragmentSubcomponent
 com.mosl.tabapp.settings.SettingFragment_MembersInjector
 com.mosl.tabapp.slider.SliderActivity$$InternalSyntheticLambda$1$effd2084934acaf721b8ab419cc02b2247c6de6817e23706f0793b1113dfd026$0
 com.mosl.tabapp.slider.SliderActivity:
@@ -84672,11 +84672,11 @@ com.mosl.tabapp.webview.WebviewFragment:
     public final com.mosl.app.core.prefs.StringPreference getBranchCodePreference()
     public static com.mosl.shared.Encryptor.AESEncryptor getEncryptor()
     public static android.net.Uri getMCapturedImageURI()
-    public static boolean getPageLoadStarted$app_uatRelease()
+    public static boolean getPageLoadStarted$app_prodRelease()
     public static io.reactivex.rxjava3.core.Observable getUrlObservable()
-    public static void renderUrl$app_uatRelease()
+    public static void renderUrl$app_prodRelease()
     public static void setBinding$22()
-    public static void setPageLoadStarted$app_uatRelease()
+    public static void setPageLoadStarted$app_prodRelease()
 com.mosl.tabapp.webview.WebviewFragment_MembersInjector
 com.mosl.tabapp.ws.CRMWebServiceHandler:
     public static java.lang.String CALL_BASE_URL
@@ -103538,39 +103538,39 @@ kotlinx.coroutines.DebugStringsKt:
     public static java.util.List getSMTUserMenu()
     public static com.mosl.tabapp.drawermenu.data.BaseMenu getSuggestMe()
     public static java.util.List getUserMenu()
-    public static com.mosl.tabapp.dashboard.leads.LeadsView provideAuLeadView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportView provideAuLeadView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.target.TargetView provideAuLeadView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetView provideAuLeadView$app_uatRelease()
+    public static com.mosl.tabapp.dashboard.leads.LeadsView provideAuLeadView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.leads.report.LeadsReportView provideAuLeadView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.target.TargetView provideAuLeadView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.teamtarget.TeamTargetView provideAuLeadView$app_prodRelease()
     public static com.mosl.app.core.prefs.StringPreference provideBranchCode()
-    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView provideBusinessSnapshotAdvView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.productivity.productivityView provideBusinessSnapshotView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotView provideBusinessSnapshotView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayView provideClientsTradedYesterdayView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.clients.ClientsView provideClientsView$app_uatRelease()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$1()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$2()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$3()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$4()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$5()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$6()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$7()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$8()
-    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_uatRelease$9()
-    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportData provideDashboardHierarchyReport$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.report.DashboardReportData provideDashboardReport$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.report.DashboardReportData provideDashboardReport$app_uatRelease$1()
-    public static com.mosl.tabapp.dashboard.trends.MonthsOnMonthsView provideMonthMonthTrendsView$app_uatRelease()
+    public static com.mosl.tabapp.dashboard.snapshot.advance.BusinessSnapshotAdvView provideBusinessSnapshotAdvView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.productivity.productivityView provideBusinessSnapshotView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.snapshot.BusinessSnapshotView provideBusinessSnapshotView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.tradeyesterday.ClientsTradedYesterdayView provideClientsTradedYesterdayView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.clients.ClientsView provideClientsView$app_prodRelease()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$1()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$2()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$3()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$4()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$5()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$6()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$7()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$8()
+    public static com.mosl.tabapp.model.dashboard.DashboardModel provideDashBoardModel$app_prodRelease$9()
+    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportData provideDashboardHierarchyReport$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.report.DashboardReportData provideDashboardReport$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.report.DashboardReportData provideDashboardReport$app_prodRelease$1()
+    public static com.mosl.tabapp.dashboard.trends.MonthsOnMonthsView provideMonthMonthTrendsView$app_prodRelease()
     public static com.mosl.app.core.prefs.IntegerPreference providePreferenceClear()
     public static com.mosl.app.core.prefs.LongPreference provideServerTimePref()
     public static com.mosl.app.core.prefs.BooleanPreference provideTwentyFourSevenPref()
-    public static com.mosl.tabapp.dashboard.report.DashboardReportView provideView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignlView provideView$app_uatRelease()
-    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportView provideView$app_uatRelease()
-    public static com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitView provideView$app_uatRelease()
-    public static com.mosl.tabapp.leadViewDetail.history.MappingHistoryView provideView$app_uatRelease()
-    public static com.mosl.tabapp.report.ReportView provideView$app_uatRelease()
+    public static com.mosl.tabapp.dashboard.report.DashboardReportView provideView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.report.assign.DashboardReportAssignlView provideView$app_prodRelease()
+    public static com.mosl.tabapp.dashboard.report.hierarchy.DashboardHierarchyReportView provideView$app_prodRelease()
+    public static com.mosl.tabapp.drawermenu.digitalSalesKit.DigitalSalesKitView provideView$app_prodRelease()
+    public static com.mosl.tabapp.leadViewDetail.history.MappingHistoryView provideView$app_prodRelease()
+    public static com.mosl.tabapp.report.ReportView provideView$app_prodRelease()
 kotlinx.coroutines.DefaultExecutor:
     public final synchronized java.lang.Thread createThreadSync()
     public static boolean isShutDown()

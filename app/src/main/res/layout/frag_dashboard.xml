@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:text="@string/mark_attendance"
         android:layout_margin="@dimen/_10sdp"
+        android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/black"
         android:background="@drawable/btn_attendance_background"/>
 
