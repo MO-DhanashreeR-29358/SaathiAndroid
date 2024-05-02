@@ -81025,11 +81025,11 @@ com.mosl.tabapp.databinding.FragmentCreateRequestReactivationBinding:
     public final androidx.appcompat.widget.AppCompatImageView appCompatImageView
     public final androidx.appcompat.widget.AppCompatImageView appCompatImageView2
     public final androidx.appcompat.widget.AppCompatTextView appCompatTextView
-    public final androidx.appcompat.widget.AppCompatTextView appCompatTextView2
-    public final androidx.appcompat.widget.AppCompatTextView appCompatTextView3
     public final androidx.appcompat.widget.LinearLayoutCompat linearLayoutCompat
     public final androidx.appcompat.widget.LinearLayoutCompat linearLayoutCompat2
     public final androidx.appcompat.widget.LinearLayoutCompat linearLayoutCompat3
+    public final androidx.appcompat.widget.LinearLayoutCompat linearLayoutCompat4
+    public final androidx.appcompat.widget.LinearLayoutCompat linearLayoutCompat5
     public final androidx.appcompat.widget.AppCompatRadioButton radioBtnDateRequest
     public final androidx.appcompat.widget.AppCompatRadioButton radioBtnRequest
     public final androidx.appcompat.widget.AppCompatRadioButton radioBtnRmRequest

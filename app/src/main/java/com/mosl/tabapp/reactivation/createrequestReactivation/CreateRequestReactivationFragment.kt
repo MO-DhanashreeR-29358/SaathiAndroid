@@ -169,6 +169,7 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         uiModel.onSuccess {
             binding.txtSearchError.isVisible=false
             objReactivationClientSearchResponseModel=it.firstOrNull()
+            alert("Client search successfully")
         }
 
         uiModel.onFailure {

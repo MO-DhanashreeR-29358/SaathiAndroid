@@ -8,8 +8,9 @@ object ReactivationSubmitValidator:Validator<ReactivationSubmitPostModel,Reactiv
     override fun execute(input: ReactivationSubmitPostModel): ValidationResult<ReactivationSubmitPostModel> {
         val errorMessage: String? = when {
             input.clientCode.isEmpty() -> "Please enter Client Code"
-            input.actualActivationDate.isEmpty() ->"Please select activation date"
+            input.uriString.isEmpty()->"Please select file"
             input.remarks.isEmpty()-> "Please enter remark"
+            input.actualActivationDate.isEmpty() ->"Please select activation date"
             else -> null
         }
 
