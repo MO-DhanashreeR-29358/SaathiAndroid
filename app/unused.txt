@@ -29655,7 +29655,6 @@ com.mosl.mobile.user.model.User:
     public static synthetic com.mosl.mobile.user.model.User copy$default(com.mosl.mobile.user.model.User,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,com.mosl.mobile.user.model.BusinessProfileRequest,com.mosl.mobile.user.model.CurrentBusinessProfileRequest,java.lang.String,boolean,boolean,boolean,boolean,java.lang.String,int,java.lang.Object)
     public final boolean isFranchise()
     public final boolean isIFA()
-    public final boolean isOmni()
     public final boolean isPCGBusiness()
     public final boolean isRetrieveOTPEnable()
 com.mosl.mobile.user.model.UserModule:
@@ -77741,8 +77740,10 @@ com.mosl.mobile.user.model.Status$EnumUnboxingLocalUtility:
 com.mosl.mobile.user.model.Status
 com.mosl.mobile.user.model.User:
     public static boolean isAttendanceAllowed()
+    public static boolean isAttendanceAllowedForOmni()
     public final boolean isCheckApprovalEnable()
     public final boolean isEkycEnable()
+    public static boolean isOmni()
     public final boolean isPCG()
     public final boolean isSMTEnabled()
     public static boolean isUseUrlEnable()

@@ -113,7 +113,9 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
         binding.btnMarkAttendance.isVisible = false
         if (userManager.user.isRetail() && userManager.user.isAttendanceAllowed()) {
             binding.btnMarkAttendance.isVisible = true
-         }
+        }else if (userManager.user.isOmni() && userManager.user.isAttendanceAllowedForOmni()) {
+            binding.btnMarkAttendance.isVisible = true
+        }
         binding.btnMarkAttendance.setOnClickListener {
             myZoneAttendanceLogic()
         }
