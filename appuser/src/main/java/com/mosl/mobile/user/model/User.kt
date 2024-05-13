@@ -157,4 +157,13 @@ data class User(
         }
         return flag
     }
+
+    fun isAttendanceAllowedForOmni(): Boolean {
+        var flag = false
+        if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
+            myZoneProfile.equals("Sales Team Leader", ignoreCase = true)) {
+            flag = true
+        }
+        return flag
+    }
 }
