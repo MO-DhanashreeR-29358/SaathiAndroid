@@ -15,7 +15,6 @@
         android:layout_margin="@dimen/_10sdp"
         android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/black"
-        android:foreground="?android:attr/selectableItemBackground"
         android:background="@drawable/btn_attendance_background"/>
 
     <ScrollView
