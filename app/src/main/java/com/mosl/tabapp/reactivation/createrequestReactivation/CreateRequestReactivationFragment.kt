@@ -55,7 +55,7 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
      var formatedDate:LocalDate?=null
     lateinit var saathiFileUploader: SaathiFileUploader
     protected val FileUploadsubject: PublishSubject<SaathiUploadUiSubject> = PublishSubject.create<SaathiUploadUiSubject>()
-
+    var isSearched:Boolean=false
     var strSelectedFile:String=""
 
     override fun getLayout(): Int {
@@ -67,8 +67,6 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         setupView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
-        Log.d("Token", userManager.user.token)
-
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -170,6 +168,7 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
             binding.txtSearchError.isVisible=false
             objReactivationClientSearchResponseModel=it.firstOrNull()
             alert("Client search successfully")
+            isSearched=true
         }
 
         uiModel.onFailure {
@@ -277,7 +276,8 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
 
          totalMarginCollected=objReactivationClientSearchResponseModel?.totalMarginCollected?:"0",
 
-         uriString=strSelectedFile
+         uriString=strSelectedFile,
+            isSearched = isSearched
         )
     }
     override fun fnOnUpdateClick(): Observable<Unit> {
@@ -287,13 +287,15 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
     override fun fnRenderUpdate(uiModel: UiModel<String>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
-            alert(it)
+            alert("Reactivation Request sent successfully")
             objReactivationClientSearchResponseModel=null
             binding.edtClientCode.setText("")
             binding.edtDateActual.setText("")
             binding.edtRemark.setText("")
             binding.txtFileName.setText("Upload")
+            strSelectedDate=""
             strSelectedFile=""
+            isSearched=false
                }
 
         uiModel.onFailure {
@@ -317,5 +319,7 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
         binding.edtRemark.setText("")
         binding.txtFileName.setText("Upload")
         strSelectedFile=""
+        strSelectedDate=""
+        isSearched=false
     }
 }

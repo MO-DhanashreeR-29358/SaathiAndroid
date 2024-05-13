@@ -20,5 +20,6 @@ data class ReactivationSubmitPostModel(
 
     @JvmField val base64FileString: String?=null,
 
-    @JvmField val uriString:String
+    @JvmField val uriString:String,
+    @JvmField var isSearched:Boolean
 )

@@ -11,9 +11,9 @@ object ReactivationSubmitValidator:Validator<ReactivationSubmitPostModel,Reactiv
             input.uriString.isEmpty()->"Please select file"
             input.remarks.isEmpty()-> "Please enter remark"
             input.actualActivationDate.isEmpty() ->"Please select activation date"
+            !input.isSearched -> "Please search Client Code"
             else -> null
         }
-
         return if (errorMessage != null) {
             withMessage(errorMessage)
         } else {

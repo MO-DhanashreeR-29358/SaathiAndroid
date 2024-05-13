@@ -609,7 +609,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             this
                         )
                     binding.lvAddProduct.adapter = leadDetailAddProductAdapter
-                    CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+                   //CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
                 }
                 MSFDialog.alertDialog(
                     requireActivity(),

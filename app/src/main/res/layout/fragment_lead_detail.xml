@@ -386,8 +386,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:background="@color/list_background"
+                android:background="@color/colorWhite"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:id="@+id/llAddProduct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/lvAddProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvLeadDetail"
@@ -2408,20 +2420,8 @@
                                 android:textSize="@dimen/_12sdp" />
                         </RelativeLayout>
                     </LinearLayout>
+<!-- moveed-->
 
-                    <LinearLayout
-                        android:id="@+id/llAddProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ListView
-                            android:id="@+id/lvAddProduct"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:divider="@null"
-                            tools:listitem="@layout/item_list_add_product" />
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
