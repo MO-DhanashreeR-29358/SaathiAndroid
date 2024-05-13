@@ -43,7 +43,9 @@ data class UpdateLeadRequest(
     @JvmField @SerializedName("AccountTypeID") var leadAccountTypeId: String,
     @JvmField @SerializedName("ChipsEventIdName") var ChipsEventIdName: String,
     @JvmField @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String? = "",
-    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String
+    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String,
+    @JvmField @SerializedName("AUBankName") val auBankName: String,
+    @JvmField @SerializedName("BankBranchCode") val auBankBranchCode: String
 )
 
 data class LeadFieldValueRequest(

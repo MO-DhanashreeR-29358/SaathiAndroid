@@ -74,6 +74,26 @@ public class LeadDetailModel {
 	private String isBandhanBankEmp = "";
 	private String bandhanBankEmp = "";
 
+	private String auBankName = "";
+
+	private String auBankBranchCode = "";
+
+	public String getAuBankName() {
+		return auBankName;
+	}
+
+	public void setAuBankName(String auBankName) {
+		this.auBankName = auBankName;
+	}
+
+	public String getAuBankBranchCode() {
+		return auBankBranchCode;
+	}
+
+	public void setAuBankBranchCode(String auBankBranchCode) {
+		this.auBankBranchCode = auBankBranchCode;
+	}
+
 	public String getIsBandhanBankEmp() {
 		return isBandhanBankEmp;
 	}

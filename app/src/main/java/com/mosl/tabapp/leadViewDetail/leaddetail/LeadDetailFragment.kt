@@ -270,6 +270,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
 
+
     }
 
     private fun setSectorSpinner() {
@@ -1549,19 +1550,32 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
         uiModel.onSuccess {
-            MSFDialog.alertDialog(
-                requireContext(),
-                0,
-                resources.getString(R.string.motilal_oswal),
-                CONFIRM_LEAD_UPDATE,
-                getString(R.string.text_label_yes),
-                getString(R.string.text_label_no),
-                true
-            ) { action: Action, _: Array<Any?>? ->
-                if (action == OK) {
-                    subject.onNext(UpdateLeadDetail)
+            removeErrorMessage()
+            if (userManager.getUser()?.isAllianceBusiness() == true &&
+                    binding.etProspectSource.text.toString().equals("BTL activity QR code", ignoreCase = true)
+                    && binding.etAuBankName.text.toString().isBlank()){
+                binding.tlAuBankName.setErrorMessages(getString(R.string.error_message_enter_au_bank_name))
+            }else if (userManager.getUser()?.isAllianceBusiness() == true &&
+                binding.etProspectSource.text.toString().equals("BTL activity QR code", ignoreCase = true)
+                && binding.etAuBranchCode.text.toString().isBlank()){
+                binding.tlAuBranchCode.setErrorMessages(getString(R.string.error_message_enter_au_branch_code))
+            }else{
+                MSFDialog.alertDialog(
+                    requireContext(),
+                    0,
+                    resources.getString(R.string.motilal_oswal),
+                    CONFIRM_LEAD_UPDATE,
+                    getString(R.string.text_label_yes),
+                    getString(R.string.text_label_no),
+                    true
+                ) { action: Action, _: Array<Any?>? ->
+                    if (action == OK) {
+                        subject.onNext(UpdateLeadDetail)
+                    }
                 }
+
             }
+
         }
     }
 
@@ -1604,6 +1618,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tvBandhanBankRMError.isVisible = true
                     binding.tvBandhanBankRMError.text = getString(it)
                 }
+                18 ->
+                    binding.tlAuBankName.setErrorMessages(getString(it))
+                19 ->
+                    binding.tlAuBranchCode.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1631,6 +1649,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlLeadAccountType.disableErrorMessages()
             tlEventName.disableErrorMessages()
             tvBandhanBankRMError.text = ""
+            tlAuBankName.disableErrorMessages()
+            tlAuBranchCode.disableErrorMessages()
         }
     }
 
@@ -1750,6 +1770,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.chipsEventId = getChipsEventId()
         leadDetailModel.isBandhanBankEmp = if(binding.chkBandhanBank.isChecked) "Yes" else "No"
         leadDetailModel.bandhanBankEmp = binding.etBandhanBankRM.text.toString()
+        leadDetailModel.auBankName = binding.etAuBankName.text.toString()
+        leadDetailModel.auBankBranchCode = binding.etAuBranchCode.text.toString()
         return updateLead(leadDetailModel)
     }
 
@@ -1810,7 +1832,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.accountTypeId,
             model.chipsEventId,
             model.isBandhanBankEmp,
-            model.bandhanBankEmp
+            model.bandhanBankEmp,
+            model.auBankName,
+            model.auBankBranchCode
         )
     }
 
@@ -2082,6 +2106,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             spLeadAccountType.isEnabled = status
             chkBandhanBank.isEnabled = status
             etBandhanBankRM.isEnabled = status
+            etAuBankName.isEnabled = status
+            etAuBranchCode.isEnabled = status
 
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
@@ -2271,6 +2297,13 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
             binding.etBandhanBankRM.setText(bandhanBankEmpCode)
 
+        }
+
+        if(userManager.getUser()!!.isAllianceBusiness() && prospectSource.equals("BTL Activity QR Code", ignoreCase = true) ){
+            binding.ilAuBankName.isVisible = true
+            binding.ilAuBranchCode.isVisible = true
+            binding.etAuBankName.setText(auBankName)
+            binding.etAuBranchCode.setText(auBankBranchCode)
         }
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {

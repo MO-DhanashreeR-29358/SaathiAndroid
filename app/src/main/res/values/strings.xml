@@ -549,6 +549,8 @@
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_select_account_type">Select Lead Account Type</string>
     <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>
+    <string name="error_message_enter_au_bank_name">Enter Bank Name_QR</string>
+    <string name="error_message_enter_au_branch_code">Enter Bank Branch Code_QR</string>
     <string name="error_message_select_event">Select Event</string>
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
@@ -583,6 +585,8 @@
     <string name="lead_detail_lead_detail">Lead Detail</string>
     <string name="lead_detail_edit">Edit</string>
     <string name="lead_detail_lead_id">Lead Id</string>
+    <string name="lead_detail_au_bank_name">Bank Name_QR</string>
+    <string name="lead_detail_au_branch_code">Bank Branch Code_QR</string>
     <string name="lead_detail_lead_category">Lead Category</string>
     <string name="lead_detail_lead_client_type">Client Type</string>
     <string name="lead_detail_profession">Profession</string>

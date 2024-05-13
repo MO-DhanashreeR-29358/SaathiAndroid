@@ -118,6 +118,7 @@ class UpdateLeadValidator (val user: User) : Validator<UpdateLeadRequest, String
                 identifier = 17
                 R.string.error_message_enter_bbemp
             }
+
             else -> {
                 identifier = 0
                 null
