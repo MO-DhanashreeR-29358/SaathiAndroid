@@ -169,6 +169,8 @@ class CreateRequestReactivationFragment : CommonFragment(),CreateRequestReactiva
             objReactivationClientSearchResponseModel=it.firstOrNull()
             alert("Client search successfully")
             isSearched=true
+            binding.edtDateActual.setText("")
+            strSelectedDate=""
         }
 
         uiModel.onFailure {

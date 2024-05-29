@@ -386,20 +386,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:background="@color/colorWhite"
+                android:background="@color/list_background"
                 android:orientation="vertical">
-                <LinearLayout
-                    android:layout_marginBottom="@dimen/_3sdp"
-                    android:id="@+id/llAddProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ListView
-                        android:id="@+id/lvAddProduct"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvLeadDetail"
@@ -1029,7 +1017,7 @@
                             android:enabled="false"
                             android:hint="@string/lead_detail_au_bank_name"
                             android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
-                           android:textAllCaps="true"
+                            android:textAllCaps="true"
                             android:inputType="textCapCharacters"
                             android:maxLines="1"
                             android:singleLine="true"
@@ -2420,8 +2408,20 @@
                                 android:textSize="@dimen/_12sdp" />
                         </RelativeLayout>
                     </LinearLayout>
-<!-- moveed-->
 
+                    <LinearLayout
+                        android:id="@+id/llAddProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/lvAddProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@null"
+                            tools:listitem="@layout/item_list_add_product" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
 
