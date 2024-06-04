@@ -37557,8 +37557,6 @@ com.mosl.tabapp.slider.ImageSliderAdapter:
     public final java.lang.Integer[] getImageList()
 com.mosl.tabapp.slider.SliderActivity:
     public final void setUserManager(com.mosl.mobile.user.login.UserManager)
-    private final void showRootedMessage()
-    private static final void showRootedMessage$lambda$1(com.mosl.tabapp.slider.SliderActivity,com.mosl.tabapp.ui.MSFDialog$Action,java.lang.Object[])
 com.mosl.tabapp.slider.SliderActivityModule
 com.mosl.tabapp.slider.SliderActivity_MembersInjector:
     private final javax.inject.Provider androidInjectorProvider
@@ -37662,7 +37660,12 @@ com.mosl.tabapp.util.NavUtilsKt:
     public static final void openPDF(android.content.Context,java.lang.String)
     public static final void openUri(android.content.Context,android.net.Uri)
     public static final void openWebUrl(android.content.Context,android.net.Uri)
-com.mosl.tabapp.util.RootDeviceHelper
+com.mosl.tabapp.util.RootDeviceHelper:
+    private final boolean checkRootMethod1()
+    private final boolean checkRootMethod2()
+    private final boolean checkRootMethod3()
+    public final boolean checkRootMethod4(android.content.pm.PackageManager)
+    public final boolean isRooted(android.content.pm.PackageManager)
 com.mosl.tabapp.util.SearchConstantsKt
 com.mosl.tabapp.util.SpinnerAdapterFactory:
     public static final android.widget.ArrayAdapter getSpinnerAdapter(android.content.Context)
@@ -37675,34 +37678,37 @@ com.mosl.tabapp.util.adapters.AutoCompleteAdapter:
     public final android.content.Context getContext()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
 com.mosl.tabapp.util.adapters.SpinnerAdapter
-com.mosl.tabapp.util.rootbeer.Const
+com.mosl.tabapp.util.rootbeer.Const:
+    static final java.lang.String BINARY_BUSYBOX
+    static final java.lang.String BINARY_SU
+    private void <init>()
 com.mosl.tabapp.util.rootbeer.RootBeer:
-    public boolean canLoadNativeLibrary()
-    public boolean checkForBinary(java.lang.String)
     public boolean checkForBusyBoxBinary()
-    public boolean checkForDangerousProps()
-    public boolean checkForMagiskBinary()
     public boolean checkForNativeLibraryReadAccess()
-    public boolean checkForRWPaths()
-    public boolean checkForRootNative()
     public boolean checkForSuBinary()
-    public boolean checkSuExists()
-    public boolean detectPotentiallyDangerousApps()
-    public boolean detectPotentiallyDangerousApps(java.lang.String[])
     public boolean detectRootCloakingApps()
     public boolean detectRootCloakingApps(java.lang.String[])
-    public boolean detectRootManagementApps()
-    public boolean detectRootManagementApps(java.lang.String[])
-    public boolean detectTestKeys()
-    private boolean isAnyPackageFromListInstalled(java.util.List)
-    public boolean isRooted()
-    public boolean isRootedWithBusyBoxCheck()
     public boolean isRootedWithoutBusyBoxCheck()
-    private java.lang.String[] mountReader()
-    private java.lang.String[] propsReader()
     public void setLogging(boolean)
-com.mosl.tabapp.util.rootbeer.RootBeerNative
-com.mosl.tabapp.util.rootbeer.util.QLog
+com.mosl.tabapp.util.rootbeer.util.QLog:
+    public static final int ALL
+    public static final int ERRORS_ONLY
+    public static final int ERRORS_WARNINGS
+    public static final int ERRORS_WARNINGS_INFO
+    public static final int ERRORS_WARNINGS_INFO_DEBUG
+    public static final int NONE
+    private static final java.lang.String TAG
+    private static final java.lang.String TAG_GENERAL_OUTPUT
+    private void <init>()
+    public static void d(java.lang.Object)
+    public static void e(java.lang.Object,java.lang.Throwable)
+    private static java.lang.String getThrowableTrace(java.lang.Throwable)
+    public static void i(java.lang.Object)
+    public static boolean isDLoggable()
+    public static boolean isILoggable()
+    public static boolean isWLoggable()
+    public static void w(java.lang.Object)
+    public static void w(java.lang.Object,java.lang.Throwable)
 com.mosl.tabapp.util.rootbeer.util.Utils
 com.mosl.tabapp.view.TableWrapperView:
     public final boolean isRetryVisible()
@@ -84820,11 +84826,13 @@ com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatR
 com.mosl.tabapp.settings.SettingFragmentProvider_ProvideSettingFragment$app_uatRelease$SettingFragmentSubcomponent
 com.mosl.tabapp.settings.SettingFragment_MembersInjector
 com.mosl.tabapp.slider.SliderActivity$$InternalSyntheticLambda$1$effd2084934acaf721b8ab419cc02b2247c6de6817e23706f0793b1113dfd026$0
+com.mosl.tabapp.slider.SliderActivity$$InternalSyntheticLambda$2$0e3f587983162377938605c5120d90e996de772efe0ac64d65144684c4b53d8c$0
 com.mosl.tabapp.slider.SliderActivity:
     public final int getItem()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
     public final void launchSplash()
     public static void setBinding$22()
+    public static void showRootedMessage()
 com.mosl.tabapp.slider.SliderActivity_MembersInjector
 com.mosl.tabapp.smt.SMTCallBack:
     public abstract void openEkyc()
@@ -84966,6 +84974,7 @@ com.mosl.tabapp.util.EkycHelper:
 com.mosl.tabapp.util.EkycHelper_Factory
 com.mosl.tabapp.util.ErrorHelperKt
 com.mosl.tabapp.util.KotlinExtensionUtilKt
+com.mosl.tabapp.util.RootDeviceHelper
 com.mosl.tabapp.util.SpinnerAdapterFactory:
     public static final com.mosl.tabapp.util.SpinnerAdapterFactory INSTANCE
     public static void <clinit>()
@@ -85007,7 +85016,30 @@ com.mosl.tabapp.util.adapters.AutoCompleteAdapter:
     public static void setErrorMsgDialogListener()
     public static void setNavigator()
     public static void setScreenNavigator()
-com.mosl.tabapp.util.rootbeer.RootBeer
+com.mosl.tabapp.util.rootbeer.Const:
+    public static final java.lang.String[] knownRootCloakingPackages
+com.mosl.tabapp.util.rootbeer.RootBeer:
+    public boolean loggingEnabled
+    public static boolean canLoadNativeLibrary()
+    public static boolean checkForMagiskBinary()
+    public final boolean detectPotentiallyDangerousApps()
+    public static boolean detectPotentiallyDangerousApps$1()
+    public final boolean detectRootManagementApps()
+    public static boolean detectRootManagementApps$1()
+    public static boolean detectTestKeys()
+    public static boolean isRooted()
+    public static boolean isRootedWithBusyBoxCheck()
+    public static java.lang.String[] mountReader()
+    public static java.lang.String[] propsReader()
+com.mosl.tabapp.util.rootbeer.RootBeerNative:
+    public static boolean wasNativeLibraryLoaded()
+com.mosl.tabapp.util.rootbeer.util.QLog:
+    public static int LOGGING_LEVEL
+    public static void <clinit>()
+    public static void e()
+    public static boolean isELoggable()
+    public static boolean isVLoggable()
+    public static void v(java.lang.String)
 com.mosl.tabapp.view.TableWrapperView:
     public static void scrollToTop()
     public static void showError()
