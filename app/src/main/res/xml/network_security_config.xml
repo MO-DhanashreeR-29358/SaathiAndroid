@@ -12,6 +12,7 @@
             <pin digest="SHA-256">hETpgVvaLC0bvcGG3t0cuqiHvr4XyP2MTwCiqhgRWwU=</pin>
             <pin digest="SHA-256">cGuxAXyFXFkWm61cF4HPWX8S0srS9j0aSqN0k4AP+4A=</pin>
 
+            <pin digest="SHA-256">ZFCKi+0rr8mCcBELg5phEk+sFjkOOuKVOYDb+7fi81I=</pin>
 
         </pin-set>
     </domain-config>
