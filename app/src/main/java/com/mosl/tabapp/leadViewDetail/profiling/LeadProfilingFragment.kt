@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
 import com.jakewharton.rxbinding4.view.clicks
+import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -86,9 +87,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                             .toTypedArray()
                         val textInEditText = entry.text.toString()
                             .trim { it <= ' ' }
-                        profileRequestList += ProfileRequestData(
-                            tagArray[0], tagArray[1], leadId, textInEditText
-                        )
+                        if (textInEditText.isNotEmpty()) {
+                            profileRequestList += ProfileRequestData(
+                                tagArray[0], tagArray[1], leadId, textInEditText
+                            )
+                        }
                     } catch (e: Exception) {
                         Timber.d(e)
                     }
@@ -103,9 +106,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                             .toTypedArray()
                         val textInTextView = entry.text.toString()
                             .trim { it <= ' ' }
-                        profileRequestList += ProfileRequestData(
-                            tagArray[0], tagArray[1], leadId, textInTextView
-                        )
+                        if (textInTextView.isNotEmpty()) {
+                            profileRequestList += ProfileRequestData(
+                                tagArray[0], tagArray[1], leadId, textInTextView
+                            )
+                        }
                     } catch (e: Exception) {
                         Timber.d(e)
                     }
@@ -113,7 +118,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 is RadioGroup -> for (i in 0 until entry.childCount) {
                     val rbTemp = entry.getChildAt(i) as RadioButton
                     val profileOption = rbTemp.tag as ProfileOption
-                    if (profileOption != null && rbTemp.isChecked) {
+                    if (rbTemp.isChecked) {
                         var valueString = ""
                         if (!CRMAppUtil.isBlank(profileOption.extraInfo) && profileOption.extraInfo.equals(
                                 "Y", ignoreCase = true
@@ -457,7 +462,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
             //Question
             // group
-            var questionNo = 1
+            //var questionNo = 1
             for (question in group.profileQuestionList) {
                 val padding = resources.getDimension(R.dimen._15sdp)
                     .toInt()
@@ -469,8 +474,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     )
                     setTextColor(ContextCompat.getColor(requireContext(), R.color.light_black))
                     setPadding(padding, padding, padding, padding)
-                    text = String.format("Q %d.%s", questionNo, question.questionText)
-                    questionNo++
+                    //as per QA requirement hide the question number to match the view with web
+                    //text = String.format("Q %d.%s", questionNo, question.questionText)
+                    // questionNo++
+                    text = question.questionText
                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                     setBackgroundResource(R.drawable.profiling_question_background_text)
                 }
@@ -481,9 +488,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
                     tvQuestion.visibility = View.GONE
                 }
-                if (!question.profileOptionList
-                        .isEmpty()
-                ) {// && question.getProfileOptionList().size()<1
+                if (!question.profileOptionList.isEmpty()) {// && question.getProfileOptionList().size()<1
                     when (question.controlType) {
                         0 -> {
                         }
@@ -545,6 +550,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                             )
                             questionMap[question.profileParameterID!!.toString()] =
                                 llBasicProfileQuestionLayoutGroup
+                            if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
+                                llBasicProfileQuestionLayoutGroup.visibility = View.GONE
+                            }
                         }
                         NUMBER_TEXT_BOX -> {
 
