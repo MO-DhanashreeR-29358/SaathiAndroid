@@ -4,7 +4,7 @@ import com.mosl.mobile.data.util.CommonBaseUrls
 
 class ApiBaseUrlImpl : CommonBaseUrls {
   override fun getSaathiApiUrl(): String {
-    return "https://saathiuat.motilaloswal.com:1023/api/"
+    return "https://Saathiuat.motilaloswalUAT.com:1023/api/"
   }
 
   override fun getUppermostApiUrl(): String {
@@ -33,7 +33,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   companion object {
-    const val SAATHI_BASE_URL = "https://saathiuat.motilaloswal.com:1023/api/"
+    const val SAATHI_BASE_URL = "https://saathiuat.motilaloswalUAT.com:1023/api/"
   }
 
 }
