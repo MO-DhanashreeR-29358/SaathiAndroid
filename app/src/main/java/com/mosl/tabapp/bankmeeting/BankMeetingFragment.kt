@@ -39,6 +39,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
+import com.mosl.tabapp.model.bankmeeting.BankBranchCodeData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
@@ -61,6 +62,7 @@ class BankMeetingFragment : CommonFragment() {
     private lateinit var branchAdapter: ArrayAdapter<RowData>
     private lateinit var bankBranchAdapter: ArrayAdapter<RowData>
     private var subBrokerId = -1
+    private var bankBranchCode = -1
     private lateinit var clientNameList: ArrayList<MeetingClientName>
     private lateinit var clientNameAdapter: ClientNameAdapter
     private var addedEmployeeCount: Int = 0
@@ -82,6 +84,13 @@ class BankMeetingFragment : CommonFragment() {
 
     private fun setUpView() {
         getProfile()
+
+        binding.actvBankBranch.setOnClickListener {
+            binding.actvBankBranch.setText("")
+            bankBranchCode = -1
+            searchDialogBankBranchCode()
+        }
+
         binding.actvSubBroker.setOnClickListener {
             binding.actvSubBroker.setText("")
             subBrokerId = -1
@@ -202,6 +211,8 @@ class BankMeetingFragment : CommonFragment() {
                         etClientName.isEnabled = false
                         etClientName.setText("")
                         actvSubBroker.setText("")
+                        actvBankBranch.setText("")
+                        tvBankBranchName.setText("")
                         subBrokerId = -1
                         setCount(0)
                         addedBankEmployeeList.clear()
@@ -223,35 +234,6 @@ class BankMeetingFragment : CommonFragment() {
         }
     }
 
-    private val bankBranchListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(
-            parent: AdapterView<*>,
-            view: View,
-            position: Int,
-            id: Long
-        ) {
-            try {
-                binding.tvBankBranchError.visibility = View.GONE
-                if (getSelectedBankBranch().value == "Others") {
-                    binding.apply {
-                        ilBankBranchOther.visibility = View.VISIBLE
-                        tvBankBranchLabelInfo.visibility = View.VISIBLE
-                        resetError()
-                    }
-
-                } else {
-                    binding.ilBankBranchOther.visibility = View.GONE
-                    binding.tvBankBranchLabelInfo.visibility = View.GONE
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>) {
-
-        }
-    }
 
 
     private fun openDatePicker() {
@@ -310,6 +292,93 @@ class BankMeetingFragment : CommonFragment() {
         }
         searchList.setmListner(assingViewListner)
     }
+
+    private fun searchDialogBankBranchCode() {
+
+        val searchList = CustomListPickerDialog(requireContext())
+        searchList.threshold = MOSLConstants.SEARCH_LENTH
+        searchList.show()
+        searchList.setCustomTitle(resources.getString(R.string.str_search))
+        val assingViewListner = object : CustomListPickerDialog.ListPickerListneable {
+            override fun onListItemSelect(data: Parcelable) {
+                val clientModel = data as BankBranchCodeData
+                if (clientModel.isNoData) {
+                    return
+                }
+                binding.actvBankBranch.setText(clientModel.branchName)
+                if(clientModel.branchName.isNotEmpty()) {
+                    val branchName = clientModel.branchName.substring(
+                        clientModel.branchName.indexOf("-")+1,
+                        clientModel.branchName.length
+                    )
+                    binding.tvBankBranchName.setText(branchName)
+                }
+                bankBranchCode = clientModel.branchCode
+                searchList.dismiss()
+            }
+
+            override fun onSearchTextChanged(constraint: CharSequence) {
+                searchBankBranchCode(constraint, searchList)
+            }
+        }
+        searchList.setmListner(assingViewListner)
+    }
+    private fun searchBankBranchCode(
+        constraint: CharSequence?,
+        searchList: CustomListPickerDialog
+    ) {
+        if (constraint == null) return
+        val profileRequest: BankBranchCodeRequest
+        try {
+            val bankName = if (binding.spBank.isSpinnerVisible()) getSelectedBank().value else ""
+
+            profileRequest = BankBranchCodeRequest(constraint.toString(),bankName)
+
+        } catch (e: UnsupportedEncodingException) {
+            return
+        }
+
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            disposable.add(saathiApi.getBranchLocationList(profileRequest)
+                .compose(applyUiModel())
+                .subscribe { uiModel ->
+                    if (uiModel.inProgress) {
+                        hideKeyboard(binding.actvBankBranch)
+                        searchList.showProgress(View.VISIBLE)
+                    } else {
+                        searchList.showProgress(View.GONE)
+                    }
+
+                    uiModel.onFailure { error ->
+                        val modelList = ArrayList<BankBranchCodeData>()
+                        modelList.add(BankBranchCodeData.getNoData(getErrorOnFailureNew(error)))
+                        val myAssineeAdapter = BankBranchCodeSearchAdapter(requireContext(), modelList)
+                        searchList.setAdapter(myAssineeAdapter)
+                    }
+
+                    uiModel.onSuccess { data ->
+                        val modelList = ArrayList<BankBranchCodeData>()
+                        for (datum in data) {
+                            modelList.add(
+                                BankBranchCodeData(
+                                    stringOrEmpty(datum.bankName),
+                                    datum.bankBranchId,
+                                    false
+                                )
+                            )
+                        }
+                        if (modelList.isEmpty()) {
+                            modelList.add(BankBranchCodeData.getNoData(MOSLConstants.ATTENDEEE_NOT_FOUND_MESSAGE))
+                        }
+                        val myAssineeAdapter = BankBranchCodeSearchAdapter(requireContext(), modelList)
+                        searchList.setAdapter(myAssineeAdapter)
+                    }
+                })
+        } else {
+            noInternetConnectionDialog()
+        }
+    }
+
 
     private fun dialogBankEmployee() {
         val dialogAttendeeList = Dialog(requireContext())
@@ -604,10 +673,6 @@ class BankMeetingFragment : CommonFragment() {
                 layout.simple_spinner_item, arrBankBranch
             )
             bankBranchAdapter.setDropDownViewResource(layout.mdropdown)
-            binding.spBankBranch.apply {
-                adapter = bankBranchAdapter
-                onItemSelectedListener = bankBranchListener
-            }
         }
     }
 
@@ -622,6 +687,9 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
+                    actvSubBroker.setText("")
+                    actvBankBranch.setText("")
+                    tvBankBranchName.setText("")
                 }
                 TRAINING -> {
                     groupBankBranch.toggelVisibility(true)
@@ -630,6 +698,9 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
+                    actvSubBroker.setText("")
+                    actvBankBranch.setText("")
+                    tvBankBranchName.setText("")
                 }
                 CLIENT_MEETING -> {
                     groupBankBranch.toggelVisibility(true)
@@ -638,6 +709,9 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(true)
                     rvClientName.visibility = View.VISIBLE
                     callBankList()
+                    actvSubBroker.setText("")
+                    actvBankBranch.setText("")
+                    tvBankBranchName.setText("")
                 }
                 else -> {
                     groupBankBranch.toggelVisibility(false)
@@ -732,7 +806,7 @@ class BankMeetingFragment : CommonFragment() {
         return binding.etMeetingDescription.text.toString()
     }
     private fun getBankBranchName(): String {
-        return binding.etBankBranchOther.text.toString()
+        return binding.tvBankBranchName.text.toString()
     }
     private fun getSelectedBank(): RowData {
         return binding.spBank.selectedItem as RowData
@@ -740,9 +814,6 @@ class BankMeetingFragment : CommonFragment() {
 
     private fun getSelectedBranch(): RowData {
         return binding.spBranch.selectedItem as RowData
-    }
-    private fun getSelectedBankBranch(): RowData {
-        return binding.spBankBranch.selectedItem as RowData
     }
     private fun getSubBroker(): Int {
         return subBrokerId
@@ -819,14 +890,14 @@ class BankMeetingFragment : CommonFragment() {
     private fun resetFields() {
         binding.apply {
             etMeetingDescription.setText("")
-            etBankBranchOther.setText("")
+            tvBankBranchName.setText("")
             tvDate.setText("")
             spMeetingType.setSelection(0)
             spMeetingDuration.setSelection(0)
             spBank.setSelection(0)
             spBranch.setSelection(0)
-            spBankBranch.setSelection(0)
             actvSubBroker.setText("")
+            actvBankBranch.setText("")
             subBrokerId = -1
 //      actvBankEmployee.setText("")
             setCount(0)
@@ -845,14 +916,13 @@ class BankMeetingFragment : CommonFragment() {
             ilMeetingDescription.setErrorMessages()
             tvBankError.toggleTextView(false)
             tvBranchError.toggleTextView(false)
-            tvBankBranchError.toggleTextView(false)
             /*ilMobileNumber.setErrorMessages()
             ilClientName.setErrorMessages()*/
             ilSubBroker.setErrorMessages()
 //      ilBankEmployee.setErrorMessages()
             tvBankEmployeeError.toggleTextView(false)
             ilSubject.setErrorMessages()
-            ilBankBranchOther.setErrorMessages()
+            ilBankBranch.setErrorMessages()
 
         }
     }
@@ -885,8 +955,10 @@ class BankMeetingFragment : CommonFragment() {
                 isClientNameVisible = ((binding.spMeetingType.selectedItem as RowData).value == "Client Meeting"),
                 clientMobileNumber = getMobileNumber(),
                 clientName = clientNameValue,
-                bankBranchId = if (spBankBranch.isSpinnerVisible()) getSelectedBankBranch().key else "-1",
-                bankBranchName = getBankBranchName()
+                bankBranchId = "-1",
+                bankBranchName = "",
+                //bankLocationCode = bankBranchCode,
+                bankLocationName = bankBranchCode.toString()
             )
         }
     }

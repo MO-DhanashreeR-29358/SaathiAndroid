@@ -319,7 +319,7 @@ Page </string>
     <string name="validate_bank_branch_name">Enter Bank Branch Name</string>
     <string name="validate_bank">Enter Bank</string>
     <string name="validate_branch">Enter Branch</string>
-    <string name="validate_bank_branch">Enter Bank Branch</string>
+    <string name="validate_bank_branch_code">Enter Bank Branch Code</string>
     <string name="validate_bank_employee">Enter Bank Employee</string>
     <string name="validate_sub_broker">Enter SubBroker</string>
     <string name="validate_subject">Enter Subject</string>
@@ -746,4 +746,8 @@ Page </string>
 
     <string name="mark_attendance">Mark Your Attendance Here</string>
 
+    <string name="label_bank_branch_code">Bank Branch Code*</string>
+    <string name="label_bank_branch_name">Bank Branch Name*</string>
+    <string name="hint_bank_branch">Enter Bank Branch Code</string>
+    <string name="hint_bank_branch_name">Bank Branch Name</string>
 </resources>

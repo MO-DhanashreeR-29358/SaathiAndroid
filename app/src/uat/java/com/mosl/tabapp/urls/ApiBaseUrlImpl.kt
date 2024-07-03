@@ -4,7 +4,7 @@ import com.mosl.mobile.data.util.CommonBaseUrls
 
 class ApiBaseUrlImpl : CommonBaseUrls {
   override fun getSaathiApiUrl(): String {
-    return "https://saathiuat.motilaloswal.com:1023/api/"
+    return "https://saathiuat.motilaloswaluat.com:1023/api/"
   }
 
   override fun getUppermostApiUrl(): String {
@@ -25,7 +25,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getQRCodeApiUrl(): String {
-    return "https://saathiuat.motilaloswal.com/saathi_plus/api/DrishtiTransfer/GenerateQrCode_API/?Empcode="
+    return "https://saathiuat.motilaloswaluat.com/saathi_plus/api/DrishtiTransfer/GenerateQrCode_API/?Empcode="
   }
 
   override fun getMyZoneApiUrl(): String {
@@ -33,7 +33,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   companion object {
-    const val SAATHI_BASE_URL = "https://saathiuat.motilaloswal.com:1023/api/"
+    const val SAATHI_BASE_URL = "https://saathiuat.motilaloswaluat.com:1023/api/"
   }
 
 }

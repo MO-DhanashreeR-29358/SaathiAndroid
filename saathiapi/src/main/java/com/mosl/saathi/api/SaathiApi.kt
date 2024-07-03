@@ -768,6 +768,11 @@ interface SaathiApi {
         @Body request: SubBrokerRequest
     ): Observable<List<SubBrokerResponse>>
 
+    @POST("BankMeeting/getBranchLocationList")
+    fun getBranchLocationList(
+        @Body request: BankBranchCodeRequest
+    ): Observable<List<BankBranchCodeResponse>>
+
     @POST("BankMeeting/AutoCompleteBankEmployee")
     fun getBankEmployee(
         @Body request: BankEmployeeRequest
