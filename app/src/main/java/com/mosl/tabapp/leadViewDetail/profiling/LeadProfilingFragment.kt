@@ -270,6 +270,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     tmpProfileQuestion.questionType = parameter.questionType!!
                     tmpProfileQuestion.questionType = parameter.selectedProfileSubParameterID!!
                     tmpProfileQuestion.isAdminMode = parameter.isAdminMode!!
+                    tmpProfileQuestion.status = parameter.status
                     val questionText = stringOrEmpty(parameter.questionText)
                     tmpProfileQuestion.questionText = questionText
 
@@ -523,7 +524,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
                     tvQuestion.visibility = View.GONE
                 }
-                if (!question.profileOptionList.isEmpty()) {// && question.getProfileOptionList().size()<1
+                if (question.status == 0) {
+                    tvQuestion.visibility = View.GONE
+                }
+                if (!question.profileOptionList.isEmpty() && question.status != 0) {// && question.getProfileOptionList().size()<1
                     when (question.controlType) {
                         0 -> {
                         }

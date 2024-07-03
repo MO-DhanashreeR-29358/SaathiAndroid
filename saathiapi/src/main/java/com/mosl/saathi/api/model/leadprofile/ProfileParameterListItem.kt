@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ProfileParameterListItem(
 
-  @JvmField @SerializedName("Status")
+  @JvmField @SerializedName("status")
   val status: Int?,
 
   @JvmField @SerializedName("QuestionType")
