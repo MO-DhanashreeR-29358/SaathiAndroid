@@ -470,7 +470,7 @@ Page </string>
     <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
     <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>
-    <string name="lbl_lead_creation_account_type">Lead Account Type*</string>
+    <string name="lbl_lead_creation_account_type">Account Type*</string>
     <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
     <string name="hint_lead_creation_bb_rm">Bandhan Bank Employee Code*</string>
@@ -550,7 +550,7 @@ Page </string>
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
-    <string name="error_message_select_account_type">Select Lead Account Type</string>
+    <string name="error_message_select_account_type">Select Account Type</string>
     <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>
     <string name="error_message_enter_au_bank_name">Enter Bank Name_QR</string>
     <string name="error_message_enter_au_branch_code">Enter Bank Branch Code_QR</string>
@@ -611,7 +611,7 @@ Page </string>
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>
     <string name="lead_detail_event_name">Event Name</string>
-    <string name="lead_detail_lead_account_type">Lead Account Type</string>
+    <string name="lead_detail_lead_account_type">Account Type</string>
     <string name="lead_detail_broking_profile">Broking Profile</string>
     <string name="lead_detail_ip_profile">IP Profile</string>
     <string name="lead_detail_final_profile">Final Profile</string>
