@@ -247,7 +247,9 @@ class LeadCreationValidator(val user: User) : Validator<LeadCreationUserInput, S
 
             input.accountTypeId == "-1"
                     && user.isAllianceBusiness()
-                    && input.selectedBranch.branchName == "AUSFBMAIN" -> {
+                    && (input.selectedBranch.branchName == "AUSFBMAIN"
+                    || input.selectedBranch.branchName == "BANBMAIN"
+                    || input.selectedBranch.branchName == "IIBLMAIN") -> {
                 identifier = 40
                 R.string.error_message_select_account_type
             }

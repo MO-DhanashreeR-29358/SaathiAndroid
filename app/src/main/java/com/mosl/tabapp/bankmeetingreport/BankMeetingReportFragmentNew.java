@@ -302,7 +302,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                         if (columnName.toString().equalsIgnoreCase("lead_id")) {
                             columnName = columnName.toString().toUpperCase();
                         }
-                        columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                        columnsHeader.add(getRefreshBankMeetingReportColumnName(columnName.toString()));
                     }
                     String[] stockArr = new String[columnsHeader.size()];
                     stockArr = columnsHeader.toArray(stockArr);
@@ -335,7 +335,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                     if (column.equalsIgnoreCase("lead_id")) {
                         column = column.toUpperCase();
                     }
-                    hm.put(getRefreshColumnName(column), columnData.trim());
+                    hm.put(getRefreshBankMeetingReportColumnName(column), columnData.trim());
                 }
                 meetingReportTableAdapter.add(hm);
             }
@@ -349,6 +349,28 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
             binding.tvNoRecords.setVisibility(View.VISIBLE);
         }
     }
+
+    public static String getRefreshBankMeetingReportColumnName(String columnName) {
+
+        if (columnName.equalsIgnoreCase("lead_id")) {
+            columnName = columnName.toUpperCase();
+        }
+
+        columnName = columnName.replace("Group_Bank", "Bank Name");
+        columnName = columnName.replace("Bank_Branch", "Branch");
+        columnName = columnName.replace("IFSCCode", "IFSC Code");
+        columnName = columnName.replace("ProductId", "Product Id");
+        columnName = columnName.replace("MeetingStatusId", "Meeting Status Id");
+        columnName = columnName.replace("ProductListName", "Product List");
+        columnName = columnName.replace("MeetingStatusName", "Meeting Status Name");
+        columnName = columnName.replace("BankLocationCode", "Bank Branch Code");
+        columnName = columnName.replace("BankLocationName", "Bank Branch Name");
+
+        columnName = columnName.replace("_", " ");
+
+        return columnName;
+    }
+
 
     private class CommonHeader {
         private final String name;

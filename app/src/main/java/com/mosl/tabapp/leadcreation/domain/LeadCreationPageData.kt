@@ -23,7 +23,6 @@ data class LeadDetailPageData(
     @JvmField val finalProfileRowDatas: List<RowData>,
     @JvmField val interestInRowDatas: List<RowData>,
     @JvmField val countryRowDatas: List<RowData>,
-    @JvmField val accountTypeRowDatas: List<RowData>,
     @JvmField val chipsRowDatas: List<RowData>
 )
 

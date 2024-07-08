@@ -1,7 +1,6 @@
 package com.mosl.tabapp.leadcreation.data
 
 import com.mosl.app.core.data.bank.banckCodeTransform
-import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.user.login.UserManager
@@ -268,12 +267,12 @@ class LeadCreationRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getAccountTypeList(): Observable<List<RowData>> {
+    override fun getAccountTypeList(lookupTypeId: Int): Observable<List<RowData>> {
         val request = LookupRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.LEADACCOUNTTYPE
+            lookupTypeId = lookupTypeId
         )
         return getRowDatas(request)
     }

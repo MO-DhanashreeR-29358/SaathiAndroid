@@ -32,6 +32,7 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.lead.*
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
@@ -99,6 +100,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var selectedStateId = DEFAULT_SELECTION_ID
     private var selectedStateOffId = DEFAULT_SELECTION_ID
     private var pmsList: List<String> = emptyList()
+
+    private var accountTypeLookupId = 0
+    private var strAccountTypeName = ""
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
@@ -1995,7 +1999,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             interestedAdapter.addAll(data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
-            binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, data.accountTypeRowDatas)
             binding.spEvent.setSpinnerData(chipsAdapter, data.chipsRowDatas)
             binding.llEditLeadDetail.performClick()
         }
@@ -2260,16 +2263,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.spNetworth.setSelection(it.position)
         }
 
-        if(accountTypeName.isEmpty()){
-            binding.tvLeadAccountType.isVisible = false
-            binding.tlLeadAccountType.isVisible = false
-        }else{
-            val dataAccountType = RowData.getSpinnerRowDataByValue(accountTypeName, accountTypeAdapter)
-            dataAccountType?.let {
-                binding.spLeadAccountType.setSelection(it.position)
-            }
-        }
-
         binding.etReferralEmpCode.setText(referralEmpCode)
         binding.etReferralEmpName.setText(referralEmpName)
 
@@ -2311,6 +2304,34 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
 
         contact?.renderContact()
+
+        if(accountTypeName.isEmpty()){
+            binding.tvLeadAccountType.isVisible = false
+            binding.tlLeadAccountType.isVisible = false
+        }else{
+            if(BuildConfig.FLAVOR == "prod"){
+                if(branchName == "AUSFBMAIN" ){
+                    accountTypeLookupId = 145
+                } else  if(branchName == "IIBLMAIN"){
+                    accountTypeLookupId = 146
+                } else  if(branchName == "BANBMAIN"){
+                    accountTypeLookupId = 147
+                }
+
+            }else{
+                if(branchName == "AUSFBMAIN" ){
+                    accountTypeLookupId = 142
+                } else  if(branchName == "IIBLMAIN"){
+                    accountTypeLookupId = 148
+                } else  if(branchName == "BANBMAIN"){
+                    accountTypeLookupId = 149
+                }
+            }
+            strAccountTypeName = accountTypeName
+
+            subject.onNext(CallAccountType)
+
+        }
 
     }
 
@@ -2664,6 +2685,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             return (binding.spEvent.selectedItem as? RowData)?.key
         }
         return ""
+    }
+
+    override fun onCallAccountTypeFired(): Observable<CallAccountType> {
+        return subject.ofType()
+    }
+
+    override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, it)
+            val dataAccountType = RowData.getSpinnerRowDataByValue(strAccountTypeName, accountTypeAdapter)
+            dataAccountType?.let {
+                binding.spLeadAccountType.setSelection(it.position)
+            }
+        }
+    }
+
+
+    override fun getAccountTypeLookupId(): Int {
+        return  accountTypeLookupId
     }
 
     override fun renderStage(uiModel: UiModel<List<RowData>>) {

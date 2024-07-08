@@ -130,6 +130,7 @@ interface LeadCreationView : BaseView {
   fun onProspectSourceChanged(): Observable<Int>
   fun getSelectedProspectSource(): RowData
   fun renderOnProspectSourceChange(isBTL: Boolean)
+  fun getAccountTypeLookupId() : Int
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"
