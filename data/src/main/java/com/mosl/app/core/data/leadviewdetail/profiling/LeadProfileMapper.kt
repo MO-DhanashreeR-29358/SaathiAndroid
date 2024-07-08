@@ -63,7 +63,8 @@ private fun ProfileParameterListItem.mapToProfileParameter(): ProfileParameter {
     isAdminMode = isAdminMode,
     controlType = controlType,
     questionText = questionText,
-    profileParameterID = profileParameterID
+    profileParameterID = profileParameterID,
+    status = status
   )
 }
 

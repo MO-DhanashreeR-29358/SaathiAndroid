@@ -14,8 +14,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.TabLayoutOnPageChangeListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.error.getErrorOnFailure
@@ -42,9 +40,8 @@ import com.mosl.tabapp.util.initiateCall
 import com.mosl.tabapp.util.initiateMessage
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
-import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -70,6 +67,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
     private var prospectSourceDetail: String? = null
     private var initialPage = 0
     private var isShowOAO: Int = 0
+    private var isStageCompleted = 0
 
     private val subject = LeadViewDetailUiEvent.getSubject()
 
@@ -209,9 +207,22 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
 
             dialogBinding.ivOaoForm.setOnClickListener {
                 dismiss()
+                if (userManager.getUser() != null && userManager.getUser()!!
+                        .isPCG() && isStageCompleted == 0
+                ) {
+                    alert(getString(string.lead_not_in_c3_stage))
+                    return@setOnClickListener
+                }
                 subject.onNext(LeadViewDetailUiEvent.OaoFormClick(oaoUserId))
             }
             dialogBinding.ivOpenAccount.setOnClickListener {
+
+                if (userManager.getUser() != null && userManager.getUser()!!
+                        .isPCG() && isStageCompleted == 0
+                ) {
+                    alert(getString(string.lead_not_in_c3_stage))
+                    return@setOnClickListener
+                }
                 dismiss()
                 subject.onNext(LeadViewDetailUiEvent.OpenAccountClick)
             }
@@ -233,6 +244,13 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
             }
             dialogBinding.ivClose.setOnClickListener { dismiss() }
             dialogBinding.ivShareLink.setOnClickListener {
+
+                if (userManager.getUser() != null && userManager.getUser()!!
+                        .isPCG() && isStageCompleted == 0
+                ) {
+                    alert(getString(string.lead_not_in_c3_stage))
+                    return@setOnClickListener
+                }
                 dismiss()
                 subject.onNext(LeadViewDetailUiEvent.ShareLinkClick)
             }
@@ -241,6 +259,13 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 subject.onNext(LeadViewDetailUiEvent.SuggestMeClick)
             }
             dialogBinding.ivCopyLink.setOnClickListener {
+
+                if (userManager.getUser() != null && userManager.getUser()!!
+                        .isPCG() && isStageCompleted == 0
+                ) {
+                    alert(getString(string.lead_not_in_c3_stage))
+                    return@setOnClickListener
+                }
                 dismiss()
                 subject.onNext(LeadViewDetailUiEvent.CopyLinkClick)
             }
@@ -406,6 +431,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 diyLink = it.diyLink
                 clientType = it.clientType
                 isShowOAO = it.isShowOAO
+                isStageCompleted = it.isStageCompleted
                 it.leadProducts
                     .forEach {
                         interestedIn = it.interestedIn

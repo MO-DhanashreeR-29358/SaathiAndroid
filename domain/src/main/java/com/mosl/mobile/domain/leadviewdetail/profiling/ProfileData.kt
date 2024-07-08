@@ -14,7 +14,7 @@ data class LeadProfile(
   @JvmField val businessUnitId: Int,
   @JvmField val isAdminMode: Boolean,
   @JvmField val profileParameterList: List<ProfileParameter>?,
-  @JvmField val profileParameterId: String?
+  @JvmField val profileParameterId: String?,
 )
 
 data class ProfileParameter(
@@ -27,7 +27,8 @@ data class ProfileParameter(
   @JvmField val isAdminMode: Boolean?,
   @JvmField val controlType: Int,
   @JvmField val questionText: String?,
-  @JvmField val profileParameterID: Int?
+  @JvmField val profileParameterID: Int?,
+  @JvmField val status: Int?
 )
 
 data class ProfileSubParameter(

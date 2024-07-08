@@ -59,7 +59,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -85,7 +86,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -118,7 +120,8 @@ open class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -141,7 +144,8 @@ open class MenuDataSourceImpl @Inject constructor(
         } else {
             arrayListOf(
                 getDashboard(),
-                getSip(),
+                 // hide as per requirement
+                 // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -177,7 +181,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -204,7 +209,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -271,7 +277,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),
@@ -294,7 +301,8 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getReactivationCreate(),
                 getEModification(),

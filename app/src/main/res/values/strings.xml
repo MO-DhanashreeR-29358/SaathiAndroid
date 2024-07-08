@@ -745,6 +745,7 @@ Page </string>
     <string name="successfully_logout">Successfully logout</string>
 
     <string name="mark_attendance">Mark Your Attendance Here</string>
+    <string name="lead_not_in_c3_stage">Currently Lead Is Not In C3 Stage.Please Update Stage.</string>
 
     <string name="label_bank_branch_code">Bank Branch Code*</string>
     <string name="label_bank_branch_name">Bank Branch Name*</string>
