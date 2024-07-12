@@ -86,8 +86,6 @@ class BankMeetingFragment : CommonFragment() {
         getProfile()
 
         binding.actvBankBranch.setOnClickListener {
-            binding.actvBankBranch.setText("")
-            bankBranchCode = -1
             searchDialogBankBranchCode()
         }
 
@@ -223,7 +221,10 @@ class BankMeetingFragment : CommonFragment() {
                 } else {
                     binding.etClientName.isEnabled = true
                 }
-                callBankBranchList(getSelectedBank().key)
+                binding.actvBankBranch.setText("")
+                binding.tvBankBranchName.setText("")
+                binding.actvSubBroker.setText("")
+                // callBankBranchList(getSelectedBank().key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }

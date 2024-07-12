@@ -94,12 +94,12 @@ fun FragmentAuBankMeetingBinding.showValidationMsg(msg: Int) {
             ilSubBroker.error = context.getString(R.string.validate_sub_broker)
             actvSubBroker.requestFocus()
         }
-        7 -> {
+       /* 7 -> {
             tvBankEmployeeError.text = context.getString(R.string.validate_bank_employee)
             tvBankEmployeeError.toggleTextView(true)
 //      ilBankEmployee.error = context.getString(R.string.validate_bank_employee)
 //      actvBankEmployee.requestFocus()
-        }
+        }*/
         8 -> {
             ilSubject.error = context.getString(R.string.validate_subject)
             etSubject.requestFocus()

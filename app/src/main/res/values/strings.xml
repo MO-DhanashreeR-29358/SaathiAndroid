@@ -294,14 +294,14 @@ Page </string>
     <string name="text_label_meeting_date">Meeting Date*</string>
     <string name="text_label_meeting_type">Meeting Type*</string>
     <string name="text_label_meeting_duration">Meeting Duration*</string>
-    <string name="text_label_bank">Bank*</string>
+    <string name="text_label_bank">Bank Name*</string>
     <string name="text_label_branch">Branch*</string>
     <string name="text_label_bank_branch">Bank Branch*</string>
     <string name="button_label_save">Save</string>
     <string name="button_label_reset">Reset</string>
     <string name="text_hint_label_enter_bank_branch_other">Enter Branch Code (Only numeric allowed)*</string>
     <string name="text_hint_label_enter_sub_broker">Enter SubBroker*</string>
-    <string name="text_hint_label_enter_bank_employee">Enter Bank Employee*</string>
+    <string name="text_hint_label_enter_bank_employee">Enter Bank Employee</string>
     <string name="text_hint_label_enter_mosl_employee">Enter MOFSL Employee*</string>
     <string name="text_lable_other_bank_info">*Only Numeric allowed!</string>
 

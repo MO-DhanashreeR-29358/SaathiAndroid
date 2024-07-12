@@ -8,7 +8,24 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+        <RelativeLayout
+            android:id="@+id/labelContainer"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@color/titleBarBackground">
 
+            <TextView
+                android:id="@+id/txtLables"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:singleLine="true"
+                android:text="Bank Meeting Report"
+                android:textColor="@color/alternateTextColor"
+                android:textSize="@dimen/appTitleTextSize"
+                android:textStyle="bold" />
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1400,7 +1400,12 @@ class LeadCreationFragment : CommonFragment(),
                 } else if (dedupeModel != null && data.errors != null) {
                     dedupeDialog(dedupeModel)
                 }
-            }
+            }else
+            MSFDialog.alertDialog(
+                context, 0,
+                context.getResources().getString(R.string.motilal_oswal),
+                data.errors?.get(0)?.message, "OK", true, null
+            )
         }
     }
 
