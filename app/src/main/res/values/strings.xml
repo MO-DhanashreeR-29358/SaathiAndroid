@@ -525,6 +525,8 @@ Page </string>
     <string name="lbl_lead_creation_same_address"> Same as Above</string>
     <string name="lbl_lead_creation_primary_address"> Primary Address</string>
     <string name="page_title_lead_creation">Lead Creation</string>
+    <string name="page_title_bank_meeting_creation">Create Bank Meeting</string>
+    <string name="page_title_bank_meeting_report">Bank Meeting Report</string>
 
     <string name="text_msg_success_add_product">Product Added Successfully</string>
     <string name="text_msg_cross_product_saved">Cross Selling Product Saved successfully</string>

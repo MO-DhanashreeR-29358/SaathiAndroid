@@ -69,17 +69,13 @@ class BankMeetingFragment : CommonFragment() {
     private lateinit var bankEmployeeAdapter: BankEmployeeAdapter
     private lateinit var addedBankEmployeeAdapter: AddedBankEmployeeAdapter
     private var addedBankEmployeeList = ArrayList<AddedBankEmployeeModel>()
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(
-            inflater, layout.fragment_au_bank_meeting, container, false
-        )
+
+    override fun getLayout(): Int = R.layout.fragment_au_bank_meeting
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentAuBankMeetingBinding.bind(view)
+        setAppTitle(R.string.page_title_bank_meeting_creation)
         setUpView()
-        return binding.root
     }
 
     private fun setUpView() {

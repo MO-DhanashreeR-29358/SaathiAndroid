@@ -53,6 +53,9 @@ import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class BankMeetingReportFragmentNew extends CommonFragment {
 
     final public static String TAG = BankMeetingReportFragmentNew.class.getSimpleName();
@@ -63,13 +66,16 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
     private Calendar today;
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = inflate(
-                inflater, R.layout.fragment_bank_meeting_report, container, false
-        );
+    protected int getLayout() {
+        return R.layout.fragment_bank_meeting_report;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentBankMeetingReportBinding.bind(view);
+        setAppTitle(R.string.page_title_bank_meeting_report);
         setUpView();
-        return binding.getRoot();
     }
 
     private void setUpView() {
