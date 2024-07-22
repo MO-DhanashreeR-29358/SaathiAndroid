@@ -62,7 +62,7 @@ class BankMeetingFragment : CommonFragment() {
     private lateinit var branchAdapter: ArrayAdapter<RowData>
     private lateinit var bankBranchAdapter: ArrayAdapter<RowData>
     private var subBrokerId = -1
-    private var bankBranchCode = -1
+    private var bankBranchCode = "-1"
     private lateinit var clientNameList: ArrayList<MeetingClientName>
     private lateinit var clientNameAdapter: ClientNameAdapter
     private var addedEmployeeCount: Int = 0
@@ -310,7 +310,9 @@ class BankMeetingFragment : CommonFragment() {
                     )
                     binding.tvBankBranchName.setText(branchName)
                 }
-                bankBranchCode = clientModel.branchCode
+                bankBranchCode = clientModel.branchName.substring(0,
+                    clientModel.branchName.indexOf("-")
+                )
                 searchList.dismiss()
             }
 
@@ -955,7 +957,7 @@ class BankMeetingFragment : CommonFragment() {
                 bankBranchId = "-1",
                 bankBranchName = "",
                 //bankLocationCode = bankBranchCode,
-                bankLocationName = bankBranchCode.toString()
+                bankLocationName = bankBranchCode
             )
         }
     }

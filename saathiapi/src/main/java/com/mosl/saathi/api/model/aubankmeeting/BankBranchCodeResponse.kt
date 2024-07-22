@@ -6,6 +6,6 @@ data class BankBranchCodeResponse(
 
     @JvmField @SerializedName("Bankname") val bankName: String,
 
-    @JvmField @SerializedName("BankBranchId") val bankBranchId: Int
+    @JvmField @SerializedName("BankBranchId") val bankBranchId: String
 
 )

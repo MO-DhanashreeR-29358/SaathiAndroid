@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -305,6 +306,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                 if (columns.size() == 0) {
                     for (Object columnName : objDetail.keySet()) {
                         columns.add(columnName.toString());
+                        Log.d("BankMeetingColuman",columnName.toString() );
                         if (columnName.toString().equalsIgnoreCase("lead_id")) {
                             columnName = columnName.toString().toUpperCase();
                         }
@@ -321,7 +323,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                     String columnData =
                             objDetail.get(column) == null
                                     ? "" : objDetail.get(column).toString();
-
+                    Log.d("BankMeetingColumanValue",columnData);
                     if (objDetail.get(column) instanceof Number) {
                         String strValue =
                                 objDetail.get(column).toString().trim();
@@ -364,11 +366,10 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
 
         columnName = columnName.replace("Group_Bank", "Bank Name");
         columnName = columnName.replace("Bank_Branch", "Branch");
+        columnName = columnName.replace("Meeting_Duration_Name", "Meeting Duration");
         columnName = columnName.replace("IFSCCode", "IFSC Code");
-        columnName = columnName.replace("ProductId", "Product Id");
-        columnName = columnName.replace("MeetingStatusId", "Meeting Status Id");
         columnName = columnName.replace("ProductListName", "Product List");
-        columnName = columnName.replace("MeetingStatusName", "Meeting Status Name");
+        columnName = columnName.replace("MeetingStatusName", "Meeting Status");
         columnName = columnName.replace("BankLocationCode", "Bank Branch Code");
         columnName = columnName.replace("BankLocationName", "Bank Branch Name");
 

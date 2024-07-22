@@ -19,9 +19,9 @@ public class BankBranchCodeData implements Serializable, Parcelable {
   };
   private boolean noData;
   private String branchName;
-  private int branchCode;
+  private String branchCode;
 
-  public BankBranchCodeData(String branchName, int branchCode, boolean noData) {
+  public BankBranchCodeData(String branchName, String branchCode, boolean noData) {
     this.branchName = branchName;
     this.branchCode = branchCode;
     this.noData = noData;
@@ -35,7 +35,7 @@ public class BankBranchCodeData implements Serializable, Parcelable {
   private BankBranchCodeData(Parcel in) {
     noData = in.readByte() != 0;
     branchName = in.readString();
-    branchCode = in.readInt();
+    branchCode = in.readString();
   }
 
   public static BankBranchCodeData getNoData(String errorMsg) {
@@ -58,11 +58,11 @@ public class BankBranchCodeData implements Serializable, Parcelable {
     this.branchName = branchName;
   }
 
-  public int getBranchCode() {
+  public String getBranchCode() {
     return branchCode;
   }
 
-  public void setBranchCode(int branchCode) {
+  public void setBranchCode(String branchCode) {
     this.branchCode = branchCode;
   }
 
@@ -70,7 +70,7 @@ public class BankBranchCodeData implements Serializable, Parcelable {
   public void writeToParcel(Parcel dest, int flags) {
     dest.writeByte((byte) (noData ? 1 : 0));
     dest.writeString(branchName);
-    dest.writeInt(branchCode);
+    dest.writeString(branchCode);
   }
 
   @Override

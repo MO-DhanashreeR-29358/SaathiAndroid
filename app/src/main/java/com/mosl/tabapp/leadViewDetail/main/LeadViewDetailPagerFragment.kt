@@ -166,7 +166,7 @@ class LeadViewDetailPagerFragment : CommonFragment(), LeadViewDetailPagerView, D
                 dialogBinding.ivOpenAccount.visibility = View.GONE
                 dialogBinding.ivOaoForm.visibility = View.INVISIBLE
             }else{
-                dialogBinding.ivOpenAccount.visibility = View.VISIBLE
+                dialogBinding.ivOpenAccount.visibility = View.GONE
                 dialogBinding.ivOaoForm.visibility = View.VISIBLE
 
                 if (userManager.getUser() != null && userManager.getUser()!!
