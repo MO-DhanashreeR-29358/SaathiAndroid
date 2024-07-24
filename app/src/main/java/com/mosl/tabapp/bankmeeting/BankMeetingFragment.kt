@@ -207,6 +207,7 @@ class BankMeetingFragment : CommonFragment() {
                         actvSubBroker.setText("")
                         actvBankBranch.setText("")
                         tvBankBranchName.setText("")
+                        bankBranchCode = "-1"
                         subBrokerId = -1
                         setCount(0)
                         addedBankEmployeeList.clear()
@@ -220,6 +221,8 @@ class BankMeetingFragment : CommonFragment() {
                 binding.actvBankBranch.setText("")
                 binding.tvBankBranchName.setText("")
                 binding.actvSubBroker.setText("")
+                bankBranchCode = "-1"
+                subBrokerId = -1
                 // callBankBranchList(getSelectedBank().key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -686,6 +689,8 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
+                    bankBranchCode = "-1"
+                    subBrokerId = -1
                     actvSubBroker.setText("")
                     actvBankBranch.setText("")
                     tvBankBranchName.setText("")
@@ -697,6 +702,8 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(false)
                     rvClientName.visibility = View.GONE
                     callBankList()
+                    bankBranchCode = "-1"
+                    subBrokerId = -1
                     actvSubBroker.setText("")
                     actvBankBranch.setText("")
                     tvBankBranchName.setText("")
@@ -708,6 +715,8 @@ class BankMeetingFragment : CommonFragment() {
                     ilMobileNumber.toggelInputLayoutVisibility(true)
                     rvClientName.visibility = View.VISIBLE
                     callBankList()
+                    bankBranchCode = "-1"
+                    subBrokerId = -1
                     actvSubBroker.setText("")
                     actvBankBranch.setText("")
                     tvBankBranchName.setText("")
@@ -897,6 +906,7 @@ class BankMeetingFragment : CommonFragment() {
             spBranch.setSelection(0)
             actvSubBroker.setText("")
             actvBankBranch.setText("")
+            bankBranchCode = "-1"
             subBrokerId = -1
 //      actvBankEmployee.setText("")
             setCount(0)
