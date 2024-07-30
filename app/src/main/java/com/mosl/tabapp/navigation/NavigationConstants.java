@@ -12,6 +12,8 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_DASHBOARD,
         NavigationConstants.NAVIGATE_TO_FRESH_REG,
         NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+        NavigationConstants.NAVIGATE_TO_ONLY_MFD,
+        NavigationConstants.NAVIGATE_TO_EQUITY_MFD,
         NavigationConstants.NAVIGATE_TO_CALENDAR,
         NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL,
         NavigationConstants.NAVIGATE_TO_SALES_BROCHURE,
@@ -105,4 +107,8 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_REACTIVATION_DETAIL_TL = 49;
     int NAVIGATE_TO_REACTIVATION_CREATE =50;
     int NAVIGATE_TO_DORMANT=51;
+
+    int NAVIGATE_TO_ONLY_MFD = 52;
+
+    int NAVIGATE_TO_EQUITY_MFD = 53;
 }

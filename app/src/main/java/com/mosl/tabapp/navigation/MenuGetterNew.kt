@@ -1,5 +1,6 @@
 package com.mosl.tabapp.navigation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
@@ -44,6 +45,7 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
 object MenuGetterNew {
+    @SuppressLint("WrongConstant")
     @JvmStatic
     fun getFragment(@NavigationConstants pageId: Int): Fragment? {
         val args = Bundle()
@@ -119,6 +121,7 @@ object MenuGetterNew {
         }
     }
 
+    @SuppressLint("WrongConstant")
     @JvmStatic
     fun isHandled(@NavigationConstants pageId: Int): Boolean {
         return when (pageId) {
@@ -128,6 +131,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true
             NavigationConstants.NAVIGATE_TO_FRESH_REG -> true
             NavigationConstants.NAVIGATE_TO_EXISTING_APP -> true
+            NavigationConstants.NAVIGATE_TO_ONLY_MFD -> true
+            NavigationConstants.NAVIGATE_TO_EQUITY_MFD -> true
             NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> true
             NavigationConstants.NAVIGATE_TO_CALENDAR -> true
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> true

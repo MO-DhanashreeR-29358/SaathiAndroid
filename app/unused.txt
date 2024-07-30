@@ -29638,17 +29638,21 @@ com.mosl.mobile.user.login.LoginRepositoryImpl_Factory:
     public static com.mosl.mobile.user.login.LoginRepositoryImpl newInstance(com.mosl.mobile.user.login.AppUserRepository,com.mosl.mobile.user.login.UserManagerImpl)
 com.mosl.mobile.user.login.UserCache:
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
+    public abstract boolean isOtpEnable()
     public abstract void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
+    public boolean isOtpEnable()
     public void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl_Factory:
     public static com.mosl.mobile.user.login.UserCacheImpl newInstance(com.google.gson.Gson,com.mosl.mobile.user.helper.UserPrefStore,com.mosl.app.core.prefs.IntegerPreference)
 com.mosl.mobile.user.login.UserManager:
     public abstract void fnSetIsOtpEnable(boolean)
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
+    public abstract boolean isOtpEnable()
 com.mosl.mobile.user.login.UserManagerImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
+    public boolean isOtpEnable()
     public final void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserManagerImpl_Factory:
     public static com.mosl.mobile.user.login.UserManagerImpl newInstance(com.mosl.mobile.user.login.UserCache)
@@ -37757,6 +37761,8 @@ com.mosl.tabapp.webview.WebviewFragment:
     public static final java.lang.String DELETE_REQUEST_KEY
     public static final java.lang.String DORMANT_REQUEST_ID
     public static final java.lang.String DORMANT_REQUEST_KEY
+    public static final java.lang.String EQUITY_AND_MFD_ID
+    public static final java.lang.String EQUITY_AND_MFD_KEY
     public static final java.lang.String EXISTING_APPLICATIONS_ID
     public static final java.lang.String EXISTING_APPLICATIONS_KEY
     public static final java.lang.String E_MODIFICATION_ID
@@ -37770,6 +37776,8 @@ com.mosl.tabapp.webview.WebviewFragment:
     public static final java.lang.String NEW_LAS_APPLICATION_ID
     public static final java.lang.String NEW_LAS_APPLICATION_KEY
     public static final java.lang.String OAO_USER_ID
+    public static final java.lang.String ONLY_MFD_ID
+    public static final java.lang.String ONLY_MFD_KEY
     public static final java.lang.String PAGE_ID
     public static final java.lang.String PRIME_ENTRY_ID
     public static final java.lang.String PRIME_ENTRY_KEY
@@ -61573,12 +61581,28 @@ androidx.constraintlayout.motion.widget.KeyCache:
     public static void fetchGhostViewClass()
     public static void fetchSetFrame()
     public final java.lang.Object get()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getAUBankMeeting()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getAUBankMeetingReport()
+    public static java.util.List getAllianceUserMenu()
+    public static java.util.List getAuSalesBank()
+    public static java.util.List getAufsbUserMenu()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getBandhanOpenAccount()
+    public static java.util.List getBandhanUserMenu()
+    public static java.util.List getEkycUserMenu()
     public static float getFloatValue()
     public static boolean getGooglePlayInstantParam()
     public static long getInstallBeginTimestampSeconds()
     public final java.lang.String getInstallReferrer()
+    public final io.reactivex.rxjava3.core.Observable getMenuItems()
+    public static java.util.ArrayList getOpenAccountChildMenu()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getPrimeEntry()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getQRCode()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getReactivation()
     public static long getReferrerClickTimestampSeconds()
+    public static java.util.List getSMTUserMenu()
+    public static com.mosl.tabapp.drawermenu.data.BaseMenu getSuggestMe()
     public float getTransitionAlpha(android.view.View)
+    public static java.util.List getUserMenu()
     public static void onNextAnimationStart()
     public final void remove(android.graphics.drawable.Drawable)
     public final void remove(android.view.View)
@@ -61589,6 +61613,7 @@ androidx.constraintlayout.motion.widget.KeyCache:
     public static void setFloatValue()
     public void setLeftTopRightBottom(android.view.View,int,int,int,int)
     public void setTransitionAlpha(android.view.View,float)
+    public static void setUser()
     public void transformMatrixToGlobal(android.view.View,android.graphics.Matrix)
     public void transformMatrixToLocal(android.view.View,android.graphics.Matrix)
 androidx.constraintlayout.motion.widget.KeyCycle:
@@ -79822,6 +79847,10 @@ com.mosl.tabapp.core.ActivityNavigationHelper$getUrlObservable$6:
     public final java.lang.String apply$41()
 com.mosl.tabapp.core.ActivityNavigationHelper$getUrlObservable$7:
     public final java.lang.String apply$41()
+com.mosl.tabapp.core.ActivityNavigationHelper$getUrlObservable$8:
+    public final java.lang.String apply$41()
+com.mosl.tabapp.core.ActivityNavigationHelper$getUrlObservable$9:
+    public final java.lang.String apply$41()
 com.mosl.tabapp.core.ActivityNavigationHelper$gotoEkycExpressPage$1:
     public final io.reactivex.rxjava3.core.ObservableSource apply$1()
 com.mosl.tabapp.core.ActivityNavigationHelper$gotoEkycExpressPage$2:
@@ -83605,6 +83634,7 @@ com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1:
 com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
+    public boolean isCallOtp
     public final void buildAlertMessageNoGps()
     public final boolean checkMapServices()
     public final void fetchDigitalSalesKitParentMenu()
@@ -83638,6 +83668,8 @@ com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:
     public final com.mosl.navigator.NavigationCallback get()
 com.mosl.tabapp.login.LoginActivityModule_ProvidePermissionCheckHelperFactory
 com.mosl.tabapp.login.LoginActivityUiEvent$Companion
+com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin:
+    public static final com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin INSTANCE
 com.mosl.tabapp.login.LoginActivityUiEvent$OnOtpSucess:
     public static com.mosl.mobile.user.model.User getUser()
 com.mosl.tabapp.login.LoginActivityUiEvent:
@@ -84601,8 +84633,7 @@ com.mosl.tabapp.report.hierarchy.HierarchyReportFragment:
     public final java.lang.String getValue()
     public final void setUpView()
 com.mosl.tabapp.report.hierarchy.HierarchyReportFragment_MembersInjector
-com.mosl.tabapp.report.hierarchy.HierarchyReportModule:
-    public static com.mosl.tabapp.report.hierarchy.HierarchyReportView provideView$app_prodRelease()
+com.mosl.tabapp.report.hierarchy.HierarchyReportModule
 com.mosl.tabapp.report.hierarchy.HierarchyReportModule_ProvideView$app_prodReleaseFactory
 com.mosl.tabapp.report.hierarchy.HierarchyReportPresenter$Companion
 com.mosl.tabapp.report.hierarchy.HierarchyReportPresenter$start$1:
@@ -85079,6 +85110,10 @@ com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$13:
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$14:
     public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$15:
+    public final kotlin.Pair apply$10()
+com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$16:
+    public final kotlin.Pair apply$10()
+com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$17:
     public final kotlin.Pair apply$10()
 com.mosl.tabapp.webview.WebviewFragment$getUrlObservable$1:
     public final kotlin.Pair apply$10()
@@ -103421,7 +103456,8 @@ kotlin.reflect.jvm.internal.impl.types.checker.StrictEqualityTypeChecker
 kotlin.reflect.jvm.internal.impl.types.checker.SubtypePathNode:
     public static kotlin.reflect.jvm.internal.impl.types.checker.SubtypePathNode getPrevious()
     public static kotlin.reflect.jvm.internal.impl.types.KotlinType getType()
-kotlin.reflect.jvm.internal.impl.types.checker.TypeCheckerProcedureCallbacksImpl
+kotlin.reflect.jvm.internal.impl.types.checker.TypeCheckerProcedureCallbacksImpl:
+    public static com.mosl.tabapp.report.hierarchy.HierarchyReportView provideView$app_prodRelease()
 kotlin.reflect.jvm.internal.impl.types.checker.TypeCheckingProcedure
 kotlin.reflect.jvm.internal.impl.types.checker.TypeCheckingProcedureCallbacks
 kotlin.reflect.jvm.internal.impl.types.checker.TypeIntersector$ResultNullability$NOT_NULL:
@@ -103976,22 +104012,8 @@ kotlinx.coroutines.DebugStringsKt:
     public static com.bumptech.glide.request.target.BaseTarget buildTarget()
     public static long currentTimeMillis()
     public static boolean encode$1()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getAUBankMeeting()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getAUBankMeetingReport()
-    public static java.util.List getAuSalesBank()
-    public static java.util.List getAufsbUserMenu()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getBandhanOpenAccount()
-    public static java.util.List getBandhanUserMenu()
     public static final java.lang.String getClassSimpleName(java.lang.Object)
     public static void getCornerPath()
-    public static java.util.List getEkycUserMenu()
-    public final io.reactivex.rxjava3.core.Observable getMenuItems()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getPrimeEntry()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getQRCode()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getReactivation()
-    public static java.util.List getSMTUserMenu()
-    public static com.mosl.tabapp.drawermenu.data.BaseMenu getSuggestMe()
-    public static java.util.List getUserMenu()
     public static com.mosl.tabapp.dashboard.leads.LeadsView provideAuLeadView$app_prodRelease()
     public static com.mosl.tabapp.dashboard.leads.report.LeadsReportView provideAuLeadView$app_prodRelease()
     public static com.mosl.tabapp.dashboard.target.TargetView provideAuLeadView$app_prodRelease()
