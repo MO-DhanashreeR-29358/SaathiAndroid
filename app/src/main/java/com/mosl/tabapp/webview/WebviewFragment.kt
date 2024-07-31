@@ -472,6 +472,11 @@ class WebviewFragment : CommonFragment() {
                         CommonURLRequest(DORMANT_REQUEST_KEY, null, null, null)
                     ).map { Pair(it.url, webViewRequest.id) }
                 }
+            QUERY_FORM_ID->{
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(QUERY_FORM_KEY, null, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
 
 
             else -> {
@@ -544,6 +549,8 @@ class WebviewFragment : CommonFragment() {
         const val ONLY_MFD_KEY = "MFD"
         const val EQUITY_AND_MFD_ID = "18"
         const val EQUITY_AND_MFD_KEY = "EQUITY_MFD"
+        const val QUERY_FORM_ID="19"
+        const val QUERY_FORM_KEY="QueryForm"
 
     }
 }

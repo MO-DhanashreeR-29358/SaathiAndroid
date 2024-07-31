@@ -117,6 +117,10 @@ object MenuGetterNew {
                     args.putString(WebviewFragment.PAGE_ID, DORMANT_REQUEST_ID)
                     arguments = args
                 }
+            NavigationConstants.NAVIGATE_TO_QUERY_FORM ->  WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, WebviewFragment.QUERY_FORM_ID)
+                arguments = args
+            }
             else -> null
         }
     }
@@ -175,6 +179,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL_TL -> true
             NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE -> true
             NavigationConstants.NAVIGATE_TO_DORMANT -> true
+            NavigationConstants.NAVIGATE_TO_QUERY_FORM -> true
             else -> return false
         }
     }

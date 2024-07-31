@@ -68,6 +68,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -95,6 +96,7 @@ open class MenuDataSourceImpl @Inject constructor(
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -129,6 +131,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -153,6 +156,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -189,6 +193,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -214,6 +219,7 @@ open class MenuDataSourceImpl @Inject constructor(
                  // hide as per requirement
                  // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -251,6 +257,7 @@ open class MenuDataSourceImpl @Inject constructor(
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -279,6 +286,7 @@ open class MenuDataSourceImpl @Inject constructor(
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getReports(list),
@@ -347,6 +355,7 @@ open class MenuDataSourceImpl @Inject constructor(
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -371,6 +380,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
+                getQueryFormCreate(),
                 getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
@@ -772,6 +782,15 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_DORMANT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_DORMANT
+        )
+    }
+
+    private fun getQueryFormCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_QUERY_FORM,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_QUERY_FORM
         )
     }
 

@@ -57,6 +57,7 @@
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
     <string name="MOSL_MENU_SIP">SIP</string>
     <string name="MOSL_MENU_DORMANT">Dormant Reactivation </string>
+    <string name="MOSL_MENU_QUERY_FORM">Query Form</string>
     <string name="MOSL_MENU_REACTIVATION_REQ">Reactivation Request
 Page </string>
     <string name="txt_lable_diy_link">DIY Link</string>
