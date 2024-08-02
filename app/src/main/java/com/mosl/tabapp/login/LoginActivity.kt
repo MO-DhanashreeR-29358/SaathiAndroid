@@ -143,7 +143,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     if (!sharedPreferences.getBoolean(getString(R.string.consent_value), false)) {
       showDiscloserDilog()
     }
-  //  isCallOtp=userManager.isOtpEnable()
+    isCallOtp=userManager.isOtpEnable()
 
     binding.btnLogin.setOnClickListener {
       if(isCallOtp)
