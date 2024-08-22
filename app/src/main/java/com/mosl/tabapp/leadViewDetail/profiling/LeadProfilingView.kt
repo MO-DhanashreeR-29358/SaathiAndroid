@@ -21,4 +21,5 @@ interface LeadProfilingView : BaseView {
   fun getProfileRequestDataList(): List<ProfileRequestData>
   fun onSubmitProfileEventFired(): Observable<SubmitProfileEvent>
   fun renderSubmitProfile(uiModel: UiModel<ProfilingResponseModel>)
+
 }

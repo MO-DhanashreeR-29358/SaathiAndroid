@@ -77,7 +77,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     override fun getLayout(): Int = layout.frag_lead_profiling
 
     var profileNewRequestList = ArrayList<ProfileRequestData>()
-
+    var isRequiredListMap = HashMap<Int, String>()
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -226,8 +226,65 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
     override fun renderSubmitButtonClicked() {
         val request = profileNewRequestList
+
         when {
-            request.isNotEmpty() -> subject.onNext(SubmitProfileEvent)
+            request.isNotEmpty() ->{
+               /* var tempMap = HashMap<Int, String>()
+                tempMap.putAll(isRequiredListMap)
+                for ((key, value) in isRequiredListMap) {
+                    println("Key: $key, Value: $value")
+                    for(answer in profileNewRequestList) {
+                        if (Integer.parseInt(answer.profileParameterID) == key) {
+                            tempMap.remove(key)
+                        }
+                    }
+                }
+
+              var list =  tempMap.values.toList()
+              if(list.distinct().isNotEmpty()){
+                    val result = list.distinct().joinToString(separator = "\n") + "\nPlease fill mandatory questions in above groups."
+                    alertDialog(
+                        requireContext(), 0,
+                        resources.getString(R.string.motilal_oswal), result,
+                        resources.getString(android.R.string.ok), true, null
+                    )
+                }else{
+                    subject.onNext(SubmitProfileEvent)
+                }*/
+
+                //-------------------
+                var arrTempGroupName = ArrayList<String>()
+
+                for (group in profileModel!!.profileQuestionGroup) {
+                     for (question in group.profileQuestionList) {
+                         if (question.isRequired == 1) {
+                             var isSelected = false
+                             for(answer in profileNewRequestList) {
+                               if(Integer.parseInt(answer.profileParameterID) == question.profileParameterID){
+                                   isSelected = true
+                                   break
+                               }
+                             }
+                             if(!isSelected){
+                                 val str  = getQuestionValidationText(question.questionText, question.controlType)
+                                 arrTempGroupName.add(str)
+                             }
+                        }
+                    }
+
+                }
+
+                if(arrTempGroupName.isNotEmpty()){
+                    val result = arrTempGroupName.joinToString(separator = "\n")
+                    alertDialog(
+                        requireContext(), 0,
+                        resources.getString(R.string.motilal_oswal), result,
+                        resources.getString(android.R.string.ok), true, null
+                    )
+                }else{
+                    subject.onNext(SubmitProfileEvent)
+                }
+            }
             else -> {
                 alertDialog(
                     requireContext(), 0,
@@ -238,6 +295,19 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         }
     }
 
+    private fun getQuestionValidationText(questionText: String?, controlType: Int): String{
+        when (controlType) {
+            0 -> {
+            }
+            TEXT_BOX, NUMBER_TEXT_BOX -> {
+                return "$questionText is required."
+            }
+            RADIO_BUTTON, CHECK_BOX, DROP_DOWN, DATE_PICKER-> {
+                return "$questionText must be selected."
+            }
+        }
+        return ""
+    }
     override fun onCancelButtonClicked(): Observable<Unit> = binding.btnCancel.clicks()
     override fun renderCancelButtonClicked() {
         viewPager?.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
@@ -271,6 +341,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     tmpProfileQuestion.questionType = parameter.selectedProfileSubParameterID!!
                     tmpProfileQuestion.isAdminMode = parameter.isAdminMode!!
                     tmpProfileQuestion.status = parameter.status
+                    tmpProfileQuestion.isRequired = parameter.isRequired
+
                     val questionText = stringOrEmpty(parameter.questionText)
                     tmpProfileQuestion.questionText = questionText
 
@@ -279,6 +351,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         else -> parameter.isDefaultHidden
                     }
                     tmpProfileQuestion.isDefaultHidden = yNStatus
+
                     tmpProfileQuestion.profileParameterID = parameter.profileParameterID!!
 
                     val mProfileOptionList = ArrayList<ProfileOption>()
@@ -503,7 +576,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 val padding = resources.getDimension(R.dimen._15sdp)
                     .toInt()
                 val tvQuestion = TextView(activity).apply {
-                    text = question.questionText
+
+                    if(question.isRequired == 1){
+                        val str = question.questionText + " *"
+                        text = str
+                        isRequiredListMap.put(question.profileParameterID,group.groupName )
+                    }else{
+                        text = question.questionText
+                    }
+
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
@@ -513,7 +594,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     //as per QA requirement hide the question number to match the view with web
                     //text = String.format("Q %d.%s", questionNo, question.questionText)
                     // questionNo++
-                    text = question.questionText
                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                     setBackgroundResource(R.drawable.profiling_question_background_text)
                 }
@@ -588,6 +668,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                         profileNewRequestList += ProfileRequestData(
                                             question.profileParameterID.toString(), mOptions.profileSubParameterID.toString(), leadId, text
                                         )
+                                    }else{
+                                        deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
                                     }
                                 }
                                 if (mEditTextOption.text.toString().isNotEmpty()) {
@@ -597,6 +679,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     profileNewRequestList += ProfileRequestData(
                                         question.profileParameterID.toString(), mOptions.profileSubParameterID.toString(), leadId, text
                                     )
+                                }else{
+                                    deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
                                 }
                             }
                             llBasicProfileQuestionLayoutGroup.setBackgroundResource(

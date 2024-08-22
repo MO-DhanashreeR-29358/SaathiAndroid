@@ -28,8 +28,10 @@ data class ProfileParameter(
   @JvmField val controlType: Int,
   @JvmField val questionText: String?,
   @JvmField val profileParameterID: Int?,
-  @JvmField val status: Int?
-)
+  @JvmField val status: Int?,
+  @JvmField val isRequired: Int?
+
+  )
 
 data class ProfileSubParameter(
   @JvmField val isHide: String?,

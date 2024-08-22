@@ -64,7 +64,8 @@ private fun ProfileParameterListItem.mapToProfileParameter(): ProfileParameter {
     controlType = controlType,
     questionText = questionText,
     profileParameterID = profileParameterID,
-    status = status
+    status = status,
+    isRequired = isRequired
   )
 }
 
