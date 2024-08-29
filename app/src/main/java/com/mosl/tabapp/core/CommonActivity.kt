@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
@@ -210,6 +211,7 @@ class CommonActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("AAAAA Common Activity onCreate ")
+
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
         binding.actionBar.setNotification(OnClickListener {
@@ -577,7 +579,7 @@ class CommonActivity : BaseActivity(),
                         remoteConfig.getString(getString(R.string.saathi_init))
                     //alert("Banner response : $saathiInit")
                    // Toast.makeText(this@CommonActivity, "Banner response : $saathiInit", Toast.LENGTH_LONG).show()
-                  //  Timber.d("OkHttp Banner response : %s", saathiInit)
+                    Timber.d("OkHttp Banner response : %s", saathiInit)
                     if (saathiInit != null && !saathiInit.isEmpty()) {
                         remoteConfigModel =
                             gson.fromJson(saathiInit, RemoteConfigModel::class.java)

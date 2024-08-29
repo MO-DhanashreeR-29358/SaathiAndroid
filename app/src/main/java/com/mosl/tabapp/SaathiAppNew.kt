@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.room.Room
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
@@ -82,6 +84,10 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
           //).show()
         }
       })
+
+    FirebaseApp.initializeApp(this)
+
+    FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
 
   }

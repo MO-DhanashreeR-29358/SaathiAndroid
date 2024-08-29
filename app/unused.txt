@@ -28660,6 +28660,7 @@ com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter:
     public final java.lang.Integer component1()
     public final java.lang.Integer component10()
     public final java.lang.Integer component11()
+    public final java.lang.Integer component12()
     public final java.lang.Integer component2()
     public final java.lang.Boolean component3()
     public final java.util.List component4()
@@ -28668,8 +28669,8 @@ com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter:
     public final java.lang.Boolean component7()
     public final int component8()
     public final java.lang.String component9()
-    public final com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter copy(java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Boolean,int,java.lang.String,java.lang.Integer,java.lang.Integer)
-    public static synthetic com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter copy$default(com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Boolean,int,java.lang.String,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
+    public final com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter copy(java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Boolean,int,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer)
+    public static synthetic com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter copy$default(com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Boolean,int,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
 com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData:
     public final java.lang.String component1()
     public final java.lang.String component2()
@@ -32307,7 +32308,7 @@ com.mosl.saathi.api.model.leadprofile.LeadProfileRequest:
     public final com.mosl.saathi.api.model.leadprofile.LeadProfileRequest copy(java.lang.String)
     public static synthetic com.mosl.saathi.api.model.leadprofile.LeadProfileRequest copy$default(com.mosl.saathi.api.model.leadprofile.LeadProfileRequest,java.lang.String,int,java.lang.Object)
 com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem:
-    public void <init>(java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String)
+    public void <init>(java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String,java.lang.Integer)
     public final java.lang.Integer component1()
     public final java.lang.Object component10()
     public final java.lang.Object component11()
@@ -32317,6 +32318,7 @@ com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem:
     public final java.lang.String component15()
     public final java.lang.Integer component16()
     public final java.lang.String component17()
+    public final java.lang.Integer component18()
     public final java.lang.Integer component2()
     public final java.lang.Integer component3()
     public final java.lang.Integer component4()
@@ -32325,8 +32327,8 @@ com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem:
     public final java.lang.String component7()
     public final int component8()
     public final java.lang.Object component9()
-    public final com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem copy(java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String)
-    public static synthetic com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem copy$default(com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String,int,java.lang.Object)
+    public final com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem copy(java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String,java.lang.Integer)
+    public static synthetic com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem copy$default(com.mosl.saathi.api.model.leadprofile.ProfileParameterListItem,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Integer,java.lang.Boolean,java.util.List,java.lang.String,int,java.lang.Object,java.lang.Object,java.lang.Object,java.lang.Boolean,int,java.util.List,java.lang.String,java.lang.Integer,java.lang.String,java.lang.Integer,int,java.lang.Object)
 com.mosl.saathi.api.model.leadprofile.ProfileSubParameterListItem:
     public void <init>(java.lang.Integer,java.lang.String,java.lang.Integer,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.Integer,java.lang.String,java.lang.Integer,java.lang.Boolean,java.lang.Integer,java.lang.Object,java.lang.String,java.lang.String,java.lang.Object,java.lang.Boolean,java.lang.Integer)
     public final java.lang.Integer component1()
@@ -36170,9 +36172,11 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment:
     private static final int RADIO_BUTTON
     private static final int TEXT_BOX
     private final java.util.ArrayList getSelectedAnswersJson()
+    public final java.util.HashMap isRequiredListMap()
     public final java.lang.String prefix(int)
     public final void setPresenter$app_prodRelease(com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter)
     public final void setProfileNewRequestList(java.util.ArrayList)
+    public final void setRequiredListMap(java.util.HashMap)
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
     private final javax.inject.Provider androidInjectorProvider
@@ -82896,6 +82900,7 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment:
     public static final synthetic java.lang.String access$getLeadId$p()
     public static com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter getPresenter$app_prodRelease()
     public static java.util.ArrayList getProfileNewRequestList()
+    public static java.lang.String getQuestionValidationText()
     public final void setViewPager(androidx.viewpager.widget.ViewPager)
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment_MembersInjector
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule$Companion
@@ -84126,6 +84131,7 @@ com.mosl.tabapp.model.profile.ProfileQuestion:
     public java.lang.Integer questionType
     public static int getControlType()
     public static int getDropdownValueArrPosition()
+    public static java.lang.Integer getIsRequired()
     public static java.util.List getProfileOptionList()
     public static java.lang.Integer getProfileParameterID()
     public static java.lang.String getQuestionText()
@@ -84135,6 +84141,7 @@ com.mosl.tabapp.model.profile.ProfileQuestion:
     public static void setDefaultHidden()
     public static void setInApproval()
     public static void setIsAdminMode()
+    public static void setIsRequired()
     public static void setProfileOptionList()
     public static void setProfileParameterGroupID()
     public static void setProfileParameterID()
