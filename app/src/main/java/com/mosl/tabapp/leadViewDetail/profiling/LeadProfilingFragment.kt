@@ -83,6 +83,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     var profileNewRequestList = ArrayList<ProfileRequestData>()
     var isRequiredListMap = HashMap<Int, String>()
     var objListOriginal :List<LeadProfile> = mutableListOf()
+    var strSelectedClientType :String =""
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -560,6 +561,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
     private fun updateRender(objList : List<LeadProfile>)
     {
+
         var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
         leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
             if(it.profileParameterID!=168)
@@ -568,6 +570,21 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             }
         }
         objListOriginal=leadProfileList
+        if(strSelectedClientType.equals("524"))
+        {
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+                if(it.profileParameterID!=169)
+                {
+                        it.isRequired=null
+                }
+            }
+        }
+        else{
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+                it.isRequired=1
+            }
+        }
+
 
         profileModel = ProfileModel()
         val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
@@ -767,6 +784,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                                 }
 
+
                                 val mEditTextOption = EditText(activity).apply {
                                     layoutParams = LinearLayout.LayoutParams(
                                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -781,6 +799,14 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     filters = arrayOf(CRMAppUtil.filterOnlyAlphabetAndNumbers)
                                     setText(mOptions.value)
                                     hint = mOptions.questionSubText
+                                }
+
+                                for( objprofileNewRequestList in profileNewRequestList){
+                                    if((mOptions.profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (mOptions.profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
+                                    {
+                                        mEditTextOption.setText("${objprofileNewRequestList.value}")
+                                        break
+                                    }
                                 }
 
                                 tvHead.text = mOptions.questionSubText
@@ -870,6 +896,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     hint = mOptions.questionSubText
                                 }
 
+                                for( objprofileNewRequestList in profileNewRequestList){
+                                    if((mOptions.profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (mOptions.profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
+                                    {
+                                        mEditTextOption.setText("${objprofileNewRequestList.value}")
+                                        break
+                                    }
+                                }
                                 tvHead.text = mOptions.questionSubText
                                 llBasicProfileQuestionLayoutGroup.addView(tvHead)
                                 llBasicProfileQuestionLayoutGroup.addView(mEditTextOption)
@@ -932,7 +965,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                             //Adding linarlayout for info for extra end
                             llBasicProfileQuestionLayoutInner.addView(extraFieldLayout)
                             for (mOptions in question.profileOptionList) {
-                                val rbOption = RadioButton(activity).apply {
+                                var rbOption :RadioButton = RadioButton(activity).apply {
                                     layoutParams = LinearLayout.LayoutParams(
                                         LinearLayout.LayoutParams.MATCH_PARENT,
                                         LinearLayout.LayoutParams.WRAP_CONTENT
@@ -943,6 +976,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                                     text = mOptions.questionSubText
                                     tag = mOptions
+
+                                }
+
+                                for( objprofileNewRequestList in profileNewRequestList){
+                                    if((mOptions.profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (mOptions.profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
+                                    {
+                                        rbOption.isChecked=true;
+                                       break
+                                    }
                                 }
 
                                 rbOption.setOnClickListener {
@@ -959,8 +1001,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                             extraFieldLayout.visibility = View.GONE
                                         }
                                     }
-                                    if (!CRMAppUtil.isBlank(mOptions.hideDepedentQuestion)
-                                    ) {
+                                    if (!CRMAppUtil.isBlank(mOptions.hideDepedentQuestion)) {
                                         if (questionMap.containsKey(
                                                 mOptions.hideDepedentQuestion
                                             )
@@ -1015,8 +1056,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     try{
                                         if(question.profileParameterID==168)
                                         {
+                                            strSelectedClientType= mOptions.profileSubParameterID!!.toString()
                                             requireActivity().runOnUiThread {
-                                                updateRender(objListOriginal)
+                                                    updateRender(objListOriginal)
                                             }
 
 
@@ -1043,12 +1085,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     )
                                 }
 
+
                                 rbGroup.addView(rbOption)
                             }//end of for loop for option printing
 
                             if (rbOptionSelected != null) {
 
-                                rbOptionSelected.isChecked = false
+                               // rbOptionSelected.isChecked = false
                                 previousActionMap[previousAction.hideDepedentQuestion] =
                                     previousAction.isHide
                             }
@@ -1087,6 +1130,14 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     orientation = LinearLayout.VERTICAL
                                     setPadding(padding, padding, padding, padding)
                                     visibility = View.GONE
+                                }
+
+                                for( objprofileNewRequestList in profileNewRequestList){
+                                    if((mOptions.profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (mOptions.profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
+                                    {
+                                        cbOption.isChecked=true;
+                                        break
+                                    }
                                 }
 
                                 cbOption.setOnClickListener { view ->
@@ -1176,6 +1227,18 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 setPadding(padding, padding, padding, padding)
                                 visibility = View.GONE
                             }
+                            question.profileOptionList.forEachIndexed { index, mOptions ->
+                                for (objprofileNewRequestList in profileNewRequestList) {
+
+                                    if ((mOptions.profileParameterID.toString()
+                                            .equals(objprofileNewRequestList.profileParameterID)) && (mOptions.profileSubParameterID.toString()
+                                            .equals(objprofileNewRequestList.profileSubParameterID))
+                                    ) {
+                                        spSection.setSelection(index);
+                                        break
+                                    }
+                                }
+                            }
 
                             //Adding linarlayout for info for extra end
                             spSection.onItemSelectedListener =
@@ -1263,6 +1326,14 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                                 "_T"
                                 }
                             }
+
+                            for( objprofileNewRequestList in profileNewRequestList){
+                                if((question.profileOptionList[0].profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (question.profileOptionList[0].profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
+                                {
+                                    tvDate.setText("${objprofileNewRequestList.value}")
+                                    break
+                                }
+                            }
                             rlDate.setOnClickListener {
                                 val cal = Calendar.getInstance()
                                 val y = cal.get(Calendar.YEAR)
@@ -1296,6 +1367,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 datePickerDialog.datePicker.maxDate = cal.timeInMillis
                                 datePickerDialog.show()
                             }
+
                             if (tvDate.text.toString().isNotEmpty()) {
                                 profileNewRequestList += ProfileRequestData(
                                     question.profileParameterID.toString(),  question.profileOptionList[0].profileSubParameterID.toString(), leadId, tvDate.text.toString()

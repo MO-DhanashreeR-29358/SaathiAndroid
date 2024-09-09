@@ -1,5 +1,6 @@
 package com.mosl.mobile.domain.leadviewdetail.profiling
 
+//profileNewRequestList
 data class ProfileRequestData(
   @JvmField val profileParameterID: String,
   @JvmField val profileSubParameterID: String,
@@ -29,7 +30,7 @@ data class ProfileParameter(
   @JvmField val questionText: String?,
   @JvmField val profileParameterID: Int?,
   @JvmField val status: Int?,
-  @JvmField val isRequired: Int?
+  @JvmField var isRequired: Int?
 
   )
 
