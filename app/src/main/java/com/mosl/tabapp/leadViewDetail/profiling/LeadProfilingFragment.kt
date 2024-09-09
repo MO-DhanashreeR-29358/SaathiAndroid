@@ -5,20 +5,24 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.R
@@ -78,6 +82,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
     var profileNewRequestList = ArrayList<ProfileRequestData>()
     var isRequiredListMap = HashMap<Int, String>()
+    var objListOriginal :List<LeadProfile> = mutableListOf()
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -313,7 +318,24 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         viewPager?.setCurrentItem(MOSLConstants.LEAD_DETAIL, false)
     }
 
-    private fun fillProfileModal(leadProfileList: List<LeadProfile>) {
+    private fun fillProfileModal(objList : List<LeadProfile>) {
+
+      var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
+
+       var objProfileParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.find {
+           it.profileParameterID==168
+       };
+        leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.removeAt(1);
+        leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.add(0,
+            objProfileParameter!!
+        )
+         leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+             if(it.profileParameterID!=168)
+             {
+                 it.isDefaultHidden="Y"
+             }
+         }
+        objListOriginal= leadProfileList
 
         profileModel = ProfileModel()
         val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
@@ -392,6 +414,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         }
                     }
                     tmpProfileQuestion.profileOptionList = mProfileOptionList
+
                     mProfileQuestionList.add(tmpProfileQuestion)
                 }
             }
@@ -534,6 +557,110 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
     }
 
+
+    private fun updateRender(objList : List<LeadProfile>)
+    {
+        var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
+        leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+            if(it.profileParameterID!=168)
+            {
+                it.isDefaultHidden="N"
+            }
+        }
+        objListOriginal=leadProfileList
+
+        profileModel = ProfileModel()
+        val profileQuestionGroupList = ArrayList<ProfileQuestionGroup>()
+        for (leadProfile in leadProfileList) {
+            val groupName = stringOrEmpty(leadProfile.groupName)
+            val profileId = stringOrEmpty(leadProfile.profileParameterId)
+            val tempProfileQuestionGroup = ProfileQuestionGroup().apply {
+                this.groupName = groupName
+                this.profileParameterID = profileId
+                this.inApproval = leadProfile.inApproval
+                this.profileParameterGroupID = leadProfile.profileParameterGroupID
+                this.businessUnitId = leadProfile.businessUnitId
+                this.isAdminMode = leadProfile.isAdminMode
+            }
+
+            val mProfileQuestionList = ArrayList<ProfileQuestion>()
+            leadProfile.profileParameterList?.let {
+                for (parameter in it) {
+                    val tmpProfileQuestion = ProfileQuestion()
+
+                    tmpProfileQuestion.controlType = parameter.controlType
+                    tmpProfileQuestion.inApproval = parameter.inApproval
+                    tmpProfileQuestion.profileParameterGroupID = parameter.profileParameterGroupID
+                    tmpProfileQuestion.questionType = parameter.questionType!!
+                    tmpProfileQuestion.questionType = parameter.selectedProfileSubParameterID!!
+                    tmpProfileQuestion.isAdminMode = parameter.isAdminMode!!
+                    tmpProfileQuestion.status = parameter.status
+                    tmpProfileQuestion.isRequired = parameter.isRequired
+
+                    val questionText = stringOrEmpty(parameter.questionText)
+                    tmpProfileQuestion.questionText = questionText
+
+                    val yNStatus = when (parameter.isDefaultHidden) {
+                        null, "" -> "N"
+                        else -> parameter.isDefaultHidden
+                    }
+                    tmpProfileQuestion.isDefaultHidden = yNStatus
+
+                    tmpProfileQuestion.profileParameterID = parameter.profileParameterID!!
+
+                    val mProfileOptionList = ArrayList<ProfileOption>()
+                    parameter.profileSubParameterList?.let { list ->
+                        for (subParameter in list) {
+                            val tempProfileOption = ProfileOption()
+
+                            tempProfileOption.profileParameterID =
+                                tmpProfileQuestion.profileParameterID
+
+                            val profileSubParameterListInApproval = subParameter.inApproval!!
+                            tempProfileOption.inApproval = profileSubParameterListInApproval
+
+                            val value = stringOrEmpty(subParameter.value)
+                            tempProfileOption.value = value
+                            tempProfileOption.isSelected = subParameter.isSelected!!
+
+                            val profileSubParameterID = subParameter.profileSubParameterID!!
+                            tempProfileOption.profileSubParameterID = profileSubParameterID
+                            tempProfileOption.hideDepedentQuestion =
+                                stringOrEmpty(subParameter.hideDependentQuestion)
+                            val noStr = stringOrEmpty(subParameter.isHide)
+                            tempProfileOption.setIsHide(noStr)
+
+                            tempProfileOption.questionSubText =
+                                stringOrEmpty(subParameter.questionSubText)
+                            tempProfileOption.isAdminMode = subParameter.isAdminMode!!
+                            tempProfileOption.extraInfo = stringOrEmpty(subParameter.extraInfo)
+
+                            subParameter.extraInfoRowCount?.let { rowCount ->
+                                tempProfileOption.extraInfoRowCount = rowCount
+                            }
+
+                            tempProfileOption.extraInfoFieldName =
+                                stringOrEmpty(subParameter.extraInfoFieldName)
+
+                            mProfileOptionList.add(tempProfileOption)
+                        }
+                    }
+                    tmpProfileQuestion.profileOptionList = mProfileOptionList
+
+                    mProfileQuestionList.add(tmpProfileQuestion)
+                }
+            }
+
+
+            tempProfileQuestionGroup.profileQuestionList = mProfileQuestionList
+            profileQuestionGroupList.add(tempProfileQuestionGroup)
+        }
+
+        profileModel?.profileQuestionGroup = profileQuestionGroupList
+        renderForm()
+
+    }
+
     /**
      * this method will render/design the profile page with question filled in model
      */
@@ -597,7 +724,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                     setBackgroundResource(R.drawable.profiling_question_background_text)
                 }
-
+                        Log.d("question ",Gson().toJson(question));
 
                 llBasicProfileQuestionLayoutInner.addView(tvQuestion)
                 questionMap[question.profileParameterID!!.toString() + Head] = tvQuestion
@@ -822,6 +949,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     extraFieldLayout.removeAllViews()
                                     extraFieldLayout.removeAllViewsInLayout()
 
+
                                     when {
                                         !CRMAppUtil.isBlank(mOptions.extraInfo) && mOptions.extraInfo.equals(
                                             "Y", ignoreCase = true
@@ -884,6 +1012,19 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                             )
                                         )
                                     }
+                                    try{
+                                        if(question.profileParameterID==168)
+                                        {
+                                            requireActivity().runOnUiThread {
+                                                updateRender(objListOriginal)
+                                            }
+
+
+                                        }
+                                    }
+                                    catch (ex: Exception){
+
+                                    }
                                 }
 
                                 if (mOptions.isSelected) {
@@ -907,7 +1048,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                             if (rbOptionSelected != null) {
 
-                                rbOptionSelected.isChecked = true
+                                rbOptionSelected.isChecked = false
                                 previousActionMap[previousAction.hideDepedentQuestion] =
                                     previousAction.isHide
                             }
@@ -1177,7 +1318,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         R.color.white
                     )
                 )
+
                 llBasicProfileQuestionLayoutInner.addView(questionBar)
+
             }
 
             //question section end

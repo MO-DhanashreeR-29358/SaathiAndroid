@@ -38,7 +38,7 @@ private fun LeadProfileItem.mapToLeadProfile(): LeadProfile {
     profileParameterGroupID = profileParameterGroupID,
     businessUnitId = businessUnitId,
     isAdminMode = isAdminMode,
-    profileParameterList = profileParameterList,
+    profileParameterList = profileParameterList as MutableList<ProfileParameter>,
     profileParameterId = profileParameterId
   )
 }
@@ -57,7 +57,7 @@ private fun ProfileParameterListItem.mapToProfileParameter(): ProfileParameter {
     questionType = questionType,
     selectedProfileSubParameterID = selectedProfileSubParameterID,
     inApproval = inApproval,
-    profileSubParameterList = profileSubParameterList,
+    profileSubParameterList = profileSubParameterList as MutableList<ProfileSubParameter>,
     isDefaultHidden = isDefaultHidden,
     profileParameterGroupID = profileParameterGroupID,
     isAdminMode = isAdminMode,

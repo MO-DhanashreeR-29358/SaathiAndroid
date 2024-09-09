@@ -13,7 +13,7 @@ data class LeadProfile(
   @JvmField val profileParameterGroupID: Int,
   @JvmField val businessUnitId: Int,
   @JvmField val isAdminMode: Boolean,
-  @JvmField val profileParameterList: List<ProfileParameter>?,
+  @JvmField val profileParameterList: MutableList<ProfileParameter>?,
   @JvmField val profileParameterId: String?,
 )
 
@@ -21,8 +21,8 @@ data class ProfileParameter(
   @JvmField val questionType: Int?,
   @JvmField val selectedProfileSubParameterID: Int?,
   @JvmField val inApproval: Boolean?,
-  @JvmField val profileSubParameterList: List<ProfileSubParameter>?,
-  @JvmField val isDefaultHidden: String?,
+  @JvmField val profileSubParameterList: MutableList<ProfileSubParameter>?,
+  @JvmField var isDefaultHidden: String?,
   @JvmField val profileParameterGroupID: Int,
   @JvmField val isAdminMode: Boolean?,
   @JvmField val controlType: Int,
