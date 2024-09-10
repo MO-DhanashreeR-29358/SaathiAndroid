@@ -323,6 +323,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
       var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
 
+        /*** for Client profiling changes start here****/
+
        var objProfileParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.find {
            it.profileParameterID==168
        };
@@ -336,6 +338,27 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                  it.isDefaultHidden="Y"
              }
          }
+
+
+        /*** End here****/
+        /*** for Family Members changes start here****/
+
+        var objFamilyMemberParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==205
+        };
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(3);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(4,
+            objFamilyMemberParameter!!
+        )
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
+            if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+            {
+                it.isDefaultHidden="Y"
+            }
+        }
+        /*** End here****/
         objListOriginal= leadProfileList
 
         profileModel = ProfileModel()
@@ -563,13 +586,19 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     {
 
         var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
-        leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
-            if(it.profileParameterID!=168)
-            {
-                it.isDefaultHidden="N"
+
+
+        if(strSelectedClientType.equals("523") || strSelectedClientType.equals("524"))
+        {
+            leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+                if(it.profileParameterID!=168)
+                {
+                    it.isDefaultHidden="N"
+                }
             }
         }
-        objListOriginal=leadProfileList
+
+
         if(strSelectedClientType.equals("524"))
         {
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
@@ -579,11 +608,42 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
             }
         }
-        else{
+        else if(strSelectedClientType.equals("523"))
+        {
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
                 it.isRequired=1
             }
         }
+        else if(strSelectedClientType.equals("814"))
+        {
+            leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+                {
+                    it.isDefaultHidden="N"
+                }
+
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==261 )
+                {
+                    it.isRequired=1
+                }
+            }
+        }
+        else if(strSelectedClientType.equals("815"))
+        {
+            leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+                {
+                    it.isDefaultHidden="Y"
+                    it.isRequired=null
+                }
+
+
+            }
+
+        }
+
+
+        objListOriginal=leadProfileList
 
 
         profileModel = ProfileModel()
@@ -1054,7 +1114,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                         )
                                     }
                                     try{
-                                        if(question.profileParameterID==168)
+                                        if(question.profileParameterID==168 || question.profileParameterID==261)
                                         {
                                             strSelectedClientType= mOptions.profileSubParameterID!!.toString()
                                             requireActivity().runOnUiThread {
@@ -1374,8 +1434,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 )
                             }
                             formElementList.add(tvDate)
-                            questionMap[question.profileParameterID!!.toString()] =
-                                childValue
+                            questionMap[question.profileParameterID!!.toString()] = childValue
+
+                            if (question.isDefaultHidden.equals("Y", ignoreCase = true)) {
+                                childValue.visibility = View.GONE
+                            }
                         }
                         else -> {
                         }
@@ -1405,10 +1468,35 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
             if (mCoutFlagFirstGroup) {
                 //collapse others
-                toggleSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
+                    toggleSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
             } else {
                 openSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
             }
+            if(strSelectedClientType.equals("814") || strSelectedClientType.equals("815") )
+            {
+                if(group.profileParameterGroupID==121 )
+                {
+                    openSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
+                }
+                else if(group.profileParameterGroupID==109)
+                {
+                    toggleSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
+                }
+
+            }
+            else if(strSelectedClientType.equals("524") ||strSelectedClientType.equals("523"))
+            {
+                if( group.profileParameterGroupID==117)
+                {
+                    openSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
+                }
+                else if(group.profileParameterGroupID==109)
+                {
+                    toggleSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
+                }
+            }
+
+
             mCoutFlagFirstGroup = true
         }
         //perform proper opioin
