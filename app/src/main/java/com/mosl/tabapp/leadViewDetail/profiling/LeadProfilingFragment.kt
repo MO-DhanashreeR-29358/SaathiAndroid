@@ -356,6 +356,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
             {
                 it.isDefaultHidden="Y"
+                it.isRequired = null
             }
         }
         /*** End here****/
