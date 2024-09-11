@@ -163,6 +163,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     var strLatitude : String = ""
     var strLongitude : String = ""
+    var strMeetingLatitude : String = ""
+    var strMeetingLongitude : String = ""
     var strAddress : String = ""
     var isMockLocationEnabled : Boolean = false
     var strSourceName : String = ""
@@ -279,6 +281,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             isMockLocationEnabled = locationItem.isMockLocationEnabled
         }else
         {
+            strMeetingLatitude = locationItem.latitude
+            strMeetingLongitude = locationItem.longitude
             binding.etLocation.setText(locationItem.address)
         }
         //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
@@ -1246,6 +1250,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     override fun getMeetingAddress(): String {
         return binding.etLocation.text.toString()
+    }
+
+    override fun getMeetingLatitude(): String? {
+        return strMeetingLatitude
+    }
+
+    override fun getMeetingLongitude(): String? {
+        return strMeetingLongitude
     }
 
     override fun getMeetingDesc(): String {
