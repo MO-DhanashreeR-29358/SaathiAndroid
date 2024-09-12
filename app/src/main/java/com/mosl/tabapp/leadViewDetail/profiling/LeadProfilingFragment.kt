@@ -24,6 +24,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileSubParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -84,6 +85,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     var isRequiredListMap = HashMap<Int, String>()
     var objListOriginal :List<LeadProfile> = mutableListOf()
     var strSelectedClientType :String =""
+    var isShowSuccessMessage : Boolean = false
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -281,6 +283,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
 
                 if(arrTempGroupName.isNotEmpty()){
+                    isShowSuccessMessage = false
+                    subject.onNext(SubmitProfileEvent)
                     val result = arrTempGroupName.joinToString(separator = "\n")
                     alertDialog(
                         requireContext(), 0,
@@ -288,6 +292,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         resources.getString(android.R.string.ok), true, null
                     )
                 }else{
+                    isShowSuccessMessage = true
                     subject.onNext(SubmitProfileEvent)
                 }
             }
@@ -332,10 +337,21 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.add(0,
             objProfileParameter!!
         )
+        var isHidden = true
+        objProfileParameter?.profileSubParameterList?.forEach {
+            if (it.isSelected == true) {
+                isHidden = false
+            }
+        }
          leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
-             if(it.profileParameterID!=168)
+            if(it.profileParameterID!=168)
              {
-                 it.isDefaultHidden="Y"
+                 if(isHidden){
+                     it.isDefaultHidden="Y"
+                 }else{
+                     it.isDefaultHidden="N"
+                 }
+
              }
          }
 
@@ -353,7 +369,14 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         )
 
         leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
-            if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+            var objOptions: ProfileSubParameter?= it.profileSubParameterList?.find {  it.profileSubParameterID == 814}
+            if(objOptions?.isSelected == true){
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+                {
+                    it.isDefaultHidden="N"
+
+                }
+            }else if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
             {
                 it.isDefaultHidden="Y"
                 it.isRequired = null
@@ -1529,15 +1552,17 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
         uiModel.onSuccess {
             if (it.status) {
-                alertDialog(
-                    requireContext(), 0,
-                    resources.getString(R.string.motilal_oswal),
-                    MOSLConstants.SET_USER_PROFILE, "OK", true
-                ) { action, data1 ->
-                    if (action == MSFDialog.Action.OK) {
-                        viewPager?.setCurrentItem(
-                            MOSLConstants.LEAD_DETAIL, false
-                        )
+                if(isShowSuccessMessage) {
+                    alertDialog(
+                        requireContext(), 0,
+                        resources.getString(R.string.motilal_oswal),
+                        MOSLConstants.SET_USER_PROFILE, "OK", true
+                    ) { action, data1 ->
+                        if (action == MSFDialog.Action.OK) {
+                            viewPager?.setCurrentItem(
+                                MOSLConstants.LEAD_DETAIL, false
+                            )
+                        }
                     }
                 }
 

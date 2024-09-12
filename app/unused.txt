@@ -36175,11 +36175,13 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment:
     private final java.util.ArrayList getSelectedAnswersJson()
     public final java.lang.String getStrSelectedClientType()
     public final java.util.HashMap isRequiredListMap()
+    public final boolean isShowSuccessMessage()
     public final java.lang.String prefix(int)
     public final void setObjListOriginal(java.util.List)
     public final void setPresenter$app_uatRelease(com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingPresenter)
     public final void setProfileNewRequestList(java.util.ArrayList)
     public final void setRequiredListMap(java.util.HashMap)
+    public final void setShowSuccessMessage(boolean)
     public final void setStrSelectedClientType(java.lang.String)
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment_MembersInjector:
     private final javax.inject.Provider activityDelegateProvider
@@ -82891,7 +82893,7 @@ com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheti
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheticLambda$1$a9857f73a04f0e88efc60ff459a6bc264080e32d5985aac833b4cd2191cf5cb3$1
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheticLambda$1$a9857f73a04f0e88efc60ff459a6bc264080e32d5985aac833b4cd2191cf5cb3$2
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheticLambda$1$a9857f73a04f0e88efc60ff459a6bc264080e32d5985aac833b4cd2191cf5cb3$3
-com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheticLambda$2$7be0babf6b827c579ec807c34a5d33f28d384448d26852f70c0f138e0589ebd8$0
+com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$$InternalSyntheticLambda$2$1844f179c510f33509580380552882456d15eb557d5f399ba9b62f528ef3f6b8$0
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$Companion
 com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment$selectedAnswersJson$2:
     public final java.util.ArrayList invoke()
