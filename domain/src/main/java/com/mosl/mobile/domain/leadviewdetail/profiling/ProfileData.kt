@@ -37,7 +37,7 @@ data class ProfileParameter(
 data class ProfileSubParameter(
   @JvmField val isHide: String?,
   @JvmField val questionSubText: String?,
-  @JvmField val isSelected: Boolean?,
+  @JvmField var isSelected: Boolean?,
   @JvmField val extraInfo: String?,
   @JvmField val extraInfoFieldName: String?,
   @JvmField val extraInfoRowCount: Int?,
