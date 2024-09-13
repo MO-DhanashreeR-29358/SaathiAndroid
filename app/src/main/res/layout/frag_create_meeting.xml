@@ -254,7 +254,7 @@
                 android:id="@+id/et_meeting_reason"
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
-                android:layout_height="18dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/txt_lable_meeting_reason" />
             <Spinner
                 android:id="@+id/spMeetingReason"
@@ -544,7 +544,7 @@
                 <TextView
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                     android:inputType="textMultiLine"
                     android:maxLines="6"

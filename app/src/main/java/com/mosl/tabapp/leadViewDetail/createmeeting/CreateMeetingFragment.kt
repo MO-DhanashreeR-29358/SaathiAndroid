@@ -285,6 +285,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             strMeetingLongitude = locationItem.longitude
             binding.etLocation.setText(locationItem.address)
         }
+
+        Log.d("strLatitude",strLatitude)
+        Log.d("strLongitude",strLongitude)
+
+        Log.d("strMeetingLatitude",strMeetingLatitude)
+        Log.d("strMeetingLongitude",strMeetingLongitude)
         //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
 
     }
