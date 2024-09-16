@@ -376,13 +376,57 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         /*** End here****/
         /*** for Family Members changes start here****/
 
-        var objFamilyMemberParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
-            it.profileParameterID==205
+        var objMaritaleStatusParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==261
         };
 
-        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(3);
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(4);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(0,
+            objMaritaleStatusParameter!!
+        )
+        var objAnniversaryParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==205
+        };
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(4);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(1,
+            objAnniversaryParameter!!
+        )
+
+        var objSpouseParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==262
+        };
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(5);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(2,
+            objSpouseParameter!!
+        )
+
+        var objSpousebdayParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==263
+        };
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(6);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(3,
+            objSpousebdayParameter!!
+        )
+
+        var objkidsParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==264
+        };
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(7);
         leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(4,
-            objFamilyMemberParameter!!
+            objkidsParameter!!
+        )
+
+        var objkidsNameParameter: ProfileParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find {
+            it.profileParameterID==265
+        };
+
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.removeAt(8);
+        leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.add(5,
+            objkidsNameParameter!!
         )
 
 
