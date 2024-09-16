@@ -1590,7 +1590,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
     private void getLeadDetail() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            getCompositeDisposable().add(getSaathiApi().getLeadView(new LeadViewRequest(mLeadId))
+            getCompositeDisposable().add(getSaathiApi().getLeadView(new LeadViewRequest(mLeadId, 1))
                     .compose(applyUiModel())
                     .subscribe(this::renderLeads));
         } else {
