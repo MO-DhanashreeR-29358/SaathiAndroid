@@ -680,7 +680,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         }
         else if(strSelectedClientType.equals("814"))
         {
-            leadProfileList.find { it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 814 }?.isSelected = true
 
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
@@ -692,12 +691,23 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 {
                     it.isRequired=1
                 }
+                if(it.profileParameterID == 261) {
+                    it.profileSubParameterList?.forEach {
+                        if(it.profileSubParameterID == 814)
+                        {
+                            it.isSelected=true
+                        }
+                        else
+                        {
+                            it.isSelected=false
+                        }
+
+                    }
+                }
             }
         }
         else if(strSelectedClientType.equals("815"))
         {
-            leadProfileList.find { it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 815 }?.isSelected = true
-
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
                 {
@@ -705,6 +715,19 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     it.isRequired=null
                 }
 
+                if(it.profileParameterID == 261) {
+                    it.profileSubParameterList?.forEach {
+                        if(it.profileSubParameterID == 815)
+                        {
+                            it.isSelected=true
+                        }
+                        else
+                        {
+                            it.isSelected=false
+                        }
+
+                    }
+                }
 
             }
 
