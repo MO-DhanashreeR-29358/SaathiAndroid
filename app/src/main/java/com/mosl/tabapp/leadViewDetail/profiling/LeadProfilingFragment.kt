@@ -24,6 +24,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.profiling.LeadProfile
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileRequestData
+import com.mosl.mobile.domain.leadviewdetail.profiling.ProfileSubParameter
 import com.mosl.mobile.domain.leadviewdetail.profiling.ProfilingResponseModel
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.layout
@@ -84,6 +85,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     var isRequiredListMap = HashMap<Int, String>()
     var objListOriginal :List<LeadProfile> = mutableListOf()
     var strSelectedClientType :String =""
+    var isShowSuccessMessage : Boolean = false
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -281,6 +283,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
 
                 if(arrTempGroupName.isNotEmpty()){
+                    isShowSuccessMessage = false
+                    subject.onNext(SubmitProfileEvent)
                     val result = arrTempGroupName.joinToString(separator = "\n")
                     alertDialog(
                         requireContext(), 0,
@@ -288,6 +292,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                         resources.getString(android.R.string.ok), true, null
                     )
                 }else{
+                    isShowSuccessMessage = true
                     subject.onNext(SubmitProfileEvent)
                 }
             }
@@ -332,10 +337,38 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.add(0,
             objProfileParameter!!
         )
+        var isHidden = true
+        var selectedClientType = ""
+        objProfileParameter?.profileSubParameterList?.forEach {
+            if (it.isSelected == true) {
+                selectedClientType = it.profileSubParameterID.toString()
+                isHidden = false
+            }
+        }
+        if(selectedClientType.equals("524"))
+        {
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+                if(it.profileParameterID!=169)
+                {
+                    it.isRequired=null
+                }
+            }
+        }
+        else if(selectedClientType.equals("523"))
+        {
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
+                it.isRequired=1
+            }
+        }
          leadProfileList.find {  it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
-             if(it.profileParameterID!=168)
+            if(it.profileParameterID!=168)
              {
-                 it.isDefaultHidden="Y"
+                 if(isHidden){
+                     it.isDefaultHidden="Y"
+                 }else{
+                     it.isDefaultHidden="N"
+                 }
+
              }
          }
 
@@ -352,12 +385,40 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             objFamilyMemberParameter!!
         )
 
+
         leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
             if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
             {
                 it.isDefaultHidden="Y"
+                it.isRequired = null
             }
         }
+
+        var objOptionsYes: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 814 }
+        if(objOptionsYes?.isSelected == true){
+            leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+                {
+                    it.isDefaultHidden="N"
+                }
+
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==261 )
+                {
+                    it.isRequired=1
+                }
+            }
+        }
+        var objOptionsNo: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 815 }
+        if(objOptionsNo?.isSelected == true){
+            leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
+                if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
+                {
+                    it.isDefaultHidden="Y"
+                    it.isRequired=null
+                }
+            }
+        }
+
         /*** End here****/
         objListOriginal= leadProfileList
 
@@ -601,6 +662,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
         if(strSelectedClientType.equals("524"))
         {
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.find { it.profileParameterID == 168 }?.profileSubParameterList?.find { it.profileSubParameterID == 524 }?.isSelected = true
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
                 if(it.profileParameterID!=169)
                 {
@@ -610,12 +672,16 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         }
         else if(strSelectedClientType.equals("523"))
         {
+            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.find { it.profileParameterID == 168 }?.profileSubParameterList?.find { it.profileSubParameterID == 523 }?.isSelected = true
+
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
                 it.isRequired=1
             }
         }
         else if(strSelectedClientType.equals("814"))
         {
+            leadProfileList.find { it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 814 }?.isSelected = true
+
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
                 {
@@ -630,6 +696,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
         }
         else if(strSelectedClientType.equals("815"))
         {
+            leadProfileList.find { it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 815 }?.isSelected = true
+
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
                 {
@@ -1039,13 +1107,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                                 }
 
-                                for( objprofileNewRequestList in profileNewRequestList){
-                                    if((mOptions.profileParameterID.toString().equals(objprofileNewRequestList.profileParameterID))&& (mOptions.profileSubParameterID.toString().equals(objprofileNewRequestList.profileSubParameterID)))
-                                    {
-                                        rbOption.isChecked=true;
-                                       break
-                                    }
-                                }
 
                                 rbOption.setOnClickListener {
                                     extraFieldLayout.removeAllViews()
@@ -1130,7 +1191,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 }
 
                                 if (mOptions.isSelected) {
-
                                     rbOptionSelected = rbOption
                                     previousAction = mOptions
                                     setExtraView(mOptions, extraFieldLayout)
@@ -1145,12 +1205,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     )
                                 }
 
-
                                 rbGroup.addView(rbOption)
                             }//end of for loop for option printing
 
                             if (rbOptionSelected != null) {
-
+                                rbGroup.check(rbOptionSelected.id)
                                // rbOptionSelected.isChecked = false
                                 previousActionMap[previousAction.hideDepedentQuestion] =
                                     previousAction.isHide
@@ -1528,15 +1587,17 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
         uiModel.onSuccess {
             if (it.status) {
-                alertDialog(
-                    requireContext(), 0,
-                    resources.getString(R.string.motilal_oswal),
-                    MOSLConstants.SET_USER_PROFILE, "OK", true
-                ) { action, data1 ->
-                    if (action == MSFDialog.Action.OK) {
-                        viewPager?.setCurrentItem(
-                            MOSLConstants.LEAD_DETAIL, false
-                        )
+                if(isShowSuccessMessage) {
+                    alertDialog(
+                        requireContext(), 0,
+                        resources.getString(R.string.motilal_oswal),
+                        MOSLConstants.SET_USER_PROFILE, "OK", true
+                    ) { action, data1 ->
+                        if (action == MSFDialog.Action.OK) {
+                            viewPager?.setCurrentItem(
+                                MOSLConstants.LEAD_DETAIL, false
+                            )
+                        }
                     }
                 }
 
