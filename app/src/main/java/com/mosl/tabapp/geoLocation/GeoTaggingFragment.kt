@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.utils.toast
@@ -674,25 +675,33 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                 try {
                     // on below line we are getting location from the
                     // location name and adding that location to address list.
-                    addressList = geocoder.getFromLocationName(location, 1)
+                    addressList = try {
+                        geocoder.getFromLocationName(location, 1)
+                    } catch (e: Exception) {
+                        FirebaseCrashlytics.getInstance().recordException(e)
+                        null
+                    }
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    if(!addressList.isNullOrEmpty()) {
+                        val address = addressList!![0]
+
+                        // on below line we are creating a variable for our location
+                        // where we will add our locations latitude and longitude.
+                        val latLng = LatLng(address.latitude, address.longitude)
+
+                        mMarker.remove()
+                        removeAllMarker()
+                        addMarker(latLng)
+                        // on below line we are adding marker to that position.
+                        //mGoogleMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        // below line is to animate camera to that position.
+                        //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                    }
                 } catch (e: IOException) {
-                    e.printStackTrace()
+                    FirebaseCrashlytics.getInstance().recordException(e)
                 }
-                // on below line we are getting the location
-                // from our list a first position.
-                val address = addressList!![0]
 
-                // on below line we are creating a variable for our location
-                // where we will add our locations latitude and longitude.
-                val latLng = LatLng(address.latitude, address.longitude)
-
-                mMarker.remove()
-                removeAllMarker()
-                addMarker(latLng)
-                // on below line we are adding marker to that position.
-                //mGoogleMap.addMarker(MarkerOptions().position(latLng).title(location))
-                // below line is to animate camera to that position.
-                //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                 return false
             }
 
