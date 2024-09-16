@@ -15,6 +15,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager.widget.ViewPager
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction.Fetch
@@ -662,20 +663,31 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
         if(strSelectedClientType.equals("524"))
         {
-            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.find { it.profileParameterID == 168 }?.profileSubParameterList?.find { it.profileSubParameterID == 524 }?.isSelected = true
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
                 if(it.profileParameterID!=169)
                 {
                         it.isRequired=null
                 }
+                if(it.profileParameterID == 168) {
+                    it.profileSubParameterList?.forEach {
+                        it.isSelected = it.profileSubParameterID == 524
+
+                    }
+                }
             }
+
+
         }
         else if(strSelectedClientType.equals("523"))
         {
-            leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.find { it.profileParameterID == 168 }?.profileSubParameterList?.find { it.profileSubParameterID == 523 }?.isSelected = true
-
             leadProfileList.find { it.profileParameterGroupID ==117 }?.profileParameterList?.forEach {
                 it.isRequired=1
+                if(it.profileParameterID == 168) {
+                    it.profileSubParameterList?.forEach {
+                        it.isSelected = it.profileSubParameterID == 523
+
+                    }
+                }
             }
         }
         else if(strSelectedClientType.equals("814"))
@@ -693,14 +705,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
                 if(it.profileParameterID == 261) {
                     it.profileSubParameterList?.forEach {
-                        if(it.profileSubParameterID == 814)
-                        {
-                            it.isSelected=true
-                        }
-                        else
-                        {
-                            it.isSelected=false
-                        }
+                        it.isSelected = it.profileSubParameterID == 814
 
                     }
                 }
@@ -717,14 +722,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                 if(it.profileParameterID == 261) {
                     it.profileSubParameterList?.forEach {
-                        if(it.profileSubParameterID == 815)
-                        {
-                            it.isSelected=true
-                        }
-                        else
-                        {
-                            it.isSelected=false
-                        }
+                        it.isSelected = it.profileSubParameterID == 815
 
                     }
                 }
@@ -892,7 +890,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     textSize = resources.getDimension(R.dimen.txt_size_profile)
                     setBackgroundResource(R.drawable.profiling_question_background_text)
                 }
-                        Log.d("question ",Gson().toJson(question));
 
                 llBasicProfileQuestionLayoutInner.addView(tvQuestion)
                 questionMap[question.profileParameterID!!.toString() + Head] = tvQuestion
@@ -1648,7 +1645,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     fillProfileModal(dataList)
                     renderForm()
                 } catch (e: Exception) {
-                    /****** add firebase log***/
+                    FirebaseCrashlytics.getInstance().recordException(e)
 //                    alertDialog(
 //                        requireContext(), 0, resources.getString(R.string.motilal_oswal),
 //                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null

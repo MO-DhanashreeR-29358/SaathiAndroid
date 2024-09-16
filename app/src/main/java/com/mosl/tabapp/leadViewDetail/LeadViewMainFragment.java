@@ -309,7 +309,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     private void getLeadByIdFromServer(CharSequence strLeadId) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LeadViewRequest request =
-                    new LeadViewRequest(String.valueOf(strLeadId));
+                    new LeadViewRequest(String.valueOf(strLeadId), 1);
             Disposable subscribe = getSaathiApi().getLeadView(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderLeadView);
