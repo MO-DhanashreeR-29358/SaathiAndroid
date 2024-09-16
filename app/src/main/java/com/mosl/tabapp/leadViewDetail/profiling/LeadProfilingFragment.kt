@@ -1564,10 +1564,11 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     fillProfileModal(dataList)
                     renderForm()
                 } catch (e: Exception) {
-                    alertDialog(
-                        requireContext(), 0, resources.getString(R.string.motilal_oswal),
-                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null
-                    )
+                    /****** add firebase log***/
+//                    alertDialog(
+//                        requireContext(), 0, resources.getString(R.string.motilal_oswal),
+//                        SOME_ERROR_OCCURED_PLEASE_RETRY, "OK", true, null
+//                    )
                 }
             }
 
