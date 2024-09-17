@@ -120,6 +120,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
     private lateinit var splAttendeeAdapter: AttendeeAdapter
     private lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
+    var isAreaRestricted :Boolean = true
 
     @Inject
     lateinit var presenter: CreateMeetingPresenter
@@ -162,6 +163,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     var strLatitude : String = ""
     var strLongitude : String = ""
+    var strMeetingLatitude : String = ""
+    var strMeetingLongitude : String = ""
     var strAddress : String = ""
     var isMockLocationEnabled : Boolean = false
     var strSourceName : String = ""
@@ -182,7 +185,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         if (permissionCheckHelper.locationPermission()) {
             // fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject)
+            dialog.setData(uiSubject, true)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
         }
@@ -243,6 +246,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.rvTravellingList.adapter = travellingAdapter
         AddedAttendeeModel.setAttendeeUserEmplyeeCode(userManager.getUser()?.employeeCode)
 
+        binding.etLocation.setOnClickListener {
+            isAreaRestricted = false
+            if(getSelectedMeetingLocation().lookUpName != "Branch") {
+                val dialog = GeoTaggingFragment()
+                dialog.setData(uiSubject, isAreaRestricted)
+                dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+            }
+        }
     }
 
     override fun extractArguments(bundle: Bundle) {
@@ -263,12 +274,24 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun renderLocationSave(locationItem: LocationItem) {
-        strLatitude = locationItem.latitude
-        strLongitude = locationItem.longitude
-        strAddress = locationItem.address
-        isMockLocationEnabled = locationItem.isMockLocationEnabled
-        //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
+        if(isAreaRestricted) {
+            strLatitude = locationItem.latitude
+            strLongitude = locationItem.longitude
+            strAddress = locationItem.address
+            isMockLocationEnabled = locationItem.isMockLocationEnabled
+        }else
+        {
+            strMeetingLatitude = locationItem.latitude
+            strMeetingLongitude = locationItem.longitude
+            binding.etLocation.setText(locationItem.address)
+        }
 
+        Log.d("strLatitude",strLatitude)
+        Log.d("strLongitude",strLongitude)
+
+        Log.d("strMeetingLatitude",strMeetingLatitude)
+        Log.d("strMeetingLongitude",strMeetingLongitude)
+        //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
 
     }
 
@@ -501,13 +524,16 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             binding.etLocation.setText("")
             Timber.d("CreateMeetingFragment renderAddress showOnFailurePopup ${it.message}")
 
-            if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
+           /* if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
                 showOnFailurePopup(it)
-            }
+            }*/
         }
 
         uiModel.onSuccess {
-            binding.etLocation.setText(it)
+            if(getSelectedMeetingLocation().lookUpName == "Branch"){
+                binding.etLocation.setText(it)
+            }
+
         }
     }
 
@@ -1097,7 +1123,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             //fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject)
+            dialog.setData(uiSubject, true)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
             false
@@ -1232,6 +1258,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.etLocation.text.toString()
     }
 
+    override fun getMeetingLatitude(): String? {
+        return strMeetingLatitude
+    }
+
+    override fun getMeetingLongitude(): String? {
+        return strMeetingLongitude
+    }
+
     override fun getMeetingDesc(): String {
         return binding.etMeetingDescription.text.toString()
     }
@@ -1309,7 +1343,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
                     //fusedLocation.initDispatcher(this)
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject)
+                    dialog.setData(uiSubject, true)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
@@ -1369,7 +1403,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             // Toast.makeText(requireContext(),"call fusedLocation.initDispatcher",Toast.LENGTH_LONG).show()
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject)
+            dialog.setData(uiSubject, true)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
             //fusedLocation.initDispatcher(this)
 
@@ -1475,7 +1509,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     if (permissionCheckHelper.locationPermission()) {
                         // fusedLocation.initDispatcher(this)
                         val dialog = GeoTaggingFragment()
-                        dialog.setData(uiSubject)
+                        dialog.setData(uiSubject, true)
                         dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
                     }
@@ -1561,7 +1595,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     isMockLocation(meetingApptModel)
                 } else {
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject)
+                    dialog.setData(uiSubject, true)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }

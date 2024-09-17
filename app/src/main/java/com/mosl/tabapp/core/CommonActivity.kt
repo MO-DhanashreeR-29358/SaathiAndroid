@@ -728,6 +728,7 @@ class CommonActivity : BaseActivity(),
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
+    @SuppressLint("WrongConstant")
     private fun setupMenuDrawer() {
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(
@@ -774,6 +775,12 @@ class CommonActivity : BaseActivity(),
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SALES_BROCHURE) {
                     gotoEkycExpressPage(false, WebviewFragment.COLLATERAL_ID)
+                    binding.drawerLayout.closeDrawers()
+                }else if (menu.pageId == NavigationConstants.NAVIGATE_TO_ONLY_MFD) {
+                    gotoEkycExpressPage(false, WebviewFragment.ONLY_MFD_ID)
+                    binding.drawerLayout.closeDrawers()
+                }else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EQUITY_MFD) {
+                    gotoEkycExpressPage(false, WebviewFragment.EQUITY_AND_MFD_ID)
                     binding.drawerLayout.closeDrawers()
                 }
 

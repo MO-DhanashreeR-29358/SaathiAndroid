@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
@@ -13,6 +13,7 @@
             android:layout_height="match_parent" />
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/address_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_medium"
@@ -101,11 +102,23 @@
 
         </androidx.cardview.widget.CardView>
 
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/idSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:elevation="5dp"
+            android:background="@color/white"
+            app:iconifiedByDefault="false"
+            android:layout_below="@+id/address_card"
+            app:queryHint="Search Here"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/margin_medium"
             android:background="@drawable/ekyc_button_default_bg"
             android:paddingStart="@dimen/padding_medium"
@@ -114,6 +127,6 @@
             android:textColor="@color/white"
             android:visibility="visible" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </layout>

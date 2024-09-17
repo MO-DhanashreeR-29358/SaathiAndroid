@@ -14,13 +14,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.model.*
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.utils.toast
@@ -46,6 +49,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
     internal lateinit var binding: FragmentGeoTaggingBinding
     private val dataActionSubject = PublishSubject.create<DataAction>()
     var uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
+    var isAreaRestriction : Boolean = true
     private lateinit var mGoogleMap: GoogleMap
     lateinit var mContext: Context
     private var mCurrentLocation: Location? = null
@@ -78,8 +82,9 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         return inflater.inflate(R.layout.fragment_geo_tagging, container, false)
     }
 
-    fun setData(publishSubject: PublishSubject<CreateMeetingUiEvent>){
+    fun setData(publishSubject: PublishSubject<CreateMeetingUiEvent>, isAreaRestriction : Boolean){
         this.uiSubject = publishSubject
+        this.isAreaRestriction = isAreaRestriction
     }
 
     override fun onStart() {
@@ -87,6 +92,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         val window = dialog?.window
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT)
         binding.maps.onStart()
+
     }
 
     override fun onAttach(context: Context) {
@@ -95,6 +101,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         mContext = context
         locationManager = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         handler = Handler(Looper.getMainLooper())
+
     }
 
     override fun onMarkerDragEnd(p0: Marker) {
@@ -106,22 +113,37 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
             end.latitude = it.position.latitude
             end.longitude = it.position.longitude
             val distance = start.distanceTo(end)
-            if (distance > 700) {
-                mMarker.remove()
-                removeAllMarker()
-                addMarker(
-                    latLng = LatLng(
-                        start.latitude,
-                        start.longitude
+            if(isAreaRestriction) {
+                if (distance > 700) {
+                    mMarker.remove()
+                    removeAllMarker()
+                    addMarker(
+                        latLng = LatLng(
+                            start.latitude,
+                            start.longitude
+                        )
                     )
-                )
-                mSelectedLocation = LatLng(start.latitude, start.longitude)
-                // set true because here set the location to current location
-                isValidDistance = true
-                mContext.toast("Please select a location less than 700 meters")
+                    mSelectedLocation = LatLng(start.latitude, start.longitude)
+                    // set true because here set the location to current location
+                    isValidDistance = true
+                    mContext.toast("Please select a location less than 700 meters")
 
 
-            } else {
+                } else {
+                    mMarker.remove()
+                    removeAllMarker()
+                    addMarker(it.position)
+                    mSelectedLocation = it.position
+                    mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(it.position))
+                    isValidDistance = true
+                    Toast.makeText(
+                        mContext,
+                        "Distance from current location is : $distance meters",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }
+            }else {
                 mMarker.remove()
                 removeAllMarker()
                 addMarker(it.position)
@@ -231,7 +253,8 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                 e.printStackTrace()
             }
         }
-
+        binding.idSearchView.isVisible = !isAreaRestriction
+        getSearchBox()
 
     }
 
@@ -397,9 +420,31 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
     }
 
     private fun removeAllMarker(){
-        if(mapMarkerExists) {
-            mGoogleMap.clear()
-            mCurrentLocation?.let { loc ->
+
+            if (mapMarkerExists) {
+                mGoogleMap.clear()
+                mCurrentLocation?.let { loc ->
+                    if(isAreaRestriction) {
+                        mGoogleMap.addCircle(
+                            CircleOptions()
+                                .radius(700.0)
+                                .center(LatLng(loc.latitude, loc.longitude))
+                                .clickable(true)
+                                .strokeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                                .zIndex(122.0f)
+                                .visible(true)
+                        )
+                    }
+
+            }
+        }
+    }
+
+    private fun addMarkerAndZoom() {
+
+        mGoogleMap.clear()
+        mCurrentLocation?.let { loc ->
+            if(isAreaRestriction) {
                 mGoogleMap.addCircle(
                     CircleOptions()
                         .radius(700.0)
@@ -410,21 +455,6 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                         .visible(true)
                 )
             }
-        }
-    }
-
-    private fun addMarkerAndZoom() {
-        mGoogleMap.clear()
-        mCurrentLocation?.let { loc ->
-            mGoogleMap.addCircle(
-                CircleOptions()
-                    .radius(700.0)
-                    .center(LatLng(loc.latitude, loc.longitude))
-                    .clickable(true)
-                    .strokeColor(ContextCompat.getColor(mContext, R.color.colorAccent))
-                    .zIndex(122.0f)
-                    .visible(true)
-            )
 
             // For showing a move to my location button
             if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -624,6 +654,61 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
             mContext,
             location
         )
+    }
+
+    private fun getSearchBox(){
+        // adding on query listener for our search view.
+        // adding on query listener for our search view.
+        binding.idSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // on below line we are getting the
+                // location name from search view.
+                val location: String = binding.idSearchView.getQuery().toString()
+
+                // below line is to create a list of address
+                // where we will store the list of all address.
+                var addressList: List<Address>? = null
+
+                // checking if the entered location is null or not.
+                // on below line we are creating and initializing a geo coder.
+                val geocoder = Geocoder(mContext, Locale.getDefault())
+                try {
+                    // on below line we are getting location from the
+                    // location name and adding that location to address list.
+                    addressList = try {
+                        geocoder.getFromLocationName(location, 1)
+                    } catch (e: Exception) {
+                        FirebaseCrashlytics.getInstance().recordException(e)
+                        null
+                    }
+                    // on below line we are getting the location
+                    // from our list a first position.
+                    if(!addressList.isNullOrEmpty()) {
+                        val address = addressList!![0]
+
+                        // on below line we are creating a variable for our location
+                        // where we will add our locations latitude and longitude.
+                        val latLng = LatLng(address.latitude, address.longitude)
+
+                        mMarker.remove()
+                        removeAllMarker()
+                        addMarker(latLng)
+                        // on below line we are adding marker to that position.
+                        //mGoogleMap.addMarker(MarkerOptions().position(latLng).title(location))
+                        // below line is to animate camera to that position.
+                        //mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                    }
+                } catch (e: IOException) {
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                }
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+        })
     }
 
 }

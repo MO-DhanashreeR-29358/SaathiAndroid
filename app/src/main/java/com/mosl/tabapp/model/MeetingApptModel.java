@@ -80,6 +80,10 @@ public class MeetingApptModel implements Serializable {
     private String clientCode;
     private String meetingAddressTypeId;
     private String meetingAddress;
+
+    private String meetingLongitude;
+
+    private String meetingLatitude;
     private String amount;
     private String geoArea;
     private String geoLongitude;
@@ -384,7 +388,21 @@ public class MeetingApptModel implements Serializable {
         this.meetingAddress = meetingAddress;
     }
 
+    public String getMeetingLongitude() {
+        return meetingLongitude;
+    }
 
+    public void setMeetingLongitude(String meetingLongitude) {
+        this.meetingLongitude = meetingLongitude;
+    }
+
+    public String getMeetingLatitude() {
+        return meetingLatitude;
+    }
+
+    public void setMeetingLatitude(String meetingLatitude) {
+        this.meetingLatitude = meetingLatitude;
+    }
 
     public String getAmount() {
         return amount;
@@ -472,6 +490,8 @@ public class MeetingApptModel implements Serializable {
         if (displayType.equalsIgnoreCase("A") && meetingType.equalsIgnoreCase(MEETING_TYPE_MEETING)) {
             json += ",\"MeetingAddressTypeId\":\"" + getMeetingAddressTypeId() + "\"";
             json += ",\"MeetingAddress\":\"" + getMeetingAddress() + "\"";
+            json += ",\"MeetingLatitude\":\"" + getMeetingLatitude() + "\"";
+            json += ",\"MeetingLongitude\":\"" + getMeetingLongitude() + "\"";
             json += ",\"TravellingModeIds\":\"" + getTravellingJson() + "\"";
             json += ",\"Amount\":\"" + getAmount() + "\"";
             json += ",\"Products\":" + getProductJson();

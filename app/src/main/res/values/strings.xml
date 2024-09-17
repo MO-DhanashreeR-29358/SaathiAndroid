@@ -17,6 +17,8 @@
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing Applications</string>
     <string name="MOSL_MENU_PENDING_ESIGN_TXT">Pending Esign</string>
+    <string name="MOSL_MENU_MFD_ONLY">Only MFD</string>
+    <string name="MOSL_MENU_EQUITY_AND_MFD">Equity &amp; MFD</string>
     <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>
     <string name="MOSL_MENU_RESUME_APPLICATIONS_TXT">Resume Application</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
@@ -55,6 +57,7 @@
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
     <string name="MOSL_MENU_SIP">SIP</string>
     <string name="MOSL_MENU_DORMANT">Dormant Reactivation </string>
+    <string name="MOSL_MENU_QUERY_FORM">Raise Your Query</string>
     <string name="MOSL_MENU_REACTIVATION_REQ">Reactivation Request
 Page </string>
     <string name="txt_lable_diy_link">DIY Link</string>

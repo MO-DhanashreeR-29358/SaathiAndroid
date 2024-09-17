@@ -384,6 +384,8 @@ class CreateMeetingPresenter @Inject constructor(
         data.pincode = view.getPincode()
         data.amount = view.getAmount()
         data.meetingAddress = view.getMeetingAddress()
+        data.meetingLatitude = view.getMeetingLatitude()
+        data.meetingLongitude = view.getMeetingLongitude()
         data.meetingAddressTypeId = view.getSelectedMeetingLocation()?.lookUpID.toString()
         data.leadId = createMeetingData.leadId
         data.ucid = createMeetingData.ucid

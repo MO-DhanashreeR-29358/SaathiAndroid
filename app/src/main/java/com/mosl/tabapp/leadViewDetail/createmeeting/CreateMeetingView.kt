@@ -48,6 +48,10 @@ interface CreateMeetingView : BaseView {
   fun getPincode(): String?
   fun getAmount(): String?
   fun getMeetingAddress(): String?
+
+  fun getMeetingLatitude(): String?
+  fun getMeetingLongitude(): String?
+
   fun getMeetingDesc(): String
   fun getCustomerComment(): String?
   fun getCategory(): String

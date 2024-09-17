@@ -338,6 +338,26 @@ class ActivityNavigationHelper @Inject constructor(
                     it.url?.apply { this.replace("", "%20") }.toString()
                 }
             }
+            WebviewFragment.ONLY_MFD_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(
+                        WebviewFragment.ONLY_MFD_KEY, null,
+                        null, null
+                    )
+                ).map {
+                    it.url?.apply { this.replace("", "%20") }.toString()
+                }
+            }
+            WebviewFragment.EQUITY_AND_MFD_ID -> {
+                return saathiApi.getEkycExpressUrl(
+                    CommonURLRequest(
+                        WebviewFragment.EQUITY_AND_MFD_KEY, null,
+                        null, null
+                    )
+                ).map {
+                    it.url?.apply { this.replace("", "%20") }.toString()
+                }
+            }
             else -> {
                 return saathiApi.getEkycExpressUrl(
                     CommonURLRequest(
