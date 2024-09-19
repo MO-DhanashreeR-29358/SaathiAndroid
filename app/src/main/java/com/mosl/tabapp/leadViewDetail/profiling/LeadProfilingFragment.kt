@@ -495,7 +495,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     tmpProfileQuestion.status = parameter.status
                     tmpProfileQuestion.isRequired = parameter.isRequired
 
-                    val questionText = stringOrEmpty(parameter.questionText)
+                    var questionText = stringOrEmpty(parameter.questionText)
+                    if(questionText == "Anniversary"){
+                        questionText = "Anniversary Date"
+                    }
                     tmpProfileQuestion.questionText = questionText
 
                     val yNStatus = when (parameter.isDefaultHidden) {
