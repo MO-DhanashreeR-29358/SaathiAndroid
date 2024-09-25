@@ -288,9 +288,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         Log.d("strLatitude",strLatitude)
         Log.d("strLongitude",strLongitude)
+        Log.d("strAddress",strAddress)
 
         Log.d("strMeetingLatitude",strMeetingLatitude)
         Log.d("strMeetingLongitude",strMeetingLongitude)
+        Log.d("strMeetingAddress",binding.etLocation.text.toString())
         //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
 
     }
@@ -375,7 +377,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 CRMAppUtil.setImage(imageUrl, binding.layoutTopSection.ivLead, requireContext())
             }
             binding.tvDate.text = CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY)
-            productAdapter.setSpinnerData(binding.spProduct, it.listInterestedIn)
+            var list = it.listInterestedIn.toMutableList()
+            list.removeIf { it.lookUpID == 4210 }
+            list.removeIf { it.lookUpID == 4211 }
+
+            productAdapter.setSpinnerData(binding.spProduct, list)
             meetingObjectiveAdapter.setSpinnerData(
                 binding.spMeetingObjective,
                 it.listMeetingObjective

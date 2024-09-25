@@ -234,10 +234,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
     override fun onSubmitProfileEventFired(): Observable<SubmitProfileEvent> = subject.ofType()
     override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
     override fun renderSubmitButtonClicked() {
-        val request = profileNewRequestList
+        //val request = profileNewRequestList
 
-        when {
-            request.isNotEmpty() ->{
+       // when {
+           // request.isNotEmpty() ->{
                /* var tempMap = HashMap<Int, String>()
                 tempMap.putAll(isRequiredListMap)
                 for ((key, value) in isRequiredListMap) {
@@ -296,15 +296,15 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     isShowSuccessMessage = true
                     subject.onNext(SubmitProfileEvent)
                 }
-            }
-            else -> {
+           // }
+           /* else -> {
                 alertDialog(
                     requireContext(), 0,
                     resources.getString(R.string.motilal_oswal), SOME_SEELECTION_METHOD,
                     resources.getString(android.R.string.ok), true, null
                 )
-            }
-        }
+            }*/
+       // }
     }
 
     private fun getQuestionValidationText(questionText: String?, controlType: Int): String{
@@ -365,6 +365,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             if(it.profileParameterID!=168)
              {
                  if(isHidden){
+                     it.isRequired=null
                      it.isDefaultHidden="Y"
                  }else{
                      it.isDefaultHidden="N"
@@ -714,6 +715,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 if(it.profileParameterID!=169)
                 {
                         it.isRequired=null
+                }else{
+                    it.isRequired = 1
                 }
                 if(it.profileParameterID == 168) {
                     it.profileSubParameterList?.forEach {
@@ -810,7 +813,10 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     tmpProfileQuestion.status = parameter.status
                     tmpProfileQuestion.isRequired = parameter.isRequired
 
-                    val questionText = stringOrEmpty(parameter.questionText)
+                    var questionText = stringOrEmpty(parameter.questionText)
+                    if(questionText == "Anniversary"){
+                        questionText = "Anniversary Date"
+                    }
                     tmpProfileQuestion.questionText = questionText
 
                     val yNStatus = when (parameter.isDefaultHidden) {

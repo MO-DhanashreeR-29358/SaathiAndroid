@@ -341,7 +341,9 @@ class SetAppointmentFragment : CommonFragment(), SetAppointmentView, OnClickList
       arrSelectProduct.clear()
       arrSelectProduct.add(RowData(0, "-1", SELECT_PRODUCT))
       for (item in it.indices) {
-        arrSelectProduct.add(RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName))
+        if(it[item].lookUpid != 4210 && it[item].lookUpid != 4211) {
+          arrSelectProduct.add(RowData(item + 1, it[item].lookUpid.toString(), it[item].lookUpName))
+        }
       }
       val arrAdapSelectProduct = SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
       binding.spSelectProduct.adapter = arrAdapSelectProduct

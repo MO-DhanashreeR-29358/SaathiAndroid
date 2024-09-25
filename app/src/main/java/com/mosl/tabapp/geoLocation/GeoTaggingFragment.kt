@@ -499,6 +499,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                 .snippet(getAddress(latLng))
                 .draggable(true)
         )!!
+        mSelectedLocation = mMarker.position
         val cameraPos = CameraPosition.Builder()
             .target(latLng).zoom(15f)
             .build()

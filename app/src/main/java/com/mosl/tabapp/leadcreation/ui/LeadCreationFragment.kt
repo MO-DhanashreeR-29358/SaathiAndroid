@@ -939,7 +939,10 @@ class LeadCreationFragment : CommonFragment(),
             binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
             bankAdapter.setSpinnerData(binding.spBank, data.listBank)
             binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
-            binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
+            var list = data.interestInRowDatas.toMutableList()
+            list.removeIf { it.value == "Equity" }
+            list.removeIf { it.value == "Only MFD" }
+            binding.spInterestIn.setSpinnerData(interestInAdapter, list)
             binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
