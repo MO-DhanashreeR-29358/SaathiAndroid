@@ -167,3 +167,4 @@
 -dontwarn com.sec.biometric.**
 -dontwarn android.content.**
 -keep class android.content.** { *; }
+-keep class androidx.databinding.** { *; }

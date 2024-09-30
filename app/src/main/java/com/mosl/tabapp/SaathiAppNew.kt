@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.room.Room
+import androidx.work.Configuration
 import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mosl.app.core.utils.matchesService
@@ -26,7 +27,7 @@ import utils.interfaces.IRepositoryUtils
 import javax.inject.Inject
 
 
-abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
+abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean>, Configuration.Provider  {
   init {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
   }
