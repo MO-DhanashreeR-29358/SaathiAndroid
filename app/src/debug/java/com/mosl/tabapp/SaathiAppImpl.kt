@@ -43,11 +43,6 @@ class SaathiAppImpl : SaathiAppNew() {
     return appComponent
   }
 
-  @NonNull
-  override fun getWorkManagerConfiguration(): Configuration {
-    return Configuration.Builder()
-      .setMinimumLoggingLevel(Log.INFO)
-      .build()
-  }
+
 
 }

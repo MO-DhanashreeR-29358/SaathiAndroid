@@ -2,6 +2,7 @@ package com.mosl.tabapp
 
 import android.R.attr
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -15,6 +16,7 @@ import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
+import io.reactivex.rxjava3.annotations.NonNull
 import processors.coreProcessors.eventReceivers.AbstractEventObserver.SESSION_EXPIRED
 import processors.coreProcessors.eventReceivers.EventBroadcast
 import processors.coreProcessors.eventReceivers.IEventObserver
@@ -47,6 +49,12 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean>, Conf
     }
   }
 
+  @NonNull
+  override fun getWorkManagerConfiguration(): Configuration {
+    return Configuration.Builder()
+      .setMinimumLoggingLevel(Log.INFO)
+      .build()
+  }
   override fun onCreate() {
     super.onCreate()
       EventBroadcast.registerSessionExpiredObserver(this, this)
