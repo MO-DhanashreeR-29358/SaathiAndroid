@@ -290,8 +290,10 @@ class CommonActivity : BaseActivity(),
         // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
         // }else{
-            mDistaSdk.doLoginCheckIn(this,
-                userManager.getUser()?.employeeCode,
+        val emp = userManager.getUser()?.employeeCode
+
+            mDistaSdk.doLoginCheckIn(
+                emp,
                 object : OnTaskSuccessListener {
                     override fun onSuccess() {
                         // Toast.makeText(

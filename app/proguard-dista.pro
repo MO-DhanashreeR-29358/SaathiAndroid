@@ -276,9 +276,12 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
--keep public class * implements ma.dista.utils.DistaApplication {
-   public static <methods>;
+-keep class ma.dista.utils.DistaApplication {
+public *;
 }
+-keep class androidx.databinding.** { *; }
+
+
 
 
 
