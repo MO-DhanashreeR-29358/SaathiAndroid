@@ -694,7 +694,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
     private fun updateRender(objList : List<LeadProfile>)
     {
-
         var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
 
 
@@ -1015,16 +1014,16 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 llBasicProfileQuestionLayoutGroup.addView(mEditTextOption)
                                 formElementList.add(mEditTextOption)
                                 mEditTextOption.doAfterTextChanged {
-                                    if (mEditTextOption.text.toString().isNotEmpty()) {
+                                   // if (mEditTextOption.text.toString().isNotEmpty()) {
                                         deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
                                         val text = mEditTextOption.text.toString()
                                             .trim { it <= ' ' }
                                         profileNewRequestList += ProfileRequestData(
                                             question.profileParameterID.toString(), mOptions.profileSubParameterID.toString(), leadId, text
                                         )
-                                    }else{
+                                    /*}else{
                                         deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
-                                    }
+                                    }*/
                                 }
                                 if (mEditTextOption.text.toString().isNotEmpty()) {
                                     deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
@@ -1269,6 +1268,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     setExtraView(mOptions, extraFieldLayout)
 
                                     val valueString =  getExtraView( mOptions)
+                                    deletePreviousItem( mOptions.profileParameterID!!.toString(),
+                                        mOptions.profileSubParameterID!!.toString())
                                     profileNewRequestList.add(
                                         ProfileRequestData(
                                             question.profileParameterID!!.toString(),
