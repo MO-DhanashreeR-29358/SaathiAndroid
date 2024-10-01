@@ -264,8 +264,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 //-------------------
                 var arrTempGroupName = ArrayList<String>()
 
-                for (group in profileModel!!.profileQuestionGroup) {
-                     for (question in group.profileQuestionList) {
+                for (group in objListOriginal) {
+                     for (question in group.profileParameterList!!) {
+
                          if (question.isRequired == 1) {
                              var isSelected = false
                              for(answer in profileNewRequestList) {
@@ -282,6 +283,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     }
 
                 }
+
+
 
                 if(arrTempGroupName.isNotEmpty()){
                     isShowSuccessMessage = false
@@ -1014,16 +1017,16 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                 llBasicProfileQuestionLayoutGroup.addView(mEditTextOption)
                                 formElementList.add(mEditTextOption)
                                 mEditTextOption.doAfterTextChanged {
-                                   // if (mEditTextOption.text.toString().isNotEmpty()) {
+                                    if (mEditTextOption.text.toString().isNotEmpty()) {
                                         deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
                                         val text = mEditTextOption.text.toString()
                                             .trim { it <= ' ' }
                                         profileNewRequestList += ProfileRequestData(
                                             question.profileParameterID.toString(), mOptions.profileSubParameterID.toString(), leadId, text
                                         )
-                                    /*}else{
+                                    }else{
                                         deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
-                                    }*/
+                                    }
                                 }
                                 if (mEditTextOption.text.toString().isNotEmpty()) {
                                     deletePreviousItem(question.profileParameterID.toString(), mOptions.profileSubParameterID.toString())
