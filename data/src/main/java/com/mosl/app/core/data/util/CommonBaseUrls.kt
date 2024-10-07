@@ -9,4 +9,7 @@ interface CommonBaseUrls {
 
   fun getQRCodeApiUrl(): String
   fun getMyZoneApiUrl(): String
+
+  fun getSaathiIndirectUrl(): String
+
 }

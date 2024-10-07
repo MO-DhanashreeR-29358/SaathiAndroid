@@ -12,7 +12,7 @@ data class ValidateLoingResponseModel(
 
     @JvmField val isChequeApprovalEnable: Int? = null,
 
-    @JvmField val user: NewUser? = null,
+    @JvmField val user: Any? = null,
 
     @JvmField val isPrimeUser: Int? = null,
 

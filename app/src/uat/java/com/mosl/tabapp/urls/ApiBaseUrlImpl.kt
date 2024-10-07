@@ -7,6 +7,10 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     return "https://saathiuat.motilaloswaluat.com:1023/api/"
   }
 
+  override fun getSaathiIndirectUrl(): String {
+    return "http://saathiuat.motilaloswal.com:80/api/"
+  }
+
   override fun getUppermostApiUrl(): String {
     return "http://122.184.137.89/Partner/PartnerMobileWebServices.asmx/"
   }

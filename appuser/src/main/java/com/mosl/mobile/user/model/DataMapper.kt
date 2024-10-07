@@ -133,9 +133,7 @@ fun ValidateLoginResponse.transformnewlogin(_strMessage:String):  ValidateLoingR
 
    isChequeApprovalEnable=isChequeApprovalEnable,
 
-   user=NewUser{
-
-   },
+   user=user,
 
    isPrimeUser=isPrimeUser,
 

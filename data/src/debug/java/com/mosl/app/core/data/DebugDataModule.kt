@@ -5,6 +5,7 @@ import com.mosl.app.core.data.interceptor.HeaderInterceptor
 import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor
 import com.mosl.app.core.data.meta.InternalAPIClient
 import com.mosl.app.core.data.meta.MyZoneAPIClient
+import com.mosl.app.core.data.meta.SaathiIndrectAPIClient
 import com.mosl.app.core.data.util.CertPinProvider
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.user.AuthorizationInterceptor
@@ -107,4 +108,24 @@ class DebugDataModule {
             .addInterceptor(authorizationInterceptor)
             .build()
     }
+
+
+    @Provides
+    @Singleton
+    @SaathiIndrectAPIClient
+    fun provideSaathiIndirectAPIOkHttpClient(
+        @Named("BaseOkClient") okHttpClient: OkHttpClient,
+        loggingInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: HeaderInterceptor,
+        encryptionInterceptor: EncryptionInterceptor,
+        listenerFactory: HttpListenerFactory
+    ): OkHttpClient {
+        return okHttpClient.newBuilder()
+            .addInterceptor(headerInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .eventListenerFactory(listenerFactory)
+            .build()
+    }
+
 }
