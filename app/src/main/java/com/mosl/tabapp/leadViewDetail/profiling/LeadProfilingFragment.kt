@@ -264,8 +264,9 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 //-------------------
                 var arrTempGroupName = ArrayList<String>()
 
-                for (group in profileModel!!.profileQuestionGroup) {
-                     for (question in group.profileQuestionList) {
+                for (group in objListOriginal) {
+                     for (question in group.profileParameterList!!) {
+
                          if (question.isRequired == 1) {
                              var isSelected = false
                              for(answer in profileNewRequestList) {
@@ -282,6 +283,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                     }
 
                 }
+
+
 
                 if(arrTempGroupName.isNotEmpty()){
                     isShowSuccessMessage = false
@@ -440,7 +443,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             }
         }
 
-        var objOptionsYes: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 814 }
+        var objOptionsYes: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 813 }
         if(objOptionsYes?.isSelected == true){
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
@@ -454,7 +457,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
             }
         }
-        var objOptionsNo: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 815 }
+        var objOptionsNo: ProfileSubParameter?= leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.find { it.profileParameterID == 261 }?.profileSubParameterList?.find { it.profileSubParameterID == 814 }
         if(objOptionsNo?.isSelected == true){
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
@@ -694,7 +697,6 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
     private fun updateRender(objList : List<LeadProfile>)
     {
-
         var leadProfileList  :  MutableList<LeadProfile> = objList as MutableList<LeadProfile>
 
 
@@ -740,7 +742,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
             }
         }
-        else if(strSelectedClientType.equals("814"))
+        else if(strSelectedClientType.equals("813"))
         {
 
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
@@ -755,13 +757,13 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                 }
                 if(it.profileParameterID == 261) {
                     it.profileSubParameterList?.forEach {
-                        it.isSelected = it.profileSubParameterID == 814
+                        it.isSelected = it.profileSubParameterID == 813
 
                     }
                 }
             }
         }
-        else if(strSelectedClientType.equals("815"))
+        else if(strSelectedClientType.equals("814"))
         {
             leadProfileList.find {  it.profileParameterGroupID ==121 }?.profileParameterList?.forEach {
                 if(it.profileParameterID==205 || it.profileParameterID==262 || it.profileParameterID==263 || it.profileParameterID==264 || it.profileParameterID==265 )
@@ -772,7 +774,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
 
                 if(it.profileParameterID == 261) {
                     it.profileSubParameterList?.forEach {
-                        it.isSelected = it.profileSubParameterID == 815
+                        it.isSelected = it.profileSubParameterID == 814
 
                     }
                 }
@@ -1269,6 +1271,8 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
                                     setExtraView(mOptions, extraFieldLayout)
 
                                     val valueString =  getExtraView( mOptions)
+                                    deletePreviousItem( mOptions.profileParameterID!!.toString(),
+                                        mOptions.profileSubParameterID!!.toString())
                                     profileNewRequestList.add(
                                         ProfileRequestData(
                                             question.profileParameterID!!.toString(),
@@ -1604,7 +1608,7 @@ class LeadProfilingFragment : CommonFragment(), LeadProfilingView {
             } else {
                 openSectionExpansion(llBasicProfileQuestionLayoutInner, tvGroupName)
             }
-            if(strSelectedClientType.equals("814") || strSelectedClientType.equals("815") )
+            if(strSelectedClientType.equals("813") || strSelectedClientType.equals("814") )
             {
                 if(group.profileParameterGroupID==121 )
                 {

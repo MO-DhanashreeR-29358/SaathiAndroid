@@ -538,6 +538,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onSuccess {
             if(getSelectedMeetingLocation().lookUpName == "Branch"){
                 binding.etLocation.setText(it)
+            }else{
+                binding.etLocation.setText("")
             }
 
         }
