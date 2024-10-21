@@ -378,8 +378,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             }
             binding.tvDate.text = CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY)
             var list = it.listInterestedIn.toMutableList()
-            list.removeIf { it.lookUpID == 4210 }
-            list.removeIf { it.lookUpID == 4211 }
+            list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
+            list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
 
             productAdapter.setSpinnerData(binding.spProduct, list)
             meetingObjectiveAdapter.setSpinnerData(

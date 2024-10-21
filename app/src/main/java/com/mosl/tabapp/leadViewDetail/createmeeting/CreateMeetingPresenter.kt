@@ -393,7 +393,7 @@ class CreateMeetingPresenter @Inject constructor(
         data.product = "0"
         data.setProductList(view.getproductList())
         data.meetingDuration = view.getSelectedMeetingDuration()?.lookUpID.toString()
-        data.meetingObjectiveID = view.getSelectedMeetingLocation()?.lookUpID.toString()
+        data.meetingObjectiveID = view.getSelectedMeetingObjective()?.lookUpID.toString()
         data.activityTypeID = view.getSelectedActivityType()?.lookUpID.toString()
         data.meetingReason = view.getSelectedMeetingReason()?.lookUpID.toString()
         data.meetingDes = CRMAppUtil.getJsonSafeString(view.getMeetingDesc())

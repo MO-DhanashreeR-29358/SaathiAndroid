@@ -381,7 +381,7 @@ public class MeetingApptModel implements Serializable {
     }
 
     public String getMeetingAddress() {
-        return meetingAddress;
+        return meetingAddress.replace("\"", "'");
     }
 
     public void setMeetingAddress(String meetingAddress) {
