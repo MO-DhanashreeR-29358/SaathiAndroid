@@ -298,6 +298,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getCheckApproval(),
                 getSalesBrochure(),
                 getSalesStadium(),
+                getBirthdayAnniversary(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
@@ -322,6 +323,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getIncentiveReport(),
                 getSalesBrochure(),
                 getSalesStadium(),
+                getBirthdayAnniversary(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
