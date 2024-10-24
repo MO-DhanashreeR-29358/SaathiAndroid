@@ -344,7 +344,7 @@ class WebviewFragment : CommonFragment() {
         uiModel.onSuccess {
             when (it.second) {
 
-                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID, COLLATERAL_ID -> {
+                FRESH_REGISTRATION_ID, EXISTING_APPLICATIONS_ID, RESUME_APPLICATIONS_ID, COLLATERAL_ID, ONLY_MFD_ID, EQUITY_AND_MFD_ID -> {
                     it.first?.apply { bannerNavigator.openUrlInAppCrome(this.replace(" ", "%20")) }
                 }
                 else -> it.first?.apply {
@@ -387,6 +387,20 @@ class WebviewFragment : CommonFragment() {
                         EXISTING_APPLICATIONS_KEY, null,
                         branchCodePreference.get(), null
                     )
+                ).map {
+                    Pair(it.url, webViewRequest.id)
+                }
+            }
+            ONLY_MFD_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(ONLY_MFD_KEY, null, null, null)
+                ).map {
+                    Pair(it.url, webViewRequest.id)
+                }
+            }
+            EQUITY_AND_MFD_ID -> {
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(EQUITY_AND_MFD_KEY, null, null, null)
                 ).map {
                     Pair(it.url, webViewRequest.id)
                 }
@@ -453,6 +467,18 @@ class WebviewFragment : CommonFragment() {
                     CommonURLRequest(DELETE_REQUEST_KEY, null, null, null)
                 ).map { Pair(it.url, webViewRequest.id) }
             }
+                DORMANT_REQUEST_ID->{
+                    return saathiApiNew.getEkycExpressUrl(
+                        CommonURLRequest(DORMANT_REQUEST_KEY, null, null, null)
+                    ).map { Pair(it.url, webViewRequest.id) }
+                }
+            QUERY_FORM_ID->{
+                return saathiApiNew.getEkycExpressUrl(
+                    CommonURLRequest(QUERY_FORM_KEY, null, null, null)
+                ).map { Pair(it.url, webViewRequest.id) }
+            }
+
+
             else -> {
                 return saathiApiNew.getEkycExpressUrl(
                     CommonURLRequest(CHECK_APPROVAL_KEY, null, null, null)
@@ -517,5 +543,14 @@ class WebviewFragment : CommonFragment() {
         const val PRIME_ENTRY_KEY = "PrimeEntry"
         const val DELETE_REQUEST_ID = "15"
         const val DELETE_REQUEST_KEY = "LEADUPDATEUTILITY"
+        const val DORMANT_REQUEST_ID="16"
+        const val DORMANT_REQUEST_KEY="Reactivation"
+        const val ONLY_MFD_ID = "17"
+        const val ONLY_MFD_KEY = "MFD"
+        const val EQUITY_AND_MFD_ID = "18"
+        const val EQUITY_AND_MFD_KEY = "EQUITY_MFD"
+        const val QUERY_FORM_ID="19"
+        const val QUERY_FORM_KEY="QueryForm"
+
     }
 }

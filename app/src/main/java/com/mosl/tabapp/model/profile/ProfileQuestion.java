@@ -26,6 +26,17 @@ public class ProfileQuestion {
     private Object approvalFieldList;
     private int controlType;
     private String defaultHidden="";
+
+    private Integer isRequired;
+
+    public Integer getIsRequired() {
+        return isRequired;
+    }
+
+    public void setIsRequired(Integer isRequired) {
+        this.isRequired = isRequired;
+    }
+
     public String isDefaultHidden() {
         return defaultHidden;
     }

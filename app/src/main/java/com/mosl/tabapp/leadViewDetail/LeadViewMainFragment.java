@@ -96,6 +96,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     private int createMeetingId = 0;
     private int diyCode = 0;
     private String diyLink = "";
+    private int isStageCompleted = 0;
 
     @Override
     protected int getLayout() {
@@ -308,7 +309,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
     private void getLeadByIdFromServer(CharSequence strLeadId) {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             LeadViewRequest request =
-                    new LeadViewRequest(String.valueOf(strLeadId));
+                    new LeadViewRequest(String.valueOf(strLeadId), 1);
             Disposable subscribe = getSaathiApi().getLeadView(request)
                     .compose(applyUiModel())
                     .subscribe(this::renderLeadView);
@@ -338,6 +339,7 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
             oaoUserId = data.oAOUserid;
             diyCode = data.diyCode;
             diyLink = stringOrEmpty(data.diyLink);
+            isStageCompleted = data.IsStageCompleted;
             List<LeadProductMappingItem> productMapping = data.leadProductMapping;
             if (productMapping.size() > 0) {
                 for (int i = 0; i < productMapping.size(); i++) {
@@ -426,14 +428,22 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
 
         ivOaoForm.setOnClickListener(view -> {
             dialog.dismiss();
-            gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
-                    prospectSourceDetail, intrestedIn, oaoUserId.toString(), "", LeadOwner));
-            // gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
+            if (userManager.getUser() != null && userManager.getUser().isPCG() && isStageCompleted == 0){
+                alert("Currently Lead Is Not In C3 Stage.Please Update Stage.");
+            }else {
+                gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
+                        prospectSourceDetail, intrestedIn, oaoUserId.toString(), "", LeadOwner));
+                // gotoEkycExpressPage(true, WebviewFragment.RESUME_APPLICATIONS_ID, oaoUserId.toString());
+            }
         });
         ivOpenAccount.setOnClickListener(view -> {
             dialog.dismiss();
-            gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
-                    prospectSourceDetail, intrestedIn, oaoUserId.toString(), "", LeadOwner));
+            if (userManager.getUser() != null && userManager.getUser().isPCG() && isStageCompleted == 0){
+                alert("Currently Lead Is Not In C3 Stage.Please Update Stage.");
+            }else {
+                gotoEkycPage(new EkycModule(mobileNo, email, LeadOwner, sourceName, prospectSourceName,
+                        prospectSourceDetail, intrestedIn, oaoUserId.toString(), "", LeadOwner));
+            }
         });
         ivCreateMeeting.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
@@ -492,7 +502,11 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
         ivClose.setOnClickListener(view -> dialog.dismiss());
         ivShareLink.setOnClickListener(view -> {
             dialog.dismiss();
-            renderDiyLink(leadId, this);
+            if (userManager.getUser() != null && userManager.getUser().isPCG() && isStageCompleted == 0){
+                alert("Currently Lead Is Not In C3 Stage.Please Update Stage.");
+            }else {
+                renderDiyLink(leadId, this);
+            }
         });
         ivSuggestMe.setOnClickListener(view -> {
             getSuggestMe();
@@ -505,6 +519,10 @@ public class LeadViewMainFragment extends CommonFragment implements View.OnClick
                         Toast.LENGTH_LONG)
                         .show();
             } else {
+                if (userManager.getUser() != null && userManager.getUser().isPCG() && isStageCompleted == 0){
+                    alert("Currently Lead Is Not In C3 Stage.Please Update Stage.");
+                    return;
+                }
                 ClipboardManager clipboard =
                         (ClipboardManager) requireContext().getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", diyLink);

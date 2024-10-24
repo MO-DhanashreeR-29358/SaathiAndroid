@@ -1590,7 +1590,7 @@ public class LeadViewDetailFragment extends CommonFragment
 
     private void getLeadDetail() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            getCompositeDisposable().add(getSaathiApi().getLeadView(new LeadViewRequest(mLeadId))
+            getCompositeDisposable().add(getSaathiApi().getLeadView(new LeadViewRequest(mLeadId, 1))
                     .compose(applyUiModel())
                     .subscribe(this::renderLeads));
         } else {
@@ -1985,7 +1985,7 @@ public class LeadViewDetailFragment extends CommonFragment
                     model.getProspectRefereMobile(), model.getProspectRefereEmail(),
                     model.getCreatedThrough(), model.getCreationDate(),
                     contactRequest,
-                    model.getLeadFieldValueModels(),"","","","","","","","","","","",""
+                    model.getLeadFieldValueModels(),"","","","","","","","","","","","","",""
             );
             getCompositeDisposable().add(getSaathiApi().updateLead(updateLeadRequest)
                     .compose(applyUiModel())

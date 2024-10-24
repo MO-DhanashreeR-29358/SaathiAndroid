@@ -19,3 +19,5 @@ data class AssignToEvent(val search: String) : LeadDetailUiEvent()
 object UpdateLeadDetail : LeadDetailUiEvent()
 
 object UpdateLeadSection : LeadDetailUiEvent()
+
+object CallAccountType : LeadDetailUiEvent()

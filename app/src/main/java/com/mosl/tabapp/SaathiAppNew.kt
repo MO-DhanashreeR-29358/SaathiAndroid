@@ -2,16 +2,21 @@ package com.mosl.tabapp
 
 import android.R.attr
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.multidex.MultiDex
 import androidx.room.Room
+import androidx.work.Configuration
+import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.mosl.app.core.utils.matchesService
 import com.mosl.tabapp.database.AppDatabase
 import com.mosl.tabapp.database.Data.MIGRATION_1_2
 import com.mosl.tabapp.ws.CRMWebServiceHandler
 import dagger.android.DaggerApplication
+import io.reactivex.rxjava3.annotations.NonNull
 import processors.coreProcessors.eventReceivers.AbstractEventObserver.SESSION_EXPIRED
 import processors.coreProcessors.eventReceivers.EventBroadcast
 import processors.coreProcessors.eventReceivers.IEventObserver
@@ -24,7 +29,7 @@ import utils.interfaces.IRepositoryUtils
 import javax.inject.Inject
 
 
-abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
+abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean>, Configuration.Provider  {
   init {
     AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
   }
@@ -44,6 +49,12 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
     }
   }
 
+  @NonNull
+  override fun getWorkManagerConfiguration(): Configuration {
+    return Configuration.Builder()
+      .setMinimumLoggingLevel(Log.INFO)
+      .build()
+  }
   override fun onCreate() {
     super.onCreate()
       EventBroadcast.registerSessionExpiredObserver(this, this)
@@ -82,6 +93,10 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean> {
           //).show()
         }
       })
+
+    FirebaseApp.initializeApp(this)
+
+    FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
 
   }

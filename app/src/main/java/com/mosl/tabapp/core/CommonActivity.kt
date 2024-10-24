@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.work.*
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.gson.Gson
@@ -210,6 +211,7 @@ class CommonActivity : BaseActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("AAAAA Common Activity onCreate ")
+
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
         binding.actionBar.setNotification(OnClickListener {
@@ -266,7 +268,7 @@ class CommonActivity : BaseActivity(),
 
     override fun onStart() {
         super.onStart()
-       // userLocationHelper.start()
+        userLocationHelper.start()
 
         Timber.d("AAA onStart")
     }
@@ -288,8 +290,10 @@ class CommonActivity : BaseActivity(),
         // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
         // }else{
-            mDistaSdk.doLoginCheckIn(this,
-                userManager.getUser()?.employeeCode,
+        val emp = userManager.getUser()?.employeeCode
+
+            mDistaSdk.doLoginCheckIn(
+                emp,
                 object : OnTaskSuccessListener {
                     override fun onSuccess() {
                         // Toast.makeText(
@@ -577,7 +581,7 @@ class CommonActivity : BaseActivity(),
                         remoteConfig.getString(getString(R.string.saathi_init))
                     //alert("Banner response : $saathiInit")
                    // Toast.makeText(this@CommonActivity, "Banner response : $saathiInit", Toast.LENGTH_LONG).show()
-                  //  Timber.d("OkHttp Banner response : %s", saathiInit)
+                    Timber.d("OkHttp Banner response : %s", saathiInit)
                     if (saathiInit != null && !saathiInit.isEmpty()) {
                         remoteConfigModel =
                             gson.fromJson(saathiInit, RemoteConfigModel::class.java)
@@ -726,6 +730,7 @@ class CommonActivity : BaseActivity(),
         binding.drawerLayout.openDrawer(GravityCompat.START)
     }
 
+    @SuppressLint("WrongConstant")
     private fun setupMenuDrawer() {
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(
@@ -772,6 +777,12 @@ class CommonActivity : BaseActivity(),
                     binding.drawerLayout.closeDrawers()
                 } else if (menu.pageId == NavigationConstants.NAVIGATE_TO_SALES_BROCHURE) {
                     gotoEkycExpressPage(false, WebviewFragment.COLLATERAL_ID)
+                    binding.drawerLayout.closeDrawers()
+                }else if (menu.pageId == NavigationConstants.NAVIGATE_TO_ONLY_MFD) {
+                    gotoEkycExpressPage(false, WebviewFragment.ONLY_MFD_ID)
+                    binding.drawerLayout.closeDrawers()
+                }else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EQUITY_MFD) {
+                    gotoEkycExpressPage(false, WebviewFragment.EQUITY_AND_MFD_ID)
                     binding.drawerLayout.closeDrawers()
                 }
 

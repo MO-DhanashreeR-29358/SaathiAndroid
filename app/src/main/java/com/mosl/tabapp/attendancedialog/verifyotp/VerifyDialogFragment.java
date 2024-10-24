@@ -4,8 +4,10 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 import static com.mosl.tabapp.attendancedialog.verifyotp.VerifyContract.OTP_RESENT;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,12 +91,19 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
         dataActionSubject.onNext(DataAction.Fetch.INSTANCE);
     }
 
+   // @SuppressLint("UnspecifiedRegisterReceiverFlag")
     private void setupViews() {
         //retrieveFromRemoteConfig();
         requireDialog().setCanceledOnTouchOutside(false);
-        requireContext().registerReceiver(smsReceiver,
-            new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION));
-        startSMSRetriever();
+        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireContext().registerReceiver(smsReceiver,
+                    new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            requireContext().registerReceiver(smsReceiver,
+                    new IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION));
+        }
+
+        startSMSRetriever();*/
         setWaitingForOtpView();
     }
 
@@ -211,7 +220,7 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
             binding.edtOtp.setText("");
             dataActionSubject.onNext(new DataAction.RetrySection(OTP_RESENT));
             setWaitingForOtpView();
-            startSMSRetriever();
+           // startSMSRetriever();
         }
     }
 

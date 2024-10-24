@@ -9,6 +9,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
 import io.reactivex.rxjava3.core.Observable
 
@@ -130,6 +131,10 @@ interface LeadDetailView : BaseView {
     fun selectedStage(): Observable<SelectStageEvent>
     fun getAccountTypeId() : String?
     fun getChipsEventId() : String?
+
+    fun onCallAccountTypeFired(): Observable<CallAccountType>
+    fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
+    fun getAccountTypeLookupId() : Int
 
     companion object {
         const val INVALID_SELECTION_KEY = "-1"

@@ -1,27 +1,30 @@
 package com.mosl.app.core.data.reactivation
 
+import android.content.ContentResolver
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Base64
 import com.google.gson.Gson
-import com.mosl.mobile.domain.branch.BranchItemResponse
-import com.mosl.mobile.domain.branch.BranchRepository
+import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.domain.productivity.ColHeader
-import com.mosl.mobile.domain.productivity.ProductivityCombo
-import com.mosl.mobile.domain.productivity.ProductivityData
 import com.mosl.mobile.domain.reactivation.*
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiApi
-import com.mosl.saathi.api.model.branch.BranchRequest
 import com.mosl.saathi.api.model.reactivation.*
-import com.mosl.shared.util.toConvertDecimals
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class ReactivationRepositoryImpl @Inject constructor(
     val saathiApi: SaathiApi,
     val userManager: UserManagerImpl
 ) : ReactivationRepository {
-
+    val FILE_MODE_READ = "r"
+    val BITMAP_COMPRESS_QUALITY = 50
     override fun getReactivationSourceList(): Observable<List<String>> {
         val request = ReactivationSourceRequest(userManager.user.employeeCode)
         return saathiApi.getReactivationSource(request).map {
@@ -234,6 +237,82 @@ class ReactivationRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun fnGetSearchClientCode(objReactivationClientSearchPostModel: ReactivationClientSearchPostModel): Observable<List<ReactivationClientSearchResponseModel>>{
+        val request=ReactivationClientSearchREquest(objReactivationClientSearchPostModel.employeeCode,objReactivationClientSearchPostModel.clientCode,
+            objReactivationClientSearchPostModel.requestTypeFlag,objReactivationClientSearchPostModel.branchShift)
+        return  saathiApi.fnReactivationClientSearch(request).map {
+            if(it.status)
+            {
+                it.response?.transformReactivationClientSearchList()!!
+            }
+            else
+            {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+            }
+
+        }
+    }
+
+    override fun fnGetMinDate(objReactivationMinDatePostModel: ReactivationMinDatePostModel): Observable<String> {
+        val request=ReactivationMinDateRequest(objReactivationMinDatePostModel.requestorRMCode)
+        return saathiApi.fnGetDays(request).map {
+            if(it.status)
+            {
+                it.response?.firstOrNull()?.startDate?:""
+            }
+            else
+            {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+            }
+        }
+    }
+
+    override fun fnGetActualMargin(objReactivationActualMarginPostModel: ReactivationActualMarginPostModel): Observable<List<ReactivationClientSearchResponseModel>> {
+        val request=ReactivationActualMarginRequest(objReactivationActualMarginPostModel.businessUnitId,objReactivationActualMarginPostModel.clientCode,objReactivationActualMarginPostModel.actualActivationDate)
+        return saathiApi.fnGetActualMargin(request)
+            .map {
+                if(it.status)
+                {
+                    it.response?.transformReactivationClientSearchList()!!
+                }
+                else
+                {
+                    throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+                }
+        }
+    }
+
+    override fun fnGetSubmitReactivation(objReactivationSubmitPostModel: ReactivationSubmitPostModel,context:Context): Observable<String> {
+
+        val fileUri = Uri.parse(objReactivationSubmitPostModel.uriString)
+        val parcelFileDescriptor =
+            context.contentResolver?.openFileDescriptor(fileUri, FILE_MODE_READ)
+        val baos = ByteArrayOutputStream()
+        val bitmap = BitmapFactory.decodeFileDescriptor(parcelFileDescriptor?.fileDescriptor)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, BITMAP_COMPRESS_QUALITY, baos)
+        val byteArray = baos.toByteArray()
+        val base64String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+            .replace("\n", "")
+            .replace("\r", "")
+        val request=ReactivationSubmitRequest(objReactivationSubmitPostModel.tGSEdumoRevenue,objReactivationSubmitPostModel.remarks,
+            objReactivationSubmitPostModel.marginProofFileName,objReactivationSubmitPostModel.clientCode,objReactivationSubmitPostModel.requestTypeFlag,
+            objReactivationSubmitPostModel.actualActivationDate,objReactivationSubmitPostModel.documentName,objReactivationSubmitPostModel.totalMarginCollected,base64String)
+        val strRequest=Gson().toJson(request)
+        return saathiApi.fnSubmitReactivation(request).map{
+            if(it.status)
+            {
+                it.response?:it.message
+            }
+            else
+            {
+                throw ServiceFailureException(it.errors?.firstOrNull()?.message ?: ""+it.getMessage())
+
+            }
+        }
+    }
     private fun setData(values: ArrayList<String>): ArrayList<String> {
         val list: ArrayList<String> = ArrayList()
         list.add(values[0])

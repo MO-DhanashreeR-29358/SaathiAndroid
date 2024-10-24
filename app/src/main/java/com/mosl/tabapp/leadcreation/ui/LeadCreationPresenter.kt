@@ -281,7 +281,7 @@ class LeadCreationPresenter @Inject constructor(
 
         view.onCallAccountTypeFired()
             .switchMap {
-                repository.getAccountTypeList()
+                repository.getAccountTypeList(view.getAccountTypeLookupId())
                     .compose(applyUiModel())
             }
             .subscribe(view::renderAccountTypeList, Timber::e)

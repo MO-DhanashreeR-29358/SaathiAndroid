@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:background="@android:color/transparent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_64sdp"
+                android:background="@drawable/bg_popup_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/appCompatImageView2"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_15sdp"
+                    android:src="@drawable/ic_filter_header"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:fontFamily="@font/lato_reg"
+                    android:text="@string/lbl_view_client_details"
+                    android:textColor="@color/colorBlack"
+                    android:textFontWeight="500"
+                    android:textSize="@dimen/_18ssp"
+                    app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView2"
+                    app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
+                    app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
+                    app:layout_constraintTop_toTopOf="@+id/appCompatImageView2" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/appCompatImageView3"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:src="@drawable/ic_popup_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_client_name"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtClientName"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_final_seg"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtFinalSegment"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_sub_seg"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtsubSegment"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_branch"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtBranch"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_final_act_date"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtFinalActDate"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_last_trade_Date"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtLastTradeDate"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_crm_code"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCurrentRM"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_crm_name"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCurrentRMName"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_map_advisor"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtMappedAdvisor"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_map_name"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtMappedAdvisorName"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_margin"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtMargin"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_margin_col"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtMarginCollection"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lbl_react_tgs"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtTgs"
+                        android:enabled="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnClosePopup"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_20sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_20sdp"
+                        android:background="@drawable/btn_yellow_background"
+                        android:fontFamily="@font/lato_reg"
+                        android:text="@string/lbl_react_close"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+

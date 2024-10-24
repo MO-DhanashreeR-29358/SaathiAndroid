@@ -53,7 +53,9 @@ fun transformInput(data: BankMeetingInput): MeetingSaveRequest {
         bankEmployeeCode = data.bankEmployeeCode.toString(),
         clientMobileNumber = data.clientMobileNumber,
         bankBranchIdWithIFSC = data.bankBranchId,
-        otherBranchName = data.bankBranchName
+        otherBranchName = data.bankBranchName,
+        bankLocationName = data.bankLocationName
+       // bankLocationCode = data.bankLocationCode
     )
 }
 
@@ -92,12 +94,12 @@ fun FragmentAuBankMeetingBinding.showValidationMsg(msg: Int) {
             ilSubBroker.error = context.getString(R.string.validate_sub_broker)
             actvSubBroker.requestFocus()
         }
-        7 -> {
+       /* 7 -> {
             tvBankEmployeeError.text = context.getString(R.string.validate_bank_employee)
             tvBankEmployeeError.toggleTextView(true)
 //      ilBankEmployee.error = context.getString(R.string.validate_bank_employee)
 //      actvBankEmployee.requestFocus()
-        }
+        }*/
         8 -> {
             ilSubject.error = context.getString(R.string.validate_subject)
             etSubject.requestFocus()
@@ -115,14 +117,10 @@ fun FragmentAuBankMeetingBinding.showValidationMsg(msg: Int) {
             etClientName.requestFocus()
         }
         12 -> {
-            tvBankBranchError.text = context.getString(R.string.validate_bank_branch)
-            tvBankBranchError.toggleTextView(true)
-            spBankBranch.requestFocus()
+            ilBankBranch.error = context.getString(R.string.validate_bank_branch_code)
+            actvBankBranch.requestFocus()
         }
-        13 -> {
-            ilBankBranchOther.error = context.getString(R.string.validate_bank_branch_name)
-            etBankBranchOther.requestFocus()
-        }
+
     }
 
 }

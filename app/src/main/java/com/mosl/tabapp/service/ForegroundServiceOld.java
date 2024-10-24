@@ -1,5 +1,7 @@
 package com.mosl.tabapp.service;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
+
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -227,7 +229,9 @@ public class ForegroundServiceOld extends Service {
 
   @Override public boolean onUnbind(Intent intent) {
     Timber.tag(TAG).i("Last client unbound from service");
-    startForeground(NOTIFICATION_ID, getNotification());
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+      startForeground(NOTIFICATION_ID, getNotification(), FOREGROUND_SERVICE_TYPE_LOCATION);
+    }
     return true;
   }
 

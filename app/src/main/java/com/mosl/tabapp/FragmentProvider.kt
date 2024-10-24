@@ -70,6 +70,10 @@ import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.qrcode.QRCodeModule
 import com.mosl.tabapp.query.QueryFragment
 import com.mosl.tabapp.query.QueryModule
+import com.mosl.tabapp.reactivation.createrequestReactivation.CreateRequestReactivationFragment
+import com.mosl.tabapp.reactivation.createrequestReactivation.CreateRequestReactivationModule
+import com.mosl.tabapp.reactivation.createrequestReactivationDetails.ReactivationDetailsFragment
+import com.mosl.tabapp.reactivation.createrequestReactivationDetails.ReactivationDetailsModule
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailModule
 import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
@@ -220,11 +224,16 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [ReactivationDetailTLModule::class])
     fun provideReactivationDetailTLFragmentFactory(): ReactivationDetailTLFragment
 
+    @ContributesAndroidInjector(modules = [CreateRequestReactivationModule::class])
+    fun provideCreateRequestReactivationFragmentFactory(): CreateRequestReactivationFragment
 
+    @ContributesAndroidInjector(modules = [ReactivationDetailsModule::class])
+    fun provideReactivationDetailsFragmentFactory(): ReactivationDetailsFragment
 
     @ContributesAndroidInjector(modules = [AttendanceDialogModule::class])
     fun provideAttendanceFragmentFactory(): AttendanceDialogFragment
 
     @ContributesAndroidInjector(modules = [VerifyOtpModule::class])
     fun provideVerifyDialogFragmentFactory(): VerifyDialogFragment
+
 }

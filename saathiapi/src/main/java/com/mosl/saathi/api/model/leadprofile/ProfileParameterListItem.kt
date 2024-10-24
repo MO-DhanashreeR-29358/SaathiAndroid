@@ -53,5 +53,8 @@ data class ProfileParameterListItem(
   val profileParameterID: Int?,
 
   @JvmField @SerializedName("Sysname")
-  val sysname: String?
+  val sysname: String?,
+
+  @JvmField @SerializedName("IsRequired")
+  val isRequired: Int?
 )

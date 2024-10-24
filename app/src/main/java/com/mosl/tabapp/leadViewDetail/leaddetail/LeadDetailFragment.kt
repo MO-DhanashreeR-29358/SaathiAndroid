@@ -32,6 +32,7 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.lead.*
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
@@ -99,6 +100,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private var selectedStateId = DEFAULT_SELECTION_ID
     private var selectedStateOffId = DEFAULT_SELECTION_ID
     private var pmsList: List<String> = emptyList()
+
+    private var accountTypeLookupId = 0
+    private var strAccountTypeName = ""
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
@@ -269,6 +273,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 binding.tvBandhanBankRMError.text = ""
             }
         }
+
 
     }
 
@@ -608,7 +613,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             this
                         )
                     binding.lvAddProduct.adapter = leadDetailAddProductAdapter
-                    CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+                   //CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
                 }
                 MSFDialog.alertDialog(
                     requireActivity(),
@@ -1549,19 +1554,32 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
         uiModel.onSuccess {
-            MSFDialog.alertDialog(
-                requireContext(),
-                0,
-                resources.getString(R.string.motilal_oswal),
-                CONFIRM_LEAD_UPDATE,
-                getString(R.string.text_label_yes),
-                getString(R.string.text_label_no),
-                true
-            ) { action: Action, _: Array<Any?>? ->
-                if (action == OK) {
-                    subject.onNext(UpdateLeadDetail)
+            removeErrorMessage()
+            if (userManager.getUser()?.isAllianceBusiness() == true &&
+                    binding.etProspectSource.text.toString().equals("BTL activity QR code", ignoreCase = true)
+                    && binding.etAuBankName.text.toString().isBlank()){
+                binding.tlAuBankName.setErrorMessages(getString(R.string.error_message_enter_au_bank_name))
+            }else if (userManager.getUser()?.isAllianceBusiness() == true &&
+                binding.etProspectSource.text.toString().equals("BTL activity QR code", ignoreCase = true)
+                && binding.etAuBranchCode.text.toString().isBlank()){
+                binding.tlAuBranchCode.setErrorMessages(getString(R.string.error_message_enter_au_branch_code))
+            }else{
+                MSFDialog.alertDialog(
+                    requireContext(),
+                    0,
+                    resources.getString(R.string.motilal_oswal),
+                    CONFIRM_LEAD_UPDATE,
+                    getString(R.string.text_label_yes),
+                    getString(R.string.text_label_no),
+                    true
+                ) { action: Action, _: Array<Any?>? ->
+                    if (action == OK) {
+                        subject.onNext(UpdateLeadDetail)
+                    }
                 }
+
             }
+
         }
     }
 
@@ -1604,6 +1622,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                     binding.tvBandhanBankRMError.isVisible = true
                     binding.tvBandhanBankRMError.text = getString(it)
                 }
+                18 ->
+                    binding.tlAuBankName.setErrorMessages(getString(it))
+                19 ->
+                    binding.tlAuBranchCode.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -1631,6 +1653,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             tlLeadAccountType.disableErrorMessages()
             tlEventName.disableErrorMessages()
             tvBandhanBankRMError.text = ""
+            tlAuBankName.disableErrorMessages()
+            tlAuBranchCode.disableErrorMessages()
         }
     }
 
@@ -1750,6 +1774,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.chipsEventId = getChipsEventId()
         leadDetailModel.isBandhanBankEmp = if(binding.chkBandhanBank.isChecked) "Yes" else "No"
         leadDetailModel.bandhanBankEmp = binding.etBandhanBankRM.text.toString()
+        leadDetailModel.auBankName = binding.etAuBankName.text.toString()
+        leadDetailModel.auBankBranchCode = binding.etAuBranchCode.text.toString()
         return updateLead(leadDetailModel)
     }
 
@@ -1810,7 +1836,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.accountTypeId,
             model.chipsEventId,
             model.isBandhanBankEmp,
-            model.bandhanBankEmp
+            model.bandhanBankEmp,
+            model.auBankName,
+            model.auBankBranchCode
         )
     }
 
@@ -1971,7 +1999,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             interestedAdapter.addAll(data.interestInRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
-            binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, data.accountTypeRowDatas)
             binding.spEvent.setSpinnerData(chipsAdapter, data.chipsRowDatas)
             binding.llEditLeadDetail.performClick()
         }
@@ -2082,6 +2109,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             spLeadAccountType.isEnabled = status
             chkBandhanBank.isEnabled = status
             etBandhanBankRM.isEnabled = status
+            etAuBankName.isEnabled = status
+            etAuBranchCode.isEnabled = status
 
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
@@ -2234,16 +2263,6 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             binding.spNetworth.setSelection(it.position)
         }
 
-        if(accountTypeName.isEmpty()){
-            binding.tvLeadAccountType.isVisible = false
-            binding.tlLeadAccountType.isVisible = false
-        }else{
-            val dataAccountType = RowData.getSpinnerRowDataByValue(accountTypeName, accountTypeAdapter)
-            dataAccountType?.let {
-                binding.spLeadAccountType.setSelection(it.position)
-            }
-        }
-
         binding.etReferralEmpCode.setText(referralEmpCode)
         binding.etReferralEmpName.setText(referralEmpName)
 
@@ -2273,11 +2292,46 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         }
 
+        if(userManager.getUser()!!.isAllianceBusiness() && prospectSource.equals("BTL Activity QR Code", ignoreCase = true) ){
+            binding.ilAuBankName.isVisible = true
+            binding.ilAuBranchCode.isVisible = true
+            binding.etAuBankName.setText(auBankName)
+            binding.etAuBranchCode.setText(auBankBranchCode)
+        }
+
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()
         }
 
         contact?.renderContact()
+
+        if(accountTypeName.isEmpty()){
+            binding.tvLeadAccountType.isVisible = false
+            binding.tlLeadAccountType.isVisible = false
+        }else{
+            if(BuildConfig.FLAVOR == "prod"){
+                if(branchName == "AUSFBMAIN" ){
+                    accountTypeLookupId = 145
+                } else  if(branchName == "IIBLMAIN"){
+                    accountTypeLookupId = 146
+                } else  if(branchName == "BANBMAIN"){
+                    accountTypeLookupId = 147
+                }
+
+            }else{
+                if(branchName == "AUSFBMAIN" ){
+                    accountTypeLookupId = 142
+                } else  if(branchName == "IIBLMAIN"){
+                    accountTypeLookupId = 148
+                } else  if(branchName == "BANBMAIN"){
+                    accountTypeLookupId = 149
+                }
+            }
+            strAccountTypeName = accountTypeName
+
+            subject.onNext(CallAccountType)
+
+        }
 
     }
 
@@ -2631,6 +2685,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             return (binding.spEvent.selectedItem as? RowData)?.key
         }
         return ""
+    }
+
+    override fun onCallAccountTypeFired(): Observable<CallAccountType> {
+        return subject.ofType()
+    }
+
+    override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, it)
+            val dataAccountType = RowData.getSpinnerRowDataByValue(strAccountTypeName, accountTypeAdapter)
+            dataAccountType?.let {
+                binding.spLeadAccountType.setSelection(it.position)
+            }
+        }
+    }
+
+
+    override fun getAccountTypeLookupId(): Int {
+        return  accountTypeLookupId
     }
 
     override fun renderStage(uiModel: UiModel<List<RowData>>) {

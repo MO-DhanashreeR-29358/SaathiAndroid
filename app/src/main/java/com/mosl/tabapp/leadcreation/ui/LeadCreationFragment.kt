@@ -37,6 +37,7 @@ import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.DedupeModelResponse
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
@@ -520,7 +521,8 @@ class LeadCreationFragment : CommonFragment(),
                     }
 
                     binding.groupAccountType.isVisible = getBranch()!!.branchName == "AUSFBMAIN"
-                    if(getBranch()!!.branchName == "AUSFBMAIN"){
+                            || getBranch()!!.branchName == "IIBLMAIN" || getBranch()!!.branchName == "BANBMAIN"
+                    if(getBranch()!!.branchName == "AUSFBMAIN" || getBranch()!!.branchName == "IIBLMAIN" || getBranch()!!.branchName == "BANBMAIN"){
                         subject.onNext(CallAccountType)
                     }
 
@@ -937,7 +939,10 @@ class LeadCreationFragment : CommonFragment(),
             binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
             bankAdapter.setSpinnerData(binding.spBank, data.listBank)
             binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
-            binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
+            var list = data.interestInRowDatas.toMutableList()
+            list.removeIf { it.value == "Equity" }
+            list.removeIf { it.value == "Only MFD" }
+            binding.spInterestIn.setSpinnerData(interestInAdapter, list)
             binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
@@ -1398,7 +1403,12 @@ class LeadCreationFragment : CommonFragment(),
                 } else if (dedupeModel != null && data.errors != null) {
                     dedupeDialog(dedupeModel)
                 }
-            }
+            }else
+            MSFDialog.alertDialog(
+                context, 0,
+                context.getResources().getString(R.string.motilal_oswal),
+                data.errors?.get(0)?.message, "OK", true, null
+            )
         }
     }
 
@@ -1587,7 +1597,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun getAccountTypeId(): String? {
         if(binding.spAccountType.selectedItem != null && getBranch() != null
-            && getBranch()!!.branchName == "AUSFBMAIN"){
+            && (getBranch()!!.branchName == "AUSFBMAIN" || getBranch()!!.branchName == "BANBMAIN"
+                    || getBranch()!!.branchName == "IIBLMAIN")){
             return (binding.spAccountType.selectedItem as? RowData)?.key
         }
         return ""
@@ -1768,6 +1779,30 @@ class LeadCreationFragment : CommonFragment(),
         }else{
             binding.groupChips.isVisible = false
         }
+    }
+
+    override fun getAccountTypeLookupId(): Int {
+        var lookupID = 0
+        if(BuildConfig.FLAVOR == "prod"){
+            if(getBranch()!!.branchName == "AUSFBMAIN" ){
+                lookupID = 145
+            } else  if(getBranch()!!.branchName == "IIBLMAIN"){
+                lookupID = 146
+            } else  if(getBranch()!!.branchName == "BANBMAIN"){
+                lookupID = 147
+            }
+
+        }else{
+            if(getBranch()!!.branchName == "AUSFBMAIN" ){
+                lookupID = 142
+            } else  if(getBranch()!!.branchName == "IIBLMAIN"){
+                lookupID = 148
+            } else  if(getBranch()!!.branchName == "BANBMAIN"){
+                lookupID = 149
+            }
+        }
+
+        return lookupID
     }
 
     override fun onDestroyView() {

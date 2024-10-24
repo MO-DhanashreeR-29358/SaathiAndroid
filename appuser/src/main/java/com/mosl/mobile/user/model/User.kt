@@ -1,5 +1,7 @@
 package com.mosl.mobile.user.model
 
+import android.util.Log
+
 /**
  * Created by lalkishore on 14/01/18.
  */
@@ -26,7 +28,8 @@ data class User(
     @JvmField var isQRDownload: Boolean,
     @JvmField var EventListRequired: Boolean,
     @JvmField val collectionOfficer: Boolean = false,
-    @JvmField var myZoneProfile: String
+    @JvmField var myZoneProfile: String,
+    @JvmField var isBankMeeting: Boolean
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
@@ -55,11 +58,8 @@ data class User(
     }
 
     fun isAuBankSalesSupport(): Boolean {
-        currentBusinessProfile.businessProfileId?.apply {
-            return this == "1142" || this == "1156"
-                    || this == "1158"
-        }
-        return false
+
+        return isBankMeeting
     }
 
     fun isRetail(): Boolean {
@@ -152,7 +152,20 @@ data class User(
     fun isAttendanceAllowed(): Boolean {
         var flag = false
         if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
-                myZoneProfile.equals("Key Account Manager", ignoreCase = true)) {
+                myZoneProfile.equals("Key Account Manager", ignoreCase = true)||
+            myZoneProfile.equals("Sales Manager-Branch", ignoreCase = true)||
+            myZoneProfile.equals("Area Sales Manager", ignoreCase = true)||
+            myZoneProfile.equals("Regional Sales Manager", ignoreCase = true)||
+            myZoneProfile.equals("Cluster Head", ignoreCase = true)) {
+            flag = true
+        }
+        return flag
+    }
+
+    fun isAttendanceAllowedForOmni(): Boolean {
+        var flag = false
+        if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
+            myZoneProfile.equals("Sales Team Leader", ignoreCase = true)) {
             flag = true
         }
         return flag

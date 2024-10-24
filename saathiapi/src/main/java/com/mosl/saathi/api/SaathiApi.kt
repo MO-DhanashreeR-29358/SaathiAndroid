@@ -768,6 +768,11 @@ interface SaathiApi {
         @Body request: SubBrokerRequest
     ): Observable<List<SubBrokerResponse>>
 
+    @POST("BankMeeting/getBranchLocationList")
+    fun getBranchLocationList(
+        @Body request: BankBranchCodeRequest
+    ): Observable<List<BankBranchCodeResponse>>
+
     @POST("BankMeeting/AutoCompleteBankEmployee")
     fun getBankEmployee(
         @Body request: BankEmployeeRequest
@@ -820,5 +825,15 @@ interface SaathiApi {
         @Url url: String
     ): Observable<String>
 
+    @POST("SMSCampaign/ReactivationClientCodeSearch")
+    fun fnReactivationClientSearch(@Body request : ReactivationClientSearchREquest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
 
+    @POST("SMSCampaign/SaveMinenableDays")
+    fun fnGetDays(@Body request: ReactivationMinDateRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
+
+    @POST("SMSCampaign/MarginDatafromActualDate")
+    fun fnGetActualMargin(@Body request: ReactivationActualMarginRequest):Observable<SaathiCommonResponse<List<ReactivationClientSearchResponse>>>
+
+    @POST("SMSCampaign/InsertReactivationWithFile")
+    fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
 }

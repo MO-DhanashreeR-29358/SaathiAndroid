@@ -12,6 +12,8 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_DASHBOARD,
         NavigationConstants.NAVIGATE_TO_FRESH_REG,
         NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+        NavigationConstants.NAVIGATE_TO_ONLY_MFD,
+        NavigationConstants.NAVIGATE_TO_EQUITY_MFD,
         NavigationConstants.NAVIGATE_TO_CALENDAR,
         NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL,
         NavigationConstants.NAVIGATE_TO_SALES_BROCHURE,
@@ -49,6 +51,9 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
         NavigationConstants.NAVIGATE_TO_DELETE_REQUEST,
         NavigationConstants.NAVIGATE_TO_QR_CODE,
+        NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE,
+        NavigationConstants.NAVIGATE_TO_DORMANT,
+        NavigationConstants.NAVIGATE_TO_QUERY_FORM
 
 })
 public @interface NavigationConstants {
@@ -101,4 +106,12 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_REACTIVATION_SUMMARY = 47;
     int NAVIGATE_TO_REACTIVATION_DETAIL = 48;
     int NAVIGATE_TO_REACTIVATION_DETAIL_TL = 49;
+    int NAVIGATE_TO_REACTIVATION_CREATE =50;
+    int NAVIGATE_TO_DORMANT=51;
+
+    int NAVIGATE_TO_ONLY_MFD = 52;
+
+    int NAVIGATE_TO_EQUITY_MFD = 53;
+
+    int NAVIGATE_TO_QUERY_FORM=54;
 }

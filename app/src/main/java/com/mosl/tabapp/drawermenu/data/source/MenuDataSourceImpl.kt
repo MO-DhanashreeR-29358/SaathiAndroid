@@ -1,5 +1,6 @@
 package com.mosl.tabapp.drawermenu.data.source
 
+import android.annotation.SuppressLint
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.User
@@ -14,13 +15,15 @@ import javax.inject.Inject
 
 open class MenuDataSourceImpl @Inject constructor(
 ) : MenuDataSource {
+
+    lateinit var user : User
     override fun getMenuItems(
         userManager: UserManager,
         menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>,
         digitalSalesKitMenu : List<DigitalSalesKitData>
     ): Observable<List<BaseMenu>> {
         return Observable.fromCallable {
-           val user = userManager.user
+            user = userManager.user
             when {
                 user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
@@ -59,7 +62,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -83,7 +90,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -114,7 +125,11 @@ open class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -135,7 +150,11 @@ open class MenuDataSourceImpl @Inject constructor(
         } else {
             arrayListOf(
                 getDashboard(),
-                getSip(),
+                 // hide as per requirement
+                 // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -169,7 +188,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -194,7 +217,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getReports(list),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -259,7 +286,11 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
-                getSip(),
+                 // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
@@ -267,6 +298,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getCheckApproval(),
                 getSalesBrochure(),
                 getSalesStadium(),
+                getBirthdayAnniversary(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
@@ -280,13 +312,18 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
-                getSip(),
+                // hide as per requirement
+                // getSip(),
+                getDormantReactivationCreate(),
+                getQueryFormCreate(),
+                getReactivationCreate(),
                 getEModification(),
                 getAUBankMeeting(),
                 getAUBankMeetingReport(),
                 getIncentiveReport(),
                 getSalesBrochure(),
                 getSalesStadium(),
+                getBirthdayAnniversary(),
                 getMostGuide(),
                 getSetting(),
                 getLogout()
@@ -351,6 +388,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    @SuppressLint("WrongConstant")
     private fun getDigitalSalesKitMenu(list: List<DigitalSalesKitData>): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_my_reports,
@@ -397,12 +435,13 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    @SuppressLint("WrongConstant")
     private fun getOpenAccount(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_update_ekyc,
             label = R.string.MOSL_MENU_EKYC_TXT,
             enabled = true,
-            children = arrayListOf(
+            children =  arrayListOf(
                 ChildMenu(
                     label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
                     enabled = true,
@@ -477,6 +516,7 @@ open class MenuDataSourceImpl @Inject constructor(
             pageId = NavigationConstants.NAVIGATE_TO_DELETE_REQUEST
         )
     }
+    @SuppressLint("WrongConstant")
     private fun getEModification(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_emodification,
@@ -585,12 +625,40 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    @SuppressLint("WrongConstant")
     private fun getReactivation(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_most_guide,
             label = R.string.MOSL_MENU_REACTIVATION,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY
+        )
+    }
+
+    private fun getReactivationCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_reactivation_req,
+            label = R.string.MOSL_MENU_REACTIVATION_REQ,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE
+        )
+    }
+
+    private fun getDormantReactivationCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_DORMANT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_DORMANT
+        )
+    }
+
+    private fun getQueryFormCreate():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_QUERY_FORM,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_QUERY_FORM
         )
     }
 

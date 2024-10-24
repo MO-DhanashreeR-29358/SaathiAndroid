@@ -101,7 +101,10 @@ data class LeadViewItem(
     @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?,
     @JvmField @SerializedName("ChipEventId") val ChipEventId: String?,
     @JvmField @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String?,
-    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String?
+    @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String?,
+    @JvmField @SerializedName("AUBankName") val auBankName: String?,
+    @JvmField @SerializedName("BankBranchCode") val auBankBranchCode: String?,
+    @JvmField @SerializedName("IsStageCompleted") val IsStageCompleted: Int
 )
 
 data class LeadFieldSection(

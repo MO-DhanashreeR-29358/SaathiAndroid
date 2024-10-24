@@ -30,22 +30,18 @@ fun BankMeetingInput.validateForm(binding: FragmentAuBankMeetingBinding): Boolea
       binding.showValidationMsg(5)
       return false
     }
-    this.bankBranchId.isEmpty() || this.bankBranchId == "-1" -> {
+    !this.disabledFields && this.bankLocationName == "-1"  -> {
       binding.showValidationMsg(12)
-      return false
-    }
-    binding.ilBankBranchOther.isVisible && this.bankBranchName.isEmpty() -> {
-      binding.showValidationMsg(13)
       return false
     }
     !this.disabledFields && this.subBrokerId == -1 -> {
       binding.showValidationMsg(6)
       return false
     }
-    !this.disabledFields && this.bankEmployeeCode.isEmpty() -> {
+    /*!this.disabledFields && this.bankEmployeeCode.isEmpty() -> {
       binding.showValidationMsg(7)
       return false
-    }
+    }*/
     this.isSubjectVisible && this.subject.isEmpty() -> {
       binding.showValidationMsg(8)
       return false

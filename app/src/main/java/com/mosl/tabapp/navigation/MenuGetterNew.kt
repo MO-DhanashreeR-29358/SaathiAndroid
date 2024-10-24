@@ -1,5 +1,6 @@
 package com.mosl.tabapp.navigation
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
@@ -24,6 +25,7 @@ import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
 import com.mosl.tabapp.pendingApproval.report.PendingForApprovalFragment
 import com.mosl.tabapp.qrcode.QRCodeFragment
 import com.mosl.tabapp.query.QueryFragment
+import com.mosl.tabapp.reactivation.createrequestReactivation.CreateRequestReactivationFragment
 import com.mosl.tabapp.reactivation.detail.ReactivationDetailFragment
 import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
@@ -35,6 +37,7 @@ import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.tabapp.webview.WebviewFragment.Companion.CHECK_APPROVAL_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.DELETE_REQUEST_ID
+import com.mosl.tabapp.webview.WebviewFragment.Companion.DORMANT_REQUEST_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.INCENTIVE_REPORT_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
@@ -42,6 +45,7 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
 
 object MenuGetterNew {
+    @SuppressLint("WrongConstant")
     @JvmStatic
     fun getFragment(@NavigationConstants pageId: Int): Fragment? {
         val args = Bundle()
@@ -108,10 +112,20 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU -> null
             NavigationConstants.NAVIGATE_TO_SETTING -> SettingFragment()
             NavigationConstants.NAVIGATE_TO_DIGITAL_SALES_KIT -> DigitalSalesKitFragment()
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE ->CreateRequestReactivationFragment()
+                NavigationConstants.NAVIGATE_TO_DORMANT ->  WebviewFragment().apply {
+                    args.putString(WebviewFragment.PAGE_ID, DORMANT_REQUEST_ID)
+                    arguments = args
+                }
+            NavigationConstants.NAVIGATE_TO_QUERY_FORM ->  WebviewFragment().apply {
+                args.putString(WebviewFragment.PAGE_ID, WebviewFragment.QUERY_FORM_ID)
+                arguments = args
+            }
             else -> null
         }
     }
 
+    @SuppressLint("WrongConstant")
     @JvmStatic
     fun isHandled(@NavigationConstants pageId: Int): Boolean {
         return when (pageId) {
@@ -121,6 +135,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true
             NavigationConstants.NAVIGATE_TO_FRESH_REG -> true
             NavigationConstants.NAVIGATE_TO_EXISTING_APP -> true
+            NavigationConstants.NAVIGATE_TO_ONLY_MFD -> true
+            NavigationConstants.NAVIGATE_TO_EQUITY_MFD -> true
             NavigationConstants.NAVIGATE_TO_SALES_BROCHURE -> true
             NavigationConstants.NAVIGATE_TO_CALENDAR -> true
             NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL -> true
@@ -161,6 +177,9 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> true
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL -> true
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL_TL -> true
+            NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE -> true
+            NavigationConstants.NAVIGATE_TO_DORMANT -> true
+            NavigationConstants.NAVIGATE_TO_QUERY_FORM -> true
             else -> return false
         }
     }

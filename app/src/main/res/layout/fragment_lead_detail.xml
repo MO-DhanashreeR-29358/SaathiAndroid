@@ -1002,6 +1002,66 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilAuBankName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout"
+                        android:visibility="gone">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAuBankName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_au_bank_name"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 "
+                            android:textAllCaps="true"
+                            android:inputType="textCapCharacters"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_au_bank_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilAuBranchCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAuBranchCode"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_au_branch_code"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:maxLength="10"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_au_branch_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilProductType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

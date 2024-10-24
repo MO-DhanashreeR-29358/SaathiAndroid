@@ -249,11 +249,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_5sdp"
             app:hintEnabled="false">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_meeting_reason"
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_22sdp"
+                android:layout_height="wrap_content"
                 android:hint="@string/txt_lable_meeting_reason" />
             <Spinner
                 android:id="@+id/spMeetingReason"
@@ -531,16 +532,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
+                android:id="@+id/tilMeetingAddress"
                 app:errorTextAppearance="@style/error_appearance">
-
                 <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditTextHint"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_22sdp"
+                    android:hint="@string/txt_lable_meeting_address"
+                    />
+
+                <TextView
                     android:id="@+id/etLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_height="@dimen/_60sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                    android:hint="@string/txt_lable_meeting_address"
                     android:inputType="textMultiLine"
-                    android:maxLength="500"
+                    android:maxLines="6"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:padding="3dp"
+                    android:background="@color/white"
+                    android:scrollHorizontally="false"
+                    android:scrollbars="vertical"
+                    android:gravity="top|left"
+                    android:textSize="18dp"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 

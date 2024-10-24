@@ -384,6 +384,8 @@ class CreateMeetingPresenter @Inject constructor(
         data.pincode = view.getPincode()
         data.amount = view.getAmount()
         data.meetingAddress = view.getMeetingAddress()
+        data.meetingLatitude = view.getMeetingLatitude()
+        data.meetingLongitude = view.getMeetingLongitude()
         data.meetingAddressTypeId = view.getSelectedMeetingLocation()?.lookUpID.toString()
         data.leadId = createMeetingData.leadId
         data.ucid = createMeetingData.ucid
@@ -391,7 +393,7 @@ class CreateMeetingPresenter @Inject constructor(
         data.product = "0"
         data.setProductList(view.getproductList())
         data.meetingDuration = view.getSelectedMeetingDuration()?.lookUpID.toString()
-        data.meetingObjectiveID = view.getSelectedMeetingLocation()?.lookUpID.toString()
+        data.meetingObjectiveID = view.getSelectedMeetingObjective()?.lookUpID.toString()
         data.activityTypeID = view.getSelectedActivityType()?.lookUpID.toString()
         data.meetingReason = view.getSelectedMeetingReason()?.lookUpID.toString()
         data.meetingDes = CRMAppUtil.getJsonSafeString(view.getMeetingDesc())

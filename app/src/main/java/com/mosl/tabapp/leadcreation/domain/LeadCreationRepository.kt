@@ -42,7 +42,7 @@ interface LeadCreationRepository {
         ucId: String
     ): Observable<Pair<String, String>>
 
-    fun getAccountTypeList(): Observable<List<RowData>>
+    fun getAccountTypeList(lookupTypeId : Int): Observable<List<RowData>>
 
     fun getChipsList(
     ): Observable<List<RowData>>

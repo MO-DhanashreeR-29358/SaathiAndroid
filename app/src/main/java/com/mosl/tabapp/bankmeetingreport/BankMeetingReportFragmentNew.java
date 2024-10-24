@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,9 @@ import static com.mosl.tabapp.constants.MOSLConstants.MESSAGE;
 import static com.mosl.tabapp.constants.MOSLConstants.STATUS;
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class BankMeetingReportFragmentNew extends CommonFragment {
 
     final public static String TAG = BankMeetingReportFragmentNew.class.getSimpleName();
@@ -63,13 +67,16 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
     private Calendar today;
 
     @Override
-    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = inflate(
-                inflater, R.layout.fragment_bank_meeting_report, container, false
-        );
+    protected int getLayout() {
+        return R.layout.fragment_bank_meeting_report;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding = FragmentBankMeetingReportBinding.bind(view);
+        setAppTitle(R.string.page_title_bank_meeting_report);
         setUpView();
-        return binding.getRoot();
     }
 
     private void setUpView() {
@@ -299,10 +306,11 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                 if (columns.size() == 0) {
                     for (Object columnName : objDetail.keySet()) {
                         columns.add(columnName.toString());
+                        Log.d("BankMeetingColuman",columnName.toString() );
                         if (columnName.toString().equalsIgnoreCase("lead_id")) {
                             columnName = columnName.toString().toUpperCase();
                         }
-                        columnsHeader.add(getRefreshColumnName(columnName.toString()));
+                        columnsHeader.add(getRefreshBankMeetingReportColumnName(columnName.toString()));
                     }
                     String[] stockArr = new String[columnsHeader.size()];
                     stockArr = columnsHeader.toArray(stockArr);
@@ -315,7 +323,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                     String columnData =
                             objDetail.get(column) == null
                                     ? "" : objDetail.get(column).toString();
-
+                    Log.d("BankMeetingColumanValue",columnData);
                     if (objDetail.get(column) instanceof Number) {
                         String strValue =
                                 objDetail.get(column).toString().trim();
@@ -335,7 +343,7 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
                     if (column.equalsIgnoreCase("lead_id")) {
                         column = column.toUpperCase();
                     }
-                    hm.put(getRefreshColumnName(column), columnData.trim());
+                    hm.put(getRefreshBankMeetingReportColumnName(column), columnData.trim());
                 }
                 meetingReportTableAdapter.add(hm);
             }
@@ -349,6 +357,27 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
             binding.tvNoRecords.setVisibility(View.VISIBLE);
         }
     }
+
+    public static String getRefreshBankMeetingReportColumnName(String columnName) {
+
+        if (columnName.equalsIgnoreCase("lead_id")) {
+            columnName = columnName.toUpperCase();
+        }
+
+        columnName = columnName.replace("Group_Bank", "Bank Name");
+        columnName = columnName.replace("Bank_Branch", "Branch");
+        columnName = columnName.replace("Meeting_Duration_Name", "Meeting Duration");
+        columnName = columnName.replace("IFSCCode", "IFSC Code");
+        columnName = columnName.replace("ProductListName", "Product List");
+        columnName = columnName.replace("MeetingStatusName", "Meeting Status");
+        columnName = columnName.replace("BankLocationCode", "Bank Branch Code");
+        columnName = columnName.replace("BankLocationName", "Bank Branch Name");
+
+        columnName = columnName.replace("_", " ");
+
+        return columnName;
+    }
+
 
     private class CommonHeader {
         private final String name;

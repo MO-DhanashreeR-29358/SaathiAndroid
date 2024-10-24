@@ -17,6 +17,8 @@
     <string name="MOSL_MENU_FRESH_REGISTRATION_TXT">Fresh Registration</string>
     <string name="MOSL_MENU_EXISTING_APPLICATIONS_TXT">Existing Applications</string>
     <string name="MOSL_MENU_PENDING_ESIGN_TXT">Pending Esign</string>
+    <string name="MOSL_MENU_MFD_ONLY">Only MFD</string>
+    <string name="MOSL_MENU_EQUITY_AND_MFD">Equity &amp; MFD</string>
     <string name="MOSL_MENU_NEW_APPLICATIONS_TXT">New Application</string>
     <string name="MOSL_MENU_RESUME_APPLICATIONS_TXT">Resume Application</string>
     <string name="MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT">Birthday &amp; Anniversary</string>
@@ -54,6 +56,10 @@
     <string name="rupee_symbol">\u20B9</string>
     <string name="MOSL_MENU_SET_APPOINTMENT">Set Appointment</string>
     <string name="MOSL_MENU_SIP">SIP</string>
+    <string name="MOSL_MENU_DORMANT">Dormant Reactivation </string>
+    <string name="MOSL_MENU_QUERY_FORM">Raise Your Query</string>
+    <string name="MOSL_MENU_REACTIVATION_REQ">Reactivation Request
+Page </string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>
@@ -72,7 +78,7 @@
     <string name="TXT_QUERY">For any query:</string>
     <string name="PAGE_TITLE_BRANCH_LIST">Branch List</string>
     <string name="TXT_AUFSB_GMAIL">au@motilaloswal.com</string>
-    <string name="TXT_AUFSB_TELEPHONE1">022&#8211;62126688</string>
+    <string name="TXT_AUFSB_TELEPHONE1">022&#8211;62126668</string>
     <string name="TXT_AUFSB_TELEPHONE2">022&#8211;40548488</string>
     <string name="TXT_FRESH_REGISTRATION">New client account opening process</string>
     <string name="TXT_EXISTING_APPLICATION">Resume previously saved application to complete the account opening process</string>
@@ -291,14 +297,14 @@
     <string name="text_label_meeting_date">Meeting Date*</string>
     <string name="text_label_meeting_type">Meeting Type*</string>
     <string name="text_label_meeting_duration">Meeting Duration*</string>
-    <string name="text_label_bank">Bank*</string>
+    <string name="text_label_bank">Bank Name*</string>
     <string name="text_label_branch">Branch*</string>
     <string name="text_label_bank_branch">Bank Branch*</string>
     <string name="button_label_save">Save</string>
     <string name="button_label_reset">Reset</string>
     <string name="text_hint_label_enter_bank_branch_other">Enter Branch Code (Only numeric allowed)*</string>
     <string name="text_hint_label_enter_sub_broker">Enter SubBroker*</string>
-    <string name="text_hint_label_enter_bank_employee">Enter Bank Employee*</string>
+    <string name="text_hint_label_enter_bank_employee">Enter Bank Employee</string>
     <string name="text_hint_label_enter_mosl_employee">Enter MOFSL Employee*</string>
     <string name="text_lable_other_bank_info">*Only Numeric allowed!</string>
 
@@ -316,7 +322,7 @@
     <string name="validate_bank_branch_name">Enter Bank Branch Name</string>
     <string name="validate_bank">Enter Bank</string>
     <string name="validate_branch">Enter Branch</string>
-    <string name="validate_bank_branch">Enter Bank Branch</string>
+    <string name="validate_bank_branch_code">Enter Bank Branch Code</string>
     <string name="validate_bank_employee">Enter Bank Employee</string>
     <string name="validate_sub_broker">Enter SubBroker</string>
     <string name="validate_subject">Enter Subject</string>
@@ -441,7 +447,7 @@
     <string name="txt_lable_actionables">Actionables*</string>
     <string name="dialog_ok">OK</string>
     <string name="consent_value">consent_check</string>
-    <string name="alert_dialog_location_message">We Motilal Oswal Financial Services Limited (herein after referred to as \'MOFSL\' for short) care about data privacy and security. Please review our Privacy Policy \n<b>[<a href="https://saathi.motilaloswal.com/apps/privacypolicy.html">https://saathi.motilaloswal.com/apps/privacypolicy.html</a>]</b>.\n By using Saathi App, you agree to have read, understood and bound by our Privacy Policy, link to which is already given above. Please be advised that by proceeding further you expressly consent to have your GPS (satellite navigation system) data collected, transmitted, transferred, stored and processed by MOFSL.</string>
+    <string name="alert_dialog_location_message">We Motilal Oswal Financial Services Limited (herein after referred to as \'MOFSL\' for short) care about data privacy and security. Please review our Privacy Policy \n<b>[<a href="https://epay.motilaloswal.com/SaathiAppPolicy/privacypolicy.html">https://epay.motilaloswal.com/SaathiAppPolicy/privacypolicy.html</a>]</b>.\n By using Saathi App, you agree to have read, understood and bound by our Privacy Policy, link to which is already given above. Please be advised that by proceeding further you expressly consent to have your GPS (satellite navigation system) data collected, transmitted, transferred, stored and processed by MOFSL.</string>
     <string name="alert_dialog_discloser_message">Saathi app collects location data to Claim Travelling Expense even when app is in background</string>
     <string name="consent_check">ConsentCheck</string>
     <string name="terms_condition_msg">Please Agree with Terms &amp; Conditions to Access your account</string>
@@ -467,7 +473,7 @@
     <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
     <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>
-    <string name="lbl_lead_creation_account_type">Lead Account Type*</string>
+    <string name="lbl_lead_creation_account_type">Account Type*</string>
     <string name="lbl_lead_creation_bank">Bank*</string>
     <string name="hint_lead_creation_name">Name*</string>
     <string name="hint_lead_creation_bb_rm">Bandhan Bank Employee Code*</string>
@@ -522,6 +528,8 @@
     <string name="lbl_lead_creation_same_address"> Same as Above</string>
     <string name="lbl_lead_creation_primary_address"> Primary Address</string>
     <string name="page_title_lead_creation">Lead Creation</string>
+    <string name="page_title_bank_meeting_creation">Create Bank Meeting</string>
+    <string name="page_title_bank_meeting_report">Bank Meeting Report</string>
 
     <string name="text_msg_success_add_product">Product Added Successfully</string>
     <string name="text_msg_cross_product_saved">Cross Selling Product Saved successfully</string>
@@ -547,8 +555,10 @@
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
-    <string name="error_message_select_account_type">Select Lead Account Type</string>
+    <string name="error_message_select_account_type">Select Account Type</string>
     <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>
+    <string name="error_message_enter_au_bank_name">Enter Bank Name_QR</string>
+    <string name="error_message_enter_au_branch_code">Enter Bank Branch Code_QR</string>
     <string name="error_message_select_event">Select Event</string>
     <string name="error_message_select_std_code">Select Country Code</string>
     <string name="error_message_enter_email">Enter email id.</string>
@@ -583,6 +593,8 @@
     <string name="lead_detail_lead_detail">Lead Detail</string>
     <string name="lead_detail_edit">Edit</string>
     <string name="lead_detail_lead_id">Lead Id</string>
+    <string name="lead_detail_au_bank_name">Bank Name_QR</string>
+    <string name="lead_detail_au_branch_code">Bank Branch Code_QR</string>
     <string name="lead_detail_lead_category">Lead Category</string>
     <string name="lead_detail_lead_client_type">Client Type</string>
     <string name="lead_detail_profession">Profession</string>
@@ -604,7 +616,7 @@
     <string name="lead_detail_created_through">Created Through</string>
     <string name="lead_detail_profile">Profile</string>
     <string name="lead_detail_event_name">Event Name</string>
-    <string name="lead_detail_lead_account_type">Lead Account Type</string>
+    <string name="lead_detail_lead_account_type">Account Type</string>
     <string name="lead_detail_broking_profile">Broking Profile</string>
     <string name="lead_detail_ip_profile">IP Profile</string>
     <string name="lead_detail_final_profile">Final Profile</string>
@@ -688,6 +700,33 @@
     <string name="sathi_otp_error">Please enter OTP</string>
     <string name="sathi_resend_otp">Regenerate OTP</string>
 
+    <string name="lbl_reactivation_head">Reactivation Request Page</string>
+    <string name="lbl_enter_client_code">Enter Client Code</string>
+    <string name="lbl_search_client">Search Client Code</string>
+    <string name="lbl_view_client">View Client Details</string>
+    <string name="lbl_select_file">Select File To Upload</string>
+    <string name="lbl_upload">Upload</string>
+    <string name="lbl_remarkt">Remark</string>
+    <string name="lbl_actual_date">Actual Activation Date</string>
+    <string name="lbl_actual_hint">Enter Actual Activation Date</string>
+    <string name="lbl_reset">Reset</string>
+    <string name="lbl_view_client_details">View Client Details</string>
+    <string name="lbl_react_client_name">Client Name</string>
+    <string name="lbl_react_final_seg">Final Segment</string>
+    <string name="lbl_react_sub_seg">Sub-segment</string>
+    <string name="lbl_react_branch">Branch</string>
+    <string name="lbl_react_final_act_date">Final Activation Date</string>
+    <string name="lbl_react_last_trade_Date">Last Traded Date</string>
+    <string name="lbl_react_crm_code">Current RM code</string>
+    <string name="lbl_react_crm_name">Current RM Name</string>
+    <string name="lbl_react_map_advisor">Mapped Advisor Code</string>
+    <string name="lbl_react_map_name">Mapped Advisor Name</string>
+    <string name="lbl_react_margin">Margin</string>
+    <string name="lbl_react_margin_col">Margin Collection</string>
+    <string name="lbl_react_tgs">TGS/Edumo</string>
+    <string name="lbl_react_close">Close</string>
+
+
 
     <string name="select_your_mood_for_sign_in">Select your mood to sign in</string>
     <string name="text_label_hi">Hi</string>
@@ -711,4 +750,10 @@
     <string name="successfully_logout">Successfully logout</string>
 
     <string name="mark_attendance">Mark Your Attendance Here</string>
+    <string name="lead_not_in_c3_stage">Currently Lead Is Not In C3 Stage.Please Update Stage.</string>
+
+    <string name="label_bank_branch_code">Bank Branch Code*</string>
+    <string name="label_bank_branch_name">Bank Branch Name*</string>
+    <string name="hint_bank_branch">Enter Bank Branch Code</string>
+    <string name="hint_bank_branch_name">Bank Branch Name</string>
 </resources>

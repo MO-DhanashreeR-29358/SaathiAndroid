@@ -45,30 +45,31 @@ class AttendanceHelper @Inject constructor(
 
 
     fun handleAttendanceAndLocation(clickListener: ClickListener) {
-            attendanceFragment = AttendanceDialogFragment()
-            this.clickListener = clickListener
-            showMockDialogIfLocationFromMockProvider()
+        attendanceFragment = AttendanceDialogFragment()
+        this.clickListener = clickListener
+        showMockDialogIfLocationFromMockProvider()
 
-            val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
-                .filter { location ->
-                    !MockLocationDetector.isLocationFromMockProvider(
-                        activity,
-                        location
-                    )
-                }
-                .map { loc -> LatLng(loc.latitude, loc.longitude) }
-                .switchMap<Pair<ProfileInfo, LatLng>> { location ->
-                    loginRepo.getProfileInfo()
-                        .map { Pair.create(it, location) }
-                }
-                .share()
-            handleAttendanceData(attendanceObs)
+        val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
+            .filter { location ->
+                !MockLocationDetector.isLocationFromMockProvider(
+                    activity,
+                    location
+                )
+            }
+            .map { loc -> LatLng(loc.latitude, loc.longitude) }
+            .switchMap<Pair<ProfileInfo, LatLng>> { location ->
+                loginRepo.getProfileInfo()
+                    .map { Pair.create(it, location) }
+            }
+            .share()
+        handleAttendanceData(attendanceObs)
     }
 
     private fun handleAttendanceData(latLngObservable: Observable<Pair<ProfileInfo, LatLng>>) {
 
+        // user that have biometric assigned will show attendance popup forcible
         disposable.add(latLngObservable
-            .filter { t -> t.first.attendanceType == 1 && t.first.attendanceCount != 1 }
+            .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
             .map { t -> t.second }
             .switchMap { location ->
                 attendanceRepo.getNearestOfficeLocation(location)
@@ -76,14 +77,14 @@ class AttendanceHelper @Inject constructor(
             }
             .subscribe(this::showAttendancePopupGeoFancing))
 
-        disposable.add(latLngObservable
-            .filter { t -> t.first.attendanceType == 2 && t.first.attendanceCount != 1 }
+        /* disposable.add(latLngObservable
+            .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
             .map { t -> t.second }
             .switchMap { location ->
                 attendanceRepo.getOfficeLocationList(location)
                     .compose(applyUiModel())
             }
-            .subscribe(this::showAttendancePopupWFH))
+            .subscribe(this::showAttendancePopupWFH))*/
 
         disposable.add(latLngObservable
             .filter { t -> t.first.attendanceCount == 1 }
@@ -94,12 +95,12 @@ class AttendanceHelper @Inject constructor(
             })
 
         disposable.add(latLngObservable
-                .filter { t -> t.first.attendanceType == 3 }
-                .map { it -> it.first }
-                .compose<UiModel<ProfileInfo>>(applyUiModel<ProfileInfo>())
-                .subscribe {
-                    clickListener.setMessageForAttendanceTypeThree(it)
-                })
+            .filter { t -> t.first.attendanceType == 1 || t.first.attendanceType == 2  }
+            .map { it -> it.first }
+            .compose<UiModel<ProfileInfo>>(applyUiModel<ProfileInfo>())
+            .subscribe {
+                clickListener.setMessageForAttendanceNotAllowed(it)
+            })
     }
 
     fun OfficeLocation.distance(userLocation: LatLng): Double {
@@ -227,7 +228,7 @@ class AttendanceHelper @Inject constructor(
         fun exit()
         fun setInTime(uiModel: UiModel<ProfileInfo>)
 
-        fun setMessageForAttendanceTypeThree(uiModel: UiModel<ProfileInfo>)
+        fun setMessageForAttendanceNotAllowed(uiModel: UiModel<ProfileInfo>)
     }
 
     override fun skipClick(status: Boolean) {

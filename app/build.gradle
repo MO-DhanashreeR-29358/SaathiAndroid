@@ -141,6 +141,9 @@ android {
         checkReleaseBuilds false
     }
     namespace 'com.mosl.tabapp'
+    configurations {
+        implementation.exclude module:'protobuf-lite'
+    }
 
 }
 

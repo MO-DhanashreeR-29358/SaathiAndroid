@@ -247,6 +247,16 @@
     <color name="text_color_disabled">#42000000</color>
     <color name="sathi_red_textcolor">#DA0000</color>
 
+    <color name="clr_heading">#424242</color>
+    <color name="clr_astrik">#FF0000</color>
+    <color name="clr_text_color">#999999</color>
+    <color name="clr_border">#D9D9D9</color>
+    <color name="clr_yellow_border">#FCAF17</color>
+    <color name="clr_btn_yellow">#FCAF17</color>
+    <color name="clr_btn_gray">#E1E5EC</color>
+    <color name="clr_btn_reset">#666666</color>
+    <color name="cl_bg_edit_text">#EFF1F5</color>
+    <color name="clr_border_edit_text">#ECECEC</color>
     <color name="text_color_primary_black">#dd000000</color>
     <color name="text_color_secondary_black">#89000000</color>
     <color name="alternate_background">#f0f0f0</color>

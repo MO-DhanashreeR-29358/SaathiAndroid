@@ -15,13 +15,13 @@
             android:background="@color/white"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="@dimen/padding_large">
+            android:padding="16dp">
 
             <ImageView
                 android:layout_width="@dimen/dim_attendance_icon"
                 android:layout_height="@dimen/dim_attendance_icon"
                 android:layout_gravity="center"
-                android:paddingTop="@dimen/padding_extra_small"
+                android:paddingTop="2dp"
                 android:src="@mipmap/icon_app_saathi" />
 
             <TextView
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:paddingTop="@dimen/padding_large"
+                android:paddingTop="16dp"
                 android:singleLine="true"
                 android:text="@string/text_label_hi"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -38,7 +38,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -49,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_small"
+                    android:paddingStart="4dp"
                     android:text="@string/saathi"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
@@ -57,10 +57,10 @@
 
             <TextView
                 android:id="@+id/tv_message"
-                contentPaddingBottom="@dimen/padding_medium"
-                contentPaddingLeft="@dimen/padding_small"
-                contentPaddingRight="@dimen/padding_small"
-                contentPaddingTop="@dimen/padding_medium"
+                contentPaddingBottom="8dp"
+                contentPaddingLeft="4dp"
+                contentPaddingRight="4dp"
+                contentPaddingTop="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_label_your_sigin_time"
@@ -98,10 +98,10 @@
                 style="@style/AppTheme.PrimaryButton"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dialog_button_height"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_large"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_large"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="16dp"
                 android:text="@string/btn_submit"
                 android:textSize="16sp" />
 
@@ -116,7 +116,7 @@
             android:layout_gravity="center"
             android:background="@color/text_color_secondary_black"
             android:orientation="horizontal"
-            android:padding="@dimen/padding_medium">
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/tv_login_date"
@@ -153,7 +153,7 @@
                 android:id="@+id/tv_skip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
+                android:layout_margin="4dp"
                 android:gravity="end"
                 android:textColor="@color/text_color_red"
                 android:textSize="16sp" />
