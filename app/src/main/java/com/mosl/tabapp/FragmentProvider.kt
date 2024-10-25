@@ -84,6 +84,8 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.ReportModule
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
+import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
@@ -96,6 +98,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [LeadCreationModule::class])
     fun provideLeadCreationFactory(): LeadCreationFragment
+
+    @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
+    fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment
 
     @ContributesAndroidInjector
     fun provideLeadViewMainFactory(): LeadViewMainFragment

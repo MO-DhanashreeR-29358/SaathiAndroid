@@ -26,7 +26,8 @@ fun LoginResponse.transform(
             isBank == "1",
             isQRDownload  == "1",
             EventListRequired  == "1",
-            isBankMeeting == "1"
+            isBankMeeting == "1",
+            authState = 1
         ),
         smtEnabled = smtEnabled
     )
@@ -54,9 +55,10 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
     isRetrieveOTPEnable: String?,
     isPrimeUser: Boolean,
     isBank: Boolean,
-    isQRDownload : Boolean,
-    EventListRequired : Boolean,
-    isBankMeeting : Boolean
+    isQRDownload: Boolean,
+    EventListRequired: Boolean,
+    isBankMeeting: Boolean,
+    authState: Int
 
 ): User {
     val defaultBusinessProfile: BusinessProfile = defaultBusinessProfile
@@ -85,7 +87,8 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         isQRDownload = isQRDownload,
         EventListRequired = EventListRequired,
         myZoneProfile = myZoneProfile?: "",
-        isBankMeeting = isBankMeeting
+        isBankMeeting = isBankMeeting,
+        authState = authState
     )
 }
 

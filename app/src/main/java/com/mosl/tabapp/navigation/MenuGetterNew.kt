@@ -31,6 +31,7 @@ import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
+import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
@@ -94,6 +95,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> DashboardReportAssignFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
             NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
@@ -150,6 +152,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_NOTIFICATION -> true
             NavigationConstants.NAVIGATE_TO_REPORTS -> true
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> true
             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
             NavigationConstants.NAVIGATE_TO_DOCUMENT -> true

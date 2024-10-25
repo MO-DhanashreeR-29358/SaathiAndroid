@@ -29,7 +29,8 @@ data class User(
     @JvmField var EventListRequired: Boolean,
     @JvmField val collectionOfficer: Boolean = false,
     @JvmField var myZoneProfile: String,
-    @JvmField var isBankMeeting: Boolean
+    @JvmField var isBankMeeting: Boolean,
+    @JvmField var authState: Int
 ) {
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
@@ -58,8 +59,11 @@ data class User(
     }
 
     fun isAuBankSalesSupport(): Boolean {
-
         return isBankMeeting
+    }
+
+    fun isIndirectUser(): Boolean {
+        return authState == 9
     }
 
     fun isRetail(): Boolean {

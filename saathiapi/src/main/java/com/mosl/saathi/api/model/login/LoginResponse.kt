@@ -13,6 +13,7 @@ data class LoginResponse(
     @SerializedName("IsQRDownload") @JvmField val isQRDownload: String,
     @SerializedName("EventListRequired") @JvmField val EventListRequired: String,
     @SerializedName("IsBankMeetnig") @JvmField val isBankMeeting: String,
+    @SerializedName("AuthState") @JvmField val authState: Int,
     @SerializedName("User") @JvmField val user: User
 ) {
 

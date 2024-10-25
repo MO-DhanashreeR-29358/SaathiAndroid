@@ -114,4 +114,6 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_EQUITY_MFD = 53;
 
     int NAVIGATE_TO_QUERY_FORM=54;
+
+    int NAVIGATE_TO_INDIRECT_LEAD_CREATION = 55;
 }
