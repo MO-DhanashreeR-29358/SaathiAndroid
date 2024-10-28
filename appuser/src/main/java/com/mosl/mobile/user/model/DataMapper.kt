@@ -88,7 +88,7 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         EventListRequired = EventListRequired,
         myZoneProfile = myZoneProfile?: "",
         isBankMeeting = isBankMeeting,
-        authState = authState
+        authState = 9
     )
 }
 

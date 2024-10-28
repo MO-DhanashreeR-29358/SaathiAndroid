@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
@@ -10,7 +10,7 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationUiEvent.*
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUiEvent.*
 import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.rxjava3.core.Observable
 

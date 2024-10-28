@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate

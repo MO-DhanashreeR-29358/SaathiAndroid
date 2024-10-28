@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_LOGOUT,
         NavigationConstants.NAVIGATE_TO_NONE,
         NavigationConstants.NAVIGATE_TO_DASHBOARD,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD,
         NavigationConstants.NAVIGATE_TO_FRESH_REG,
         NavigationConstants.NAVIGATE_TO_EXISTING_APP,
         NavigationConstants.NAVIGATE_TO_ONLY_MFD,
@@ -33,6 +34,7 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_NOTIFICATION,
         NavigationConstants.NAVIGATE_TO_REPORTS,
         NavigationConstants.NAVIGATE_TO_LEAD_CREATION,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION,
         NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
         NavigationConstants.NAVIGATE_TO_UPDATE_MEETING,
         NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS,
@@ -116,4 +118,6 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_QUERY_FORM=54;
 
     int NAVIGATE_TO_INDIRECT_LEAD_CREATION = 55;
+
+    int NAVIGATE_TO_INDIRECT_DASHBOARD = 56;
 }

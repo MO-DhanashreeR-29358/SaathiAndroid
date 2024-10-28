@@ -2,6 +2,7 @@ package com.mosl.tabapp.dashboard.base
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
+import android.util.Log
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
@@ -69,6 +70,8 @@ class DashboardPresenter @Inject constructor(
         view.onLeadCreationClicked()
             .subscribe {
                 view.collapseActionsMenu()
+                Timber.tag("AuthState==").d(userManager.getUser()?.authState.toString())
+                Timber.tag("AuthStateFlag==").d(userManager.getUser()?.isIndirectUser().toString())
                 if(userManager.getUser()?.isIndirectUser() == true) {
                     navigator.openPage(
                         NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION.toString(),

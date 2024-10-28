@@ -1,9 +1,6 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import androidx.annotation.StringRes
-import com.mosl.mobile.user.login.UserManager
-import com.mosl.mobile.user.login.UserManagerImpl
-import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.User
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
@@ -11,7 +8,6 @@ import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
-import javax.inject.Inject
 
 class IndirectLeadCreationValidator(val user: User) : Validator<IndirectLeadCreationUserInput, String>() {
 

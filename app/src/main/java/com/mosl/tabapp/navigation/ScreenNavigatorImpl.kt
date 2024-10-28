@@ -89,7 +89,11 @@ class ScreenNavigatorImpl @Inject constructor(
   }
 
   override fun openHome() {
-    openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
+    if(userManager.getUser()?.isIndirectUser() == true){
+      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
+    }else{
+      openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
+    }
   }
 
   @Deprecated("prefer openPage(NavigationRequest)")

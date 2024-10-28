@@ -1,6 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
-
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 sealed class IndirectLeadCreationUiEvent {
   data class AssignToSearchEvent(val searchText: String) : IndirectLeadCreationUiEvent()

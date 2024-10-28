@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.domain.bank.BranchCodeModel

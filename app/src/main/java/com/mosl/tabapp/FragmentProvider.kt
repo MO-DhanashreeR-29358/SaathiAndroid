@@ -58,8 +58,6 @@ import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
-import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
-import com.mosl.tabapp.login.otpverification.OtpVerificationModule
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -84,8 +82,10 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.ReportModule
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
-import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationFragment
-import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationModule
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
@@ -213,6 +213,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [DashboardModule::class])
     fun provideNewDashboardFragmentFactory(): DashboardFragment
+
+    @ContributesAndroidInjector(modules = [IndirectDashboardModule::class])
+    fun provideIndirectDashboardFragmentFactory(): IndirectDashboardFragment
 
     @ContributesAndroidInjector(modules = [GeoTaggingModule::class])
     fun provideGeoTaggingFactory(): GeoTaggingFragment

@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.indirectLeadCreation
+package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import android.app.Dialog
 import android.graphics.Color
@@ -51,13 +51,12 @@ import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragmentIndirectLeadCreationBinding
-import com.mosl.tabapp.databinding.FragmentLeadCreationBinding
 import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.saathiIndirect.indirectLeadCreation.IndirectLeadCreationUiEvent.*
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUiEvent.*
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
