@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.util.Log
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
@@ -26,9 +28,15 @@ class IndirectDashboardPresenter @Inject constructor(
 ) : BasePresenter<IndirectDashboardView>(view) {
     override fun start() {
             onFetchCalled().switchMap{
-                indirectRepo.fnGetFOCODashboardFilter()
+                indirectRepo.fnGetFOCODashboardFilter().compose(applyUiModel())
             }.subscribe {
-                Timber.d("Response "+it)
+                it.onFailure {
+                    Timber.d("Response Error"+it.message)
+                }
+                it.onSuccess {
+                    Timber.d("Response "+it)
+                }
+
             }.addTo(disposable)
 
     }
