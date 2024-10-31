@@ -24,6 +24,11 @@ class IndirectDashboardPresenter @Inject constructor(
 ) : BasePresenter<IndirectDashboardView>(view) {
     override fun start() {
 
+        view.onLeadCreationClicked()
+            .subscribe {
+                navigator.openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION.toString(), false)
+            }
+            .addTo(disposable)
     }
 
 }

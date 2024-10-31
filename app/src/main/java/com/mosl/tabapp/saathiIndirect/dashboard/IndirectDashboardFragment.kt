@@ -98,5 +98,8 @@ class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView{
     private fun setupViews() {
 
     }
+    override fun onLeadCreationClicked(): Observable<Unit> {
+        return binding.leadcreation.clicks()
+    }
 
 }

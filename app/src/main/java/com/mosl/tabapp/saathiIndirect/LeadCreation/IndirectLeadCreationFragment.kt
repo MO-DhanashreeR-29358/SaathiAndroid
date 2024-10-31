@@ -149,7 +149,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
     @field:BranchCode
     lateinit var branchCodePreference: StringPreference
 
-    override fun getLayout(): Int = R.layout.fragment_lead_creation
+    override fun getLayout(): Int = R.layout.fragment_indirect_lead_creation
 
     override fun onViewCreated(
         view: View,

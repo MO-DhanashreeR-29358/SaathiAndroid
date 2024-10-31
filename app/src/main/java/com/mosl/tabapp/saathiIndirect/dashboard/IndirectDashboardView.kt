@@ -9,5 +9,5 @@ import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectDashboardView : BaseView {
-
+    fun onLeadCreationClicked(): Observable<Unit>
 }
