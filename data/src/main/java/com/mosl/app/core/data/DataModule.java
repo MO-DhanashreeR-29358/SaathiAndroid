@@ -1,10 +1,13 @@
 package com.mosl.app.core.data;
 
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor;
+import com.mosl.app.core.data.interceptor.EncryptionInterceptorIndirect;
 import com.mosl.app.core.data.interceptor.HeaderInterceptor;
+import com.mosl.app.core.data.interceptor.HeaderInterceptorIndirect;
 import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.MyZoneAPIClient;
+import com.mosl.app.core.data.meta.SaathiIndrectAPIClient;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.data.util.HttpListenerFactory;
 import com.mosl.user.AuthorizationInterceptor;
@@ -84,6 +87,24 @@ public abstract class DataModule {
                 .addInterceptor(loggingInterceptor)
                 .eventListenerFactory(listenerFactory)
                 .addInterceptor(authorizationInterceptor)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    @SaathiIndrectAPIClient
+    static OkHttpClient provideSaathiIndirectAPIOkHttpClient(
+            @Named("BaseOkClient")  OkHttpClient okHttpClient,
+            HttpLoggingInterceptor loggingInterceptor,
+            HeaderInterceptorIndirect headerInterceptor,
+            HttpListenerFactory listenerFactory,
+            EncryptionInterceptorIndirect encryptionInterceptor
+    ) {
+        return okHttpClient.newBuilder()
+                .addInterceptor(headerInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(encryptionInterceptor)
+                .eventListenerFactory(listenerFactory)
                 .build();
     }
 

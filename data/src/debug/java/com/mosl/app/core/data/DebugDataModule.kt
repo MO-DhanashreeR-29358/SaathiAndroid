@@ -1,7 +1,9 @@
 package com.mosl.app.core.data
 
 import com.mosl.app.core.data.interceptor.EncryptionInterceptor
+import com.mosl.app.core.data.interceptor.EncryptionInterceptorIndirect
 import com.mosl.app.core.data.interceptor.HeaderInterceptor
+import com.mosl.app.core.data.interceptor.HeaderInterceptorIndirect
 import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor
 import com.mosl.app.core.data.meta.InternalAPIClient
 import com.mosl.app.core.data.meta.MyZoneAPIClient
@@ -116,13 +118,14 @@ class DebugDataModule {
     fun provideSaathiIndirectAPIOkHttpClient(
         @Named("BaseOkClient") okHttpClient: OkHttpClient,
         loggingInterceptor: HttpLoggingInterceptor,
-        headerInterceptor: HeaderInterceptor,
-        encryptionInterceptor: EncryptionInterceptor,
+        headerInterceptor: HeaderInterceptorIndirect,
+        encryptionInterceptor: EncryptionInterceptorIndirect,
         listenerFactory: HttpListenerFactory
     ): OkHttpClient {
         return okHttpClient.newBuilder()
             .addInterceptor(headerInterceptor)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(encryptionInterceptor)
             .addInterceptor(loggingInterceptor)
             .eventListenerFactory(listenerFactory)
             .build()
