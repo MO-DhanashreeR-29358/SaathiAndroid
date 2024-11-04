@@ -8,7 +8,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getSaathiIndirectUrl(): String {
-    return "http://saathiuat.motilaloswal.com:80/api/"
+    return "https://saathiuat.motilaloswaluat.com:82/api/"
   }
 
   override fun getUppermostApiUrl(): String {

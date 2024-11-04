@@ -31,6 +31,10 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     return "https://myzonehr.motilaloswal.com/"
   }
 
+  override fun getSaathiIndirectUrl(): String {
+    return "https://saathiuat.motilaloswaluat.com:82/api/"
+  }
+
   companion object {
     const val SAATHI_BASE_URL = "https://saathi.motilaloswal.com:84/api/"
   }

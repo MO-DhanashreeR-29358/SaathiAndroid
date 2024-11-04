@@ -24,10 +24,10 @@ class IndirectLeadCreationPresenter @Inject constructor(
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
             .switchMap {
-                repository.getLeadCreationPageData()
+                repository.getInterestInRowDatas()
                     .compose(applyUiModel())
             }
-            .subscribe(view::renderLeadCreationPageData, Timber::e)
+            .subscribe(view::renderStatusOnStageSelection, Timber::e)
             .addTo(disposable)
 
         val bankChangeObsc = view.onBankChange().share()
