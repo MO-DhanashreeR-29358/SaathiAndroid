@@ -70,19 +70,10 @@ class DashboardPresenter @Inject constructor(
         view.onLeadCreationClicked()
             .subscribe {
                 view.collapseActionsMenu()
-                Timber.tag("AuthState==").d(userManager.getUser()?.authState.toString())
-                Timber.tag("AuthStateFlag==").d(userManager.getUser()?.isIndirectUser().toString())
-                if(userManager.getUser()?.isIndirectUser() == true) {
-                    navigator.openPage(
-                        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION.toString(),
-                        true
-                    )
-                }else{
-                    navigator.openPage(
-                        NavigationConstants.NAVIGATE_TO_LEAD_CREATION.toString(),
-                        true
-                    )
-                }
+                navigator.openPage(
+                    NavigationConstants.NAVIGATE_TO_LEAD_CREATION.toString(),
+                    true
+                )
             }
             .addTo(disposable)
 

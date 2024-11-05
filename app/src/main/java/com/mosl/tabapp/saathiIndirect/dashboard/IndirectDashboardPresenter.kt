@@ -39,6 +39,11 @@ class IndirectDashboardPresenter @Inject constructor(
 
             }.addTo(disposable)
 
+        view.onLeadCreationClicked()
+            .subscribe {
+                navigator.openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION.toString(), false)
+            }
+            .addTo(disposable)
     }
 
 }
