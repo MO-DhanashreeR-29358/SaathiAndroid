@@ -59,7 +59,6 @@ import timber.log.Timber;
 
 public class VerifyDialogFragment extends DialogFragment implements VerifyContract.View {
     public static String ARG_OTP_DATA = "OtpData";
-    private final SMSReceiver smsReceiver = new SMSReceiver();
     @Inject
     VerifyPresenter presenter;
     @Inject @DepartmentIds
@@ -162,10 +161,6 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
         return binding.edtOtp.getText().toString().trim();
     }
 
-    @Override public void setOtp(@NotNull String otp) {
-        binding.edtOtp.setText(otp);
-    }
-
     @Override public void renderOtpEntered() {
         setOtpReceivedView();
         toggleSubmitButton(true);
@@ -252,14 +247,7 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
         binding.txtErrorMessage.setText(message);
     }
 
-    @Override public void onDestroyView() {
-      //  presenter.stop();
-        Context context = getContext();
-        if (context != null) {
-            context.unregisterReceiver(smsReceiver);
-        }
-        super.onDestroyView();
-    }
+
 
     @Override public void showPopup() {
         showErrorMessage(
@@ -286,11 +274,6 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
                 event -> event == EditorInfo.IME_ACTION_DONE);
     }
 
-    @NonNull
-    @Override
-    public Observable<Integer> onOtpReceived() {
-        return smsReceiver.read();
-    }
 
     @NonNull
     @Override
