@@ -471,6 +471,8 @@ Page </string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
     <string name="lbl_lead_creation_indirect_personal_info">Primary Details</string>
     <string name="lbl_lead_creation_category">Category*</string>
+    <string name="lbl_lead_creation_background">Background*</string>
+    <string name="lbl_lead_creation_work_exp">Work Exp. in Broking Industry</string>
     <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
     <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>

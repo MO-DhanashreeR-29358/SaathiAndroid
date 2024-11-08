@@ -374,6 +374,37 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/spCategory" />
 
+                    <!--background -->
+                    <TextView
+                        android:id="@+id/tvBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_background"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvCategoryError"  />
+
+                    <Spinner
+                        android:id="@+id/spBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvBackground"/>
+
+                    <TextView
+                        android:id="@+id/tvBackgroundError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spBackground" />
 
                     <!--stage-->
                     <TextView
@@ -385,7 +416,7 @@
                         android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvCategoryError" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvBackgroundError" />
 
 
                     <Spinner
@@ -458,6 +489,38 @@
                     android:padding="@dimen/_5sdp"
                     android:visibility="gone">
 
+                    <!--Work Experience -->
+                    <TextView
+                        android:id="@+id/tvWorkExp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_work_exp"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"  />
+
+                    <Spinner
+                        android:id="@+id/spWorkExp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvWorkExp"/>
+
+                    <TextView
+                        android:id="@+id/tvWorkExpError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spWorkExp" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeCode"
                         android:layout_width="match_parent"
@@ -465,7 +528,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/tvWorkExpError">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etRefereeCode"
@@ -610,71 +673,6 @@
                             android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereeName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                            android:hint="@string/PROSPECT_REFEREE_NAME_HINT_TXT"
-                            android:inputType="textNoSuggestions"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeMobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ilProspectRefereeName">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereerMobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/PROSPECT_REFEREE_MOBILE_HINT_TXT"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeMobile">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereerEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/PROSPECT_REFEREE_EMAIL_HINT_TXT"
-                            android:inputType="textEmailAddress"
-                            android:maxLength="100"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvResidenceAddress"
@@ -689,7 +687,7 @@
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintStart_toEndOf="@id/cbPrimaryAddress"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile" />
 
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/cbPrimaryAddress"
@@ -700,7 +698,7 @@
                         android:textColor="@color/secondaryTextColor"
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile" />
 
 
                     <LinearLayout

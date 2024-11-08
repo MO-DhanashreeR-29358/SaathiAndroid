@@ -116,9 +116,6 @@ private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): L
             refereeName = referName
         refereeEmail = referEmail
         refereeMobile = referMobile
-        prospectRefereName = proReferName
-        prospectRefereEmail = proReferEmail
-        prospectRefereMobile = proReferMob
         comments = comment
         profileID = user?.currentBusinessProfile?.businessProfileId
         createdBy = user?.employeeCode
@@ -155,6 +152,20 @@ private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduc
         )
     )
 }
+
+ internal fun List<BackgroundItem>.backgroundItemsToRowDatas(): List<RowData> {
+        return mapIndexedNotNull { index: Int, backgroundItem: BackgroundItem ->
+            try {
+                RowData(
+                    index,
+                    backgroundItem.backgroundId ?: "",
+                    backgroundItem.backgroundName
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }
+    }
 
 internal fun List<LookupItem>.mapToIndirectRowDatas(): List<RowData> {
     return mapIndexedNotNull { index: Int, lookupItem: LookupItem ->

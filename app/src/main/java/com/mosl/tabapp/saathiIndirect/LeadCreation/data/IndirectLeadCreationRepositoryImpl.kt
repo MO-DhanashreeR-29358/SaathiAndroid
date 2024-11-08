@@ -27,9 +27,10 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRe
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.backgroundItemsToRowDatas
 import com.mosl.tabapp.util.emptyString
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.functions.Function5
+import io.reactivex.rxjava3.functions.Function7
 import javax.inject.Inject
 
 class IndirectLeadCreationRepositoryImpl @Inject constructor(
@@ -44,13 +45,17 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
             getSourceRowDatas(),
             getStageRowDatas(),
             getCountryRowDatas(),
-            Function5 { listOfCategory, listOfInterestIn, listOfSource, listOfStage, listOfCountry ->
+            getBackgroundRowDatas(),
+            getWorkExpRowDatas(),
+            Function7 { listOfCategory, listOfInterestIn, listOfSource, listOfStage, listOfCountry, listOfBackground, listOfWorkExp ->
                 IndirectLeadCreationPageData(
                     categoryRowDatas = listOfCategory,
                     interestInRowDatas = listOfInterestIn,
                     sourceRowDatas = listOfSource,
                     stageRowDatas = listOfStage,
-                    countryRowDatas = listOfCountry
+                    countryRowDatas = listOfCountry,
+                    backgroundRowDatas = listOfBackground,
+                    workExpRowDatas = listOfWorkExp
                 )
             }
         )
@@ -88,7 +93,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = 14
+            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
         )
         return getRowDatas(interestInRequest)
     }
@@ -146,7 +151,20 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         return indirectSaathiApi.getCountries()
             .map { it.response?.countryItemsToRowDatas() ?: mutableListOf() }
     }
+    private fun getBackgroundRowDatas(): Observable<List<RowData>> {
+        return indirectSaathiApi.getBackground()
+            .map { it.response?.backgroundItemsToRowDatas() ?: mutableListOf() }
+    }
 
+    private fun getWorkExpRowDatas(): Observable<List<RowData>> {
+        val workExpRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.INDIRECT_WORK_EXP
+        )
+        return getRowDatas(workExpRequest)
+    }
     override fun getProfileRowDatas(): Observable<List<RowData>> {
         val request = LookupRequest(
             businessUnitId = requireNotNull(
@@ -218,7 +236,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     override fun getCityRowDatas(selectedState: String): Observable<List<RowData>> {
         val cityRequest = CityListRequest(selectedState)
         return indirectSaathiApi.getCityList(cityRequest)
-            .map { it.cityItemsToRowDatas() }
+            .map { it.response?.cityItemsToRowDatas()?: mutableListOf() }
     }
 
     override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {

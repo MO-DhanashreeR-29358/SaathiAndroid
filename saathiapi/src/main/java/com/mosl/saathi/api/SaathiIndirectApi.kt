@@ -13,6 +13,7 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
+import com.mosl.saathi.api.model.lead.BackgroundItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.CountryItem
@@ -74,6 +75,9 @@ interface SaathiIndirectApi {
     @POST("Country/GetCountryList")
     fun getCountries(): Observable<SaathiCommonResponse<List<CountryItem>>>
 
+    @POST("Lead/GetBackgroundList")
+    fun getBackground(): Observable<SaathiCommonResponse<List<BackgroundItem>>>
+
     @POST("Client/SaveClientProfile")
     fun saveClientProfile(
         @Body request: ClientProfileRequest
@@ -87,7 +91,7 @@ interface SaathiIndirectApi {
     @POST("City/GetCityList")
     fun getCityList(
         @Body request: CityListRequest
-    ): Observable<List<CityItem>>
+    ): Observable<SaathiCommonResponse<List<CityItem>>>
 
     @POST("Lead/AddUpdateLead")
     fun addUpdateLead(

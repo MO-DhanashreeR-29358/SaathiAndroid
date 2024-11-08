@@ -71,16 +71,8 @@ class IndirectLeadCreationFragment : CommonFragment(),
     private val categoryAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
-    private val clientTypeAdapter: ArrayAdapter<RowData> by lazy {
-        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-    }
-    private val professionAdapter: ArrayAdapter<RowData> by lazy {
-        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-    }
+
     private val interestInAdapter: ArrayAdapter<RowData> by lazy {
-        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-    }
-    private val productTypeAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
     private val sourceAdapter: ArrayAdapter<RowData> by lazy {
@@ -120,18 +112,13 @@ class IndirectLeadCreationFragment : CommonFragment(),
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
 
-    private val stdCodeAdapter: ArrayAdapter<RowData> by lazy {
+    private val backgroundAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
-    private val accountTypeAdapter: ArrayAdapter<RowData> by lazy {
+    private val workExpAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
-    private lateinit var bankAdapter: ArrayAdapter<BankCodeModel>
-    private lateinit var branchAdapter: ArrayAdapter<BranchCodeModel>
 
-    private val chipsAdapter: ArrayAdapter<RowData> by lazy {
-        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
-    }
 
     private val selectedList = ArrayList<RowData>()
 
@@ -273,81 +260,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
                     binding.etName.error = null
                 }
             }
-        })
-        binding.etProspectRefereeName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                if (!CRMAppUtil.isBlank(
-                        binding.etProspectRefereeName.text.toString()
-                            .trim { it <= ' ' }
-                    )
-                ) {
-                    if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            binding.etProspectRefereeName.text
-                                .toString()
-                                .trim { it <= ' ' }
-                        )
-                    ) {
-                        binding.etProspectRefereeName.error = MOSLConstants.ErrorMsgName
-                    } else {
-                        binding.etProspectRefereeName.error = null
-                    }
-                } else {
-                    binding.etProspectRefereeName.error = null
-                }
-            }
-        })
-
-        binding.etProspectRefereerMobile.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-                if (!CRMAppUtil.isBlank(
-                        binding.etProspectRefereerMobile.text
-                            .toString()
-                    )
-                ) {
-                    if (!CRMValidationRule.validateMobile(
-                            binding.etProspectRefereerMobile.text
-                                .toString()
-                        )
-                    ) {
-                        binding.etProspectRefereeName.error = MOSLConstants.INVALID_MOBILE_NO
-                    } else {
-                        binding.etProspectRefereeName.error = null
-                    }
-                } else {
-                    binding.etProspectRefereeName.error = null
-                }
-            }
-
-            override fun afterTextChanged(s: Editable) {}
         })
 
         //Expected margin feild should not display for Mo internationl user
@@ -599,6 +511,8 @@ class IndirectLeadCreationFragment : CommonFragment(),
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+            binding.spBackground.setSpinnerData(backgroundAdapter, data.backgroundRowDatas)
+            binding.spWorkExp.setSpinnerData(workExpAdapter, data.workExpRowDatas)
 
             binding.spCategory.setOnItemSelectedListener(object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
@@ -1070,9 +984,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
             isSameAsChecked = binding.cbSameAs.isChecked,
             selectedSource = binding.spSource.selectedItem as RowData,
             selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
-            proReferName = binding.etProspectRefereeName.text.toString(),
-            proReferEmail = binding.etProspectRefereerEmail.text.toString(),
-            proReferMob = binding.etProspectRefereerMobile.text.toString(),
             comment = getJsonSafeString(binding.etComments.text.toString()),
             primRM = primaryRM,
             stageId = binding.spStage.selectedItem as RowData,
