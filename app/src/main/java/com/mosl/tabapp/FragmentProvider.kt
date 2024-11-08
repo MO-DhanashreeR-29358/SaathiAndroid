@@ -84,8 +84,12 @@ import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
@@ -98,9 +102,6 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [LeadCreationModule::class])
     fun provideLeadCreationFactory(): LeadCreationFragment
-
-    @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
-    fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment
 
     @ContributesAndroidInjector
     fun provideLeadViewMainFactory(): LeadViewMainFragment
@@ -214,9 +215,6 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [DashboardModule::class])
     fun provideNewDashboardFragmentFactory(): DashboardFragment
 
-    @ContributesAndroidInjector(modules = [IndirectDashboardModule::class])
-    fun provideIndirectDashboardFragmentFactory(): IndirectDashboardFragment
-
     @ContributesAndroidInjector(modules = [GeoTaggingModule::class])
     fun provideGeoTaggingFactory(): GeoTaggingFragment
 
@@ -243,5 +241,16 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [VerifyOtpModule::class])
     fun provideVerifyDialogFragmentFactory(): VerifyDialogFragment
+
+    @ContributesAndroidInjector(modules = [IndirectDashboardModule::class])
+    fun provideIndirectDashboardFragmentFactory(): IndirectDashboardFragment
+    @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
+    fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment
+
+    @ContributesAndroidInjector(modules=[IndirectSetAppointmentModule::class])
+    fun provideIndirectSetAppointmentFragmentFactory(): IndirectSetAppointmentFragment
+
+    @ContributesAndroidInjector (modules = [IndirectCreateMeetingModule::class])
+    fun provideIndirectCreateMeetingFragmentFactory():IndirectCreateMeetingFragment
 
 }
