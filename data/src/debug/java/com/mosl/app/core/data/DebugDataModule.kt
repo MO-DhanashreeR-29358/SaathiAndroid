@@ -123,6 +123,7 @@ class DebugDataModule {
         return okHttpClient.newBuilder()
             .addInterceptor(headerInterceptor)
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(encryptionInterceptor)
             .addInterceptor(loggingInterceptor)
             .eventListenerFactory(listenerFactory)
             .build()

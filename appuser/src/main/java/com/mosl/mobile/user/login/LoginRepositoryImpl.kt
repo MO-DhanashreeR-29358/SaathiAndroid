@@ -69,7 +69,7 @@ class LoginRepositoryImpl @Inject constructor(
 
 
   override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {
-    Log.d("validate login","called")
+
     return  userRepository.fnValidateLogin(objValidateLoingPostModel)
   }
   override fun fnCallOtp(objGenerateOtpPostModel: LoginInfo): Observable<String> {

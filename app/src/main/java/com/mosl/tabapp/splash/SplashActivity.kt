@@ -153,7 +153,7 @@ class SplashActivity : LeanBaseActivity() {
         toggleProgressBar(uiModel.inProgress)
 
         uiModel.onSuccess {
-            //userManager.fnSetIsOtpEnable(it.isOtpRequired == "true")
+            userManager.fnSetIsOtpEnable(it.isOtpRequired == "true")
             val msg = it.msg
 
             when (it.statusCode) {

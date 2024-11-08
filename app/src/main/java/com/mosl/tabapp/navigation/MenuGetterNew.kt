@@ -32,7 +32,9 @@ import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
@@ -53,7 +55,7 @@ object MenuGetterNew {
         val args = Bundle()
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_QR_CODE -> QRCodeFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> ReactivationSummaryFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL-> ReactivationDetailFragment()

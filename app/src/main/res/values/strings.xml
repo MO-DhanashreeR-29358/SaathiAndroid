@@ -758,4 +758,14 @@ Page </string>
     <string name="label_bank_branch_name">Bank Branch Name*</string>
     <string name="hint_bank_branch">Enter Bank Branch Code</string>
     <string name="hint_bank_branch_name">Bank Branch Name</string>
+
+
+    <string name="lable_target_date">Target Date*</string>
+    <string name="lable_sp_attende">Spl. Attendee</string>
+    <string name="text_label_in_comments">Comments*</string>
+    <string name="lable_repeate_on">Repeate On</string>
+    <string name="label_repeate_start_on">Repetition Starts On</string>
+    <string name="label_repeate_end_on">Repetition End On</string>
+    <string name="label_intrested_in">Interested In*</string>
+    <string name="label_mmeting_desp">Meeting Description*</string>
 </resources>
