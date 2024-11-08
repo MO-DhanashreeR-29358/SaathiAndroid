@@ -24,13 +24,11 @@ class IndirectLeadCreationPresenter @Inject constructor(
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
             .switchMap {
-                repository.getStageRowDatas()
+                repository.getLeadCreationPageData()
                     .compose(applyUiModel())
             }
-            .subscribe(view::renderStageList, Timber::e)
+            .subscribe(view::renderLeadCreationPageData, Timber::e)
             .addTo(disposable)
-
-
 
         view.onPrimaryCheckboxChanged()
             .skip(1)

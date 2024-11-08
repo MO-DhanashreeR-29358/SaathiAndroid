@@ -1,5 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.LeadCreation.data
 
+import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -65,17 +66,6 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(categoryRequest)
     }
 
-    private fun getClientTypeRowDatas(): Observable<List<RowData>> {
-        val categoryRequest = LookupRequest(
-            businessUnitId = requireNotNull(
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.CLIENTTYPE
-        )
-        return indirectSaathiApi.getAllLookup(categoryRequest)
-            .map { it.mapToClientTypeRowDatas() }
-    }
-
     override fun getProfessionRowDatas(): Observable<List<RowData>> {
         val professionRequest = LookupRequest(
             businessUnitId = requireNotNull(
@@ -98,14 +88,15 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
+            lookupTypeId = 14
         )
         return getRowDatas(interestInRequest)
     }
 
     private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
         return indirectSaathiApi.getAllLookup(request)
-            .map { it.mapToRowDatas() }
+            .map { IndirectLeadCreationMapper.transformLookupData(it.response?: mutableListOf()
+            )}
     }
 
     private fun getSourceRowDatas(): Observable<List<RowData>> {
@@ -115,25 +106,17 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
                 { "businessUnitId in UserManager is not be null" })
         )
         return indirectSaathiApi.getSourceList(sourceRequest)
-            .map { it.mapToRowDataList() }
+            .map { it.response?.mapToRowDataList()?: mutableListOf()  }
     }
 
     override fun getStageRowDatas(): Observable<List<RowData>> {
-       /* val stageRequest = StageRequest(
+        val stageRequest = StageRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
         return indirectSaathiApi.getStageList(stageRequest)
-            .map { it.stageItemsToRowDatas() }*/
-
-        val categoryRequest = LookupRequest(
-            businessUnitId = requireNotNull(
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.INDIRECT_CATEGORY
-        )
-        return getRowDatas(categoryRequest)
+            .map { it.response?.stageItemsToRowDatas()?: mutableListOf()  }
     }
 
     override fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>> {
@@ -150,18 +133,18 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     override fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>> {
         val prospectSourceRequest = LeadSourceListRequest(selectedSource)
         return indirectSaathiApi.getLeadSourceList(prospectSourceRequest)
-            .map { it.leadSourceItemsToRowDatas() }
+            .map { it.response?.leadSourceItemsToRowDatas() ?: mutableListOf() }
     }
 
     override fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>> {
         val statusRequest = StatusRequest(stageID = selectedStage)
         return indirectSaathiApi.getStatusList(statusRequest)
-            .map { it.statusItemsToRowDatas() }
+            .map { it.response?.statusItemsToRowDatas()  ?: mutableListOf()}
     }
 
     override fun getCountryRowDatas(): Observable<List<RowData>> {
         return indirectSaathiApi.getCountries()
-            .map { it.countryItemsToRowDatas() }
+            .map { it.response?.countryItemsToRowDatas() ?: mutableListOf() }
     }
 
     override fun getProfileRowDatas(): Observable<List<RowData>> {
@@ -229,7 +212,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {
         val stateRequest = StateProvinceRequest(selectedCountry)
         return indirectSaathiApi.getStateProvinces(stateRequest)
-            .map { it.stateProvinceItemsToRowDatas() }
+            .map { it.response?.stateProvinceItemsToRowDatas() ?: mutableListOf()}
     }
 
     override fun getCityRowDatas(selectedState: String): Observable<List<RowData>> {

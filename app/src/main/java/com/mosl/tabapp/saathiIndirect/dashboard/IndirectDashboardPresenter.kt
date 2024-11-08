@@ -27,7 +27,7 @@ class IndirectDashboardPresenter @Inject constructor(
     val indirectRepo: DashboardIndirctRepository
 ) : BasePresenter<IndirectDashboardView>(view) {
     override fun start() {
-            onFetchCalled().switchMap{
+          /*  onFetchCalled().switchMap{
                 indirectRepo.fnGetFOCODashboardFilter().compose(applyUiModel())
             }.subscribe {
                 it.onFailure {
@@ -37,7 +37,7 @@ class IndirectDashboardPresenter @Inject constructor(
                     Timber.d("Response "+it)
                 }
 
-            }.addTo(disposable)
+            }.addTo(disposable)*/
 
         view.onLeadCreationClicked()
             .subscribe {

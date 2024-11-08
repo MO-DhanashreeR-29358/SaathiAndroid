@@ -1,16 +1,22 @@
 package com.mosl.tabapp.saathiIndirect.LeadCreation.data
 
+import com.mosl.app.core.data.util.addDefaultSelection
 import com.mosl.app.core.data.util.safeMap
+import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.model.User
 import com.mosl.saathi.api.model.createlead.*
 import com.mosl.saathi.api.model.createmeeting.ChipsEventResponse
 import com.mosl.saathi.api.model.lead.*
+import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.ResponseItem
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.model.*
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
+
+object IndirectLeadCreationMapper {
+
 
 internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: User?): CreateLeadRequest {
 
@@ -165,7 +171,22 @@ internal fun List<LookupItem>.mapToIndirectRowDatas(): List<RowData> {
     }.addIndirectSelectRowData()
 }
 
+fun transformLookupData(
+    list: List<ResponseItem?>
+): List<RowData> {
+    return list.mapIndexedNotNull { index: Int, lookupItem: ResponseItem? ->
+        try {
+            RowData(
+                index + 1,
+                "${lookupItem?.lookUpid}",
+                lookupItem?.lookUpName ?: ""
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }.addIndirectSelectRowData()
 
+}
 
 internal fun List<SourceListItem>.mapToIndirectRowDataList(): List<RowData> {
     return mapIndexedNotNull { index: Int, sourceItem: SourceListItem ->
@@ -322,6 +343,6 @@ internal fun List<RowData>.addIndirectSelectRowData(): List<RowData> {
         .toList()
 }
 
-
+}
 
 

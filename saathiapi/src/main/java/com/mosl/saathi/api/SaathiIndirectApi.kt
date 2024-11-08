@@ -26,12 +26,7 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
-import io.reactivex.rxjava3.core.Observable
-import retrofit2.http.Body
-import retrofit2.http.POST
 
-import com.mosl.saathi.api.model.lead.LookupItem
-import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
@@ -42,8 +37,8 @@ import retrofit2.http.POST
 
 interface SaathiIndirectApi {
 
-    @POST("Dashboard/GetFocoDashFilter")
-    fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>
+   /* @POST("Dashboard/GetFocoDashFilter")
+    fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>*/
 
     @POST("Master/GetAllLookup")
     fun getAllLookup(
@@ -55,33 +50,29 @@ interface SaathiIndirectApi {
         @Body request: LookupRequestTemp
     ): Observable<LookUpResponse>
 
-    @POST("Master/GetAllLookup")
-    fun getAllLookup(
-        @Body request: LookupRequest
-    ): Observable<List<LookupItem>>
 
     @POST("Source/GetSourceList")
     fun getSourceList(
         @Body request: SourceListRequest
-    ): Observable<List<SourceListItem>>
+    ): Observable<SaathiCommonResponse<List<SourceListItem>>>
 
     @POST("Stage/GetStageList")
     fun getStageList(
         @Body request: StageRequest
-    ): Observable<List<StageItem>>
+    ): Observable<SaathiCommonResponse<List<StageItem>>>
 
     @POST("LeadSource/GetLeadSourceList")
     fun getLeadSourceList(
         @Body request: LeadSourceListRequest
-    ): Observable<List<LeadSourceItem>>
+    ): Observable<SaathiCommonResponse<List<LeadSourceItem>>>
 
     @POST("LeadStatus/GetStatusList")
     fun getStatusList(
         @Body request: StatusRequest
-    ): Observable<List<StatusItem>>
+    ): Observable<SaathiCommonResponse<List<StatusItem>>>
 
     @POST("Country/GetCountryList")
-    fun getCountries(): Observable<List<CountryItem>>
+    fun getCountries(): Observable<SaathiCommonResponse<List<CountryItem>>>
 
     @POST("Client/SaveClientProfile")
     fun saveClientProfile(
@@ -91,7 +82,7 @@ interface SaathiIndirectApi {
     @POST("StateProvince/GetStateProvinceList")
     fun getStateProvinces(
         @Body request: StateProvinceRequest
-    ): Observable<List<StateProvinceItem>>
+    ): Observable<SaathiCommonResponse<List<StateProvinceItem>>>
 
     @POST("City/GetCityList")
     fun getCityList(
