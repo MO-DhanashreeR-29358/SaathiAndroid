@@ -1,0 +1,296 @@
+package com.mosl.tabapp.saathiIndirect.LeadCreation.data
+
+import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.createlead.*
+import com.mosl.saathi.api.model.lead.*
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.leadcreation.data.cityItemsToRowDatas
+import com.mosl.tabapp.leadcreation.data.countryItemsToRowDatas
+import com.mosl.tabapp.leadcreation.data.leadSourceItemsToRowDatas
+import com.mosl.tabapp.leadcreation.data.mapToClientTypeRowDatas
+import com.mosl.tabapp.leadcreation.data.mapToCreateLeadRequest
+import com.mosl.tabapp.leadcreation.data.mapToRowDataList
+import com.mosl.tabapp.leadcreation.data.mapToRowDatas
+import com.mosl.tabapp.leadcreation.data.refereeResponseToReferee
+import com.mosl.tabapp.leadcreation.data.stageItemsToRowDatas
+import com.mosl.tabapp.leadcreation.data.stateProvinceItemsToRowDatas
+import com.mosl.tabapp.leadcreation.data.statusItemsToRowDatas
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPageData
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
+import com.mosl.tabapp.leadcreation.domain.SearchReferee
+import com.mosl.tabapp.leadcreation.domain.TransferLead
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
+import com.mosl.tabapp.util.emptyString
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.Function5
+import javax.inject.Inject
+
+class IndirectLeadCreationRepositoryImpl @Inject constructor(
+    val indirectSaathiApi: SaathiIndirectApi,
+    val userManager: UserManager
+) : IndirectLeadCreationRepository {
+
+    override fun getLeadCreationPageData(): Observable<IndirectLeadCreationPageData> {
+        return Observable.zip(
+            getCategoryRowDatas(),
+            getInterestInRowDatas(),
+            getSourceRowDatas(),
+            getStageRowDatas(),
+            getCountryRowDatas(),
+            Function5 { listOfCategory, listOfInterestIn, listOfSource, listOfStage, listOfCountry ->
+                IndirectLeadCreationPageData(
+                    categoryRowDatas = listOfCategory,
+                    interestInRowDatas = listOfInterestIn,
+                    sourceRowDatas = listOfSource,
+                    stageRowDatas = listOfStage,
+                    countryRowDatas = listOfCountry
+                )
+            }
+        )
+    }
+
+    private fun getCategoryRowDatas(): Observable<List<RowData>> {
+        val categoryRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.INDIRECT_CATEGORY
+        )
+        return getRowDatas(categoryRequest)
+    }
+
+    private fun getClientTypeRowDatas(): Observable<List<RowData>> {
+        val categoryRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.CLIENTTYPE
+        )
+        return indirectSaathiApi.getAllLookup(categoryRequest)
+            .map { it.mapToClientTypeRowDatas() }
+    }
+
+    override fun getProfessionRowDatas(): Observable<List<RowData>> {
+        val professionRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.PROFESSIONID
+        )
+        return getRowDatas(professionRequest)
+    }
+
+    override fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
+        if(request.leadAccountTypeId.isEmpty()){
+            request.leadAccountTypeId = "-1"
+        }
+        return indirectSaathiApi.updateLead(request)
+    }
+
+    override fun getInterestInRowDatas(): Observable<List<RowData>> {
+        val interestInRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
+        )
+        return getRowDatas(interestInRequest)
+    }
+
+    private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
+        return indirectSaathiApi.getAllLookup(request)
+            .map { it.mapToRowDatas() }
+    }
+
+    private fun getSourceRowDatas(): Observable<List<RowData>> {
+        val sourceRequest = SourceListRequest(
+            id = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" })
+        )
+        return indirectSaathiApi.getSourceList(sourceRequest)
+            .map { it.mapToRowDataList() }
+    }
+
+    override fun getStageRowDatas(): Observable<List<RowData>> {
+       /* val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" })
+        )
+        return indirectSaathiApi.getStageList(stageRequest)
+            .map { it.stageItemsToRowDatas() }*/
+
+        val categoryRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.INDIRECT_CATEGORY
+        )
+        return getRowDatas(categoryRequest)
+    }
+
+    override fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>> {
+        val productTypeRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.PRODUCTTYPE,
+            parentId = selectedInterestedProduct
+        )
+        return getRowDatas(productTypeRequest)
+    }
+
+    override fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>> {
+        val prospectSourceRequest = LeadSourceListRequest(selectedSource)
+        return indirectSaathiApi.getLeadSourceList(prospectSourceRequest)
+            .map { it.leadSourceItemsToRowDatas() }
+    }
+
+    override fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>> {
+        val statusRequest = StatusRequest(stageID = selectedStage)
+        return indirectSaathiApi.getStatusList(statusRequest)
+            .map { it.statusItemsToRowDatas() }
+    }
+
+    override fun getCountryRowDatas(): Observable<List<RowData>> {
+        return indirectSaathiApi.getCountries()
+            .map { it.countryItemsToRowDatas() }
+    }
+
+    override fun getProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getBrokingProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADBROKINGPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getIpProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADIPPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getFinalProfileRowDatas(): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.LEADFINALPROFILE
+        )
+        return getRowDatas(request)
+    }
+
+    override fun updateProfile(
+        profile: RowData,
+        ucId: String
+    ): Observable<Pair<String, String>> {
+        val request = ClientProfileRequest(profile.value, false, ucId)
+        return indirectSaathiApi.saveClientProfile(request)
+            .map {
+                val approval = it.approvalMessage ?: emptyString()
+                approval to it.clientPotential
+            }
+    }
+
+    override fun getAccountTypeList(lookupTypeId: Int): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = lookupTypeId
+        )
+        return getRowDatas(request)
+    }
+
+    override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {
+        val stateRequest = StateProvinceRequest(selectedCountry)
+        return indirectSaathiApi.getStateProvinces(stateRequest)
+            .map { it.stateProvinceItemsToRowDatas() }
+    }
+
+    override fun getCityRowDatas(selectedState: String): Observable<List<RowData>> {
+        val cityRequest = CityListRequest(selectedState)
+        return indirectSaathiApi.getCityList(cityRequest)
+            .map { it.cityItemsToRowDatas() }
+    }
+
+    override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
+        val createLeadRequest = input mapToCreateLeadRequest userManager.getUser()
+        return indirectSaathiApi.addUpdateLead(
+            request = createLeadRequest
+        )
+    }
+
+    override fun getRefereeCode(text: String): Observable<SearchReferee> {
+        return getReferee(type = TYPE_REFEREE_CODE, text = text)
+    }
+
+    override fun getRefereeName(text: String): Observable<SearchReferee> {
+        return getReferee(type = TYPE_REFEREE_NAME, text = text)
+    }
+
+    override fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead> {
+        val request = TransferLeadRequest(
+            mobile = leadIdMobilePair.second,
+            currentUser = userManager.user.employeeCode
+        )
+        return indirectSaathiApi.transferLead(request)
+            .map {
+                if (it.status) {
+                    TransferLead(
+                        leadIdForTransfer = leadIdMobilePair.first,
+                        isPaymentDone = it.response?.isPaymentDone ?: false,
+                        message = it.message
+                    )
+
+                } else {
+                    throw ServiceFailureException(it.message)
+                }
+
+            }
+    }
+
+    private fun getReferee(
+        type: String,
+        text: String
+    ): Observable<SearchReferee> {
+        val request = SearchRefereeModel(
+            type = type,
+            hint = text
+        )
+        return indirectSaathiApi.getRefereeCode(request)
+            .map {
+                it refereeResponseToReferee type
+            }
+    }
+
+    companion object {
+        val SELECT_ROW_DATA = RowData(0, "-1", "Select")
+        const val TYPE_REFEREE_CODE = "ByCode"
+        const val TYPE_REFEREE_NAME = "ByName"
+    }
+}

@@ -555,6 +555,7 @@ Page </string>
     <string name="error_message_invalid_referaal_code">Invalid Referaal Code.</string>
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
+    <string name="error_message_enter_lead_name">Enter lead name</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_select_account_type">Select Account Type</string>
     <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>

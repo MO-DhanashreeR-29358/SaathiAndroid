@@ -2,20 +2,17 @@ package com.mosl.tabapp.saathiIndirect.LeadCreation
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.mobile.domain.bank.BankCodeModel
-import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.tabapp.common.RowData
-import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUiEvent.*
-import com.mosl.tabapp.model.EmployeeModel
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectLeadCreationView : BaseView {
-  fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>)
+  fun renderLeadCreationPageData(uiModel: UiModel<IndirectLeadCreationPageData>)
 
   fun onPrimaryCheckboxChanged(): Observable<Boolean>
   fun renderOnPrimaryCheckboxChanges(isChecked: Boolean)
@@ -38,7 +35,6 @@ interface IndirectLeadCreationView : BaseView {
 
   fun onInterestedProductSelected(): Observable<Int>
   fun getSelectedInterestedProduct(): RowData
-  fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>)
 
   fun onSourceSelected(): Observable<Int>
   fun getSelectedSource(): RowData
@@ -51,9 +47,6 @@ interface IndirectLeadCreationView : BaseView {
   fun onAssignToSearchEventFired(): Observable<AssignToSearchEvent>
   fun onSecondaryRMSearchEventFired(): Observable<SecondaryRMSearchEvent>
   fun onPCGSecondaryRMSearchEventFired(): Observable<PCGSecondaryRMSearchEvent>
-
-  fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
-  fun renderOnSecondaryRMSearchEventFire(uiModel: UiModel<List<EmployeeModel>>)
 
   fun onRefereeCodeChanged(): Observable<String>
   fun resetRefereeOnCodeChange()
@@ -111,26 +104,18 @@ interface IndirectLeadCreationView : BaseView {
   fun onTransferLeadPaymentFired(): Observable<TransferLeadPayment>
   fun getMobile(): String
   fun renderTransferLead(uiModel: UiModel<TransferLead>)
-  fun onBranchChange(): Observable<Int>
-  fun onBankChange(): Observable<Int>
-  fun getBank(): BankCodeModel?
-  fun getBranch(): BranchCodeModel?
-  fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>)
-  fun renderBranchChange()
+
 
   fun renderStageList(uiModel: UiModel<List<RowData>>)
 
   fun onCallAccountTypeFired(): Observable<CallAccountType>
-  fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
-  fun getAccountTypeId() : String?
+
 
   fun onChipsApiCall(): Observable<CallChipsApi>
-  fun renderChipsList(uiModel: UiModel<List<RowData>>)
+
 
   fun onProspectSourceChanged(): Observable<Int>
   fun getSelectedProspectSource(): RowData
-  fun renderOnProspectSourceChange(isBTL: Boolean)
-  fun getAccountTypeLookupId() : Int
 
   companion object {
     const val INVALID_SELECTION_KEY = "-1"

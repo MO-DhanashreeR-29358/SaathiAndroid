@@ -21,6 +21,8 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl;
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository;
 import com.mosl.tabapp.urls.ApiBaseUrlImpl;
 
 import dagger.Binds;
@@ -47,6 +49,9 @@ public abstract class CommonDataModule {
 
     @Binds abstract LeadCreationRepository bindLeadCreationRepository(
         LeadCreationRepositoryImpl repository);
+
+    @Binds abstract IndirectLeadCreationRepository bindIndirectLeadCreationRepository(
+            IndirectLeadCreationRepositoryImpl repository);
 
     @Binds abstract LeadDetailRepository bindLeadDetailRepository(
         LeadDetailRepositoryImpl repository);

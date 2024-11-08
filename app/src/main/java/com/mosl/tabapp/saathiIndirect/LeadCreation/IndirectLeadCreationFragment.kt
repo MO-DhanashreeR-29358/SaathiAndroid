@@ -4,14 +4,11 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager.LayoutParams
 import android.widget.*
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.core.view.isVisible
@@ -30,35 +27,28 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.domain.bank.BranchCodeModel
-import com.mosl.mobile.domain.bank.SelectBank
-import com.mosl.mobile.domain.bank.SelectBranch
 import com.mosl.mobile.user.annotation.BranchCode
-import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.DedupeModelResponse
-import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.string
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.common.CustomListPickerDialog
-import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogDedupeBinding
 import com.mosl.tabapp.databinding.FragmentIndirectLeadCreationBinding
-import com.mosl.tabapp.leadViewDetail.AttendeeAdapter
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
-import com.mosl.tabapp.leadcreation.domain.LeadCreationPageData
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUiEvent.*
 import com.mosl.tabapp.model.AddressDetailModel
-import com.mosl.tabapp.model.EmployeeModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
@@ -179,10 +169,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
 
     private fun setupView() {
         setupScrollView()
-        setupAllianceSeconadaryRM()
-        setupWealthManagementCodeSeconadaryRM()
-        setupRINRI()
-        setupBandhanBankRM()
 
         binding.spCity.setDialogTitle("Search City")
         binding.spOffCity.setDialogTitle("Search City")
@@ -190,38 +176,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
         disableField(binding.llOffAdd)
         binding.tvPersonalInfo.toggleIcon(binding.llPersonalInformation)
         binding.tvAdditionInfo.toggleIcon(binding.llAdditionInfo)
-        binding.actAssignTo.apply {
-            setHint(R.string.str_assing)
-            setListener { primaryRM = null }
-            setOnClickListener {
-                requireActivity().window
-                    .setSoftInputMode(
-                        LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                or LayoutParams.SOFT_INPUT_ADJUST_PAN
-                    )
-                searchList.threshold = MOSLConstants.SEARCH_LENTH
-                searchList.show()
-                searchList.setCustomTitle(resources.getString(string.str_assing))
-                val assingViewListner: ListPickerListneable = object : ListPickerListneable {
-                    override fun onListItemSelect(data: Parcelable) {
-                        val clientModel =
-                            data as EmployeeModel
-                        if (clientModel.isNoData) {
-                            return
-                        }
-                        binding.actAssignTo.setText(clientModel.attendeeName)
-                        primaryRM = clientModel.attendeeCode
-                        searchList.dismiss()
-                        binding.actAssignTo.setClearIconVisible(true)
-                    }
 
-                    override fun onSearchTextChanged(constraint: CharSequence) {
-                        subject.onNext(AssignToSearchEvent(constraint.toString()))
-                    }
-                }
-                searchList.setmListner(assingViewListner)
-            }
-        }
 
         binding.etRefereeCode.setOnFocusChangeListener { _: View?, _: Boolean ->
             if (binding.etRefereeCode.text
@@ -357,45 +312,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
                 }
             }
         })
-        binding.etContactPerson.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(
-                s: CharSequence,
-                start: Int,
-                count: Int,
-                after: Int
-            ) {
-            }
-
-            override fun onTextChanged(
-                s: CharSequence,
-                start: Int,
-                before: Int,
-                count: Int
-            ) {
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                if (!CRMAppUtil.isBlank(
-                        binding.etContactPerson.text
-                            .toString()
-                            .trim { it <= ' ' }
-                    )
-                ) {
-                    if (!CRMAppUtil.validateOnlyAlphabetAndNumberWithoutSplChar(
-                            binding.etContactPerson.text
-                                .toString()
-                                .trim { it <= ' ' }
-                        )
-                    ) {
-                        binding.etContactPerson.error = MOSLConstants.ErrorMsgName
-                    } else {
-                        binding.etContactPerson.error = null
-                    }
-                } else {
-                    binding.etContactPerson.error = null
-                }
-            }
-        })
 
         binding.etProspectRefereerMobile.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
@@ -434,267 +350,15 @@ class IndirectLeadCreationFragment : CommonFragment(),
             override fun afterTextChanged(s: Editable) {}
         })
 
-        bankAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-        binding.spBank.adapter = bankAdapter
-
-        branchAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-        binding.spBranch.adapter = branchAdapter
-
-        userManager.getUser()?.apply {
-            if (isBank) {
-                binding.groupBank.visibility = View.VISIBLE
-            } else {
-                binding.groupBank.visibility = View.GONE
-            }
-        }
-
-        //this fields only required for indusand bank development
-        binding.ilDOB.visibility = View.GONE
-        binding.ilAccountNumber.visibility = View.GONE
-
-        if(branchCodePreference.get().equals(BRANCH_CODE_FSFBMAIN) || branchCodePreference.get().equals(BRANCH_CODE_CBIMAIN)){
-            binding.ilReferaalCode.visibility =View.VISIBLE
-            binding.etPanNum.hint = getString(R.string.hint_lead_creation_pan_mandatory)
-            if(branchCodePreference.get().equals(BRANCH_CODE_CBIMAIN)){
-                binding.ilReferaalCode.visibility =View.GONE
-            }
-        }else{
-            binding.ilReferaalCode.visibility =View.GONE
-            binding.etPanNum.hint = getString(R.string.hint_lead_creation_pan)
-        }
-
-        val filterArray = arrayOf(InputFilter.LengthFilter(10))
-        binding.etDOB.apply {
-            filters = filterArray
-            DateInputMask(this).listen()
-            setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus) {
-                    this.hint = context.getString(R.string.hint_lead_creation_date_format)
-                } else {
-                    this.hint = ""
-                    if (!text.isNullOrEmpty() && text?.length == 10) {
-                    }
-                }
-            }
-
-        }
-
         //Expected margin feild should not display for Mo internationl user
       if(userManager.getUser()!!.isMoInternationUser()){
           binding.ilExpectedMargin.isVisible = false
       }
 
-        binding.spBranch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                binding.actSecondaryRM.setText("")
-                binding.tvSecondaryRmError.isVisible = false
-
-                if (userManager.user.isAllianceBusiness()) {
-                    binding.actSecondaryRM.apply {
-                        var moRm: String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
-                        var bankRm: String = getString(R.string.hint_lead_creation_secondary_rm_title)
-                        userManager.getUser()?.apply {
-                            if (isAufsb()) {
-                                if (getBank()!!.bankName == "Au Bank") {
-                                    setHint(moRm)
-                                } else {
-                                    setHint(moRm.replace("*", ""))
-                                }
-
-                            } else {
-                                if (getBank()!!.bankName == "Au Bank") {
-                                    if(getBranch()!!.branchName == "AUSFBREF"){
-                                        setHint(bankRm.replace("*", ""))
-                                    }else{
-                                        setHint(bankRm)
-                                    }
-
-                                } else {
-                                    setHint(bankRm.replace("*", ""))
-                                }
-                            }
-                        }
-                    }
-
-                    binding.groupAccountType.isVisible = getBranch()!!.branchName == "AUSFBMAIN"
-                            || getBranch()!!.branchName == "IIBLMAIN" || getBranch()!!.branchName == "BANBMAIN"
-                    if(getBranch()!!.branchName == "AUSFBMAIN" || getBranch()!!.branchName == "IIBLMAIN" || getBranch()!!.branchName == "BANBMAIN"){
-                        subject.onNext(CallAccountType)
-                    }
-
-                    binding.bandhanBankContainer.isVisible = getBranch()!!.branchName == "BANBMAIN"
-                    binding.chkBandhanBank.isChecked = false
-
-                }
-
-            }
-
-        }
-
-
-
 
 
     }
 
-    private fun setupRINRI(){
-        if(userManager.user.isShowRINRI()){
-            binding.tvStdCode.isVisible = true
-            binding.spStdCode.isVisible = true
-            binding.tvSTDError.isVisible = true
-            binding.tvClientType.isVisible = true
-            binding.spClientType.isVisible = true
-        }else{
-            binding.tvStdCode.isVisible = false
-            binding.spStdCode.isVisible = false
-            binding.tvSTDError.isVisible = false
-            binding.tvClientType.isVisible = false
-            binding.spClientType.isVisible = false
-        }
-    }
-
-    private fun setupAllianceSeconadaryRM(){
-        if (userManager.user.isAllianceBusiness()) {
-            binding.llSearchSecondaryRM.isVisible = true
-            binding.actSecondaryRM.apply {
-                var moRm :String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
-                var bankRm :String = getString(R.string.hint_lead_creation_secondary_rm_title)
-                userManager.getUser()?.apply {
-                    if (isAufsb()) {
-                        setHint(moRm)
-                    } else {
-                        setHint(bankRm)
-                    }
-                }
-                setListener { secondaryRM = null }
-                setOnClickListener {
-                    if(getBank()!!.bankId   == -1){
-                        Toast.makeText(requireContext(), "Please select bank ", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                    if(getBranch()!!.branchId   == -1){
-                        Toast.makeText(requireContext(), "Please select branch ", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                    requireActivity().window
-                        .setSoftInputMode(
-                            LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                    or LayoutParams.SOFT_INPUT_ADJUST_PAN
-                        )
-                    secondaryRMSearchList.threshold = MOSLConstants.SEARCH_LENTH
-                    secondaryRMSearchList.clearSearchText()
-                    secondaryRMSearchList.show()
-                    userManager.getUser()?.apply {
-                        if (isAufsb()) {
-                            secondaryRMSearchList.setCustomTitle(moRm.replace("*", ""))
-                        } else {
-                            secondaryRMSearchList.setCustomTitle(bankRm.replace("*", ""))
-                        }
-                    }
-                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
-                        override fun onListItemSelect(data: Parcelable) {
-                            val clientModel =
-                                data as EmployeeModel
-                            if (clientModel.isNoData) {
-                                return
-                            }
-                            binding.actSecondaryRM.setText(clientModel.attendeeCode + " - "+ clientModel.attendeeName)
-                            secondaryRM = clientModel.attendeeCode
-                            secondaryRMSearchList.dismiss()
-                            binding.actSecondaryRM.setClearIconVisible(true)
-                        }
-
-                        override fun onSearchTextChanged(constraint: CharSequence) {
-                            subject.onNext(SecondaryRMSearchEvent(constraint.toString()))
-                        }
-                    }
-                    secondaryRMSearchList.setmListner(assingViewListner)
-                }
-            }
-        }
-    }
-
-    private fun setupWealthManagementCodeSeconadaryRM(){
-        if (userManager.user.isPCG()) {
-            binding.wmcodecontainer.isVisible = true
-            if(binding.chkWMCode.isChecked ) {
-                binding.llSearchSecondaryRM.isVisible = true
-            }else {
-                binding.llSearchSecondaryRM.isVisible = false
-                binding.tvSecondaryRmError.isVisible = false
-            }
-
-            binding.chkWMCode.setOnCheckedChangeListener { buttonView, isChecked ->
-                if(isChecked){
-                    binding.llSearchSecondaryRM.isVisible = true
-                }else{
-                    binding.llSearchSecondaryRM.isVisible = false
-                    binding.tvSecondaryRmError.isVisible = false
-                }
-            }
-            binding.actSecondaryRM.apply {
-                setHint(R.string.hint_lead_creation_secondary_rm_pcg_title)
-
-                setListener { secondaryRM = null }
-                setOnClickListener {
-
-                    requireActivity().window
-                        .setSoftInputMode(
-                            LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                    or LayoutParams.SOFT_INPUT_ADJUST_PAN
-                        )
-                    secondaryRMSearchList.threshold = MOSLConstants.SEARCH_LENTH
-                    secondaryRMSearchList.clearSearchText()
-                    secondaryRMSearchList.show()
-                    secondaryRMSearchList.setCustomTitle(resources.getString(string.hint_lead_creation_secondary_rm_pcg_title))
-                    val assingViewListner: ListPickerListneable = object : ListPickerListneable {
-                        override fun onListItemSelect(data: Parcelable) {
-                            val clientModel =
-                                data as EmployeeModel
-                            if (clientModel.isNoData) {
-                                return
-                            }
-                            binding.actSecondaryRM.setText(clientModel.attendeeName)
-                            secondaryRM = clientModel.attendeeCode
-                            secondaryRMSearchList.dismiss()
-                            binding.actSecondaryRM.setClearIconVisible(true)
-                            binding.tvSecondaryRmError.isVisible = false
-                        }
-
-
-
-                        override fun onSearchTextChanged(constraint: CharSequence) {
-                            subject.onNext(PCGSecondaryRMSearchEvent(constraint.toString()))
-                        }
-                    }
-                    secondaryRMSearchList.setmListner(assingViewListner)
-                }
-            }
-        }
-    }
-
-    private fun setupBandhanBankRM(){
-        if( getBranch() != null
-            && getBranch()!!.branchName == "BANBMAIN"){
-            binding.bandhanBankContainer.isVisible = true
-            binding.ilBandhanBankRM.isVisible = binding.chkBandhanBank.isChecked
-        }
-
-        binding.chkBandhanBank.setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked){
-                binding.ilBandhanBankRM.isVisible = true
-            }else{
-                binding.ilBandhanBankRM.isVisible = false
-                binding.tvBandhanBankRMError.isVisible = false
-                binding.etBandhanBankRM.setText("")
-                binding.tvBandhanBankRMError.text = ""
-            }
-        }
-    }
 
     private fun setupScrollView() {
         binding.scrollView.apply {
@@ -919,26 +583,14 @@ class IndirectLeadCreationFragment : CommonFragment(),
     override fun getSelectedOfficeState(): RowData = binding.spOffState.selectedItem as RowData
 
     override fun renderOnCategoryChange(category: String) {
-        when (category) {
-            "INDIVIDUAL", "Individual" -> {
-                binding.ilContactPerson.gone()
-            }
-            else -> {
-                binding.tvContactPersonError.setText("")
-                binding.ilContactPerson.visible()
 
-            }
-        }
     }
 
-    override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
+    override fun renderLeadCreationPageData(uiModel: UiModel<IndirectLeadCreationPageData>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
-            binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
-            bankAdapter.setSpinnerData(binding.spBank, data.listBank)
-            binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
             var list = data.interestInRowDatas.toMutableList()
             list.removeIf { it.value == "Equity" }
             list.removeIf { it.value == "Only MFD" }
@@ -947,64 +599,20 @@ class IndirectLeadCreationFragment : CommonFragment(),
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
             binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
-            binding.spStdCode.setSpinnerData(stdCodeAdapter, data.countryStdCodeList)
 
             binding.spCategory.setOnItemSelectedListener(object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
                     when (getSelectedCategory().value) {
-                        "INDIVIDUAL", "Individual" -> {
-                            binding.ilContactPerson.gone()
-                        }
-                        else -> {
-                            binding.tvContactPersonError.setText("")
-                            binding.ilContactPerson.visible()
 
-                        }
                     }
                 }
                override fun onNothingSelected(parent: AdapterView<*>?) {}
             })
 
-            binding.spClientType.setOnItemSelectedListener(object : OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
-                    val type = binding.spClientType.selectedItem as RowData
-                    when (type.value) {
-                        "NRI", "nri" -> {
-                            binding.tvStdCode.isVisible = true
-                            binding.spStdCode.isVisible = true
-                            binding.tvSTDError.isVisible = true
-                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(14))
-                            binding.etAlternateMobno.filters = arrayOf(InputFilter.LengthFilter(14))
-                            binding.etEkycMobile.filters = arrayOf(InputFilter.LengthFilter(14))
-                            binding.etMobile.setText("")
-                            binding.etAlternateMobno.setText("")
-                            binding.etEkycMobile.setText("")
-                        }
-                        else -> {
-                            binding.tvStdCode.isVisible = false
-                            binding.spStdCode.isVisible = false
-                            binding.tvSTDError.isVisible = false
-                            binding.etMobile.filters = arrayOf(InputFilter.LengthFilter(10))
-                            binding.etAlternateMobno.filters = arrayOf(InputFilter.LengthFilter(10))
-                            binding.etEkycMobile.filters = arrayOf(InputFilter.LengthFilter(10))
-                            binding.etMobile.setText("")
-                            binding.etAlternateMobno.setText("")
-                            binding.etEkycMobile.setText("")
 
-
-                        }
-                    }
-                }
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            })
         }
     }
 
-    override fun renderProductTypeOnInterestedProductSelection(uiModel: UiModel<List<RowData>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess { binding.spProductType.setSpinnerData(productTypeAdapter, it) }
-    }
 
     override fun renderProspectSourceOnSourceSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
@@ -1018,68 +626,8 @@ class IndirectLeadCreationFragment : CommonFragment(),
         uiModel.onSuccess { binding.spStatus.setSpinnerData(statusAdapter, it) }
     }
 
-    override fun renderOnAssignToSearchEventFire(uiModel: UiModel<List<EmployeeModel>>) {
-        toggleSearchListProgress(uiModel.inProgress)
-        uiModel.onFailure {
-            val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
-            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
-            searchList.setAdapter(attendeeAdapter)
-            attendeeAdapter.notifyDataSetChanged()
-        }
 
-        uiModel.onSuccess {
-            val list = if (it.isEmpty()) {
-                listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
-            } else {
-                it
-            }
-            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
-            searchList.setAdapter(attendeeAdapter)
-            attendeeAdapter.notifyDataSetChanged()
-        }
 
-    }
-
-    override fun renderOnSecondaryRMSearchEventFire(uiModel: UiModel<List<EmployeeModel>>) {
-        toggleSecondaryRMSearchListProgress(uiModel.inProgress)
-        uiModel.onFailure {
-            val list = listOf(EmployeeModel.getNoData(getErrorOnFailureNew(it)))
-            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
-            secondaryRMSearchList.setAdapter(attendeeAdapter)
-            attendeeAdapter.notifyDataSetChanged()
-        }
-
-        uiModel.onSuccess {
-            val list = if (it.isEmpty()) {
-                listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
-            } else {
-                it
-            }
-            val attendeeAdapter = AttendeeAdapter(requireContext(), list)
-            secondaryRMSearchList.setAdapter(attendeeAdapter)
-            attendeeAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun toggleSearchListProgress(inProgress: Boolean) {
-        when {
-            inProgress -> {
-                hideKeyboard(binding.actAssignTo)
-                searchList.showProgress(View.VISIBLE)
-            }
-            else -> searchList.showProgress(View.GONE)
-        }
-    }
-
-    private fun toggleSecondaryRMSearchListProgress(inProgress: Boolean) {
-        when {
-            inProgress -> {
-                hideKeyboard(binding.actSecondaryRM)
-                secondaryRMSearchList.showProgress(View.VISIBLE)
-            }
-            else -> secondaryRMSearchList.showProgress(View.GONE)
-        }
-    }
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
@@ -1194,53 +742,31 @@ class IndirectLeadCreationFragment : CommonFragment(),
         error.error?.let {
             when (error.identifier as Int) {
                 1 -> {
-                    binding.tvCategoryError.setText(getString(it))
-                }
-                27 -> {
-                    binding.tvBankError.setText(getString(it))
-                }
-                28 -> {
-                    binding.tvBranchError.setText(getString(it))
-                }
-                2 -> {
-                    val rowData = binding.spCategory.selectedItem as RowData
-                    binding.tvNameError.setText(getString(it, rowData.value))
-                }
-                3 -> {
                     binding.tvNameError.setText(getString(it))
                 }
-                4, 5 -> {
-                    binding.tvContactPersonError.setText(getString(it))
-                }
-                6 -> {
+                2 -> {
                     binding.tvInterestInError.setText(getString(it))
                 }
-                7 -> {
-                    binding.tvProductTypeError.setText(getString(it))
-                }
-                8 -> {
+                3 -> {
                     binding.tvEmailError.setText(getString(it))
                 }
-                9, 10 -> {
+                4 , 5-> {
                     binding.tvAlternateEmailError.setText(getString(it))
                 }
-                11, 12 -> {
+                6 ,7 -> {
                     binding.tvMobileError.setText(getString(it))
                 }
-                13, 14 -> {
-                    binding.tvAlternateMobnoError.setText(getString(it))
-                }
-                15 -> {
+                8 -> {
                     binding.tvLandLineError.setText(getString(it))
                 }
-                16 -> {
-                    binding.tvEkycMobileError.setText(getString(it))
-                }
-                17 -> {
+                9, 10 -> {
                     binding.tvPANError.setText(getString(it))
                 }
-                18 -> {
-                    binding.tvAadharError.setText(getString(it))
+                11,12 -> {
+                    binding.tvExpectedMarginError.setText(getString(it))
+                }
+                13 -> {
+                    binding.tvCategoryError.setText(getString(it))
                 }
                 19 -> {
                     binding.tvReferCodeError.setText(getString(it))
@@ -1260,50 +786,20 @@ class IndirectLeadCreationFragment : CommonFragment(),
                 26 -> {
                     binding.tvOffPinError.setText(getString(it))
                 }
-                29 -> {
-                    binding.tvReferralCodeError.setText(getString(it))
-                }
                 30 -> {
-                    binding.tvPANError.setText(getString(it))
+
                 }
                 31 -> {
                     binding.tvPANError.setText(getString(it))
-                }
-                32 -> {
-                    binding.tvSecondaryRmError.isVisible = true
-                    binding.tvSecondaryRmError.text = getString(it)
-                }
-                33 ->{
-                    binding.tvSTDError.setText(getString(it))
                 }
                 34 ->{
                     binding.tvMobileError.setText(getString(it))
                 }
                 35 ->{
-                    binding.tvExpectedMarginError.setText(getString(it))
+
                 }
                 36 ->{
-                    binding.tvExpectedMarginError.setText(getString(it))
-                }
-                37 -> {
-                    binding.tvSecondaryRmError.isVisible = true
-                    binding.tvSecondaryRmError.text = getString(it)
-                }
-                38 -> {
-                    binding.tvSecondaryRmError.isVisible = true
-                    binding.tvSecondaryRmError.text = getString(it)
-                }
-                40 -> {
-                    binding.tvAccountTypeError.isVisible = true
-                    binding.tvAccountTypeError.text = getString(it)
-                }
-                41 -> {
-                    binding.tvChipsError.isVisible = true
-                    binding.tvChipsError.text = getString(it)
-                }
-                42 -> {
-                    binding.tvBandhanBankRMError.isVisible = true
-                    binding.tvBandhanBankRMError.text = getString(it)
+
                 }
                 else -> {
                 }
@@ -1315,19 +811,12 @@ class IndirectLeadCreationFragment : CommonFragment(),
     private fun removeErrorMessage() {
         binding.apply {
             tvCategoryError.setText("")
-            tvBankError.setText("")
-            tvBranchError.setText("")
             tvNameError.setText("")
-            tvContactPersonError.setText("")
             tvEmailError.setText("")
             tvAlternateEmailError.setText("")
-            tvAlternateMobnoError.setText("")
             tvMobileError.setText("")
             tvLandLineError.setText("")
-            tvEkycMobileError.setText("")
-            tvReferralCodeError.setText("")
             tvPANError.setText("")
-            tvAadharError.setText("")
             tvReferCodeError.setText("")
             tvReferNameError.setText("")
             tvReferEmailError.setText("")
@@ -1335,13 +824,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
             tvPinError.setText("")
             tvOffPinError.setText("")
             tvInterestInError.setText("")
-            tvProductTypeError.setText("")
-            tvSecondaryRmError.isVisible = false
-            tvSTDError.setText("")
-            tvExpectedMarginError.setText("")
-            tvAccountTypeError.setText("")
-            tvChipsError.setText("")
-            tvBandhanBankRMError.setText("")
         }
     }
 
@@ -1518,90 +1000,17 @@ class IndirectLeadCreationFragment : CommonFragment(),
         }
     }
 
-    override fun onBranchChange(): Observable<Int> {
-        return binding.spBranch.itemSelections()
-    }
-
-    override fun onBankChange(): Observable<Int> {
-        return binding.spBank.itemSelections()
-    }
-
-    override fun getBank(): BankCodeModel? {
-        return binding.spBank.selectedItem as? BankCodeModel
-    }
-
-    override fun getBranch(): BranchCodeModel? {
-        return binding.spBranch.selectedItem as? BranchCodeModel
-    }
-
-    override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
-        toggleProgress(uiModel.inProgress)
-        uiModel.onFailure { error ->
-            showOnFailurePopup(error)
-        }
-
-        uiModel.onSuccess {
-            branchAdapter.setSpinnerData(binding.spBranch, it)
-
-
-            if (userManager.user.isAllianceBusiness()) {
-                binding.actSecondaryRM.apply {
-                    var moRm: String = getString(R.string.hint_lead_creation_secondary_rm_mo_title)
-                    var bankRm: String = getString(R.string.hint_lead_creation_secondary_rm_title)
-                    userManager.getUser()?.apply {
-                        if (isAufsb()) {
-                            if (getBank()!!.bankName == "Au Bank") {
-                                setHint(moRm)
-                            } else {
-                                setHint(moRm.replace("*", ""))
-                            }
-
-                        } else {
-                            if (getBank()!!.bankName == "Au Bank") {
-                                setHint(bankRm)
-                            } else {
-                                setHint(bankRm.replace("*", ""))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    override fun renderBranchChange() {
-        binding.actSecondaryRM.setText("")
-        binding.tvSecondaryRmError.isVisible = false
-
-    }
-
     override fun renderStageList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-            binding.spStage.setSpinnerData(stageAdapter, it)
+           // binding.spStage.setSpinnerData(stageAdapter, it)
+            binding.spCategory.setSpinnerData(categoryAdapter, it)
         }
     }
 
     override fun onCallAccountTypeFired(): Observable<CallAccountType> {
        return subject.ofType()
-    }
-
-    override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
-        uiModel.onSuccess {
-            binding.spAccountType.setSpinnerData(accountTypeAdapter, it)
-        }
-    }
-
-    override fun getAccountTypeId(): String? {
-        if(binding.spAccountType.selectedItem != null && getBranch() != null
-            && (getBranch()!!.branchName == "AUSFBMAIN" || getBranch()!!.branchName == "BANBMAIN"
-                    || getBranch()!!.branchName == "IIBLMAIN")){
-            return (binding.spAccountType.selectedItem as? RowData)?.key
-        }
-        return ""
     }
 
 
@@ -1641,24 +1050,14 @@ class IndirectLeadCreationFragment : CommonFragment(),
 
         return IndirectLeadCreationUserInput(
             selectedCategory = binding.spCategory.selectedItem as RowData,
-            selectedBank = binding.spBank.selectedItem as? BankCodeModel ?: SelectBank,
-            selectedBranch = binding.spBranch.selectedItem as? BranchCodeModel ?: SelectBranch,
             etCategoryName = binding.etName.text.toString(),
-            etContactPerson = binding.etContactPerson.text.toString(),
-            selectedProfession = binding.spProfession.selectedItem as RowData,
             selectedInterestIn = binding.spInterestIn.selectedItem as RowData,
-            selectedProductType = binding.spProductType.selectedItem as? RowData
-                ?: IndirectLeadCreationView.SELECT_ROW_DATA,
             emailId = binding.etEmailId.text.toString(),
             alternateEmailId = binding.etAlternateEmailId.text.toString(),
-            mobileNo = getStdCode() + binding.etMobile.text.toString(),
-            mobileNoRI =  binding.etMobile.text.toString(),
-            alternateMobileNo = binding.etAlternateMobno.text.toString(),
+            mobileNo =  binding.etMobile.text.toString(),
             landlineNo = binding.etLandLine.text.toString(),
-            ekycMobileNo = binding.etEkycMobile.text.toString(),
             panNo = binding.etPanNum.text.toString()
                 .toUpperCase(Locale.ROOT),
-            aadharNo = binding.etAadharNum.text.toString(),
             sourceName = binding.spProspectSource.selectedItem.toString(),
             referCode = binding.etRefereeCode.text.toString(),
             referEmail = binding.etRefereeEmail.text.toString(),
@@ -1671,12 +1070,10 @@ class IndirectLeadCreationFragment : CommonFragment(),
             isSameAsChecked = binding.cbSameAs.isChecked,
             selectedSource = binding.spSource.selectedItem as RowData,
             selectedProspectSource = binding.spProspectSource.selectedItem as RowData,
-            prospectSourceDetail = binding.etProspectSourceDetails.text.toString(),
             proReferName = binding.etProspectRefereeName.text.toString(),
             proReferEmail = binding.etProspectRefereerEmail.text.toString(),
             proReferMob = binding.etProspectRefereerMobile.text.toString(),
             comment = getJsonSafeString(binding.etComments.text.toString()),
-            professionalId = binding.spProfession.selectedItem as RowData,
             primRM = primaryRM,
             stageId = binding.spStage.selectedItem as RowData,
             statusId = binding.spStatus.selectedItem as RowData,
@@ -1684,56 +1081,15 @@ class IndirectLeadCreationFragment : CommonFragment(),
             officeAdd = offAdd,
             isBank = userManager.getUser()?.isBank ?: false,
             branchCode = branchCodePreference.get(),
-            referaalCode = binding.etReferaalCode.text.toString(),
-            dob = binding.etDOB.text.toString(),
-            BankAccountNumber = binding.etAccountNumber.text.toString(),
-            secondaryRM = if(binding.actSecondaryRM.text.toString().isEmpty()) "" else secondaryRM.toString(),
-            isWMCodeChecked = binding.chkWMCode.isChecked,
-            nriRiId = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).key else "",
-            nriRiValue = if(userManager.getUser()!!.isShowRINRI()) (binding.spClientType.selectedItem as RowData).value else "",
-            countryStdCode =  if(userManager.getUser()!!.isShowRINRI()) (binding.spStdCode.selectedItem as RowData).value else "",
-            expectedMargin = binding.etExpectedMargin.text.toString(),
-            accountTypeId = getAccountTypeId(),
-            ChipsEventId = getChipsEventId(),
-            isChipsVisible = binding.groupChips.isVisible,
-            isBandhanBankEmp = if(binding.chkBandhanBank.isChecked) "Yes" else "No",
-            BandhanBankEmpCode = binding.etBandhanBankRM.text.toString()
+            expectedMargin = binding.etExpectedMargin.text.toString()
         )
-    }
-
-    private fun getChipsEventId(): String? {
-        if(binding.spChips.selectedItem != null && binding.spChips.isVisible){
-            return (binding.spChips.selectedItem as? RowData)?.key
-        }
-        return ""
-    }
-
-    private fun getStdCode() : String{
-        var code = ""
-        if(userManager.getUser()!!.isShowRINRI()) {
-            val type = binding.spClientType.selectedItem as RowData
-
-            if (type.value.equals("NRI")) {
-                code = (binding.spStdCode.selectedItem as RowData).key ?: ""
-                if (code.isNotEmpty() && !code.equals("-1")) {
-                    code = code + "-"
-                } else {
-                    code = ""
-                }
-            }
-        }
-        return code
     }
 
     override fun isDataEmpty(): Boolean = true
 
     private fun cleanupView() {
         binding.spCategory.adapter = null
-        binding.spProfession.adapter = null
-        binding.spBank.adapter = null
-        binding.spBranch.adapter = null
         binding.spSource.adapter = null
-        binding.spProductType.adapter = null
         binding.spProspectSource.adapter = null
         binding.spStage.adapter = null
         binding.spCountry.adapter = null
@@ -1751,18 +1107,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
         return subject.ofType()
     }
 
-    override fun renderChipsList(uiModel: UiModel<List<RowData>>) {
-        toggleProgress(uiModel.inProgress)
-
-        uiModel.onFailure {
-            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
-
-            showOnFailurePopup(it) }
-
-        uiModel.onSuccess {
-            binding.spChips.setSpinnerData(chipsAdapter, it)
-        }
-    }
 
     override fun onProspectSourceChanged(): Observable<Int> {
         return binding.spProspectSource.itemSelections()
@@ -1770,39 +1114,6 @@ class IndirectLeadCreationFragment : CommonFragment(),
 
     override fun getSelectedProspectSource(): RowData {
       return  binding.spProspectSource.selectedItem as RowData
-    }
-
-    override fun renderOnProspectSourceChange(isBTL: Boolean) {
-        if(isBTL && userManager.getUser()?.EventListRequired == true){
-            binding.groupChips.isVisible = true
-            subject.onNext(CallChipsApi)
-        }else{
-            binding.groupChips.isVisible = false
-        }
-    }
-
-    override fun getAccountTypeLookupId(): Int {
-        var lookupID = 0
-        if(BuildConfig.FLAVOR == "prod"){
-            if(getBranch()!!.branchName == "AUSFBMAIN" ){
-                lookupID = 145
-            } else  if(getBranch()!!.branchName == "IIBLMAIN"){
-                lookupID = 146
-            } else  if(getBranch()!!.branchName == "BANBMAIN"){
-                lookupID = 147
-            }
-
-        }else{
-            if(getBranch()!!.branchName == "AUSFBMAIN" ){
-                lookupID = 142
-            } else  if(getBranch()!!.branchName == "IIBLMAIN"){
-                lookupID = 148
-            } else  if(getBranch()!!.branchName == "BANBMAIN"){
-                lookupID = 149
-            }
-        }
-
-        return lookupID
     }
 
     override fun onDestroyView() {

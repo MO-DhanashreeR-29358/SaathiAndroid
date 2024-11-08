@@ -5,7 +5,7 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.user.login.UserManagerImpl
-import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 class IndirectLeadCreationPresenter @Inject constructor(
     view: IndirectLeadCreationView,
-    val repository: LeadCreationRepository,
-  /*  val navigator: LeadCreationNavigator,*/
+    val repository: IndirectLeadCreationRepository,
+    /*  val navigator: LeadCreationNavigator,*/
     val bankRepository: BankRepository,
     val userManager: UserManagerImpl
 ) : BasePresenter<IndirectLeadCreationView>(view) {
@@ -24,20 +24,11 @@ class IndirectLeadCreationPresenter @Inject constructor(
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
             .switchMap {
-                repository.getInterestInRowDatas()
+                repository.getStageRowDatas()
                     .compose(applyUiModel())
             }
-            .subscribe(view::renderStatusOnStageSelection, Timber::e)
+            .subscribe(view::renderStageList, Timber::e)
             .addTo(disposable)
-
-        val bankChangeObsc = view.onBankChange().share()
-        bankChangeObsc
-            .filter(InvalidSelectionPredicate)
-            .switchMap {
-                bankRepository.getBranchFilter(view.getBank()!!.bankName)
-                    .compose(applyUiModel())
-            }.subscribe(view::renderBranchFilter).addTo(disposable)
-
 
 
 
@@ -78,32 +69,8 @@ class IndirectLeadCreationPresenter @Inject constructor(
             .subscribe { view.renderPrimaryInfoClick() }
             .addTo(disposable)
 
-        val interestedProdChange = view.onInterestedProductSelected().share()
-        interestedProdChange
-            .filter(InvalidSelectionPredicate)
-            .skip(1)
-            .map { view.getSelectedInterestedProduct() }
-            .filter { rowData -> rowData.key != INVALID_SELECTION_KEY }
-            .switchMap {
-                repository.getProductTypeRowDatas(it.key)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderProductTypeOnInterestedProductSelection, Timber::e)
-            .addTo(disposable)
 
-        interestedProdChange
-            .filter(InvalidSelectionPredicate)
-            .skip(1)
-            .map { view.getSelectedInterestedProduct() }
-            .filter { rowData -> rowData.value == "Real Estate - Physical" && !userManager.getUser()!!.isAllianceBusiness() }
-            .switchMap {
-                repository.getRealEstateStageRowDatas()
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderStageList, Timber::e)
-            .addTo(disposable)
-
-        interestedProdChange
+        view.onInterestedProductSelected()
             .filter(InvalidSelectionPredicate)
             .skip(1)
             .map { view.getSelectedInterestedProduct() }
@@ -148,39 +115,6 @@ class IndirectLeadCreationPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe(view::renderStatusOnStageSelection, Timber::e)
-            .addTo(disposable)
-
-        view.onAssignToSearchEventFired()
-            .debounce(1000, MILLISECONDS, dispatchers.main)
-            .map { it.searchText }
-            .filter { it.isNotEmpty() && it.length >= 3}
-            .switchMap {
-                repository.getEmployeeModelsFilterBy(it)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderOnAssignToSearchEventFire, Timber::e)
-            .addTo(disposable)
-
-        view.onSecondaryRMSearchEventFired()
-            .debounce(1000, MILLISECONDS, dispatchers.main)
-            .map { it.searchText }
-            .filter { it.isNotEmpty() && it.length >= 3 }
-            .switchMap {
-                repository.getEmployeeModelsFilterForSecondaryRM(it, view.getBranch()!!.branchName)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderOnSecondaryRMSearchEventFire, Timber::e)
-            .addTo(disposable)
-
-        view.onPCGSecondaryRMSearchEventFired()
-            .debounce(1000, MILLISECONDS, dispatchers.main)
-            .map { it.searchText }
-            .filter { it.isNotEmpty() && it.length >= 3 }
-            .switchMap {
-                repository.getEmployeeModelsFilterForWMSecondaryRM(it)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderOnSecondaryRMSearchEventFire, Timber::e)
             .addTo(disposable)
 
         val refereeCodeObs = view.onRefereeCodeChanged()
@@ -279,13 +213,6 @@ class IndirectLeadCreationPresenter @Inject constructor(
             .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
             .addTo(disposable)
 
-        view.onCallAccountTypeFired()
-            .switchMap {
-                repository.getAccountTypeList(view.getAccountTypeLookupId())
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderAccountTypeList, Timber::e)
-            .addTo(disposable)
 
         view.onAdditionalInfoClicked()
             .subscribe { view.renderAdditionalInfoClick() }
@@ -327,19 +254,5 @@ class IndirectLeadCreationPresenter @Inject constructor(
             .subscribe {/* navigator.navigateToLeadViewPager(it.leadId)*/ }
             .addTo(disposable)
 
-        view.onProspectSourceChanged()
-            .filter(InvalidSelectionPredicate)
-            .map { view.getSelectedProspectSource() }
-            .map { it.value == "BTL Activity" || it.value == "BTL activity QR code" }
-            .subscribe(view::renderOnProspectSourceChange, Timber::e)
-            .addTo(disposable)
-
-        view.onChipsApiCall()
-            .switchMap {
-                repository.getChipsList()
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderChipsList)
-            .addTo(disposable)
     }
 }

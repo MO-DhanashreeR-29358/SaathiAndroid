@@ -1,28 +1,17 @@
 package com.mosl.tabapp.saathiIndirect.LeadCreation
 
-import com.mosl.mobile.domain.bank.BankCodeModel
-import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.model.AddressDetailModel
 
 data class IndirectLeadCreationUserInput(
     @JvmField val selectedCategory: RowData,
-    @JvmField val selectedBranch: BranchCodeModel,
-    @JvmField val selectedBank: BankCodeModel,
     @JvmField val etCategoryName: String,
-    @JvmField val etContactPerson: String,
-    @JvmField val selectedProfession: RowData,
     @JvmField val selectedInterestIn: RowData,
-    @JvmField val selectedProductType: RowData,
     @JvmField val emailId: String,
     @JvmField val alternateEmailId: String,
     @JvmField val mobileNo: String,
-    @JvmField val mobileNoRI: String,
-    @JvmField val alternateMobileNo: String,
     @JvmField val landlineNo: String,
-    @JvmField val ekycMobileNo: String,
     @JvmField val panNo: String,
-    @JvmField val aadharNo: String,
     @JvmField val sourceName: String,
     @JvmField val referCode: String,
     @JvmField val referEmail: String,
@@ -35,12 +24,10 @@ data class IndirectLeadCreationUserInput(
     @JvmField val selectedSource: RowData,
     @JvmField val selectedProspectSource: RowData,
     @JvmField val name: String,
-    @JvmField val prospectSourceDetail: String,
     @JvmField val proReferName: String,
     @JvmField val proReferMob: String,
     @JvmField val proReferEmail: String,
     @JvmField val comment: String,
-    @JvmField val professionalId: RowData,
     @JvmField val primRM: String?,
     @JvmField val stageId: RowData,
     @JvmField val statusId: RowData,
@@ -49,18 +36,5 @@ data class IndirectLeadCreationUserInput(
     @JvmField val officeAdd: AddressDetailModel,
     @JvmField val isBank: Boolean,
     @JvmField val branchCode : String,
-    @JvmField val referaalCode : String,
-    @JvmField val BankAccountNumber : String,
-    @JvmField val dob : String,
-    @JvmField val secondaryRM : String,
-    @JvmField val isWMCodeChecked: Boolean,
-    @JvmField val nriRiId : String,
-    @JvmField val nriRiValue : String,
-    @JvmField val countryStdCode : String,
-    @JvmField val expectedMargin : String,
-    @JvmField val accountTypeId: String?,
-    @JvmField val ChipsEventId: String?,
-    @JvmField val isChipsVisible: Boolean,
-    @JvmField val isBandhanBankEmp: String?,
-    @JvmField val BandhanBankEmpCode: String
+    @JvmField val expectedMargin : String
 )
