@@ -164,7 +164,7 @@ private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduc
             } catch (_: Exception) {
                 null
             }
-        }
+        }.addIndirectSelectRowData()
     }
 
 internal fun List<LookupItem>.mapToIndirectRowDatas(): List<RowData> {

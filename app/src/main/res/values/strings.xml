@@ -254,6 +254,12 @@ Page </string>
         <item>Business</item>
     </string-array>
 
+    <string-array name="indirectLeadViewDetailTabArray">
+        <item>Details</item>
+        <item>Activities</item>
+        <item>Mapping History</item>
+    </string-array>
+
     <string-array name="leadViewDetailTabArrayWhenLeadIdZero">
         <item>Details</item>
         <item>Activities</item>
@@ -378,10 +384,12 @@ Page </string>
     <string name="txt_lable_open_account">Open Account</string>
     <string name="txt_lable_oao_form">OAO Form</string>
     <string name="txt_lable_client_code">Client Code</string>
+    <string name="txt_lable_indirect_client_code">1200 Code/Client Code</string>
     <string name="txt_lable_lead_id">Lead Id:</string>
     <string name="txt_lable_branch_code">Branch Code</string>
     <string name="txt_lable_current_stage">Current Stage</string>
     <string name="txt_lable_in_current_stage_since">In Current Stage Since</string>
+    <string name="txt_lable_lead_activation_date">Activation Date</string>
     <string name="txt_lable_copy_ekyc_link">Copy Link</string>
     <string name="txt_lable_link_msg">Copy link successfully</string>
     <string name="txt_lable_link_error_msg">Link not available</string>

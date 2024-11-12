@@ -16,4 +16,7 @@ data class BackgroundItem(
   @SerializedName("InApproval")
   @JvmField val inApproval: Boolean,
 
+  @SerializedName("BusinessUnitId")
+  @JvmField val businessUnitId: String
+
 )

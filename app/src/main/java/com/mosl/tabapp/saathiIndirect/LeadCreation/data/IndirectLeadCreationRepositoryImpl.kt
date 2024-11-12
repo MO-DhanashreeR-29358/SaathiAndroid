@@ -1,6 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.LeadCreation.data
 
 import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
+import com.mosl.app.core.data.saathiIndirect.SetAppointment.SetAppointmentMapper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -9,6 +10,7 @@ import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.*
 import com.mosl.saathi.api.model.lead.*
+import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.data.cityItemsToRowDatas
@@ -89,13 +91,18 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun getInterestInRowDatas(): Observable<List<RowData>> {
-        val interestInRequest = LookupRequest(
-            businessUnitId = requireNotNull(
+       return indirectSaathiApi.getAllLookupTemp(
+            LookupRequestTemp(businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
-        )
-        return getRowDatas(interestInRequest)
+                lookupTypeId=183,parentId="",
+                IgnoreBusinessUnit=false,lookupId=0,lookUpName = null,
+                lookupType = 183, sequence = 0, status = 0,
+                active = false,sysName = null)
+        ).map {
+           IndirectLeadCreationMapper.transformLookupData(it.response?: mutableListOf()
+           )
+        }
     }
 
     private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
@@ -105,12 +112,12 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     private fun getSourceRowDatas(): Observable<List<RowData>> {
-        val sourceRequest = SourceListRequest(
-            id = requireNotNull(
+        val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
-        return indirectSaathiApi.getSourceList(sourceRequest)
+        return indirectSaathiApi.getSourceList(stageRequest)
             .map { it.response?.mapToRowDataList()?: mutableListOf()  }
     }
 
@@ -152,7 +159,12 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
             .map { it.response?.countryItemsToRowDatas() ?: mutableListOf() }
     }
     private fun getBackgroundRowDatas(): Observable<List<RowData>> {
-        return indirectSaathiApi.getBackground()
+        val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" })
+        )
+        return indirectSaathiApi.getBackground(stageRequest)
             .map { it.response?.backgroundItemsToRowDatas() ?: mutableListOf() }
     }
 
@@ -205,17 +217,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(request)
     }
 
-    override fun updateProfile(
-        profile: RowData,
-        ucId: String
-    ): Observable<Pair<String, String>> {
-        val request = ClientProfileRequest(profile.value, false, ucId)
-        return indirectSaathiApi.saveClientProfile(request)
-            .map {
-                val approval = it.approvalMessage ?: emptyString()
-                approval to it.clientPotential
-            }
-    }
+
 
     override fun getAccountTypeList(lookupTypeId: Int): Observable<List<RowData>> {
         val request = LookupRequest(

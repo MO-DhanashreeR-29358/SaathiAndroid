@@ -33,11 +33,6 @@ interface IndirectLeadCreationRepository {
     fun getBrokingProfileRowDatas(): Observable<List<RowData>>
     fun getIpProfileRowDatas(): Observable<List<RowData>>
     fun getFinalProfileRowDatas(): Observable<List<RowData>>
-    fun updateProfile(
-        profile: RowData,
-        ucId: String
-    ): Observable<Pair<String, String>>
-
     fun getAccountTypeList(lookupTypeId : Int): Observable<List<RowData>>
 
 }

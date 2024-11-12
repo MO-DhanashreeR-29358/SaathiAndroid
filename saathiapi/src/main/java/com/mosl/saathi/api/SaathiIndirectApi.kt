@@ -17,6 +17,9 @@ import com.mosl.saathi.api.model.lead.BackgroundItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.CountryItem
+import com.mosl.saathi.api.model.lead.IndirectLeadViewItem
+import com.mosl.saathi.api.model.lead.LeadViewItem
+import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageItem
@@ -54,7 +57,7 @@ interface SaathiIndirectApi {
 
     @POST("Source/GetSourceList")
     fun getSourceList(
-        @Body request: SourceListRequest
+        @Body request: StageRequest
     ): Observable<SaathiCommonResponse<List<SourceListItem>>>
 
     @POST("Stage/GetStageList")
@@ -76,12 +79,8 @@ interface SaathiIndirectApi {
     fun getCountries(): Observable<SaathiCommonResponse<List<CountryItem>>>
 
     @POST("Lead/GetBackgroundList")
-    fun getBackground(): Observable<SaathiCommonResponse<List<BackgroundItem>>>
+    fun getBackground( @Body request: StageRequest): Observable<SaathiCommonResponse<List<BackgroundItem>>>
 
-    @POST("Client/SaveClientProfile")
-    fun saveClientProfile(
-        @Body request: ClientProfileRequest
-    ): Observable<ClientProfileResponse>
 
     @POST("StateProvince/GetStateProvinceList")
     fun getStateProvinces(
@@ -113,4 +112,8 @@ interface SaathiIndirectApi {
         @Body request: UpdateLeadRequest
     ): Observable<UpdateLeadResponse>
 
+    @POST("Lead/GetLeadView")
+    fun getLeadView(
+        @Body request: LeadViewRequest
+    ): Observable<IndirectLeadViewItem>
 }
