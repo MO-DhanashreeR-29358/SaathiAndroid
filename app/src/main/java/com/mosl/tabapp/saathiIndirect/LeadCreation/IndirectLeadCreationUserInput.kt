@@ -5,12 +5,18 @@ import com.mosl.tabapp.model.AddressDetailModel
 
 data class IndirectLeadCreationUserInput(
     @JvmField val selectedCategory: RowData,
+    @JvmField val selectedBackground: RowData,
+    @JvmField val selectedWorkExp: RowData,
     @JvmField val etCategoryName: String,
     @JvmField val selectedInterestIn: RowData,
     @JvmField val emailId: String,
+    @JvmField val dob: String,
+    @JvmField val aadharNo: String,
     @JvmField val alternateEmailId: String,
+    @JvmField val alternateMobNo: String,
     @JvmField val mobileNo: String,
     @JvmField val landlineNo: String,
+    @JvmField val ekycMobileNo: String,
     @JvmField val panNo: String,
     @JvmField val sourceName: String,
     @JvmField val referCode: String,
@@ -32,6 +38,13 @@ data class IndirectLeadCreationUserInput(
     @JvmField val residenceAdd: AddressDetailModel,
     @JvmField val officeAdd: AddressDetailModel,
     @JvmField val isBank: Boolean,
-    @JvmField val branchCode : String,
-    @JvmField val expectedMargin : String
+    @JvmField val branchCode_ : String,
+    @JvmField val expectedMargin : String,
+    @JvmField val prospectSourceDetail: String,
+    @JvmField val proReferName: String,
+    @JvmField val proReferMob: String,
+    @JvmField val proReferEmail: String,
+    @JvmField val professionalId: RowData,
+    @JvmField val selectedProductType: RowData,
+    @JvmField val secondaryRM : String
 )

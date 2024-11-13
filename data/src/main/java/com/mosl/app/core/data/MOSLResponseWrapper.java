@@ -58,7 +58,7 @@ public class MOSLResponseWrapper extends Converter.Factory {
         return false;
     }
 
-    private static boolean hasExtraDataWrapper(Annotation[] annotations) {
+    public static boolean hasExtraDataWrapper(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType() == ExtraDataWrapper.class) {
                 return true;

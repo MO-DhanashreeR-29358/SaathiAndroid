@@ -2,9 +2,12 @@ package com.mosl.saathi.api
 
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
+import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
+import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadRequest
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest
 import com.mosl.saathi.api.model.createlead.LeadSourceItem
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SearchRefereeModel
@@ -32,8 +35,10 @@ import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 
 import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
+import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.search.SearchResponse
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
 import retrofit2.http.Body
@@ -43,6 +48,11 @@ interface SaathiIndirectApi {
 
    /* @POST("Dashboard/GetFocoDashFilter")
     fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>*/
+
+    @POST("Lead/SearchCommonMetaData")
+    fun getSearchData(
+        @Body request: SearchRequest
+    ): Observable<ExtraDataCommonResponse<List<SearchResponse>>>
 
     @POST("Master/GetAllLookup")
     fun getAllLookup(
@@ -94,13 +104,9 @@ interface SaathiIndirectApi {
 
     @POST("Lead/AddUpdateLead")
     fun addUpdateLead(
-        @Body request: CreateLeadRequest
+        @Body request: IndirectCreateLeadRequest
     ): Observable<SaathiCommonResponse<CreateLeadResponse>>
 
-    @POST("Lead/TransferLeadCaughtInC2")
-    fun transferLead(
-        @Body request: TransferLeadRequest
-    ): Observable<SaathiCommonResponse<TransferLeadResponse>>
 
     @POST("Common/GetRefereeCode")
     fun getRefereeCode(

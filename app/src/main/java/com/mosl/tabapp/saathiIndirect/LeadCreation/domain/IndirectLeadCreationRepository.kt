@@ -7,7 +7,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectLeadCreationRepository {
@@ -18,10 +18,9 @@ interface IndirectLeadCreationRepository {
     fun getStageRowDatas(): Observable<List<RowData>>
     fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>>
     fun getCityRowDatas(selectedState: String): Observable<List<RowData>>
-    fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
+    fun createLead(input: IndirectLeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>>
     fun getRefereeCode(text: String): Observable<SearchReferee>
     fun getRefereeName(text: String): Observable<SearchReferee>
-    fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead>
 
     fun getProfessionRowDatas(): Observable<List<RowData>>
 

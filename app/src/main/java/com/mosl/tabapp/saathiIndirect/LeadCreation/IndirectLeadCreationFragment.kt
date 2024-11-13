@@ -47,6 +47,7 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
+import com.mosl.tabapp.leadcreation.ui.LeadCreationView
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUiEvent.*
 import com.mosl.tabapp.model.AddressDetailModel
 import com.mosl.tabapp.ui.MSFDialog
@@ -918,8 +919,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess {
-           // binding.spStage.setSpinnerData(stageAdapter, it)
-            binding.spCategory.setSpinnerData(categoryAdapter, it)
+            binding.spStage.setSpinnerData(stageAdapter, it)
         }
     }
 
@@ -991,8 +991,21 @@ class IndirectLeadCreationFragment : CommonFragment(),
             residenceAdd = resAdd,
             officeAdd = offAdd,
             isBank = userManager.getUser()?.isBank ?: false,
-            branchCode = branchCodePreference.get(),
-            expectedMargin = binding.etExpectedMargin.text.toString()
+            branchCode_ = branchCodePreference.get(),
+            expectedMargin = binding.etExpectedMargin.text.toString(),
+            dob = "",
+            alternateMobNo = "",
+            ekycMobileNo = "",
+            aadharNo = "",
+            prospectSourceDetail = "",
+            proReferEmail = "",
+            proReferName = "",
+            proReferMob = "",
+            professionalId =  LeadCreationView.SELECT_ROW_DATA,
+            selectedProductType =  LeadCreationView.SELECT_ROW_DATA,
+            secondaryRM = "",
+            selectedBackground = binding.spBackground.selectedItem as RowData,
+            selectedWorkExp = binding.spWorkExp.selectedItem as RowData
         )
     }
 

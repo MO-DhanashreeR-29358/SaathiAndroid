@@ -1,12 +1,9 @@
 package com.mosl.tabapp.saathiIndirect.LeadCreation.data
 
-import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
-import com.mosl.app.core.data.saathiIndirect.SetAppointment.SetAppointmentMapper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.SaathiIndirectApi
-import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.*
 import com.mosl.saathi.api.model.lead.*
@@ -16,10 +13,8 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.data.cityItemsToRowDatas
 import com.mosl.tabapp.leadcreation.data.countryItemsToRowDatas
 import com.mosl.tabapp.leadcreation.data.leadSourceItemsToRowDatas
-import com.mosl.tabapp.leadcreation.data.mapToClientTypeRowDatas
 import com.mosl.tabapp.leadcreation.data.mapToCreateLeadRequest
 import com.mosl.tabapp.leadcreation.data.mapToRowDataList
-import com.mosl.tabapp.leadcreation.data.mapToRowDatas
 import com.mosl.tabapp.leadcreation.data.refereeResponseToReferee
 import com.mosl.tabapp.leadcreation.data.stageItemsToRowDatas
 import com.mosl.tabapp.leadcreation.data.stateProvinceItemsToRowDatas
@@ -28,9 +23,9 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPa
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.domain.TransferLead
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUserInput
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
 import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.backgroundItemsToRowDatas
-import com.mosl.tabapp.util.emptyString
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.mapToCreateLeadRequest
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Function7
 import javax.inject.Inject
@@ -91,18 +86,25 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun getInterestInRowDatas(): Observable<List<RowData>> {
-       return indirectSaathiApi.getAllLookupTemp(
+      /* return indirectSaathiApi.getAllLookupTemp(
             LookupRequestTemp(businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-                lookupTypeId=183,parentId="",
+                lookupTypeId=23,parentId="",
                 IgnoreBusinessUnit=false,lookupId=0,lookUpName = null,
-                lookupType = 183, sequence = 0, status = 0,
+                lookupType = 23, sequence = 0, status = 0,
                 active = false,sysName = null)
         ).map {
            IndirectLeadCreationMapper.transformLookupData(it.response?: mutableListOf()
            )
-        }
+        }*/
+        val categoryRequest = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.INDIRECT_CATEGORY
+        )
+        return getRowDatas(categoryRequest)
     }
 
     private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
@@ -241,7 +243,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
             .map { it.response?.cityItemsToRowDatas()?: mutableListOf() }
     }
 
-    override fun createLead(input: LeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
+    override fun createLead(input: IndirectLeadCreationUserInput): Observable<SaathiCommonResponse<CreateLeadResponse>> {
         val createLeadRequest = input mapToCreateLeadRequest userManager.getUser()
         return indirectSaathiApi.addUpdateLead(
             request = createLeadRequest
@@ -256,26 +258,6 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         return getReferee(type = TYPE_REFEREE_NAME, text = text)
     }
 
-    override fun transferLeadForMobile(leadIdMobilePair: Pair<String, String>): Observable<TransferLead> {
-        val request = TransferLeadRequest(
-            mobile = leadIdMobilePair.second,
-            currentUser = userManager.user.employeeCode
-        )
-        return indirectSaathiApi.transferLead(request)
-            .map {
-                if (it.status) {
-                    TransferLead(
-                        leadIdForTransfer = leadIdMobilePair.first,
-                        isPaymentDone = it.response?.isPaymentDone ?: false,
-                        message = it.message
-                    )
-
-                } else {
-                    throw ServiceFailureException(it.message)
-                }
-
-            }
-    }
 
     private fun getReferee(
         type: String,

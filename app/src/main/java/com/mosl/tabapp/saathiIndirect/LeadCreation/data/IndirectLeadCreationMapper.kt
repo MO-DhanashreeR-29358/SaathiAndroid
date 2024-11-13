@@ -18,15 +18,17 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
 object IndirectLeadCreationMapper {
 
 
-internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: User?): CreateLeadRequest {
+internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: User?): IndirectCreateLeadRequest {
 
     val model = mapToLeadCreationModel(user)
     val listOfCreateLeadProduct = model.productMapping.mapToProductList()
     val leadContact = model.contact.mapToCreateLeadContact()
 
-    return CreateLeadRequest(
+    return IndirectCreateLeadRequest(
         businessUnitID = model.businessUnitID,
         leadCategoryID = model.leadCategoryID,
+        bgId = model.bgId,
+        workExpId = model.workExpId,
         branchCode = model.branchCode,
         contactPerson = model.contactPerson,
         sourceID = model.sourceID,
@@ -45,23 +47,16 @@ internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: Us
         prospectRefereMobile = model.prospectRefereMobile,
         productMapping = listOfCreateLeadProduct,
         contact = leadContact,
-        referralEmpCode = model.referralEmpCode,
-        nriRiId = model.nriRiID,
-        expectedMargin = model.expMargin,
-        leadAccountTypeId = model.leadAccountTypeId,
-        chipsEventIdName = model.chipsEventIdName,
-        IsBandhanBankEmployee = model.isBandhanBankEmployee,
-        BandhanBankEmployeeCode = model.bandhanBankEmployeeCode
+        expectedMargin = model.expMargin
     )
 }
 
-private fun LeadCreationContact.mapToCreateLeadContact(): CreateLeadContact {
+private fun IndirectLeadCreationContact.mapToCreateLeadContact(): IndirectCreateLeadContact {
     val leadAddresses = address.mapToCreateLeadAddressDetailList()
 
-    return CreateLeadContact(
+    return IndirectCreateLeadContact(
         name,
         dob,
-        bankAccountNumber,
         geteMail(),
         alternateEmail,
         alternateMobileNo,
@@ -72,7 +67,6 @@ private fun LeadCreationContact.mapToCreateLeadContact(): CreateLeadContact {
         panNo,
         aadharNo,
         isSameAsAbove,
-        isWMCodeCheck,
         leadAddresses
     )
 }
@@ -94,35 +88,49 @@ private fun List<AddressDetailModel>.mapToCreateLeadAddressDetailList(): List<Cr
     }
 }
 
-private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): LeadCreationModel {
-    return LeadCreationModel().apply {
+private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): IndirectLeadCreationModel {
+    return IndirectLeadCreationModel().apply {
         seteMail(emailId)
         setSameAsAbove(isSameAsChecked)
         setAlternateEmail(alternateEmailId)
         setMobileNo(mobileNo)
         setMobileNoRi(mobileNo)
         setLandLineNo(landlineNo)
+        setEkycMobileNo(ekycMobileNo)
         setPanNo(panNo)
+        setAadharNo(aadharNo)
+        setDob(dob)
+        setAlternateMobileNo(alternateMobNo)
         setBusinessUnitID(user?.currentBusinessProfile?.businessUnitId)
         setLeadCategoryID(selectedCategory.key)
+        setBgId(selectedBackground.key)
+        setWorkExpId (selectedWorkExp.key )
+        setBranchCode(branchCode_)
         setContactPerson(contactPerson)
         setSourceID(selectedSource.key)
         setLeadSourceID(selectedProspectSource.key)
         setLeadSourceDetailsID("0")
         setName(name)
+        setLeadSourceDetails(prospectSourceDetail)
         if (referCode.length >= 4 && isRefereeCode)
             refereeCode = referCode
         if (referName.length >= 3 && isRefereeCode)
             refereeName = referName
         refereeEmail = referEmail
         refereeMobile = referMobile
+        prospectRefereName = proReferName
+        prospectRefereEmail = proReferEmail
+        prospectRefereMobile = proReferMob
         comments = comment
         profileID = user?.currentBusinessProfile?.businessProfileId
         createdBy = user?.employeeCode
         createdThrough = "SelfCreated"
         creationDate = CRMAppUtil.getDBDate()
         setInterestedIn(selectedInterestIn.key)
+        professionid = professionalId.key
+        setProductID(selectedProductType.key)
         setPrimaryRM(primRM ?: user?.employeeCode)
+        setSecondaryRM(secondaryRM)
         setClientCode(null)
         setAssignedBy(user?.employeeCode)
         setAssignedByDate(CRMAppUtil.getDBDate())
@@ -133,13 +141,12 @@ private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): L
         addressDetailModels = arrayListOf<AddressDetailModel>()
         productDetailModels = arrayListOf<LeadCreationProductMapping>()
         setExpectedMargin(expectedMargin)
-
     }
 }
 
-private fun LeadCreationProductMapping.mapToProductList(): List<CreateLeadProduct> {
+private fun LeadCreationProductMapping.mapToProductList(): List<IndirectCreateLeadProduct> {
     return listOf(
-        CreateLeadProduct(
+        IndirectCreateLeadProduct(
             interestedIn,
             productID,
             primaryRM,

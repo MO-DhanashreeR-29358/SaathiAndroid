@@ -142,11 +142,19 @@ class AutoCompleteAdapter(
         }
       }
 
+      if(userManager.getUser()?.isIndirectUser() == true){
+        holderView.rlOpenAccount.visibility = View.GONE
+        holderView.rlOAOForm.visibility = View.GONE
+        holderView.rlDiyLink.visibility = View.GONE
+      }
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
       bundle.putString(FLG_REACTIVATION_CLIENT, resultModel.flgReactivationClient)
       holderView.rlSetAppointment.setOnClickListener {
+        if(userManager.getUser()?.isIndirectUser() == true){
+
+        }
         openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
       }
       holderView.rlCreateMeeting.setOnClickListener {

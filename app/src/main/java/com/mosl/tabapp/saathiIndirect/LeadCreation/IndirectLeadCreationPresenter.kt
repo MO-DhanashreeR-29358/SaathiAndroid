@@ -230,23 +230,16 @@ class IndirectLeadCreationPresenter @Inject constructor(
             .subscribe { /*navigator.navigateToHome()*/ }
             .addTo(disposable)
 
-      /*  view.onCreateLeadEventFired()
+        view.onCreateLeadEventFired()
             .map { view.getLeadCreationUserInput() }
             .switchMap { input ->
                 repository.createLead(input)
                     .compose(applyUiModel())
             }
             .subscribe(view::renderCreateLead, Timber::e)
-            .addTo(disposable)*/
-
-        view.onTransferLeadEventFired()
-            .map { it.leadId to view.getMobile() }
-            .switchMap {
-                repository.transferLeadForMobile(it)
-                    .compose(applyUiModel())
-            }
-            .subscribe(view::renderTransferLead)
             .addTo(disposable)
+
+
 
         view.onTransferLeadPaymentFired()
             .subscribe {/* navigator.navigateToLeadViewPager(it.leadId)*/ }
