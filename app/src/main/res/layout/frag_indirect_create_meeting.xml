@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -87,61 +88,53 @@
                 android:entries="@array/Select_Meeting_Reason" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_intrested_in"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            app:hintEnabled="false">
+             android:id="@+id/til_intrested_in"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/_5sdp"
+             app:hintEnabled="false">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_intrested_in"
-                style="@style/EditTextHint"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/label_intrested_in" />
-            <Spinner
-                android:id="@+id/spIntrestedIn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:entries="@array/Select_Meeting_Reason" />
-        </com.google.android.material.textfield.TextInputLayout>
+             <com.google.android.material.textfield.TextInputEditText
+                 android:id="@+id/et_intrested_in"
+                 style="@style/EditTextHint"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:hint="@string/label_intrested_in" />
+             <Spinner
+                 android:id="@+id/spIntrestedIn"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:entries="@array/Select_Meeting_Reason" />
+         </com.google.android.material.textfield.TextInputLayout>
+
+         <com.google.android.material.textfield.TextInputLayout
+             android:id="@+id/til_meeting_duration"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_marginTop="@dimen/_5sdp"
+             app:errorTextAppearance="@style/error_appearance"
+             app:hintEnabled="false">
+
+             <com.google.android.material.textfield.TextInputEditText
+                 android:id="@+id/et_meeting_duration"
+                 style="@style/EditTextHint"
+                 android:layout_width="match_parent"
+                 android:layout_height="@dimen/_22sdp"
+                 android:hint="@string/txt_lable_meeting_duration" />
+
+             <Spinner
+                 android:id="@+id/spMeetingDuration"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+
+         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_meeting_duration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false">
+            android:layout_marginTop="@dimen/_3sdp"
+            app:errorTextAppearance="@style/error_appearance">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_meeting_duration"
-                style="@style/EditTextHint"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_meeting_duration" />
-
-            <Spinner
-                android:id="@+id/spMeetingDuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_meeting_desp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_5sdp"
-            app:errorTextAppearance="@style/error_appearance"
-            app:hintEnabled="false">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_meeting_desp"
-                style="@style/EditTextHint"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_22sdp"
-                android:hint="@string/label_mmeting_desp" />
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etMeetingDescription"
                 android:layout_width="match_parent"
@@ -151,48 +144,61 @@
                 android:inputType="textMultiLine"
                 android:maxLength="500"
                 android:textCursorDrawable="@null" />
-
-
         </com.google.android.material.textfield.TextInputLayout>
-
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llAttendee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/textview_border"
+            app:layout_constraintTop_toBottomOf="@+id/tvAPPDateError">
 
             <TextView
                 android:id="@+id/tvAttendee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:paddingStart="@dimen/_3sdp"
                 android:paddingTop="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_10sdp"
-                android:text="@string/txt_lable_attendee"
+                android:text="@string/text_label_attendee"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry" />
 
             <TextView
                 android:id="@+id/tvAttendeeCount"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/tvAttendee"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
                 android:paddingStart="@dimen/_5sdp"
                 android:paddingTop="@dimen/_10sdp"
                 android:paddingBottom="@dimen/_10sdp"
                 android:textColor="@color/black"
-                android:textSize="@dimen/_12sdp" />
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/ibAttendee"
+                app:layout_constraintStart_toEndOf="@+id/tvAttendee"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="RtlSymmetry" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageButton
                 android:id="@+id/ibAttendee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
+                android:layout_marginEnd="@dimen/_5sdp"
                 android:background="@color/white"
-                android:src="@drawable/ic_plus" />
+                android:src="@drawable/ic_plus"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_objective"
@@ -212,6 +218,127 @@
                 android:id="@+id/spMeetingObjective"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:errorTextAppearance="@style/error_appearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etCustRemark"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
+                android:hint="@string/label_cust_remark"
+                android:inputType="textMultiLine"
+                android:maxLength="500"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_loc_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:errorTextAppearance="@style/error_appearance"
+            app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_loc_add"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/label_loc_add" />
+
+            <Spinner
+                android:id="@+id/spLocationAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:errorTextAppearance="@style/error_appearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMeetingAdd"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
+                android:hint="@string/label_meeting_add"
+                android:inputType="textMultiLine"
+                android:maxLength="500"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tvTravellingMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="@string/txt_lable_travelling_mode"
+            android:textColor="@color/text_color_personal"
+            android:textSize="@dimen/_11sdp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_travelling_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_5sdp"
+            app:errorTextAppearance="@style/error_appearance"
+            app:hintEnabled="false">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_travelling_mode"
+                style="@style/EditTextHint"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_22sdp"
+                android:hint="@string/txt_lable_travelling_mode" />
+
+            <Spinner
+                android:id="@+id/spTravellingMode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/Select" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:errorTextAppearance="@style/error_appearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etAddPinCode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:digits="0123456789"
+                android:hint="@string/label_pin_code"
+                android:inputType="number"
+                android:maxLength="10"
+                android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            app:errorTextAppearance="@style/error_appearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etMeetingAmount"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:digits="0123456789"
+                android:hint="@string/label_amount"
+                android:inputType="number"
+                android:maxLength="5"
+                android:textCursorDrawable="@null" />
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

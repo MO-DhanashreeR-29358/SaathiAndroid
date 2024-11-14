@@ -1,16 +1,73 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
+import android.util.Log
+import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.data.onFailure
+import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
+import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import io.reactivex.rxjava3.kotlin.addTo
 import javax.inject.Inject
 
 class IndirectCreateMeetingPresenter @Inject constructor(
     view:IndirectCreateMeetingView,
     val navigator: ScreenNavigatorImpl,
-    val userManager: UserManager
+    val userManager: UserManager,
+    val indirectrepo: IndirectSetAppointmentRepository,
+    val indirectrepoCreateMeeting:IndirectCreateMeetingRepository
 ) :BasePresenter<IndirectCreateMeetingView>(view){
     override fun start() {
 
+        onFetchCalled().switchMap {
+            indirectrepo.getActivitytype().compose(applyUiModel())
+        }.subscribe {
+            view.fnRenderActivityType(it)
+        }.addTo(disposable)
+
+
+        val activityTypeSelectedObs = view.onActivityTypeSelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedActivityType() }
+            .share()
+
+        activityTypeSelectedObs.switchMap {
+            indirectrepo.getMeetingReason(it.lookUpID).compose(applyUiModel())
+        }.subscribe {
+            view.fnRenderMeetingReason(it)
+        }.addTo(disposable)
+
+        view.onMeetingDurationCall()
+            .switchMap {
+                indirectrepoCreateMeeting.getMeetingReason().compose(applyUiModel())
+            }.subscribe {
+              view.fnRenderMeetingDuration(it)
+            }.addTo(disposable)
+
+        view.onMeetingObjectiveCall().
+                switchMap {
+                    indirectrepoCreateMeeting.getMeetingObjective().compose(applyUiModel())
+                }.subscribe {
+                    view.fnRenderMeetingObjective(it)
+        }.addTo(disposable)
+
+        view.onLocationAddressCall().switchMap {
+            indirectrepoCreateMeeting.getLocationAddress().compose(applyUiModel())
+        }.subscribe {
+            view.fnRenderLocationAddress(it)
+        }.addTo(disposable)
+
+        view.onTravellingModeCall().switchMap {
+            indirectrepoCreateMeeting.getTravellingMode().compose(applyUiModel())
+        }.subscribe { view.fnRenderTravellingMode(it) }.addTo(disposable)
+
+        view.onDatePicker()
+            .subscribe {
+                view.renderDatePicker()
+            }
+            .addTo(disposable)
     }
 }

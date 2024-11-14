@@ -4,7 +4,6 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIONABLES
 import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
 import com.mosl.app.core.data.leadviewdetail.createmeeting.BACLIENTMEETING
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CATEGORY
-import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper
 import com.mosl.app.core.data.leadviewdetail.createmeeting.FEEDBACK
 import com.mosl.app.core.data.leadviewdetail.createmeeting.INTERESTEDIN
 import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGADDRESSID
@@ -20,7 +19,6 @@ import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointme
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.lead.LookupRequest
-import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
@@ -30,21 +28,22 @@ class IndirectSetAppointmentRepositoryImpl @Inject constructor(
 ):IndirectSetAppointmentRepository {
     override fun getActivitytype(): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
-            LookupRequest(businessUnitId="0",lookupTypeId=13,parentId="0",IgnoreBusinessUnit=false)
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=13,parentId="0",IgnoreBusinessUnit=false)
         ).map {
             SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(ACTIVITYTYPE))
         }
     }
 
     override fun getMeetingReason(intParnetId: Int): Observable<List<LookUp>> {
-        return  saathiIndrectApi.getAllLookupTemp(
-            LookupRequestTemp(businessUnitId="0",lookupTypeId=14,parentId=intParnetId.toString(),
-                IgnoreBusinessUnit=false,lookupId=0,lookUpName = null, lookupType = 14, sequence = 0, status = 0,
-                active = false,sysName = null)
+        return  saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=14,parentId=intParnetId.toString(),
+                IgnoreBusinessUnit=false)
         ).map {
-            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(ACTIVITYTYPE))
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(MEETINGREASON))
         }
     }
+
+
 
     fun getType(type: Int): String {
         return when (type) {

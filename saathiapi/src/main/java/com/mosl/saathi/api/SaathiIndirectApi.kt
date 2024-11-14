@@ -1,9 +1,8 @@
 package com.mosl.saathi.api
 
-import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
-import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
+import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.SetAppointmentPostReq
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.ResponseBody
@@ -20,9 +19,12 @@ interface SaathiIndirectApi {
         @Body request: LookupRequest
     ): Observable<LookUpResponse>
 
-    @POST("Master/GetAllLookup")
-    fun getAllLookupTemp(
-        @Body request: LookupRequestTemp
-    ): Observable<LookUpResponse>
+    @POST("UserApi/AutoCompleteAttende")
+    fun getAttende()
+
+
+    @POST("Meeting/AddUpdateMeeting")
+    fun fnSetAppointment(@Body request: SetAppointmentPostReq) :Observable<ResponseBody>
+
 
 }

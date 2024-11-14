@@ -767,4 +767,9 @@ Page </string>
     <string name="label_repeate_end_on">Repetition End On</string>
     <string name="label_intrested_in">Interested In*</string>
     <string name="label_mmeting_desp">Meeting Description*</string>
+    <string name="label_cust_remark">Customer Remark</string>
+    <string name="label_loc_add">Location Address*</string>
+    <string name="label_pin_code">PIN Code*</string>
+    <string name="label_meeting_add">Meeting Address*</string>
+    <string name="label_amount">Amount</string>
 </resources>

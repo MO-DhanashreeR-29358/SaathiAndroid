@@ -8,4 +8,8 @@ interface IndirectSetAppointmentRepository {
     fun getActivitytype(): Observable<List<LookUp>>
 
     fun getMeetingReason(intParnetId:Int):Observable<List<LookUp>>
+
+
+
+
 }
