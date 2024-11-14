@@ -83,51 +83,56 @@ class IndirectLeadCreationValidator(val user: User) : Validator<IndirectLeadCrea
                 R.string.error_message_category
             }
 
+            input.selectedBackground.value == SELECT -> {
+                identifier = 14
+                R.string.error_message_background
+            }
+
             input.sourceName == MOSLConstants.WEBSITE_CLIENT_REFERRAL &&
                     input.referCode.length < 4 -> {
-                identifier = 19
+                identifier = 15
                 R.string.error_message_referee_code
             }
 
             input.referName.isNotBlank() &&
                     input.referName.invalidAlphaNumbric() -> {
-                identifier = 20
+                identifier = 16
                 R.string.error_message_alphabets
             }
 
             input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
                     input.referName.isBlank() -> {
-                identifier = 21
+                identifier = 17
                 R.string.error_message_prospect_referee
             }
 
             input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
                     input.referMobile.isBlank() -> {
-                identifier = 22
+                identifier = 18
                 R.string.error_message_enter_mobile
             }
 
             input.referMobile.isNotBlank() &&
                     input.referMobile.invalidMobileNo() -> {
-                identifier = 23
+                identifier = 19
                 R.string.error_message_invalid_mobile
             }
 
             input.sourceName == MOSLConstants.WEBSITE_PROSPECT_REFERRAL &&
                     input.referEmail.isBlank() -> {
-                identifier = 24
+                identifier = 20
                 R.string.error_message_enter_email
             }
 
             input.pinCode.isNotBlank() &&
                     input.pinCode.length < 6 -> {
-                identifier = 25
+                identifier = 21
                 R.string.error_message_pincode
             }
 
             input.officePinCode.isNotBlank() &&
                     input.officePinCode.length < 6 -> {
-                identifier = 26
+                identifier = 22
                 R.string.error_message_pincode
             }
 

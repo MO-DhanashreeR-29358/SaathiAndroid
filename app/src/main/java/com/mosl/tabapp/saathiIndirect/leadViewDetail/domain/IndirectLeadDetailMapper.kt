@@ -89,7 +89,10 @@ fun IndirectLeadViewItem.leadViewItemToLeadDetail(): IndirectLeadDetail {
       bandhanBankEmpCode = BandhanBankEmployeeCode?: emptyString(),
       auBankName = auBankName?: emptyString(),
       auBankBranchCode = auBankBranchCode ?: emptyString(),
-      isStageCompleted = IsStageCompleted
+      bgId = bgId?: emptyString(),
+      workExpId = workExpId?: emptyString(),
+      existingBrokerID = existingBrokerID?: emptyString(),
+      branchCode = branchcode?: emptyString()
   )
 }
 

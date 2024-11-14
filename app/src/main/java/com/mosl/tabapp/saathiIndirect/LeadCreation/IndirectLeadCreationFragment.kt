@@ -654,6 +654,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
     }
 
     private fun showErrorWithFocus(error: ValidationError) {
+        removeErrorMessage()
         error.error?.let {
             when (error.identifier as Int) {
                 1 -> {
@@ -683,38 +684,26 @@ class IndirectLeadCreationFragment : CommonFragment(),
                 13 -> {
                     binding.tvCategoryError.setText(getString(it))
                 }
-                19 -> {
+                14 -> {
+                    binding.tvBackgroundError.setText(getString(it))
+                }
+                15 -> {
                     binding.tvReferCodeError.setText(getString(it))
                 }
-                20, 21 -> {
+                16, 17 -> {
                     binding.tvReferNameError.setText(getString(it))
                 }
-                22, 23 -> {
+                18, 19 -> {
                     binding.tvReferMobError.setText(getString(it))
                 }
-                24 -> {
+                20 -> {
                     binding.tvReferEmailError.setText(getString(it))
                 }
-                25 -> {
+                21 -> {
                     binding.tvPinError.setText(getString(it))
                 }
-                26 -> {
+                22 -> {
                     binding.tvOffPinError.setText(getString(it))
-                }
-                30 -> {
-
-                }
-                31 -> {
-                    binding.tvPANError.setText(getString(it))
-                }
-                34 ->{
-                    binding.tvMobileError.setText(getString(it))
-                }
-                35 ->{
-
-                }
-                36 ->{
-
                 }
                 else -> {
                 }
@@ -725,13 +714,15 @@ class IndirectLeadCreationFragment : CommonFragment(),
 
     private fun removeErrorMessage() {
         binding.apply {
-            tvCategoryError.setText("")
             tvNameError.setText("")
             tvEmailError.setText("")
             tvAlternateEmailError.setText("")
             tvMobileError.setText("")
             tvLandLineError.setText("")
             tvPANError.setText("")
+            binding.tvExpectedMarginError.setText("")
+            tvCategoryError.setText("")
+            tvBackgroundError.setText("")
             tvReferCodeError.setText("")
             tvReferNameError.setText("")
             tvReferEmailError.setText("")

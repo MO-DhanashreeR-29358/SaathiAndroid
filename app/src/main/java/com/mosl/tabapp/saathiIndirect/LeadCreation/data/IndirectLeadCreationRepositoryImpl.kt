@@ -37,17 +37,17 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
 
     override fun getLeadCreationPageData(): Observable<IndirectLeadCreationPageData> {
         return Observable.zip(
-            getCategoryRowDatas(),
             getInterestInRowDatas(),
+            getCategoryRowDatas(),
             getSourceRowDatas(),
             getStageRowDatas(),
             getCountryRowDatas(),
             getBackgroundRowDatas(),
             getWorkExpRowDatas(),
-            Function7 { listOfCategory, listOfInterestIn, listOfSource, listOfStage, listOfCountry, listOfBackground, listOfWorkExp ->
+            Function7 { listOfInterestIn,listOfCategory,  listOfSource, listOfStage, listOfCountry, listOfBackground, listOfWorkExp ->
                 IndirectLeadCreationPageData(
-                    categoryRowDatas = listOfCategory,
                     interestInRowDatas = listOfInterestIn,
+                    categoryRowDatas = listOfCategory,
                     sourceRowDatas = listOfSource,
                     stageRowDatas = listOfStage,
                     countryRowDatas = listOfCountry,
@@ -86,23 +86,11 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun getInterestInRowDatas(): Observable<List<RowData>> {
-      /* return indirectSaathiApi.getAllLookupTemp(
-            LookupRequestTemp(businessUnitId = requireNotNull(
-                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                { "businessUnitId in UserManager is not be null" }),
-                lookupTypeId=23,parentId="",
-                IgnoreBusinessUnit=false,lookupId=0,lookUpName = null,
-                lookupType = 23, sequence = 0, status = 0,
-                active = false,sysName = null)
-        ).map {
-           IndirectLeadCreationMapper.transformLookupData(it.response?: mutableListOf()
-           )
-        }*/
         val categoryRequest = LookupRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.INDIRECT_CATEGORY
+            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
         )
         return getRowDatas(categoryRequest)
     }

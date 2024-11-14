@@ -25,7 +25,7 @@ class IndirectLeadDetailRepositoryImpl @Inject constructor(
         val request = LeadViewRequest(leadId)
         return saathiApi.getLeadView(request)
             .map {
-                it.leadViewItemToLeadDetail()
+                it.response?.leadViewItemToLeadDetail()!!
             }
     }
 

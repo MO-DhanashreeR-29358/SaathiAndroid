@@ -27,7 +27,7 @@ data class IndirectLeadViewItem(
     @JvmField @SerializedName("BankName") val bankName: String?,
     @JvmField @SerializedName("RefereeEmail") val refereeEmail: String?,
     @JvmField @SerializedName("OAOUserid") val oAOUserid: Int,
-    @JvmField @SerializedName("QueryId") val queryId: Int,
+    @JvmField @SerializedName("QueryId") val queryId:  String?,
     @JvmField @SerializedName("ProspectRefereEmail") val prospectRefereEmail: String?,
     @JvmField @SerializedName("ChannelID") val channelID: String?,
     @JvmField @SerializedName("IsProductSpecialist") val isProductSpecialist: String?,
@@ -59,7 +59,7 @@ data class IndirectLeadViewItem(
         "leadFieldSectionModels"
     ) val leadFieldSectionModels: List<LeadFieldSection>?,
     @JvmField @SerializedName("ProfileID") val profileID: Int,
-    @JvmField @SerializedName("DIY") val diyCode: Int,
+    @JvmField @SerializedName("DIY") val diyCode: String?,
     @JvmField @SerializedName("DIYUrl") val diyLink: String?,
     @JvmField @SerializedName("DedupeModel") val dedupeModel: DedupeModel,
     @JvmField @SerializedName("LoginId") val loginId: String?,
@@ -71,14 +71,14 @@ data class IndirectLeadViewItem(
     @JvmField @SerializedName("LeadSourceID") val leadSourceID: Int,
     @JvmField @SerializedName("ContactID") val contactID: Int,
     @JvmField @SerializedName("LeadSourceDetailsID") val leadSourceDetailsID: Int,
-    @JvmField @SerializedName("AMCCampaignID") val aMCCampaignID: Int,
+    @JvmField @SerializedName("AMCCampaignID") val aMCCampaignID: String?,
     @JvmField @SerializedName("IsAllowed") val isAllowed: Boolean,
     @JvmField @SerializedName("IsPotentialPMSProductValue") val isPotentialPMSProductValue: String?,
     @JvmField @SerializedName("InApproval") val inApproval: Boolean,
     @JvmField @SerializedName("IsReCycleTransfer") val isReCycleTransfer: String?,
     @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: String?,
     @JvmField @SerializedName("LeadID") val leadID: Int,
-    @JvmField @SerializedName("CreateMeeting") val createMeetingId: Int,
+    @JvmField @SerializedName("CreateMeeting") val createMeetingId: String?,
     @JvmField @SerializedName("IsPotentialPMSProduct") val isPotentialPMSProduct: String?,
     @JvmField @SerializedName("leadProfileParameters") val leadProfileParameters: String?,
     @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: Int,
@@ -96,7 +96,7 @@ data class IndirectLeadViewItem(
     @JvmField @SerializedName("ClientType") val clientType: String?,
     @JvmField @SerializedName("ProductType") val productType: String?,
     @JvmField @SerializedName("ExpectedMargin") val expectedMargin: String?,
-    @JvmField @SerializedName("OAO") val isShowOAO: Int?,
+    @JvmField @SerializedName("OAO") val isShowOAO:  String?,
     @JvmField @SerializedName("AccountTypeName") val AccountTypeName: String?,
     @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?,
     @JvmField @SerializedName("ChipEventId") val ChipEventId: String?,
@@ -104,7 +104,9 @@ data class IndirectLeadViewItem(
     @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String?,
     @JvmField @SerializedName("AUBankName") val auBankName: String?,
     @JvmField @SerializedName("BankBranchCode") val auBankBranchCode: String?,
-    @JvmField @SerializedName("IsStageCompleted") val IsStageCompleted: Int
+    @JvmField @SerializedName("BG_ID") val bgId: String?,
+    @JvmField @SerializedName("WorkExp_ID") val workExpId: String?,
+    @JvmField @SerializedName("ExistingBrokerID") val existingBrokerID: String?
 )
 
 data class IndirectLeadFieldSection(

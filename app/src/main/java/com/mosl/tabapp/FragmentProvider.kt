@@ -88,6 +88,8 @@ import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragmen
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainModule
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
@@ -105,6 +107,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector
     fun provideLeadViewMainFactory(): LeadViewMainFragment
+
+    @ContributesAndroidInjector(modules = [IndirectLeadDetailMainModule::class])
+    fun provideIndirectLeadViewMainFactory(): IndirectLeadDetailMainFragment
 
     @ContributesAndroidInjector
     fun provideLeadViewDetailFactory(): LeadViewDetailFragment

@@ -12,8 +12,11 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.error.getErrorOnFailure
@@ -57,6 +60,14 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
     private var ucId: String = "0"
     private var leadId: String = "0"
     private var initialPage = 0
+    private var leadOwner: String? = null
+    private var sourceName: String? = null
+    private var mobile: String? = null
+    private var branchName: String? = null
+    private var prospectSourceName: String? = null
+    private var clientType: String = ""
+    private var interestedIn: String? = null
+    private var email: String? = null
 
     override fun getLayout(): Int {
         return R.layout.frag_indirect_leadview_main
@@ -115,6 +126,36 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
     }
 
     override fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetail>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
 
+        uiModel.onSuccess {
+            binding.apply {
+                leadOwner = it.leadOwner
+                sourceName = it.sourceName
+                prospectSourceName = it.prospectSource
+                clientType = it.clientType
+                it.leadProductMapping
+                    ?.forEach {
+                        interestedIn = it.interestedIn.toString()
+                        if (it.isDefault) {
+                            includeClient.detail.apply {
+                                tvClientCode.text = it.clientCode
+                                tvCurrentStage.text = it.stageName
+                            }
+                        }
+                    }
+                ucId = stringOrZero(it.contact?.uCID)
+                email = it.contact?.emailId
+                mobile = it.contact?.mobile
+                branchName = it.branchCode
+                includeClient.detail.tvName.text = it.contact?.name
+                hideAppTitle()
+                includeClient.detail.tvLeadId.text = it.leadId
+                includeClient.detail.tvBranchCode.text = it.branchCode
+            }
+        }
     }
 }

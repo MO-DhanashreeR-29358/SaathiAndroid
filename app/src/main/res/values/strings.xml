@@ -548,6 +548,7 @@ Page </string>
     <string name="text_msg_product_update">Products Updated Successfully</string>
 
     <string name="error_message_category">Select Category</string>
+    <string name="error_message_background">Select Background</string>
     <string name="error_message_bank">Select Bank</string>
     <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>

@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -43,7 +45,7 @@
                 android:layout_gravity="bottom"
                 app:tabBackground="@color/white_subheading"
                 app:tabIndicatorColor="@color/orange"
-                app:tabMode="scrollable"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/orange"
                 app:tabTextColor="@android:color/black" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>

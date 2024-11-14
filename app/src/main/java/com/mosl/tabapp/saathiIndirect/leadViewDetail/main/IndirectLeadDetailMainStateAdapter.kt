@@ -9,6 +9,7 @@ import com.mosl.tabapp.leadViewDetail.activity.LeadViewActivitiesFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.leaddetail.LeadDetailFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
 
 class IndirectLeadDetailMainStateAdapter(
   activity: AppCompatActivity,
@@ -21,10 +22,10 @@ class IndirectLeadDetailMainStateAdapter(
   override fun createFragment(position: Int): Fragment {
 
     return when (position) {
-      0 -> LeadDetailFragment.newInstance(0, MOSLConstants.DETAILS, leadId, ucId)
-      1 -> LeadViewActivitiesFragment.newInstance(1, MOSLConstants.ACTIVITIES, leadId, ucId)
+      0 -> IndirectLeadDetailFragment.newInstance(0, MOSLConstants.DETAILS, leadId, ucId)
+      1 -> IndirectLeadDetailFragment.newInstance(1, MOSLConstants.ACTIVITIES, leadId, ucId)
       else -> {
-            MappingHistoryFragment.newInstance(2, MOSLConstants.MAPPING_HISTORY, leadId, ucId)
+        IndirectLeadDetailFragment.newInstance(2, MOSLConstants.MAPPING_HISTORY, leadId, ucId)
       }
     }
 

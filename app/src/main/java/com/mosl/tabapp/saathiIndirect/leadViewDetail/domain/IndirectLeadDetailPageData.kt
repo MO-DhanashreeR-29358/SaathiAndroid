@@ -1,5 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.leadViewDetail.domain
 
+import com.mosl.mobile.domain.leadviewdetail.main.LeadProduct
+import com.mosl.mobile.domain.leadviewdetail.main.PersonalDetail
 import com.mosl.saathi.api.model.lead.Contact
 import com.mosl.saathi.api.model.lead.ContactAddressItem
 import com.mosl.saathi.api.model.lead.CrossSellingProduct
@@ -60,7 +62,10 @@ data class IndirectLeadDetail(
     @JvmField val bandhanBankEmpCode: String,
     @JvmField val auBankName: String,
     @JvmField val auBankBranchCode: String,
-    @JvmField val isStageCompleted: Int
+    @JvmField val bgId: String,
+    @JvmField val workExpId: String,
+    @JvmField val existingBrokerID: String,
+    @JvmField val branchCode: String
 )
 
 data class LeadProductMap(
@@ -68,7 +73,12 @@ data class LeadProductMap(
     @JvmField val statusId: String,
     @JvmField val clientCode: String
 )
-
+data class PersonalDetail(
+    @JvmField val name: String,
+    @JvmField val ucId: String,
+    @JvmField val mobile: String,
+    @JvmField val email: String
+)
 data class Contact(
     @JvmField val isSameAsAbove: Boolean,
     @JvmField val ucId: Int,
@@ -150,6 +160,7 @@ data class ClientDetail(
     @JvmField val account: String,
     @JvmField val profile: String,
     @JvmField val defaultBank: String
+
 )
 
 data class Product(
@@ -159,7 +170,13 @@ data class Product(
     @JvmField val clientCode: String,
     @JvmField val advisorCode: String
 )
-
+data class LeadProduct(
+    @JvmField val clientCode: String,
+    @JvmField val stageName: String,
+    @JvmField val isDefault: Boolean,
+    @JvmField val pendingDays: String,
+    @JvmField val interestedIn: String
+)
 data class ClientPortfolio(
     @JvmField val netWorth: String,
     @JvmField val dayChangeAmount: String,

@@ -36,6 +36,8 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 
 import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.lead.request.SearchRequest
+import com.mosl.saathi.api.model.notification.NotificationRequest
+import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import com.mosl.saathi.api.model.search.SearchResponse
@@ -53,6 +55,11 @@ interface SaathiIndirectApi {
     fun getSearchData(
         @Body request: SearchRequest
     ): Observable<ExtraDataCommonResponse<List<SearchResponse>>>
+
+    @POST("NotificationMessage/GetNotificationMessageMobile")
+    @ExtraDataWrapper
+    fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+
 
     @POST("Master/GetAllLookup")
     fun getAllLookup(
@@ -121,5 +128,5 @@ interface SaathiIndirectApi {
     @POST("Lead/GetLeadView")
     fun getLeadView(
         @Body request: LeadViewRequest
-    ): Observable<IndirectLeadViewItem>
+    ): Observable<SaathiCommonResponse<IndirectLeadViewItem>>
 }
