@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.leadViewDetail.domain
+package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data
 
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.lead.*

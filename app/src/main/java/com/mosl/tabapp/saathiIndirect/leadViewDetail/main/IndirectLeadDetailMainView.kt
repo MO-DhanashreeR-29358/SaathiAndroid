@@ -2,14 +2,11 @@ package com.mosl.tabapp.saathiIndirect.leadViewDetail.main
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.mobile.domain.leadviewdetail.main.ClientDetailAndImage
-import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetail
-import io.reactivex.rxjava3.core.Observable
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 
 interface IndirectLeadDetailMainView : BaseView {
   fun getLeadId(): String
-  fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetail>)
+  fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>)
 
   companion object {
     const val ARG_LEAD_ID = "arg_lead_id"

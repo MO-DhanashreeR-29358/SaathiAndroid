@@ -1,53 +1,19 @@
 package com.mosl.tabapp.saathiIndirect.leadViewDetail.main
 
-import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Base64
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.jakewharton.rxbinding4.view.clicks
-import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction.Fetch
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.leadviewdetail.main.ClientDetailAndImage
-import com.mosl.mobile.domain.leadviewdetail.main.LeadDetail
 import com.mosl.tabapp.R
-import com.mosl.tabapp.R.string
-import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.core.EkycModule
-import com.mosl.tabapp.databinding.DialogLeadviewBinding
 import com.mosl.tabapp.databinding.FragIndirectLeadviewMainBinding
-import com.mosl.tabapp.databinding.FragLeadviewMainBinding
-import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailFragmentStateAdapter
 import com.mosl.tabapp.model.NotificationData
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetail
-import com.mosl.tabapp.ui.MSFDialog
-import com.mosl.tabapp.ui.MSFDialog.Action
-import com.mosl.tabapp.ui.MSFDialog.Action.OK
-import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.DiyLinkClickListner
-import com.mosl.tabapp.util.initiateCall
-import com.mosl.tabapp.util.initiateMessage
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.ofType
-import timber.log.Timber
-import java.util.Locale
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import javax.inject.Inject
 
 
@@ -61,7 +27,6 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
     private var leadId: String = "0"
     private var initialPage = 0
     private var leadOwner: String? = null
-    private var sourceName: String? = null
     private var mobile: String? = null
     private var branchName: String? = null
     private var prospectSourceName: String? = null
@@ -125,7 +90,7 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
         return  leadId
     }
 
-    override fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetail>) {
+    override fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             showOnFailurePopup(it)
@@ -134,11 +99,10 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
         uiModel.onSuccess {
             binding.apply {
                 leadOwner = it.leadOwner
-                sourceName = it.sourceName
                 prospectSourceName = it.prospectSource
                 clientType = it.clientType
-                it.leadProductMapping
-                    ?.forEach {
+                it.leadProducts
+                    .forEach {
                         interestedIn = it.interestedIn.toString()
                         if (it.isDefault) {
                             includeClient.detail.apply {
@@ -147,13 +111,13 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
                             }
                         }
                     }
-                ucId = stringOrZero(it.contact?.uCID)
-                email = it.contact?.emailId
-                mobile = it.contact?.mobile
+                ucId = stringOrZero(it.personalDetail.ucId)
+                email = it.personalDetail.email
+                mobile = it.personalDetail.mobile
                 branchName = it.branchCode
-                includeClient.detail.tvName.text = it.contact?.name
+                includeClient.detail.tvName.text = it.personalDetail.name
                 hideAppTitle()
-                includeClient.detail.tvLeadId.text = it.leadId
+                includeClient.detail.tvLeadId.text = it.id
                 includeClient.detail.tvBranchCode.text = it.branchCode
             }
         }

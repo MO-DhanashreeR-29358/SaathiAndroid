@@ -1,12 +1,9 @@
-package com.mosl.tabapp.saathiIndirect.leadViewDetail.domain
+package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data
 
-import com.mosl.mobile.domain.leadviewdetail.main.LeadProduct
-import com.mosl.mobile.domain.leadviewdetail.main.PersonalDetail
 import com.mosl.saathi.api.model.lead.Contact
 import com.mosl.saathi.api.model.lead.ContactAddressItem
 import com.mosl.saathi.api.model.lead.CrossSellingProduct
 import com.mosl.saathi.api.model.lead.LeadProductMappingItem
-import com.mosl.tabapp.common.RowData
 
 data class IndirectLeadDetail(
     @JvmField val leadOwner: String,
