@@ -88,6 +88,8 @@ import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragmen
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestMeetingModule
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
@@ -252,5 +254,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector (modules = [IndirectCreateMeetingModule::class])
     fun provideIndirectCreateMeetingFragmentFactory():IndirectCreateMeetingFragment
+
+    @ContributesAndroidInjector(modules=[IndirectProspestMeetingModule::class])
+    fun provideIndirectProspectMeetingFragmentFactory():IndirectProspestmeetingFragment
 
 }

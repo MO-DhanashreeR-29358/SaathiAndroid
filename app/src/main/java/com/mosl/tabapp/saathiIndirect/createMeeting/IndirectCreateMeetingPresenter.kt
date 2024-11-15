@@ -6,11 +6,14 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class IndirectCreateMeetingPresenter @Inject constructor(
@@ -40,6 +43,10 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             view.fnRenderMeetingReason(it)
         }.addTo(disposable)
 
+        view.onIntrestedInCall().switchMap {
+            indirectrepoCreateMeeting.getInteresedIn().compose(applyUiModel())
+        }.subscribe { view.fnRenderIntrestedIn(it) }.addTo(disposable)
+
         view.onMeetingDurationCall()
             .switchMap {
                 indirectrepoCreateMeeting.getMeetingReason().compose(applyUiModel())
@@ -68,6 +75,41 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             .subscribe {
                 view.renderDatePicker()
             }
+            .addTo(disposable)
+
+        view.onAttendeeClicked()
+            .subscribe {
+                view.showAttendeDialog()
+            }
+            .addTo(disposable)
+
+
+        val searchObs = view.getAttendeeSearchText()
+            .filter { it.text.isNotEmpty() }
+            .debounce(500, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+            .map { it.text }
+            .distinctUntilChanged()
+            .share()
+
+        searchObs?.map(MapStringIsBlank)
+            ?.subscribe {
+                view.toggleSearchState(it, true)
+            }
+            ?.addTo(disposable)
+
+        searchObs?.filter { it.length > 2 }
+            ?.switchMap {
+                indirectrepoCreateMeeting.getAttendeeData(it)
+                    .compose(applyUiModel())
+            }
+            ?.subscribe { view.renderSearchResult(it, true) }
+            ?.addTo(disposable)
+
+        view.onAttendeeItemClickEventFired()
+            .map {
+                it.position
+            }
+            .subscribe(view::renderOnAttendeeItemClick)
             .addTo(disposable)
     }
 }

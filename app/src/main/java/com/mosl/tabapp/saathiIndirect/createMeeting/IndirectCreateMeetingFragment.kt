@@ -5,14 +5,22 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -20,16 +28,20 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.createmeeting.AddedAttendee
+import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectCreateMeetingBinding
 import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
-import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
+import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -55,6 +67,14 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private lateinit var mainFromDate: String
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), MoslConstant.dd_MM_yyyy)
     private val uiSubject = PublishSubject.create<IndirectCreateMeetingUiEvent>()
+
+    private lateinit var attendeeDialog: Dialog
+    private lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
+    private lateinit var attendeeAdapter: AttendeeAdapter
+    private var pbLoadingIndicator: ProgressBar? = null
+    private val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
+    private var addedAttendeeCount = 0
+
     override fun getLayout() = R.layout.frag_indirect_create_meeting
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,6 +130,22 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             meetingAdapter.setSpinnerData(binding.spMeetingReason, it)
+            uiSubject.onNext(IndirectCreateMeetingUiEvent.OnIntrestedInCall)
+        }
+        uiModel.onFailure {
+            Timber.d(it)
+            showOnFailurePopup(it)
+        }
+    }
+
+    override fun onIntrestedInCall(): Observable<IndirectCreateMeetingUiEvent.OnIntrestedInCall> {
+        return  uiSubject.ofType()
+    }
+
+    override fun fnRenderIntrestedIn(uiModel: UiModel<List<LookUp>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onSuccess {
+           Log.d("intrestedIn Response",Gson().toJson(it))
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -297,5 +333,142 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         return if (input.toString().length == 1) {
             "0$input"
         } else input.toString() + ""
+    }
+
+    override fun onAttendeeClicked(): Observable<Unit> {
+        return binding.ibAttendee.clicks()
+    }
+
+    override fun onAttendeeAddedClicked(): Observable<Unit> {
+        return binding.tvAttendeeCount.clicks()
+    }
+
+    override fun showAttendeDialog() {
+        attendeeDialog = Dialog(requireContext())
+        attendeeDialog.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        etSearchAttendeeText = attendeeDialog.findViewById(R.id.etSearchAttendee)
+        etSearchAttendeeText.imeOptions = EditorInfo.IME_ACTION_DONE
+        etSearchAttendeeText.threshold = 3
+        attendeeAdapter = AttendeeAdapter(requireContext())
+        etSearchAttendeeText.setAdapter(attendeeAdapter)
+        pbLoadingIndicator = attendeeDialog.findViewById(R.id.pbLoadingIndicator)
+        etSearchAttendeeText.setLoadingIndicator(pbLoadingIndicator)
+        etSearchAttendeeText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                uiSubject.onNext(IndirectCreateMeetingUiEvent.SearchTextChange(s?.toString() ?: ""))
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+        })
+        etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
+            uiSubject.onNext(IndirectCreateMeetingUiEvent.AttendeeItemClick(position))
+        }
+        attendeeDialog.show()
+    }
+
+    override fun getAttendeeSearchText(): Observable<IndirectCreateMeetingUiEvent.SearchTextChange> {
+        return  uiSubject.ofType()
+    }
+
+    override fun onAttendeeItemClickEventFired(): Observable<IndirectCreateMeetingUiEvent.AttendeeItemClick> {
+        return  uiSubject.ofType()
+    }
+    override fun toggleSearchState(
+        queryEmpty: Boolean,
+        isAttendee: Boolean
+    ) {
+        if (queryEmpty) {
+            if (isAttendee) {
+                attendeeAdapter.setResultList(emptyList())
+            } else {
+            }
+        }
+    }
+
+    override fun renderSearchResult(
+        uiModel: UiModel<List<Attendee>>,
+        isAttendee: Boolean
+    ) {
+        toggleSearchProgress(uiModel.inProgress, isAttendee)
+
+        uiModel.onFailure {
+            if (isAttendee) {
+                attendeeAdapter.setErrorData(it)
+            } else {
+
+            }
+        }
+
+        uiModel.onSuccess {
+            if (isAttendee) {
+                attendeeAdapter.setResultList(it)
+                if (it.isNotEmpty()) {
+                    etSearchAttendeeText.showDropDown()
+                }
+            } else {
+
+            }
+        }
+    }
+
+    override fun renderOnAttendeeItemClick(position: Int) {
+        val attendee = attendeeAdapter.getItem(position)
+        if (!CreateMeetingConstants.hasAttendeeAdded(addedAttendeeList, attendee.empCode)) {
+            addedAttendeeList.add(AddedAttendee(attendee.empName, attendee.empCode, "R"))
+            addedAttendeeCount++
+            setCount(addedAttendeeCount, binding.tvAttendeeCount)
+            attendeeDialog.dismiss()
+        } else {
+            attendeeDialog.dismiss()
+            Toast.makeText(requireContext(), "Attendee Already Added", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private fun toggleSearchProgress(
+        show: Boolean,
+        isAttendee: Boolean
+    ) {
+        if (show) {
+            if (isAttendee) {
+                pbLoadingIndicator?.visibility = View.VISIBLE
+            } else {
+            }
+        } else {
+            if (isAttendee) {
+                pbLoadingIndicator?.visibility = View.GONE
+            } else {
+            }
+        }
+    }
+
+    private fun setCount(
+        count: Int,
+        textView: TextView
+    ) {
+        if (count <= 0) {
+            textView.text = ""
+        } else {
+            textView.text = String.format("(%s)", count.toString())
+        }
     }
 }

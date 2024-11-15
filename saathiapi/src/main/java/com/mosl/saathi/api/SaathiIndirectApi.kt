@@ -1,6 +1,9 @@
 package com.mosl.saathi.api
 
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.LookupRequestNew
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.SetAppointmentPostReq
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
@@ -13,18 +16,15 @@ interface SaathiIndirectApi {
 
     @POST("Dashboard/GetFocoDashFilter")
     fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>
-
     @POST("Master/GetAllLookup")
     fun getAllLookup(
         @Body request: LookupRequest
     ): Observable<LookUpResponse>
-
-    @POST("UserApi/AutoCompleteAttende")
-    fun getAttende()
-
-
     @POST("Meeting/AddUpdateMeeting")
     fun fnSetAppointment(@Body request: SetAppointmentPostReq) :Observable<ResponseBody>
+    @POST("UserApi/AutoCompleteAttendee")
+    fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<List<AutoCompleteAttendeeItem>>
+
 
 
 }
