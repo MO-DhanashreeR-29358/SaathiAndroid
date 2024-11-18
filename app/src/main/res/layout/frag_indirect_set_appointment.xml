@@ -16,7 +16,7 @@
             <TextView
                 android:id="@+id/tvNewAppointment"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:background="@drawable/new_appointment_edittext_border"
                 android:gravity="center"
                 android:padding="@dimen/_5sdp"
@@ -43,7 +43,7 @@
         <Spinner
             android:id="@+id/spActivityType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/rlDate"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginStart="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_5sdp"
@@ -128,7 +128,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llAttendee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
@@ -195,7 +195,7 @@
         <Spinner
             android:id="@+id/spmeetingReason"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintStart_toStartOf="parent"
@@ -204,7 +204,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llspAttendee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
@@ -283,6 +283,8 @@
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                     android:hint="Enter Meeting Description*"
                     android:inputType="textMultiLine"
+                    android:textAlignment="viewStart"
+                    android:gravity="start"
                     android:maxLength="500"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>

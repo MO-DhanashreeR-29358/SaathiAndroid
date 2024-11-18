@@ -83,7 +83,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
             URLEncoder.encode(searchText, "utf-8")
         )
         return saathiIndrectApi.getAutoCompleteAttendee(request)
-            .map { CreateMeetingMapper.transformAttendeeData(it) }
+            .map { CreateMeetingMapper.transformAttendeeData(it.response ?: mutableListOf()) }
     }
 
     fun getType(type: Int): String {

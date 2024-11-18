@@ -13,7 +13,7 @@
         <RelativeLayout
             android:id="@+id/rlDate"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:background="@drawable/list_bacground">
 
@@ -66,7 +66,7 @@
             <Spinner
                 android:id="@+id/spActivityType"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/_40sdp"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_meeting_reason"
@@ -84,7 +84,7 @@
             <Spinner
                 android:id="@+id/spMeetingReason"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40sdp"
                 android:entries="@array/Select_Meeting_Reason" />
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -103,7 +103,7 @@
              <Spinner
                  android:id="@+id/spIntrestedIn"
                  android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
+                 android:layout_height="@dimen/_40sdp"
                  android:entries="@array/Select_Meeting_Reason" />
          </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,7 +125,7 @@
              <Spinner
                  android:id="@+id/spMeetingDuration"
                  android:layout_width="match_parent"
-                 android:layout_height="wrap_content" />
+                 android:layout_height="@dimen/_40sdp" />
 
          </com.google.android.material.textfield.TextInputLayout>
 
@@ -148,7 +148,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llAttendee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_40sdp"
             android:layout_marginStart="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_marginEnd="@dimen/_5sdp"
@@ -217,7 +217,7 @@
             <Spinner
                 android:id="@+id/spMeetingObjective"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="@dimen/_40sdp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -229,7 +229,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etCustRemark"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
                 android:hint="@string/label_cust_remark"
                 android:inputType="textMultiLine"
@@ -255,7 +255,7 @@
             <Spinner
                 android:id="@+id/spLocationAdd"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="@dimen/_40sdp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -267,7 +267,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etMeetingAdd"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
                 android:hint="@string/label_meeting_add"
                 android:inputType="textMultiLine"
@@ -301,7 +301,7 @@
             <Spinner
                 android:id="@+id/spTravellingMode"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40sdp"
                 android:entries="@array/Select" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -316,7 +316,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAddPinCode"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:digits="0123456789"
                 android:hint="@string/label_pin_code"
                 android:inputType="number"
@@ -333,7 +333,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etMeetingAmount"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:digits="0123456789"
                 android:hint="@string/label_amount"
                 android:inputType="number"

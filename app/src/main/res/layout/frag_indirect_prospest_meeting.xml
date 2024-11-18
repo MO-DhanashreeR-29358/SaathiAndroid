@@ -123,7 +123,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btn_yellow_background"
                 android:fontFamily="@font/lato_reg"
-                android:text="@string/lead_detail_button_update"
+                android:text="@string/str_search"
                 android:textColor="@color/colorBlack"
                 android:textFontWeight="500"
                 android:textSize="@dimen/_14ssp" />

@@ -5,14 +5,22 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -20,20 +28,26 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.createmeeting.AddedAttendee
+import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
 import com.mosl.tabapp.R
+import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectDashboardBinding
 import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Calendar
@@ -49,6 +63,21 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     private val uiSubject = PublishSubject.create<IndirectSetAppointmentUiEvent>()
     private lateinit var mainFromDate: String
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), MoslConstant.dd_MM_yyyy)
+
+    private lateinit var attendeeDialog: Dialog
+    private lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
+    private lateinit var attendeeAdapter: AttendeeAdapter
+    private var pbLoadingIndicator: ProgressBar? = null
+    private val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
+    private var addedAttendeeCount = 0
+
+
+    private lateinit var splAttendeeDialog: Dialog
+    private lateinit var etSearchSplAttendeeText: DelayAutoCompleteTextView
+    private lateinit var splAttendeeAdapter: AttendeeAdapter
+    private var pbLoadingIndicator1: ProgressBar? = null
+    private val addedSplAttendeeList: ArrayList<AddedAttendee> = ArrayList()
+    private var addedSplAttendeeCount = 0
     override fun getLayout() = R.layout.frag_indirect_set_appointment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -223,5 +252,230 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         } else input.toString() + ""
     }
 
+    override fun onAttendeeClicked(): Observable<Unit> {
+        return binding.ibAttendee.clicks()
+    }
+
+    override fun onAttendeeAddedClicked(): Observable<Unit> {
+        return binding.tvAttendeeCount.clicks()
+    }
+
+    override fun showAttendeDialog() {
+        attendeeDialog = Dialog(requireContext())
+        attendeeDialog.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        etSearchAttendeeText = attendeeDialog.findViewById(R.id.etSearchAttendee)
+        etSearchAttendeeText.imeOptions = EditorInfo.IME_ACTION_DONE
+        etSearchAttendeeText.threshold = 3
+        attendeeAdapter = AttendeeAdapter(requireContext())
+        etSearchAttendeeText.setAdapter(attendeeAdapter)
+        pbLoadingIndicator = attendeeDialog.findViewById(R.id.pbLoadingIndicator)
+        etSearchAttendeeText.setLoadingIndicator(pbLoadingIndicator)
+        etSearchAttendeeText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                uiSubject.onNext(IndirectSetAppointmentUiEvent.SearchTextChange(s?.toString() ?: ""))
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+        })
+        etSearchAttendeeText.setOnItemClickListener { _, _, position, _ ->
+            uiSubject.onNext(IndirectSetAppointmentUiEvent.AttendeeItemClick(position))
+        }
+        attendeeDialog.show()
+    }
+
+    override fun getAttendeeSearchText(): Observable<IndirectSetAppointmentUiEvent.SearchTextChange> {
+        return  uiSubject.ofType()
+    }
+
+    override fun onAttendeeItemClickEventFired(): Observable<IndirectSetAppointmentUiEvent.AttendeeItemClick> {
+        return  uiSubject.ofType()
+    }
+    override fun toggleSearchState(
+        queryEmpty: Boolean,
+        isAttendee: Boolean
+    ) {
+        if (queryEmpty) {
+            if (isAttendee) {
+                attendeeAdapter.setResultList(emptyList())
+            } else {
+                splAttendeeAdapter.setResultList(emptyList())
+            }
+        }
+    }
+
+    override fun renderSearchResult(
+        uiModel: UiModel<List<Attendee>>,
+        isAttendee: Boolean
+    ) {
+        toggleSearchProgress(uiModel.inProgress, isAttendee)
+
+        uiModel.onFailure {
+            Log.d("Searchfail attend",Gson().toJson(it))
+            if (isAttendee) {
+                attendeeAdapter.setErrorData(it)
+            } else {
+                splAttendeeAdapter.setErrorData(it)
+            }
+        }
+
+        uiModel.onSuccess {
+            Log.d("Search attend",Gson().toJson(it))
+            if (isAttendee) {
+
+                attendeeAdapter.setResultList(it)
+                if (it.isNotEmpty()) {
+
+                    etSearchAttendeeText.showDropDown()
+                }
+            } else {
+                splAttendeeAdapter.setResultList(it)
+                if (it.isNotEmpty()) {
+                    etSearchSplAttendeeText.showDropDown()
+                }
+            }
+        }
+    }
+
+    override fun renderOnAttendeeItemClick(position: Int) {
+        val attendee = attendeeAdapter.getItem(position)
+        if (!CreateMeetingConstants.hasAttendeeAdded(addedAttendeeList, attendee.empCode)) {
+            addedAttendeeList.add(AddedAttendee(attendee.empName, attendee.empCode, "R"))
+            addedAttendeeCount++
+            setCount(addedAttendeeCount, binding.tvAttendeeCount)
+            attendeeDialog.dismiss()
+        } else {
+            attendeeDialog.dismiss()
+            Toast.makeText(requireContext(), "Attendee Already Added", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private fun toggleSearchProgress(
+        show: Boolean,
+        isAttendee: Boolean
+    ) {
+        if (show) {
+            if (isAttendee) {
+                pbLoadingIndicator?.visibility = View.VISIBLE
+            } else {
+                pbLoadingIndicator1?.visibility = View.VISIBLE
+            }
+        } else {
+            if (isAttendee) {
+                pbLoadingIndicator?.visibility = View.GONE
+            } else {
+                pbLoadingIndicator1?.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setCount(
+        count: Int,
+        textView: TextView
+    ) {
+        if (count <= 0) {
+            textView.text = ""
+        } else {
+            textView.text = String.format("(%s)", count.toString())
+        }
+    }
+
+    override fun onSplAttendeeClicked(): Observable<Unit> {
+        return binding.ibspAttendee.clicks()
+    }
+
+    override fun onSplAttendeeAddedClicked(): Observable<Unit> {
+        return binding.tvspAttendeeCount.clicks()
+    }
+
+    override fun showSplAttendeDialog() {
+        splAttendeeDialog = Dialog(requireContext())
+        splAttendeeDialog.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        etSearchSplAttendeeText = splAttendeeDialog.findViewById(R.id.etSearchAttendee)
+        etSearchSplAttendeeText.imeOptions = EditorInfo.IME_ACTION_DONE
+        etSearchSplAttendeeText.threshold = 3
+        splAttendeeAdapter = AttendeeAdapter(requireContext())
+        etSearchSplAttendeeText.setAdapter(splAttendeeAdapter)
+        pbLoadingIndicator1 = splAttendeeDialog.findViewById(R.id.pbLoadingIndicator)
+        etSearchSplAttendeeText.setLoadingIndicator(pbLoadingIndicator)
+        etSearchSplAttendeeText.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(
+                s: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                uiSubject.onNext(
+                    IndirectSetAppointmentUiEvent.SearchTextChangeSplAttendee(
+                        s?.toString() ?: ""
+                    )
+                )
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+        })
+        etSearchSplAttendeeText.setOnItemClickListener { _, _, position, _ ->
+            uiSubject.onNext(IndirectSetAppointmentUiEvent.SplAttendeeItemClick(position))
+        }
+        splAttendeeDialog.show()
+    }
+
+    override fun showSplAttendeAddedDialog() {
+       // showAddedDialog(false)
+    }
+
+    override fun onSplAttendeeItemClickEventFired(): Observable<IndirectSetAppointmentUiEvent.SplAttendeeItemClick> =
+        uiSubject.ofType()
+
+    override fun getSplAttendeeSearchText(): Observable<IndirectSetAppointmentUiEvent.SearchTextChangeSplAttendee> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderOnSplAttendeeItemClick(position: Int) {
+        val attendee = splAttendeeAdapter.getItem(position)
+        if (!CreateMeetingConstants.hasAttendeeAdded(addedSplAttendeeList, attendee.empCode)) {
+            addedSplAttendeeList.add(AddedAttendee(attendee.empName, attendee.empCode, "S"))
+            addedSplAttendeeCount++
+            setCount(addedSplAttendeeCount, binding.tvspAttendeeCount)
+            splAttendeeDialog.dismiss()
+        } else {
+            splAttendeeDialog.dismiss()
+            Toast.makeText(requireContext(), "Special Attendee Already Added", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 
 }
