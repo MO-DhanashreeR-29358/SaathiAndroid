@@ -1,5 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data
 
+import com.google.gson.annotations.SerializedName
 import com.mosl.saathi.api.model.lead.Contact
 import com.mosl.saathi.api.model.lead.ContactAddressItem
 import com.mosl.saathi.api.model.lead.CrossSellingProduct
@@ -7,6 +8,7 @@ import com.mosl.saathi.api.model.lead.LeadProductMappingItem
 
 data class IndirectLeadDetail(
     @JvmField val leadOwner: String,
+    @JvmField val leadName: String,
     @JvmField val contactPerson: String,
     @JvmField val sourceId: String,
     @JvmField val leadProspectSourceId: String,
@@ -14,9 +16,6 @@ data class IndirectLeadDetail(
     @JvmField val refereeName: String,
     @JvmField val isReferee: Boolean,
     @JvmField val profile: String,
-    @JvmField val brokingProfile: String,
-    @JvmField val ipProfile: String,
-    @JvmField val finalProfile: String,
     @JvmField val profession: String,
     @JvmField val createdDate: String,
     @JvmField val isPotentialPMSProduct: String = "",
@@ -41,28 +40,21 @@ data class IndirectLeadDetail(
     @JvmField val prospectReferName: String,
     @JvmField val leadProductMapping: List<LeadProductMappingItem>?,
     @JvmField val leadSourceId: Int, //Himanshu
-    @JvmField val contact: Contact?, //Himanshu
-    @JvmField val sectorId: String,
-    @JvmField val sectorName: String,
-    @JvmField val designationId: String,
-    @JvmField val designationName: String,
-    @JvmField val networthId: String,
-    @JvmField val networthName: String,
-    @JvmField val referralEmpCode: String,
-    @JvmField val referralEmpName: String,
+    @JvmField val contact: Contact?,
     @JvmField val clientType: String,
-    @JvmField val productType: String,
     @JvmField val expectedMargin: String,
-    @JvmField val accountTypeName: String,
-    @JvmField val ChipEventId: String,
-    @JvmField val isBandhanBankEmp: String,
-    @JvmField val bandhanBankEmpCode: String,
-    @JvmField val auBankName: String,
-    @JvmField val auBankBranchCode: String,
     @JvmField val bgId: String,
     @JvmField val workExpId: String,
     @JvmField val existingBrokerID: String,
-    @JvmField val branchCode: String
+    @JvmField val branchCode: String,
+    @JvmField val businessName: String,
+    @JvmField val associatedBroker : String,
+    @JvmField val lastMeetingDate: String,
+    @JvmField val RFMName : String,
+    @JvmField val TMName : String,
+    @JvmField val currentBrokeragePerMonth: String,
+    @JvmField val BAType: String,
+    @JvmField val leadCategoryID: Int
 )
 
 data class LeadProductMap(

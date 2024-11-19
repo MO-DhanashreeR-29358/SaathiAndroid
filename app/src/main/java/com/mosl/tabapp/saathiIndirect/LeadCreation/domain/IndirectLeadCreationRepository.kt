@@ -29,9 +29,9 @@ interface IndirectLeadCreationRepository {
     fun getInterestInRowDatas(): Observable<List<RowData>>
     fun getCountryRowDatas(): Observable<List<RowData>>
     fun getProfileRowDatas(): Observable<List<RowData>>
-    fun getBrokingProfileRowDatas(): Observable<List<RowData>>
-    fun getIpProfileRowDatas(): Observable<List<RowData>>
-    fun getFinalProfileRowDatas(): Observable<List<RowData>>
-    fun getAccountTypeList(lookupTypeId : Int): Observable<List<RowData>>
+    fun getBackgroundRowDatas(): Observable<List<RowData>>
 
+    fun getAssociateBrokerRowDatas(): Observable<List<RowData>>
+    fun getWorkExpRowDatas(): Observable<List<RowData>>
+    fun getCategoryRowDatas(): Observable<List<RowData>>
 }

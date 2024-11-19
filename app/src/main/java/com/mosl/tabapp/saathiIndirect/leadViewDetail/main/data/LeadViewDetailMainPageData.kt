@@ -10,10 +10,7 @@ data class IndirectLeadDetailMain(
   @JvmField val prospectSource: String,
   @JvmField val prospectSourceDetail: String,
   @JvmField val oaoUserId: Int,
-  @JvmField val diyCode: Int,
-  @JvmField val diyLink: String,
   @JvmField val clientType: String,
-  @JvmField val isShowOAO: Int,
   @JvmField val leadProducts: List<IndirectLeadProduct>
 )
 

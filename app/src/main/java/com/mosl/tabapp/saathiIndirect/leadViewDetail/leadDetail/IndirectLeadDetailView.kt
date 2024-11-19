@@ -11,6 +11,8 @@ import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadDetailPageData
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data.IndirectLeadDetail
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectLeadDetailView : BaseView {
@@ -22,8 +24,6 @@ interface IndirectLeadDetailView : BaseView {
     fun onSameAsCheckboxClicked(): Observable<Unit>
     fun getUpdateLeadUSerInput(): UpdateLeadRequest
     fun onSubmitButtonClicked(): Observable<Unit>
-    fun onProfileLayoutClicked(): Observable<Unit>
-    fun renderProfileClick()
     fun onAddProductClicked(): Observable<Unit>
     fun isLeadEditable(): Boolean
     fun openAddProductDialog()
@@ -32,8 +32,7 @@ interface IndirectLeadDetailView : BaseView {
     fun renderPrimaryAddCheckBoxClicked()
     fun renderOffPrimaryAddCheckBoxClicked()
     fun renderSameAsAboveClicked()
-    fun onClientDetailClicked(): Observable<Unit>
-    fun onClientPortfolioDetailClicked(): Observable<Unit>
+
     fun onLeadDetailClicked(): Observable<Unit>
     fun onDocumentClicked(): Observable<Unit>
     fun onDOBClicked(): Observable<Unit>
@@ -55,31 +54,10 @@ interface IndirectLeadDetailView : BaseView {
     fun onUpdateLeadEventFired(): Observable<UpdateLeadDetail>
     fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>)
 
-    fun onClientDetailSectionClicked(): Observable<Unit>
-    fun onClientPortfolioSectionClicked(): Observable<Unit>
     fun onLeadDetailSectionClicked(): Observable<Unit>
 
-    fun toggleClientDetailSection()
     fun toggleLeadDetailSection()
-    fun toggleClientPortfolioSection()
 
-    fun onPortfolioSnapshotClicked(): Observable<Unit>
-    fun togglePortfolio()
-    fun onProfitLossSnapshotClicked(): Observable<Unit>
-    fun toggleProfitLoss()
-    fun onAvailableLimitSnapshotClicked(): Observable<Unit>
-    fun toggleAvailableLimit()
-
-    fun onBrokingPortfolioClicked(): Observable<Unit>
-    fun toggleBrokingPortfolio()
-    fun onAssetPortfolioClicked(): Observable<Unit>
-    fun toggleAssetPortfolio()
-    fun onLedgerClicked(): Observable<Unit>
-    fun toggleLedger()
-    fun onBrokingProductClicked(): Observable<Unit>
-    fun toggleBrokingProduct()
-    fun onAssetProductClicked(): Observable<Unit>
-    fun toggleAssetProduct()
 
     fun onRefereeCodeChanged(): Observable<String>
     fun isRefereeCodeFocused(): Boolean
@@ -91,8 +69,8 @@ interface IndirectLeadDetailView : BaseView {
     fun resetRefereeOnNameChange()
     fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
-    fun render(uiModel: UiModel<LeadDetailPageData>)
-    fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
+    fun render(uiModel: UiModel<IndirectLeadDetailPageData>)
+    fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetail>)
 
     fun onUpdateProfileEventFired(): Observable<UpdateProfile>
     fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent>
@@ -122,19 +100,10 @@ interface IndirectLeadDetailView : BaseView {
     fun onOfficeStateSelected(): Observable<Int>
     fun getSelectedOfficeState(): RowData
     fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
-    fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>)
-    fun renderClientDetail(uiModel: UiModel<ClientDetail>)
-
     fun interestedProductSelected(): Observable<SelectInterestedProductEvent>
-    fun renderStage(uiModel: UiModel<List<RowData>>)
-    fun renderStatus(uiModel: UiModel<List<RowData>>)
-    fun selectedStage(): Observable<SelectStageEvent>
-    fun getAccountTypeId() : String?
-    fun getChipsEventId() : String?
 
     fun onCallAccountTypeFired(): Observable<CallAccountType>
-    fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
-    fun getAccountTypeLookupId() : Int
+
 
     companion object {
         const val INVALID_SELECTION_KEY = "-1"

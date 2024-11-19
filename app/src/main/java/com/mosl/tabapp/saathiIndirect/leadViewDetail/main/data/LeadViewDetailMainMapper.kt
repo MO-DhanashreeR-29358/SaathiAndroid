@@ -32,11 +32,8 @@ fun IndirectLeadViewItem.leadViewItemToLeadDetailMain(): IndirectLeadDetailMain 
         prospectSource = prospectSource ?: emptyString,
         prospectSourceDetail = leadSourceDetailsID.toString(),
         oaoUserId = oAOUserid,
-        diyCode = diyCode ?:0,
-        diyLink = diyLink ?: "",
         leadProducts = leadProducts,
-        clientType = clientType?: "",
-        isShowOAO = isShowOAO?: 0
+        clientType = clientType?: ""
     )
 }
 

@@ -15,9 +15,9 @@ data class IndirectLeadCreationPageData(
 
 data class IndirectLeadDetailPageData(
     @JvmField val categoryRowDatas: List<RowData>,
-    @JvmField val interestInRowDatas: List<RowData>,
-    @JvmField val sourceRowDatas: List<RowData>,
-    @JvmField val stageRowDatas: List<RowData>,
+    @JvmField val backgroundRowDatas: List<RowData>,
+    @JvmField val workExpRowDatas: List<RowData>,
+    @JvmField val associateBroker: List<RowData>,
     @JvmField val countryRowDatas: List<RowData>
 )
 
