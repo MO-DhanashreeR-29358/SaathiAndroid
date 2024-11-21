@@ -16,6 +16,7 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
+import com.mosl.saathi.api.model.lead.AssociatedBrokerItem
 import com.mosl.saathi.api.model.lead.BackgroundItem
 import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
@@ -56,9 +57,9 @@ interface SaathiIndirectApi {
         @Body request: SearchRequest
     ): Observable<ExtraDataCommonResponse<List<SearchResponse>>>
 
-    @POST("NotificationMessage/GetNotificationMessageMobile")
+    @POST("NotificationMessage/GetNotificationMessage")
     @ExtraDataWrapper
-    fun getNotifications(@Body request: NotificationRequest): Observable<List<NotificationResponse>>
+    fun getNotifications(@Body request: NotificationRequest): Observable<ExtraDataCommonResponse<List<NotificationResponse>>>
 
 
     @POST("Master/GetAllLookup")
@@ -97,6 +98,9 @@ interface SaathiIndirectApi {
 
     @POST("Lead/GetBackgroundList")
     fun getBackground( @Body request: StageRequest): Observable<SaathiCommonResponse<List<BackgroundItem>>>
+
+    @POST("Lead/GetExistingBrokerList")
+    fun getExistingBrokerList( @Body request: StageRequest): Observable<SaathiCommonResponse<List<AssociatedBrokerItem>>>
 
 
     @POST("StateProvince/GetStateProvinceList")

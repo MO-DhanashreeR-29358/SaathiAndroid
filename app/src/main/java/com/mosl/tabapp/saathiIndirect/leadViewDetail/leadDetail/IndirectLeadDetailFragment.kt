@@ -60,6 +60,7 @@ import com.mosl.tabapp.model.leaddetail.LeadDetailModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadDetailPageData
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data.IndirectLeadDetail
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadViewDetailUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
 import com.mosl.tabapp.ui.MSFDialog.Action.OK
@@ -88,7 +89,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
     private var status: String? = null
 
     private val subject = PublishSubject.create<IndirectLeadDetailUiEvent>()
-    private val mainSubject = LeadViewDetailUiEvent.getSubject()
+    private val mainSubject = IndirectLeadViewDetailUiEvent.getSubject()
 
     private var categoryData = emptyList<RowData>()
     private var backgroundData = emptyList<RowData>()
@@ -1137,7 +1138,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             showOnFailurePopup(it) }
         uiModel.onSuccess{
             Log.d("AAA MeetingID", it.createMeeting.toString())
-            mainSubject.onNext(LeadViewDetailUiEvent.RetryClick)
+            mainSubject.onNext(IndirectLeadViewDetailUiEvent.RetryClick)
             leadUpdatedDialog()
         }
     }
@@ -1761,16 +1762,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             }
         }
     }
-
-    override fun interestedProductSelected(): Observable<SelectInterestedProductEvent> =
-        subject.ofType()
-
-
-    override fun onCallAccountTypeFired(): Observable<CallAccountType> {
-        return subject.ofType()
-    }
-
-
 
     override fun onDestroyView() {
         presenter.stop()

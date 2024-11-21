@@ -3,6 +3,7 @@ package com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data
 import com.mosl.mobile.domain.leadviewdetail.main.ClientDetail
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.lead.IndirectLeadViewItem
+import com.mosl.tabapp.util.emptyString
 
 fun IndirectLeadViewItem.leadViewItemToLeadDetailMain(): IndirectLeadDetailMain {
     val emptyString = ""
@@ -33,7 +34,8 @@ fun IndirectLeadViewItem.leadViewItemToLeadDetailMain(): IndirectLeadDetailMain 
         prospectSourceDetail = leadSourceDetailsID.toString(),
         oaoUserId = oAOUserid,
         leadProducts = leadProducts,
-        clientType = clientType?: ""
+        clientType = clientType?: "",
+        leadName = leadName ?: emptyString()
     )
 }
 

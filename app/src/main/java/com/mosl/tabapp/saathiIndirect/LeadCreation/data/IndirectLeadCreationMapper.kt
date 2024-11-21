@@ -27,6 +27,7 @@ internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: Us
     return IndirectCreateLeadRequest(
         businessUnitID = model.businessUnitID,
         leadCategoryID = model.leadCategoryID,
+        leadName = model.leadName,
         bgId = model.bgId,
         workExpId = model.workExpId,
         branchCode = model.branchCode,
@@ -110,6 +111,7 @@ private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): I
         setSourceID(selectedSource.key)
         setLeadSourceID(selectedProspectSource.key)
         setLeadSourceDetailsID("0")
+        leadName = name
         setName(name)
         setLeadSourceDetails(prospectSourceDetail)
         if (referCode.length >= 4 && isRefereeCode)
@@ -167,6 +169,20 @@ private fun LeadCreationProductMapping.mapToProductList(): List<IndirectCreateLe
                     index,
                     backgroundItem.backgroundId ?: "",
                     backgroundItem.backgroundName
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }.addIndirectSelectRowData()
+    }
+
+    internal fun List<AssociatedBrokerItem>.borkerItemsToRowDatas(): List<RowData> {
+        return mapIndexedNotNull { index: Int, item: AssociatedBrokerItem ->
+            try {
+                RowData(
+                    index,
+                    item.brokerId ?: "",
+                    item.brokerName
                 )
             } catch (_: Exception) {
                 null

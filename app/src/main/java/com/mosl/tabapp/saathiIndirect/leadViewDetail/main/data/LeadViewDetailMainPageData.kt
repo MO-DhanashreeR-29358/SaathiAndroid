@@ -6,6 +6,7 @@ data class IndirectLeadDetailMain(
   @JvmField val personalDetail: IndirectPersonalDetail,
   @JvmField val createMeetingId: Int,
   @JvmField val leadOwner: String,
+  @JvmField val leadName: String,
   @JvmField val source: String,
   @JvmField val prospectSource: String,
   @JvmField val prospectSourceDetail: String,

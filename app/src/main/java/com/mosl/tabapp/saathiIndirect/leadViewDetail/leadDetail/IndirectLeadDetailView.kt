@@ -100,9 +100,7 @@ interface IndirectLeadDetailView : BaseView {
     fun onOfficeStateSelected(): Observable<Int>
     fun getSelectedOfficeState(): RowData
     fun renderOfficeCityOnOfficeStateSelection(uiModel: UiModel<List<RowData>>)
-    fun interestedProductSelected(): Observable<SelectInterestedProductEvent>
 
-    fun onCallAccountTypeFired(): Observable<CallAccountType>
 
 
     companion object {

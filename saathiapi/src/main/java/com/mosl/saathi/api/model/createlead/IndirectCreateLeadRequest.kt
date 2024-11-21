@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class IndirectCreateLeadRequest(
     @SerializedName("BusinessUnitID") val businessUnitID: String = "",
     @SerializedName("LeadCategoryID") val leadCategoryID: String = "",
+    @SerializedName("LeadName") val leadName: String = "",
     @SerializedName("BG_ID") val bgId: String = "",
     @SerializedName("WorkExp_ID") val workExpId: String = "",
     @SerializedName("Branchcode") val branchCode: String = "",

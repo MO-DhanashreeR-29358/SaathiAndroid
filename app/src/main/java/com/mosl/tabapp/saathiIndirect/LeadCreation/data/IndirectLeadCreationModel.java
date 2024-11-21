@@ -19,6 +19,9 @@ public class IndirectLeadCreationModel implements Serializable {
     @SerializedName("LeadCategoryID")
     private String leadCategoryID;
 
+    @SerializedName("LeadName")
+    private String leadName;
+
     @SerializedName("BG_ID")
     private String BgId;
 
@@ -53,6 +56,14 @@ public class IndirectLeadCreationModel implements Serializable {
     @SerializedName("ExpectedMargin") private String expectedMargin = "";
 
     private transient String profileID;
+
+    public String getLeadName() {
+        return leadName;
+    }
+
+    public void setLeadName(String leadName) {
+        this.leadName = leadName;
+    }
 
     public String getBgId() {
         return BgId;

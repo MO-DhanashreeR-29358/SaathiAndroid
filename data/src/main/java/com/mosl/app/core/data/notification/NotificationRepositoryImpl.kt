@@ -21,7 +21,7 @@ class NotificationRepositoryImpl @Inject constructor(
 
     if(userManager.getUser()?.isIndirectUser() == true){
       return saathiIndirectApi.getNotifications(request).map {
-        it.responseTransform()
+        it.data?.responseTransform()?: mutableListOf()
       }
     }else{
       return saathiApi.getNotifications(request).map {

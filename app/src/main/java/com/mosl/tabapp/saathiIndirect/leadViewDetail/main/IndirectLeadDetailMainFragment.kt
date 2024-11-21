@@ -139,7 +139,7 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
                 email = it.personalDetail.email
                 mobile = it.personalDetail.mobile
                 branchName = it.branchCode
-                includeClient.detail.tvName.text = it.personalDetail.name
+                includeClient.detail.tvName.text = it.leadName
                 hideAppTitle()
                 includeClient.detail.tvLeadId.text = it.id
                 includeClient.detail.tvBranchCode.text = it.branchCode

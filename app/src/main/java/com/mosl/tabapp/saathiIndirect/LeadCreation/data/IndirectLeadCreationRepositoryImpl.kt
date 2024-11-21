@@ -26,6 +26,7 @@ import com.mosl.tabapp.leadcreation.data.statusItemsToRowDatas
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
 import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.backgroundItemsToRowDatas
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.borkerItemsToRowDatas
 import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationMapper.mapToCreateLeadRequest
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPageData
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
@@ -167,8 +168,8 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
-        return indirectSaathiApi.getBackground(stageRequest)
-            .map { it.response?.backgroundItemsToRowDatas() ?: mutableListOf() }
+        return indirectSaathiApi.getExistingBrokerList(stageRequest)
+            .map { it.response?.borkerItemsToRowDatas() ?: mutableListOf() }
     }
 
     override fun getWorkExpRowDatas(): Observable<List<RowData>> {
