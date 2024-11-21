@@ -15,6 +15,8 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.OUTSTATIONMEETING
 import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
+import com.mosl.app.core.data.setappointment.responseSetAppointmentTransform
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
@@ -23,6 +25,9 @@ import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import org.json.JSONObject
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -64,6 +69,17 @@ class IndirectSetAppointmentRepositoryImpl @Inject constructor(
         )
         return saathiIndrectApi.getAutoCompleteSplAttendee(request)
             .map { CreateMeetingMapper.transformAttendeeData(it.response?: mutableListOf()) }
+    }
+
+
+    override fun setAppointmentMeeting(meetingApptModel: String): Observable<String> {
+        var json = JSONObject(meetingApptModel)
+        val request = RequestBody.create(MediaType.parse("text/plain"), json.toString())
+        return saathiIndrectApi.setAppointmentMeeting(request)
+            .map {
+                it.string()
+               // it.responseSetAppointmentTransform()
+            }
     }
 
 

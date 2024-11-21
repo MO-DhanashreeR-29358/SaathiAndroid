@@ -289,29 +289,44 @@
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!--        <Button-->
-<!--            android:id="@+id/btnSave"-->
-<!--            android:layout_width="@dimen/_60sdp"-->
-<!--            android:layout_height="@dimen/_30sdp"-->
-<!--            android:layout_marginTop="@dimen/_10sdp"-->
-<!--            android:layout_marginBottom="@dimen/_10sdp"-->
-<!--            android:text="@string/text_button_save"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="@dimen/_12sdp" />-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:orientation="horizontal"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_input_comments">
 
-<!--        <Button-->
-<!--            android:id="@+id/btnReset"-->
-<!--            android:layout_width="@dimen/_60sdp"-->
-<!--            android:layout_height="@dimen/_30sdp"-->
-<!--            android:layout_marginStart="@dimen/_10sdp"-->
-<!--            android:layout_marginTop="@dimen/_10sdp"-->
-<!--            android:layout_marginBottom="@dimen/_10sdp"-->
-<!--            android:background="@color/calendar_gray2"-->
-<!--            android:text="@string/text_button_reset"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="@dimen/_12sdp"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/btnSave" />-->
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_yellow_background"
+                android:fontFamily="@font/lato_reg"
+                android:text="@string/text_button_save"
+                android:textColor="@color/colorBlack"
+                android:textFontWeight="500"
+                android:textSize="@dimen/_14ssp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnReset"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_weight="1"
+                android:background="@drawable/btn_gray_background"
+                android:fontFamily="@font/lato_reg"
+                android:text="@string/lbl_reset"
+                android:textColor="@color/clr_btn_reset"
+                android:textFontWeight="500" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

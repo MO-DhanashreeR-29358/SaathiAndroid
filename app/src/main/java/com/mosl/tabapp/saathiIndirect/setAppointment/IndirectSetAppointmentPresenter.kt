@@ -123,6 +123,22 @@ class IndirectSetAppointmentPresenter @Inject constructor(
             }
             .subscribe(view::renderOnSplAttendeeItemClick)
             .addTo(disposable)
+
+        view.onSaveButtonClicked().map {
+            view.getSaveData()
+        }
+            .switchMap {
+                        indirectrepo.setAppointmentMeeting(it) .compose(applyUiModel())
+            }
+            .subscribe {
+
+                it.onSuccess {
+                    Log.d("Save Response",it)
+                }
+                it.onFailure {
+                    Log.d("Save Responsef",it.message.toString())
+                }
+            }
     }
 
 

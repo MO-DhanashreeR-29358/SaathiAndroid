@@ -38,6 +38,7 @@
             android:hint="@string/label_search_lead_id"
             android:text=""
             android:textColor="@color/colorBlack"
+            android:inputType="number"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
@@ -57,7 +58,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edtleadId"
             />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/edtFCode"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -68,6 +69,7 @@
             android:fontFamily="@font/lato_reg"
             android:hint="@string/label_search_FCode"
             android:text=""
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/_14ssp"
             app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +80,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_reg"
-            android:text="@string/label_FCode"
+            android:text="@string/text_label_client_code"
             android:textColor="@color/clr_text_color"
             android:textFontWeight="400"
             android:textSize="@dimen/_14ssp"
@@ -88,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edtFCode"
             />
 
-        <androidx.appcompat.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/edtClientCode"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
@@ -97,10 +99,11 @@
             android:background="@drawable/bg_reactivation_white"
             android:cursorVisible="true"
             android:fontFamily="@font/lato_reg"
-            android:hint="@string/label_search_FCode"
+            android:hint="@string/text_label_client_code"
             android:text=""
             android:textColor="@color/colorBlack"
             android:textSize="@dimen/_14ssp"
+            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
 
@@ -116,7 +119,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edtClientCode">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_update_lead"
+                android:id="@+id/btn_search_lead"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginEnd="@dimen/_5sdp"

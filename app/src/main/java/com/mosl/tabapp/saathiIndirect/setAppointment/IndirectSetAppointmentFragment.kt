@@ -32,6 +32,8 @@ import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
+import com.mosl.shared.util.AppDateFormats
+import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
@@ -43,6 +45,9 @@ import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.model.AddedAttendeeModel
+import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -97,6 +102,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         meetingAdapter= SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spmeetingReason.adapter=meetingAdapter
         mainFromDate = CRMAppUtil.getDate(Date(), MoslConstant.yyyy_MM_dd)
+
+        binding.tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(Date(), MOSLConstants.DATE_FORMAT_TO_DISPLAY)
     }
 
     override fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>) {
@@ -117,6 +124,10 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 
     override fun getSelectedActivityType(): LookUp {
         return (binding.spActivityType.selectedItem as LookUp)
+    }
+
+    override fun getSelectedMeetingReason(): LookUp {
+        return (binding.spmeetingReason.selectedItem as LookUp)
     }
 
     override fun fnRenderMeetingReason(uiModel: UiModel<List<LookUp>>) {
@@ -476,6 +487,37 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             Toast.makeText(requireContext(), "Special Attendee Already Added", Toast.LENGTH_SHORT)
                 .show()
         }
+    }
+
+    override fun onSaveButtonClicked(): Observable<Unit> {
+        return  binding.btnSave.clicks()
+    }
+
+    override fun getDate(): String {
+        return getFormatedDate(binding.tvApppointmentDateTimeDisplay.text.toString(), AppDateFormats.DF_JSON_DATE12, AppDateFormats.DF_JSON_DATE9)
+    }
+
+    override fun getSaveData(): String {
+        val meetingApptModel = MeetingApptModel().apply {
+            meetingType = "A"
+            displayType = "A"
+            leadId = "978823"
+            ucid = "0"
+            meetingDate = getDate()
+
+            meetingAttendee = addedAttendeeList .map {
+                AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+            }
+            splMeetingAttendee = addedSplAttendeeList .map {
+                AddedSplAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+            }
+            product = "0"
+            activityTypeID=getSelectedActivityType().lookUpID.toString()
+                meetingReasonID=getSelectedMeetingReason().lookUpID
+            meetingDes=binding.etMeetingDescription.text.toString()
+
+        }
+        return Gson().toJson(meetingApptModel)
     }
 
 }
