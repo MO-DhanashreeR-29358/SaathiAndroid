@@ -15,7 +15,7 @@ data class IndirectLeadDetail(
     @JvmField val refereeCode: String,
     @JvmField val refereeName: String,
     @JvmField val isReferee: Boolean,
-    @JvmField val profile: String,
+    @JvmField val profileId: Int,
     @JvmField val profession: String,
     @JvmField val createdDate: String,
     @JvmField val isPotentialPMSProduct: String = "",

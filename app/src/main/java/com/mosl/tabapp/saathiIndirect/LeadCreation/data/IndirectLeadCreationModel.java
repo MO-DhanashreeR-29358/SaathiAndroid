@@ -16,7 +16,7 @@ import java.util.List;
 
 public class IndirectLeadCreationModel implements Serializable {
     @SerializedName("BusinessUnitID") private String businessUnitID;
-    @SerializedName("LeadCategoryID")
+    @SerializedName("ProfileID")
     private String leadCategoryID;
 
     @SerializedName("LeadName")

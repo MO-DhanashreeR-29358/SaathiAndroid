@@ -26,7 +26,6 @@ interface IndirectLeadDetailView : BaseView {
     fun onSubmitButtonClicked(): Observable<Unit>
     fun onAddProductClicked(): Observable<Unit>
     fun isLeadEditable(): Boolean
-    fun openAddProductDialog()
     fun onEditLeadDetailClicked(): Observable<Unit>
     fun renderEditLeadDetailClick()
     fun renderPrimaryAddCheckBoxClicked()
@@ -72,13 +71,6 @@ interface IndirectLeadDetailView : BaseView {
     fun render(uiModel: UiModel<IndirectLeadDetailPageData>)
     fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetail>)
 
-    fun onUpdateProfileEventFired(): Observable<UpdateProfile>
-    fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent>
-    fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>)
-    fun addProductEventFired(): Observable<AddProductEvent>
-    fun renderAddProduct(uiModel: UiModel<List<AddProductData>>)
-    fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>)
-    fun onAssignToEventFired(): Observable<AssignToEvent>
     fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)
 
     fun isSameAsAboveChecked(): Boolean

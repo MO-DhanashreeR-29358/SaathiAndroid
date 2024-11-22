@@ -509,7 +509,7 @@ public class IndirectLeadDetailAddProductAdapter extends BaseAdapter {
         });
 
         holder.llAddProduct.setOnClickListener(view1 -> {
-            if (isLeadEditable && !leadDetailAddProductModel.getIsProductDisabled()
+           /* if (isLeadEditable && !leadDetailAddProductModel.getIsProductDisabled()
                     .equals("1")) {
                 editProduct(leadDetailAddProductModel.getInterestedIn(),
                         leadDetailAddProductModel.getStageId(),
@@ -520,7 +520,7 @@ public class IndirectLeadDetailAddProductAdapter extends BaseAdapter {
                         leadDetailAddProductModel.isDefault(),
                         leadDetailAddProductModel.getIsProSpeEditDisabled(),
                         leadDetailAddProductModel.getProductSpecialistId());
-            }
+            }*/
         });
 
         return view;

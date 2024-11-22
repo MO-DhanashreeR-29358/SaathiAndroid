@@ -88,6 +88,20 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
     private var stage: String? = null
     private var status: String? = null
 
+    private var strPanNumber: String? = null
+    private var strMaskedPanNumber: String? = null
+    private var strMobile: String? = null
+    private var strMaskedMobile: String? = null
+    private var strEmail: String? = null
+    private var strMaskedEmail: String? = null
+
+    private var strAlternateMobile: String? = null
+    private var strMaskedAlternateMobile: String? = null
+    private var strAlternateEmail: String? = null
+    private var strMaskedAlternateEmail: String? = null
+    private var strLandline: String? = null
+    private var strMaskedLandline: String? = null
+
     private val subject = PublishSubject.create<IndirectLeadDetailUiEvent>()
     private val mainSubject = IndirectLeadViewDetailUiEvent.getSubject()
 
@@ -172,21 +186,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
 
     }
-    private fun setIcon(parent: View, icon: TextView, Section: String) {
-        if (Section.equals(CONST_OUTER, ignoreCase = true)) {
-            if (parent.visibility == View.VISIBLE) {
-                icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_minus, 0)
-            } else {
-                icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.ic_upload_plus, 0)
-            }
-        } else if (Section.equals(CONST_INNER, ignoreCase = true)) {
-            if (parent.visibility == View.VISIBLE) {
-                icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.up_button, 0)
-            } else {
-                icon.setCompoundDrawablesWithIntrinsicBounds(0, 0, drawable.down_button, 0)
-            }
-        }
-    }
 
     override fun renderArguments(data: LeadDetailArgument) {
         leadId = data.leadId
@@ -211,8 +210,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
 
-     override fun onUpdateProfileEventFired(): Observable<UpdateProfile> = subject.ofType()
-
     override fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderUpdateProfile showOnFailurePopup %s", it.message)
@@ -234,436 +231,10 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     override fun isLeadEditable(): Boolean = isLeadEditable
 
-    private var specialistAdd: String? = null
-    private var primaryRm: String? = null
-
-    private lateinit var addProductDialogBinding: DialogLeadviewAddProductBinding
-
-    private var productSpecialDialog: CustomListPickerDialog? = null
-    private var assignToDialog: CustomListPickerDialog? = null
-
-    override fun onProductSpecialEventFired(): Observable<ProductSpecialistEvent> = subject.ofType()
-
-    override fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure {
-            val model = listOf(
-                EmployeeModel.getNoData(getErrorOnFailureNew(it))
-            )
-            assignToDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(),
-                    model
-                )
-            )
-        }
-
-        uiModel.onSuccess {
-            val list = emptyList<EmployeeModel>()
-            if (it.isNotEmpty()) {
-                it.filter { it1 ->
-                    it1.code == userManager.user.employeeCode
-                }.map { leadEmployees ->
-                    EmployeeModel(
-                        leadEmployees.name, leadEmployees.code, leadEmployees.branchCode, false
-                    )
-                }
-            } else {
-                EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE)
-            }
-
-            assignToDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(), list
-                )
-            )
-        }
-
-    }
-
-    override fun addProductEventFired(): Observable<AddProductEvent> = subject.ofType()
-
-    override fun renderAddProduct(uiModel: UiModel<List<AddProductData>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure {
-            Timber.d("LeadDetailFragment renderAddProduct showOnFailurePopup %s", it.message)
-
-            showOnFailurePopup(it)
-        }
-        uiModel.onSuccess {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.text_message_success),
-                Toast.LENGTH_LONG
-            ).show()
-
-            if ("0".equals(leadId, ignoreCase = true)) {
-
-                val leadID = it[0].leadId
-                val uCID = it[0].ucId
-
-                MSFDialog.alertDialog(
-                    requireActivity(), 0,
-                    resources.getString(
-                        R.string.motilal_oswal
-                    ), getString(R.string.text_msg_success_add_product),
-                    getString(R.string.button_label_ok), true
-                ) { action: Action, _: Array<Any?>? ->
-                    if (action == OK) {
-                        val bundle = Bundle()
-                        bundle.putString(LEAD_ID, leadID)
-                        bundle.putString(UCID, uCID)
-                        navigator.openPage(
-                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle,
-                            true,
-                            forceReload = false
-                        )
-                    }
-                }
-            } else {
-                if (it.isNotEmpty()) {
-                    for (datum in it) {
-
-                        leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
-                    }
-                    leadDetailAddProductAdapter =
-                        IndirectLeadDetailAddProductAdapter(
-                            saathiApi,
-                            requireContext(),
-                            leadDetailAddProductList,
-                            binding.lvAddProduct,
-                            leadId,
-                            getPrimaryRM(),
-                            isLeadEditable,
-                            defaultSelectionList,
-                            categoryAdapter,
-                            workExpAdapter,
-                            userManager.getUser()?.employeeCode,
-                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                             emptyString(),
-                            this
-                        )
-                    binding.lvAddProduct.adapter = leadDetailAddProductAdapter
-                   //CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
-                }
-                MSFDialog.alertDialog(
-                    requireActivity(),
-                    0,
-                    resources.getString(R.string.motilal_oswal),
-                    getString(R.string.text_msg_success_add_product),
-                    getString(R.string.button_label_ok),
-                    true
-                ) { _: Action?, _: Array<Any?>? ->
-                }
-            }
-        }
-    }
-
     private fun getPrimaryRM(): String =
         if (isBlank(leadOwner.trim())) advisoryCode else leadOwner.trim()
 
-    override fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>) {
-        toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure {
-            val model = listOf(
-                EmployeeModel.getNoData(getErrorOnFailureNew(it))
-            )
-            productSpecialDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(),
-                    model
-                )
-            )
-        }
-        uiModel.onSuccess {
-            val list = if (it.isNotEmpty()) {
-                it.filter { it1 ->
-                    it1.code != userManager.user.employeeCode
-                }
-                    .map { it1 ->
-                        EmployeeModel(
-                            it1.name, it1.code, it1.branchCode, false
-                        )
-                    }
-            } else {
-                listOf(EmployeeModel.getNoData(ATTENDEEE_NOT_FOUND_MESSAGE))
-            }
 
-            productSpecialDialog?.setAdapter(
-                AttendeeAdapter(
-                    requireContext(), list
-                )
-            )
-        }
-
-    }
-
-    override fun onAssignToEventFired(): Observable<AssignToEvent> = subject.ofType()
-
-    private var isPotentialPMSProduct = false
-
-    override fun openAddProductDialog() {
-        Dialog(requireContext()).apply {
-            addProductDialogBinding = DialogLeadviewAddProductBinding.bind(
-                View.inflate(
-                    requireContext(),
-                    R.layout.dialog_leadview_add_product,
-                    null
-                )
-            )
-            val dialogBinding = addProductDialogBinding
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            setCanceledOnTouchOutside(false)
-            setContentView(dialogBinding.root)
-            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            window?.setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-            dialogBinding.dacProductSpecialist.hint = resources.getString(R.string.str_prod_spl)
-            dialogBinding.actAssignTo.hint = resources.getString(R.string.str_assing)
-            dialogBinding.dacProductSpecialist.setListener {
-                specialistAdd = ""
-            }
-            dialogBinding.dacProductSpecialist.setOnClickListener {
-
-                requireActivity().window
-                    .setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                    )
-
-                val searchListProductSpecialist =
-                    CustomListPickerDialog(requireContext())
-
-                searchListProductSpecialist.threshold = SEARCH_LENTH
-
-                searchListProductSpecialist.show()
-                searchListProductSpecialist.setCustomTitle(
-                    resources.getString(R.string.str_prod_spl)
-                )
-                val productSpecialistViewListner: ListPickerListneable =
-                    object : ListPickerListneable {
-                        override fun onListItemSelect(data: Parcelable) {
-                            val clientModel =
-                                data as EmployeeModel
-                            if (clientModel.isNoData) {
-                                return
-                            }
-                            dialogBinding.dacProductSpecialist.setText(clientModel.attendeeName)
-                            specialistAdd = clientModel.attendeeCode
-                            dialogBinding.dacProductSpecialist.setClearIconVisible(true)
-                            searchListProductSpecialist.dismiss()
-                        }
-
-                        override fun onSearchTextChanged(constraint: CharSequence?) {
-                            if (constraint != null) {
-
-                                primaryRm = if (isBlank(leadOwner.trim())) {
-                                    advisoryCode
-                                } else {
-                                    leadOwner
-                                }
-                                val rm = primaryRm.nullSafe()
-                                productSpecialDialog = searchListProductSpecialist
-                                subject.onNext(
-                                    ProductSpecialistEvent(
-                                        selectedProduct = constraint.toString(),
-                                        primaryRM = rm
-                                    )
-                                )
-                            }
-                        }
-                    }
-                searchListProductSpecialist.setmListner(productSpecialistViewListner)
-
-            }
-            dialogBinding.actAssignTo.setListener {
-                primaryRm = ""
-            }
-            dialogBinding.actAssignTo.setOnClickListener {
-                requireActivity().window
-                    .setSoftInputMode(
-                        WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                                or WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-                    )
-                val searchList = CustomListPickerDialog(requireContext())
-                searchList.show()
-                searchList.threshold = SEARCH_LENTH
-                searchList.setCustomTitle(resources.getString(R.string.str_assing))
-                val assingViewListner: ListPickerListneable = object : ListPickerListneable {
-                    override fun onListItemSelect(data: Parcelable) {
-                        val clientModel =
-                            data as EmployeeModel
-                        if (clientModel.isNoData) {
-                            return
-                        }
-                        dialogBinding.actAssignTo.setText(clientModel.attendeeName)
-                        dialogBinding.actAssignTo.isEnabled = true
-                        primaryRm = clientModel.attendeeCode
-                        dialogBinding.actAssignTo.setClearIconVisible(true)
-                        searchList.dismiss()
-                    }
-
-                    override fun onSearchTextChanged(constraint: CharSequence?) {
-
-                        if (constraint != null) {
-                            assignToDialog = searchList
-                            subject.onNext(AssignToEvent(constraint.toString()))
-                        }
-                    }
-                }
-                searchList.setmListner(assingViewListner)
-            }
-            window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN)
-           /* dialogBinding.spInterestedIn.adapter = interestedAdapter
-            dialogBinding.spStage.adapter = stageAdapter
-            dialogBinding.spStatus.adapter = statusAdapter
-            interestedAdapter.setSpinnerData(dialogBinding.spInterestedIn, interestedData)*/
-
-            dialogBinding.spInterestedIn.itemSelections()
-                .filter(InvalidSelectionPredicate)
-                .map { dialogBinding.spInterestedIn.selectedItem as RowData }
-                .filter { it.key != IndirectLeadDetailView.INVALID_SELECTION_KEY }
-                .subscribe {
-                    subject.onNext(SelectInterestedProductEvent(it))
-                }
-                .addTo(disposable)
-
-            dialogBinding.spStage.itemSelections()
-                .filter(InvalidSelectionPredicate)
-                .map { dialogBinding.spStage.selectedItem as RowData }
-                .filter { it.key != IndirectLeadDetailView.INVALID_SELECTION_KEY }
-                .subscribe {
-                    subject.onNext(SelectStageEvent(it))
-                }
-                .addTo(disposable)
-
-
-
-
-            dialogBinding.btnSave.setOnClickListener {
-
-                if (dialogBinding.spInterestedIn.selectedItemPosition < 1) {
-                    dialogBinding.tvspIntrestError.visible()
-                    dialogBinding.tvspIntrestError.text =
-                        getString(R.string.error_message_select_interest)
-                    return@setOnClickListener
-                }
-                if (dialogBinding.spStage.selectedItemPosition < 1) {
-                    dialogBinding.tvspStageError.visible()
-                    dialogBinding.tvspStageError.text =
-                        getString(R.string.error_message_select_stage)
-                    return@setOnClickListener
-                }
-                if (dialogBinding.spStatus.selectedItemPosition < 1) {
-                    dialogBinding.tvspStatusError.visible()
-                    dialogBinding.tvspStatusError.text =
-                        getString(R.string.error_message_select_status)
-                    return@setOnClickListener
-                }
-
-
-                val interestedInKey =
-                    (dialogBinding.spInterestedIn.selectedItem as RowData).key
-                val interestedInDisplayText =
-                    (dialogBinding.spInterestedIn.selectedItem as RowData).value
-                if (leadDetailAddProductList.size == 0) {
-                    leadDetailAddProductAdapter =
-                        IndirectLeadDetailAddProductAdapter(
-                            saathiApi,
-                            requireContext(),
-                            leadDetailAddProductList,
-                            binding.lvAddProduct,
-                            leadId,
-                            getPrimaryRM(),
-                            isLeadEditable,
-                            defaultSelectionList,
-                            categoryAdapter,
-                            workExpAdapter,
-                            userManager.getUser()?.employeeCode,
-                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
-                            emptyString(),
-                            this@IndirectLeadDetailFragment
-                        )
-                }
-                if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true) {
-                    MSFDialog.alertDialog(
-                        requireContext(),
-                        0,
-                        resources.getString(R.string.motilal_oswal),
-                        getString(R.string.error_message_already_added, interestedInDisplayText),
-                        getString(R.string.button_label_ok),
-                        true,
-                        null
-                    )
-                } else {
-                    if (isPotentialPMSProduct) {
-                        MSFDialog.alertDialog(
-                            requireActivity(),
-                            0,
-                            resources.getString(R.string.motilal_oswal),
-                            POTENTIAL_INVEST_IN_PRODUCT,
-                            YES,
-                            NO,
-                            true
-                        ) { action: Action, _: Array<Any?>? ->
-                            val productMapping = if (action == OK) YES else NO
-                            callAddProduct(productMapping)
-                        }
-                    } else
-                        callAddProduct()
-                }
-                dismiss()
-            }
-
-            dialogBinding.btnClose.setOnClickListener {
-                hideKeyboard(binding.root)
-                dismiss()
-            }
-        }
-            .show()
-       /* stageData.clear()
-        stageData.add(0, SELECT_ROW_DATA)
-        stageAdapter.setSpinnerData(addProductDialogBinding.spStage, stageData)
-
-        statusData.clear()
-        statusData.add(0, SELECT_ROW_DATA)
-        statusAdapter.setSpinnerData(addProductDialogBinding.spStatus, statusData)*/
-    }
-
-    private fun callAddProduct(productMapping: String = "") {
-        addProduct(
-            (addProductDialogBinding.spInterestedIn.selectedItem as RowData).key,
-            (addProductDialogBinding.spStage.selectedItem as RowData).key,
-            (addProductDialogBinding.spStatus.selectedItem as RowData).key,
-            productMapping
-        )
-    }
-
-    private fun addProduct(
-        interestedIn: String,
-        stage: String,
-        status: String,
-        productMapping: String
-    ) {
-        //data
-        val data = InsertLeadProductRequest(
-            leadId,
-            ucId,
-            interestedIn,
-            interestedIn,
-            primaryRm ?: "",
-            specialistAdd ?: "",
-            userManager.getUser()?.employeeCode.toString(),
-            CRMAppUtil.getDBDate(),
-            stage,
-            status,
-            productMapping
-        )
-        //event
-        subject.onNext(AddProductEvent(data))
-    }
 
     override fun onEditLeadDetailClicked(): Observable<Unit> = binding.llEditLeadDetail.clicks()
 
@@ -1037,7 +608,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         leadDetailModel.refereeEmail = binding.etRefereeEmail.text.toString().trim()
         leadDetailModel.refereeMobile = binding.etRefereeNumber.text.toString().trim()
         leadDetailModel.comments = getJsonSafeString(binding.etComments.text.toString().trim())
-        leadDetailModel.profileID = emptyString()
+        leadDetailModel.profileID = (binding.spCategory.selectedItem as RowData).key.toString()
         leadDetailModel.brokingProfileID = emptyString()
         leadDetailModel.ipProfileID = emptyString()
         leadDetailModel.finalProfileID = emptyString()
@@ -1278,7 +849,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
             backgroundData = data.backgroundRowDatas
             backgroundAdapter.addAll(data.backgroundRowDatas)
-            binding.spBackground.setSpinnerData(backgroundAdapter, workExpData)
+            binding.spBackground.setSpinnerData(backgroundAdapter, backgroundData)
 
             associateBrokerData = data.associateBroker
             AssociateBrokerAdapter.addAll(data.associateBroker)
@@ -1314,11 +885,27 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         }
 
         binding.apply {
+            if(status == true){
+                etPanNumber.setText(strPanNumber)
+                etMobileNumber.setText(strMobile)
+                etEmail.setText(strEmail)
+                etAlternateEmail.setText(strAlternateEmail)
+                etLandlineNumber.setText(strLandline)
+                etAlternateMobileNumber.setText(strAlternateMobile)
+            }else{
+                etPanNumber.setText(strMaskedPanNumber)
+                etMobileNumber.setText(strMaskedMobile)
+                etEmail.setText(strMaskedEmail)
+                etAlternateEmail.setText(strAlternateEmail)
+                etLandlineNumber.setText(strLandline)
+                etAlternateMobileNumber.setText(strMaskedAlternateMobile)
+            }
             etLeadName.isEnabled = status
             etBusiness.isEnabled = status
             spAssociatedBroker.isEnabled = status
             spCategory.isEnabled = status
             spBackground.isEnabled = status
+            spWorkExp.isEnabled = status
             etBrokerage.isEnabled = status
             etPanNumber.isEnabled = status
             etLandlineNumber.isEnabled = status
@@ -1422,7 +1009,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
         binding.etExpectedMargin.setText(expectedMargin)
 
-        val dataCategory = RowData.getSpinnerRowDataByValue(leadCategoryText, categoryAdapter)
+        val dataCategory = RowData.getSpinnerRowDataById(profileId.toString(), categoryAdapter)
         dataCategory?.let {
             binding.spCategory.setSelection(it.position)
         }
@@ -1454,12 +1041,25 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
     private fun com.mosl.saathi.api.model.lead.Contact.renderContact() {
         binding.run {
             cbSameAs.isChecked = isSameAsAbove
-            etPanNumber.setText(panNumber)
-            etMobileNumber.setText(mobile)
-            etEmail.setText(emailId)
-            etAlternateEmail.setText(alternateEmailId)
-            etLandlineNumber.setText(landlineNo)
-            etAlternateMobileNumber.setText(alternateMobileNo)
+            strPanNumber = panNumber
+            strMobile = mobile
+            strEmail = emailId
+            strLandline = landlineNo
+            strAlternateEmail = alternateEmailId
+            strAlternateMobile = alternateMobileNo
+            strMaskedPanNumber = maskedPanNumber
+            strMaskedMobile = maskedMobile
+            strMaskedEmail = maskedEmailId
+            strMaskedAlternateMobile = maskedAlternateMobileNo
+            strMaskedAlternateEmail = maskedAlternateEmailId
+            strMaskedLandline = maskedLandlineNo
+
+            etPanNumber.setText(strMaskedPanNumber)
+            etMobileNumber.setText(strMaskedMobile)
+            etEmail.setText(strMaskedEmail)
+            etAlternateEmail.setText(strMaskedAlternateEmail)
+            etLandlineNumber.setText(strMaskedLandline)
+            etAlternateMobileNumber.setText(strMaskedAlternateMobile)
 
 
             try {
@@ -1613,30 +1213,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         )
     }
 
-    private fun getLeadDetailAddProductModel(
-        item: AddProductData
-    ): LeadDetailAddProductModel {
-        val crossSellingProducts: List<CrossSellingProductsModel> =
-            getCrossSellingProductsModel(item.crossSellingProducts)
-        return LeadDetailAddProductModel(
-            item.stageId,
-            stringOrEmpty(item.stageName), item.statusId,
-            stringOrEmpty(item.statusName), item.interestedIn,
-            stringOrEmpty(item.prodName),
-            stringOrEmpty(item.primRMName),
-            stringOrEmpty(item.productSpecialistName),
-            stringOrEmpty(item.assignedBy),
-            stringOrEmpty(item.assignedByDate),
-            stringOrEmpty(item.clientCode), item.leadProductMappingId,
-            item.isDefault,
-            crossSellingProducts,
-            item.isCrossSellingProduct,
-            stringOrEmpty(item.isProdSpecEditDisabled),
-            stringOrEmpty(item.isProdDisabled),
-            stringOrEmpty(item.prodSpecialist),
-            stringOrEmpty(item.secondaryRm)
-        )
-    }
 
     private fun getCrossSellingProductsModel(
         products: List<CrossSellingProduct>?
@@ -1765,9 +1341,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     override fun onDestroyView() {
         presenter.stop()
-//        addProductDialogBinding = null
-        productSpecialDialog = null
-        assignToDialog = null
         super.onDestroyView()
     }
 

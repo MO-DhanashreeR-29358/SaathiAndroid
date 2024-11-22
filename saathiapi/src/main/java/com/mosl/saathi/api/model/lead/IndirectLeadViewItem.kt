@@ -56,7 +56,7 @@ data class IndirectLeadViewItem(
     @JvmField @SerializedName(
         "leadFieldSectionModels"
     ) val leadFieldSectionModels: List<LeadFieldSection>?,
-    @JvmField @SerializedName("ProfileID") val profileID: Int,
+    @JvmField @SerializedName("ProfileID") val profileID: Int?,
     @JvmField @SerializedName("DedupeModel") val dedupeModel: DedupeModel,
     @JvmField @SerializedName("LoginId") val loginId: String?,
     @JvmField @SerializedName("ApprovalMessage") val approvalMessage: String?,

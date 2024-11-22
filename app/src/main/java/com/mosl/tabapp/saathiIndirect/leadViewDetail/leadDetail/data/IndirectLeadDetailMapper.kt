@@ -43,7 +43,7 @@ fun IndirectLeadViewItem.leadViewItemToLeadDetail(): IndirectLeadDetail {
       leadProspectSourceId = prospectSource ?: emptyString(),
       refereeCode = refereeCode ?: emptyString(),
       refereeName = refereeName ?: emptyString(),
-      profile = profile ?: emptyString(),
+      profileId = profileID ?: 0,
       profession = profession ?: emptyString(),
       createdDate = creationDate ?: emptyString(),
       isPotentialPMSProduct = isPotentialPMSProduct ?: emptyString(),

@@ -124,7 +124,6 @@ private fun IndirectLeadCreationUserInput.mapToLeadCreationModel(user: User?): I
         prospectRefereEmail = proReferEmail
         prospectRefereMobile = proReferMob
         comments = comment
-        profileID = user?.currentBusinessProfile?.businessProfileId
         createdBy = user?.employeeCode
         createdThrough = "SelfCreated"
         creationDate = CRMAppUtil.getDBDate()
