@@ -1,17 +1,12 @@
 package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.view.focusChanges
 import com.jakewharton.rxbinding4.view.touches
@@ -19,47 +14,31 @@ import com.jakewharton.rxbinding4.widget.afterTextChangeEvents
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.jakewharton.rxbinding4.widget.textChanges
 import com.mosl.app.core.events.DataAction.Fetch
-import com.mosl.app.core.rx.applyUiModel
 import com.mosl.app.coreui.spinner.getItems
-import com.mosl.app.coreui.spinner.setSpinnerData
-import com.mosl.app.coreui.spinner.setSpinnerDataWithSelection
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.commons.rx.InvalidSelectionPredicate
-import com.mosl.commons.rx.addTo
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.lead.*
-import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
-import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.drawable
 import com.mosl.tabapp.common.*
 import com.mosl.tabapp.common.CRMAppUtil.getJsonSafeString
 import com.mosl.tabapp.common.CRMAppUtil.isBlank
-import com.mosl.tabapp.common.CustomListPickerDialog.ListPickerListneable
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.databinding.DialogLeadviewAddProductBinding
-import com.mosl.tabapp.databinding.DialogUpdateProfileBinding
 import com.mosl.tabapp.databinding.FragmentIndirectLeadDetailBinding
-import com.mosl.tabapp.databinding.FragmentLeadDetailBinding
-import com.mosl.tabapp.leadViewDetail.*
-import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailUiEvent
 import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl.Companion.SELECT_ROW_DATA
-import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leaddetail.*
-import com.mosl.tabapp.leaddetail.ClientDetail
 import com.mosl.tabapp.model.*
 import com.mosl.tabapp.model.leaddetail.CrossSellingProductsModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailAddProductModel
 import com.mosl.tabapp.model.leaddetail.LeadDetailModel
-import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadDetailPageData
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data.IndirectLeadDetail
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data.IndirectLeadUpdateModel
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadViewDetailUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.ui.MSFDialog.Action
@@ -206,7 +185,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     override fun onSameAsCheckboxClicked(): Observable<Unit> = binding.cbSameAs.clicks()
 
-    override fun getUpdateLeadUSerInput(): UpdateLeadRequest = getUpdateLead()
+    override fun getUpdateLeadUSerInput(): IndirectUpdateLeadRequest = getUpdateLead()
 
     override fun onSubmitButtonClicked(): Observable<Unit> = binding.btnSubmit.clicks()
 
@@ -482,7 +461,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         error.error?.let {
             when (error.identifier as Int) {
                 1 ->
-                    binding.tlLeadName.setErrorMessages(getString(it, ""))
+                    binding.tlLeadName.setErrorMessages(getString(it, "Lead"))
                 2 ->
                     binding.tlLeadName.setErrorMessages(getString(it))
                 3 ->
@@ -497,6 +476,12 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
                     binding.tlLand.setErrorMessages(getString(it))
                 10 ->
                     binding.tlPan.setErrorMessages(getString(it))
+                11 ->
+                    binding.tlRefereeName.setErrorMessages(getString(it))
+                12 ->
+                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                13 ->
+                    binding.tlRefereeEmail.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -516,11 +501,13 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             tlRefereeName.disableErrorMessages()
             tlPin.disableErrorMessages()
             tlOffPin.disableErrorMessages()
+            tlRefereeNumber.disableErrorMessages()
+            tlRefereeEmail.disableErrorMessages()
         }
     }
 
 
-    private fun getUpdateLead(): UpdateLeadRequest {
+    private fun getUpdateLead(): IndirectUpdateLeadRequest {
         addressDetailList.clear()
         addressDetailList.add(
             AddressDetailModel(
@@ -551,7 +538,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             )
         )
 
-        val leadDetailModel = LeadDetailModel()
+        val leadDetailModel = IndirectLeadUpdateModel()
         leadDetailModel.isSameAsAbove = binding.cbSameAs.isChecked
         leadDetailModel.seteMail(binding.etEmail.text.toString().trim())
         leadDetailModel.alternateEmail = binding.etAlternateEmail.text.toString().trim()
@@ -609,9 +596,6 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         leadDetailModel.refereeMobile = binding.etRefereeNumber.text.toString().trim()
         leadDetailModel.comments = getJsonSafeString(binding.etComments.text.toString().trim())
         leadDetailModel.profileID = (binding.spCategory.selectedItem as RowData).key.toString()
-        leadDetailModel.brokingProfileID = emptyString()
-        leadDetailModel.ipProfileID = emptyString()
-        leadDetailModel.finalProfileID = emptyString()
         leadDetailModel.professionID = emptyString()
         leadDetailModel.createdBy = emptyString()
         leadDetailModel.createdThrough = binding.etCreatedThrough.text.toString().trim()
@@ -623,29 +607,28 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         leadDetailModel.secondaryRM = null
         leadDetailModel.leadDetailAddProductModels = leadDetailAddProductList
         leadDetailModel.leadFieldValueModels = getLeadFieldValues(mLeadFieldSectionModelList)
-        leadDetailModel.sectorId = emptyString()
-        leadDetailModel.sector = emptyString()
-        leadDetailModel.desigId = emptyString()
-        leadDetailModel.desig = emptyString()
-        leadDetailModel.networthId = emptyString()
-        leadDetailModel.networth = emptyString()
         leadDetailModel.referralEmpCode =emptyString()
         leadDetailModel.referralEmpName = emptyString()
-        leadDetailModel.accountTypeId = emptyString()
-        leadDetailModel.chipsEventId = emptyString()
-        leadDetailModel.isBandhanBankEmp = emptyString()
-        leadDetailModel.bandhanBankEmp =emptyString()
-        leadDetailModel.auBankName = emptyString()
-        leadDetailModel.auBankBranchCode =emptyString()
+        leadDetailModel.bgId = (binding.spBackground.selectedItem as RowData).key.toString()
+        leadDetailModel.workExpId = (binding.spWorkExp.selectedItem as RowData).key.toString()
+        leadDetailModel.existingBrokerID = (binding.spAssociatedBroker.selectedItem as RowData).key.toString()
+        leadDetailModel.businessName = binding.etBusiness.text.toString().trim()
+        leadDetailModel.associatedBroker = (binding.spAssociatedBroker.selectedItem as RowData).key.toString()
+        leadDetailModel.lastMeetingDate = binding.etLastMeetingDate.text.toString().trim()
+        leadDetailModel.rfmName = binding.etRFMName.text.toString().trim()
+        leadDetailModel.tmName = binding.etTMName.text.toString().trim()
+        leadDetailModel.currentBrokeragePerMonth = binding.etBrokerage.text.toString().trim()
+        leadDetailModel.baType = binding.etBaType.text.toString().trim()
+        leadDetailModel.expectedMargin = binding.etExpectedMargin.text.toString().trim()
         return updateLead(leadDetailModel)
     }
 
-    private fun updateLead(model: LeadDetailModel): UpdateLeadRequest {
-        val contactAddresses: MutableList<ContactAddressRequest> = ArrayList()
+    private fun updateLead(model: IndirectLeadUpdateModel): IndirectUpdateLeadRequest {
+        val contactAddresses: MutableList<IndirectContactAddressRequest> = ArrayList()
         val detailModels: List<AddressDetailModel> = model.addressDetailModels
         for (detailModel in detailModels) {
             contactAddresses.add(
-                ContactAddressRequest(
+                IndirectContactAddressRequest(
                     detailModel.addressTypeID.toString(),
                     detailModel.address1,
                     detailModel.address2,
@@ -659,7 +642,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
                 )
             )
         }
-        val contactRequest = ContactRequest(
+        val contactRequest = IndirectContactRequest(
             model.name,
             model.geteMail(),
             model.alternateEmail,
@@ -674,36 +657,33 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             model.isSameAsAbove,
             contactAddresses
         )
-        return UpdateLeadRequest(
-            model.leadID, model.businessUnitID, model.isPotentialPMSProduct,
+        return IndirectUpdateLeadRequest(
+            model.leadID,model.name, model.businessUnitID, model.isPotentialPMSProduct,
             model.leadCategoryID, model.contactPerson, model.sourceID,
             model.leadSourceID, model.leadSourceDetailsID,
             model.leadSourceDetails, model.refereeCode.nullSafe(), model.refereeName.nullSafe(),
             model.refereeEmail, model.refereeMobile, model.comments,
-            model.profileID, model.brokingProfileID, model.ipProfileID, model.finalProfileID,
+            model.profileID,
             model.professionID, model.createdBy, model.prospectRefereName,
             model.prospectRefereMobile, model.prospectRefereEmail,
             model.createdThrough, model.creationDate,
             contactRequest,
             model.leadFieldValueModels,
-            model.sectorId,
-            model.sector,
-            model.desigId,
-            model.desig,
-            model.networthId,
-            model.networth,
-            model.referralEmpCode,
-            model.referralEmpName,
-            model.accountTypeId,
-            model.chipsEventId,
-            model.isBandhanBankEmp,
-            model.bandhanBankEmp,
-            model.auBankName,
-            model.auBankBranchCode
+            model.expectedMargin,
+            model.bgId,
+            model.workExpId,
+            model.existingBrokerID,
+            model.businessName,
+            model.associatedBroker,
+            model.lastMeetingDate,
+            model.rfmName,
+            model.tmName,
+            model.currentBrokeragePerMonth,
+            model.baType
         )
     }
 
-    override fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>) {
+    override fun renderUpdateDetail(uiModel: UiModel<IndirectUpdateLeadResponse>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderUpdateDetail showOnFailurePopup %s", it.message)
             showOnFailurePopup(it) }
@@ -729,8 +709,8 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     private fun getLeadFieldValues(
         fieldSectionModels: List<LeadFieldSectionModel>?
-    ): List<LeadFieldValueRequest?> {
-        val requests: MutableList<LeadFieldValueRequest?> = ArrayList()
+    ): List<IndirectLeadFieldValueRequest?> {
+        val requests: MutableList<IndirectLeadFieldValueRequest?> = ArrayList()
         if (fieldSectionModels == null) {
             return requests
         }
@@ -738,7 +718,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             val selectionList = mSection.selectionList ?: continue
             for (modal in selectionList) {
                 requests.add(
-                    LeadFieldValueRequest(
+                    IndirectLeadFieldValueRequest(
                         modal.lF_SysName,
                         modal.uiValue,
                         modal.leadFieldId,
@@ -963,6 +943,7 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
 
     private var leadOwner = ""
 
+    @SuppressLint("TimberArgCount")
     private fun IndirectLeadDetail.renderLeadDetail() {
         isLeadEditable = when {
             canEditLead == "0" || isProductSpecialist.equals("Y", true) -> false
@@ -1010,12 +991,22 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
         binding.etExpectedMargin.setText(expectedMargin)
 
         val dataCategory = RowData.getSpinnerRowDataById(profileId.toString(), categoryAdapter)
+        Log.d("CategoryId" ,profileId.toString() )
+        for (i in 0 until categoryAdapter.count) {
+            Log.d("categoryAdapter" ,categoryAdapter.getItem(i)?.key!! + ":" + categoryAdapter.getItem(i)?.value!!)
+        }
         dataCategory?.let {
+            Log.d("Category Position" , it.position.toString() )
             binding.spCategory.setSelection(it.position)
         }
 
         val dataBackground = RowData.getSpinnerRowDataById(bgId, backgroundAdapter)
+        Log.d("bgId" ,bgId )
+        for (i in 0 until backgroundAdapter.count) {
+            Log.d("backgroundAdapter" ,backgroundAdapter.getItem(i)?.key!! + ":" + backgroundAdapter.getItem(i)?.value!!)
+        }
         dataBackground?.let {
+            Log.d("bgId Position" , it.position.toString() )
             binding.spBackground.setSelection(it.position)
         }
 
@@ -1024,10 +1015,22 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             binding.spWorkExp.setSelection(it.position)
         }
 
-        val dataAssoBorker = RowData.getSpinnerRowDataByValue(associatedBroker, AssociateBrokerAdapter)
+        val dataAssoBorker = RowData.getSpinnerRowDataById(existingBrokerID, AssociateBrokerAdapter)
+        Log.d("existingBrokerID" ,existingBrokerID )
+        for (i in 0 until AssociateBrokerAdapter.count) {
+            Log.d("AssociateBrokerAdapter" ,AssociateBrokerAdapter.getItem(i)?.key!! + ":" + AssociateBrokerAdapter.getItem(i)?.value!!)
+        }
         dataAssoBorker?.let {
+            Log.d("existingBrokerID Position" , it.position.toString() )
             binding.spAssociatedBroker.setSelection(it.position)
         }
+
+        binding.etRFMName.setText(RFMName)
+        binding.etBaType.setText(BAType)
+        binding.etTMName.setText(TMName)
+        binding.etLastMeetingDate.setText(lastMeetingDate)
+        binding.etBrokerage.setText(currentBrokeragePerMonth)
+        binding.etBusiness.setText(businessName)
 
         if (leadProductMapping != null && leadProductMapping.isNotEmpty()) {
             leadProductMapping.renderMapping()

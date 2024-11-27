@@ -4,13 +4,10 @@ import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
-import com.mosl.saathi.api.model.lead.UpdateLeadRequest
-import com.mosl.saathi.api.model.lead.UpdateLeadResponse
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadRequest
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadResponse
 import com.mosl.tabapp.common.RowData
-import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
-import com.mosl.tabapp.leaddetail.*
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadDetailPageData
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.data.IndirectLeadDetail
 import io.reactivex.rxjava3.core.Observable
@@ -22,7 +19,7 @@ interface IndirectLeadDetailView : BaseView {
     fun onPrimaryAddCheckboxClicked(): Observable<Unit>
     fun onOfficePrimaryAddCheckboxClicked(): Observable<Unit>
     fun onSameAsCheckboxClicked(): Observable<Unit>
-    fun getUpdateLeadUSerInput(): UpdateLeadRequest
+    fun getUpdateLeadUSerInput(): IndirectUpdateLeadRequest
     fun onSubmitButtonClicked(): Observable<Unit>
     fun onAddProductClicked(): Observable<Unit>
     fun isLeadEditable(): Boolean
@@ -51,7 +48,7 @@ interface IndirectLeadDetailView : BaseView {
     fun isCbSameAsChecked(): Boolean
     fun renderOnUpdateButtonClick(uiModel: UiModel<String>)
     fun onUpdateLeadEventFired(): Observable<UpdateLeadDetail>
-    fun renderUpdateDetail(uiModel: UiModel<UpdateLeadResponse>)
+    fun renderUpdateDetail(uiModel: UiModel<IndirectUpdateLeadResponse>)
 
     fun onLeadDetailSectionClicked(): Observable<Unit>
 

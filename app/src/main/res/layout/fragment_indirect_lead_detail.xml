@@ -165,6 +165,7 @@
                         style="@style/CRMSpinnerSelector_leadView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:entries="@array/Select"
                         android:layout_marginTop="@dimen/_3sdp" />
 
 

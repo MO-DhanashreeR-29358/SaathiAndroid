@@ -165,7 +165,7 @@ private fun LeadCreationProductMapping.mapToProductList(): List<IndirectCreateLe
         return mapIndexedNotNull { index: Int, backgroundItem: BackgroundItem ->
             try {
                 RowData(
-                    index,
+                    index + 1,
                     backgroundItem.backgroundId ?: "",
                     backgroundItem.backgroundName
                 )
@@ -179,7 +179,7 @@ private fun LeadCreationProductMapping.mapToProductList(): List<IndirectCreateLe
         return mapIndexedNotNull { index: Int, item: AssociatedBrokerItem ->
             try {
                 RowData(
-                    index,
+                    index + 1,
                     item.brokerId ?: "",
                     item.brokerName
                 )
@@ -293,7 +293,7 @@ internal fun List<CountryItem>.indirectCountryItemsToRowDatas(): List<RowData> {
     return mapIndexedNotNull { index: Int, countryItem: CountryItem ->
         try {
             RowData(
-                index,
+                index + 1,
                 countryItem.countryId ?: "",
                 countryItem.countryName
             )
@@ -307,7 +307,7 @@ internal fun List<STDCodeItem>.indirectStdCodeItemsToRowDatas(): List<RowData> {
     return mapIndexedNotNull { index: Int, countryItem: STDCodeItem ->
         try {
             RowData(
-                index,
+                index + 1,
                 countryItem.STDCode ?: "",
                 countryItem.STDCodeDisplay
             )

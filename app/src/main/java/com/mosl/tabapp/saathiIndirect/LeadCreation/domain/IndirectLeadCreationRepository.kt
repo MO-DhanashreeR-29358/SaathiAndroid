@@ -2,6 +2,8 @@ package com.mosl.tabapp.saathiIndirect.LeadCreation.domain
 
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadRequest
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadResponse
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
@@ -24,7 +26,7 @@ interface IndirectLeadCreationRepository {
 
     fun getProfessionRowDatas(): Observable<List<RowData>>
 
-    fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse>
+    fun updateLead(request: IndirectUpdateLeadRequest): Observable<IndirectUpdateLeadResponse>
 
     fun getInterestInRowDatas(): Observable<List<RowData>>
     fun getCountryRowDatas(): Observable<List<RowData>>

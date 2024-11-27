@@ -7,6 +7,8 @@ import com.mosl.saathi.api.model.createlead.CreateLeadResponse
 import com.mosl.saathi.api.model.createlead.LeadSourceListRequest
 import com.mosl.saathi.api.model.createlead.SearchRefereeModel
 import com.mosl.saathi.api.model.lead.CityListRequest
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadRequest
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadResponse
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.StageRequest
 import com.mosl.saathi.api.model.lead.StateProvinceRequest
@@ -82,10 +84,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(professionRequest)
     }
 
-    override fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
-        if(request.leadAccountTypeId.isEmpty()){
-            request.leadAccountTypeId = "-1"
-        }
+    override fun updateLead(request: IndirectUpdateLeadRequest): Observable<IndirectUpdateLeadResponse> {
         return indirectSaathiApi.updateLead(request)
     }
 

@@ -22,6 +22,8 @@ import com.mosl.saathi.api.model.lead.CityItem
 import com.mosl.saathi.api.model.lead.CityListRequest
 import com.mosl.saathi.api.model.lead.CountryItem
 import com.mosl.saathi.api.model.lead.IndirectLeadViewItem
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadRequest
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadResponse
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupItem
@@ -126,8 +128,8 @@ interface SaathiIndirectApi {
 
     @POST("Lead/UpdateLead")
     fun updateLead(
-        @Body request: UpdateLeadRequest
-    ): Observable<UpdateLeadResponse>
+        @Body request: IndirectUpdateLeadRequest
+    ): Observable<IndirectUpdateLeadResponse>
 
     @POST("Lead/GetLeadView")
     fun getLeadView(

@@ -2,6 +2,7 @@ package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail
 
 import androidx.annotation.StringRes
 import com.mosl.mobile.user.model.User
+import com.mosl.saathi.api.model.lead.IndirectUpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
@@ -10,18 +11,18 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 
-class IndirectLeadDetailValidator (val user: User) : Validator<UpdateLeadRequest, String>() {
-    override fun execute(input: UpdateLeadRequest): ValidationResult<String> {
+class IndirectLeadDetailValidator (val user: User) : Validator<IndirectUpdateLeadRequest, String>() {
+    override fun execute(input: IndirectUpdateLeadRequest): ValidationResult<String> {
         val contact = input.contact
         val identifier: Int
         val errorMessageRes = when {
 
-            contact.name.isBlank() -> {
+            input.leadName.isBlank() -> {
                 identifier = 1
                 R.string.error_message_cat_name
             }
 
-            contact.name.invalidAlphaNumbric() -> {
+            input.leadName.invalidAlphaNumbric() -> {
                 identifier = 2
                 R.string.error_message_alphabets
             }
@@ -80,44 +81,22 @@ class IndirectLeadDetailValidator (val user: User) : Validator<UpdateLeadRequest
                 R.string.error_message_invalid_pan
             }
 
-            contact.aadharNumber.run { isNotBlank() && invalidAadhar() } -> {
-                identifier = 11
-                R.string.error_message_invalid_aadhar
-            }
-
             input.refereeName.run { isNotBlank() && invalidAlphaNumbric() } -> {
-                identifier = 12
+                identifier = 11
                 R.string.error_message_alphabets
             }
 
-            input.prospectRefereMobile.run {
-                isNotBlank() && length <= 10 && !matches(
-                    "^[6789]\\d{9}$".toRegex()
-                )
-            } -> {
-                identifier = 13
+            input.refereeMobile?.isNotBlank() == true && input.refereeMobile?.invalidMobileNo()!!
+            ->{
+                identifier = 12
                 R.string.error_message_invalid_mobile
             }
 
-            input.prospectRefereEmail.run { isNotBlank() && invalidEmail() } -> {
-                identifier = 14
+            input.refereeEmail?.run { isNotBlank() == true && invalidEmail() } == true -> {
+                identifier = 13
                 R.string.error_message_invalid_email
             }
 
-            input.leadAccountTypeId.run { isNotBlank() && equals("-1") } -> {
-                identifier = 15
-                R.string.error_message_select_account_type
-            }
-            input.ChipsEventIdName.run { isNotBlank() && equals("-1") } -> {
-                identifier = 16
-                R.string.error_message_select_event
-            }
-            input.IsBandhanBankEmployee == "Yes"
-                    && user.isAllianceBusiness()  &&
-                    input.BandhanBankEmployeeCode.isBlank()  -> {
-                identifier = 17
-                R.string.error_message_enter_bbemp
-            }
 
             else -> {
                 identifier = 0

@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class IndirectUpdateLeadRequest(
     @JvmField @SerializedName("LeadID") val leadID: String,
+    @JvmField @SerializedName("LeadName") val leadName: String,
     @JvmField @SerializedName("BusinessUnitID") val businessUnitID: String,
     @JvmField @SerializedName("IsPotentialPMSProductValue") val isPotentialPMSProductValue: String,
     @JvmField @SerializedName("LeadCategoryID") val leadCategoryID: String?,
@@ -30,7 +31,6 @@ data class IndirectUpdateLeadRequest(
         "leadFieldValueModels"
   ) val leadFieldValueModels: List<IndirectLeadFieldValueRequest>,
     @JvmField @SerializedName("ExpectedMargin") val expectedMargin: String?,
-    @JvmField @SerializedName("ActivateOTPInApp") val ActivateOTPInApp: String?,
     @JvmField @SerializedName("BG_ID") val bgId: String?,
     @JvmField @SerializedName("WorkExp_ID") val workExpId: String?,
     @JvmField @SerializedName("ExistingBrokerID") val existingBrokerID: String?,
