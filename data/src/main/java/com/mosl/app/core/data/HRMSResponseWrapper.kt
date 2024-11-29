@@ -1,6 +1,7 @@
 package com.mosl.app.core.data
 
 import com.google.gson.reflect.TypeToken
+import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.saathi.api.model.attendance.HrmsErrorResponse
 import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
@@ -19,13 +20,13 @@ class HRMSResponseWrapper @Inject constructor() : Converter.Factory() {
     annotations: Array<Annotation>,
     retrofit: Retrofit
   ): Converter<ResponseBody, *>? {
-    if (type !is Class<*>) {
+    if ( hasExcludeWrapper(annotations)) {
       return null
-    }
-    if (!HrmsErrorResponse::class.java.isAssignableFrom(type)) {
+    } else if (type !is Class<*>) {
       return null
-    }
-    if (MOSLResponseWrapper.hasExtraDataWrapper(annotations)) {
+    } else if (!HrmsErrorResponse::class.java.isAssignableFrom(type)) {
+      return null
+    }else if (MOSLResponseWrapper.hasExtraDataWrapper(annotations)) {
       val envelopedType = TypeToken.getParameterized(
         ExtraDataCommonResponse::class.java, type
       ).type
@@ -66,6 +67,15 @@ class HRMSResponseWrapper @Inject constructor() : Converter.Factory() {
 private fun hasExtraDataWrapper(annotations: Array<Annotation>): Boolean {
   for (annotation in annotations) {
     if (annotation.annotationClass == ExtraDataWrapper::class.java) {
+      return true
+    }
+  }
+  return false
+}
+
+fun hasExcludeWrapper(annotations: Array<Annotation>): Boolean {
+  for (annotation in annotations) {
+    if (annotation == ExcludeWrapper::class.java) {
       return true
     }
   }

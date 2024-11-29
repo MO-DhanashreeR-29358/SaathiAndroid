@@ -23,9 +23,9 @@ class IndirectLeadDetailMainStateAdapter(
 
     return when (position) {
       0 -> IndirectLeadDetailFragment.newInstance(0, MOSLConstants.DETAILS, leadId, ucId)
-      1 -> IndirectLeadDetailFragment.newInstance(1, MOSLConstants.ACTIVITIES, leadId, ucId)
+      1 -> LeadViewActivitiesFragment.newInstance(1, MOSLConstants.ACTIVITIES, leadId, ucId)
       else -> {
-        IndirectLeadDetailFragment.newInstance(2, MOSLConstants.MAPPING_HISTORY, leadId, ucId)
+        MappingHistoryFragment.newInstance(2, MOSLConstants.MAPPING_HISTORY, leadId, ucId)
       }
     }
 

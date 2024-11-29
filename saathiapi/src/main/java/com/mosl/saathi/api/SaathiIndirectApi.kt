@@ -1,5 +1,6 @@
 package com.mosl.saathi.api
 
+import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
@@ -39,6 +40,11 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 
 import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.lead.request.SearchRequest
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
+import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
+import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
+import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
+import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
@@ -135,4 +141,24 @@ interface SaathiIndirectApi {
     fun getLeadView(
         @Body request: LeadViewRequest
     ): Observable<SaathiCommonResponse<IndirectLeadViewItem>>
+
+    @POST("Meeting/GetAppointment")
+    @ExtraDataWrapper
+    fun getAppointments(@Body request: AppointmentRequest): Observable<ExtraDataCommonResponse<List<AppointmentResponse>>>
+
+    @POST("Meeting/GetMeeting")
+    @ExtraDataWrapper
+    fun getMeetings(@Body request: MeetingRequest): Observable<ExtraDataCommonResponse<List<MeetingResponse>>>
+
+    @ExcludeWrapper
+    @POST("Lead/GetLeadHistoryByLeadId")
+    fun getLeadHistoryByLeadId(
+        @Body request: LeadHistoryRequest
+    ): Observable<ExtraDataCommonResponse<String>>
+
+    @ExcludeWrapper
+    @POST("Lead/GetLeadProductHistoryByLeadId")
+    fun getLeadProductHistoryByLeadId(
+        @Body request: LeadHistoryRequest
+    ): Observable<ExtraDataCommonResponse<String>>
 }

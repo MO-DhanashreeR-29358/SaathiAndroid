@@ -49,7 +49,7 @@ public class MOSLResponseWrapper extends Converter.Factory {
         }
     }
 
-    private static boolean hasExcludeWrapper(Annotation[] annotations) {
+    public static boolean hasExcludeWrapper(Annotation[] annotations) {
         for (Annotation annotation : annotations) {
             if (annotation.annotationType() == ExcludeWrapper.class) {
                 return true;
