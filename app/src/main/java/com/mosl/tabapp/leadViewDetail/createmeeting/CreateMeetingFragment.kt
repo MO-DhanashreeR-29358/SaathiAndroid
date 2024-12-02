@@ -111,6 +111,17 @@ import kotlin.collections.ArrayList
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_EVENT
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ApiClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.MeetingFeedbackData
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ParticipantInfo
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.TransactionInfo
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerRequest
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
@@ -1661,6 +1672,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
+            callZykrrApi()
             MSFDialog.alertDialog(
                 requireContext(), 0, resources.getString(string.motilal_oswal),
                 MOSLConstants.CREATE_MEETING, "OK", true
@@ -1671,6 +1683,59 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 }
             }
         }
+    }
+
+    private fun callZykrrApi(){
+        RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
+        val callToken = ApiClient.apiService.getToken("","")
+
+        callToken.enqueue(object : Callback<tokenModel> {
+            override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
+                if (response.isSuccessful) {
+                    val post = response.body() as tokenModel
+                    callZykrrRegisterApi(post)
+                } else {
+                    // Handle error
+                }
+            }
+
+            override fun onFailure(call: Call<tokenModel>, t: Throwable) {
+                // Handle failure
+            }
+        })
+
+
+    }
+
+    private fun callZykrrRegisterApi(tokenModel: tokenModel){
+        RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
+        var registerData = registerRequest(getMeetingData(),"","","",true,"")
+        val call = ApiClient.apiService.registerParticipants("","application/json",tokenModel.token!!,registerData)
+
+        call.enqueue(object : Callback<registerResponse> {
+            override fun onResponse(call: Call<registerResponse>, response: Response<registerResponse>) {
+                if (response.isSuccessful) {
+                    val post = response.body() as tokenModel
+
+                    // Handle the retrieved post data
+                } else {
+                    // Handle error
+                }
+            }
+
+            override fun onFailure(call: Call<registerResponse>, t: Throwable) {
+                // Handle failure
+            }
+        })
+    }
+
+    private fun getMeetingData() : ArrayList<MeetingFeedbackData>{
+        var participaint = ParticipantInfo("","","","")
+        var transactionInfo = TransactionInfo(ArrayList(), "", ArrayList())
+        var feedback = MeetingFeedbackData(participaint, transactionInfo)
+        var list = ArrayList<MeetingFeedbackData>()
+        list.add(feedback)
+        return list
     }
 
     companion object {
