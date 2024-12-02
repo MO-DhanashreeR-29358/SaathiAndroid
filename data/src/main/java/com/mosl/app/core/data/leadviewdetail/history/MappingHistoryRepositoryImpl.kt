@@ -58,12 +58,12 @@ class MappingHistoryRepositoryImpl @Inject constructor(
         }
       }
 
-      return apiRequest.map { it ->
-       Log.d("LeadMapping" , gson.toJson(it))
+      return apiRequest/*.map { it ->
+       Log.d("LeadMapping" , it.toString())
         val type =
           object : TypeToken<HashMap<String?, Any?>?>() {}.type
         val response: HashMap<String, Any> =
-          gson.fromJson(gson.toJson(it), type)
+          gson.fromJson(it.toString(), type)
         val status = response["Status"].toString()
         Log.d("LeadMappingStatus" , status)
         if (status.equals("true", ignoreCase = true)) {
@@ -74,9 +74,9 @@ class MappingHistoryRepositoryImpl @Inject constructor(
           Log.d("LeadMappingMessage:" , message)
           throw ServiceFailureException(message, message)
         }
-      }.map {
+      }*/.map {
 
-        renderIndirectTable(gson.toJson(it))
+        renderIndirectTable(it.toString())
       }
     }else{
       val apiRequest = when (eventType) {

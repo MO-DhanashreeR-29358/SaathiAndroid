@@ -58,5 +58,7 @@ data class Meeting(
   @JvmField val touchedUntouched: String,
   @JvmField val feedback: String,
   @JvmField val geoTag: String,
-  @JvmField val eventName: String
+  @JvmField val eventName: String,
+  @JvmField val meetingDescription: String,
+  @JvmField val dateDisplay: String
 )

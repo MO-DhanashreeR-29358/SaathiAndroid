@@ -49,5 +49,6 @@ data class MeetingResponse(
   @JvmField @SerializedName("Location") val location: String?,
   @JvmField @SerializedName("TouchedUntouched") val touchedUntouched: String?,
   @JvmField @SerializedName("Feedback") val feedback: String?,
-  @JvmField @SerializedName("TagEventName") val eventName: String?
+  @JvmField @SerializedName("TagEventName") val eventName: String?,
+  @JvmField @SerializedName("MeetingDescription") val meetingDescription: String?
 )

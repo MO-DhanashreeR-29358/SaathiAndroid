@@ -154,7 +154,7 @@ interface SaathiIndirectApi {
     @POST("Lead/GetLeadHistoryByLeadId")
     fun getLeadHistoryByLeadId(
         @Body request: LeadHistoryRequest
-    ): Observable<ExtraDataCommonResponse<String>>
+    ): Observable<ResponseBody>
 
     @ExcludeWrapper
     @POST("Lead/GetLeadProductHistoryByLeadId")
