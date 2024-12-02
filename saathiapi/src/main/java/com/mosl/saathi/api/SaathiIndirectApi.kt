@@ -2,13 +2,14 @@ package com.mosl.saathi.api
 
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.AttendeeResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
-import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.SetAppointmentPostReq
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchRequest
 import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchResponse
@@ -38,6 +39,8 @@ interface SaathiIndirectApi {
     @POST("UserApi/GetClientCodesAuto")
     fun fnSearchProspectMeetingClient(@Body request: ProspestMeetingSearchRequest):Observable<ProspestMeetingSearchResponse>
 
+    @POST("Lead/GetAddressByLeadId")
+    fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
 
 }

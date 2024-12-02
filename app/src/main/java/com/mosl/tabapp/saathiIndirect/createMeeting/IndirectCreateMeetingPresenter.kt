@@ -10,6 +10,7 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
@@ -110,6 +111,22 @@ class IndirectCreateMeetingPresenter @Inject constructor(
                 it.position
             }
             .subscribe(view::renderOnAttendeeItemClick)
+            .addTo(disposable)
+
+
+        view.onMeetingLocationSelected()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getSelectedMeetingLocation() }
+            .filter {
+                it != CreateMeetingConstants.SELECT_MEETING_LOCATION/* &&
+                        it?.isLocationProper() ?: false*/
+            }
+            .switchMap {
+                indirectrepoCreateMeeting.getAddress(it?.lookUpID.toString(), "")
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderAddress)
             .addTo(disposable)
     }
 }

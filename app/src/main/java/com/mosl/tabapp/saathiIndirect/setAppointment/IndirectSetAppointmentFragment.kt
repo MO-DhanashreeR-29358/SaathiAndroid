@@ -21,6 +21,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -48,6 +49,9 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.MeetingApptModel
+import com.mosl.tabapp.model.MeetingAttendeeItem
+import com.mosl.tabapp.model.SetAppointmentPostReq
+import com.mosl.tabapp.model.SplMeetingAttendeeItem
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -501,7 +505,7 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         val meetingApptModel = MeetingApptModel().apply {
             meetingType = "A"
             displayType = "A"
-            leadId = "978823"
+            leadId = "7390962"
             ucid = "0"
             meetingDate = getDate()
 
@@ -517,7 +521,48 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             meetingDes=binding.etMeetingDescription.text.toString()
 
         }
-        return Gson().toJson(meetingApptModel)
+        var objSetAppointmentPostReq: SetAppointmentPostReq =SetAppointmentPostReq()
+        objSetAppointmentPostReq.product=meetingApptModel.product
+
+        var tempList :MutableList<MeetingAttendeeItem?> = addedAttendeeList .map {
+            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
+        }.toMutableList()
+
+        addedSplAttendeeList.forEach {
+            tempList.add(MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType))
+        }
+
+        objSetAppointmentPostReq.meetingAttendee= tempList
+
+        objSetAppointmentPostReq. mEETINGTYPEMEETING=meetingApptModel.meetingType
+
+
+        objSetAppointmentPostReq. meetingDurationID=meetingApptModel.meetingDurationID
+
+        objSetAppointmentPostReq.meetingType=meetingApptModel.meetingType
+
+
+        objSetAppointmentPostReq. meetingDes=meetingApptModel.meetingDes
+
+        objSetAppointmentPostReq. mEETINGTYPEAPPT="M"
+
+        objSetAppointmentPostReq.displayType=meetingApptModel.displayType
+
+        objSetAppointmentPostReq.dISPLAYTYPEMEETING="U"
+
+        objSetAppointmentPostReq.meetingObjectiveID=meetingApptModel.meetingObjectiveID
+
+        objSetAppointmentPostReq.meetingDate=meetingApptModel.meetingDate
+
+        objSetAppointmentPostReq.meetingReasonID=meetingApptModel.meetingReasonID
+
+        objSetAppointmentPostReq.activityTypeID=meetingApptModel.activityTypeID
+
+        objSetAppointmentPostReq.leadId=meetingApptModel.leadId
+
+        objSetAppointmentPostReq.ucid=meetingApptModel.ucid
+
+        return Gson().toJson(objSetAppointmentPostReq)
     }
 
 }

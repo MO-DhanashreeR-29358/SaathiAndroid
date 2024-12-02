@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
@@ -32,6 +33,8 @@ import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
+import com.mosl.shared.util.AppDateFormats
+import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
@@ -40,8 +43,12 @@ import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectCreateMeetingBinding
 import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
+import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
+import com.mosl.tabapp.model.AddedAttendeeModel
+import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -470,5 +477,123 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         } else {
             textView.text = String.format("(%s)", count.toString())
         }
+    }
+
+    override fun getAttendeeList(): List<AddedAttendee> {
+        return addedAttendeeList
+    }
+
+    override fun getPincode(): String {
+        return binding.etAddPinCode.text.toString()
+    }
+
+    override fun getAmount(): String {
+        return binding.etMeetingAmount.text.toString()
+    }
+
+    override fun getMeetingAddress(): String {
+        return binding.etMeetingAdd.text.toString()
+    }
+
+    override fun getDate(): String {
+        return getFormatedDate(binding.tvDate.text.toString(), AppDateFormats.DF_JSON_DATE12, AppDateFormats.DF_JSON_DATE9)
+    }
+    override fun getSelectedMeetingDuration(): LookUp? {
+        return getSelectedSpinnerValue(binding.spMeetingDuration)
+    }
+
+    private fun getSelectedSpinnerValue(spinner: Spinner): LookUp? {
+        if (spinner.selectedItem is LookUp) {
+            return (spinner.selectedItem as LookUp)
+        }
+        return null
+    }
+    override fun getSelectedMeetingObjective(): LookUp? {
+        return getSelectedSpinnerValue(binding.spMeetingObjective)
+    }
+    override fun getSelectedMeetingReason(): LookUp {
+        return binding.spMeetingReason.selectedItem as LookUp
+    }
+    override fun getMeetingDesc(): String {
+        return binding.etMeetingDescription.text.toString()
+    }
+
+    override fun getMeetingLatitude(): String? {
+        return "strMeetingLatitude"
+    }
+
+    override fun getMeetingLongitude(): String? {
+        return "strMeetingLongitude"
+    }
+
+    override fun getTravellingmodeList(): List<CreateMeetingTravellingModel> {
+        return mutableListOf()
+    }
+
+
+    override fun onMeetingLocationSelected(): Observable<Int> {
+        return binding.spLocationAdd.itemSelections()
+    }
+    override fun getSelectedMeetingLocation(): LookUp {
+        return (binding.spLocationAdd.selectedItem as LookUp)
+    }
+
+    override fun renderAddress(uiModel: UiModel<String>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            binding.etMeetingAdd.setText("")
+            Timber.d("CreateMeetingFragment renderAddress showOnFailurePopup ${it.message}")
+
+            /* if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
+                 showOnFailurePopup(it)
+             }*/
+        }
+
+        uiModel.onSuccess {
+            if(getSelectedMeetingLocation().lookUpName == "Branch"){
+                binding.etMeetingAdd.setText(it)
+            }else{
+                binding.etMeetingAdd.setText("")
+            }
+
+        }
+    }
+    override  fun getInputData(): MeetingApptModel {
+        val attendeeList = if (getAttendeeList()
+                .isEmpty()
+        ) {
+            emptyList()
+        } else getAttendeeList()
+            .map {
+                AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+            }
+
+        val data = MeetingApptModel()
+        data.meetingType = "M"
+        data.displayType = "A"
+        data.pincode = getPincode()
+        data.amount = getAmount()
+        data.meetingAddress = getMeetingAddress()
+        data.meetingLatitude = getMeetingLatitude()
+        data.meetingLongitude = getMeetingLongitude()
+        data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
+        data.leadId = ""
+        data.ucid = ""
+        data.meetingDate = getDate()
+        data.product = "0"
+        data.meetingDuration = getSelectedMeetingDuration()?.lookUpID.toString()
+        data.meetingObjectiveID = getSelectedMeetingObjective()?.lookUpID.toString()
+        data.activityTypeID = getSelectedActivityType()?.lookUpID.toString()
+        data.meetingReason = getSelectedMeetingReason()?.lookUpID.toString()
+        data.meetingDes = CRMAppUtil.getJsonSafeString(getMeetingDesc())
+        data.meetingAttendee = attendeeList
+        data.travellingList = getTravellingmodeList()
+
+
+        data.geoArea = "getGeoArea()"
+        data.geoLatitude = "getLatitude()"
+        data.geoLongitude = "getLongitude()"
+        return data
     }
 }

@@ -21,6 +21,7 @@ import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
@@ -84,6 +85,14 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
         )
         return saathiIndrectApi.getAutoCompleteAttendee(request)
             .map { CreateMeetingMapper.transformAttendeeData(it.response ?: mutableListOf()) }
+    }
+
+    override fun getAddress(
+        meetingID: String,
+        leadId: String
+    ): Observable<String> {
+        return saathiIndrectApi.getAddressByLeadId(AddressByLeadIdRequest(leadId, meetingID))
+            .map { it.meetingAddress }
     }
 
     fun getType(type: Int): String {

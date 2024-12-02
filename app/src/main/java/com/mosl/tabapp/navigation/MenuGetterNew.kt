@@ -56,7 +56,7 @@ object MenuGetterNew {
         val args = Bundle()
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectCreateMeetingFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_QR_CODE -> QRCodeFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> ReactivationSummaryFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL-> ReactivationDetailFragment()

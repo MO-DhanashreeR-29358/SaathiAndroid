@@ -13,4 +13,9 @@ interface IndirectCreateMeetingRepository {
     fun getInteresedIn():Observable<List<LookUp>>
     fun getAttendeeData(searchText: String): Observable<List<Attendee>>
 
+    fun getAddress(
+        meetingID: String,
+        leadId: String
+    ): Observable<String>
+
 }
