@@ -7,6 +7,7 @@ import com.mosl.mobile.user.LogoutInfo
 import com.mosl.mobile.user.model.*
 import com.mosl.saathi.api.MyZoneApi
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.login.LoginRequest
 import com.mosl.saathi.api.model.login.ValidateLoginRequest
 import com.mosl.saathi.api.model.logout.LogoutRequest
@@ -23,6 +24,8 @@ import javax.inject.Inject
 
 class AppUserRepositoryImpl @Inject constructor(
     val saathiApi: SaathiApi,
+    val saathiIndirectApi: SaathiIndirectApi,
+    val userManager: UserManager,
     val myZoneApi: MyZoneApi,
     val encryptor: AESEncryptor,
     val context: Context
@@ -75,8 +78,14 @@ class AppUserRepositoryImpl @Inject constructor(
         token = logoutInfo.token,
         ipAddress = getLocalIpAddress(), macAddress = getDeviceID(context.contentResolver)
     )
-    return saathiApi.logout(request)
-        .map { true }
+        if(userManager.getUser()?.isIndirectUser() == true){
+            return saathiIndirectApi.logout(request)
+                .map { true }
+        }else{
+            return saathiApi.logout(request)
+                .map { true }
+        }
+
   }
 
     override fun fnValidateLogin(objValidateLoingPostModel: LoginInfo): Observable<ValidateLoingResponseModel> {

@@ -17,6 +17,12 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
+import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
+import com.mosl.saathi.api.model.documents.DocumentsRequest
+import com.mosl.saathi.api.model.documents.LeadDocumentsItem
+import com.mosl.saathi.api.model.documents.UpdateDocumentsRequest
+import com.mosl.saathi.api.model.documents.UploadDocumentItem
+import com.mosl.saathi.api.model.documents.UploadDocumentsRequest
 import com.mosl.saathi.api.model.lead.AssociatedBrokerItem
 import com.mosl.saathi.api.model.lead.BackgroundItem
 import com.mosl.saathi.api.model.lead.CityItem
@@ -47,6 +53,7 @@ import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
 import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadHistoryResponse
 import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadMappingHistoryResponse
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
+import com.mosl.saathi.api.model.logout.LogoutRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
@@ -163,4 +170,30 @@ interface SaathiIndirectApi {
     fun getLeadProductHistoryByLeadId(
         @Body request: LeadHistoryRequest
     ): Observable<ExtraDataCommonResponse<List<IndirectLeadMappingHistoryResponse>>>
+
+    @POST("Auth/Logout")
+    fun logout(@Body logoutRequest: LogoutRequest): Observable<String>
+
+    //===================== Documents=========================
+
+    @POST("Lead/GetLeadDocuments")
+    @ExtraDataWrapper
+    fun getLeadDocuments(
+        @Body request: DocumentsRequest
+    ): Observable<ExtraDataCommonResponse<List<LeadDocumentsItem>>>
+
+    @POST("Lead/UploadDocument")
+    fun postUploadDocuments(
+        @Body request: UploadDocumentsRequest
+    ): Observable<SaathiCommonResponse<UploadDocumentItem>>
+
+    @POST("Lead/UpdateLeadDocuments")
+    fun postUpdateDocuments(
+        @Body request: UpdateDocumentsRequest
+    ): Observable<SaathiCommonResponse<String>>
+
+    @POST("Lead/DeleteLeadDocuments")
+    fun postDeleteDocuments(
+        @Body request: DeleteDocumentRequest
+    ): Observable<SaathiCommonResponse<String>>
 }
