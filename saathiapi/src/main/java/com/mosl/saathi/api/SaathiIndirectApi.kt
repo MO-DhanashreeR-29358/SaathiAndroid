@@ -1,5 +1,6 @@
 package com.mosl.saathi.api
 
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
@@ -41,6 +42,9 @@ interface SaathiIndirectApi {
 
     @POST("Lead/GetAddressByLeadId")
     fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
+
+    @POST("Meeting/AddUpdateMeeting")
+    fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
 
 
 }

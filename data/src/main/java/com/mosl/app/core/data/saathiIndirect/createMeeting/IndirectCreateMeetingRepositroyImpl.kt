@@ -1,5 +1,6 @@
 package com.mosl.app.core.data.saathiIndirect.createMeeting
 
+import android.util.Log
 import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIONABLES
 import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
 import com.mosl.app.core.data.leadviewdetail.createmeeting.BACLIENTMEETING
@@ -16,6 +17,7 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
 import com.mosl.app.core.data.saathiIndirect.SetAppointment.SetAppointmentMapper
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
@@ -26,6 +28,8 @@ import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -63,7 +67,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
 
     override fun getTravellingMode(): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
-            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=118,parentId="0",IgnoreBusinessUnit=false)
+            LookupRequest(businessUnitId="0",lookupTypeId=118,parentId="0",IgnoreBusinessUnit=false)
         ).map {
             SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(TRAVELLINGMODEID))
         }
@@ -71,10 +75,10 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
 
     override fun getInteresedIn(): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
-            LookupRequest(businessUnitId="21",lookupTypeId=183,
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=183,
                 parentId="0",IgnoreBusinessUnit=false)
         ).map {
-            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(TRAVELLINGMODEID))
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(INTERESTEDIN))
         }
     }
 
@@ -93,6 +97,15 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
     ): Observable<String> {
         return saathiIndrectApi.getAddressByLeadId(AddressByLeadIdRequest(leadId, meetingID))
             .map { it.meetingAddress }
+    }
+
+    override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
+        Log.d("Meeting Post Json",data)
+        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        return saathiIndrectApi.postAddUpdateMeeting(request)
+            .map {
+                CreateMeetingMapper.transformAddUpdateMeeting(it)
+            }
     }
 
     fun getType(type: Int): String {

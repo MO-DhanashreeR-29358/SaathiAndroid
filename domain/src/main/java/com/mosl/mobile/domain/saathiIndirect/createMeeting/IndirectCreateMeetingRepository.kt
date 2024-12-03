@@ -1,5 +1,6 @@
 package com.mosl.mobile.domain.saathiIndirect.createMeeting
 
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import io.reactivex.rxjava3.core.Observable
@@ -17,5 +18,7 @@ interface IndirectCreateMeetingRepository {
         meetingID: String,
         leadId: String
     ): Observable<String>
+
+    fun saveRequest(data: String): Observable<AddUpdateMeeting>
 
 }

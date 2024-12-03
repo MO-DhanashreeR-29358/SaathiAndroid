@@ -128,5 +128,33 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             }
             .subscribe(view::renderAddress)
             .addTo(disposable)
+
+        val travellingModeSelectedObs = view.onTravellingModeSelected()
+            .filter(InvalidSelectionPredicate)
+            .skip(1)
+            .map { view.getSelectedTravellingMode() }
+            .share()
+
+        travellingModeSelectedObs.filter { it != CreateMeetingConstants.SELECT_TRAVELLING_MODE }
+            .subscribe {
+                view.getSelectedTravellingMode()
+                    ?.let { it1 -> view.renderOnTravellingModeClick(it1) }
+            }
+            .addTo(disposable)
+
+
+        view.onSaveClicked().
+                map {
+                    view.getInputData()
+                }.switchMap {
+                    indirectrepoCreateMeeting.saveRequest(it) .compose(applyUiModel())
+        }.subscribe {
+            it.onSuccess {
+                Log.d("Create Meeting",Gson().toJson(it))
+            }
+            it.onFailure {
+                Log.d("Create MeetingF",it.message.toString())
+            }
+        }.addTo(disposable)
     }
 }

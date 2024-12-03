@@ -6,8 +6,6 @@ import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
-import com.mosl.tabapp.model.MeetingApptModel
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectCreateMeetingView :BaseView{
@@ -26,6 +24,8 @@ interface IndirectCreateMeetingView :BaseView{
     fun fnRenderTravellingMode(uiModel: UiModel<List<LookUp>>)
     fun onIntrestedInCall():Observable<IndirectCreateMeetingUiEvent.OnIntrestedInCall>
     fun fnRenderIntrestedIn(uiModel: UiModel<List<LookUp>>)
+
+    fun fnGetSelectedIntrestedIn():LookUp?
     fun renderDatePicker()
     fun onDatePicker(): Observable<Unit>
     fun onAttendeeClicked(): Observable<Unit>
@@ -54,6 +54,9 @@ interface IndirectCreateMeetingView :BaseView{
     fun getSelectedMeetingReason(): LookUp
     fun getMeetingDesc(): String
 
+    fun onTravellingModeSelected(): Observable<Int>
+    fun getSelectedTravellingMode(): LookUp
+    fun renderOnTravellingModeClick(lookUp: LookUp)
     fun getTravellingmodeList(): List<CreateMeetingTravellingModel>
 
     fun getMeetingLatitude(): String?
@@ -61,5 +64,8 @@ interface IndirectCreateMeetingView :BaseView{
     fun onMeetingLocationSelected(): Observable<Int>
     fun getSelectedMeetingLocation(): LookUp
     fun renderAddress(uiModel: UiModel<String>)
-    fun getInputData(): MeetingApptModel
+    fun getInputData(): String
+
+    fun onResetClicked(): Observable<Unit>
+    fun onSaveClicked(): Observable<Unit>
 }

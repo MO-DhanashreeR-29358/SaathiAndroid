@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -21,6 +20,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
@@ -42,13 +42,15 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectCreateMeetingBinding
-import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
+import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.model.AddedAttendeeModel
-import com.mosl.tabapp.model.AddedSplAttendeeModel
+import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
+import com.mosl.tabapp.model.MeetingAttendeeItem
+import com.mosl.tabapp.model.MeetingAttendeeItems
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -71,6 +73,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private lateinit var meetingObjectiveAdapter:ArrayAdapter<LookUp>
     private lateinit var locationAddAdapter:ArrayAdapter<LookUp>
     private lateinit var travellingModeAdapter:ArrayAdapter<LookUp>
+    private lateinit var intrestedInAdapter:ArrayAdapter<LookUp>
     private lateinit var mainFromDate: String
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), MoslConstant.dd_MM_yyyy)
     private val uiSubject = PublishSubject.create<IndirectCreateMeetingUiEvent>()
@@ -81,6 +84,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private var pbLoadingIndicator: ProgressBar? = null
     private val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
     private var addedAttendeeCount = 0
+
+    private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
 
     override fun getLayout() = R.layout.frag_indirect_create_meeting
 
@@ -111,6 +116,17 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
         travellingModeAdapter=SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spTravellingMode.adapter=travellingModeAdapter
+
+        intrestedInAdapter=SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spIntrestedIn.adapter=intrestedInAdapter
+
+        mainFromDate = CRMAppUtil.getDate(Date(), MoslConstant.yyyy_MM_dd)
+        binding.tvDate.text = CRMAppUtil.getDBDate(Date(), MOSLConstants.DATE_FORMAT_TO_DISPLAY)
+
+        travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
+        binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
+        binding.rvTravellingList.adapter = travellingAdapter
+
     }
 
     override fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>) {
@@ -152,12 +168,16 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     override fun fnRenderIntrestedIn(uiModel: UiModel<List<LookUp>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
-           Log.d("intrestedIn Response",Gson().toJson(it))
+            intrestedInAdapter.setSpinnerData(binding.spIntrestedIn,it)
         }
         uiModel.onFailure {
             Timber.d(it)
             showOnFailurePopup(it)
         }
+    }
+
+    override fun fnGetSelectedIntrestedIn(): LookUp? {
+        return getSelectedSpinnerValue(binding.spIntrestedIn)
     }
 
     override fun onMeetingDurationCall(): Observable<IndirectCreateMeetingUiEvent.OnMeetingDurationCall> {
@@ -200,12 +220,12 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             locationAddAdapter.setSpinnerData(binding.spLocationAdd, it)
-            uiSubject.onNext(IndirectCreateMeetingUiEvent.OnTravellingModeCall)
         }
         uiModel.onFailure {
             Timber.d(it)
             showOnFailurePopup(it)
         }
+        uiSubject.onNext(IndirectCreateMeetingUiEvent.OnTravellingModeCall)
     }
 
     override fun onTravellingModeCall(): Observable<IndirectCreateMeetingUiEvent.OnTravellingModeCall> {
@@ -526,8 +546,19 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         return "strMeetingLongitude"
     }
 
+    override fun onTravellingModeSelected(): Observable<Int> {
+        return binding.spTravellingMode.itemSelections()
+    }
+    override fun getSelectedTravellingMode(): LookUp {
+        return (binding.spTravellingMode.selectedItem as LookUp)
+    }
+    override fun renderOnTravellingModeClick(lookUp: LookUp) {
+        travellingAdapter.addTravellingMode(
+            CreateMeetingTravellingModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
+        )
+    }
     override fun getTravellingmodeList(): List<CreateMeetingTravellingModel> {
-        return mutableListOf()
+        return travellingAdapter.travellingList
     }
 
 
@@ -559,7 +590,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
         }
     }
-    override  fun getInputData(): MeetingApptModel {
+    override  fun getInputData(): String {
         val attendeeList = if (getAttendeeList()
                 .isEmpty()
         ) {
@@ -578,22 +609,95 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         data.meetingLatitude = getMeetingLatitude()
         data.meetingLongitude = getMeetingLongitude()
         data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
-        data.leadId = ""
-        data.ucid = ""
+        data.leadId = "7390962"
+        data.ucid = "0"
         data.meetingDate = getDate()
         data.product = "0"
-        data.meetingDuration = getSelectedMeetingDuration()?.lookUpID.toString()
+        data.setProductList(emptyList())
+        data.meetingDuration = getSelectedMeetingDuration()?.lookUpName
+        data.meetingDurationID=getSelectedMeetingDuration()?.lookUpID?:0
         data.meetingObjectiveID = getSelectedMeetingObjective()?.lookUpID.toString()
         data.activityTypeID = getSelectedActivityType()?.lookUpID.toString()
-        data.meetingReason = getSelectedMeetingReason()?.lookUpID.toString()
+        data.meetingReason = getSelectedMeetingReason()?.lookUpName
+        data.meetingReasonID= getSelectedMeetingReason()?.lookUpID?:0
         data.meetingDes = CRMAppUtil.getJsonSafeString(getMeetingDesc())
         data.meetingAttendee = attendeeList
+        data.splMeetingAttendee= emptyList()
         data.travellingList = getTravellingmodeList()
 
 
-        data.geoArea = "getGeoArea()"
-        data.geoLatitude = "getLatitude()"
-        data.geoLongitude = "getLongitude()"
-        return data
+        data.geoArea = "Thane"
+        data.geoLatitude = "19.218330"
+        data.geoLongitude = "72.978088"
+
+        var objPostData: CreateMeetingPostReq=CreateMeetingPostReq()
+
+        objPostData.meetingLatitude=data.geoLatitude
+        objPostData. geoArea=data.geoArea
+        objPostData. mEETINGTYPEMEETING="M"
+        objPostData. meetingType="M"
+        objPostData. meetingDuration=data.meetingDuration
+
+        var strTavelling=""
+        if(data.travellingList.size!=0)
+        {
+            for (model in data.travellingList) {
+                val meetingJson = model.travellingId
+                strTavelling += "$meetingJson,"
+            }
+
+            if (!strTavelling.isEmpty()) {
+                strTavelling = strTavelling.substring(0, strTavelling.length - 1) //remove lash comma
+            }
+        }
+        objPostData. travellingList=strTavelling
+        objPostData. meetingDate =data.meetingDate
+        objPostData. meetingDescription=data.meetingDes
+        objPostData. leadId=data.leadId
+        objPostData. meetingReason=data.meetingReason
+        objPostData. ucid=data.ucid
+        objPostData. pincode=data.pincode
+        objPostData. amount=data.amount
+        objPostData. product=data.product
+        var tempList :MutableList<MeetingAttendeeItems?> =getAttendeeList().map {
+            MeetingAttendeeItems(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
+        }.toMutableList()
+        objPostData. meetingAttendee=tempList
+        objPostData. meetingLongitude =data.meetingLongitude
+        objPostData. meetingDurationID=data.meetingDurationID
+        objPostData. geoLongitude=data.geoLongitude
+        objPostData. mEETINGTYPEAPPT ="A"
+        objPostData. meetingAddress=data.meetingAddress
+        objPostData. displayType="A"
+        objPostData. geoLatitude=data.geoLatitude
+        objPostData. dISPLAYTYPEMEETING="U"
+        objPostData. meetingAddressTypeId=data.meetingAddressTypeId
+        objPostData. meetingObjectiveID=data.meetingObjectiveID
+        objPostData. meetingReasonID=data.meetingReasonID
+        objPostData. activityTypeID=data.activityTypeID
+        objPostData.productTypeID=fnGetSelectedIntrestedIn()?.lookUpID.toString()
+        var aId=""
+        if(tempList.size!=0)
+        {
+            for (model in tempList) {
+                val meetingJson = model?.attendeeEmplyeeCode
+                aId += "$meetingJson,"
+            }
+
+            if (!aId.isEmpty()) {
+                aId = aId.substring(0, aId.length - 1) //remove lash comma
+            }
+        }
+        objPostData.attendeeCode=aId
+
+        return  Gson().toJson(objPostData)
+    }
+
+    override fun onResetClicked(): Observable<Unit> {
+        return  binding.btnReset.clicks()
+    }
+
+    override fun onSaveClicked(): Observable<Unit> {
+        return  binding.btnSave.clicks()
     }
 }
