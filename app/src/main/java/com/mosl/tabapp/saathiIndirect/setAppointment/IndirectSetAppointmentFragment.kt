@@ -87,6 +87,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     private var pbLoadingIndicator1: ProgressBar? = null
     private val addedSplAttendeeList: ArrayList<AddedAttendee> = ArrayList()
     private var addedSplAttendeeCount = 0
+    var leadID:String=""
+    var UcId:String=""
     override fun getLayout() = R.layout.frag_indirect_set_appointment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,6 +110,12 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         mainFromDate = CRMAppUtil.getDate(Date(), MoslConstant.yyyy_MM_dd)
 
         binding.tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(Date(), MOSLConstants.DATE_FORMAT_TO_DISPLAY)
+    }
+
+    override fun extractArguments(bundle: Bundle) {
+        super.extractArguments(bundle)
+        leadID =bundle.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
+        UcId =bundle.getString(MOSLConstants.UCID, "0") ?: "0"
     }
 
     override fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>) {

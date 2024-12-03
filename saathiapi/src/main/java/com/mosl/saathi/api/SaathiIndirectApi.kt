@@ -3,20 +3,12 @@ package com.mosl.saathi.api
 
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
-import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
-import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
-import com.mosl.saathi.api.model.common.ExtraDataWrapper
-import com.mosl.saathi.api.model.lead.LookupItem
-import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.AttendeeResponse
-import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
-import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
-import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchRequest
 import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchResponse
 import io.reactivex.rxjava3.core.Observable
@@ -61,8 +53,6 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
-
-import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse

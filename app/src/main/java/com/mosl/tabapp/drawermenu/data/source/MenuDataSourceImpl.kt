@@ -367,7 +367,7 @@ open class MenuDataSourceImpl @Inject constructor(
             icon = R.drawable.ic_prime_entry,
             label = R.string.MOSL_MENU_PROSPECT_MEETING_TXT,
             enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING
+            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING
         )
     }
 

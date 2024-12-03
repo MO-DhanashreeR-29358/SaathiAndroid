@@ -31,6 +31,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
+import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats
@@ -46,10 +47,10 @@ import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
-import com.mosl.tabapp.model.MeetingAttendeeItem
 import com.mosl.tabapp.model.MeetingAttendeeItems
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -86,6 +87,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private var addedAttendeeCount = 0
 
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
+    var leadID:String=""
+    var UcId:String=""
 
     override fun getLayout() = R.layout.frag_indirect_create_meeting
 
@@ -96,6 +99,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         setupViews()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
+
     }
 
     private fun setupViews() {
@@ -127,6 +131,12 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvTravellingList.adapter = travellingAdapter
 
+    }
+
+    override fun extractArguments(bundle: Bundle) {
+        super.extractArguments(bundle)
+        leadID =bundle.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
+        UcId =bundle.getString(MOSLConstants.UCID, "0") ?: "0"
     }
 
     override fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>) {
@@ -609,8 +619,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         data.meetingLatitude = getMeetingLatitude()
         data.meetingLongitude = getMeetingLongitude()
         data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
-        data.leadId = "7390962"
-        data.ucid = "0"
+        data.leadId = leadID
+        data.ucid = UcId
         data.meetingDate = getDate()
         data.product = "0"
         data.setProductList(emptyList())

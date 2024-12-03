@@ -134,6 +134,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
             else -> null
         }
     }
@@ -199,6 +200,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->true
             else -> return false
         }
     }
