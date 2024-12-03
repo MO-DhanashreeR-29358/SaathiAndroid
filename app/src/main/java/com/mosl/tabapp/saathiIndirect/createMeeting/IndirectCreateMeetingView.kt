@@ -5,7 +5,9 @@ import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectCreateMeetingView :BaseView{
@@ -68,4 +70,8 @@ interface IndirectCreateMeetingView :BaseView{
 
     fun onResetClicked(): Observable<Unit>
     fun onSaveClicked(): Observable<Unit>
+
+    fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
+
+    fun renderLocationSave(locationItem: LocationItem)
 }

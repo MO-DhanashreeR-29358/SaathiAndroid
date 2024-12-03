@@ -29,11 +29,13 @@ import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.utils.toast
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.databinding.FragmentGeoTaggingBinding
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -49,6 +51,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
     internal lateinit var binding: FragmentGeoTaggingBinding
     private val dataActionSubject = PublishSubject.create<DataAction>()
     var uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
+    var uiIndirectSubject = PublishSubject.create<IndirectCreateMeetingUiEvent>()
     var isAreaRestriction : Boolean = true
     private lateinit var mGoogleMap: GoogleMap
     lateinit var mContext: Context
@@ -64,7 +67,7 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
     var isMockLocationEnabled : Boolean = false
     var isValidDistance : Boolean = true
 
-
+    private lateinit var userManager: UserManager
     @Inject
     lateinit var fusedLocation: FusedLocation
 
@@ -82,11 +85,16 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
         return inflater.inflate(R.layout.fragment_geo_tagging, container, false)
     }
 
-    fun setData(publishSubject: PublishSubject<CreateMeetingUiEvent>, isAreaRestriction : Boolean){
+    fun setData(publishSubject: PublishSubject<CreateMeetingUiEvent>, isAreaRestriction : Boolean, userManager: UserManager){
         this.uiSubject = publishSubject
         this.isAreaRestriction = isAreaRestriction
+        this.userManager = userManager
     }
-
+    fun setIndirectData(publishSubject: PublishSubject<IndirectCreateMeetingUiEvent>, isAreaRestriction : Boolean, userManager: UserManager){
+        this.uiIndirectSubject = publishSubject
+        this.isAreaRestriction = isAreaRestriction
+        this.userManager = userManager
+    }
     override fun onStart() {
         super.onStart()
         val window = dialog?.window
@@ -631,7 +639,12 @@ class GeoTaggingFragment : DialogFragment(), GoogleMap.OnMarkerDragListener, Loc
                      "geoTagging - " + locationItem.latitude + "-" + locationItem.longitude + "-" + locationItem.address + "-" + isMockLocationEnabled.toString(),
                      Toast.LENGTH_LONG
                  ).show()*/
-                uiSubject.onNext(CreateMeetingUiEvent.OnLocationSaveClick(locationItem))
+                if(userManager.getUser()?.isIndirectUser() == true){
+                    uiIndirectSubject.onNext(IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick(locationItem))
+                }else{
+                    uiSubject.onNext(CreateMeetingUiEvent.OnLocationSaveClick(locationItem))
+                }
+
                 dismiss()
             }else{
                 mContext.toast("Please select a location less than 700 meters")

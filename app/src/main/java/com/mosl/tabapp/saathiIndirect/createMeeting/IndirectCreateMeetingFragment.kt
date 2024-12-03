@@ -1,12 +1,15 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
+import android.Manifest
 import android.app.Dialog
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -20,6 +23,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
@@ -29,6 +33,7 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
@@ -43,19 +48,20 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectCreateMeetingBinding
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.MeetingAttendeeItems
+import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Calendar
@@ -78,7 +84,6 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private lateinit var mainFromDate: String
     var selectedDate : String = CRMAppUtil.getDateStr(Date(), MoslConstant.dd_MM_yyyy)
     private val uiSubject = PublishSubject.create<IndirectCreateMeetingUiEvent>()
-
     private lateinit var attendeeDialog: Dialog
     private lateinit var etSearchAttendeeText: DelayAutoCompleteTextView
     private lateinit var attendeeAdapter: AttendeeAdapter
@@ -86,10 +91,18 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private val addedAttendeeList: ArrayList<AddedAttendee> = ArrayList()
     private var addedAttendeeCount = 0
 
+
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     var leadID:String=""
     var UcId:String=""
 
+    private var isAreaRestricted :Boolean = true
+    var strLatitude : String = ""
+    var strLongitude : String = ""
+    var strMeetingLatitude : String = ""
+    var strMeetingLongitude : String = ""
+    var strAddress : String = ""
+    var isMockLocationEnabled : Boolean = false
     override fun getLayout() = R.layout.frag_indirect_create_meeting
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,6 +113,18 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
 
+        val value =
+            ActivityCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+
+        if (value == PackageManager.PERMISSION_GRANTED) {
+            // fusedLocation.initDispatcher(this)
+            val dialog = GeoTaggingFragment()
+            dialog.setIndirectData(uiSubject, true, userManager)
+            dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+
+        }
     }
 
     private fun setupViews() {
@@ -130,6 +155,15 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         binding.rvTravellingList.layoutManager = GridLayoutManager(requireContext(), 1)
         binding.rvTravellingList.adapter = travellingAdapter
+
+        binding.etMeetingAdd.setOnClickListener {
+            isAreaRestricted = false
+            if(getSelectedMeetingLocation().lookUpName != "Branch") {
+                val dialog = GeoTaggingFragment()
+                dialog.setIndirectData(uiSubject, isAreaRestricted, userManager)
+                dialog.show(activity?.supportFragmentManager!!, "UserAddress")
+            }
+        }
 
     }
 
@@ -172,7 +206,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     }
 
     override fun onIntrestedInCall(): Observable<IndirectCreateMeetingUiEvent.OnIntrestedInCall> {
-        return  uiSubject.ofType()
+        return   uiSubject.ofType()
     }
 
     override fun fnRenderIntrestedIn(uiModel: UiModel<List<LookUp>>) {
@@ -549,11 +583,11 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     }
 
     override fun getMeetingLatitude(): String? {
-        return "strMeetingLatitude"
+        return strMeetingLatitude
     }
 
     override fun getMeetingLongitude(): String? {
-        return "strMeetingLongitude"
+        return strMeetingLongitude
     }
 
     override fun onTravellingModeSelected(): Observable<Int> {
@@ -636,14 +670,15 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         data.travellingList = getTravellingmodeList()
 
 
-        data.geoArea = "Thane"
-        data.geoLatitude = "19.218330"
-        data.geoLongitude = "72.978088"
+        data.geoArea = strAddress
+        data.geoLatitude = strLatitude
+        data.geoLongitude = strLongitude
 
         var objPostData: CreateMeetingPostReq=CreateMeetingPostReq()
 
-        objPostData.meetingLatitude=data.geoLatitude
-        objPostData. geoArea=data.geoArea
+        objPostData.meetingLatitude=data.meetingLatitude
+        objPostData.meetingLongitude=data.meetingLongitude
+        objPostData. meetingAddress=data.meetingAddress
         objPostData. mEETINGTYPEMEETING="M"
         objPostData. meetingType="M"
         objPostData. meetingDuration=data.meetingDuration
@@ -676,8 +711,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         objPostData. meetingLongitude =data.meetingLongitude
         objPostData. meetingDurationID=data.meetingDurationID
         objPostData. geoLongitude=data.geoLongitude
+        objPostData. geoArea=data.geoArea
         objPostData. mEETINGTYPEAPPT ="A"
-        objPostData. meetingAddress=data.meetingAddress
         objPostData. displayType="A"
         objPostData. geoLatitude=data.geoLatitude
         objPostData. dISPLAYTYPEMEETING="U"
@@ -710,4 +745,33 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     override fun onSaveClicked(): Observable<Unit> {
         return  binding.btnSave.clicks()
     }
+
+    override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderLocationSave(locationItem: LocationItem) {
+        if(isAreaRestricted) {
+            strLatitude = locationItem.latitude
+            strLongitude = locationItem.longitude
+            strAddress = locationItem.address
+            isMockLocationEnabled = locationItem.isMockLocationEnabled
+        }else
+        {
+            strMeetingLatitude = locationItem.latitude
+            strMeetingLongitude = locationItem.longitude
+            binding.etMeetingAdd.setText(locationItem.address)
+        }
+
+        Log.d("strLatitude",strLatitude)
+        Log.d("strLongitude",strLongitude)
+        Log.d("strAddress",strAddress)
+
+        Log.d("strMeetingLatitude",strMeetingLatitude)
+        Log.d("strMeetingLongitude",strMeetingLongitude)
+        Log.d("strMeetingAddress",binding.etMeetingAdd.text.toString())
+        //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
+
+    }
+
 }
