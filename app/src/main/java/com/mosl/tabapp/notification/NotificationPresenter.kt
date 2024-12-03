@@ -5,6 +5,7 @@ import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.notification.NotificationRepository
 import com.mosl.mobile.domain.notification.NotificationRequestInput
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.constants.MOSLConstants.*
 import com.mosl.tabapp.model.NotificationData
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class NotificationPresenter @Inject constructor(
   view: NotificationView,
   val repository: NotificationRepository,
+  val userManager: UserManager,
   private val screenNavigator: ScreenNavigatorImpl
 ) : BasePresenter<NotificationView>(view) {
 
@@ -43,10 +45,18 @@ class NotificationPresenter @Inject constructor(
     if (category.isBlank()) {
       screenNavigator.openHome()
     } else if (target.page.equals(LEADVIEW)) {
-      screenNavigator.openPage(
+      if(userManager.getUser()?.isIndirectUser() == true){
+        screenNavigator.openPage(
+          NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), openLeadViewDetail(target),
+          false
+        )
+      }else{
+        screenNavigator.openPage(
           NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), openLeadViewDetail(target),
           false
-      )
+        )
+      }
+
     } else {
       screenNavigator.openPage(
         notificationNavigation(category)
