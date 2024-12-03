@@ -46,7 +46,7 @@
                 app:tabBackground="@color/white_subheading"
                 app:tabIndicatorColor="@color/orange"
                 app:tabMode="fixed"
-                app:tabTextAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:tabTextAppearance="@style/MineCustomTabText"
                 app:tabSelectedTextColor="@color/orange"
                 app:tabTextColor="@android:color/black" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
