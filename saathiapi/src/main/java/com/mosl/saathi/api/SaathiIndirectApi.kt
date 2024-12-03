@@ -44,6 +44,8 @@ import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
+import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadHistoryResponse
+import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadMappingHistoryResponse
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
@@ -154,11 +156,11 @@ interface SaathiIndirectApi {
     @POST("Lead/GetLeadHistoryByLeadId")
     fun getLeadHistoryByLeadId(
         @Body request: LeadHistoryRequest
-    ): Observable<ResponseBody>
+    ): Observable<ExtraDataCommonResponse<List<IndirectLeadHistoryResponse>>>
 
     @ExcludeWrapper
     @POST("Lead/GetLeadProductHistoryByLeadId")
     fun getLeadProductHistoryByLeadId(
         @Body request: LeadHistoryRequest
-    ): Observable<ExtraDataCommonResponse<String>>
+    ): Observable<ExtraDataCommonResponse<List<IndirectLeadMappingHistoryResponse>>>
 }
