@@ -48,6 +48,8 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
 
 object MenuGetterNew {
     @SuppressLint("WrongConstant")
@@ -56,7 +58,6 @@ object MenuGetterNew {
         val args = Bundle()
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> DashboardFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectCreateMeetingFragment()
             NavigationConstants.NAVIGATE_TO_QR_CODE -> QRCodeFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY -> ReactivationSummaryFragment()
             NavigationConstants.NAVIGATE_TO_REACTIVATION_DETAIL-> ReactivationDetailFragment()
@@ -100,7 +101,6 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_LEAD_ASSIGN_STP -> DashboardReportAssignFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT -> DashboardHierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> LeadCreationFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
             NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_REPORT -> HierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_PENDING_FOR_APPROVAL -> PendingForApprovalFragment()
             NavigationConstants.NAVIGATE_TO_NOTIFICATION -> NotificationFragment()
@@ -128,6 +128,12 @@ object MenuGetterNew {
                 args.putString(WebviewFragment.PAGE_ID, WebviewFragment.QUERY_FORM_ID)
                 arguments = args
             }
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> IndirectCreateMeetingFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
             else -> null
         }
     }
@@ -137,7 +143,6 @@ object MenuGetterNew {
     fun isHandled(@NavigationConstants pageId: Int): Boolean {
         return when (pageId) {
             NavigationConstants.NAVIGATE_TO_DASHBOARD -> true
-            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING -> true
             NavigationConstants.NAVIGATE_TO_AU_BANK_MEETING_REPORT -> true
             NavigationConstants.NAVIGATE_TO_SALES_STADIUM -> true
@@ -158,7 +163,6 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_NOTIFICATION -> true
             NavigationConstants.NAVIGATE_TO_REPORTS -> true
             NavigationConstants.NAVIGATE_TO_LEAD_CREATION -> true
-            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> true
             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER -> true
             NavigationConstants.NAVIGATE_TO_LEAD_VIEW_DETAIL -> true
             NavigationConstants.NAVIGATE_TO_DOCUMENT -> true
@@ -189,6 +193,12 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE -> true
             NavigationConstants.NAVIGATE_TO_DORMANT -> true
             NavigationConstants.NAVIGATE_TO_QUERY_FORM -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
             else -> return false
         }
     }

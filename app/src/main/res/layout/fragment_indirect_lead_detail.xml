@@ -1,0 +1,1621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/_6sdp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/list_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvLeadDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="@string/lead_detail_lead_detail"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/calendar_gray" />
+
+                <LinearLayout
+                    android:id="@+id/llLeadDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_5sdp"
+                    android:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end">
+
+                        <LinearLayout
+                            android:id="@+id/llEditLeadDetail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/_3sdp"
+                                android:padding="@dimen/_2sdp"
+                                android:src="@drawable/ic_edit" />
+
+                            <TextView
+                                android:id="@+id/tvEditLeadDetail"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="@dimen/_3sdp"
+                                android:text="@string/lead_detail_edit" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilLeadID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLeadID"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_lead_id"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilLeadName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLeadName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_indirect_lead_name"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_lead_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilBusiness"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etBusiness"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_lead_business"
+                            android:inputType="textNoSuggestions"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_business_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lead_detail_associated_broker"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <Spinner
+                        android:id="@+id/spAssociatedBroker"
+                        style="@style/CRMSpinnerSelector_leadView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/Select"
+                        android:layout_marginTop="@dimen/_3sdp" />
+
+
+
+                    <TextView
+                        android:id="@+id/tvNameError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_email"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="100"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilAlternateEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAlternateEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_alternate_email"
+                            android:inputType="textEmailAddress"
+                            android:maxLength="100"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_alternate_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAlternateEmailIdError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_mobile_number"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilLandlineNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLandlineNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_landline_number"
+                            android:inputType="number"
+                            android:maxLength="11"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_land"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPanNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_pan_number"
+                            android:inputType="textCapCharacters"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_pan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilExpectedMargin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etExpectedMargin"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_expected_margin"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_ExpectedMargin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etSource"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_source"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilProspectSource"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etProspectSource"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_prospect_source"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_prospect_source"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilProspectSourceDetail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etProspectSourceDetail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_prospect_source_detail"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null"
+                            android:visibility="visible" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_pros_source_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLastModifiedBy"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_modified_by"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_last_modified_by"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilBaType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etBaType"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_batype"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_BaType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_label_category"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_category"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/spCategory"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_detail_background"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_background"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/spBackground"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilLastMeetingDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLastMeetingDate"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_meeting_date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_LastMeetingDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilBrokerage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etBrokerage"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_brokerage"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_Brokerage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilRFMName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRFMName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_rfmname"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_RFMName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilCreationDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCreationDate"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_creation_date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_creation_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tv_work_exp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_work_exp"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_work_exp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false">
+
+
+                        <Spinner
+                            android:id="@+id/sp_work_exp"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/Select" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilLastModifiedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etLastModifiedDate"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_last_modified_date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_last_modified_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilMasterCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etMasterCode"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_master_code"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_MasterCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilCreatedThrough"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCreatedThrough"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_created_through"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_created_through"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilAlternateMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etAlternateMobileNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_alternate_mobile_number"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_alternate_mobile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAlternateMobileNumberError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilTMName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etTMName"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_tmname"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_TMName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilDob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+
+                        <org.droidparts.widget.ClearableEditText
+                            android:id="@+id/etDob"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_close_text"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:hint="@string/lead_detail_date_of_birth"
+                            android:inputType="date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilAnniversary"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+
+                        <org.droidparts.widget.ClearableEditText
+                            android:id="@+id/etAnniversary"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:drawableEnd="@drawable/ic_close_text"
+                            android:enabled="false"
+                            android:focusable="false"
+                            android:hint="@string/lead_detail_anniversary"
+                            android:inputType="date"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_anniversary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/tvAnniversaryError"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:enabled="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:textColor="@color/error_red"
+                        android:textSize="@dimen/_10sdp"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilRefereeCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etRefereeCode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_referee_code"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_referee_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ProgressBar
+                            android:id="@+id/pbLoadingIndicatorRefreeCode"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="@dimen/_22sdp"
+                            android:layout_marginEnd="5dp"
+                            android:paddingStart="@dimen/_15sdp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilRefereeName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etRefereeName"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_referee_name"
+                                android:inputType="textNoSuggestions"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_referee_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ProgressBar
+                            android:id="@+id/pbLoadingIndicatorRefreeName"
+                            style="?android:attr/progressBarStyleSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginTop="@dimen/_22sdp"
+                            android:layout_marginEnd="5dp"
+                            android:paddingStart="@dimen/_15sdp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+                    </RelativeLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilRefereeEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRefereeEmail"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_referee_email"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_referee_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilRefereeNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etRefereeNumber"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_referee_mobile"
+                            android:inputType="number"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_referee_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@drawable/textview_border"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:id="@+id/tvResidenceAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:text="@string/lead_detail_residence_address"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <CheckBox
+                            android:id="@+id/cbPrimaryAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/lead_detail_primary_address"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llResAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilAdd1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etAdd1"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_add_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilAdd2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etAdd2"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_2"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_add_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilAdd3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etAdd3"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_3"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_add_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_country"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_country"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <Spinner
+                                android:id="@+id/spCountry"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <TextView
+                            android:id="@+id/tvState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_state"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
+                                android:id="@+id/spState"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_city"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
+                                android:id="@+id/spCity"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/Select" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilPincode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etPincode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_pincode"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_pin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:background="@drawable/textview_border"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:id="@+id/tvOffAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:paddingStart="@dimen/_5sdp"
+                            android:text="@string/lead_detail_office_address"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <CheckBox
+                            android:id="@+id/cbSameAs"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:enabled="false"
+                            android:text="@string/lead_detail_same_as_above"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone"
+                            tools:visibility="visible" />
+
+                        <CheckBox
+                            android:id="@+id/cbOffPrimaryAddress"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="@string/lead_detail_primary_address"
+                            android:textColor="@color/secondaryTextColor"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llOffAdd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilOffAdd1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etOffAdd1"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_1"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_off_add_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilOffAdd2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etOffAdd2"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_2"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_off_add_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilOffAdd3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etOffAdd3"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_address_3"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_off_add_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvOffCountry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_country"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_off_country"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <Spinner
+                                android:id="@+id/spOffCountry"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/tvOffState"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_state"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_off_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
+                                android:id="@+id/spOffState"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <TextView
+                            android:id="@+id/tvOffCity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_city"
+                            android:textColor="@color/text_color_personal"
+                            android:textSize="@dimen/_11sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_off_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false">
+
+                            <com.mosl.tabapp.common.searchableSpinnerNew.SearchableSpinner
+                                android:id="@+id/spOffCity"
+                                style="@style/CRMSpinnerSelector_leadView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/Select" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/ilOffPincode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_3sdp"
+                            app:hintTextAppearance="@style/InputLayout">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etOffPincode"
+                                style="@style/CRMEdittextLeadSelector"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:hint="@string/lead_detail_pincode"
+                                android:inputType="number"
+                                android:maxLength="6"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textCursorDrawable="@null" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tl_off_pin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:errorTextAppearance="@style/error_appearance"
+                                app:hintEnabled="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etComments"
+                            style="@style/CRMEdittextLeadSelector"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_60sdp"
+                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
+                            android:enabled="false"
+                            android:hint="@string/lead_detail_enter_comments"
+                            android:inputType="textMultiLine"
+                            android:lines="4"
+                            android:maxLines="4"
+                            android:minLines="1"
+                            android:textCursorDrawable="@null" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:background="@drawable/lead_detail_add_product_background"
+                        android:padding="@dimen/_5sdp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lead_detail_interested_products"
+                            android:textColor="@color/light_black"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <RelativeLayout
+                            android:id="@+id/rlAddProduct"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".6"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_toStartOf="@+id/tvAddProduct"
+                                android:padding="@dimen/_1sdp"
+                                android:src="@drawable/ic_plus" />
+
+                            <TextView
+                                android:id="@+id/tvAddProduct"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerInParent="true"
+                                android:text="@string/lead_detail_add_products"
+                                android:textColor="@color/tv_color"
+                                android:textSize="@dimen/_12sdp" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llAddProduct"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ListView
+                            android:id="@+id/lvAddProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:divider="@null"
+                            tools:listitem="@layout/item_list_add_product" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newDataLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:background="@color/list_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDocuments"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:ellipsize="end"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="@string/lead_detail_documents"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="@dimen/_14sdp" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:text="@string/lead_detail_button_update"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

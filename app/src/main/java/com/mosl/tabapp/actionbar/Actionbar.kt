@@ -19,6 +19,8 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.navigator.AppTitle
 import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.search.SearchResponse
 import com.mosl.tabapp.AppComponent
@@ -53,7 +55,8 @@ class Actionbar @JvmOverloads constructor(
 
     @Inject
     lateinit var saathiApi: SaathiApi
-
+    @Inject
+    lateinit var saathiIndirectApi: SaathiIndirectApi
     @Inject
     lateinit var userManager: UserManager
     internal lateinit var mTitleView: TextView
@@ -99,89 +102,174 @@ class Actionbar @JvmOverloads constructor(
         searchObs.map(MapStringIsBlank)
             .subscribe(this::toggleSearchState)
             .addTo(disposable)
-
-        searchObs.filter { it.length > 2 }
-            .switchMap {
-                saathiApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
-                    .map { t: List<SearchResponse> ->
-                        if (t.isNotEmpty()) {
-                            t.map { searchResponse: SearchResponse ->
-                                val jsonObject = JSONObject(searchResponse.metaData)
-                                if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
-                                    val empCode = jsonObject.getString(EMPLOYEE_CODE)
-                                    val name = jsonObject.getString(NAME)
-                                    val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
-                                    val businessProfileId = jsonObject.getString(PROFILE_ID)
-                                    val productId = jsonObject.getString(PRODUCT_ID)
-                                    val diyCode = jsonObject.getInt(DIY_CODE)
-                                    val isOAO = jsonObject.getInt(IS_OAO)
-                                    val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
-                                    SearchModelNew(
-                                        getSearchHint(),
-                                        empCode,
-                                        name,
-                                        businessProfileId,
-                                        businessProfile,
-                                        productId,
-                                        flgReactivationClient,
-                                        diyCode,
-                                        isOAO
-                                    )
-                                } else {
-                                    val ucid = jsonObject.getString(UCID)
-                                    val leadid = jsonObject.getString(LEADID)
-                                    val name = jsonObject.getString(NAME)
-                                    val mobile = jsonObject.getString(MOBILE)
-                                    val email = jsonObject.getString(EMAIL)
-                                    val sourceName = jsonObject.optString(SOURCENAME) ?: ""
-                                    val prospectSourceName =
-                                        jsonObject.optString(PROSPECTSOURCENAME) ?: ""
-                                    val prospectSourceDetails =
-                                        jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
-                                    val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
-                                    val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
-                                    val oaoUserId = jsonObject.getInt(OAOUSERID)
-                                    val diyCode = jsonObject.getInt(DIY_CODE)
-                                    val isOAO = jsonObject.getInt(IS_OAO)
-                                    val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
-                                    var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
-                                    val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
-                                    val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
-                                    SearchModelNew(
-                                        getSearchHint(),
-                                        leadid,
-                                        name,
-                                        mobile,
-                                        email,
-                                        ucid,
-                                        leadOwner,
-                                        oaoUserId,
-                                        sourceName,
-                                        prospectSourceName,
-                                        prospectSourceDetails,
-                                        interestedIn,
-                                        clientCode,
-                                        createMeetingId,
-                                        diyCode,
-                                        branchCode,
-                                        flgReactivationClient,
-                                        isOAO
-                                    )
+        if(userManager.getUser()?.isIndirectUser() == true){
+            searchObs.filter { it.length > 2 }
+                .switchMap {
+                    saathiIndirectApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
+                        .map { t: ExtraDataCommonResponse<List<SearchResponse>> ->
+                            if (t.data?.isNotEmpty() == true) {
+                                t.data!!.map { searchResponse: SearchResponse ->
+                                    val jsonObject = JSONObject(searchResponse.metaData)
+                                    if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
+                                        val empCode = jsonObject.getString(EMPLOYEE_CODE)
+                                        val name = jsonObject.getString(NAME)
+                                        val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
+                                        val businessProfileId = jsonObject.getString(PROFILE_ID)
+                                        val productId = jsonObject.getString(PRODUCT_ID)
+                                        val diyCode = 0
+                                        val isOAO = 0
+                                        val flgReactivationClient = ""
+                                        SearchModelNew(
+                                            getSearchHint(),
+                                            empCode,
+                                            name,
+                                            businessProfileId,
+                                            businessProfile,
+                                            productId,
+                                            flgReactivationClient,
+                                            diyCode,
+                                            isOAO
+                                        )
+                                    } else {
+                                        val ucid = jsonObject.getString(UCID)
+                                        val leadid = jsonObject.getString(LEADID)
+                                        val name = jsonObject.getString(NAME)
+                                        val mobile = jsonObject.getString(MOBILE)
+                                        val email = jsonObject.getString(EMAIL)
+                                        val sourceName = jsonObject.optString(SOURCENAME) ?: ""
+                                        val prospectSourceName =
+                                            jsonObject.optString(PROSPECTSOURCENAME) ?: ""
+                                        val prospectSourceDetails =
+                                            jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
+                                        val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
+                                        val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
+                                        val oaoUserId = 0
+                                        val diyCode = 0
+                                        val isOAO = 0
+                                        val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
+                                        var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
+                                        val createMeetingId = 0
+                                        val flgReactivationClient = ""
+                                        SearchModelNew(
+                                            getSearchHint(),
+                                            leadid,
+                                            name,
+                                            mobile,
+                                            email,
+                                            ucid,
+                                            leadOwner,
+                                            oaoUserId,
+                                            sourceName,
+                                            prospectSourceName,
+                                            prospectSourceDetails,
+                                            interestedIn,
+                                            clientCode,
+                                            createMeetingId,
+                                            diyCode,
+                                            branchCode,
+                                            flgReactivationClient,
+                                            isOAO
+                                        )
+                                    }
                                 }
-                            }
-                        } else {
-                            listOf(
-                                SearchModelNew(
-                                    "", "", NO_RECORDS_FOUND, "", "","","", 0,
-                                    0
+                            } else {
+                                listOf(
+                                    SearchModelNew(
+                                        "", "", NO_RECORDS_FOUND, "", "","","", 0,
+                                        0
+                                    )
                                 )
-                            )
+                            }
                         }
-                    }
-                    .compose(applyUiModel())
-            }
-            .subscribe(this::renderSearchResult)
-            .addTo(disposable)
+                        .compose(applyUiModel())
+                }
+                .subscribe(this::renderSearchResult)
+                .addTo(disposable)
+        }else{
+            searchObs.filter { it.length > 2 }
+                .switchMap {
+                    saathiApi.getSearchData(SearchRequest(getSearchText(), getSearchType()))
+                        .map { t: List<SearchResponse> ->
+                            if (t.isNotEmpty()) {
+                                t.map { searchResponse: SearchResponse ->
+                                    val jsonObject = JSONObject(searchResponse.metaData)
+                                    if (getSearchHint().equals(SEARCH_TYPE_DASHBOARD_HINT)) {
+                                        val empCode = jsonObject.getString(EMPLOYEE_CODE)
+                                        val name = jsonObject.getString(NAME)
+                                        val businessProfile = jsonObject.getString(BUSINESS_PROFILE)
+                                        val businessProfileId = jsonObject.getString(PROFILE_ID)
+                                        val productId = jsonObject.getString(PRODUCT_ID)
+                                        val diyCode = jsonObject.getInt(DIY_CODE)
+                                        val isOAO = jsonObject.getInt(IS_OAO)
+                                        val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
+                                        SearchModelNew(
+                                            getSearchHint(),
+                                            empCode,
+                                            name,
+                                            businessProfileId,
+                                            businessProfile,
+                                            productId,
+                                            flgReactivationClient,
+                                            diyCode,
+                                            isOAO
+                                        )
+                                    } else {
+                                        val ucid = jsonObject.getString(UCID)
+                                        val leadid = jsonObject.getString(LEADID)
+                                        val name = jsonObject.getString(NAME)
+                                        val mobile = jsonObject.getString(MOBILE)
+                                        val email = jsonObject.getString(EMAIL)
+                                        val sourceName = jsonObject.optString(SOURCENAME) ?: ""
+                                        val prospectSourceName =
+                                            jsonObject.optString(PROSPECTSOURCENAME) ?: ""
+                                        val prospectSourceDetails =
+                                            jsonObject.optString(PROSPECTSOURCEDETAILS) ?: ""
+                                        val interestedIn = jsonObject.optString(INTERESTEDIN) ?: ""
+                                        val leadOwner = jsonObject.optString(LEAD_OWNER) ?: ""
+                                        val oaoUserId = jsonObject.getInt(OAOUSERID)
+                                        val diyCode = jsonObject.getInt(DIY_CODE)
+                                        val isOAO = jsonObject.getInt(IS_OAO)
+                                        val clientCode = jsonObject.getString(CLIENTCODE) ?: ""
+                                        var branchCode = if(jsonObject.has(BRANCHCODE)) jsonObject.getString(BRANCHCODE) ?: "" else ""
+                                        val createMeetingId = jsonObject.optInt(CREATE_MEETING_ID)
+                                        val flgReactivationClient = jsonObject.getString(FLG_REACTIVATION_CLIENT)
+                                        SearchModelNew(
+                                            getSearchHint(),
+                                            leadid,
+                                            name,
+                                            mobile,
+                                            email,
+                                            ucid,
+                                            leadOwner,
+                                            oaoUserId,
+                                            sourceName,
+                                            prospectSourceName,
+                                            prospectSourceDetails,
+                                            interestedIn,
+                                            clientCode,
+                                            createMeetingId,
+                                            diyCode,
+                                            branchCode,
+                                            flgReactivationClient,
+                                            isOAO
+                                        )
+                                    }
+                                }
+                            } else {
+                                listOf(
+                                    SearchModelNew(
+                                        "", "", NO_RECORDS_FOUND, "", "","","", 0,
+                                        0
+                                    )
+                                )
+                            }
+                        }
+                        .compose(applyUiModel())
+                }
+                .subscribe(this::renderSearchResult)
+                .addTo(disposable)
+        }
+
     }
 
     fun getSearchType(): String {

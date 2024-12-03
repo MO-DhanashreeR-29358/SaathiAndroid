@@ -1,13 +1,15 @@
 package com.mosl.tabapp.leadViewDetail.activity.item
 
 import com.mosl.mobile.domain.leadviewdetail.activities.Meeting
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ListMeetingsBinding
 import com.xwray.groupie.databinding.BindableItem
 import timber.log.Timber
 
 class LeadViewActivitiesMeetingChildItem(
-  internal val data: Meeting
+  internal val data: Meeting,
+  internal val userManager: UserManager
 ) : BindableItem<ListMeetingsBinding>() {
 
   override fun getLayout(): Int {
@@ -20,10 +22,18 @@ class LeadViewActivitiesMeetingChildItem(
   ) {
     viewBinding.apply {
       try {
-        val dateArray = data.date!!.split(" ")
-        tvMonthName.text = dateArray[1]
-        tvMonthDate.text = dateArray[0]
-        tvMonthYear.text = dateArray[2]
+        if(userManager.getUser()?.isIndirectUser() == true){
+          val dateArray = data.dateDisplay.split(" ")
+          tvMonthName.text = dateArray[1]
+          tvMonthDate.text = dateArray[0]
+          tvMonthYear.text = dateArray[2]
+        }else{
+          val dateArray = data.date!!.split(" ")
+          tvMonthName.text = dateArray[1]
+          tvMonthDate.text = dateArray[0]
+          tvMonthYear.text = dateArray[2]
+        }
+
       } catch (e: Exception) {
         Timber.d(e)
       }

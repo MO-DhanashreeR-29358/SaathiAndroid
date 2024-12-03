@@ -10,7 +10,6 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_LOGOUT,
         NavigationConstants.NAVIGATE_TO_NONE,
         NavigationConstants.NAVIGATE_TO_DASHBOARD,
-        NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD,
         NavigationConstants.NAVIGATE_TO_FRESH_REG,
         NavigationConstants.NAVIGATE_TO_EXISTING_APP,
         NavigationConstants.NAVIGATE_TO_ONLY_MFD,
@@ -34,7 +33,6 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_NOTIFICATION,
         NavigationConstants.NAVIGATE_TO_REPORTS,
         NavigationConstants.NAVIGATE_TO_LEAD_CREATION,
-        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION,
         NavigationConstants.NAVIGATE_TO_SECOND_LEVEL_HIERARCHY_REPORT,
         NavigationConstants.NAVIGATE_TO_UPDATE_MEETING,
         NavigationConstants.NAVIGATE_TO_LEAD_ACTIVITIES_DETAILS,
@@ -55,7 +53,14 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_QR_CODE,
         NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE,
         NavigationConstants.NAVIGATE_TO_DORMANT,
-        NavigationConstants.NAVIGATE_TO_QUERY_FORM
+        NavigationConstants.NAVIGATE_TO_QUERY_FORM,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW
+
 
 })
 public @interface NavigationConstants {
@@ -120,4 +125,11 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_INDIRECT_LEAD_CREATION = 55;
 
     int NAVIGATE_TO_INDIRECT_DASHBOARD = 56;
+
+    int NAVIGATE_TO_INDIRECT_CREATE_MEETING = 57;
+
+    int NAVIGATE_TO_INDIRECT_APPOINTMENT = 58;
+
+    int NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN = 59;
+    int NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW = 60;
 }

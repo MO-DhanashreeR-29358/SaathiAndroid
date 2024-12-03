@@ -167,7 +167,7 @@ class LeadViewActivitiesFragment : CommonFragment(), LeadViewActivitiesView {
           meetingSection.update(listOf(
               ExpandableGroup(LeadViewActivitiesItem("Meeting")).apply {
                 addAll(data.listOfMeeting.map { meeting ->
-                  LeadViewActivitiesMeetingChildItem(meeting)
+                  LeadViewActivitiesMeetingChildItem(meeting, userManager)
                 })
               }
           ))

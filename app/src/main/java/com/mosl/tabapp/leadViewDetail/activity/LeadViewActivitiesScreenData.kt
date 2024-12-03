@@ -35,7 +35,8 @@ data class MeetingParcel(
   @JvmField val touchedUntouched: String,
   @JvmField val feedback: String,
   @JvmField val geoTag: String,
-  @JvmField val eventName: String
+  @JvmField val eventName: String,
+  @JvmField val meetingDescription: String
 ) : Parcelable
 
 fun Meeting.mapToMeetingParcel(): MeetingParcel {
@@ -69,6 +70,7 @@ fun Meeting.mapToMeetingParcel(): MeetingParcel {
       touchedUntouched = touchedUntouched,
       feedback = feedback,
       geoTag = geoTag,
-      eventName = eventName
+      eventName = eventName,
+      meetingDescription= meetingDescription
   )
 }

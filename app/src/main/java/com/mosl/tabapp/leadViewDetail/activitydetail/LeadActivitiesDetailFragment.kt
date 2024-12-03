@@ -48,7 +48,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvMeetingDuration.text = it.meetingDuration
           tvActionable.text = it.actionable
           tvCategory.text = it.category
-          tvQueryDesc.text = it.queryDescription
+          tvQueryDesc.text = it.queryDescription.ifEmpty { it.meetingDescription }
           tvComments.text = it.comment
           tvLocation.text = it.location
           tvMeetingAddress.text = it.meetingAddress

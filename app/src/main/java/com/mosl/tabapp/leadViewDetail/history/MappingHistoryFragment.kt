@@ -12,6 +12,7 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryCombo
 import com.mosl.mobile.domain.leadviewdetail.history.MappingHistoryData
+import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.tabapp.R
 import com.mosl.tabapp.R.array
 import com.mosl.tabapp.common.CRMAppUtil
@@ -119,7 +120,9 @@ class MappingHistoryFragment : CommonFragment(), MappingHistoryView {
             dynamicHeaderRow.setHeader(headerData)
             val hierarchyReport: List<MappingHistoryTableRow> =
                 map(data.data)
-            formatDate(data.data)
+            if(userManager.getUser()?.isIndirectUser() == false) {
+                formatDate(data.data)
+            }
             binding.tableWrapper.setData(
                 hierarchyReport,
                 ErrorModel.noData(getString(R.string.error_message_no_data_available))

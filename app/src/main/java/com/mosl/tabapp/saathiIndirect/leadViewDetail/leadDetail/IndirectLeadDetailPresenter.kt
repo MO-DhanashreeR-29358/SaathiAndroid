@@ -1,0 +1,251 @@
+package com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail
+
+import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
+import com.mosl.commons.rx.addTo
+import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.tabapp.common.RowData
+import com.mosl.tabapp.leadViewDetail.main.LeadViewDetailNavigator
+import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository
+import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
+import com.mosl.tabapp.leadcreation.ui.LeadCreationView
+import com.mosl.tabapp.leaddetail.LeadDetail
+import com.mosl.tabapp.leaddetail.LeadDetailAndProfession
+import com.mosl.tabapp.leaddetail.LeadDetailRepository
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadDetailPageData
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function5
+import timber.log.Timber
+import java.util.concurrent.TimeUnit.MILLISECONDS
+import javax.inject.Inject
+
+class IndirectLeadDetailPresenter @Inject constructor(
+    view: IndirectLeadDetailView,
+    private val data: LeadDetailArgument,
+    private val repository: IndirectLeadCreationRepository,
+    private val detailRepository: IndirectLeadDetailRepository,
+    val navigator: LeadViewDetailNavigator,
+    val userManager: UserManagerImpl
+) : BasePresenter<IndirectLeadDetailView>(view) {
+    private val validator = IndirectLeadDetailValidator(userManager.getUser()!!)
+    override fun start() {
+       val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
+            .share()
+
+        screenLoadObs
+            .switchMap {
+                Observable.zip(
+                    repository.getCategoryRowDatas(),
+                    repository.getBackgroundRowDatas(),
+                    repository.getWorkExpRowDatas(),
+                    repository.getAssociateBrokerRowDatas(),
+                    repository.getCountryRowDatas(),
+                    Function5 { listOfcategory: List<RowData>, listOfBackground: List<RowData>,
+                                listOfWorkExp: List<RowData>, listOfAssBroker: List<RowData>,
+                                listOfCountry: List<RowData>->
+                        IndirectLeadDetailPageData(
+                            listOfcategory, listOfBackground,
+                            listOfWorkExp, listOfAssBroker, listOfCountry
+                        )
+                    }
+                )
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::render, Timber::e)
+            .addTo(disposable)
+
+        screenLoadObs
+            .map { data.leadId }
+            .filter { it != "0" }
+            .switchMap {
+                detailRepository.getLeadDetail(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderLeadDetail, Timber::e)
+            .addTo(disposable)
+
+
+                screenLoadObs
+                    .subscribe { view.renderArguments(data) }
+                    .addTo(disposable)
+
+        view.onEditLeadDetailClicked()
+            .subscribe { view.renderEditLeadDetailClick() }
+            .addTo(disposable)
+
+        view.onPrimaryAddCheckboxClicked()
+            .subscribe { (view.renderPrimaryAddCheckBoxClicked()) }
+            .addTo(disposable)
+
+        view.onOfficePrimaryAddCheckboxClicked()
+            .subscribe { (view.renderOffPrimaryAddCheckBoxClicked()) }
+            .addTo(disposable)
+
+        view.onSameAsCheckboxClicked()
+            .subscribe { (view.renderSameAsAboveClicked()) }
+            .addTo(disposable)
+
+        view.onDOBClicked()
+            .subscribe { view.renderDOBClick() }
+            .addTo(disposable)
+
+        view.onAnniversaryClicked()
+            .subscribe { view.renderAnniversaryClick() }
+            .addTo(disposable)
+
+        view.onNestedScrollViewTouched()
+            .subscribe { view.renderOnNestedScrollViewTouch() }
+            .addTo(disposable)
+
+        view.onLeadDetailSectionClicked()
+            .subscribe { view.toggleLeadDetailSection() }
+            .addTo(disposable)
+
+        view.onDocumentClicked()
+            .subscribe({ navigator.openDocument(data.leadId, data.ucId) }, {
+                Timber.e(it)
+            })
+            .addTo(disposable)
+
+        view.onRefereeCodeFocusChanged()
+            .subscribe { view.renderOnRefereeCodeFocusChange() }
+            .addTo(disposable)
+
+        view.onRefereeNameFocusChanged()
+            .subscribe { view.renderOnRefereeNameFocusChange() }
+            .addTo(disposable)
+
+        view.onSubmitButtonClicked()
+            .map { view.getUpdateLeadUSerInput() }
+            .switchMap {
+                validator.validate(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe { view.renderOnUpdateButtonClick(it) }
+            .addTo(disposable)
+
+        view.onUpdateLeadEventFired()
+            .map { view.getUpdateLeadUSerInput() }
+            .switchMap {
+                repository.updateLead(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderUpdateDetail)
+            .addTo(disposable)
+
+        view.onAdd1AfterTextChanged()
+            .filter { view.isCbSameAsChecked() }
+            .subscribe { view.renderOnAdd1AfterTextChange(it) }
+            .addTo(disposable)
+
+        view.onAdd2AfterTextChanged()
+            .filter { view.isCbSameAsChecked() }
+            .subscribe { view.renderOnAdd2AfterTextChange(it) }
+            .addTo(disposable)
+
+        view.onAdd3AfterTextChanged()
+            .filter { view.isCbSameAsChecked() }
+            .subscribe { view.renderOnAdd3AfterTextChange(it) }
+            .addTo(disposable)
+
+        val refereeCodeObs = view.onRefereeCodeChanged()
+            .debounce(1000, MILLISECONDS, dispatchers.main)
+            .filter { view.isRefereeCodeFocused() }
+            .share()
+
+        refereeCodeObs
+            .filter { it.length > 3 }
+            .distinctUntilChanged()
+            .switchMap {
+                repository.getRefereeCode(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderOnRefereeCodeChange, Timber::e)
+            .addTo(disposable)
+
+        refereeCodeObs
+            .filter { it.length == 3 }
+            .distinctUntilChanged()
+            .subscribe { view.resetRefereeOnCodeChange() }
+            .addTo(disposable)
+
+        val refereeNameObs = view.onRefereeNameChanged()
+            .debounce(1000, MILLISECONDS, dispatchers.main)
+            .filter { view.isRefereeNameFocused() }
+            .share()
+
+        refereeNameObs
+            .filter { it.length > 2 }
+            .distinctUntilChanged()
+            .filter {
+                view.getRefereeCode()
+                    .isBlank()
+            }
+            .switchMap {
+                repository.getRefereeName(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderOnRefereeNameChange, Timber::e)
+            .addTo(disposable)
+
+        refereeNameObs
+            .filter { it.length == 2 }
+            .distinctUntilChanged()
+            .subscribe { view.resetRefereeOnNameChange() }
+            .addTo(disposable)
+
+        view.onCountrySelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedCountry() }
+            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
+            .switchMap {
+                repository.getStateRowDatas(it.key)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderStateOnCountrySelection, Timber::e)
+            .addTo(disposable)
+
+        view.onOfficeCountrySelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedOfficeCountry() }
+            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
+            .switchMap {
+                repository.getStateRowDatas(it.key)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderOfficeStateOnOfficeCountrySelection, Timber::e)
+            .addTo(disposable)
+
+        view.onStateSelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedState() }
+            .filter { rowData -> rowData.key != LeadCreationView.INVALID_SELECTION_KEY }
+            .switchMap {
+                repository.getCityRowDatas(it.key)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderCityOnStateSelection, Timber::e)
+            .addTo(disposable)
+
+        view.onOfficeStateSelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedOfficeState() }
+            .filter { !view.isSameAsAboveChecked() && it.key != LeadCreationView.INVALID_SELECTION_KEY }
+            .switchMap {
+                repository.getCityRowDatas(it.key)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderOfficeCityOnOfficeStateSelection, Timber::e)
+            .addTo(disposable)
+
+        view.onCitySelected()
+            .filter(InvalidSelectionPredicate)
+            .filter { view.isSameAsAboveChecked() }
+            .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
+            .addTo(disposable)
+    }
+}

@@ -12,11 +12,11 @@ class DashboardIndirectRepositoryImpl @Inject constructor(
     val saathiIndrectApi: SaathiIndirectApi
 ) :DashboardIndirctRepository{
 
-    override fun fnGetFOCODashboardFilter(): Observable<String> {
+    /*override fun fnGetFOCODashboardFilter(): Observable<String> {
 
         return saathiIndrectApi.fnGetFOCODashFilter(FOCODashboardFilterpostReq(employeeCode = "16149", calculatedPageP = 0,
             pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )).map {
             it.string()
         }
-    }
+    }*/
 }

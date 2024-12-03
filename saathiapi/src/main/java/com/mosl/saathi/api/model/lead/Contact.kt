@@ -52,5 +52,12 @@ data class Contact(
 
   @JvmField @SerializedName("ApprovalFieldList") val approvalFieldList: Any?,
 
-  @JvmField @SerializedName("PanNumber") val panNumber: String
+  @JvmField @SerializedName("PanNumber") val panNumber: String,
+
+  @JvmField @SerializedName("MaskedPanNumber") val maskedPanNumber: String,
+  @JvmField @SerializedName("MaskedEmailId") val maskedEmailId: String,
+  @JvmField @SerializedName("MaskedMobile") val maskedMobile: String,
+  @JvmField @SerializedName("MaskedAlternateMobileNo") val maskedAlternateMobileNo: String,
+  @JvmField @SerializedName("MaskedLandlineNo") val maskedLandlineNo: String,
+  @JvmField @SerializedName("MaskedAlternateEmailId") val maskedAlternateEmailId: String
 )

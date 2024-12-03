@@ -50,63 +50,6 @@
                     android:padding="@dimen/_5sdp"
                     android:visibility="visible">
 
-                    <TextView
-                        android:id="@+id/tvCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_category"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Spinner
-                        android:id="@+id/spCategory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvCategory"/>
-
-                    <TextView
-                        android:id="@+id/tvCategoryError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spCategory" />
-
-
-                    <TextView
-                        android:id="@+id/tvClientType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_client_type"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf = "@+id/tvCategoryError" />
-
-
-                    <Spinner
-                        android:id="@+id/spClientType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvClientType"/>
-
-
-
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilName"
                         android:layout_width="match_parent"
@@ -114,7 +57,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/spClientType">
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etName"
@@ -137,193 +80,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilContactPerson"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilName">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etContactPerson"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz "
-                            android:hint="@string/hint_lead_creation_contact_person"
-                            android:inputType="textNoSuggestions"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvContactPersonError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <TextView
-                        android:id="@+id/tvProfession"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_profession"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilContactPerson" />
-
-                    <Spinner
-                        android:id="@+id/spProfession"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvProfession"/>
-                    <TextView
-                        android:id="@+id/tvProfessionError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spProfession" />
-
-
-                    <TextView
-                        android:id="@+id/tvBank"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_bank"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvProfessionError" />
-
-
-                    <Spinner
-                        android:id="@+id/spBank"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvBank"/>
-
-
-                    <TextView
-                        android:id="@+id/tvBankError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spBank" />
-
-                    <TextView
-                        android:id="@+id/tvBranch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_branch"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvBankError" />
-
-
-                    <Spinner
-                        android:id="@+id/spBranch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvBranch"/>
-
-
-                    <TextView
-                        android:id="@+id/tvBranchError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spBranch" />
-
-                    <TextView
-                        android:id="@+id/tvAccountType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_account_type"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvBranchError" />
-
-
-                    <Spinner
-                        android:id="@+id/spAccountType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvAccountType"/>
-
-
-                    <TextView
-                        android:id="@+id/tvAccountTypeError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spAccountType" />
-
-
-                    <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_bank"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:constraint_referenced_ids="tvBank,tvBranch,spBank,spBranch, tvBankError, tvBranchError" />
-
-                    <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_account_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:constraint_referenced_ids="tvAccountType,tvAccountTypeError,spAccountType" />
-
-                    <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_chips"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:constraint_referenced_ids="tvChips,spChips,tvChipsError" />
-
-
+                    <!--interested in -->
                     <TextView
                         android:id="@+id/tvInterestIn"
                         android:layout_width="match_parent"
@@ -334,7 +91,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvAccountTypeError" />
+                        app:layout_constraintTop_toBottomOf="@id/ilName" />
 
                     <Spinner
                         android:id="@+id/spInterestIn"
@@ -356,40 +113,38 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/spInterestIn" />
 
-                    <TextView
-                        android:id="@+id/tvProductType"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_product_type"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvInterestInError" />
-
-
-                    <Spinner
-                        android:id="@+id/spProductType"
+                    <!--PAN number -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ilPanNum"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
+                        app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvProductType"/>
+                        app:layout_constraintTop_toBottomOf="@+id/tvInterestInError">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPanNum"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_lead_creation_pan_mandatory"
+                            android:inputType="text"
+                            android:maxLength="10"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textCursorDrawable="@null" />
 
-                    <TextView
-                        android:id="@+id/tvProductTypeError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spProductType" />
+                        <TextView
+                            android:id="@+id/tvPANError"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/red_textcolor"
+                            android:textSize="@dimen/_11sdp"
+                            android:layout_marginTop="@dimen/_3sdp"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
+                    <!--email -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilEmailId"
                         android:layout_width="match_parent"
@@ -397,7 +152,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvProductTypeError">
+                        app:layout_constraintTop_toBottomOf="@id/ilPanNum">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etEmailId"
@@ -420,7 +175,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-
+                    <!--alternate email -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilAlternateEmailId"
                         android:layout_width="match_parent"
@@ -451,40 +206,7 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <TextView
-                        android:id="@+id/tvStdCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lbl_lead_creation_std_code"
-                        android:textColor="@color/text_color_personal"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf = "@id/ilAlternateEmailId" />
-
-                    <Spinner
-                        android:id="@+id/spStdCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tvStdCode"/>
-
-
-                    <TextView
-                        android:id="@+id/tvSTDError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spStdCode" />
-
-
+                    <!--mobile -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilMobile"
                         android:layout_width="match_parent"
@@ -492,7 +214,7 @@
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvSTDError">
+                        app:layout_constraintTop_toBottomOf="@+id/ilAlternateEmailId">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etMobile"
@@ -514,9 +236,9 @@
                             android:layout_marginTop="@dimen/_3sdp"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
-
+                    <!--landline -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilAlternateMobno"
+                        android:id="@+id/ilLandLine1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:hintTextAppearance="@style/InputLayout"
@@ -524,162 +246,42 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ilMobile">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAlternateMobno"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_alternate_mobile"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etLandLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_lead_creation_land_line"
+                        android:inputType="number"
+                        android:maxLength="11"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textCursorDrawable="@null" />
 
-                        <TextView
-                            android:id="@+id/tvAlternateMobnoError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
+                    <TextView
+                        android:id="@+id/tvLandLineError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-
+                    <!--expected margin -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilLandLine"
+                        android:id="@+id/ilExpectedMargin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_5sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilAlternateMobno">
+                        app:layout_constraintTop_toBottomOf="@+id/ilLandLine1">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etLandLine"
+                            android:id="@+id/etExpectedMargin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_land_line"
-                            android:inputType="number"
-                            android:maxLength="11"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvLandLineError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilEkycMobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilLandLine">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etEkycMobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_ekyc_mobile"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvEkycMobileError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilDOB"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilEkycMobile">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etDOB"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="0123456789/"
-                            android:hint="@string/hint_lead_creation_dob"
-                            android:imeOptions="actionDone"
-                            android:inputType="date"
-                            android:longClickable="false"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvDOBError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilAccountNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilDOB">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAccountNumber"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_account_number"
-                            android:inputType="number"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvAccountNumberError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilReferaalCode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilAccountNumber">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etReferaalCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_referaal_code"
+                            android:hint="@string/hint_lead_creation_expected_margin"
                             android:inputType="number"
                             android:maxLength="8"
                             android:maxLines="1"
@@ -687,7 +289,7 @@
                             android:textCursorDrawable="@null" />
 
                         <TextView
-                            android:id="@+id/tvReferralCodeError"
+                            android:id="@+id/tvExpectedMarginError"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/red_textcolor"
@@ -695,68 +297,8 @@
                             android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilPanNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilReferaalCode">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etPanNum"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_pan"
-                            android:inputType="text"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvPANError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilAadharNum"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilPanNum">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etAadharNum"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_aadhar_number"
-                            android:inputType="number"
-                            android:maxLength="12"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvAadharError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
+                    <!--source -->
+                   <TextView
                         android:id="@+id/tvSource"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -765,7 +307,7 @@
                         android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ilAadharNum" />
+                        app:layout_constraintTop_toBottomOf="@id/ilExpectedMargin" />
 
 
                     <Spinner
@@ -777,6 +319,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvSource" />
 
+                    <!--Prospect source -->
                     <TextView
                         android:id="@+id/tvProspectSource"
                         android:layout_width="match_parent"
@@ -799,30 +342,29 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvProspectSource"/>
 
+                    <!--category -->
                     <TextView
-                        android:id="@+id/tvChips"
+                        android:id="@+id/tvCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/txt_lable_chips"
+                        android:text="@string/lbl_lead_creation_category"
                         android:textColor="@color/text_color_personal"
                         android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spProspectSource" />
-
+                        app:layout_constraintTop_toBottomOf="@id/spProspectSource"  />
 
                     <Spinner
-                        android:id="@+id/spChips"
+                        android:id="@+id/spCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvChips"/>
+                        app:layout_constraintTop_toBottomOf="@id/tvCategory"/>
 
                     <TextView
-                        android:id="@+id/tvChipsError"
+                        android:id="@+id/tvCategoryError"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/red_textcolor"
@@ -830,63 +372,41 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/spChips"/>
+                        app:layout_constraintTop_toBottomOf="@id/spCategory" />
 
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/il_prospet_source_detail"
+                    <!--background -->
+                    <TextView
+                        android:id="@+id/tvBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:hintTextAppearance="@style/InputLayout"
+                        android:text="@string/lbl_lead_creation_background"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvChipsError">
+                        app:layout_constraintTop_toBottomOf="@id/tvCategoryError"  />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectSourceDetails"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                            android:hint="@string/hint_lead_creation_prospect_source_detail"
-                            android:inputType="textNoSuggestions"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilExpectedMargin"
+                    <Spinner
+                        android:id="@+id/spBackground"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        app:hintTextAppearance="@style/InputLayout"
+                        android:layout_marginTop="@dimen/_3sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/il_prospet_source_detail">
+                        app:layout_constraintTop_toBottomOf="@id/tvBackground"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etExpectedMargin"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_lead_creation_expected_margin"
-                            android:inputType="number"
-                            android:maxLength="8"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
+                    <TextView
+                        android:id="@+id/tvBackgroundError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spBackground" />
 
-                        <TextView
-                            android:id="@+id/tvExpectedMarginError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                    <!--stage-->
                     <TextView
                         android:id="@+id/tvStage"
                         android:layout_width="match_parent"
@@ -896,7 +416,7 @@
                         android:textSize="@dimen/_11sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilExpectedMargin" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvBackgroundError" />
 
 
                     <Spinner
@@ -908,6 +428,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvStage" />
 
+                    <!--status -->
                     <TextView
                         android:id="@+id/tvStatus"
                         android:layout_width="match_parent"
@@ -930,216 +451,6 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tvStatus" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/_30sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:background="@drawable/textview_border"
-                        app:layout_constraintBottom_toBottomOf="@id/llSearch"
-                        app:layout_constraintEnd_toEndOf="@+id/llSearch"
-                        app:layout_constraintStart_toStartOf="@+id/llSearch"
-                        app:layout_constraintTop_toTopOf="@+id/llSearch" />
-
-                    <LinearLayout
-                        android:id="@+id/llSearch"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/spStatus">
-
-                        <androidx.appcompat.widget.AppCompatImageButton
-                            android:id="@+id/srchImg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="5dp"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/search" />
-
-                        <org.droidparts.widget.ClearableEditText
-                            android:id="@+id/actAssignTo"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:clickable="false"
-                            android:drawableEnd="@drawable/ic_close_text"
-                            android:focusable="false"
-                            android:hint="@string/hint_lead_creation_assign_to"
-                            android:inputType="none"
-                            android:textSize="@dimen/_13sdp" />
-
-
-                        <ProgressBar
-                            android:id="@+id/pbLoadingIndicator"
-                            style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/wmcodecontainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/llSearch">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/is_wealth_rm_label"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp"/>
-
-                        <androidx.appcompat.widget.AppCompatCheckBox
-                            android:id="@+id/chkWMCode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_marginLeft="10dp"
-                            android:visibility="visible"
-                            >
-                        </androidx.appcompat.widget.AppCompatCheckBox>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/bandhanBankContainer"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="@dimen/_10sdp"
-                        android:visibility="gone"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/llSearch">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/is_bandhan_bank_rm_label"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/_12sdp"/>
-
-                        <androidx.appcompat.widget.AppCompatCheckBox
-                            android:id="@+id/chkBandhanBank"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_marginLeft="10dp"
-                            android:visibility="visible"
-                            >
-                        </androidx.appcompat.widget.AppCompatCheckBox>
-
-                    </LinearLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilBandhanBankRM"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@+id/bandhanBankContainer">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etBandhanBankRM"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                            android:hint="@string/hint_lead_creation_bb_rm"
-                            android:inputType="textFilter"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-
-                        <TextView
-                            android:id="@+id/tvBandhanBankRMError"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/red_textcolor"
-                            android:textSize="@dimen/_11sdp"
-                            android:layout_marginTop="@dimen/_3sdp"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/llSearchSecondaryRM"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ilBandhanBankRM">
-
-                        <androidx.appcompat.widget.AppCompatImageButton
-                            android:id="@+id/srchImgSecRM"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="5dp"
-                            android:background="@android:color/transparent"
-                            android:src="@drawable/search" />
-
-                        <org.droidparts.widget.ClearableEditText
-                            android:id="@+id/actSecondaryRM"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            android:clickable="false"
-                            android:drawableEnd="@drawable/ic_close_text"
-                            android:focusable="false"
-                            android:hint="@string/hint_lead_creation_secondary_rm_title"
-                            android:inputType="none"
-                            android:textSize="@dimen/_13sdp" />
-
-
-                        <ProgressBar
-                            android:id="@+id/pbLoadingIndicatorSecRM"
-                            style="?android:attr/progressBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="5dp"
-                            android:visibility="gone" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tvSecondaryRmError"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/error_message_enter_secondary_rm"
-                        android:textColor="@color/red_textcolor"
-                        android:textSize="@dimen/_11sdp"
-                        android:layout_marginTop="5dp"
-                        android:visibility="gone"
-                        android:layout_marginStart="@dimen/_35sdp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/llSearchSecondaryRM" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </LinearLayout>
@@ -1178,6 +489,38 @@
                     android:padding="@dimen/_5sdp"
                     android:visibility="gone">
 
+                    <!--Work Experience -->
+                    <TextView
+                        android:id="@+id/tvWorkExp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_lead_creation_work_exp"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"  />
+
+                    <Spinner
+                        android:id="@+id/spWorkExp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvWorkExp"/>
+
+                    <TextView
+                        android:id="@+id/tvWorkExpError"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/red_textcolor"
+                        android:textSize="@dimen/_11sdp"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/spWorkExp" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ilRefereeCode"
                         android:layout_width="match_parent"
@@ -1185,7 +528,7 @@
                         android:layout_marginTop="@dimen/_3sdp"
                         app:hintTextAppearance="@style/InputLayout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toBottomOf="@+id/tvWorkExpError">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etRefereeCode"
@@ -1330,71 +673,6 @@
                             android:layout_marginTop="@dimen/_3sdp"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereeName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-                            android:hint="@string/PROSPECT_REFEREE_NAME_HINT_TXT"
-                            android:inputType="textNoSuggestions"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeMobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/ilProspectRefereeName">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereerMobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/PROSPECT_REFEREE_MOBILE_HINT_TXT"
-                            android:inputType="number"
-                            android:maxLength="10"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ilProspectRefereeEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        app:hintTextAppearance="@style/InputLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeMobile">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etProspectRefereerEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/PROSPECT_REFEREE_EMAIL_HINT_TXT"
-                            android:inputType="textEmailAddress"
-                            android:maxLength="100"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textCursorDrawable="@null" />
-                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tvResidenceAddress"
@@ -1409,7 +687,7 @@
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintStart_toEndOf="@id/cbPrimaryAddress"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile" />
 
                     <androidx.appcompat.widget.AppCompatCheckBox
                         android:id="@+id/cbPrimaryAddress"
@@ -1420,7 +698,7 @@
                         android:textColor="@color/secondaryTextColor"
                         android:textSize="@dimen/_12sdp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ilProspectRefereeEmail" />
+                        app:layout_constraintTop_toBottomOf="@+id/ilRefereeMobile" />
 
 
                     <LinearLayout
