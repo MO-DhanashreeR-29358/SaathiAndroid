@@ -1,5 +1,21 @@
 package com.mosl.saathi.api
 
+
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
+import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdResponse
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.lead.LookupRequestNew
+import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.AttendeeResponse
+import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchRequest
+import com.mosl.saathi.api.model.saathiIndirect.prospestMeeting.ProspestMeetingSearchResponse
+import io.reactivex.rxjava3.core.Observable
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.http.Body
+import retrofit2.http.POST
 import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
@@ -43,8 +59,6 @@ import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
-
-import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
@@ -59,15 +73,12 @@ import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import com.mosl.saathi.api.model.search.SearchResponse
-import io.reactivex.rxjava3.core.Observable
-import okhttp3.ResponseBody
-import retrofit2.http.Body
-import retrofit2.http.POST
+
 
 interface SaathiIndirectApi {
 
-   /* @POST("Dashboard/GetFocoDashFilter")
-    fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>*/
+    @POST("Dashboard/GetFocoDashFilter")
+    fun fnGetFOCODashFilter(@Body request: FOCODashboardFilterpostReq):Observable<ResponseBody>
 
     @POST("Lead/SearchCommonMetaData")
     fun getSearchData(
@@ -84,10 +95,23 @@ interface SaathiIndirectApi {
         @Body request: LookupRequest
     ): Observable<LookUpResponse>
 
-    @POST("Master/GetAllLookup")
-    fun getAllLookupTemp(
-        @Body request: LookupRequestTemp
-    ): Observable<LookUpResponse>
+    @POST("UserApi/AutoCompleteAttendee")
+    fun getAutoCompleteAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<AttendeeResponse>
+    @POST("UserApi/AutoCompleteSplAttendee")
+    fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<AttendeeResponse>
+
+    @POST("Meeting/AddUpdateMeeting")
+    fun setAppointmentMeeting(@Body request: RequestBody): Observable<ResponseBody>  //SetAppointmentResponse
+
+    @POST("UserApi/GetClientCodesAuto")
+    fun fnSearchProspectMeetingClient(@Body request: ProspestMeetingSearchRequest):Observable<ProspestMeetingSearchResponse>
+
+    @POST("Lead/GetAddressByLeadId")
+    fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
+
+    @POST("Meeting/AddUpdateMeeting")
+    fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
+
 
 
     @POST("Source/GetSourceList")

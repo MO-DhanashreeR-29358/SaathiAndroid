@@ -30,4 +30,5 @@ dependencies {
     implementation deps.kotlin
     implementation deps.androidx.annotation
     implementation deps.androidx.appcompat
+    implementation project(path: ':saathiapi')
 }

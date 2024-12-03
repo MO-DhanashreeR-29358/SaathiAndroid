@@ -34,8 +34,7 @@ import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.settings.SettingFragment
@@ -49,6 +48,8 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
 
 object MenuGetterNew {
     @SuppressLint("WrongConstant")
@@ -133,6 +134,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
             else -> null
         }
     }
@@ -198,6 +200,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->true
             else -> return false
         }
     }

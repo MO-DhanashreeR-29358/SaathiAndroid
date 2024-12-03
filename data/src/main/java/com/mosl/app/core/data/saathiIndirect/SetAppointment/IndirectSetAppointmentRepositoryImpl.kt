@@ -15,13 +15,20 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.OUTSTATIONMEETING
 import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
+import com.mosl.app.core.data.setappointment.responseSetAppointmentTransform
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
+import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
-import com.mosl.saathi.api.model.lead.request.LookupRequestTemp
 import io.reactivex.rxjava3.core.Observable
+import okhttp3.MediaType
+import okhttp3.RequestBody
+import org.json.JSONObject
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class IndirectSetAppointmentRepositoryImpl @Inject constructor(
@@ -30,21 +37,52 @@ class IndirectSetAppointmentRepositoryImpl @Inject constructor(
 ):IndirectSetAppointmentRepository {
     override fun getActivitytype(): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
-            LookupRequest(businessUnitId="0",lookupTypeId=13,parentId="0",IgnoreBusinessUnit=false)
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=13,parentId="0",IgnoreBusinessUnit=false)
         ).map {
             SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(ACTIVITYTYPE))
         }
     }
 
     override fun getMeetingReason(intParnetId: Int): Observable<List<LookUp>> {
-        return  saathiIndrectApi.getAllLookupTemp(
-            LookupRequestTemp(businessUnitId="0",lookupTypeId=14,parentId=intParnetId.toString(),
-                IgnoreBusinessUnit=false,lookupId=0,lookUpName = null, lookupType = 14, sequence = 0, status = 0,
-                active = false,sysName = null)
+        return  saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=14,parentId=intParnetId.toString(),
+                IgnoreBusinessUnit=false)
         ).map {
-            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(ACTIVITYTYPE))
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(MEETINGREASON))
         }
     }
+
+
+    override fun getAttendeeData(searchText: String): Observable<List<Attendee>> {
+        val request = AutoCompleteAttendeeRequest(
+            URLEncoder.encode(searchText, "utf-8"),
+            URLEncoder.encode(searchText, "utf-8")
+        )
+        return saathiIndrectApi.getAutoCompleteAttendee(request)
+            .map {  CreateMeetingMapper.transformAttendeeData(it.response?: mutableListOf()) }
+    }
+
+    override fun getSplAttendeeData(searchText: String): Observable<List<Attendee>> {
+        val request = AutoCompleteAttendeeRequest(
+            URLEncoder.encode(searchText, "utf-8"),
+            URLEncoder.encode(searchText, "utf-8")
+        )
+        return saathiIndrectApi.getAutoCompleteSplAttendee(request)
+            .map { CreateMeetingMapper.transformAttendeeData(it.response?: mutableListOf()) }
+    }
+
+
+    override fun setAppointmentMeeting(meetingApptModel: String): Observable<String> {
+        var json = JSONObject(meetingApptModel)
+        val request = RequestBody.create(MediaType.parse("text/plain"), json.toString())
+        return saathiIndrectApi.setAppointmentMeeting(request)
+            .map {
+                it.string()
+               // it.responseSetAppointmentTransform()
+            }
+    }
+
+
 
     fun getType(type: Int): String {
         return when (type) {

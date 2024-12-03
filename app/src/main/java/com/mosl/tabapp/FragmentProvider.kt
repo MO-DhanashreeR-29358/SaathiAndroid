@@ -98,6 +98,8 @@ import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestMeetingModule
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 
 @Module(includes = [LeadViewDetailFragmentProvider::class])
 interface FragmentProvider {
@@ -257,5 +259,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector (modules = [IndirectCreateMeetingModule::class])
     fun provideIndirectCreateMeetingFragmentFactory():IndirectCreateMeetingFragment
+
+    @ContributesAndroidInjector(modules=[IndirectProspestMeetingModule::class])
+    fun provideIndirectProspectMeetingFragmentFactory():IndirectProspestmeetingFragment
 
 }
