@@ -25,6 +25,9 @@ open class MenuDataSourceImpl @Inject constructor(
         return Observable.fromCallable {
             user = userManager.user
             when {
+                user.isIndirectUser()  -> {
+                    getIndirectUserMenu()
+                }
                 user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
                 }
@@ -257,6 +260,15 @@ open class MenuDataSourceImpl @Inject constructor(
         return this
     }
 
+    private fun getIndirectUserMenu( ): List<BaseMenu> {
+        return arrayListOf(
+            getIndirectDashboard(),
+            getIndirectProspectMeeting(),
+            getDeleteRequest(),
+            getLogout()
+        ).apply { checkForPrime(false,false, false) }
+    }
+
     private fun getAufsbUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
         return arrayListOf(
             getDashboard(),
@@ -339,6 +351,23 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
+        )
+    }
+    private fun getIndirectDashboard(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dashboard,
+            label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+        )
+    }
+
+    private fun getIndirectProspectMeeting(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_prime_entry,
+            label = R.string.MOSL_MENU_PROSPECT_MEETING_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING
         )
     }
 
