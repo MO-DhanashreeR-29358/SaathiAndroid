@@ -6,7 +6,9 @@ import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.ClientSearchModel
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import io.reactivex.rxjava3.core.Observable
 
@@ -85,4 +87,6 @@ interface IndirectProspestMeetingView:BaseView {
     fun onResetClicked(): Observable<Unit>
     fun onSaveClicked(): Observable<Unit>
 
+    fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
+    fun renderLocationSave(locationItem: LocationItem)
 }

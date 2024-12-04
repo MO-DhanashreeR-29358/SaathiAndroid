@@ -190,5 +190,11 @@ class IndirectProspestMeetingPresenter @Inject constructor(
             }
         }.addTo(disposable)
 
+        view.onIndirectLocationSaveEventFired()
+            .subscribe {
+                view.renderLocationSave(it.data)
+            }
+            .addTo(disposable)
+
     }
 }
