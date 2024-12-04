@@ -17,6 +17,7 @@ import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.POST
 import com.mosl.app.core.annotation.ExcludeWrapper
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
@@ -114,7 +115,7 @@ interface SaathiIndirectApi {
     fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
     @POST("Meeting/AddUpdateMeeting")
-    fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingItem>
+    fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingNewResposne>
 
 
 

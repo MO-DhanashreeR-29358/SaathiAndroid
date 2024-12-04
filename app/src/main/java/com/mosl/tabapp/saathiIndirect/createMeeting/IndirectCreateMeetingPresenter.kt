@@ -169,5 +169,9 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             }
             .addTo(disposable)
 
+        view.onResetClicked().subscribe {
+            view.renderOnResetClicked()
+        }.addTo(disposable)
+
     }
 }

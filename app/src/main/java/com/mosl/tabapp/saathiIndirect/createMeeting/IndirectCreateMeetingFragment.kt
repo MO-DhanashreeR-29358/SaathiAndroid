@@ -781,6 +781,26 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         return  binding.btnReset.clicks()
     }
 
+    override fun renderOnResetClicked() {
+        addedAttendeeList.clear()
+        binding.tvAttendeeCount.text = ""
+        binding.spActivityType.setSelection(0)
+        binding.spMeetingReason.setSelection(0)
+        binding.spIntrestedIn.setSelection(0)
+        binding.spMeetingDuration.setSelection(0)
+        binding.etMeetingDescription.setText("")
+        binding.spMeetingObjective.setSelection(0)
+        binding.etCustRemark.setText("")
+        binding.spLocationAdd.setSelection(0)
+        binding.etMeetingAdd.setText("")
+        binding.spTravellingMode.setSelection(0)
+        travellingAdapter.deleteAllProduct()
+        binding.etAddPinCode.setText("")
+        binding.etMeetingAmount.setText("")
+
+
+    }
+
     override fun onSaveClicked(): Observable<Unit> {
         return  binding.btnSave.clicks()
     }
@@ -818,6 +838,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
                 }
             }
         }
+
+        renderOnResetClicked()
     }
 
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {

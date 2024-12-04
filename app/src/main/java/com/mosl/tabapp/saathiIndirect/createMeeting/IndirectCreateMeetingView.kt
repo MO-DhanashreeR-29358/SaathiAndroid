@@ -75,6 +75,8 @@ interface IndirectCreateMeetingView :BaseView{
     fun getInputData(): CreateMeetingPostReq
 
     fun onResetClicked(): Observable<Unit>
+
+    fun renderOnResetClicked()
     fun onSaveClicked(): Observable<Unit>
     fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>)
 

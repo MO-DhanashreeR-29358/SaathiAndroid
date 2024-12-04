@@ -104,7 +104,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
         val request = RequestBody.create(MediaType.parse("text/plain"), data)
         return saathiIndrectApi.postAddUpdateMeeting(request)
             .map {
-                CreateMeetingMapper.transformAddUpdateMeeting(it)
+                CreateMeetingMapper.transformAddUpdateMeetingNew(it)
             }
     }
 
