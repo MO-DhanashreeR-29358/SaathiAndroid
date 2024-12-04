@@ -1,10 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.prospestMeeting
 
-import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
-import com.mosl.commons.data.onFailure
-import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepository
@@ -27,6 +24,7 @@ class IndirectProspestMeetingPresenter @Inject constructor(
     val indirectrepoCreateMeeting: IndirectCreateMeetingRepository,
     val repository: IndirectLeadDetailRepository,
     val indirectrepo: IndirectSetAppointmentRepository,
+    val validator: IndirectProspectMeetingValidation
 ):BasePresenter<IndirectProspestMeetingView>(view) {
 
     override fun start() {
@@ -176,18 +174,14 @@ class IndirectProspestMeetingPresenter @Inject constructor(
             .addTo(disposable)
 
 
-        view.onSaveClicked().
-        map {
+        view.onSaveClicked().map {
             view.getInputData()
-        }.switchMap {
-            indirectrepoCreateMeeting.saveRequest(it) .compose(applyUiModel())
+        }.flatMap {
+                input->validator.validate(input).flatMap {
+            indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
+        }.compose(applyUiModel())
         }.subscribe {
-            it.onSuccess {
-                Log.d("Create Meeting", Gson().toJson(it))
-            }
-            it.onFailure {
-                Log.d("Create MeetingF",it.message.toString())
-            }
+            view.renderSaveRequest(it)
         }.addTo(disposable)
 
         view.onIndirectLocationSaveEventFired()
@@ -195,6 +189,10 @@ class IndirectProspestMeetingPresenter @Inject constructor(
                 view.renderLocationSave(it.data)
             }
             .addTo(disposable)
+
+        view.onResetClicked().subscribe {
+            view.renderOnResetClicked()
+        }.addTo(disposable)
 
     }
 }

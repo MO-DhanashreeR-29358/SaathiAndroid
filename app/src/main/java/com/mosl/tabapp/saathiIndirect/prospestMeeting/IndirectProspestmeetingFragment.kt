@@ -37,6 +37,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -61,11 +62,11 @@ import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.MeetingAttendeeItems
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
-import com.mosl.tabapp.util.visible
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
@@ -828,7 +829,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
 
         }
     }
-    override  fun getInputData(): String {
+    override  fun getInputData(): CreateMeetingPostReq {
         val attendeeList = if (getAttendeeList()
                 .isEmpty()
         ) {
@@ -931,17 +932,70 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         }
         objPostData.attendeeCode=aId
 
-        return  Gson().toJson(objPostData)
+        return  objPostData
     }
 
     override fun onResetClicked(): Observable<Unit> {
         return  binding.btnReset.clicks()
     }
 
+    override fun renderOnResetClicked() {
+        addedAttendeeList.clear()
+        binding.tvAttendeeCount.text = ""
+        binding.spActivityType.setSelection(0)
+        binding.spMeetingReason.setSelection(0)
+        binding.spIntrestedIn.setSelection(0)
+        binding.spMeetingDuration.setSelection(0)
+        binding.etMeetingDescription.setText("")
+        binding.spMeetingObjective.setSelection(0)
+        binding.etCustRemark.setText("")
+        binding.spLocationAdd.setSelection(0)
+        binding.etMeetingAdd.setText("")
+        binding.spTravellingMode.setSelection(0)
+        travellingAdapter.deleteAllProduct()
+        binding.etAddPinCode.setText("")
+        binding.etMeetingAmount.setText("")
+    }
     override fun onSaveClicked(): Observable<Unit> {
         return  binding.btnSave.clicks()
     }
 
+    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("IndirectCreateMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            MSFDialog.alertDialog(
+                requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                MOSLConstants.CREATE_MEETING, "OK", true
+            )
+            { action: MSFDialog.Action, _: Array<Any?>? ->
+                if (action == MSFDialog.Action.OK) {
+                    val bundle = Bundle()
+                    bundle.putString(
+                        MOSLConstants.LEAD_ID,
+                        requireArguments().getString(MOSLConstants.LEAD_ID)
+                    )
+                    bundle.putString(
+                        MOSLConstants.UCID,
+                        requireArguments().getString(MOSLConstants.UCID)
+                    )
+                    navigator.openPage(
+                        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle,
+                        addToStack = true,
+                        forceReload = false
+                    )
+                }
+            }
+        }
+
+        renderOnResetClicked()
+    }
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {
         return uiGeoTaggingSubject.ofType()
     }
