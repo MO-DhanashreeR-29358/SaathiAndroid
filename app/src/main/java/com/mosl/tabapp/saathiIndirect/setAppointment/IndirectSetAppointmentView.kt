@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent
@@ -58,7 +59,7 @@ interface IndirectSetAppointmentView :BaseView {
     fun onResentButtonRender()
 
     fun getDate(): String
-    fun getSaveData(): String
+    fun getSaveData(): SetAppointmentPostReq
 
 
 

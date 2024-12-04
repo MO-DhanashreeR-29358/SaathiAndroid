@@ -1,6 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.setAppointment
 
 import android.util.Log
+import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -21,6 +22,7 @@ class IndirectSetAppointmentPresenter @Inject constructor(
     val userManager: UserManager,
     val indirectrepo: IndirectSetAppointmentRepository,
     val repository: IndirectLeadDetailRepository,
+    val validator: IndirectSetAppointmentValidator
 ):BasePresenter<IndirectSetAppointmentView>(view) {
     override fun start() {
 
@@ -136,11 +138,12 @@ class IndirectSetAppointmentPresenter @Inject constructor(
 
         view.onSaveButtonClicked().map {
             view.getSaveData()
-        }
-            .switchMap {
-                        indirectrepo.setAppointmentMeeting(it) .compose(applyUiModel())
-            }
-            .subscribe {
+        }.flatMap {
+                    input->validator.validate(input)
+            .flatMap {
+                indirectrepo.setAppointmentMeeting(Gson().toJson(it))
+            }.compose(applyUiModel())
+        }.subscribe {
                 view.renderAddUpdates(it)
             }.addTo(disposable)
 
