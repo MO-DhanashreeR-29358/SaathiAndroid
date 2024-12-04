@@ -597,6 +597,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
                 }
 
             }
+
+            onResentButtonRender()
         }
     }
 
@@ -619,72 +621,94 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         return getFormatedDate(binding.tvApppointmentDateTimeDisplay.text.toString(), AppDateFormats.DF_JSON_DATE12, AppDateFormats.DF_JSON_DATE9)
     }
 
-    override fun getSaveData(): String {
-        val meetingApptModel = MeetingApptModel().apply {
-            meetingType = "A"
-            displayType = "A"
-            leadId = "7390962"
-            ucid = "0"
-            meetingDate = getDate()
-            when {
-                !createMode -> meetingID = meetingId
+    override fun getSaveData(): SetAppointmentPostReq {
+
+            val meetingApptModel = MeetingApptModel().apply {
+                meetingType = "A"
+                displayType = "A"
+                leadId = "7390962"
+                ucid = "0"
+                meetingDate = getDate()
+
+                meetingAttendee = addedAttendeeList.map {
+                    AddedAttendeeModel(
+                        it.attendeeType,
+                        it.attended,
+                        it.attendeeName,
+                        it.attendeeCode
+                    )
+                }
+                splMeetingAttendee = addedSplAttendeeList.map {
+                    AddedSplAttendeeModel(
+                        it.attendeeType,
+                        it.attended,
+                        it.attendeeName,
+                        it.attendeeCode
+                    )
+                }
+                product = "0"
+                activityTypeID = getSelectedActivityType().lookUpID.toString()
+                meetingReasonID = getSelectedMeetingReason().lookUpID
+                meetingDes = binding.etMeetingDescription.text.toString()
+
+            }
+            var objSetAppointmentPostReq: SetAppointmentPostReq = SetAppointmentPostReq()
+            objSetAppointmentPostReq.product = meetingApptModel.product
+
+            var tempList: MutableList<MeetingAttendeeItem?> = addedAttendeeList.map {
+                MeetingAttendeeItem(
+                    it.attended,
+                    it.attendeeName,
+                    "0",
+                    it.attendeeCode,
+                    it.attendeeType
+                )
+            }.toMutableList()
+
+            addedSplAttendeeList.forEach {
+                tempList.add(
+                    MeetingAttendeeItem(
+                        it.attended,
+                        it.attendeeName,
+                        "0",
+                        it.attendeeCode,
+                        it.attendeeType
+                    )
+                )
             }
 
-            meetingAttendee = addedAttendeeList .map {
-                AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
-            }
-            splMeetingAttendee = addedSplAttendeeList .map {
-                AddedSplAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
-            }
-            product = "0"
-            activityTypeID=getSelectedActivityType().lookUpID.toString()
-                meetingReasonID=getSelectedMeetingReason().lookUpID
-            meetingDes=binding.etMeetingDescription.text.toString()
+            objSetAppointmentPostReq.meetingAttendee = tempList
 
+            objSetAppointmentPostReq.mEETINGTYPEMEETING = meetingApptModel.meetingType
+
+
+            objSetAppointmentPostReq.meetingDurationID = meetingApptModel.meetingDurationID
+
+            objSetAppointmentPostReq.meetingType = meetingApptModel.meetingType
+
+
+            objSetAppointmentPostReq.meetingDes = meetingApptModel.meetingDes
+
+            objSetAppointmentPostReq.mEETINGTYPEAPPT = "M"
+
+            objSetAppointmentPostReq.displayType = meetingApptModel.displayType
+
+            objSetAppointmentPostReq.dISPLAYTYPEMEETING = "U"
+
+            objSetAppointmentPostReq.meetingObjectiveID = meetingApptModel.meetingObjectiveID
+
+            objSetAppointmentPostReq.meetingDate = meetingApptModel.meetingDate
+
+            objSetAppointmentPostReq.meetingReasonID = meetingApptModel.meetingReasonID
+
+            objSetAppointmentPostReq.activityTypeID = meetingApptModel.activityTypeID
+
+            objSetAppointmentPostReq.leadId = meetingApptModel.leadId
+
+            objSetAppointmentPostReq.ucid = meetingApptModel.ucid
+
+            return objSetAppointmentPostReq
         }
-        var objSetAppointmentPostReq: SetAppointmentPostReq =SetAppointmentPostReq()
-        objSetAppointmentPostReq.product=meetingApptModel.product
-
-        var tempList :MutableList<MeetingAttendeeItem?> = addedAttendeeList .map {
-            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
-        }.toMutableList()
-
-        addedSplAttendeeList.forEach {
-            tempList.add(MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType))
-        }
-
-        objSetAppointmentPostReq.meetingAttendee= tempList
-
-        objSetAppointmentPostReq. mEETINGTYPEMEETING=meetingApptModel.meetingType
-
-
-        objSetAppointmentPostReq. meetingDurationID=meetingApptModel.meetingDurationID
-
-        objSetAppointmentPostReq.meetingType=meetingApptModel.meetingType
-
-
-        objSetAppointmentPostReq. meetingDes=meetingApptModel.meetingDes
-
-        objSetAppointmentPostReq. mEETINGTYPEAPPT="M"
-
-        objSetAppointmentPostReq.displayType=meetingApptModel.displayType
-
-        objSetAppointmentPostReq.dISPLAYTYPEMEETING="U"
-
-        objSetAppointmentPostReq.meetingObjectiveID=meetingApptModel.meetingObjectiveID
-
-        objSetAppointmentPostReq.meetingDate=meetingApptModel.meetingDate
-
-        objSetAppointmentPostReq.meetingReasonID=meetingApptModel.meetingReasonID
-
-        objSetAppointmentPostReq.activityTypeID=meetingApptModel.activityTypeID
-
-        objSetAppointmentPostReq.leadId=meetingApptModel.leadId
-
-        objSetAppointmentPostReq.ucid=meetingApptModel.ucid
-
-        return Gson().toJson(objSetAppointmentPostReq)
-    }
 
     override fun getMeetingById(): Observable<IndirectSetAppointmentUiEvent.GetMeeting> {
        return uiSubject.ofType()

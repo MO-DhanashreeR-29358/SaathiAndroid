@@ -1,10 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
-import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
-import com.mosl.commons.data.onFailure
-import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
@@ -25,6 +22,7 @@ class IndirectCreateMeetingPresenter @Inject constructor(
     val indirectrepo: IndirectSetAppointmentRepository,
     val indirectrepoCreateMeeting:IndirectCreateMeetingRepository,
     val repository: IndirectLeadDetailRepository,
+    val validator: IndirectCreateMeetingValidator
 ) :BasePresenter<IndirectCreateMeetingView>(view){
     override fun start() {
         onFetchCalled().map{
@@ -156,8 +154,10 @@ class IndirectCreateMeetingPresenter @Inject constructor(
         view.onSaveClicked().
                 map {
                     view.getInputData()
-                }.switchMap {
-                    indirectrepoCreateMeeting.saveRequest(it) .compose(applyUiModel())
+                }.flatMap {
+                    input->validator.validate(input).flatMap {
+            indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
+        }.compose(applyUiModel())
         }.subscribe {
           view.renderSaveRequest(it)
         }.addTo(disposable)

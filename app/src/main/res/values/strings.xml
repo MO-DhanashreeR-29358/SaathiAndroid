@@ -98,7 +98,7 @@ Page </string>
     <string name="text_label_status">Status</string>
     <string name="text_label_activity_type">Activity Type</string>
     <string name="text_label_event_name">Event Name</string>
-    <string name="text_label_meeting_reason">Meeting Reason</string>
+    <string name="text_label_meeting_reason">Meeting Reason*</string>
     <string name="txt_label_meeting_duration">Meeting Duration</string>
     <string name="text_label_actionable">Actionable</string>
     <string name="text_label_category">Category</string>
