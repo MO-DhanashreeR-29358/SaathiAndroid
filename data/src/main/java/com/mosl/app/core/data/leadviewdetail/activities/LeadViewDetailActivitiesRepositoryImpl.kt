@@ -65,13 +65,16 @@ class LeadViewDetailActivitiesRepositoryImpl @Inject constructor(
 
   }
 
+  @SuppressLint("SuspiciousIndentation")
   override fun deleteAppointment(
     meetingId: String,
     url: String
   ): Observable<String> {
     val request = DeleteAppointmentRequest(meetingId)
       if(userManager.getUser()?.isIndirectUser() == true){
-          return saathiIndirectApi.deleteAppointments(url, request)
+          return saathiIndirectApi.deleteAppointments(url, request).map {
+              it.response ?:""
+          }
       }else{
           return saathiApi.deleteAppointments(url, request)
       }

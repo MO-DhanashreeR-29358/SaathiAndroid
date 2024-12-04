@@ -46,6 +46,9 @@ data class SetAppointmentPostReq(
 	@SerializedName("activityTypeID")
 	var activityTypeID: String? = null,
 
+	@SerializedName("meetingId")
+	var meetingId: String? = null,
+
 	@SerializedName("leadId")
 	var leadId: String? = null,
 
