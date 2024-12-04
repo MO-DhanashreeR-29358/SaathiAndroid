@@ -229,7 +229,7 @@ interface SaathiIndirectApi {
     fun deleteAppointments(
         @Path("action") action: String,
         @Body request: DeleteAppointmentRequest
-    ): Observable<String>
+    ): Observable<SaathiCommonResponse<String>>
 
     @POST("Meeting/GetMeetingByID")
     fun getMeetingById(@Body request: MeetingByIdRequest): Observable<SaathiCommonResponse<MeetingByIdItem>>

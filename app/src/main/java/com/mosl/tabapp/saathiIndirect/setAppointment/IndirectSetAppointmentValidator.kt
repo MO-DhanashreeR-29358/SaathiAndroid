@@ -44,6 +44,7 @@ class IndirectSetAppointmentValidator @Inject constructor(val context: Context):
             meetingReasonID = input.meetingReasonID,
             activityTypeID = input.activityTypeID,
             leadId = input.leadId,
+            meetingId = input.meetingId,
             ucid = input.ucid)
             )
         }

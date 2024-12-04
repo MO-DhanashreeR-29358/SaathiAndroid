@@ -54,6 +54,7 @@ class DocumentRepositoryImpl @Inject constructor(
 
   }
 
+  @SuppressLint("SuspiciousIndentation")
   override fun uploadDocument(request: UploadDocumentsInput): Observable<UploadDocumentData> {
     val uploadDocumentRequest = request.requestUploadDocumentTransform()
       if(userManager.getUser()?.isIndirectUser() == true){

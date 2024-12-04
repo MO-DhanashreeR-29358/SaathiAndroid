@@ -626,10 +626,12 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             val meetingApptModel = MeetingApptModel().apply {
                 meetingType = "A"
                 displayType = "A"
-                leadId = "7390962"
-                ucid = "0"
+                leadId = leadID
+                ucid = ucid
                 meetingDate = getDate()
-
+                when {
+                    !createMode -> meetingID = meetingId
+                }
                 meetingAttendee = addedAttendeeList.map {
                     AddedAttendeeModel(
                         it.attendeeType,
@@ -706,6 +708,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             objSetAppointmentPostReq.leadId = meetingApptModel.leadId
 
             objSetAppointmentPostReq.ucid = meetingApptModel.ucid
+
+            objSetAppointmentPostReq.meetingId = meetingApptModel.meetingID
 
             return objSetAppointmentPostReq
         }
