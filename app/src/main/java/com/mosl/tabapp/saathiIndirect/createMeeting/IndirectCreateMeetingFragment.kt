@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,6 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
-import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats
@@ -61,7 +59,6 @@ import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.MeetingAttendeeItems
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
-import com.mosl.tabapp.permission.PermissionCheckHelperFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -70,8 +67,6 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import com.mosl.tabapp.navigation.NavigationConstants
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
@@ -678,7 +673,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
         }
     }
-    override  fun getInputData(): String {
+    override  fun getInputData(): CreateMeetingPostReq {
         val attendeeList = if (getAttendeeList()
                 .isEmpty()
         ) {
@@ -779,7 +774,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         }
         objPostData.attendeeCode=aId
 
-        return  Gson().toJson(objPostData)
+        return objPostData
     }
 
     override fun onResetClicked(): Observable<Unit> {

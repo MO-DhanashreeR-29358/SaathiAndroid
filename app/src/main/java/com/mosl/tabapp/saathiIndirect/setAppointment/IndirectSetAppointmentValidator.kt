@@ -14,10 +14,10 @@ class IndirectSetAppointmentValidator @Inject constructor(val context: Context):
 
             val errorMessage= when{
                     input.activityTypeID.equals("0") ->{
-                       "Please select activity type"
+                       "Select activity type"
                     }
                 input.meetingReasonID==0->{
-                    "Please select meeting reason"
+                    "Select meeting reason"
                 }
                 input.meetingDes?.length==0->{
                     "Enter meeting comments"

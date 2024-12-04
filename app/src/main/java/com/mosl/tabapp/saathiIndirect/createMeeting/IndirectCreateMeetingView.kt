@@ -11,7 +11,8 @@ import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import io.reactivex.rxjava3.core.Observable
 
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.model.CreateMeetingPostReq
+
 interface IndirectCreateMeetingView :BaseView{
 
     fun getLeadId(): String
@@ -71,7 +72,7 @@ interface IndirectCreateMeetingView :BaseView{
     fun onMeetingLocationSelected(): Observable<Int>
     fun getSelectedMeetingLocation(): LookUp
     fun renderAddress(uiModel: UiModel<String>)
-    fun getInputData(): String
+    fun getInputData(): CreateMeetingPostReq
 
     fun onResetClicked(): Observable<Unit>
     fun onSaveClicked(): Observable<Unit>
