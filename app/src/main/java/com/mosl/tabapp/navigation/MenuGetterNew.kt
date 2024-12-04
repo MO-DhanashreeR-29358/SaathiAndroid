@@ -132,7 +132,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> IndirectCreateMeetingFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()  //use this for navigation
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
             else -> null

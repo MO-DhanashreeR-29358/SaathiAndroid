@@ -1,7 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.setAppointment
 
 import android.util.Log
-import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
@@ -13,7 +12,6 @@ import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -33,7 +31,9 @@ class IndirectSetAppointmentPresenter @Inject constructor(
                 .compose(applyUiModel())
         }.subscribe {
             view.renderLeadDetail(it)
-        }
+        }.addTo(disposable)
+
+
         view.ononActivityCall().switchMap {
            indirectrepo.getActivitytype().compose(applyUiModel())
         }.subscribe {
@@ -141,14 +141,13 @@ class IndirectSetAppointmentPresenter @Inject constructor(
                         indirectrepo.setAppointmentMeeting(it) .compose(applyUiModel())
             }
             .subscribe {
-
-                it.onSuccess {
-                    Log.d("Save Response",it)
-                }
-                it.onFailure {
-                    Log.d("Save Responsef",it.message.toString())
-                }
+                view.renderAddUpdates(it)
             }.addTo(disposable)
+
+
+        view.onResetButtonClicked().subscribe {
+            view.onResentButtonRender()
+        }.addTo(disposable)
     }
 
 

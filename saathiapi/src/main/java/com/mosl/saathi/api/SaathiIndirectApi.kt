@@ -101,7 +101,7 @@ interface SaathiIndirectApi {
     fun getAutoCompleteSplAttendee(@Body request: AutoCompleteAttendeeRequest): Observable<AttendeeResponse>
 
     @POST("Meeting/AddUpdateMeeting")
-    fun setAppointmentMeeting(@Body request: RequestBody): Observable<ResponseBody>  //SetAppointmentResponse
+    fun setAppointmentMeeting(@Body request: RequestBody): Observable<SetAppointmentResponse>  //SetAppointmentResponse
 
     @POST("UserApi/GetClientCodesAuto")
     fun fnSearchProspectMeetingClient(@Body request: ProspestMeetingSearchRequest):Observable<ProspestMeetingSearchResponse>

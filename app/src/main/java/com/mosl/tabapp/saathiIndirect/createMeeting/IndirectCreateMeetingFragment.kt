@@ -35,6 +35,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
@@ -69,6 +70,9 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
+import com.mosl.tabapp.navigation.NavigationConstants
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     internal lateinit var binding:FragIndirectCreateMeetingBinding
@@ -784,6 +788,41 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
     override fun onSaveClicked(): Observable<Unit> {
         return  binding.btnSave.clicks()
+    }
+
+    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("IndirectCreateMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            MSFDialog.alertDialog(
+                requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                MOSLConstants.CREATE_MEETING, "OK", true
+            )
+            { action: MSFDialog.Action, _: Array<Any?>? ->
+                if (action == MSFDialog.Action.OK) {
+                    val bundle = Bundle()
+                    bundle.putString(
+                        MOSLConstants.LEAD_ID,
+                        requireArguments().getString(MOSLConstants.LEAD_ID)
+                    )
+                    bundle.putString(
+                        MOSLConstants.UCID,
+                        requireArguments().getString(MOSLConstants.UCID)
+                    )
+                    navigator.openPage(
+                        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle,
+                        addToStack = true,
+                        forceReload = false
+                    )
+                }
+            }
+        }
     }
 
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {

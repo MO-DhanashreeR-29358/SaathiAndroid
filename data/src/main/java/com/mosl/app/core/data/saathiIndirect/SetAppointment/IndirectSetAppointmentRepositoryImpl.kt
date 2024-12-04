@@ -72,13 +72,12 @@ class IndirectSetAppointmentRepositoryImpl @Inject constructor(
     }
 
 
-    override fun setAppointmentMeeting(meetingApptModel: String): Observable<String> {
+    override fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData> {
         var json = JSONObject(meetingApptModel)
         val request = RequestBody.create(MediaType.parse("text/plain"), json.toString())
         return saathiIndrectApi.setAppointmentMeeting(request)
             .map {
-                it.string()
-               // it.responseSetAppointmentTransform()
+                it.responseSetAppointmentTransform()
             }
     }
 

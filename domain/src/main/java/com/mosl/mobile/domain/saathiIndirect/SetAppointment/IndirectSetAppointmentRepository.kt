@@ -13,7 +13,7 @@ interface IndirectSetAppointmentRepository {
     fun getAttendeeData(searchText: String): Observable<List<Attendee>>
     fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
 
-    fun setAppointmentMeeting(meetingApptModel: String): Observable<String> //SetAppointmentResponseData
+    fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData> //SetAppointmentResponseData
 
 
 }

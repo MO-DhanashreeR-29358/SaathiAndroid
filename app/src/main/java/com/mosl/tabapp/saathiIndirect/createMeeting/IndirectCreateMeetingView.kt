@@ -2,6 +2,7 @@ package com.mosl.tabapp.saathiIndirect.createMeeting
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -74,6 +75,7 @@ interface IndirectCreateMeetingView :BaseView{
 
     fun onResetClicked(): Observable<Unit>
     fun onSaveClicked(): Observable<Unit>
+    fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>)
 
     fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
 

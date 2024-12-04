@@ -29,6 +29,7 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -52,6 +53,7 @@ import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.MeetingAttendeeItem
 import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.tabapp.model.SplMeetingAttendeeItem
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
@@ -90,6 +92,9 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     private var addedSplAttendeeCount = 0
     var leadID:String=""
     var UcId:String=""
+
+
+    private var createMode = true
     override fun getLayout() = R.layout.frag_indirect_set_appointment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -541,6 +546,50 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 
     override fun onSaveButtonClicked(): Observable<Unit> {
         return  binding.btnSave.clicks()
+    }
+
+    override fun renderAddUpdates(uiModel: UiModel<SetAppointmentResponseData>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            MSFDialog.alertDialog(
+                activity, 0,
+                resources.getString(R.string.motilal_oswal),
+                if (createMode) MOSLConstants.SET_APPOINTMENTS else MOSLConstants.UPDATE_APPOINTMENTS,
+                "OK", true
+            ) { action, _ ->
+                if (action == MSFDialog.Action.OK) {
+                    val bundle = Bundle()
+                    bundle.putString(
+                        MOSLConstants.LEAD_ID,
+                        requireArguments().getString(MOSLConstants.LEAD_ID)
+                    )
+                    bundle.putString(
+                        MOSLConstants.UCID,
+                        requireArguments().getString(MOSLConstants.UCID)
+                    )
+                    navigator.openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle, true, false)
+                }
+
+            }
+        }
+    }
+
+    override fun onResetButtonClicked(): Observable<Unit> {
+        return binding.btnReset.clicks()
+    }
+
+    override fun onResentButtonRender() {
+        addedAttendeeList.clear()
+        addedSplAttendeeList.clear()
+        binding.tvAttendeeCount.text = ""
+        binding.tvspAttendeeCount.text = ""
+        binding.spActivityType.setSelection(0)
+        binding.spmeetingReason.setSelection(0)
+        binding.etMeetingDescription.setText("")
+
     }
 
     override fun getDate(): String {

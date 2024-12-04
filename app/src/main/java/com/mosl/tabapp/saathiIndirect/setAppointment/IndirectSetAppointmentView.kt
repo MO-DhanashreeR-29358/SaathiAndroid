@@ -2,6 +2,7 @@ package com.mosl.tabapp.saathiIndirect.setAppointment
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
@@ -49,6 +50,12 @@ interface IndirectSetAppointmentView :BaseView {
     fun renderOnSplAttendeeItemClick(position: Int)
 
     fun onSaveButtonClicked():Observable<Unit>
+
+    fun renderAddUpdates(uiModel: UiModel<SetAppointmentResponseData>)
+
+    fun onResetButtonClicked():Observable<Unit>
+
+    fun onResentButtonRender()
 
     fun getDate(): String
     fun getSaveData(): String

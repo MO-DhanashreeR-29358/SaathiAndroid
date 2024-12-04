@@ -159,12 +159,7 @@ class IndirectCreateMeetingPresenter @Inject constructor(
                 }.switchMap {
                     indirectrepoCreateMeeting.saveRequest(it) .compose(applyUiModel())
         }.subscribe {
-            it.onSuccess {
-                Log.d("Create Meeting",Gson().toJson(it))
-            }
-            it.onFailure {
-                Log.d("Create MeetingF",it.message.toString())
-            }
+          view.renderSaveRequest(it)
         }.addTo(disposable)
 
 
