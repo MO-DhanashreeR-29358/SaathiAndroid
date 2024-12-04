@@ -33,6 +33,8 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
 import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
@@ -228,4 +230,7 @@ interface SaathiIndirectApi {
         @Path("action") action: String,
         @Body request: DeleteAppointmentRequest
     ): Observable<String>
+
+    @POST("Meeting/GetMeetingByID")
+    fun getMeetingById(@Body request: MeetingByIdRequest): Observable<SaathiCommonResponse<MeetingByIdItem>>
 }

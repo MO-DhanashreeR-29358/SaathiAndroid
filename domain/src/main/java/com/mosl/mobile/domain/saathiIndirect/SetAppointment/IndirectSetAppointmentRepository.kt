@@ -3,6 +3,7 @@ package com.mosl.mobile.domain.saathiIndirect.SetAppointment
 import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectSetAppointmentRepository {
@@ -15,5 +16,5 @@ interface IndirectSetAppointmentRepository {
 
     fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData> //SetAppointmentResponseData
 
-
+    fun getMeetingById(meetingId: String): Observable<MeetingByIdItemResponse>
 }
