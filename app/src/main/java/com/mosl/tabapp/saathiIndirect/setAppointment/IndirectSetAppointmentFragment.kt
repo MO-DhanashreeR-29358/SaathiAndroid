@@ -133,6 +133,7 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             if(meetingId != null && !meetingId.equals("0", ignoreCase = true)) {
                 //Editt mode
                 createMode = false
+                binding.tvNewAppointment.text = getString(R.string.txt_label_reschedule_appointment)
                 uiSubject.onNext(IndirectSetAppointmentUiEvent.GetMeeting(meetingId!!))
             }
         } catch (e: Exception) {
@@ -625,6 +626,9 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             leadId = "7390962"
             ucid = "0"
             meetingDate = getDate()
+            when {
+                !createMode -> meetingID = meetingId
+            }
 
             meetingAttendee = addedAttendeeList .map {
                 AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
