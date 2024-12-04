@@ -49,7 +49,6 @@ import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectCreateMeetingBinding
-import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
@@ -69,6 +68,7 @@ import timber.log.Timber
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     internal lateinit var binding:FragIndirectCreateMeetingBinding
