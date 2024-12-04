@@ -166,5 +166,13 @@ class IndirectCreateMeetingPresenter @Inject constructor(
                 Log.d("Create MeetingF",it.message.toString())
             }
         }.addTo(disposable)
+
+
+        view.onIndirectLocationSaveEventFired()
+            .subscribe {
+                view.renderLocationSave(it.data)
+            }
+            .addTo(disposable)
+
     }
 }
