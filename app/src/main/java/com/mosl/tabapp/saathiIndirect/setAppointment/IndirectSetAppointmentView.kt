@@ -6,11 +6,15 @@ import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.setappointment.SetAppointmentUiEvent
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectSetAppointmentView :BaseView {
 
+    fun getLeadId(): String
+    fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>)
+    fun ononActivityCall():Observable<IndirectSetAppointmentUiEvent.onActivityCall>
     fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>)
     fun onActivityTypeSelected(): Observable<Int>
     fun getSelectedActivityType(): LookUp

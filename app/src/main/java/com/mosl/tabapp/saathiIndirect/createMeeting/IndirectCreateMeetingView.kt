@@ -6,10 +6,14 @@ import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectCreateMeetingView :BaseView{
 
+    fun getLeadId(): String
+    fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>)
+    fun ononActivityCall():Observable<IndirectCreateMeetingUiEvent.onActivityCall>
     fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>)
     fun onActivityTypeSelected(): Observable<Int>
     fun getSelectedActivityType(): LookUp

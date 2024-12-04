@@ -53,6 +53,7 @@ import com.mosl.tabapp.model.MeetingAttendeeItem
 import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.tabapp.model.SplMeetingAttendeeItem
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -118,6 +119,43 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         UcId =bundle.getString(MOSLConstants.UCID, "0") ?: "0"
     }
 
+    override fun getLeadId(): String {
+        return  leadID;
+    }
+
+    override fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            binding.layoutTopSection.tvLeadId.text = it.id
+            it.leadProducts
+                .forEach {
+                    if (it.isDefault) {
+                        binding.layoutTopSection.tvClientCode.text = it.clientCode
+                        binding.layoutTopSection.tvCurrentStage.text = it.stageName
+                    }
+                }
+//            if (clientDetail.currentStageSince.isNotEmpty()) {
+//                binding.layoutTopSection.tvCurrentStageSince.text =
+//                    String.format("%s Days", clientDetail.currentStageSince)
+//            }
+            binding.layoutTopSection.tvName.text = it.leadName
+            binding.layoutTopSection.tvBranchCode.text = it.branchCode
+
+//            val imageUrl = Base64.decode(it., Base64.DEFAULT)
+//            if (imageUrl != null) {
+//                CRMAppUtil.setImage(imageUrl, binding.layoutTopSection.ivLead, requireContext())
+//            }
+        }
+        uiSubject.onNext(IndirectSetAppointmentUiEvent.onActivityCall)
+    }
+
+    override fun ononActivityCall(): Observable<IndirectSetAppointmentUiEvent.onActivityCall> {
+        return  uiSubject.ofType()
+    }
     override fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {

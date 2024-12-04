@@ -10,6 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <include
+            android:id="@+id/layoutTopSection"
+            layout="@layout/lms_top_section_update" />
         <RelativeLayout
             android:id="@+id/rlDate"
             android:layout_width="match_parent"

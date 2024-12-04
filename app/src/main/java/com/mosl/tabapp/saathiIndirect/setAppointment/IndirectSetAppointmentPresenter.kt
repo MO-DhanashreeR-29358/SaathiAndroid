@@ -10,6 +10,7 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
@@ -20,11 +21,20 @@ class IndirectSetAppointmentPresenter @Inject constructor(
     view:IndirectSetAppointmentView,
     val navigator: ScreenNavigatorImpl,
     val userManager: UserManager,
-    val indirectrepo: IndirectSetAppointmentRepository
+    val indirectrepo: IndirectSetAppointmentRepository,
+    val repository: IndirectLeadDetailRepository,
 ):BasePresenter<IndirectSetAppointmentView>(view) {
     override fun start() {
 
-        onFetchCalled().switchMap {
+        onFetchCalled().map{
+            view.getLeadId()
+        }.switchMap {
+            repository.getLeadDetailForMainPage(it)
+                .compose(applyUiModel())
+        }.subscribe {
+            view.renderLeadDetail(it)
+        }
+        view.ononActivityCall().switchMap {
            indirectrepo.getActivitytype().compose(applyUiModel())
         }.subscribe {
            view.fnRenderActivityType(it)
@@ -40,7 +50,7 @@ class IndirectSetAppointmentPresenter @Inject constructor(
             indirectrepo.getMeetingReason(it.lookUpID).compose(applyUiModel())
         }.subscribe {
                 view.fnRenderMeetingReason(it)
-        }
+        }.addTo(disposable)
 
         view.onDatePicker()
             .subscribe {
@@ -138,7 +148,7 @@ class IndirectSetAppointmentPresenter @Inject constructor(
                 it.onFailure {
                     Log.d("Save Responsef",it.message.toString())
                 }
-            }
+            }.addTo(disposable)
     }
 
 

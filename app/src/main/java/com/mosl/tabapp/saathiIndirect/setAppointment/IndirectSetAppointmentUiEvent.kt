@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.core.Observable
 sealed class IndirectSetAppointmentUiEvent{
 
 //data class onActivityTypeSelected(val objLookup:LookUp):IndirectSetAppointmentUiEvent()
-
+object onActivityCall: IndirectSetAppointmentUiEvent()
     data class SearchTextChange(val text: String) : IndirectSetAppointmentUiEvent()
     data class AttendeeItemClick(val position: Int): IndirectSetAppointmentUiEvent()
 

@@ -12,6 +12,7 @@ import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeeting
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.kotlin.addTo
 import java.util.concurrent.TimeUnit
@@ -22,11 +23,20 @@ class IndirectCreateMeetingPresenter @Inject constructor(
     val navigator: ScreenNavigatorImpl,
     val userManager: UserManager,
     val indirectrepo: IndirectSetAppointmentRepository,
-    val indirectrepoCreateMeeting:IndirectCreateMeetingRepository
+    val indirectrepoCreateMeeting:IndirectCreateMeetingRepository,
+    val repository: IndirectLeadDetailRepository,
 ) :BasePresenter<IndirectCreateMeetingView>(view){
     override fun start() {
+        onFetchCalled().map{
+            view.getLeadId()
+        }.switchMap {
+            repository.getLeadDetailForMainPage(it)
+                .compose(applyUiModel())
+        }.subscribe {
+            view.renderLeadDetail(it)
+        }
 
-        onFetchCalled().switchMap {
+      view.ononActivityCall().switchMap {
             indirectrepo.getActivitytype().compose(applyUiModel())
         }.subscribe {
             view.fnRenderActivityType(it)
