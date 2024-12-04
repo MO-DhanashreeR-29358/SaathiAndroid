@@ -415,12 +415,19 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etMeetingAdd"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_40sdp"
-                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
-                        android:hint="@string/label_meeting_add"
+                        android:layout_height="@dimen/_60sdp"
+                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                         android:inputType="textMultiLine"
-                        android:maxLength="500"
-                        android:textCursorDrawable="@null" />
+                        android:maxLines="6"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:padding="3dp"
+                        android:background="@color/white"
+                        android:scrollHorizontally="false"
+                        android:scrollbars="vertical"
+                        android:gravity="top|left"
+                        android:textSize="18dp"
+                        android:textCursorDrawable="@null"  />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView

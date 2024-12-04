@@ -7,12 +7,12 @@ import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
+import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.kotlin.addTo
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -151,6 +151,19 @@ class IndirectSetAppointmentPresenter @Inject constructor(
         view.onResetButtonClicked().subscribe {
             view.onResentButtonRender()
         }.addTo(disposable)
+
+        view.getMeetingById()
+            .map {
+                it.meetingId
+            }
+            .switchMap {
+                indirectrepo.getMeetingById(it)
+                    .compose(applyUiModel())
+            }
+            .subscribe {
+                view.renderMeetingByID(it)
+            }
+            .addTo(disposable)
     }
 
 

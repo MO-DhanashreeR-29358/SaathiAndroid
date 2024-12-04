@@ -70,7 +70,12 @@ class LeadViewDetailActivitiesRepositoryImpl @Inject constructor(
     url: String
   ): Observable<String> {
     val request = DeleteAppointmentRequest(meetingId)
-    return saathiApi.deleteAppointments(url, request)
+      if(userManager.getUser()?.isIndirectUser() == true){
+          return saathiIndirectApi.deleteAppointments(url, request)
+      }else{
+          return saathiApi.deleteAppointments(url, request)
+      }
+
 
   }
 }

@@ -250,7 +250,12 @@ class ScreenNavigatorImpl @Inject constructor(
       putString(UCID, data.ucid)
       putString(MEETING_ID, data.meetingId)
     }
-    openPage(NAVIGATE_TO_SET_APPOINTMENT.toString(), args, true)
+    if(userManager.getUser()?.isIndirectUser() == true){
+      openPage(NAVIGATE_TO_INDIRECT_APPOINTMENT.toString(), args, true)
+    }else{
+      openPage(NAVIGATE_TO_SET_APPOINTMENT.toString(), args, true)
+    }
+
   }
 
   override fun openUpdateMeetingScreen(data: Appointment) {

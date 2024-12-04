@@ -29,16 +29,19 @@ import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
@@ -56,10 +59,10 @@ import com.mosl.tabapp.model.SplMeetingAttendeeItem
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
+import com.mosl.tabapp.setappointment.SetAppointmentUiEvent
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import java.util.Calendar
@@ -95,14 +98,18 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 
 
     private var createMode = true
+    private var meetingId: String? = ""
+    private var meetingApptModel: MeetingApptModel? = null
+
     override fun getLayout() = R.layout.frag_indirect_set_appointment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragIndirectSetAppointmentBinding.bind(view)
         hideAppTitle()
-        setupViews()
         presenter.start()
+        setupViews()
+        setUpFromArguments()
         dataActionSubject.onNext(DataAction.Fetch)
     }
 
@@ -118,11 +125,22 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         binding.tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(Date(), MOSLConstants.DATE_FORMAT_TO_DISPLAY)
     }
 
-    override fun extractArguments(bundle: Bundle) {
-        super.extractArguments(bundle)
-        leadID =bundle.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
-        UcId =bundle.getString(MOSLConstants.UCID, "0") ?: "0"
+    private fun setUpFromArguments() {
+        try {
+            leadID =this.arguments?.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
+            UcId =this.arguments?.getString(MOSLConstants.UCID, "0") ?: "0"
+            meetingId = this.arguments?.getString(MOSLConstants.MEETING_ID, "0") ?: "0"
+            if(meetingId != null && !meetingId.equals("0", ignoreCase = true)) {
+                //Editt mode
+                createMode = false
+                uiSubject.onNext(IndirectSetAppointmentUiEvent.GetMeeting(meetingId!!))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
+
 
     override fun getLeadId(): String {
         return  leadID;
@@ -165,6 +183,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             activityAdapter.setSpinnerData(binding.spActivityType, it)
+            val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.activityTypeID }
+            binding.spActivityType.setSelection(index)
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -189,6 +209,8 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             meetingAdapter.setSpinnerData(binding.spmeetingReason, it)
+            val index = it.indexOfFirst { it.lookUpID == meetingApptModel?.meetingReasonID }
+            binding.spmeetingReason.setSelection(index)
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -686,5 +708,107 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 
             return objSetAppointmentPostReq
         }
+
+    override fun getMeetingById(): Observable<IndirectSetAppointmentUiEvent.GetMeeting> {
+       return uiSubject.ofType()
+    }
+    override fun renderMeetingByID(uiModel: UiModel<MeetingByIdItemResponse>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            meetingApptModel = getAppointmentData(it)
+            setCalenderDateFrom(meetingApptModel!!)
+        }
+    }
+
+    private fun getAppointmentData(data: MeetingByIdItemResponse): MeetingApptModel {
+        val mModel = MeetingApptModel().apply {
+            meetingType = stringOrEmpty(data.meetingType)
+            displayType = "A"
+            meetingID = stringOrEmpty(data.meetingID)
+            leadId = data.leadId.toString()
+            meetingDate = stringOrEmpty(data.meetingDate)
+            activityTypeID = stringOrEmpty(data.activityTypeID)
+            meetingReasonID= Integer.parseInt(stringOrZero(data.meetingReasonID))
+            product = stringOrEmpty(data.productTypeID)
+            appointmentStartTime = stringOrEmpty(data.repeatationStartOn)
+            appointmentEndTime = stringOrEmpty(data.repeatationEndsOn)
+            repeatEveryWeekCode = stringOrEmpty(data.repeatEveryWeekCode)
+            repeatEveryDayCode = stringOrEmpty(data.repeatEveryDayCode)
+            repeatOnCode = stringOrEmpty(data.repeatOnCode)
+            meetingDes = stringOrEmpty(data.meetingDescription)
+        }
+        binding.etMeetingDescription.setText(mModel.meetingDes)
+
+        val meetingAttendee = data.meetingAttendee
+        for (meetingAttendeeItem in meetingAttendee.indices) {
+            val meetingAttendeeObj = meetingAttendee[meetingAttendeeItem]
+
+            val attendeeType = meetingAttendeeObj.attendeeType
+            val attendeeEmpCode = meetingAttendeeObj.attendeeEmpcode ?: ""
+            val attendeeEmpName = meetingAttendeeObj.attendeeEmpName ?: ""
+            val meetingAttendeeCode = meetingAttendeeObj.meetingAttendeeID ?: ""
+            val attended = meetingAttendeeObj.attended
+
+            when (meetingAttendeeObj.status) {
+                1 -> if (!meetingAttendeeObj.defaultAttendee) {
+                    when {
+                        attendeeType!!.trim { it <= ' ' }.equals("R", ignoreCase = true) -> {
+                            val attendTmp = AddedAttendeeModel(
+                                attendeeType,
+                                attended,
+                                attendeeEmpName,
+                                attendeeEmpCode,
+                                meetingAttendeeCode
+                            )
+                            addedAttendeeList.add(AddedAttendee(attendTmp.attendeeName, attendTmp.attendeeEmplyeeCode, attendTmp.attendeeType))
+                            addedAttendeeCount++
+                        }
+                        else -> {
+                            val tempSpAttendee = AddedSplAttendeeModel(
+                                attendeeType,
+                                attended,
+                                attendeeEmpName,
+                                attendeeEmpCode
+                            )
+                            addedSplAttendeeList.add(AddedAttendee(tempSpAttendee.attendeeName, tempSpAttendee.attendeeEmplyeeCode, tempSpAttendee.attendeeType))
+                            addedSplAttendeeCount++
+                        }
+                    }
+                }
+            }
+
+        }
+
+        binding.tvspAttendeeCount.text = String.format("(%s)", addedSplAttendeeCount.toString())
+        setCount(addedAttendeeCount)
+        mModel.meetingAttendee = addedAttendeeList .map {
+            AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+        }
+        mModel.splMeetingAttendee = addedSplAttendeeList .map {
+            AddedSplAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+        }
+        return mModel
+    }
+    private fun setCount(cnt: Int) {
+        binding.tvAttendeeCount.text = when {
+            cnt <= 0 -> ""
+            else -> String.format("(%s)", cnt.toString())
+        }
+    }
+    private fun setCalenderDateFrom(mModel: MeetingApptModel) {
+
+        binding.apply {
+            var mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.meetingDate)
+            tvApppointmentDateTime.text = CRMAppUtil.getDBDate(mMeetingDate,
+                MOSLConstants.mFormatWithSpace
+            )
+            tvApppointmentDateTimeDisplay.text =
+                CRMAppUtil.getDBDate(mMeetingDate, MOSLConstants.DATE_FORMAT_TO_DISPLAY)
+            }
+    }
+
 
 }

@@ -15,14 +15,17 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.OUTSTATIONMEETING
 import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
+import com.mosl.app.core.data.setappointment.responseMeetingByIdItemTransform
 import com.mosl.app.core.data.setappointment.responseSetAppointmentTransform
 import com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
@@ -81,6 +84,12 @@ class IndirectSetAppointmentRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getMeetingById(meetingId: String): Observable<MeetingByIdItemResponse> {
+        return saathiIndrectApi.getMeetingById((MeetingByIdRequest(meetingId)))
+            .map {
+                it.response?.responseMeetingByIdItemTransform()!!
+            }
+    }
 
 
     fun getType(type: Int): String {

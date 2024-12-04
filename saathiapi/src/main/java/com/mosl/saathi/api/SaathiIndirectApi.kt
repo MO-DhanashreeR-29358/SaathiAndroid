@@ -33,6 +33,8 @@ import com.mosl.saathi.api.model.createlead.SourceListItem
 import com.mosl.saathi.api.model.createlead.SourceListRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
+import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
 import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
@@ -62,6 +64,7 @@ import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.AppointmentResponse
+import com.mosl.saathi.api.model.leadviewactivities.DeleteAppointmentRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingRequest
 import com.mosl.saathi.api.model.leadviewactivities.MeetingResponse
 import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadHistoryResponse
@@ -73,6 +76,7 @@ import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import com.mosl.saathi.api.model.search.SearchResponse
+import retrofit2.http.Path
 
 
 interface SaathiIndirectApi {
@@ -220,4 +224,13 @@ interface SaathiIndirectApi {
     fun postDeleteDocuments(
         @Body request: DeleteDocumentRequest
     ): Observable<SaathiCommonResponse<String>>
+
+    @POST("Meeting/{action}")
+    fun deleteAppointments(
+        @Path("action") action: String,
+        @Body request: DeleteAppointmentRequest
+    ): Observable<String>
+
+    @POST("Meeting/GetMeetingByID")
+    fun getMeetingById(@Body request: MeetingByIdRequest): Observable<SaathiCommonResponse<MeetingByIdItem>>
 }
