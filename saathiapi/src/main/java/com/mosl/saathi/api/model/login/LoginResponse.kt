@@ -14,7 +14,8 @@ data class LoginResponse(
     @SerializedName("EventListRequired") @JvmField val EventListRequired: String,
     @SerializedName("IsBankMeetnig") @JvmField val isBankMeeting: String,
     @SerializedName("AuthState") @JvmField val authState: Int,
-    @SerializedName("User") @JvmField val user: User
+    @SerializedName("User") @JvmField val user: User,
+    @SerializedName("UserType") @JvmField val usertype:Int
 ) {
 
   fun isSMTEnabled(): Boolean {
