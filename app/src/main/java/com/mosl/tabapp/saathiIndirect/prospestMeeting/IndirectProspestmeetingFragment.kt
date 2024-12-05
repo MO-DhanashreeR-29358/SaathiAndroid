@@ -985,16 +985,13 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
                         MOSLConstants.UCID,
                         requireArguments().getString(MOSLConstants.UCID)
                     )
-                    navigator.openPage(
-                        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle,
-                        addToStack = true,
-                        forceReload = false
-                    )
+                    navigator.openHome()
                 }
             }
+            renderOnResetClicked()
         }
 
-        renderOnResetClicked()
+
     }
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {
         return uiGeoTaggingSubject.ofType()

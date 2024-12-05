@@ -837,9 +837,10 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
                     )
                 }
             }
+            renderOnResetClicked()
         }
 
-        renderOnResetClicked()
+
     }
 
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {
