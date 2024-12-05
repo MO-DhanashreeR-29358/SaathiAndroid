@@ -559,6 +559,8 @@ Page </string>
     <string name="error_message_contact">Enter contact person</string>
     <string name="error_message_referee_code">Enter referee code</string>
     <string name="error_message_pincode">Invalid Pincode</string>
+    <string name="error_message_lead_comment">Enter Comments</string>
+    <string name="error_message_lead_comment_length">Comments should be minimum 50 character</string>
     <string name="error_message_expected_margin">Enter Expected Margin</string>
     <string name="error_message_valid_expected_margin">Invalid Expected Margin</string>
     <string name="error_message_profession">Select Profession</string>

@@ -27,7 +27,7 @@ fun LoginResponse.transform(
             isQRDownload  == "1",
             EventListRequired  == "1",
             isBankMeeting == "1",
-            authState = 1
+            authState
         ),
         smtEnabled = smtEnabled
     )
@@ -88,7 +88,7 @@ fun com.mosl.saathi.api.model.login.User.transformUser(
         EventListRequired = EventListRequired,
         myZoneProfile = myZoneProfile?: "",
         isBankMeeting = isBankMeeting,
-        authState = 9
+        authState = authState
     )
 }
 

@@ -1514,6 +1514,14 @@
                             android:maxLines="4"
                             android:minLines="1"
                             android:textCursorDrawable="@null" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tl_comments"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:errorTextAppearance="@style/error_appearance"
+                            app:hintEnabled="false" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
@@ -1522,7 +1530,8 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:background="@drawable/lead_detail_add_product_background"
-                        android:padding="@dimen/_5sdp">
+                        android:padding="@dimen/_5sdp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="match_parent"
