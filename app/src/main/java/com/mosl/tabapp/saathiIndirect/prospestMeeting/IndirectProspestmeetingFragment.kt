@@ -964,7 +964,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
-            Timber.d("IndirectCreateMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
+            Timber.d("IndirecProspestMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
 
             showOnFailurePopup(it)
         }
