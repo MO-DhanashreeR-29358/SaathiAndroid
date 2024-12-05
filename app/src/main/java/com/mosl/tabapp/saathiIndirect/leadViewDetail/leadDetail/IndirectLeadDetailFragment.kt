@@ -464,24 +464,26 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
                     binding.tlLeadName.setErrorMessages(getString(it, "Lead"))
                 2 ->
                     binding.tlLeadName.setErrorMessages(getString(it))
-                3 ->
+                3,4 ->
                     binding.tlEmail.setErrorMessages(getString(it))
-                4, 5 ->
+                5,6 ->
                     binding.tlAlternateEmail.setErrorMessages(getString(it))
-                6 ->
-                    binding.tlAlternateMobile.setErrorMessages(getString(it))
-                7 ->
+                7,8 ->
                     binding.tlAlternateMobile.setErrorMessages(getString(it))
                 9 ->
                     binding.tlLand.setErrorMessages(getString(it))
-                10 ->
+                10,11 ->
                     binding.tlPan.setErrorMessages(getString(it))
-                11 ->
-                    binding.tlRefereeName.setErrorMessages(getString(it))
                 12 ->
-                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                    binding.tlRefereeName.setErrorMessages(getString(it))
                 13 ->
+                    binding.tlRefereeNumber.setErrorMessages(getString(it))
+                14 ->
                     binding.tlRefereeEmail.setErrorMessages(getString(it))
+                15 ->
+                    binding.tlExpectedMargin.setErrorMessages(getString(it))
+                16,17 ->
+                    binding.tlComments.setErrorMessages(getString(it))
                 else -> {
                 }
             }
@@ -503,6 +505,8 @@ class IndirectLeadDetailFragment : CommonFragment(), IndirectLeadDetailView, Ind
             tlOffPin.disableErrorMessages()
             tlRefereeNumber.disableErrorMessages()
             tlRefereeEmail.disableErrorMessages()
+            tlExpectedMargin.disableErrorMessages()
+            tlComments.disableErrorMessages()
         }
     }
 

@@ -264,7 +264,6 @@ open class MenuDataSourceImpl @Inject constructor(
         return arrayListOf(
             getIndirectDashboard(),
             getIndirectProspectMeeting(),
-            getDeleteRequest(),
             getLogout()
         ).apply { checkForPrime(false,false, false) }
     }

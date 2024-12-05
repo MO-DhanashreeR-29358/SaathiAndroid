@@ -8,6 +8,7 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMValidationRule
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.util.disableErrorMessages
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 
@@ -27,19 +28,24 @@ class IndirectLeadDetailValidator (val user: User) : Validator<IndirectUpdateLea
                 R.string.error_message_alphabets
             }
 
-            contact.emailId.run { isNotBlank() && invalidEmail() } -> {
+            contact.emailId.run { isBlank()  } -> {
                 identifier = 3
+                R.string.error_message_enter_email
+            }
+
+            contact.emailId.run { isNotBlank() && invalidEmail() } -> {
+                identifier = 4
                 R.string.error_message_invalid_email
             } // MOSLConstants.INVALID_EMAIL_ID
 
 
             contact.alternateEmailId.run { isNotBlank() && invalidEmail() } -> {
-                identifier = 4
+                identifier = 5
                 R.string.error_message_invalid_email
             }
 
             contact.alternateEmailId.run { isNotBlank() && contact.emailId == this } -> {
-                identifier = 5
+                identifier = 6
                 R.string.error_message_same_email
             }
 
@@ -49,7 +55,7 @@ class IndirectLeadDetailValidator (val user: User) : Validator<IndirectUpdateLea
                     "^[6789]\\d{9}$".toRegex()
                 )
             } -> {
-                identifier = 6
+                identifier = 7
                 R.string.error_message_invalid_mobile
             }
 
@@ -57,46 +63,57 @@ class IndirectLeadDetailValidator (val user: User) : Validator<IndirectUpdateLea
                 isNotBlank() &&
                         contact.mobile == this
             } -> {
-                identifier = 7
+                identifier = 8
                 R.string.error_message_same_mobile
             }
 
-            contact.eKYCMobileNo.run {
-                isNotBlank() &&
-                        length <= 10 && !matches(
-                    "^[6789]\\d{9}$".toRegex()
-                )
-            } -> {
-                identifier = 8
-                R.string.error_message_invalid_mobile
-            }
 
             contact.landlineNo.run { isNotBlank() && invalidLandLine() } -> {
                 identifier = 9
                 R.string.error_message_invalid_landline
             }
 
-            contact.panNumber.run { isNotBlank() && invalidPan() } -> {
+            contact.panNumber.run { isBlank()  } -> {
                 identifier = 10
+                R.string.error_message_enter_pan
+            }
+
+            contact.panNumber.run { isNotBlank() && invalidPan() } -> {
+                identifier = 11
                 R.string.error_message_invalid_pan
             }
 
             input.refereeName.run { isNotBlank() && invalidAlphaNumbric() } -> {
-                identifier = 11
+                identifier = 12
                 R.string.error_message_alphabets
             }
 
             input.refereeMobile?.isNotBlank() == true && input.refereeMobile?.invalidMobileNo()!!
             ->{
-                identifier = 12
+                identifier = 13
                 R.string.error_message_invalid_mobile
             }
 
             input.refereeEmail?.run { isNotBlank() == true && invalidEmail() } == true -> {
-                identifier = 13
+                identifier = 14
                 R.string.error_message_invalid_email
             }
+            input.expectedMargin?.run { isBlank()  } == true -> {
+                identifier = 15
+                R.string.error_message_expected_margin
+            }
+            input.comments?.run { isBlank()  } == true -> {
+                identifier = 16
+                R.string.error_message_lead_comment
+            }
 
+            input.comments?.run {
+                isNotBlank() &&
+                        length <= 50
+            } == true -> {
+                identifier = 17
+                R.string.error_message_lead_comment_length
+            }
 
             else -> {
                 identifier = 0
