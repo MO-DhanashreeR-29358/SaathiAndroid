@@ -38,6 +38,7 @@ import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.getFormatedDate
@@ -67,7 +68,9 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.navigation.NavigationConstants
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     internal lateinit var binding:FragIndirectCreateMeetingBinding
@@ -96,6 +99,9 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     var leadID:String=""
     var UcId:String=""
+    var meetingId:String=""
+    private var createMode = true
+    private var meetingApptModel: MeetingApptModel? = null
 
     private var isAreaRestricted :Boolean = true
     var strLatitude : String = ""
@@ -111,8 +117,9 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         binding = FragIndirectCreateMeetingBinding.bind(view)
         setAppTitle(R.string.page_title_create_meeting)
         hideAppTitle()
-        setupViews()
         presenter.start()
+        setupViews()
+        setUpFromArguments()
         dataActionSubject.onNext(DataAction.Fetch)
 
         val value =
@@ -169,6 +176,23 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
     }
 
+    private fun setUpFromArguments() {
+        try {
+            leadID =this.arguments?.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
+            UcId =this.arguments?.getString(MOSLConstants.UCID, "0") ?: "0"
+            meetingId = this.arguments?.getString(MOSLConstants.MEETING_ID, "0") ?: "0"
+            if(!meetingId.equals("0", ignoreCase = true)) {
+                //Editt mode
+                createMode = false
+                setAppTitle(R.string.page_title_update_meeting)
+                uiSubject.onNext(IndirectCreateMeetingUiEvent.GetMeeting(meetingId!!))
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     override fun extractArguments(bundle: Bundle) {
         super.extractArguments(bundle)
         leadID =bundle.getString(MOSLConstants.LEAD_ID, "0") ?: "0"
@@ -216,6 +240,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             activityAdapter.setSpinnerData(binding.spActivityType, it)
+            val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.activityTypeID }
+            binding.spActivityType.setSelection(index)
             uiSubject.onNext(IndirectCreateMeetingUiEvent.OnMeetingDurationCall)
         }
         uiModel.onFailure {
@@ -236,6 +262,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             meetingAdapter.setSpinnerData(binding.spMeetingReason, it)
+            val index = it.indexOfFirst { it.lookUpID == meetingApptModel?.meetingReasonID }
+            binding.spMeetingReason.setSelection(index)
             uiSubject.onNext(IndirectCreateMeetingUiEvent.OnIntrestedInCall)
         }
         uiModel.onFailure {
@@ -252,6 +280,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             intrestedInAdapter.setSpinnerData(binding.spIntrestedIn,it)
+            val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.product }
+            binding.spIntrestedIn.setSelection(index)
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -271,6 +301,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it)
+            val index = it.indexOfFirst { it.lookUpID == meetingApptModel?.meetingDurationID }
+            binding.spMeetingDuration.setSelection(index)
             uiSubject.onNext(IndirectCreateMeetingUiEvent.OnMeetingObjectiveCall)
         }
         uiModel.onFailure {
@@ -287,6 +319,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             meetingObjectiveAdapter.setSpinnerData(binding.spMeetingObjective, it)
+            val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.meetingObjectiveID }
+            binding.spMeetingObjective.setSelection(index)
             uiSubject.onNext(IndirectCreateMeetingUiEvent.OnLocationAddressCall)
         }
         uiModel.onFailure {
@@ -303,6 +337,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         toggleProgress(uiModel.inProgress)
         uiModel.onSuccess {
             locationAddAdapter.setSpinnerData(binding.spLocationAdd, it)
+            val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.meetingAddressTypeId }
+            binding.spLocationAdd.setSelection(index)
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -694,6 +730,9 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
         data.leadId = leadID
         data.ucid = UcId
+        when {
+            !createMode -> data.meetingID = meetingId
+        }
         data.meetingDate = getDate()
         data.product = "0"
         data.setProductList(emptyList())
@@ -738,6 +777,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         objPostData. meetingDate =data.meetingDate
         objPostData. meetingDescription=data.meetingDes
         objPostData. leadId=data.leadId
+        objPostData. meetingId = data.meetingID
         objPostData. meetingReason=data.meetingReason
         objPostData. ucid=data.ucid
         objPostData. pincode=data.pincode
@@ -869,6 +909,95 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
         Log.d("strMeetingAddress",binding.etMeetingAdd.text.toString())
         //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
 
+    }
+
+    override fun getMeetingById(): Observable<IndirectCreateMeetingUiEvent.GetMeeting> {
+        return  uiSubject.ofType()
+    }
+
+    override fun renderMeetingByID(uiModel: UiModel<MeetingByIdItemResponse>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            meetingApptModel = getAppointmentData(it)
+            setCalenderDateFrom(meetingApptModel!!)
+        }
+    }
+
+    private fun getAppointmentData(data: MeetingByIdItemResponse): MeetingApptModel {
+        val mModel = MeetingApptModel().apply {
+            meetingType = stringOrEmpty(data.meetingType)
+            displayType = "A"
+            meetingID = stringOrEmpty(data.meetingID)
+            leadId = data.leadId.toString()
+            meetingDate = stringOrEmpty(data.meetingDate)
+            activityTypeID = stringOrEmpty(data.activityTypeID)
+            meetingReasonID= Integer.parseInt(stringOrZero(data.meetingReasonID))
+            product = stringOrEmpty(data.productTypeID)
+            meetingDurationID = Integer.parseInt(stringOrZero(data.meetingDurationID))
+            meetingObjectiveID = stringOrEmpty(data.meetingObjectiveID.toString())
+            meetingAddressTypeId = stringOrEmpty(data.meetingAddressTypeId.toString())
+            appointmentStartTime = stringOrEmpty(data.repeatationStartOn)
+            appointmentEndTime = stringOrEmpty(data.repeatationEndsOn)
+            repeatEveryWeekCode = stringOrEmpty(data.repeatEveryWeekCode)
+            repeatEveryDayCode = stringOrEmpty(data.repeatEveryDayCode)
+            repeatOnCode = stringOrEmpty(data.repeatOnCode)
+            meetingDes = stringOrEmpty(data.meetingDescription)
+        }
+        binding.etMeetingDescription.setText(mModel.meetingDes)
+
+        val meetingAttendee = data.meetingAttendee
+        for (meetingAttendeeItem in meetingAttendee.indices) {
+            val meetingAttendeeObj = meetingAttendee[meetingAttendeeItem]
+
+            val attendeeType = meetingAttendeeObj.attendeeType
+            val attendeeEmpCode = meetingAttendeeObj.attendeeEmpcode ?: ""
+            val attendeeEmpName = meetingAttendeeObj.attendeeEmpName ?: ""
+            val meetingAttendeeCode = meetingAttendeeObj.meetingAttendeeID ?: ""
+            val attended = meetingAttendeeObj.attended
+
+            when (meetingAttendeeObj.status) {
+                1 -> if (!meetingAttendeeObj.defaultAttendee) {
+                    when {
+                        attendeeType!!.trim { it <= ' ' }.equals("R", ignoreCase = true) -> {
+                            val attendTmp = AddedAttendeeModel(
+                                attendeeType,
+                                attended,
+                                attendeeEmpName,
+                                attendeeEmpCode,
+                                meetingAttendeeCode
+                            )
+                            addedAttendeeList.add(AddedAttendee(attendTmp.attendeeName, attendTmp.attendeeEmplyeeCode, attendTmp.attendeeType))
+                            addedAttendeeCount++
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        binding.tvAttendeeCount.text = String.format("(%s)", addedAttendeeCount.toString())
+        setCount(addedAttendeeCount, binding.tvAttendeeCount)
+        mModel.meetingAttendee = addedAttendeeList .map {
+            AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+        }
+
+        return mModel
+    }
+
+    private fun setCalenderDateFrom(mModel: MeetingApptModel) {
+
+        binding.apply {
+            var mMeetingDate = CRMAppUtil.getDBDateFrom(mModel.meetingDate)
+            binding.tvDate.text =
+                CRMAppUtil.getDBDate(mMeetingDate,
+                    MOSLConstants.DATE_FORMAT_TO_DISPLAY
+                )
+
+        }
     }
 
 }

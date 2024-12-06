@@ -228,7 +228,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
         )
         return indirectSaathiApi.getRefereeCode(request)
             .map {
-                it refereeResponseToReferee type
+                it.response?.refereeResponseToReferee(type)!!
             }
     }
 

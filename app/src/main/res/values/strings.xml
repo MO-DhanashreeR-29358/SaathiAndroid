@@ -354,6 +354,7 @@ Page </string>
     <string name="error_message_empty_query">Please enter query description</string>
     <string name="page_title_query">Insert Your Query</string>
     <string name="page_title_create_meeting">Create Meeting</string>
+    <string name="page_title_update_meeting">Update Meeting</string>
     <string name="text_label_no">No</string>
     <string name="text_label_yes">Yes</string>
     <string name="call_alert_message">"Do you want to call?"</string>

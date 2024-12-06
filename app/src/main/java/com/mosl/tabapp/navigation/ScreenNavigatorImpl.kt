@@ -262,17 +262,20 @@ class ScreenNavigatorImpl @Inject constructor(
 
     val updateMeetingScreenData = data.mapToUpdateMeetingScreenData()
 
-        val args = Bundle().apply {
-            /*putString(MEETING, data.meetingId)
-            putString(LEAD_ID, data.leadId)
-            putString(DATE, data.date)
-            putString(TIME, data.time)
-            putString(PRODUCT, data.product)
-            putString(UCID, data.ucid)*/
-            putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
-        }
+    if(userManager.getUser()?.isIndirectUser() == true){
+      val args = Bundle().apply {
+        putString(LEAD_ID, data.leadId)
+        putString(UCID, data.ucid)
+        putString(MEETING_ID, data.meetingId)
+      }
+      openPage(NAVIGATE_TO_INDIRECT_CREATE_MEETING.toString(), args, true)
+    }else{
+      val args = Bundle().apply {
+        putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
+      }
+      openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
+    }
 
-    openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
   }
 
   override fun navigateToSecondLevelDashboard(

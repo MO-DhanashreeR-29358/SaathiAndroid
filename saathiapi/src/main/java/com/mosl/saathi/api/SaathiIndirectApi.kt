@@ -168,7 +168,7 @@ interface SaathiIndirectApi {
     @POST("Common/GetRefereeCode")
     fun getRefereeCode(
         @Body request: SearchRefereeModel
-    ): Observable<SearchRefereeResponse>
+    ): Observable<SaathiCommonResponse<SearchRefereeResponse>>
 
     @POST("Lead/UpdateLead")
     fun updateLead(

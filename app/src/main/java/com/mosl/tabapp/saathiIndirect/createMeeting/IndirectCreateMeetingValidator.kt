@@ -52,6 +52,7 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
                          meetingDate =input.meetingDate,
                          meetingDescription=input.meetingDescription,
                          leadId=input.leadId,
+                         meetingId =input.meetingId,
                          meetingReason=input.meetingReason,
                          ucid=input.ucid,
                          pincode=input.pincode,
