@@ -30,8 +30,11 @@ data class User(
     @JvmField val collectionOfficer: Boolean = false,
     @JvmField var myZoneProfile: String,
     @JvmField var isBankMeeting: Boolean,
-    @JvmField var authState: Int
+    @JvmField var authState: Int,
+    @JvmField var usertype:Int
 ) {
+
+
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
     }
@@ -63,7 +66,15 @@ data class User(
     }
 
     fun isIndirectUser(): Boolean {
-        return authState == 9
+        Log.d("user type",usertype.toString())
+        if(usertype==0)
+        {
+            return authState==9
+        }
+        else{
+            return usertype==9
+        }
+
     }
 
     fun isRetail(): Boolean {
