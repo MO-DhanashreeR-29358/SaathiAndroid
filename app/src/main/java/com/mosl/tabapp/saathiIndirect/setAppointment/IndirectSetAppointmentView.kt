@@ -65,4 +65,6 @@ interface IndirectSetAppointmentView :BaseView {
     fun getMeetingById(): Observable<IndirectSetAppointmentUiEvent.GetMeeting>
 
     fun renderMeetingByID(uiModel: UiModel<MeetingByIdItemResponse>)
+
+    fun showAttendeAddedDialog()
 }

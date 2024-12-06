@@ -83,4 +83,8 @@ interface IndirectCreateMeetingView :BaseView{
     fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
 
     fun renderLocationSave(locationItem: LocationItem)
+
+    fun showAttendeAddedDialog()
+
+
 }

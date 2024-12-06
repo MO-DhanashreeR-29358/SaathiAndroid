@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.TimePicker
@@ -47,6 +48,7 @@ import com.mosl.tabapp.constants.MoslConstant
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectDashboardBinding
 import com.mosl.tabapp.databinding.FragIndirectSetAppointmentBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
@@ -69,7 +71,7 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
-class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView  {
+class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView,AddedAttendeeAdapter.ClickListenerHandler  {
     internal lateinit var binding:FragIndirectSetAppointmentBinding
     @Inject
     lateinit var presenter: IndirectSetAppointmentPresenter
@@ -100,6 +102,9 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     private var createMode = true
     private var meetingId: String? = ""
     private var meetingApptModel: MeetingApptModel? = null
+
+    private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
+    private lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
 
     override fun getLayout() = R.layout.frag_indirect_set_appointment
 
@@ -348,6 +353,37 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     override fun onAttendeeAddedClicked(): Observable<Unit> {
         return binding.tvAttendeeCount.clicks()
     }
+    private fun showAddedDialog(isAttendee: Boolean) {
+        val dialogAddedAttendee = Dialog(requireContext())
+        dialogAddedAttendee.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_addedd_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
+        val lvAttendee = dialogAddedAttendee.findViewById<ListView>(R.id.lvAttendee)
+        lvAttendee.emptyView = tvEmpty
+        if (isAttendee) {
+            addedAttendeeAdapter = AddedAttendeeAdapter(
+                requireContext(), addedAttendeeList, this
+            )
+            lvAttendee.adapter = addedAttendeeAdapter
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+            addedSplAttendeeAdapter = AddedAttendeeAdapter(
+                requireContext(), addedSplAttendeeList, this
+            )
+            lvAttendee.adapter = addedSplAttendeeAdapter
+            addedSplAttendeeAdapter.notifyDataSetChanged()
+        }
+        dialogAddedAttendee.show()
+    }
+
+    override fun showAttendeAddedDialog() {
+        showAddedDialog(true)
+    }
 
     override fun showAttendeDialog() {
         attendeeDialog = Dialog(requireContext())
@@ -390,6 +426,24 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         }
         attendeeDialog.show()
     }
+
+    override fun onDeleteClicked(
+        position: Int,
+        isAttendee: Boolean
+    ) {
+        if (isAttendee) {
+            addedAttendeeCount--
+            setCount(addedAttendeeCount, binding.tvAttendeeCount)
+            addedAttendeeList.removeAt(position)
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+            addedSplAttendeeCount--
+            setCount(addedSplAttendeeCount, binding.tvspAttendeeCount)
+            addedSplAttendeeList.removeAt(position)
+            addedSplAttendeeAdapter.notifyDataSetChanged()
+        }
+    }
+
 
     override fun getAttendeeSearchText(): Observable<IndirectSetAppointmentUiEvent.SearchTextChange> {
         return  uiSubject.ofType()

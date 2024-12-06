@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -67,9 +68,10 @@ import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
 import com.mosl.tabapp.navigation.NavigationConstants
 
-class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
+class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView , AddedAttendeeAdapter.ClickListenerHandler{
     internal lateinit var binding:FragIndirectCreateMeetingBinding
 
     @Inject
@@ -104,6 +106,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
     var strMeetingLongitude : String = ""
     var strAddress : String = ""
     var isMockLocationEnabled : Boolean = false
+    private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
     override fun getLayout() = R.layout.frag_indirect_create_meeting
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -451,6 +454,44 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView {
 
     override fun onAttendeeAddedClicked(): Observable<Unit> {
         return binding.tvAttendeeCount.clicks()
+    }
+
+    override fun showAttendeAddedDialog() {
+        showAddedDialog(true)
+    }
+    private fun showAddedDialog(isAttendee: Boolean) {
+        val dialogAddedAttendee = Dialog(requireContext())
+        dialogAddedAttendee.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_addedd_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
+        val lvAttendee = dialogAddedAttendee.findViewById<ListView>(R.id.lvAttendee)
+        lvAttendee.emptyView = tvEmpty
+        if (isAttendee) {
+            addedAttendeeAdapter = AddedAttendeeAdapter(
+                requireContext(), addedAttendeeList, this
+            )
+            lvAttendee.adapter = addedAttendeeAdapter
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+
+        }
+        dialogAddedAttendee.show()
+    }
+
+    override fun onDeleteClicked(position: Int, isAttendee: Boolean) {
+        if (isAttendee) {
+            addedAttendeeCount--
+            setCount(addedAttendeeCount, binding.tvAttendeeCount)
+            addedAttendeeList.removeAt(position)
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+
+        }
     }
 
     override fun showAttendeDialog() {
