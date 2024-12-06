@@ -66,7 +66,15 @@ data class User(
     }
 
     fun isIndirectUser(): Boolean {
-        return usertype==9
+        Log.d("user type",usertype.toString())
+        if(usertype==0)
+        {
+            return authState==9
+        }
+        else{
+            return usertype==9
+        }
+
     }
 
     fun isRetail(): Boolean {
