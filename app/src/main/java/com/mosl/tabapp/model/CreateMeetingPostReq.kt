@@ -50,7 +50,7 @@ data class CreateMeetingPostReq(
 	var product: String? = null,
 
 	@SerializedName("meetingAttendee")
-	var meetingAttendee: MutableList<MeetingAttendeeItems?>? = null,
+	var meetingAttendee: MutableList<MeetingAttendeeItem?>? = null,
 
 	@SerializedName("meetingLongitude")
 	var meetingLongitude: String? = null,
@@ -95,20 +95,3 @@ data class CreateMeetingPostReq(
 	var attendeeCode:String?=null
 )
 
-data class MeetingAttendeeItems(
-
-	@SerializedName("Attended")
-	var attended: Boolean? = null,
-
-	@SerializedName("AttendeeEmpName")
-	var attendeeName: String? = null,
-
-	@SerializedName("meetingAttendeeCode")
-	var meetingAttendeeCode: String? = null,
-
-	@SerializedName("AttendeeEmpcode")
-	var attendeeEmplyeeCode: String? = null,
-
-	@SerializedName("AttendeeType")
-	var attendeeType: String? = null
-)

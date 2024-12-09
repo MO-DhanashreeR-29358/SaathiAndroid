@@ -61,7 +61,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
-import com.mosl.tabapp.model.MeetingAttendeeItems
+import com.mosl.tabapp.model.MeetingAttendeeItem
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
@@ -903,8 +903,8 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         objPostData. pincode=data.pincode
         objPostData. amount=data.amount
         objPostData. product=data.product
-        var tempList :MutableList<MeetingAttendeeItems?> =getAttendeeList().map {
-            MeetingAttendeeItems(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
+        var tempList :MutableList<MeetingAttendeeItem?> =getAttendeeList().map {
+            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
         }.toMutableList()
         objPostData. meetingAttendee=tempList
         objPostData. meetingDurationID=data.meetingDurationID

@@ -74,20 +74,3 @@ data class MeetingAttendeeItem(
 	var attendeeType: String? = null
 )
 
-data class SplMeetingAttendeeItem(
-
-	@SerializedName("attended")
-	var attended: Boolean? = null,
-
-	@SerializedName("attendeeName")
-	var attendeeName: String? = null,
-
-	@SerializedName("meetingAttendeeCode")
-	var meetingAttendeeCode: String? = null,
-
-	@SerializedName("attendeeEmplyeeCode")
-	var attendeeEmplyeeCode: String? = null,
-
-	@SerializedName("attendeeType")
-	var attendeeType: String? = null
-)

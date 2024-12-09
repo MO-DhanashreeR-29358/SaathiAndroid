@@ -58,7 +58,6 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
-import com.mosl.tabapp.model.MeetingAttendeeItems
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.SpinnerAdapterFactory
@@ -72,9 +71,8 @@ import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
-D:\Project\saathi_android\app\src\main\java\com\mosl\tabapp\saathiIndirect\createMeeting\IndirectCreateMeetingFragment.kt
 import com.mosl.tabapp.model.AddedSplAttendeeModel
-
+import com.mosl.tabapp.model.MeetingAttendeeItem
 
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView , AddedAttendeeAdapter.ClickListenerHandler{
@@ -827,8 +825,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         objPostData. pincode=data.pincode
         objPostData. amount=data.amount
         objPostData. product=data.product
-        var tempList :MutableList<MeetingAttendeeItems?> =getAttendeeList().map {
-            MeetingAttendeeItems(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
+        var tempList :MutableList<MeetingAttendeeItem?> =getAttendeeList().map {
+            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
         }.toMutableList()
         objPostData. meetingAttendee=tempList
         objPostData. meetingLongitude =data.meetingLongitude

@@ -28,6 +28,7 @@ interface IndirectSetAppointmentView :BaseView {
 
     fun onAttendeeClicked(): Observable<Unit>
     fun onAttendeeAddedClicked(): Observable<Unit>
+    fun onSplAttendeeAddedClicked(): Observable<Unit>
     fun showAttendeDialog()
     fun getAttendeeSearchText(): Observable<IndirectSetAppointmentUiEvent.SearchTextChange>
     fun onAttendeeItemClickEventFired(): Observable<IndirectSetAppointmentUiEvent.AttendeeItemClick>
@@ -44,7 +45,6 @@ interface IndirectSetAppointmentView :BaseView {
 
     //spl attendee
     fun onSplAttendeeClicked(): Observable<Unit>
-    fun onSplAttendeeAddedClicked(): Observable<Unit>
     fun showSplAttendeDialog()
     fun showSplAttendeAddedDialog()
     fun getSplAttendeeSearchText(): Observable<IndirectSetAppointmentUiEvent.SearchTextChangeSplAttendee>

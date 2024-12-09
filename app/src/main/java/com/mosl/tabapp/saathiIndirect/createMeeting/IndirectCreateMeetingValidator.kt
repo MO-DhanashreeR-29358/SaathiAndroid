@@ -2,7 +2,6 @@ package com.mosl.tabapp.saathiIndirect.createMeeting
 
 import android.content.Context
 import com.mosl.tabapp.model.CreateMeetingPostReq
-import com.mosl.tabapp.model.MeetingAttendeeItems
 import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult

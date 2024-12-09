@@ -169,6 +169,10 @@ class IndirectSetAppointmentPresenter @Inject constructor(
         view.onAttendeeAddedClicked()
             .subscribe { view.showAttendeAddedDialog() }
             .addTo(disposable)
+
+        view.onSplAttendeeAddedClicked()
+            .subscribe { view.showSplAttendeAddedDialog() }
+            .addTo(disposable)
     }
 
 }

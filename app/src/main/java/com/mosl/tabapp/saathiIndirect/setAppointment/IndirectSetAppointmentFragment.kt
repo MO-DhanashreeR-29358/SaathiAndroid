@@ -597,7 +597,7 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     }
 
     override fun showSplAttendeAddedDialog() {
-       // showAddedDialog(false)
+        showAddedDialog(false)
     }
 
     override fun onSplAttendeeItemClickEventFired(): Observable<IndirectSetAppointmentUiEvent.SplAttendeeItemClick> =
