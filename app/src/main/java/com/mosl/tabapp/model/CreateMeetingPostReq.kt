@@ -31,6 +31,9 @@ data class CreateMeetingPostReq(
 	@SerializedName("leadId")
 	var leadId: String? = null,
 
+	@SerializedName("meetingId")
+	var meetingId: String? = null,
+
 	@SerializedName("meetingReason")
 	var meetingReason: String? = null,
 
