@@ -145,6 +145,7 @@ class DrawerMenuView : FrameLayout {
                      // it.defaultBusinessProfile.branchCode,
                     branchCode,
                       it.imageUrl,
+                    userManager,
                       closeSelectSubject,
                       menuSelectSubject
           )
