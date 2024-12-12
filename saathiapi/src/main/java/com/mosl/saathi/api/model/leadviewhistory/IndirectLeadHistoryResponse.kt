@@ -10,9 +10,11 @@ data class IndirectLeadHistoryResponse(
     @SerializedName("Branchcode"            ) var Branchcode            : String?  = null,
     @SerializedName("Profile"               ) var Profile               : String?  = null,
     @SerializedName("LeadOwner"             ) var LeadOwner             : String?  = null,
+    @SerializedName("LeadOwnerName"         ) var LeadOwnerName             : String?  = null,
     @SerializedName("Comments"              ) var Comments              : String?  = null,
     @SerializedName("Action"                ) var Action                : String?  = null,
     @SerializedName("ActionDate"            ) var ActionDate            : String?  = null,
+    @SerializedName("ActionUser"        ) var ActionUser        : String?  = null,
     @SerializedName("ActionUserName"        ) var ActionUserName        : String?  = null,
 
 )

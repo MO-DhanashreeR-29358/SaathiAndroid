@@ -504,10 +504,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
         uiModel.onFailure { showOnFailurePopup(it) }
         uiModel.onSuccess { data ->
             binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
-            var list = data.interestInRowDatas.toMutableList()
-            list.removeIf { it.value == "Equity" }
-            list.removeIf { it.value == "Only MFD" }
-            binding.spInterestIn.setSpinnerData(interestInAdapter, list)
+            binding.spInterestIn.setSpinnerData(interestInAdapter, data.interestInRowDatas)
             binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
             binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
             binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)

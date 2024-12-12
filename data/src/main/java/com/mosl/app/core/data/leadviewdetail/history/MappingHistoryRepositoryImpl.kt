@@ -190,11 +190,11 @@ class MappingHistoryRepositoryImpl @Inject constructor(
         values.add(list.get(i).EmailId ?: "")
         values.add(list.get(i).Branchcode ?: "")
         values.add(list.get(i).Profile ?: "")
-        values.add(list.get(i).LeadOwner ?: "")
+        values.add(list.get(i).LeadOwner + "-" + list.get(i).LeadOwnerName)
         values.add(list.get(i).Comments ?: "")
         values.add(list.get(i).Action ?: "")
         values.add(getDate(list.get(i).ActionDate?: ""))
-        values.add(list.get(i).ActionUserName ?: "")
+        values.add(list.get(i).ActionUser + "-" +  list.get(i).ActionUserName)
 
         data.add(MappingHistoryData(setData(values)))
       }
@@ -218,10 +218,12 @@ class MappingHistoryRepositoryImpl @Inject constructor(
       Branchcode = Branchcode ?: "",
       Profile = Profile ?: "",
       LeadOwner = LeadOwner ?: "",
+      LeadOwnerName = LeadOwnerName ?: "",
       Comments = Comments ?: "",
       Action = Action ?: "",
       ActionDate = ActionDate ?: "",
-      ActionUserName = ActionUserName ?: ""
+      ActionUserName = ActionUserName ?: "",
+      ActionUser = ActionUser ?: ""
     )
   }
 
