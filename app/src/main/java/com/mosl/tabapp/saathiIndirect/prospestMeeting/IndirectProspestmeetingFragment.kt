@@ -356,6 +356,10 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
 //            }
             binding.layoutTopSection.tvName.text = it.leadName
             binding.layoutTopSection.tvBranchCode.text = it.branchCode
+            binding.layoutTopSection.tvCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
 
 //            val imageUrl = Base64.decode(it., Base64.DEFAULT)
 //            if (imageUrl != null) {

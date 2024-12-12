@@ -173,6 +173,10 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 //            }
             binding.layoutTopSection.tvName.text = it.leadName
             binding.layoutTopSection.tvBranchCode.text = it.branchCode
+            binding.layoutTopSection.tvCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
 
 //            val imageUrl = Base64.decode(it., Base64.DEFAULT)
 //            if (imageUrl != null) {
@@ -234,58 +238,71 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
         showSelectDateDialog()
     }
 
-    private fun showSelectDateDialog() {
-        var hour: Int
-        var minute: Int
+    private var today: Calendar? = null
 
-        val dialog = Dialog(requireContext()).apply {
+    private var close: ImageView? = null
+    private var btnSubmit: Button? = null
+    private var currentYear: Int = 0
+    private var month: Int = 0
+    private var day: Int = 0
+    private var hour: Int = 0
+    private var minute: Int = 0
+    private var fromDat: Date? = null//, toDate;
+    private var fromPostingDate: String? = null
+    private fun showSelectDateDialog() {
+        today = Calendar.getInstance()
+        val dialogDateTime = Dialog(requireContext()).apply {
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setContentView(R.layout.date_picker)
             window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
 
-        val dpFromDate = dialog.findViewById<DatePicker>(R.id.datePickerFromDate)
+        val dpFromDate = dialogDateTime.findViewById<DatePicker>(R.id.datePickerFromDate)
+
         dpFromDate.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-        val close =
-            dialog.findViewById<ImageView>(R.id.ibtnClose)
-        val btnSubmit =
-            dialog.findViewById<Button>(R.id.btnSubmit)
-        val timePicker = dialog.findViewById<TimePicker>(R.id.timePicker)
-        timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
-        timePicker.setIs24HourView(true)
-        val cal = Calendar.getInstance()
-        hour = cal.get(Calendar.HOUR_OF_DAY)
-        minute = cal.get(Calendar.MINUTE)
-        cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
-            && userManager.user.isRM()
-        ) {
-            dpFromDate.minDate = System.currentTimeMillis() - 1000
-        }
-        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
-            && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
-            dpFromDate.minDate = System.currentTimeMillis() - 1000
-        }
-        else {
-            dpFromDate.minDate = cal.timeInMillis
-        }
-        dpFromDate.maxDate = System.currentTimeMillis() - 1000
 
-        try {
-            val dateSplit: Array<String> = mainFromDate.split("-").toTypedArray()
-            dpFromDate.init(
-                dateSplit[0].toInt(),
-                dateSplit[1].toInt() - 1,
-                dateSplit[2].toInt()
-            ) { _: DatePicker?, year: Int, monthOfYear: Int, dayOfMonth: Int ->
-                mainFromDate =
-                    year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+        close = dialogDateTime.findViewById<ImageView>(R.id.ibtnClose)
+        btnSubmit = dialogDateTime.findViewById<Button>(R.id.btnSubmit)
+        dpFromDate.minDate = System.currentTimeMillis() - 1000
+
+        mainFromDate?.let {
+
+            try {
+                val dateSplit = it.split("-".toRegex())
+                    .dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+                dpFromDate.init(
+                    Integer.parseInt(dateSplit[0]), Integer.parseInt(dateSplit[1]) - 1,
+                    Integer.parseInt(dateSplit[2])
+                ) { _, year, monthOfYear, dayOfMonth ->
+                    mainFromDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+                    currentYear = year
+                    month = monthOfYear + 1
+                    day = dayOfMonth
+                }
+            } catch (e: Exception) {
+                Timber.d(e)
             }
-        } catch (e: Exception) {
-            Timber.d(e)
+
         }
 
+        if (mainFromDate == null) {
+            dpFromDate.init(
+                today!!.get(Calendar.YEAR), today!!.get(Calendar.MONTH),
+                today!!.get(Calendar.DATE)
+            ) { view, year, monthOfYear, dayOfMonth ->
+                mainFromDate = year.toString() + "-" + prefix(monthOfYear + 1) + "-" + prefix(dayOfMonth)
+                currentYear = year
+                month = monthOfYear + 1
+                day = dayOfMonth
+            }
+        }
+
+        val timePicker = dialogDateTime.findViewById<TimePicker>(R.id.timePicker)
+        //    timePic
+
+        timePicker.descendantFocusability = DatePicker.FOCUS_BLOCK_DESCENDANTS
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             timePicker.hour = hour
             timePicker.minute = minute
@@ -293,51 +310,57 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
             timePicker.currentHour = hour
             timePicker.currentMinute = minute
         }
-
-        timePicker.setOnTimeChangedListener { _: TimePicker?, arg1: Int, arg2: Int ->
+        timePicker.setOnTimeChangedListener { _, arg1, arg2 ->
             hour = arg1
             minute = arg2
         }
 
-        close.setOnClickListener { dialog.dismiss() }
+        close?.setOnClickListener { _ -> dialogDateTime.dismiss() }
 
-        btnSubmit.setOnClickListener {
-            try {
-                val fromDat = CRMAppUtil.getDate(mainFromDate, MoslConstant.yyyy_MM_dd)
-                val fromPostingDate = CRMAppUtil.getDateStr(fromDat, MoslConstant.dd_MM_yyyy)
-                selectedDate = fromPostingDate
-                val finalSelectedDateStr =
+        btnSubmit?.setOnClickListener { _ ->
+
+            if (mainFromDate != null) {
+                fromDat = CRMAppUtil.getDate(mainFromDate, "yyyy-MM-dd")
+                fromPostingDate = CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd")
+                binding.tvApppointmentDateTime.setText(
                     String.format(
                         "%s %d:%d:00", fromPostingDate, hour,
                         minute
-                    ) //dd-MM-yyyy hh:mm:ss
-                val finalSelectedDate =
-                    CRMAppUtil.getDate(finalSelectedDateStr, MoslConstant.dd_MMM_yyyy_hh_mm)
-                if (CRMAppUtil.isBeforeandEqualDate(
-                        finalSelectedDate
                     )
-                ) { //
-                    binding.tvApppointmentDateTimeDisplay.text =
-                        CRMAppUtil.getDBDate(finalSelectedDate,
-                            MOSLConstants.DATE_FORMAT_TO_DISPLAY
-                        )
-
-                    dialog.dismiss()
-                } else {
-                    MSFDialog.alertDialog(
-                        requireContext(), 0,
-                        resources.getString(R.string.motilal_oswal), MOSLConstants.INVALID_TIME,
-                        "OK", true, null
-                    )
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
+                )//Replaced with  T>> -
+                binding.tvAPPDateError.visibility = View.GONE
             }
+            val meetingDate = stringArray(binding.tvApppointmentDateTime.getText().toString())
+            try {
+                val newstartDate = meetingDate.split("-".toRegex())
+                    .dropLastWhile { it.isEmpty() }
+                    .toTypedArray()
+                binding.tvApppointmentDateTimeDisplay.text = CRMAppUtil.getDBDate(
+                    CRMAppUtil.getDBDateObj(
+                        Integer.parseInt(newstartDate[0]),
+                        Integer.parseInt(newstartDate[1]), Integer.parseInt(newstartDate[2]), hour,
+                        minute
+                    ), MOSLConstants.DATE_FORMAT_TO_DISPLAY
+                )//Replaced with  T>> -
+            } catch (e: Exception) {
+                Timber.d(e)
+            }
+
+
+            dialogDateTime.dismiss()
+          //  binding.tvStartDateError.setVisibility(View.GONE)
         }
 
-        dialog.show()
+        dialogDateTime.show()
 
+    }
+
+    private fun stringArray(date: String): String {
+        val spaceString = date.split(" ".toRegex())
+            .dropLastWhile { it.isEmpty() }
+            .toTypedArray()
+
+        return spaceString[0]
     }
 
     fun prefix(input: Int): String? {

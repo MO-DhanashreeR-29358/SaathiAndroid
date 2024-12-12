@@ -17,7 +17,7 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
                 "Select meeting reason"
             }
             input.productTypeID.equals("0")->{
-                "Select intrested in"
+                "Select interested in"
             }
             input.meetingDurationID==0->{
                 "Select meeting duration"
@@ -28,10 +28,10 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
             input.meetingObjectiveID.equals("0")->{
                 "Select meeting objective"
             }
-            input.meetingAddressTypeId.equals("0")->{
+            input.meetingAddressTypeId.equals("0") && input.activityTypeID.equals("3743")->{
                 "Select meeting address"
             }
-            input.travellingList?.length==0->{
+            input.travellingList?.length==0 && input.activityTypeID.equals("3743") ->{
                 "Select travelling mode"
             }
             else -> {

@@ -279,18 +279,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_3sdp"
-                app:hintTextAppearance="@style/InputLayout"
+                app:hintEnabled="false"
+                app:errorTextAppearance="@style/error_appearance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_label_comments">
 
-                <androidx.appcompat.widget.AppCompatEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMeetingDescription"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_80sdp"
-                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
-                    android:hint="Enter Meeting Description*"
+                    android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_."
+                    android:hint="@string/hint_lable_enter_meeting_description"
                     android:inputType="textMultiLine"
-                    android:textAlignment="viewStart"
-                    android:gravity="start"
                     android:maxLength="500"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>

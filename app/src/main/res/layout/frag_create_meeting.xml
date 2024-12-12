@@ -447,7 +447,6 @@
                 android:visibility="gone"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_meeting_location"
                 android:layout_width="match_parent"
@@ -468,7 +467,6 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/Select" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/tvTravellingMode"
                 android:layout_width="match_parent"
@@ -477,7 +475,6 @@
                 android:text="@string/txt_lable_travelling_mode"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_travelling_mode"
                 android:layout_width="match_parent"
@@ -499,13 +496,10 @@
                     android:entries="@array/Select" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTravellingList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_amount"
                 android:layout_width="match_parent"
@@ -526,8 +520,6 @@
 
                     />
             </com.google.android.material.textfield.TextInputLayout>
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -558,7 +550,6 @@
                     android:textSize="18dp"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_location"
                 android:layout_width="match_parent"
