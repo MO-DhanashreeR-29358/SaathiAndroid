@@ -25,6 +25,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
@@ -69,6 +70,7 @@ import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
 import com.mosl.tabapp.model.AddedSplAttendeeModel
@@ -228,6 +230,11 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
 //            }
             binding.layoutTopSection.tvName.text = it.leadName
             binding.layoutTopSection.tvBranchCode.text = it.branchCode
+
+            binding.layoutTopSection.tvCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStage.visibility=View.GONE
+            binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
 
 //            val imageUrl = Base64.decode(it., Base64.DEFAULT)
 //            if (imageUrl != null) {
@@ -1040,6 +1047,11 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
                 )
 
         }
+    }
+
+    override fun toggleOTPVisibility(show: Boolean) {
+        enableDisableField(binding.llLocationGroup, show)
+
     }
 
 }

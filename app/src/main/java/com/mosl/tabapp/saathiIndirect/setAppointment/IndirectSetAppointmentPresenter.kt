@@ -10,6 +10,7 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -48,7 +49,7 @@ class IndirectSetAppointmentPresenter @Inject constructor(
             .map { view.getSelectedActivityType() }
             .share()
 
-        activityTypeSelectedObs.switchMap {
+        activityTypeSelectedObs.filter { it != CreateMeetingConstants.SELECT_ACTIVITY_TYPE }.switchMap {
             indirectrepo.getMeetingReason(it.lookUpID).compose(applyUiModel())
         }.subscribe {
                 view.fnRenderMeetingReason(it)

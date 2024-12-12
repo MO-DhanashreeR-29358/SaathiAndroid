@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
-import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManager
@@ -12,6 +11,8 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.kotlin.addTo
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -46,7 +47,15 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             .map { view.getSelectedActivityType() }
             .share()
 
-        activityTypeSelectedObs.switchMap {
+        activityTypeSelectedObs.map {
+            Timber.d("activity type")
+            it?.isPersonalMeeting() ?: false
+        }
+            .startWithItem(false)
+            .subscribe(view::toggleOTPVisibility)
+            .addTo(disposable)
+
+        activityTypeSelectedObs.filter { it != CreateMeetingConstants.SELECT_ACTIVITY_TYPE }.switchMap {
             indirectrepo.getMeetingReason(it.lookUpID).compose(applyUiModel())
         }.subscribe {
             view.fnRenderMeetingReason(it)

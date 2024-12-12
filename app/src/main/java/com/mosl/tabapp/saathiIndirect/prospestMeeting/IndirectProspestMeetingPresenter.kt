@@ -24,7 +24,8 @@ class IndirectProspestMeetingPresenter @Inject constructor(
     val indirectrepoCreateMeeting: IndirectCreateMeetingRepository,
     val repository: IndirectLeadDetailRepository,
     val indirectrepo: IndirectSetAppointmentRepository,
-    val validator: IndirectProspectMeetingValidation
+    val validator: IndirectProspectMeetingValidation,
+    val validatorSearch:IndirectProsspectMeetingsearchValiation
 ):BasePresenter<IndirectProspestMeetingView>(view) {
 
     override fun start() {
@@ -43,9 +44,10 @@ class IndirectProspestMeetingPresenter @Inject constructor(
 
         view.onSearchButtonClicked().map {
             view.getLeadId()
-        }.switchMap {
+        }.flatMap {
+            input->validatorSearch.validate(input).flatMap {
             repository.getLeadDetailForMainPage(it)
-                .compose(applyUiModel())
+        } .compose(applyUiModel())
         }.subscribe {
             view.renderLeadDetail(it)
         }.addTo(disposable)

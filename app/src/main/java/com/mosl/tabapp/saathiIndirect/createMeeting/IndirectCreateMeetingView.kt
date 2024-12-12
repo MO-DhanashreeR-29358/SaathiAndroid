@@ -91,5 +91,6 @@ interface IndirectCreateMeetingView :BaseView{
     fun getMeetingById(): Observable<IndirectCreateMeetingUiEvent.GetMeeting>
 
     fun renderMeetingByID(uiModel: UiModel<MeetingByIdItemResponse>)
+    fun toggleOTPVisibility(show: Boolean)
 
 }
