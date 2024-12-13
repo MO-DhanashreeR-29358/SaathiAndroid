@@ -31,6 +31,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
+import com.mosl.app.core.error.ErrorModel
+import com.mosl.app.core.error.ErrorState
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -337,7 +339,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
     override fun renderLeadDetail(uiModel: UiModel<IndirectLeadDetailMain>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
-            showOnFailurePopup(it)
+           showSuccessToast("Lead not found!")
         }
 
         uiModel.onSuccess {
