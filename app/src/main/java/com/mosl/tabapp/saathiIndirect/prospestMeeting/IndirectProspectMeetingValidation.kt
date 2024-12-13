@@ -17,7 +17,7 @@ class IndirectProspectMeetingValidation @Inject constructor(val context: Context
                 "Select meeting reason"
             }
             input.productTypeID.equals("0")->{
-                "Select intrested in"
+                "Select interested in"
             }
             input.meetingDurationID==0->{
                 "Select meeting duration"
