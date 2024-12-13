@@ -853,7 +853,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         data.meetingLongitude = getMeetingLongitude()
         data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
         data.leadId = leadID
-        data.ucid = UcId
+        data.ucid = leadID
         data.meetingDate = getDate()
         data.product = "0"
         data.setProductList(emptyList())
@@ -1022,6 +1022,11 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         Log.d("strMeetingLongitude",strMeetingLongitude)
         Log.d("strMeetingAddress",binding.etMeetingAdd.text.toString())
         //Toast.makeText(requireContext(),"CreateMeeting - " + strLatitude+ "-"+ strLongitude + "-" + strAddress + "-"+ isMockLocationEnabled.toString(),Toast.LENGTH_LONG).show()
+
+    }
+
+    override fun toggleOTPVisibility(show: Boolean) {
+        enableDisableField(binding.llLocationGroup, show)
 
     }
 

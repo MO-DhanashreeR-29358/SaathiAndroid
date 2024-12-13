@@ -385,6 +385,11 @@
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:id="@+id/llLocationGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_loc_add"
                     android:layout_width="match_parent"
@@ -502,7 +507,7 @@
                         android:maxLength="5"
                         android:textCursorDrawable="@null" />
                 </com.google.android.material.textfield.TextInputLayout>
-
+            </LinearLayout>
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_60sdp"
