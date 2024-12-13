@@ -94,4 +94,6 @@ interface IndirectProspestMeetingView:BaseView {
 
     fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
     fun renderLocationSave(locationItem: LocationItem)
+
+    fun toggleOTPVisibility(show: Boolean)
 }

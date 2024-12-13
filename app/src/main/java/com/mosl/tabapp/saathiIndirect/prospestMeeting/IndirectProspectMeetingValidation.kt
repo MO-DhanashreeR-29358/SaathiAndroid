@@ -28,10 +28,10 @@ class IndirectProspectMeetingValidation @Inject constructor(val context: Context
             input.meetingObjectiveID.equals("0")->{
                 "Select meeting objective"
             }
-            input.meetingAddressTypeId.equals("0")->{
+            input.meetingAddressTypeId.equals("0") && input.activityTypeID.equals("3743")->{
                 "Select meeting address"
             }
-            input.travellingList?.length==0->{
+            input.travellingList?.length==0 && input.activityTypeID.equals("3743") ->{
                 "Select travelling mode"
             }
             else -> {
