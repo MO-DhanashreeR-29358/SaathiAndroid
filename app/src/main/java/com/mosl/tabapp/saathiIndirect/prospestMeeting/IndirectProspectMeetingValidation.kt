@@ -34,6 +34,9 @@ class IndirectProspectMeetingValidation @Inject constructor(val context: Context
             input.travellingList?.length==0 && input.activityTypeID.equals("3743") ->{
                 "Select travelling mode"
             }
+            input.pincode?.length ?: 0 < 6 && input.activityTypeID.equals("3743")->{
+                "Invalid pincode number"
+            }
             else -> {
                 null
             }
