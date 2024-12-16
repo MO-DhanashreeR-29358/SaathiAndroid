@@ -32,7 +32,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getSaathiIndirectUrl(): String {
-    return "https://saathiuat.motilaloswaluat.com:82/api/"
+    return "https://saathi.motilaloswal.com:85/api/"
   }
 
   companion object {
