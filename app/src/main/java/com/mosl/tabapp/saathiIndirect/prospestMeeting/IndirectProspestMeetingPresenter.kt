@@ -190,7 +190,7 @@ class IndirectProspestMeetingPresenter @Inject constructor(
             view.getInputData()
         }.flatMap {
                 input->validator.validate(input).flatMap {
-            indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
+            indirectrepoCreateMeeting.saveRequetProspectMeeting(Gson().toJson(it))
         }.compose(applyUiModel())
         }.subscribe {
             view.renderSaveRequest(it)

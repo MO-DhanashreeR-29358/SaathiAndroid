@@ -37,6 +37,9 @@ class IndirectProspectMeetingValidation @Inject constructor(val context: Context
             input.pincode?.length ?: 0 < 6 && input.activityTypeID.equals("3743")->{
                 "Invalid pincode number"
             }
+            input.ucid.equals("0")->{
+                "'U C I D' must not be empty."
+            }
             else -> {
                 null
             }
