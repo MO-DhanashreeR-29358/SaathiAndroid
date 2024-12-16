@@ -16,6 +16,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.tabapp.R
+import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.DialogIndirectLeadviewBinding
@@ -74,6 +75,7 @@ class IndirectLeadDetailMainFragment : CommonFragment(), IndirectLeadDetailMainV
     }
 
     private fun setupView() {
+        CRMAppUtil.setImage(ByteArray(0), binding.includeClient.detail.ivLead, requireContext())
         binding.includeClient.detail.ivLeadViewArrow.visibility = View.VISIBLE
         setupPager()
     }

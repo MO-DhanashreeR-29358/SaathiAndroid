@@ -43,12 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:tabBackground="@color/white_subheading"
-                app:tabIndicatorColor="@color/orange"
-                app:tabMode="fixed"
-                app:tabTextAppearance="@style/MineCustomTabText"
-                app:tabSelectedTextColor="@color/orange"
-                app:tabTextColor="@android:color/black" />
+                style="@style/MyCustomTabLayout"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -5,6 +5,7 @@ import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.tabapp.leadcreation.ui.LeadCreationNavigator
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
 import com.mosl.tabapp.leadcreation.ui.LeadCreationView.Companion.INVALID_SELECTION_KEY
 import io.reactivex.rxjava3.core.Observable
@@ -15,8 +16,7 @@ import javax.inject.Inject
 class IndirectLeadCreationPresenter @Inject constructor(
     view: IndirectLeadCreationView,
     val repository: IndirectLeadCreationRepository,
-    /*  val navigator: LeadCreationNavigator,*/
-    val bankRepository: BankRepository,
+    val navigator: LeadCreationNavigator,
     val userManager: UserManagerImpl
 ) : BasePresenter<IndirectLeadCreationView>(view) {
     private val validator = IndirectLeadCreationValidator(userManager.getUser()!!)
@@ -227,7 +227,8 @@ class IndirectLeadCreationPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onCancelButtonClicked()
-            .subscribe { /*navigator.navigateToHome()*/ }
+            .subscribe {
+            navigator.navigateToHome() }
             .addTo(disposable)
 
         view.onCreateLeadEventFired()

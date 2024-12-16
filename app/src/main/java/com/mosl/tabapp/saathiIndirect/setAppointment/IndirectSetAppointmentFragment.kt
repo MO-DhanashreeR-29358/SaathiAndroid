@@ -119,7 +119,9 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
     }
 
     private fun setupViews() {
-
+        CRMAppUtil.setImage(ByteArray(0),  binding.layoutTopSection.ivLead, requireContext())
+        binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
+        binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
         activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spActivityType.adapter = activityAdapter
 
@@ -173,10 +175,7 @@ class IndirectSetAppointmentFragment:CommonFragment(),IndirectSetAppointmentView
 //            }
             binding.layoutTopSection.tvName.text = it.leadName
             binding.layoutTopSection.tvBranchCode.text = it.branchCode
-            binding.layoutTopSection.tvCurrentStage.visibility=View.GONE
-            binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
-            binding.layoutTopSection.lblCurrentStage.visibility=View.GONE
-            binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
+
 
 //            val imageUrl = Base64.decode(it., Base64.DEFAULT)
 //            if (imageUrl != null) {

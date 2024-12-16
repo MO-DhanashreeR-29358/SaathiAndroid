@@ -220,12 +220,8 @@ public class IndirectLeadDetailAddProductAdapter extends BaseAdapter {
         holder.tvStage.setText(leadDetailAddProductModel.getStageValue());
         holder.tvProductID.setText(leadDetailAddProductModel.getInterestedInValue());
         holder.tvStatus.setText(leadDetailAddProductModel.getStatusValue());
-        if (leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase(EQUITY)
-                || leadDetailAddProductModel.getInterestedInValue().equalsIgnoreCase(MF)) {
-            holder.llCrossSellingProducts.setVisibility(View.VISIBLE);
-        } else {
-            holder.llCrossSellingProducts.setVisibility(View.GONE);
-        }
+        holder.llCrossSellingProducts.setVisibility(View.GONE);
+
 
         for (final CrossSellingProductsModel mSection : leadDetailAddProductModel.getCrossSellingProductsModelList()) {
             @SuppressLint("ViewHolder") ViewGroup childSection =

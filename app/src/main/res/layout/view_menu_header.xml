@@ -5,16 +5,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="120dp"
         android:background="@color/menu_header_background_color"
-        android:paddingTop="@dimen/padding_extra_large">
+        android:paddingTop="@dimen/padding_normal">
 
         <ImageView
             android:id="@+id/imgClose"
             android:layout_width="@dimen/_16sdp"
             android:layout_height="@dimen/_16sdp"
             android:layout_marginEnd="@dimen/margin_medium"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_close"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@id/txtPartnerName"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -24,7 +27,7 @@
             android:layout_width="@dimen/menu_icons_size"
             android:layout_height="@dimen/menu_icons_size"
             android:layout_marginStart="@dimen/margin_medium"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/_15sdp"
             android:src="@drawable/menu_profile_pic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -34,7 +37,7 @@
             android:id="@+id/txtPartnerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/_22sdp"
             android:paddingLeft="@dimen/padding_medium"
             android:paddingRight="@dimen/padding_medium"
             android:paddingBottom="@dimen/padding_small"
