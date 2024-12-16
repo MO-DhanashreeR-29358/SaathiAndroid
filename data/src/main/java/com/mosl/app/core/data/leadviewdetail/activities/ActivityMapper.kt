@@ -114,6 +114,11 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       geoTag = geoTag ?: "",
       eventName = eventName ?: "",
       meetingDescription = meetingDescription ?:"",
-      dateDisplay = dATEDISPLAY ?:""
+      dateDisplay = dATEDISPLAY ?:"",
+      actionDate = actionDate ?:"",
+      actionTime= actionTime ?:"",
+      meetingDate = meetingDate ?:"",
+      createdBy = createdBy ?:"",
+      prodType = prodType ?:""
   )
 }
