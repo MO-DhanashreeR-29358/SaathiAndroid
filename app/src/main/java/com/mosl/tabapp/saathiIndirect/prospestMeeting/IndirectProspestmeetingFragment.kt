@@ -28,23 +28,20 @@ import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
-import com.mosl.app.core.error.ErrorModel
-import com.mosl.app.core.error.ErrorState
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.ClientSearchModel
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.getFormatedDate
 import com.mosl.tabapp.R
@@ -64,7 +61,6 @@ import com.mosl.tabapp.model.AddedAttendeeModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.MeetingApptModel
 import com.mosl.tabapp.model.MeetingAttendeeItem
-import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.data.IndirectLeadDetailMain
 import com.mosl.tabapp.ui.MSFDialog
@@ -201,6 +197,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         binding.edtFCode.setOnItemClickListener(
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 leadID=autoSuggestAdapterFCode?.getObject(position)?.leadId.toString()
+
                 binding.edtFCode.setText(leadID)
             })
 
@@ -347,6 +344,8 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         uiModel.onSuccess {
             binding.linearCreateMeeting.visibility=View.VISIBLE
             binding.layoutTopSection.tvLeadId.text = it.id
+            UcId=it.personalDetail.ucId
+            Log.d("Lead ucId"," $UcId")
             it.leadProducts
                 .forEach {
                     if (it.isDefault) {
@@ -852,8 +851,8 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         data.meetingLatitude = getMeetingLatitude()
         data.meetingLongitude = getMeetingLongitude()
         data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
-        data.leadId = leadID
-        data.ucid = leadID
+        data.leadId = getLeadId()
+        data.ucid = getLeadId()
         data.meetingDate = getDate()
         data.product = "0"
         data.setProductList(emptyList())
@@ -964,7 +963,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         return  binding.btnSave.clicks()
     }
 
-    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>) {
+    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingNewResposne>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
@@ -974,25 +973,35 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         }
 
         uiModel.onSuccess {
-            MSFDialog.alertDialog(
-                requireContext(), 0, resources.getString(R.string.motilal_oswal),
-                MOSLConstants.CREATE_MEETING, "OK", true
-            )
-            { action: MSFDialog.Action, _: Array<Any?>? ->
-                if (action == MSFDialog.Action.OK) {
-                    val bundle = Bundle()
-                    bundle.putString(
-                        MOSLConstants.LEAD_ID,
-                        requireArguments().getString(MOSLConstants.LEAD_ID)
-                    )
-                    bundle.putString(
-                        MOSLConstants.UCID,
-                        requireArguments().getString(MOSLConstants.UCID)
-                    )
-                    navigator.openHome()
+            if(it.status == true) {
+
+                MSFDialog.alertDialog(
+                    requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                    MOSLConstants.CREATE_MEETING, "OK", true
+                )
+                { action: MSFDialog.Action, _: Array<Any?>? ->
+                    if (action == MSFDialog.Action.OK) {
+                        val bundle = Bundle()
+                        bundle.putString(
+                            MOSLConstants.LEAD_ID,
+                            requireArguments().getString(MOSLConstants.LEAD_ID)
+                        )
+                        bundle.putString(
+                            MOSLConstants.UCID,
+                            requireArguments().getString(MOSLConstants.UCID)
+                        )
+                        navigator.openHome()
+                    }
                 }
-            }
-            renderOnResetClicked()
+
+                renderOnResetClicked()
+
+        }
+        else
+        {
+                        showErrorToast(it.message?:"")
+
+        }
         }
 
 

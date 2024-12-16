@@ -23,6 +23,7 @@ import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
@@ -106,6 +107,13 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
             .map {
                 CreateMeetingMapper.transformAddUpdateMeetingNew(it)
             }
+    }
+
+    override fun saveRequetProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
+        Log.d("ProMeeting Post Json",data)
+        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        return saathiIndrectApi.postAddUpdateMeeting(request)
+
     }
 
     fun getType(type: Int): String {

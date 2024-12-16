@@ -2,11 +2,11 @@ package com.mosl.tabapp.saathiIndirect.prospestMeeting
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.ClientSearchModel
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.model.CreateMeetingPostReq
@@ -90,7 +90,7 @@ interface IndirectProspestMeetingView:BaseView {
     fun renderOnResetClicked()
     fun onSaveClicked(): Observable<Unit>
 
-    fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>)
+    fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingNewResposne>)
 
     fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
     fun renderLocationSave(locationItem: LocationItem)
