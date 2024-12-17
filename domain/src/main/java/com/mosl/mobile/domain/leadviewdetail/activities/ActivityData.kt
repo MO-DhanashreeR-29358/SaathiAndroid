@@ -60,5 +60,10 @@ data class Meeting(
   @JvmField val geoTag: String,
   @JvmField val eventName: String,
   @JvmField val meetingDescription: String,
-  @JvmField val dateDisplay: String
+  @JvmField val dateDisplay: String,
+  @JvmField val actionDate: String,
+  @JvmField val actionTime: String,
+  @JvmField val meetingDate: String,
+  @JvmField val createdBy: String,
+  @JvmField val prodType: String
 )
