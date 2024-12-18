@@ -29331,14 +29331,19 @@ com.mosl.mobile.domain.leadviewdetail.activities.Meeting:
     public final java.lang.String component30()
     public final java.lang.String component31()
     public final java.lang.String component32()
+    public final java.lang.String component33()
+    public final java.lang.String component34()
+    public final java.lang.String component35()
+    public final java.lang.String component36()
+    public final java.lang.String component37()
     public final java.lang.String component4()
     public final java.lang.String component5()
     public final java.lang.String component6()
     public final java.lang.String component7()
     public final java.lang.String component8()
     public final java.lang.String component9()
-    public final com.mosl.mobile.domain.leadviewdetail.activities.Meeting copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.mosl.mobile.domain.leadviewdetail.activities.Meeting copy$default(com.mosl.mobile.domain.leadviewdetail.activities.Meeting,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
+    public final com.mosl.mobile.domain.leadviewdetail.activities.Meeting copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public static synthetic com.mosl.mobile.domain.leadviewdetail.activities.Meeting copy$default(com.mosl.mobile.domain.leadviewdetail.activities.Meeting,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
 com.mosl.mobile.domain.leadviewdetail.document.DocumentInput:
     public final com.mosl.mobile.domain.leadviewdetail.document.LeadDocumentsInput component1()
     public final com.mosl.mobile.domain.leadviewdetail.document.FilterRequestInput component2()
@@ -33677,7 +33682,7 @@ com.mosl.saathi.api.model.leadviewactivities.MeetingRequest:
     public final com.mosl.saathi.api.model.leadviewactivities.MeetingRequest copy(com.mosl.saathi.api.model.leadviewactivities.Request,com.mosl.saathi.api.model.leadviewactivities.Filter,boolean)
     public static synthetic com.mosl.saathi.api.model.leadviewactivities.MeetingRequest copy$default(com.mosl.saathi.api.model.leadviewactivities.MeetingRequest,com.mosl.saathi.api.model.leadviewactivities.Request,com.mosl.saathi.api.model.leadviewactivities.Filter,boolean,int,java.lang.Object)
 com.mosl.saathi.api.model.leadviewactivities.MeetingResponse:
-    public void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public void <init>(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
     public final java.lang.String component1()
     public final java.lang.String component10()
     public final java.lang.String component11()
@@ -33720,13 +33725,17 @@ com.mosl.saathi.api.model.leadviewactivities.MeetingResponse:
     public final java.lang.String component45()
     public final java.lang.String component46()
     public final java.lang.String component47()
+    public final java.lang.String component48()
+    public final java.lang.String component49()
     public final java.lang.String component5()
+    public final java.lang.String component50()
+    public final java.lang.String component51()
     public final java.lang.String component6()
     public final java.lang.String component7()
     public final java.lang.String component8()
     public final java.lang.String component9()
-    public final com.mosl.saathi.api.model.leadviewactivities.MeetingResponse copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.mosl.saathi.api.model.leadviewactivities.MeetingResponse copy$default(com.mosl.saathi.api.model.leadviewactivities.MeetingResponse,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
+    public final com.mosl.saathi.api.model.leadviewactivities.MeetingResponse copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public static synthetic com.mosl.saathi.api.model.leadviewactivities.MeetingResponse copy$default(com.mosl.saathi.api.model.leadviewactivities.MeetingResponse,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Object,java.lang.String,java.lang.Boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,boolean,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
 com.mosl.saathi.api.model.leadviewactivities.Request:
     public final java.lang.String component1()
     public final java.lang.String component2()
@@ -37343,14 +37352,19 @@ com.mosl.tabapp.leadViewDetail.activity.MeetingParcel:
     public final java.lang.String component3()
     public final java.lang.String component30()
     public final java.lang.String component31()
+    public final java.lang.String component32()
+    public final java.lang.String component33()
+    public final java.lang.String component34()
+    public final java.lang.String component35()
+    public final java.lang.String component36()
     public final java.lang.String component4()
     public final java.lang.String component5()
     public final java.lang.String component6()
     public final java.lang.String component7()
     public final java.lang.String component8()
     public final java.lang.String component9()
-    public final com.mosl.tabapp.leadViewDetail.activity.MeetingParcel copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.mosl.tabapp.leadViewDetail.activity.MeetingParcel copy$default(com.mosl.tabapp.leadViewDetail.activity.MeetingParcel,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
+    public final com.mosl.tabapp.leadViewDetail.activity.MeetingParcel copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public static synthetic com.mosl.tabapp.leadViewDetail.activity.MeetingParcel copy$default(com.mosl.tabapp.leadViewDetail.activity.MeetingParcel,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
 com.mosl.tabapp.leadViewDetail.activity.item.LeadViewActivitiesMeetingChildItem:
     public final com.mosl.mobile.user.login.UserManager getUserManager$app_uatRelease()
 com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment:
@@ -83926,27 +83940,45 @@ com.mosl.tabapp.databinding.FragLeadActDetailBindingImpl:
     public static final androidx.databinding.ViewDataBinding$IncludedLayouts sIncludes
 com.mosl.tabapp.databinding.FragLeadActDetailConstraintBinding:
     public final androidx.constraintlayout.widget.Guideline guideline
+    public final androidx.constraintlayout.widget.Guideline guideline2
     public final android.widget.TextView textLabelActionable
+    public final android.widget.TextView textLabelActiondate
+    public final android.widget.TextView textLabelActiontime
     public final android.widget.TextView textLabelActivityType
     public final android.widget.TextView textLabelAmount
+    public final android.widget.TextView textLabelAttendee
     public final android.widget.TextView textLabelAttendee1
     public final android.widget.TextView textLabelAttendee2
     public final android.widget.TextView textLabelAttendee3
     public final android.widget.TextView textLabelCategory
     public final android.widget.TextView textLabelComments
+    public final android.widget.TextView textLabelCreateFromAppo
+    public final android.widget.TextView textLabelCreatedBy
     public final android.widget.TextView textLabelEmail
     public final android.widget.TextView textLabelEventName
     public final android.widget.TextView textLabelFeedback
     public final android.widget.TextView textLabelGeoMeetingLocation
     public final android.widget.TextView textLabelGeoTag
+    public final android.widget.TextView textLabelGeoTagStatus
+    public final android.widget.TextView textLabelIndirectActivityType
+    public final android.widget.TextView textLabelIndirectMeetingDuartion
+    public final android.widget.TextView textLabelIndirectStatus
+    public final android.widget.TextView textLabelIndrectCategory
+    public final android.widget.TextView textLabelInterestedIn
+    public final android.widget.TextView textLabelLead
     public final android.widget.TextView textLabelLocation
     public final android.widget.TextView textLabelMeetingAddress
+    public final android.widget.TextView textLabelMeetingDesc
     public final android.widget.TextView textLabelMeetingDescription
     public final android.widget.TextView textLabelMeetingDuration
     public final android.widget.TextView textLabelMeetingReason
+    public final android.widget.TextView textLabelMeetingdate
+    public final android.widget.TextView textLabelMeetingreason
+    public final android.widget.TextView textLabelMeetingtime
     public final android.widget.TextView textLabelMobile
     public final android.widget.TextView textLabelPinCode
     public final android.widget.TextView textLabelProduct
+    public final android.widget.TextView textLabelStage
     public final android.widget.TextView textLabelStatus
     public final android.widget.TextView textLabelTouchedUntouched
     public final android.widget.TextView textLabelTravellingMode
@@ -85129,7 +85161,8 @@ com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment$Compa
 com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment:
     public static final com.mosl.tabapp.leadViewDetail.activitydetail.LeadActivitiesDetailFragment$Companion Companion
     public static void <clinit>()
-    public final void setUpView()
+    public static void setDirectUpView()
+    public static void setInDirectUpView()
 com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter$$InternalSyntheticLambda$1$be072360c21e112be4f03da792b60d68a87272681ecd5e8d082e28fee0341efb$0
 com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter$HolderView:
     public static android.widget.TextView getAttendeeName()
