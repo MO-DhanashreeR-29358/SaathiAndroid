@@ -1,0 +1,5 @@
+Version : 2.6.9
+Upload Date : 20.12.2014
+Release Note :  adding indirect flow for pcg advisory and pcg admin
+                Modules cover - lead creation, lead view details, create meeting, set appointment,
+                                menu drawer, prospect meeting, lead search on dashboard.
