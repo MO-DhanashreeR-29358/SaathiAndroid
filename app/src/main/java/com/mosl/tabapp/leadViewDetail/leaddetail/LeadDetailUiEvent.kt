@@ -21,3 +21,5 @@ object UpdateLeadDetail : LeadDetailUiEvent()
 object UpdateLeadSection : LeadDetailUiEvent()
 
 object CallAccountType : LeadDetailUiEvent()
+
+data class StandardRemarks(val lookupId: Int) : LeadDetailUiEvent()

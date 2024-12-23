@@ -103,6 +103,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private var accountTypeLookupId = 0
     private var strAccountTypeName = ""
+    private var standardReamrkLookupId = 0
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
@@ -187,6 +188,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private val chipsAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
+    private val standardRemarkAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val defaultSelectionList = ArrayList<RowData>()
 
     override fun getLayout(): Int = R.layout.fragment_lead_detail
@@ -1776,7 +1781,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.bandhanBankEmp = binding.etBandhanBankRM.text.toString()
         leadDetailModel.auBankName = binding.etAuBankName.text.toString()
         leadDetailModel.auBankBranchCode = binding.etAuBranchCode.text.toString()
+        leadDetailModel.standardReamrkId = getStandardRemark()
+
         return updateLead(leadDetailModel)
+    }
+
+    private fun getStandardRemark() : String{
+        if(binding.spSatndardRemark.selectedItem == null){
+            return "-1"
+        }else{
+           return (binding.spSatndardRemark.selectedItem as RowData).key
+        }
     }
 
     private fun updateLead(model: LeadDetailModel): UpdateLeadRequest {
@@ -1838,7 +1853,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.isBandhanBankEmp,
             model.bandhanBankEmp,
             model.auBankName,
-            model.auBankBranchCode
+            model.auBankBranchCode,
+            model.standardReamrkId
         )
     }
 
@@ -2111,6 +2127,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etBandhanBankRM.isEnabled = status
             etAuBankName.isEnabled = status
             etAuBranchCode.isEnabled = status
+            spSatndardRemark.isEnabled = status
 
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
@@ -2328,6 +2345,24 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 }
             }
             strAccountTypeName = accountTypeName
+
+            //for standard remark field
+            if (userManager.getUser()?.isAllianceBusiness()  == true &&
+                branchName == "AUSFBMAIN"
+            ){
+                binding.tvStandardRemark.isVisible = true
+                binding.tlStandardRemark.isVisible = true
+                standardReamrkLookupId = standardRemarksId
+                if(BuildConfig.FLAVOR == "prod"){
+                    subject.onNext(StandardRemarks(155))
+                }else{
+                    subject.onNext(StandardRemarks(159))
+                }
+
+            }else{
+                binding.tvStandardRemark.isVisible = false
+                binding.tlStandardRemark.isVisible = false
+            }
 
             subject.onNext(CallAccountType)
 
@@ -2706,6 +2741,22 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun getAccountTypeLookupId(): Int {
         return  accountTypeLookupId
+    }
+
+    override fun onStandardRemarkFired(): Observable<StandardRemarks> {
+        return subject.ofType()
+    }
+
+    override fun renderStandardRemark(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onSuccess {
+            binding.spSatndardRemark.setSpinnerData(standardRemarkAdapter, it)
+            val dataAccountType = RowData.getSpinnerRowDataById(standardReamrkLookupId.toString(), standardRemarkAdapter)
+            dataAccountType?.let {
+                binding.spSatndardRemark.setSelection(it.position)
+            }
+        }
     }
 
     override fun renderStage(uiModel: UiModel<List<RowData>>) {

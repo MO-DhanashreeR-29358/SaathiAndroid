@@ -104,7 +104,8 @@ data class LeadViewItem(
     @JvmField @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String?,
     @JvmField @SerializedName("AUBankName") val auBankName: String?,
     @JvmField @SerializedName("BankBranchCode") val auBankBranchCode: String?,
-    @JvmField @SerializedName("IsStageCompleted") val IsStageCompleted: Int
+    @JvmField @SerializedName("IsStageCompleted") val IsStageCompleted: Int,
+    @JvmField @SerializedName("StandardRemarksId") val standardRemarksId: Int
 )
 
 data class LeadFieldSection(

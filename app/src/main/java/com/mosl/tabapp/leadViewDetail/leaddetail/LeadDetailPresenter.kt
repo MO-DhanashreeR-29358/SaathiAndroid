@@ -373,5 +373,13 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe(view::renderOnCitySelectAndSameAsAboveChecked, Timber::e)
             .addTo(disposable)
 
+        view.onStandardRemarkFired()
+            .switchMap {
+                repository.getStandardRemarkList(it.lookupId)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderStandardRemark, Timber::e)
+            .addTo(disposable)
+
     }
 }

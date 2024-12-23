@@ -2368,10 +2368,36 @@
                             android:textCursorDrawable="@null" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tvStandardRemark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_5sdp"
+                        android:text="@string/lead_detail_standard_remark"
+                        android:textColor="@color/text_color_personal"
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility="gone"/>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tl_standard_remark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:errorTextAppearance="@style/error_appearance"
+                        app:hintEnabled="false"
+                        android:visibility="gone">
+
+                        <Spinner
+                            android:id="@+id/spSatndardRemark"
+                            style="@style/CRMSpinnerSelector_leadView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
                         android:layout_marginBottom="@dimen/_5sdp"
                         android:background="@drawable/lead_detail_add_product_background"
                         android:padding="@dimen/_5sdp">

@@ -44,6 +44,8 @@ interface LeadCreationRepository {
 
     fun getAccountTypeList(lookupTypeId : Int): Observable<List<RowData>>
 
+    fun getStandardRemarkList(lookupTypeId : Int): Observable<List<RowData>>
+
     fun getChipsList(
     ): Observable<List<RowData>>
 }

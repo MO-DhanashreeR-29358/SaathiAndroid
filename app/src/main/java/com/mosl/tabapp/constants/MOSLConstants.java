@@ -301,5 +301,6 @@ public interface MOSLConstants extends LabelConfig {
     int INDIRECT_INTERESTED_IN = 179;
 
     int INDIRECT_WORK_EXP = 147;
+
 }
 

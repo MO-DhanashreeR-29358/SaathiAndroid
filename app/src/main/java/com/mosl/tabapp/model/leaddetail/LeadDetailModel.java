@@ -78,6 +78,18 @@ public class LeadDetailModel {
 
 	private String auBankBranchCode = "";
 
+	private String standardReamrkId = "";
+
+
+	public String getStandardReamrkId() {
+		return standardReamrkId;
+	}
+
+	public void setStandardReamrkId(String standardReamrkId) {
+		this.standardReamrkId = standardReamrkId;
+	}
+
+
 	public String getAuBankName() {
 		return auBankName;
 	}
