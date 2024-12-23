@@ -47,6 +47,12 @@
                 android:background="@color/calendar_gray"
                 app:layout_constraintTop_toBottomOf="@+id/tvMonthDate" />
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/direct_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider">
+
             <TextView
                 android:id="@+id/text_label_mobile"
                 android:layout_width="0dp"
@@ -58,7 +64,7 @@
                 android:textSize="@dimen/txt_size"
                 app:layout_constraintEnd_toStartOf="@id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view_divider" />
+                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/tvMobile"
@@ -692,6 +698,466 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/indirect_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/view_divider">
+
+                <TextView
+                    android:id="@+id/text_label_lead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Lead"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tool:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/tvLead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_lead"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_actiondate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Action Date"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvLead" />
+
+                <TextView
+                    android:id="@+id/tvActionDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_actiondate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_actiontime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Action Time"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvActionDate" />
+
+                <TextView
+                    android:id="@+id/tvActionTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_actiontime"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_meetingdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Meeting Date"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvActionTime" />
+
+                <TextView
+                    android:id="@+id/tvMeetingDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_meetingdate"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_meetingtime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Time"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeetingDate" />
+
+                <TextView
+                    android:id="@+id/tvMeetingTime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_meetingtime"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_InterestedIn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Interested In"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMeetingTime" />
+
+                <TextView
+                    android:id="@+id/tvInterestedIn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_InterestedIn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_stage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Stage"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvInterestedIn" />
+
+                <TextView
+                    android:id="@+id/tvStage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_stage"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_meetingreason"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Meeting Reason"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvStage" />
+
+                <TextView
+                    android:id="@+id/tvIndirectMeetingReason"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_meetingreason"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_geo_tag_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Geo Tag Status"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectMeetingReason" />
+
+                <TextView
+                    android:id="@+id/tvGeoTagStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_geo_tag_status"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+
+                <TextView
+                    android:id="@+id/text_label_indirect_activity_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Activity Type"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvGeoTagStatus" />
+
+                <TextView
+                    android:id="@+id/tvIndirectAcitvityType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_indirect_activity_type"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_attendee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Attendees"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectAcitvityType" />
+
+                <TextView
+                    android:id="@+id/tvAttendees"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_attendee"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_created_by"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Meeting Created By"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAttendees" />
+
+                <TextView
+                    android:id="@+id/tvCreatedBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_created_by"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_indirect_meeting_duartion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Meeting Duration"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCreatedBy" />
+
+                <TextView
+                    android:id="@+id/tvIndirectMeetingDuartion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_indirect_meeting_duartion"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_indrect_category"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Category"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectMeetingDuartion" />
+
+                <TextView
+                    android:id="@+id/tvIndirectCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_indrect_category"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_meeting_desc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Meeting Description"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectCategory" />
+
+                <TextView
+                    android:id="@+id/tvIndirectMeetingDesc"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_meeting_desc"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_indirect_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Status"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectMeetingDesc" />
+
+                <TextView
+                    android:id="@+id/tvIndirectStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_indirect_status"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+                <TextView
+                    android:id="@+id/text_label_create_from_appo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Is Created From Appointment"
+                    android:textColor="@color/tv_color"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintEnd_toStartOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvIndirectStatus" />
+
+                <TextView
+                    android:id="@+id/tvCreateFromAppoint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/txt_size"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/text_label_create_from_appo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/guideline2"
+                    tool:text="data" />
+
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

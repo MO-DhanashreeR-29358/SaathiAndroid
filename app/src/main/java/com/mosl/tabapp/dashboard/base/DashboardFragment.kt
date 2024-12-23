@@ -1,5 +1,6 @@
 package com.mosl.tabapp.dashboard.base
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,6 +66,7 @@ import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
 import com.mosl.user.data.login.VerifyAction
 import com.mosl.user.domain.model.GenerateOTP
 import com.mosl.user.login.MyZoneUserManagerImpl
+import dagger.android.support.DaggerAppCompatActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
@@ -95,6 +97,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
     @Inject
     lateinit var attendanceHelper: AttendanceHelper
     internal var isUserLogin = false
+    lateinit var sharedPreferences: SharedPreferences
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?

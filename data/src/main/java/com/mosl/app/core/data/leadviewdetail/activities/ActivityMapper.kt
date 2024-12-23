@@ -112,6 +112,13 @@ private fun MeetingResponse.mapToMeeting(): Meeting {
       touchedUntouched = touchedUntouched ?: "",
       feedback = feedback ?: "",
       geoTag = geoTag ?: "",
-      eventName = eventName ?: ""
+      eventName = eventName ?: "",
+      meetingDescription = meetingDescription ?:"",
+      dateDisplay = dATEDISPLAY ?:"",
+      actionDate = actionDate ?:"",
+      actionTime= actionTime ?:"",
+      meetingDate = meetingDate ?:"",
+      createdBy = createdBy ?:"",
+      prodType = prodType ?:""
   )
 }

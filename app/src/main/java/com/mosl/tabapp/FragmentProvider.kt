@@ -58,8 +58,6 @@ import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
-import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
-import com.mosl.tabapp.login.otpverification.OtpVerificationModule
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -84,12 +82,24 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.ReportModule
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainModule
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestMeetingModule
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 
 @Module(includes = [LeadViewDetailFragmentProvider::class])
 interface FragmentProvider {
@@ -99,6 +109,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector
     fun provideLeadViewMainFactory(): LeadViewMainFragment
+
+    @ContributesAndroidInjector(modules = [IndirectLeadDetailMainModule::class])
+    fun provideIndirectLeadViewMainFactory(): IndirectLeadDetailMainFragment
 
     @ContributesAndroidInjector
     fun provideLeadViewDetailFactory(): LeadViewDetailFragment
@@ -235,5 +248,19 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [VerifyOtpModule::class])
     fun provideVerifyDialogFragmentFactory(): VerifyDialogFragment
+
+    @ContributesAndroidInjector(modules = [IndirectDashboardModule::class])
+    fun provideIndirectDashboardFragmentFactory(): IndirectDashboardFragment
+    @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
+    fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment
+
+    @ContributesAndroidInjector(modules=[IndirectSetAppointmentModule::class])
+    fun provideIndirectSetAppointmentFragmentFactory(): IndirectSetAppointmentFragment
+
+    @ContributesAndroidInjector (modules = [IndirectCreateMeetingModule::class])
+    fun provideIndirectCreateMeetingFragmentFactory():IndirectCreateMeetingFragment
+
+    @ContributesAndroidInjector(modules=[IndirectProspestMeetingModule::class])
+    fun provideIndirectProspectMeetingFragmentFactory():IndirectProspestmeetingFragment
 
 }

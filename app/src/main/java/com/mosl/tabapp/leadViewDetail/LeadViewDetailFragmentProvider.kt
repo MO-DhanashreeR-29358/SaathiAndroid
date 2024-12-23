@@ -13,6 +13,8 @@ import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingFragment
 import com.mosl.tabapp.leadViewDetail.profiling.LeadProfilingModule
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingFragment
 import com.mosl.tabapp.leadViewDetail.updatemeeting.UpdateMeetingModule
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -39,5 +41,8 @@ abstract class LeadViewDetailFragmentProvider {
 
   @ContributesAndroidInjector(modules = [LeadDetailModule::class])
   abstract fun provideLeadDetailFragmentFactory(): LeadDetailFragment
+
+  @ContributesAndroidInjector(modules = [IndirectLeadDetailModule::class])
+  abstract fun provideIndirectLeadDetailFragmentFactory(): IndirectLeadDetailFragment
 
 }

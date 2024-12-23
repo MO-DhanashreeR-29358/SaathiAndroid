@@ -146,6 +146,7 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     isCallOtp=userManager.isOtpEnable()
 
     binding.btnLogin.setOnClickListener {
+      Log.d("isCallOtp",isCallOtp.toString());
       if(isCallOtp)
       {
 
@@ -598,8 +599,9 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   override fun fnRenderNewLogin(uiModdel: UiModel<ValidateLoingResponseModel>) {
     toggleProgressBar(uiModdel.inProgress)
     uiModdel.onSuccess {
-     /* subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)*/
       try {
+      editor.putInt("AuthState",it.authState?:1)
+        editor.commit();
        runOnUiThread {
          val otpBottomSheet = OtpVerificationFragment()
          otpBottomSheet.fnSetData(fnGetLoginData(), it.strMessage ?: "")

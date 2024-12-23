@@ -53,7 +53,14 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_QR_CODE,
         NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE,
         NavigationConstants.NAVIGATE_TO_DORMANT,
-        NavigationConstants.NAVIGATE_TO_QUERY_FORM
+        NavigationConstants.NAVIGATE_TO_QUERY_FORM,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN,
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW
+
 
 })
 public @interface NavigationConstants {
@@ -114,4 +121,17 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_EQUITY_MFD = 53;
 
     int NAVIGATE_TO_QUERY_FORM=54;
+
+    int NAVIGATE_TO_INDIRECT_LEAD_CREATION = 55;
+
+    int NAVIGATE_TO_INDIRECT_DASHBOARD = 56;
+
+    int NAVIGATE_TO_INDIRECT_CREATE_MEETING = 57;
+
+    int NAVIGATE_TO_INDIRECT_APPOINTMENT = 58;
+
+    int NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN = 59;
+    int NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW = 60;
+
+    int NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING=61;
 }

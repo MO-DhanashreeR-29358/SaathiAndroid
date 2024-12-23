@@ -49,6 +49,7 @@ class HeaderInterceptor @Inject constructor(
       )
       )
       builder.header(API_HEADER_EMPLOYEE_CODE, encryptor.encrypt(userManager.user.employeeCode))
+      builder.header("currentBusinessProfileId",encryptor.encrypt(userManager.user.currentBusinessProfile.businessProfileId ?:"0"))
 
     }
     val response = chain.proceed(builder.build())

@@ -4,6 +4,7 @@
     <string name="SS_SEARCH">Search</string>
     <string name="ATTENDEE_SEARCH_HINT_TXT"><font size="14">Select Employee Name/Code</font></string>
     <string name="MOSL_MENU_My_DASHBOARD_TXT">My Dashboard</string>
+    <string name="MOSL_MENU_PROSPECT_MEETING_TXT">Prospect Meeting</string>
     <string name="MOSL_MENU_INCENTIVE_REPORT_TXT">Incentive Report</string>
     <string name="MOSL_MENU_CHECK_APPROVAL_TXT">Check Approval</string>
     <string name="MOSL_MENU_MOST_GUIDE_TXT">MOSTGuide</string>
@@ -97,7 +98,7 @@ Page </string>
     <string name="text_label_status">Status</string>
     <string name="text_label_activity_type">Activity Type</string>
     <string name="text_label_event_name">Event Name</string>
-    <string name="text_label_meeting_reason">Meeting Reason</string>
+    <string name="text_label_meeting_reason">Meeting Reason*</string>
     <string name="txt_label_meeting_duration">Meeting Duration</string>
     <string name="text_label_actionable">Actionable</string>
     <string name="text_label_category">Category</string>
@@ -254,6 +255,12 @@ Page </string>
         <item>Business</item>
     </string-array>
 
+    <string-array name="indirectLeadViewDetailTabArray">
+        <item>Details</item>
+        <item>Activities</item>
+        <item>Mapping History</item>
+    </string-array>
+
     <string-array name="leadViewDetailTabArrayWhenLeadIdZero">
         <item>Details</item>
         <item>Activities</item>
@@ -347,6 +354,7 @@ Page </string>
     <string name="error_message_empty_query">Please enter query description</string>
     <string name="page_title_query">Insert Your Query</string>
     <string name="page_title_create_meeting">Create Meeting</string>
+    <string name="page_title_update_meeting">Update Meeting</string>
     <string name="text_label_no">No</string>
     <string name="text_label_yes">Yes</string>
     <string name="call_alert_message">"Do you want to call?"</string>
@@ -378,10 +386,12 @@ Page </string>
     <string name="txt_lable_open_account">Open Account</string>
     <string name="txt_lable_oao_form">OAO Form</string>
     <string name="txt_lable_client_code">Client Code</string>
+    <string name="txt_lable_indirect_client_code">1200 Code/Client Code</string>
     <string name="txt_lable_lead_id">Lead Id:</string>
     <string name="txt_lable_branch_code">Branch Code</string>
     <string name="txt_lable_current_stage">Current Stage</string>
     <string name="txt_lable_in_current_stage_since">In Current Stage Since</string>
+    <string name="txt_lable_lead_activation_date">Activation Date</string>
     <string name="txt_lable_copy_ekyc_link">Copy Link</string>
     <string name="txt_lable_link_msg">Copy link successfully</string>
     <string name="txt_lable_link_error_msg">Link not available</string>
@@ -469,7 +479,11 @@ Page </string>
     <string name="settings">Settings</string>
     <string name="mock_location_label">Please Disable Mock Location!</string>
     <string name="lbl_lead_creation_personal_info">Personal Information</string>
+    <string name="lbl_lead_creation_indirect_personal_info">Primary Details</string>
     <string name="lbl_lead_creation_category">Category*</string>
+    <string name="lbl_lead_creation_background">Background*</string>
+    <string name="lbl_lead_detail_background">Background</string>
+    <string name="lbl_lead_creation_work_exp">Work Exp. in Broking Industry</string>
     <string name="lbl_lead_creation_client_type">Client Type(NRI/RI)</string>
     <string name="lbl_lead_creation_std_code">Country Code*</string>
     <string name="lbl_lead_creation_branch">Branch*</string>
@@ -537,6 +551,7 @@ Page </string>
     <string name="text_msg_product_update">Products Updated Successfully</string>
 
     <string name="error_message_category">Select Category</string>
+    <string name="error_message_background">Select Background</string>
     <string name="error_message_bank">Select Bank</string>
     <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>
@@ -545,6 +560,8 @@ Page </string>
     <string name="error_message_contact">Enter contact person</string>
     <string name="error_message_referee_code">Enter referee code</string>
     <string name="error_message_pincode">Invalid Pincode</string>
+    <string name="error_message_lead_comment">Enter Comments</string>
+    <string name="error_message_lead_comment_length">Comments should be minimum 50 character</string>
     <string name="error_message_expected_margin">Enter Expected Margin</string>
     <string name="error_message_valid_expected_margin">Invalid Expected Margin</string>
     <string name="error_message_profession">Select Profession</string>
@@ -554,6 +571,7 @@ Page </string>
     <string name="error_message_invalid_referaal_code">Invalid Referaal Code.</string>
     <string name="error_message_same_email">Alternate email Id cannot be same</string>
     <string name="error_message_enter_mobile">Enter mobile number</string>
+    <string name="error_message_enter_lead_name">Enter lead name</string>
     <string name="error_message_enter_secondary_rm">Select Secondary RM</string>
     <string name="error_message_select_account_type">Select Account Type</string>
     <string name="error_message_enter_bbemp">Enter Bandhan Bank Employee</string>
@@ -596,15 +614,24 @@ Page </string>
     <string name="lead_detail_au_bank_name">Bank Name_QR</string>
     <string name="lead_detail_au_branch_code">Bank Branch Code_QR</string>
     <string name="lead_detail_lead_category">Lead Category</string>
+    <string name="lead_detail_indirect_lead_name">Lead Name</string>
     <string name="lead_detail_lead_client_type">Client Type</string>
     <string name="lead_detail_profession">Profession</string>
+    <string name="lead_detail_associated_broker">Associated Broker</string>
     <string name="lead_detail_lead_name">Individual Name</string>
+    <string name="lead_detail_lead_business">Business Name</string>
     <string name="lead_detail_date_of_birth">Date of Birth</string>
     <string name="lead_detail_anniversary">Anniversary</string>
     <string name="lead_detail_creation_date">Creation Date</string>
+    <string name="lead_detail_meeting_date">Last Meeting Date</string>
     <string name="lead_detail_created_by">Created By</string>
     <string name="lead_detail_bank">Bank</string>
+    <string name="lead_detail_batype">BA Type</string>
     <string name="lead_detail_branch">Branch</string>
+    <string name="lead_detail_brokerage">Current Brokerage per month</string>
+    <string name="lead_detail_rfmname">RFM Name</string>
+    <string name="lead_detail_tmname">TM Name</string>
+    <string name="lead_detail_master_code">1200 Code / Master Code</string>
     <string name="lead_detail_last_modified_date">Last Modified Date</string>
     <string name="lead_detail_modified_by">Modified By</string>
     <string name="lead_detail_source">Source</string>
@@ -756,4 +783,23 @@ Page </string>
     <string name="label_bank_branch_name">Bank Branch Name*</string>
     <string name="hint_bank_branch">Enter Bank Branch Code</string>
     <string name="hint_bank_branch_name">Bank Branch Name</string>
+
+
+    <string name="lable_target_date">Target Date*</string>
+    <string name="lable_sp_attende">Spl. Attendee</string>
+    <string name="text_label_in_comments">Comments*</string>
+    <string name="lable_repeate_on">Repeate On</string>
+    <string name="label_repeate_start_on">Repetition Starts On</string>
+    <string name="label_repeate_end_on">Repetition End On</string>
+    <string name="label_intrested_in">Interested In*</string>
+    <string name="label_mmeting_desp">Meeting Description*</string>
+    <string name="label_cust_remark">Customer Remark</string>
+    <string name="label_loc_add">Location Address*</string>
+    <string name="label_pin_code">PIN Code*</string>
+    <string name="label_meeting_add">Meeting Address*</string>
+    <string name="label_amount">Amount</string>
+    <string name="label_lead_id">Lead Id</string>
+    <string name="label_search_lead_id">Search Lead Id</string>
+    <string name="label_search_FCode">Enter Franchisee Code</string>
+    <string name="label_FCode">Franchiseee Code</string>
 </resources>
