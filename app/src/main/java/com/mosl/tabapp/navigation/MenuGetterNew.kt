@@ -33,6 +33,7 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
@@ -129,7 +130,7 @@ object MenuGetterNew {
                 arguments = args
             }
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectIFADashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> IndirectCreateMeetingFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()  //use this for navigation

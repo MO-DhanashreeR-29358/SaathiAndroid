@@ -86,6 +86,8 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
@@ -262,5 +264,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules=[IndirectProspestMeetingModule::class])
     fun provideIndirectProspectMeetingFragmentFactory():IndirectProspestmeetingFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFADashboardModule::class])
+    fun provideIndirectIFADashboardFragmentFactory():IndirectIFADashboardFragment
 
 }
