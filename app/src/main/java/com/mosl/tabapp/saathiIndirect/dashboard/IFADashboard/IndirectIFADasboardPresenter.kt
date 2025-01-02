@@ -21,13 +21,13 @@ class IndirectIFADasboardPresenter @Inject constructor(
     override fun start() {
 
         onFetchCalled().switchMap {
-            indirectRepo.fnGetIFASalesDashboBuisnessSnapshot().compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashMyBuisnessSnapIP().compose(applyUiModel())
         }.subscribe {
             it.onFailure {
-                Timber.d("Response Error"+it.message)
+                Timber.d("ResponseError"+it.message)
             }
             it.onSuccess {
-                Timber.d("Response "+it)
+                Timber.d("ResponseIFA "+it)
             }
 
         }.addTo(disposable)
@@ -35,6 +35,12 @@ class IndirectIFADasboardPresenter @Inject constructor(
         view.onLeadCreationClicked()
             .subscribe {
                 navigator.openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION.toString(), false)
+            }
+            .addTo(disposable)
+
+        view.onActionableInsightsClicked()
+            .subscribe {
+                view.showInsightsDialog()
             }
             .addTo(disposable)
     }

@@ -4,5 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class IndirectDashboardFilterPostRequest(
     @JvmField @SerializedName("EmployeeCode")
-    val employeeCode: String? = null
+    val employeeCode: String? = null,
+    @JvmField @SerializedName("frequency")
+val frequency: String? = "MTD"
 )

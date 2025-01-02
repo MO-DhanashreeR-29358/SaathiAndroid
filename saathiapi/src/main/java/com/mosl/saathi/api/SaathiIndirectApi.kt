@@ -260,5 +260,19 @@ interface SaathiIndirectApi {
     @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotBrokingWidgetData")
     fun getIFASalesDashboBuisnessSnapshot(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
+    @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotIPWidgetData")
+    fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashRevenueIPWidgetData")
+    fun getIFADashREvenueIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashRevenueBrokingWidgetData")
+    fun getIFADashRevenueBroking(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashMeetingWidgetData")
+    fun getIFADashMeeting(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashIFAActivationWidgetData")
+    fun getIFADashIFAACtivation(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
     /*************IFADashboard End Here************/
 }

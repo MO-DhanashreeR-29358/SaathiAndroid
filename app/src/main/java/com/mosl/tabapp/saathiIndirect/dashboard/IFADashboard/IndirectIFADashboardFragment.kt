@@ -6,11 +6,15 @@ import com.jakewharton.rxbinding4.view.clicks
 import com.mosl.app.core.events.DataAction
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
+import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
+import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.databinding.FragIndirectDashboardBinding
 import com.mosl.tabapp.databinding.FragIndirectIfaDashboardBinding
+import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardPresenter
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardView
 import io.reactivex.rxjava3.core.Observable
+import java.util.ArrayList
 import javax.inject.Inject
 
 class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView {
@@ -35,6 +39,13 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
     }
     override fun onLeadCreationClicked(): Observable<Unit> {
         return binding.leadcreation.clicks()
+    }
+    override fun onActionableInsightsClicked(): Observable<Unit> {
+        return binding.ivActionableInsights.clicks()
+    }
+
+    override fun showInsightsDialog() {
+
     }
 
 }

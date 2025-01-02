@@ -48,4 +48,34 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
             Gson().toJson(it.response)
         }
     }
+
+    override fun fnGetIFASalesDashMyBuisnessSnapIP(): Observable<String> {
+        return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
+            it.string()
+        }
+    }
+
+    override fun fnGetIFADashREvenueIP(): Observable<String> {
+        return saathiIndrectApi.getIFADashREvenueIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
+          it.string()
+        }
+    }
+
+    override fun fnGetIFADashRevenueBroking(): Observable<String> {
+        return  saathiIndrectApi.getIFADashRevenueBroking(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
+            it.string()
+        }
+    }
+
+    override fun fnGetIFADashMeeting(): Observable<String> {
+        return  saathiIndrectApi.getIFADashMeeting(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
+            it.string()
+        }
+    }
+
+    override fun fnGetIFADashIFAACtivation(): Observable<String> {
+        return  saathiIndrectApi.getIFADashIFAACtivation(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
+            it.string()
+        }
+    }
 }

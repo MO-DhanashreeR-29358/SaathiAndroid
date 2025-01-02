@@ -15,4 +15,13 @@ interface IndirectIFADashboardRepository {
     fun fnGetSalesDashInactive():Observable<String>
 
     fun fnGetIFASalesDashboBuisnessSnapshot():Observable<String>
+
+    fun fnGetIFASalesDashMyBuisnessSnapIP():Observable<String>
+
+    fun fnGetIFADashREvenueIP():Observable<String>
+
+    fun fnGetIFADashRevenueBroking():Observable<String>
+    fun fnGetIFADashMeeting() :Observable<String>
+
+    fun fnGetIFADashIFAACtivation() :Observable<String>
 }
