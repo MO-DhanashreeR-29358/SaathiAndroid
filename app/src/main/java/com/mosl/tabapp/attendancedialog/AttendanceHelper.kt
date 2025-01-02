@@ -17,6 +17,7 @@ import com.mosl.mobile.domain.attendance.model.OfficeLocation
 import com.mosl.mobile.domain.attendance.model.UserLocationInfo
 import com.mosl.mobile.user.login.LoginRepository
 import com.mosl.mobile.user.login.UserManager
+import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.ProfileInfo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.Companion.ARGS_USER_AREA
@@ -68,24 +69,28 @@ class AttendanceHelper @Inject constructor(
     private fun handleAttendanceData(latLngObservable: Observable<Pair<ProfileInfo, LatLng>>) {
 
         // user that have biometric assigned will show attendance popup forcible
-        disposable.add(latLngObservable
-            .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
-            .map { t -> t.second }
-            .switchMap { location ->
-                attendanceRepo.getNearestOfficeLocation(location)
-                    .compose(applyUiModel())
-            }
-            .subscribe(this::showAttendancePopupGeoFancing))
+        // PCG user needs to mark attendance like work from home , but attendance type will be biometric means 3.
 
-        /* disposable.add(latLngObservable
-            .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
-            .map { t -> t.second }
-            .switchMap { location ->
-                attendanceRepo.getOfficeLocationList(location)
-                    .compose(applyUiModel())
-            }
-            .subscribe(this::showAttendancePopupWFH))*/
-
+        if (userManager.user.isPCG() && userManager.user.isAttendanceAllowedForPCG()) {
+            disposable.add(latLngObservable
+                .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
+                .map { t -> t.second }
+                .switchMap { location ->
+                    attendanceRepo.getOfficeLocationList(location)
+                        .compose(applyUiModel())
+                }
+                .subscribe(this::showAttendancePopupWFH))
+        }else{
+            disposable.add(latLngObservable
+                .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
+                .map { t -> t.second }
+                .switchMap { location ->
+                    attendanceRepo.getNearestOfficeLocation(location)
+                        .compose(applyUiModel())
+                }
+                .subscribe(this::showAttendancePopupGeoFancing))
+        }
+        
         disposable.add(latLngObservable
             .filter { t -> t.first.attendanceCount == 1 }
             .map { it -> it.first }

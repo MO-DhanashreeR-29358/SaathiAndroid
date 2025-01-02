@@ -136,6 +136,9 @@ interface LeadDetailView : BaseView {
     fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
     fun getAccountTypeLookupId() : Int
 
+    fun onStandardRemarkFired(): Observable<StandardRemarks>
+    fun renderStandardRemark(uiModel: UiModel<List<RowData>>)
+
     companion object {
         const val INVALID_SELECTION_KEY = "-1"
     }

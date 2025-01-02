@@ -1,5 +1,6 @@
 package com.mosl.tabapp.navigation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -88,9 +89,10 @@ class ScreenNavigatorImpl @Inject constructor(
     openPage(FragmentNavigationEntry.goBackWithResult(result))
   }
 
+  @SuppressLint("WrongConstant")
   override fun openHome() {
     if(userManager.getUser()?.isIndirectUser() == true){
-      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
+      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
     }else{
       openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
     }

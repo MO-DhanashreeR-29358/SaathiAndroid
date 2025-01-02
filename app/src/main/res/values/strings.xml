@@ -672,6 +672,7 @@ Page </string>
     <string name="lead_detail_address_2">Address 2</string>
     <string name="lead_detail_address_3">Address 3</string>
     <string name="lead_detail_country">Country</string>
+    <string name="lead_detail_standard_remark">Standard Remarks</string>
     <string name="lead_detail_state">State</string>
     <string name="lead_detail_city">City</string>
     <string name="lead_detail_pincode">Pincode</string>

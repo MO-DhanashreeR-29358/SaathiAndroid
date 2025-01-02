@@ -301,5 +301,11 @@ public interface MOSLConstants extends LabelConfig {
     int INDIRECT_INTERESTED_IN = 179;
 
     int INDIRECT_WORK_EXP = 147;
+
+    String INDIRECT_TALK_TIME = "Talk Time";
+    String INDIRECT_TOP_INCENTIVE = "Top Incentive Clients";
+    String INDIRECT_CLIENT_REACTIVATION = "Client Reactivation";
+    String INDIRECT_TOP_CLIENT_LIST = "Top client list giving 25% or above revenue";
+
 }
 

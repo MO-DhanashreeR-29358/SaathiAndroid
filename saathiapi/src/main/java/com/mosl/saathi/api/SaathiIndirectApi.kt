@@ -36,6 +36,11 @@ import com.mosl.saathi.api.model.createlead.TransferLeadRequest
 import com.mosl.saathi.api.model.createlead.TransferLeadResponse
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdItem
 import com.mosl.saathi.api.model.createmeeting.MeetingByIdRequest
+import com.mosl.saathi.api.model.dashboard.target.FocoPeriodResponse
+import com.mosl.saathi.api.model.dashboard.target.FocoPeriodResponseObject
+import com.mosl.saathi.api.model.dashboard.target.FocoPeriodResponseObjectMain
+import com.mosl.saathi.api.model.dashboard.target.TargetItemResponse
+import com.mosl.saathi.api.model.dashboard.targetnew.TargetRequest
 import com.mosl.saathi.api.model.documents.DeleteDocumentRequest
 import com.mosl.saathi.api.model.documents.DocumentsRequest
 import com.mosl.saathi.api.model.documents.LeadDocumentsItem
@@ -237,6 +242,13 @@ interface SaathiIndirectApi {
 
     @POST("Meeting/GetMeetingByID")
     fun getMeetingById(@Body request: MeetingByIdRequest): Observable<SaathiCommonResponse<MeetingByIdItem>>
+
+    //---Dashboard----------------------------------
+
+    @POST("Dashboard/GetFocoDashFilter")
+    fun getFocoPeriodFilter(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<FocoPeriodResponseObjectMain>
 
 
     /*************IFADashboard Start Here************/

@@ -1985,7 +1985,7 @@ public class LeadViewDetailFragment extends CommonFragment
                     model.getProspectRefereMobile(), model.getProspectRefereEmail(),
                     model.getCreatedThrough(), model.getCreationDate(),
                     contactRequest,
-                    model.getLeadFieldValueModels(),"","","","","","","","","","","","","",""
+                    model.getLeadFieldValueModels(),"","","","","","","","","","","","","","",""
             );
             getCompositeDisposable().add(getSaathiApi().updateLead(updateLeadRequest)
                     .compose(applyUiModel())

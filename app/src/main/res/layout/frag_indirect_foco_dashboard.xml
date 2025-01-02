@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    >
+
+
+    <RelativeLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/spPeriod"
+        style="@style/DashbordSpinnerSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" ></Spinner>
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivActionableInsights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_actionable"
+            />
+
+</RelativeLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/floatingActionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        fab:fab_addButtonColorNormal="#f54d41"
+        fab:fab_addButtonColorPressed="@color/white_pressed"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/leadcreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_create_lead"
+            fab:fab_colorNormal="#ffffff"
+            fab:fab_colorPressed="#ffffff"
+            fab:fab_size="mini"
+            fab:fab_title="Create Lead"
+            />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+</RelativeLayout>
