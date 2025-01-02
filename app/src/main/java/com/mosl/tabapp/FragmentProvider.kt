@@ -90,6 +90,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportModule
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainModule
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
@@ -256,6 +258,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [FocoDashboardModule::class])
     fun provideIndirectFocoDashboardFragmentFactory(): FocoDashboardFragment
+
+    @ContributesAndroidInjector(modules = [FocoDashboardReportModule::class])
+    fun provideIndirectFocoDashboardReportFragmentFactory(): FocoDashboardReportFragment
 
     @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
     fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment

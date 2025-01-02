@@ -10,21 +10,18 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.tabapp.R
-import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightDialogFragment
-import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.databinding.FragIndirectFocoDashboardBinding
-import com.mosl.tabapp.model.dashboard.WidgetModel
-import com.mosl.tabapp.saathiIndirect.dashboard.foco.domain.FocoPeriodModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
-import java.util.ArrayList
 import javax.inject.Inject
 
 class FocoDashboardFragment : CommonFragment(), FocoDashboardView{
     internal lateinit var binding: FragIndirectFocoDashboardBinding
+
+
     @Inject
     lateinit var presenter: FocoDashboardPresenter
     lateinit var periodAdapter: ArrayAdapter<FocoPeriodModel>
@@ -68,7 +65,7 @@ class FocoDashboardFragment : CommonFragment(), FocoDashboardView{
 
     override fun showInsightsDialog() {
         hideKeyboard(binding.ivActionableInsights)
-        val dialogFragment = FocoActionableInsightDialogFragment()
+        val dialogFragment = FocoActionableInsightDialogFragment(navigator)
         dialogFragment.show(requireFragmentManager(), "Actionable Dialog")
     }
 

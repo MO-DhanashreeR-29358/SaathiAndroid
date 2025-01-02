@@ -1,4 +1,4 @@
-package com.mosl.tabapp.saathiIndirect.dashboard.foco.domain
+package com.mosl.mobile.domain.saathiIndirect.dashboard
 
 
 data class FocoPeriodFilterInput(

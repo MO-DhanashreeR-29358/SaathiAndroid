@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
 import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
 
@@ -246,4 +247,26 @@ interface SaathiIndirectApi {
     fun getFocoPeriodFilter(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<FocoPeriodResponseObjectMain>
+
+
+    @POST("Dashboard/GetFocoDashTalktimeWidgetData")
+    fun getTalkTimeData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+
+    @POST("Dashboard/GetFocoDashTopInactiveClientWidgetData")
+    fun getTopIncentiveData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+
+    @POST("Dashboard/GetFocoDashClientReactivationWidgetData")
+    fun getClientReactivationData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashTopClientListWidgetData")
+    fun getTopClientListData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
 }
