@@ -22,7 +22,8 @@ fun FocoDashboardInput.requestTransform(): FOCODashboardFilterpostReq {
         pageP = pageP,
         pageSize = pageSize,
         totalCountP = totalCountP,
-        totalCount = totalCount
+        totalCount = totalCount,
+        category = category
     )
 }
 fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {

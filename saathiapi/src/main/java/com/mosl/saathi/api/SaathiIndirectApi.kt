@@ -249,23 +249,23 @@ interface SaathiIndirectApi {
     ): Observable<FocoPeriodResponseObjectMain>
 
 
-    @POST("Dashboard/GetFocoDashTalktimeWidgetData")
+    @POST("Dashboard/GetFocoDashTalkTimeDetail")
     fun getTalkTimeData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
 
 
-    @POST("Dashboard/GetFocoDashTopInactiveClientWidgetData")
+    @POST("Dashboard/GetFocoDashTopInactiveClientDetail")
     fun getTopIncentiveData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
 
 
-    @POST("Dashboard/GetFocoDashClientReactivationWidgetData")
+    @POST("Dashboard/GetFocoDashClientReactivationDetail")
     fun getClientReactivationData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
-    @POST("Dashboard/GetFocoDashTopClientListWidgetData")
+    @POST("Dashboard/GetFocoDashTopClientListDetail")
     fun getTopClientListData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
