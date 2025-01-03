@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.mobile.domain.dashboardreport.DashboardReportData
 import com.mosl.mobile.domain.productivity.ColHeader
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodFilterInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoRepository
@@ -30,7 +31,7 @@ class FocoRepositoryImpl @Inject constructor(
 ) : FocoRepository {
 
 
-    override fun getPeriodFilter(request: FocoPeriodFilterInput): Observable<List<FocoPeriodModel>> {
+    override fun getPeriodFilter(request: FocoDashboardInput): Observable<List<FocoPeriodModel>> {
         val targetRequest = request.requestTransform()
         return api.getFocoPeriodFilter(targetRequest).map {
                 it.data.list.itemTransform()
@@ -66,6 +67,62 @@ class FocoRepositoryImpl @Inject constructor(
         return api.getTopClientListData(req)
             .map {
                 renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getFocoDashRevenueWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashRevenueWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashRevenueGrowthWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashRevenueGrowthWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashNoOfClientsWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashNoOfClientsWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashOnlineRevenueWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashOnlineRevenueWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashClientReachWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashClientReachWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashIPSalesWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashIPSalesWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
+            }
+    }
+
+    override fun getFocoDashTotalMobAppWidgetData(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return api.getFocoDashTotalMobListWidgetData(req)
+            .map {
+                mapToFocoDashboardModel(it)
             }
     }
 

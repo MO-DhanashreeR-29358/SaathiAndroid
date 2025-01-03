@@ -1,6 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.foco
 
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -35,11 +36,9 @@ class FocoDashboardPresenter @Inject constructor(
             .addTo(disposable)
     }
 
-    private fun getWidgetRequest(): FocoPeriodFilterInput {
-        return FocoPeriodFilterInput(
-            employeeCode = userManager.getUser()?.employeeCode,
-
-        )
+    fun getWidgetRequest() : FocoDashboardInput {
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", category = "Existing", calculatedPageP = 0,
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
 }

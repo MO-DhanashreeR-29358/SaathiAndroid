@@ -1,10 +1,13 @@
 package com.mosl.app.core.data.saathiIndirect.dashboard
 
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodFilterInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
 import com.mosl.saathi.api.model.dashboard.target.FocoPeriodResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
 
 fun FocoPeriodFilterInput.requestTransform(): FOCODashboardFilterpostReq {
     return FOCODashboardFilterpostReq(
@@ -37,4 +40,32 @@ fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {
         )
     }
 }
+
+fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.product,
+                Value = originalGraph.Value
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = response.Response?.ObjectData?.strTarget
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+
 

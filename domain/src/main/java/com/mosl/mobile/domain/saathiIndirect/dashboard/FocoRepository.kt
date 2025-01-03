@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 
 interface FocoRepository {
 
-    fun getPeriodFilter(request: FocoPeriodFilterInput): Observable<List<FocoPeriodModel>>
+    fun getPeriodFilter(request: FocoDashboardInput): Observable<List<FocoPeriodModel>>
 
     fun getActionableTalkTime(request : FocoDashboardInput): Observable<DashboardReportCombo>
     fun getActionableTopIncentive(request : FocoDashboardInput): Observable<DashboardReportCombo>
@@ -13,5 +13,16 @@ interface FocoRepository {
     fun getActionableClientReactivation(request : FocoDashboardInput): Observable<DashboardReportCombo>
 
     fun getActionableTopClientList(request : FocoDashboardInput): Observable<DashboardReportCombo>
+
+    fun getFocoDashRevenueWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+    fun getFocoDashRevenueGrowthWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+    fun getFocoDashNoOfClientsWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+
+    fun getFocoDashOnlineRevenueWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+    fun getFocoDashClientReachWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+
+    fun getFocoDashIPSalesWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+
+    fun getFocoDashTotalMobAppWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
 
 }
