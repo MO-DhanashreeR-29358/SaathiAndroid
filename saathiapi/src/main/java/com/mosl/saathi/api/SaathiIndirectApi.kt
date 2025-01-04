@@ -305,4 +305,9 @@ interface SaathiIndirectApi {
     fun getFocoDashTotalMobListWidgetData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRunrateForAdvisorWidgetData")
+    fun getRunrateForAdvisorData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
 }

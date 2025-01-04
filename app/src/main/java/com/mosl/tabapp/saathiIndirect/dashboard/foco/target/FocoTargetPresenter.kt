@@ -61,7 +61,7 @@ class FocoTargetPresenter @Inject constructor(
             .switchMap {
                 indirectRepo.getFocoDashRevenueGrowthWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
-            .subscribe(view::renderData, Timber::e)
+            .subscribe(view::renderBarChartData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc

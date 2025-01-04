@@ -72,6 +72,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_3sdp"
+                        android:src="@drawable/minus"
                         />
 
                 </RelativeLayout>
@@ -133,7 +134,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:layout_marginEnd="@dimen/_3sdp"
-                        />
+                        android:src="@drawable/minus"/>
                 </RelativeLayout>
 
                 <LinearLayout

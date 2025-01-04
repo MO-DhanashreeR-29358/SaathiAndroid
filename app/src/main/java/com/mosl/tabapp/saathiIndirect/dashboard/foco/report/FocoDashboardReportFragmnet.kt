@@ -99,6 +99,9 @@ class FocoDashboardReportFragment : CommonFragment(),
 
   private fun setUpView() {
     binding.txtLables.text = strSystemName
+    if(strSystemName == MOSLConstants.INDIRECT_RUNRATE_FOR_ADVISOR){
+      binding.labelContainer.visibility = View.GONE
+    }
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = HierarchyReportTableMapper.header(
         requireContext()

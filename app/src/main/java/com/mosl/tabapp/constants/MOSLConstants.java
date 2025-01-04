@@ -307,5 +307,7 @@ public interface MOSLConstants extends LabelConfig {
     String INDIRECT_CLIENT_REACTIVATION = "Client Reactivation";
     String INDIRECT_TOP_CLIENT_LIST = "Top client list giving 25% or above revenue";
 
+    String INDIRECT_RUNRATE_FOR_ADVISOR = "Runrate for Advisor";
+
 }
 

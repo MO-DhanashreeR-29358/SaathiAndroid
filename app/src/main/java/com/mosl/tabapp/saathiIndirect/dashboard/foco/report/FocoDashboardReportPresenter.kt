@@ -60,6 +60,16 @@ class FocoDashboardReportPresenter @Inject constructor(
           }
           .subscribe(view::renderData, Timber::e)
           .addTo(disposable)
+
+      screenLoadObs
+          .filter { view.getWidgetName()  == MOSLConstants.INDIRECT_RUNRATE_FOR_ADVISOR }
+          .switchMap {
+              repository.getFocoDashRunrateForAdvisorWidgetData(getWidgetRequest())
+                  .compose(applyUiModel())
+          }
+          .subscribe(view::renderData, Timber::e)
+          .addTo(disposable)
+
   }
 
     fun getWidgetRequest() : FocoDashboardInput {

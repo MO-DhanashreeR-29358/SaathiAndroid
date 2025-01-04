@@ -11,5 +11,7 @@ data class FocoDashboardModel(
 
 data class Graph (
       var product           : String?  = null,
-      var Value             : String?  = null
+      var Value             : String?  = null,
+      var currentMonth             : String?  = null,
+      var lastMonth             : String?  = null
 )

@@ -16,8 +16,10 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragIndirectFocoDashboardBinding
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.dashboard.target.TargetFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -50,8 +52,11 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
         if (binding.llTargetAchievementADV.visibility != View.VISIBLE) {
             toggleSection(binding.llTargetAchievementADV, binding.ivTargetAchievementADV)
         }
+        if (binding.llTargetAchievementADV.visibility != View.VISIBLE) {
+            toggleSection(binding.llRunrateforAdvisorADV, binding.ivRunrateforAdvisorHeader)
+        }
         loadTargetAchievementFragment()
-
+        loadRunrateForAdvisorFragment()
         binding.rlTargetAchievementADV.setOnClickListener(this)
         binding.rlRunrateForAdvisorADV.setOnClickListener(this)
     }
@@ -99,8 +104,8 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
     }
 
     private fun loadRunrateForAdvisorFragment() {
-        val targetFragment = TargetFragment()
-        args.putSerializable(DashboardFragment.DASHBOARD_MODEL, "currentDashboard")
+        val targetFragment = FocoDashboardReportFragment()
+        args.putString(MOSLConstants.SYSTEM_NAME, MOSLConstants.INDIRECT_RUNRATE_FOR_ADVISOR)
         targetFragment.arguments = args
         requireActivity().supportFragmentManager
             .beginTransaction()
@@ -114,9 +119,8 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
                 binding.llTargetAchievementADV, binding.ivTargetAchievementADV
             )
             R.id.rlRunrateForAdvisorADV -> {
-                loadRunrateForAdvisorFragment()
                 toggleSection(
-                    binding.rlRunrateForAdvisorADV, binding.ivRunrateforAdvisorHeader
+                    binding.llRunrateforAdvisorADV, binding.ivRunrateforAdvisorHeader
                 )
             }
         }

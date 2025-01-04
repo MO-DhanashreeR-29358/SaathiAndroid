@@ -94,26 +94,37 @@
         app:layout_constraintTop_toBottomOf="@+id/rv_summary_count"
         />
 
-
-    <com.mosl.tabapp.common.LockedPieChart
-        android:id="@+id/chart"
+    <RelativeLayout
+        android:id="@+id/chartContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:layout_marginTop="@dimen/_minus10sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <com.mosl.tabapp.common.LockedPieChart
+            android:id="@+id/chart"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            />
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/barChart"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_lable"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@+id/chart"
+        android:layout_below="@+id/chartContainer"
         android:layout_margin="@dimen/_3sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart"
+        app:layout_constraintTop_toBottomOf="@+id/chartContainer"
         tools:listitem="@layout/item_target_achievement_dynamic_list"
         />
 

@@ -122,7 +122,15 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getFocoDashTotalMobListWidgetData(req)
             .map {
-                mapToFocoDashboardModel(it)
+                mapToTotalMobileLoggedIn(it)
+            }
+    }
+
+    override fun getFocoDashRunrateForAdvisorWidgetData(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getRunrateForAdvisorData(req)
+            .map {
+                renderTable(Gson().toJson(it))
             }
     }
 

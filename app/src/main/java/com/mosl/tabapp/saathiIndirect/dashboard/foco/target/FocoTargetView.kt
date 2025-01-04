@@ -16,6 +16,8 @@ interface FocoTargetView : BaseView {
     fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun renderData(uiModel: UiModel<FocoDashboardModel>)
+
+    fun renderBarChartData(uiModel: UiModel<FocoDashboardModel>)
     fun getColorsArray(): IntArray
 }
 

@@ -2,47 +2,36 @@ package com.mosl.tabapp.saathiIndirect.dashboard.foco.target
 
 import android.graphics.Color
 import android.graphics.Typeface
-import android.mtp.MtpConstants
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
-import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.bank.*
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
-import com.mosl.mobile.domain.target.Table1ItemModel
-import com.mosl.mobile.domain.target.TableItemModel
-import com.mosl.mobile.domain.target.TargetItemModel
-import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
-import com.mosl.tabapp.common.FilterRowData
-import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.leads.LeadsFragment
-import com.mosl.tabapp.dashboard.leads.LeadsFragment.Companion.PERIOD_FILTER
-import com.mosl.tabapp.dashboard.target.WidgetUiEvent
 import com.mosl.tabapp.databinding.FragmentFocoTargetBinding
-import com.mosl.tabapp.databinding.FragmentTargetBinding
-import com.mosl.tabapp.model.dashboard.DashboardModel
-import com.mosl.tabapp.model.dashboard.DashboardSystemModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.CLIENT_REACH
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.IP_SALES
@@ -51,15 +40,12 @@ import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE_GROWTH_DEGROWTH
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.TOTAL_MOB_APP
-import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
@@ -192,6 +178,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+
   override fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick> {
     return widgetUiEvent.ofType()
   }
@@ -207,6 +194,8 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   override fun renderData(uiModel: UiModel<FocoDashboardModel>) {
     toggleProgress(uiModel.inProgress)
+    binding.includeTargetChart.chart.visibility = View.VISIBLE
+    binding.includeTargetChart.barChart.visibility = View.GONE
     chartClear()
     labelGroupAdapter.clear()
     lableItemList.clear()
@@ -236,6 +225,127 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
     }
   }
 
+  override fun renderBarChartData(uiModel: UiModel<FocoDashboardModel>) {
+    toggleProgress(uiModel.inProgress)
+    barChartClear()
+    binding.includeTargetChart.chart.visibility = View.GONE
+    binding.includeTargetChart.barChart.visibility = View.VISIBLE
+    labelGroupAdapter.clear()
+    lableItemList.clear()
+    binding.includeTargetChart.txtTarget.text = "0"
+    binding.includeTargetChart.txtAchievement.text = "0"
+    uiModel.onFailure { error ->
+      Timber.d("renderPeriodFilter ${error.message}")
+      barChartClear()
+    }
+
+    uiModel.onSuccess {
+      Timber.d("strTarget ${it.strTarget}")
+      Timber.d("strAchieved ${it.strAchieved}")
+      binding.includeTargetChart.txtTarget.text = it.strTarget
+      binding.includeTargetChart.txtAchievement.text = it.strAchieved
+      for( gr in it.graph){
+        Timber.d("graph Product ${gr.product}")
+        Timber.d("graph value ${gr.Value}")
+      }
+      if (it.graph.isEmpty()) {
+        barChartClear()
+      } else {
+        setBarChart(it.graph)
+        LableView(it.graph)
+      }
+
+    }
+  }
+
+  private fun setBarChart(graph: ArrayList<Graph>) {
+    val data = getBarData(graph)
+
+    data.setDrawValues(false) // for text hidden
+    data.setValueTextSize(11f)
+    data.setValueTextColor(Color.BLACK)
+    data.setValueTypeface(Typeface.DEFAULT)
+    binding.includeTargetChart.barChart.description.isEnabled = false // Disable description text
+    binding.includeTargetChart.barChart.setData(data)
+    binding.includeTargetChart.barChart.setOnChartValueSelectedListener(object :
+      OnChartValueSelectedListener {
+      override fun onValueSelected(
+        e: Entry,
+        h: Highlight
+      ) {
+
+        // pieChartEvent.onNext(FocoTargetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
+
+      }
+
+      override fun onNothingSelected() {}
+    })
+
+    val groupSpace = 0.3f
+    val barSpace = 0.1f // x2 dataset
+    val barWidth = 0.20f // x2 dataset
+
+    binding.includeTargetChart.barChart.groupBars(0f, groupSpace, barSpace)  // Extra padding on the bottom if needed
+    var labels = ArrayList<String?>()
+    for (i in graph.indices) {
+      labels.add(graph[i].product)
+    }
+    with(binding.includeTargetChart.barChart) {
+      description.isEnabled = false
+      setDragEnabled(true)
+      xAxis.apply {
+        valueFormatter = IndexAxisValueFormatter(labels)
+        position = XAxis.XAxisPosition.BOTTOM
+        granularity = 1f
+        isGranularityEnabled = true
+        axisMinimum = 0f
+        setCenterAxisLabels(false)
+        axisMaximum = 0 + barData.getGroupWidth(groupSpace, barSpace) * labels.size
+        labelCount = labels.size - 1
+        animateY(1000)
+        spaceMin = 1F
+        spaceMax = 1f
+      }
+    }
+
+    // Y-Axis: Make sure the Y-Axis starts at 0
+    val yAxis: YAxis = binding.includeTargetChart.barChart.axisLeft
+    yAxis.axisMinimum = 0f
+
+    val yAxisRight: YAxis = binding.includeTargetChart.barChart.axisRight
+    yAxisRight.isEnabled = false // Hide the right Y-Axis
+
+    binding.includeTargetChart.barChart.invalidate()
+  }
+
+  private fun getBarData(graph: ArrayList<Graph>): BarData {
+    val barCurrentMonthEntries = ArrayList<BarEntry>()
+    val barLastMonthEntries = ArrayList<BarEntry>()
+    for (index in graph.indices) {
+      val currentMonth = graph[index].currentMonth?.toFloat() ?: 0.0f
+      barCurrentMonthEntries.add(
+        BarEntry(index.toFloat(), currentMonth)
+      )
+    }
+    for (index in graph.indices) {
+       val lastMonth = graph[index].lastMonth?.toFloat() ?: 0.0f
+      barLastMonthEntries.add(
+        BarEntry(index.toFloat(), lastMonth)
+      )
+    }
+   val barDataSet1 = BarDataSet(barCurrentMonthEntries, "Current Month").apply {
+      color = ContextCompat.getColor(requireContext(), R.color.red)
+    }
+    val barDataSet2 = BarDataSet(barLastMonthEntries, "Last Month").apply {
+      color = ContextCompat.getColor(requireContext(), R.color.blue)
+    }
+    val data = BarData(barDataSet1, barDataSet2).apply {
+      barWidth = 0.20f
+    }
+
+    return data
+  }
+
   override fun getColorsArray(): IntArray {
     return VORDIPLOM_COLORS
   }
@@ -244,7 +354,9 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
   fun chartClear() {
     binding.includeTargetChart.chart.clear()
   }
-
+  fun barChartClear() {
+    binding.includeTargetChart.barChart.clear()
+  }
 
   private fun setDataBroking(
     tableItemList: ArrayList<Graph>
@@ -324,4 +436,6 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+
 }
+

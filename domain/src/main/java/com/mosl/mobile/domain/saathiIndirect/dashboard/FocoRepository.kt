@@ -24,5 +24,6 @@ interface FocoRepository {
     fun getFocoDashIPSalesWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
 
     fun getFocoDashTotalMobAppWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
+    fun getFocoDashRunrateForAdvisorWidgetData(request : FocoDashboardInput): Observable<DashboardReportCombo>
 
 }

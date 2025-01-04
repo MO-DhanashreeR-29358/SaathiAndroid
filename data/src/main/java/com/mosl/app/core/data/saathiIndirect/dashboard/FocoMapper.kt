@@ -50,7 +50,9 @@ fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDash
         it.forEach { originalGraph ->
             val graph = Graph(
                 product = originalGraph.product,
-                Value = originalGraph.Value
+                Value = originalGraph.Value,
+                currentMonth = originalGraph.CurrentMonth,
+                lastMonth = originalGraph.LastMonth
             )
             graphList.add(graph)
         }
@@ -68,4 +70,30 @@ fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDash
     )
 }
 
+fun mapToTotalMobileLoggedIn(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.Category,
+                Value = originalGraph.Valuedata
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = response.Response?.ObjectData?.target2
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
 
