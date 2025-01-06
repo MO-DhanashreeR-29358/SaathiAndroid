@@ -11,6 +11,6 @@ import io.reactivex.rxjava3.core.Observable
 interface FocoDashboardReportView : BaseView {
 
     fun getWidgetName() : String
-
     fun renderData(uiModel: UiModel<DashboardReportCombo>)
+    fun onReportClickEvent() : Observable<FocoDashboardReportUIEvent.OnReportClick>
 }

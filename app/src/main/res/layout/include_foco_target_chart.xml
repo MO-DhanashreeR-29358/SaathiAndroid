@@ -112,7 +112,7 @@
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/barChart"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_150sdp"
+            android:layout_height="@dimen/_160sdp"
             android:visibility="gone"/>
     </RelativeLayout>
 

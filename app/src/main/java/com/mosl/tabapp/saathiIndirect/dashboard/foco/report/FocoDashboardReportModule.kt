@@ -27,18 +27,7 @@ class FocoDashboardReportModule {
     return fragment
   }
 
-  @Provides
-  internal fun provideDashboardReport(fragment: FocoDashboardReportFragment): FocoDashboardReportData {
 
-    return FocoDashboardReportData(
-      emptyMap<String, String>(),
-      "",
-      "",
-      emptyList<FilterRowData>(),
-      emptyList<TypeActionableFilterModel>(),
-      false
-    )
-  }
 
 
 }

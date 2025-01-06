@@ -134,6 +134,78 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun getRevenueHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getRevenueHierarchy(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getRevenueDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getRevenueDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getClientMeetingHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getClientMeetingHierarchy(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getClientMeetingDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getClientMeetingDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getOnlineRevenueDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getOnlineRevenueDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getClientReachDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getClientReachDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getIpSalesHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getIpSalesHierarchy(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getIpSalesDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getIpSalesDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
+    override fun getTotalMobAppDetail(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+        val req = request.requestTransform()
+        return api.getTotalMobAppDetail(req)
+            .map {
+                renderTable(Gson().toJson(it))
+            }
+    }
+
     private fun renderTable(response: String?): DashboardReportCombo {
         if(response != null) {
             Log.d("dashboardReportRes", response)

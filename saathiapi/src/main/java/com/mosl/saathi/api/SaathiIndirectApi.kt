@@ -310,4 +310,43 @@ interface SaathiIndirectApi {
     fun getRunrateForAdvisorData(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueHierarchy")
+    fun getRevenueHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueDetail")
+    fun getRevenueDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashMeetingHierarchy")
+    fun getClientMeetingHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashMeetingDetail")
+    fun getClientMeetingDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashOnlineReenueDetail")
+    fun getOnlineRevenueDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashClientReachDetail")
+    fun getClientReachDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoIPSalesHierarchy")
+    fun getIpSalesHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashIPSalesDetail")
+    fun getIpSalesDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashTotalMobAppDetail")
+    fun getTotalMobAppDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
 }

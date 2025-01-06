@@ -1,5 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.foco.target
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -18,6 +20,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
@@ -30,9 +33,11 @@ import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
 import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
+import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentFocoTargetBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.CLIENT_REACH
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.IP_SALES
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.NO_OF_CLIENT_MEETINGS
@@ -46,6 +51,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
@@ -98,6 +104,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+  @SuppressLint("WrongConstant")
   private fun setUpView() {
     val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.horizontalRecyclerView.apply {
@@ -116,32 +123,32 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
       )
       adapter = labelGroupAdapter
     }
-    var model1 = WidgetModel()
+    val model1 = WidgetModel()
     model1.name = REVENUE
     model1.isSelected = true
     widgetModelList.add(model1)
 
-    var model2 = WidgetModel()
+    val model2 = WidgetModel()
     model2.name = REVENUE_GROWTH_DEGROWTH
     widgetModelList.add(model2)
 
-    var model3 = WidgetModel()
+    val model3 = WidgetModel()
     model3.name = NO_OF_CLIENT_MEETINGS
     widgetModelList.add(model3)
 
-    var model4 = WidgetModel()
+    val model4 = WidgetModel()
     model4.name = ONLINE_REVENUE
     widgetModelList.add(model4)
 
-    var model5 = WidgetModel()
+    val model5 = WidgetModel()
     model5.name = CLIENT_REACH
     widgetModelList.add(model5)
 
-    var model6 = WidgetModel()
+    val model6 = WidgetModel()
     model6.name = IP_SALES
     widgetModelList.add(model6)
 
-    var model7 = WidgetModel()
+    val model7 = WidgetModel()
     model7.name = TOTAL_MOB_APP
     widgetModelList.add(model7)
 
@@ -151,6 +158,27 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
     groupAdapter.addAll(itemList)
 
+    binding.includeTargetChart.txtAchievement.setOnClickListener {
+      if(widgetModel?.name == REVENUE_GROWTH_DEGROWTH){
+        return@setOnClickListener
+      }
+      val args = Bundle()
+      if(widgetModel?.name == REVENUE || widgetModel?.name == IP_SALES || widgetModel?.name == NO_OF_CLIENT_MEETINGS){
+        args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        navigator.openPage(
+          NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT.toString(), args,
+          addToStack = true,
+          forceReload = false
+        )
+      }else{
+        args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        navigator.openPage(
+          NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args,
+          addToStack = true,
+          forceReload = false
+        )
+      }
+    }
 
   }
 
@@ -290,11 +318,12 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
     for (i in graph.indices) {
       labels.add(graph[i].product)
     }
+    val xAxis: XAxis = binding.includeTargetChart.barChart.xAxis
+    xAxis.valueFormatter = IAxisValueFormatter { value, _ -> graph[value.toInt()].product!! }
     with(binding.includeTargetChart.barChart) {
       description.isEnabled = false
       setDragEnabled(true)
       xAxis.apply {
-        valueFormatter = IndexAxisValueFormatter(labels)
         position = XAxis.XAxisPosition.BOTTOM
         granularity = 1f
         isGranularityEnabled = true
@@ -418,7 +447,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
     tableList.mapIndexed { index, tableItemModel ->
       lableItemList.add(
-        FocoTargetLableItem(tableItemModel, requireContext(), this)
+        FocoTargetLableItem(widgetModel?.name,tableItemModel, requireContext(), this)
       )
     }
     labelGroupAdapter.addAll(lableItemList)

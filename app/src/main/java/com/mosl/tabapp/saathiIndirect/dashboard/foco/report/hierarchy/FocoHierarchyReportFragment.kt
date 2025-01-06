@@ -1,57 +1,27 @@
-package com.mosl.tabapp.saathiIndirect.dashboard.foco.report
+package com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy
 
-import android.app.Dialog
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup.LayoutParams
-import android.view.Window
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import com.jakewharton.rxbinding4.view.clicks
-import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
-import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
-import com.mosl.tabapp.common.CRMAppUtil.getDateStr
-import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.constants.MOSLConstants
-import com.mosl.tabapp.constants.MoslConstant.CLIENT_UCID
-import com.mosl.tabapp.constants.MoslConstant.Client_UCID
-import com.mosl.tabapp.constants.MoslConstant.Client_ucid
-import com.mosl.tabapp.constants.MoslConstant.LEADID_CLIENTCODE
-import com.mosl.tabapp.constants.MoslConstant.LEAD_ID
-import com.mosl.tabapp.constants.MoslConstant.LeadId
-import com.mosl.tabapp.constants.MoslConstant.LeadId_ClientCode
-import com.mosl.tabapp.constants.MoslConstant.Lead_Id
-import com.mosl.tabapp.constants.MoslConstant.UCID
-import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy
-import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FLT_HIERARCHY_BRANCH_CODE
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FlgEmpcode
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.Flg_Hierarchy
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.FltHierarchyEmpCode
-import com.mosl.tabapp.dashboard.report.DashboardReportPresenter.Companion.WidgetSystemName
-import com.mosl.tabapp.dashboard.report.DashboardReportUIEvent.CellEvent
-import com.mosl.tabapp.databinding.DatePickerBinding
+import com.mosl.tabapp.dashboard.report.DashboardReportPresenter
 import com.mosl.tabapp.databinding.FragDashboardReportBinding
-import com.mosl.tabapp.model.TypeActionableFilterModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.report.HierarchyReportTableMapper
-import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportTableMapper
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportTableRow
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
-import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.mosl.tableview.rowadapter.TableRowAdapter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
@@ -59,18 +29,19 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.*
 import javax.inject.Inject
 
-class FocoDashboardReportFragment : CommonFragment(),
-    FocoDashboardReportView {
+class FocoHierarchyReportFragment : CommonFragment(),
+    FocoHierarchyReportView {
   private lateinit var binding: FragDashboardReportBinding
 
   @Inject
-  lateinit var presenter: FocoDashboardReportPresenter
+  lateinit var presenter: FocoHierarchyReportPresenter
   private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<FocoDashboardReportTableRow>
-  private val navigateEvent = PublishSubject.create<CellEvent>()
+  private val navigateEvent = PublishSubject.create<FocoHierarchyReportUIEvent.OnReportClick>()
 
-  var strSystemName : String = ""
+  private var strSystemName : String = ""
+
   override fun getLayout(): Int {
     return R.layout.frag_dashboard_report
   }
@@ -97,16 +68,22 @@ class FocoDashboardReportFragment : CommonFragment(),
 
   }
 
+  @SuppressLint("SetTextI18n")
   private fun setUpView() {
-    binding.txtLables.text = strSystemName
-    if(strSystemName == MOSLConstants.INDIRECT_RUNRATE_FOR_ADVISOR){
-      binding.labelContainer.visibility = View.GONE
-    }
+    binding.txtLables.text = "$strSystemName Hierarchy"
+
     binding.tableWrapper.setRetryListener(onRetryClick)
     dynamicHeaderRow = HierarchyReportTableMapper.header(
         requireContext()
     ) as DynamicHeaderRow
     val mfAdapter = requireContext().createRowAdapter<FocoDashboardReportTableRow>(dynamicHeaderRow)
+      .apply {
+        viewProvider.rowClickListener = { row, _ ->
+         /* val reportData = tableRowAdapter.getItem(row).data
+          val rmName = reportData.hasMap["SalesRM"] ?: ""*/
+          navigateEvent.onNext(FocoHierarchyReportUIEvent.OnReportClick(strSystemName))
+        }
+      }
     tableRowAdapter = mfAdapter
     binding.tableWrapper.setAdapter(tableRowAdapter)
 
@@ -132,10 +109,8 @@ class FocoDashboardReportFragment : CommonFragment(),
     }
   }
 
-  fun prefix(input: Int): String? {
-    return if (input.toString().length == 1) {
-      "0$input"
-    } else input.toString() + ""
+  override fun onReportClickEvent(): Observable<FocoHierarchyReportUIEvent.OnReportClick> {
+    return navigateEvent.ofType()
   }
 
   override fun getWidgetName(): String {
