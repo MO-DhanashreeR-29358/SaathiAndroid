@@ -7,17 +7,156 @@
     android:background="@color/colorWhite"
     >
 
+    <Spinner
+        android:id="@+id/spPeriod"
+        style="@style/DashbordSpinnerSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" ></Spinner>
+
+    <ScrollView
+        android:id="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_20sdp"
+        android:layout_below="@+id/spPeriod">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+
+            <!-- Target vs Achievement-->
+            <LinearLayout
+                android:id="@+id/llTarget"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlTargetAchievementADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/txtTarget"
+                        app:srcCompat="@drawable/ic_target_achievement"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtTarget"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="Target Vs Achievement"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivTargetAchievementADV"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        android:src="@drawable/minus"
+                        />
+
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llTargetAchievementADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llRunrateforAdvisor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                android:visibility="visible"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlRunrateForAdvisorADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/tvRunrateforAdvisorHeader"
+                        app:srcCompat="@drawable/ic_incentive_performance"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvRunrateforAdvisorHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="Runrate for Advisor"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivRunrateforAdvisorHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        android:src="@drawable/minus"/>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/llRunrateforAdvisorADV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spPeriod"
-        style="@style/DashbordSpinnerSelector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" ></Spinner>
 
 
         <androidx.appcompat.widget.AppCompatImageView

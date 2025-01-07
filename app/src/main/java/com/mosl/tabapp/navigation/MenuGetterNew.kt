@@ -36,6 +36,8 @@ import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragmen
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
 import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
@@ -134,6 +136,9 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> FocoDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->IndirectIFADashboardFragment()
+
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> FocoDashboardReportFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> FocoHierarchyReportFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> IndirectCreateMeetingFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()  //use this for navigation
@@ -201,6 +206,9 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->true
+
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> true

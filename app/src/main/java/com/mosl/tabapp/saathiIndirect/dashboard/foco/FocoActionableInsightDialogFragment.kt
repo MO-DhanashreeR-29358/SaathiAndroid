@@ -1,5 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.foco
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,8 +16,11 @@ import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightEvent.OnItemClicked
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightItem
+import com.mosl.tabapp.dashboard.teamtarget.TeamTargetPresenter
 import com.mosl.tabapp.databinding.DialogFragmentActionableInsightsBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.navigation.NavigationConstants
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -24,15 +28,17 @@ import dagger.android.support.AndroidSupportInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.io.Serializable
 import javax.inject.Inject
 
-class FocoActionableInsightDialogFragment : DialogFragment() {
+class FocoActionableInsightDialogFragment @Inject constructor(val screenNavigator: ScreenNavigatorImpl): DialogFragment() {
 
   lateinit var binding: DialogFragmentActionableInsightsBinding
 
   private val dataActionSubject = PublishSubject.create<DataAction>()
 
   internal lateinit var section: DataManagerSection
+
 
   val onRetryClick: View.OnClickListener = View.OnClickListener {
     dataActionSubject.onNext(DataAction.Retry)
@@ -66,6 +72,7 @@ class FocoActionableInsightDialogFragment : DialogFragment() {
     window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
   }
 
+  @SuppressLint("WrongConstant")
   private fun setupViews() {
     requireDialog().setCanceledOnTouchOutside(false)
     section = DataManagerSection(onRetryClick)
@@ -73,6 +80,15 @@ class FocoActionableInsightDialogFragment : DialogFragment() {
     val context = requireContext()
     val actionableInsightAdapter = GroupAdapter<GroupieViewHolder>()
     actionableInsightAdapter.setOnItemClickListener { item, _ ->
+      if (item is FocoActionableInsightItem) {
+        val args = Bundle()
+        args.putString(MOSLConstants.SYSTEM_NAME, item.data)
+        screenNavigator.openPage(
+          NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args, true,
+          false
+        )
+        this.dismiss()
+      }
 
     }
     actionableInsightAdapter.add(section)

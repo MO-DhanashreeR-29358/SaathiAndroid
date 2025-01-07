@@ -86,6 +86,8 @@ import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFADashboardFi
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFAWidgetCommonResponse
 import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
+
 
 
 interface SaathiIndirectApi {
@@ -249,6 +251,106 @@ interface SaathiIndirectApi {
     fun getFocoPeriodFilter(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<FocoPeriodResponseObjectMain>
+    @POST("Dashboard/GetFocoDashTalkTimeDetail")
+    fun getTalkTimeData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+
+    @POST("Dashboard/GetFocoDashTopInactiveClientDetail")
+    fun getTopIncentiveData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+
+    @POST("Dashboard/GetFocoDashClientReactivationDetail")
+    fun getClientReactivationData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashTopClientListDetail")
+    fun getTopClientListData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueWidgetData")
+    fun getFocoDashRevenueWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueGrowthAndDegrowthWidgetData")
+    fun getFocoDashRevenueGrowthWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+
+    @POST("Dashboard/GetFocoDashNoOfClientMeetingWidgetData")
+    fun getFocoDashNoOfClientsWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashOnlineRevenueWidgetData")
+    fun getFocoDashOnlineRevenueWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashClientReachWidgetData")
+    fun getFocoDashClientReachWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashIPSalesWidgetData")
+    fun getFocoDashIPSalesWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashTotalMobAppLoginWidgetData")
+    fun getFocoDashTotalMobListWidgetData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRunrateForAdvisorWidgetData")
+    fun getRunrateForAdvisorData(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueHierarchy")
+    fun getRevenueHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashRevenueDetail")
+    fun getRevenueDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetFocoDashMeetingHierarchy")
+    fun getClientMeetingHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashMeetingDetail")
+    fun getClientMeetingDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashOnlineReenueDetail")
+    fun getOnlineRevenueDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashClientReachDetail")
+    fun getClientReachDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoIPSalesHierarchy")
+    fun getIpSalesHierarchy(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashIPSalesDetail")
+    fun getIpSalesDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+    @POST("Dashboard/GetFocoDashTotalMobAppDetail")
+    fun getTotalMobAppDetail(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
 
 
     /*************IFADashboard Start Here************/
