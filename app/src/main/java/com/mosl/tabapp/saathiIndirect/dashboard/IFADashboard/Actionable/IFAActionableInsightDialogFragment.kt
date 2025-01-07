@@ -17,6 +17,9 @@ import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightEvent.OnItem
 import com.mosl.tabapp.dashboard.actionableinsight.ActionableInsightItem
 import com.mosl.tabapp.databinding.DialogFragmentActionableInsightsBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.navigation.NavigationConstants
+import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoActionableInsightItem
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -25,7 +28,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
-class IFAActionableInsightDialogFragment : DialogFragment() {
+class IFAActionableInsightDialogFragment @Inject constructor(val screenNavigator: ScreenNavigatorImpl) : DialogFragment() {
 
     lateinit var binding: DialogFragmentActionableInsightsBinding
 
@@ -72,6 +75,15 @@ class IFAActionableInsightDialogFragment : DialogFragment() {
         val context = requireContext()
         val actionableInsightAdapter = GroupAdapter<GroupieViewHolder>()
         actionableInsightAdapter.setOnItemClickListener { item, _ ->
+            if (item is FocoActionableInsightItem) {
+                val args = Bundle()
+                args.putString(MOSLConstants.SYSTEM_NAME, item.data)
+                screenNavigator.openPage(
+                    NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT.toString(), args, true,
+                    false
+                )
+                this.dismiss()
+            }
 
         }
         actionableInsightAdapter.add(section)
@@ -89,10 +101,12 @@ class IFAActionableInsightDialogFragment : DialogFragment() {
 
     fun setData() {
         val items = mutableListOf<Item<*>>()
-        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_TALK_TIME))
-        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_TOP_INCENTIVE))
-        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_CLIENT_REACTIVATION))
-        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_TOP_CLIENT_LIST))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_TODAY_BIRTHDAY))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_1ST_MEETING))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_LEADS_NOT_UPDATED))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_INACTIVE_IFAS))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_TEAM_APPOINTMENT))
+        items.add(IFAActionableInsightItem(MOSLConstants.INDIRECT_NEW_LEAD))
         section.setContent(items)
     }
 }

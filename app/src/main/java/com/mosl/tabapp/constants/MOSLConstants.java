@@ -310,5 +310,15 @@ public interface MOSLConstants extends LabelConfig {
     String INDIRECT_RUNRATE_FOR_ADVISOR = "Runrate for Advisor";
 
     String INDIRECT_REPORT_IS_HERARCHY = "isHerarchy";
+
+    String INDIRECT_TODAY_BIRTHDAY="Today's Birthday And Anniversary";
+    String INDIRECT_1ST_MEETING="1st Meeting not Done";
+
+    String INDIRECT_LEADS_NOT_UPDATED="Leads not Updated";
+
+    String INDIRECT_INACTIVE_IFAS="Inactive IFAs";
+    String INDIRECT_TEAM_APPOINTMENT="Team Appointment";
+
+    String INDIRECT_NEW_LEAD="New Lead";
 }
 
