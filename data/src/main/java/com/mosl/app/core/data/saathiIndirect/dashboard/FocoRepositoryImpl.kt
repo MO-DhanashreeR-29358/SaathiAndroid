@@ -90,7 +90,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getFocoDashNoOfClientsWidgetData(req)
             .map {
-                mapToFocoDashboardModel(it)
+                mapToNoOfClientsMeeting(it)
             }
     }
 
@@ -106,7 +106,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getFocoDashClientReachWidgetData(req)
             .map {
-                mapToFocoDashboardModel(it)
+                mapToClientReach(it)
             }
     }
 
@@ -114,7 +114,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getFocoDashIPSalesWidgetData(req)
             .map {
-                mapToFocoDashboardModel(it)
+                mapToIPSales(it)
             }
     }
 
@@ -248,7 +248,7 @@ class FocoRepositoryImpl @Inject constructor(
                                 } else {
                                     val toDouble = json.get(header).toString().toDouble()
                                     if (toDouble == 0.0) {
-                                        values.add("")
+                                        values.add("0")
                                     } else {
                                         if (json.get(header).toString().contains(".")) {
                                             values.add(toDouble.toBigDecimal().toPlainString())

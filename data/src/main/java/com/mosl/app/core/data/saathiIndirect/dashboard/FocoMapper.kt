@@ -24,9 +24,11 @@ fun FocoDashboardInput.requestTransform(): FOCODashboardFilterpostReq {
         page = page,
         pageP = pageP,
         pageSize = pageSize,
-        totalCountP = totalCountP,
+        pageSizeP = pageSizeP,
         totalCount = totalCount,
-        category = category
+        category = category,
+        filter = filter,
+        fltUserStatus = fltUserStatus
     )
 }
 fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {
@@ -59,7 +61,7 @@ fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDash
     }
 
     // Extract target and achieved values from ObjectData
-    val strTarget = response.Response?.ObjectData?.strTarget
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
     val strAchieved = response.Response?.ObjectData?.strAchieved
 
     // Return the mapped FocoDashboardModel
@@ -86,7 +88,7 @@ fun mapToTotalMobileLoggedIn(response: IndirectExtraDataCommonResponse): FocoDas
     }
 
     // Extract target and achieved values from ObjectData
-    val strTarget = response.Response?.ObjectData?.target2
+    val strTarget =getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
     val strAchieved = response.Response?.ObjectData?.strAchieved
 
     // Return the mapped FocoDashboardModel
@@ -97,3 +99,101 @@ fun mapToTotalMobileLoggedIn(response: IndirectExtraDataCommonResponse): FocoDas
     )
 }
 
+fun mapToNoOfClientsMeeting(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.Parameter,
+                Value = originalGraph.Val
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+
+fun mapToClientReach(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.Series,
+                Value = originalGraph.Value,
+                currentMonth = originalGraph.CurrentMonth,
+                lastMonth = originalGraph.LastMonth
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+fun mapToIPSales(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.product,
+                Value = originalGraph.Revenue,
+                currentMonth = originalGraph.CurrentMonth,
+                lastMonth = originalGraph.LastMonth
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+private fun getTarget(target1 : String?, target2 : String?): String{
+    val toTarget1 = target1?.toDouble()
+    val toTarget2 = target2?.toDouble()
+    if (toTarget1 != null) {
+        if(toTarget1 > 0){
+            return target1
+        }
+    }
+    if (toTarget2 != null) {
+        if(toTarget2 > 0){
+            return target2
+        }
+    }
+    return ""
+}

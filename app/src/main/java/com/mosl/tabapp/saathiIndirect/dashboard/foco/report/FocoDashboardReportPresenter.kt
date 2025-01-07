@@ -72,7 +72,7 @@ class FocoDashboardReportPresenter @Inject constructor(
       screenLoadObs
           .filter { view.getWidgetName()  == MOSLConstants.INDIRECT_RUNRATE_FOR_ADVISOR }
           .switchMap {
-              repository.getFocoDashRunrateForAdvisorWidgetData(getWidgetRequest())
+              repository.getFocoDashRunrateForAdvisorWidgetData(getWidgetRequestForRunrate())
                   .compose(applyUiModel())
           }
           .subscribe(view::renderData, Timber::e)
@@ -135,8 +135,12 @@ class FocoDashboardReportPresenter @Inject constructor(
   }
 
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", category = "Existing", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "MTD", category = "Existing", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
+    fun getWidgetRequestForRunrate() : FocoDashboardInput {
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "", category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+    }
 }
