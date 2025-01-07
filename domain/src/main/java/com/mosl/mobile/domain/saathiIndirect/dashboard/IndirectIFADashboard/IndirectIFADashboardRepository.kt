@@ -1,19 +1,24 @@
 package com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard
 
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectIFADashboardRepository {
 
     fun fnGetIFADashboardFilter():Observable<List<LookUp>>
 
-    fun fnGetTodaysBirthdayAnniversary():Observable<String>
+    fun fnGetTodaysBirthdayAnniversary(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
-    fun fnGetFirstMeetingNotDone():Observable<String>
+    fun fnGetFirstMeetingNotDone(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
-    fun fnGetLeadsNotUpdated():Observable<String>
+    fun fnGetLeadsNotUpdated(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
-    fun fnGetSalesDashInactive():Observable<String>
+    fun fnGetSalesDashInactive(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
+
+    fun fnGetIFASalesDashTeamAppointment(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
+
+    fun fnGetIFASalesDashNewLead(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
     fun fnGetIFASalesDashboBuisnessSnapshot():Observable<String>
 

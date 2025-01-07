@@ -58,7 +58,7 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
 
     override fun showInsightsDialog() {
         hideKeyboard(binding.ivActionableInsights)
-        val dialogFragment = IFAActionableInsightDialogFragment()
+        val dialogFragment = IFAActionableInsightDialogFragment(navigator)
         dialogFragment.show(requireFragmentManager(), "Actionable Dialog")
     }
 

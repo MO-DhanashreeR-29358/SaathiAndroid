@@ -1,4 +1,13 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report
 
-class IndirectIFADashboardReportModule {
+import dagger.Module
+import dagger.Provides
+
+@Module
+public  class IndirectIFADashboardReportModule {
+    @Provides
+    internal fun provideIndirectIFADashboardReportModule(fragment: IndirectIFADashboardReportFragment):IndirectIFADashboardReportView{
+        return fragment
+    }
+
 }

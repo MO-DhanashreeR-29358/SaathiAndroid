@@ -17,7 +17,7 @@ data class IndirectIFAWidgetCommonResponse(
 	val permissions: Permissions? = null,
 
 	@field:SerializedName("Data")
-	val data: List<DataItem?>? = null,
+	val data:  ArrayList<Any?> = arrayListOf(),
 
 	@field:SerializedName("ExtraData")
 	val extraData: Any? = null
@@ -39,40 +39,4 @@ data class Permissions(
 
 	@field:SerializedName("SystemName")
 	val systemName: Any? = null
-)
-
-data class DataItem(
-
-	@field:SerializedName("Birthday_Anniversary")
-	val birthdayAnniversary: String? = null,
-
-	@field:SerializedName("Status")
-	val status: Int? = null,
-
-	@field:SerializedName("InApproval")
-	val inApproval: Boolean? = null,
-
-	@field:SerializedName("CreationDate")
-	val creationDate: String? = null,
-
-	@field:SerializedName("IFA_Name")
-	val iFAName: String? = null,
-
-	@field:SerializedName("CreatedBy")
-	val createdBy: Any? = null,
-
-	@field:SerializedName("Mobile_No")
-	val mobileNo: String? = null,
-
-	@field:SerializedName("AM_Name")
-	val aMName: String? = null,
-
-	@field:SerializedName("ApprovalFieldList")
-	val approvalFieldList: Any? = null,
-
-	@field:SerializedName("IsAdminMode")
-	val isAdminMode: Boolean? = null,
-
-	@field:SerializedName("Profile")
-	val profile: String? = null
 )

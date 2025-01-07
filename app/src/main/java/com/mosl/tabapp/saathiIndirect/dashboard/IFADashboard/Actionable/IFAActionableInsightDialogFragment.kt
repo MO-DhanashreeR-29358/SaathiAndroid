@@ -1,10 +1,12 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Actionable
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,6 +70,7 @@ class IFAActionableInsightDialogFragment @Inject constructor(val screenNavigator
         window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
+    @SuppressLint("WrongConstant")
     private fun setupViews() {
         requireDialog().setCanceledOnTouchOutside(false)
         section = DataManagerSection(onRetryClick)
@@ -75,12 +78,11 @@ class IFAActionableInsightDialogFragment @Inject constructor(val screenNavigator
         val context = requireContext()
         val actionableInsightAdapter = GroupAdapter<GroupieViewHolder>()
         actionableInsightAdapter.setOnItemClickListener { item, _ ->
-            if (item is FocoActionableInsightItem) {
+            if (item is IFAActionableInsightItem) {
                 val args = Bundle()
                 args.putString(MOSLConstants.SYSTEM_NAME, item.data)
                 screenNavigator.openPage(
-                    NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT.toString(), args, true,
-                    false
+                    NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT.toString(), args, true, false
                 )
                 this.dismiss()
             }
