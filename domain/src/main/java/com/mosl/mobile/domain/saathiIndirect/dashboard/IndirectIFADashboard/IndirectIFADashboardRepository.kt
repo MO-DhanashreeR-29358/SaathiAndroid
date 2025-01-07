@@ -1,10 +1,11 @@
-package com.mosl.mobile.domain.saathiIndirect.dashboard
+package com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard
 
+import com.mosl.mobile.domain.createmeeting.LookUp
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectIFADashboardRepository {
 
-    fun fnGetIFADashboardFilter():Observable<String>
+    fun fnGetIFADashboardFilter():Observable<List<LookUp>>
 
     fun fnGetTodaysBirthdayAnniversary():Observable<String>
 

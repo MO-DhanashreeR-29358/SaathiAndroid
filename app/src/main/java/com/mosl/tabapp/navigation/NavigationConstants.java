@@ -137,4 +137,6 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD = 62;
 
+    int NAVIGATE_TO_INDIRECT_IFA_DASHBOARD = 63;
+
 }

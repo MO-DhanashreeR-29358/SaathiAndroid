@@ -3,8 +3,7 @@ package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.saathiIndirect.dashboard.DashboardIndirctRepository
-import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboardRepository
+import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl

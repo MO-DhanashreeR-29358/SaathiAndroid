@@ -1,7 +1,9 @@
-package com.mosl.app.core.data.saathiIndirect.dashboard
+package com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard
 
 import com.google.gson.Gson
-import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboardRepository
+import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.FilterPeriodModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
@@ -11,10 +13,10 @@ import javax.inject.Inject
 class IndirectIFADashboardRepositoryImpl @Inject constructor(
     val userManager: UserManagerImpl,
     val saathiIndrectApi: SaathiIndirectApi
-) :IndirectIFADashboardRepository {
-    override fun fnGetIFADashboardFilter(): Observable<String> {
-        return saathiIndrectApi.getIFADashboard(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            Gson().toJson(it.response)
+) : IndirectIFADashboardRepository {
+    override fun fnGetIFADashboardFilter(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getIFADashboard(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode)).map {
+            IndirectIFADashboardMapper.fnTranformFilterList(it.response?.lstPeriod)
         }
     }
 
