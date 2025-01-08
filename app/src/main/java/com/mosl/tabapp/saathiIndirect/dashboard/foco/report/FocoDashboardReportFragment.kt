@@ -32,13 +32,12 @@ class FocoDashboardReportFragment : CommonFragment(),
 
   @Inject
   lateinit var presenter: FocoDashboardReportPresenter
-  private lateinit var model: WidgetModel
   private lateinit var dynamicHeaderRow: DynamicHeaderRow
   private lateinit var tableRowAdapter: TableRowAdapter<FocoDashboardReportTableRow>
   private val navigateEvent = PublishSubject.create<FocoDashboardReportUIEvent.OnReportClick>()
 
   private var strSystemName : String = ""
-
+  private var strEmployeeCode : String = ""
   override fun getLayout(): Int {
     return R.layout.frag_dashboard_report
   }
@@ -58,7 +57,9 @@ class FocoDashboardReportFragment : CommonFragment(),
   private fun setUpFromArguments() {
     try {
       strSystemName =this.arguments?.getString(MOSLConstants.SYSTEM_NAME, "") ?: ""
+      strEmployeeCode = (this.arguments?.getString(MOSLConstants.EMPLOYEE_CODE, "") ?: userManager.getUser()?.employeeCode).toString()
       Log.d("systemName", strSystemName)
+      Log.d("employeeCode", strEmployeeCode)
     } catch (e: Exception) {
       e.printStackTrace()
     }
@@ -110,6 +111,10 @@ class FocoDashboardReportFragment : CommonFragment(),
 
   override fun getWidgetName(): String {
     return strSystemName
+  }
+
+  override fun getEmployeeCode(): String {
+    return strEmployeeCode
   }
 
 

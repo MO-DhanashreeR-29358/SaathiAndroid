@@ -135,12 +135,12 @@ class FocoDashboardReportPresenter @Inject constructor(
   }
 
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "MTD", category = "Existing", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = "MTD", category = "Existing", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
     fun getWidgetRequestForRunrate() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "", category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = "", category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 }

@@ -25,13 +25,13 @@ interface FocoRepository {
 
     fun getFocoDashTotalMobAppWidgetData(request : FocoDashboardInput): Observable<FocoDashboardModel>
     fun getFocoDashRunrateForAdvisorWidgetData(request : FocoDashboardInput): Observable<DashboardReportCombo>
-    fun getRevenueHierarchy(request : FocoDashboardInput): Observable<DashboardReportCombo>
+    fun getRevenueHierarchy(request : FocoDashboardInput): Observable<List<SalesRM>>
     fun getRevenueDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
-    fun getClientMeetingHierarchy(request : FocoDashboardInput): Observable<DashboardReportCombo>
+    fun getClientMeetingHierarchy(request : FocoDashboardInput): Observable<List<SalesRM>>
     fun getClientMeetingDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
     fun getOnlineRevenueDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
     fun getClientReachDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
-    fun getIpSalesHierarchy(request : FocoDashboardInput): Observable<DashboardReportCombo>
+    fun getIpSalesHierarchy(request : FocoDashboardInput): Observable<List<SalesRM>>
     fun getIpSalesDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
     fun getTotalMobAppDetail(request : FocoDashboardInput): Observable<DashboardReportCombo>
 }

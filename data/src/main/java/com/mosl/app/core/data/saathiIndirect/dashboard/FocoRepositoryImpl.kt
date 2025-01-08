@@ -5,11 +5,13 @@ import com.google.gson.Gson
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.mobile.domain.dashboardreport.DashboardReportData
 import com.mosl.mobile.domain.productivity.ColHeader
+import com.mosl.mobile.domain.saathiIndirect.dashboard.ApiResponse
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodFilterInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoRepository
+import com.mosl.mobile.domain.saathiIndirect.dashboard.SalesRM
 import com.mosl.saathi.api.SaathiIndirectApi
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
@@ -134,11 +136,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getRevenueHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+    override fun getRevenueHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
         val req = request.requestTransform()
         return api.getRevenueHierarchy(req)
             .map {
-                renderTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -150,11 +152,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getClientMeetingHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+    override fun getClientMeetingHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
         val req = request.requestTransform()
         return api.getClientMeetingHierarchy(req)
             .map {
-                renderTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -182,11 +184,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getIpSalesHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
+    override fun getIpSalesHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
         val req = request.requestTransform()
         return api.getIpSalesHierarchy(req)
             .map {
-                renderTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -291,4 +293,47 @@ class FocoRepositoryImpl @Inject constructor(
         return list
     }
 
+    private fun renderHierarchyTable(response: String?) : List<SalesRM> {
+
+        val salesRMs: List<SalesRM> = parseSalesRM(response)
+
+        // Build the hierarchy starting from the top (SalesRMs that report to 'null')
+        val topLevelSalesRMs = buildHierarchy(salesRMs, null)
+        println("Sales Hierarchy:")
+        printHierarchy(topLevelSalesRMs)
+        return topLevelSalesRMs
+    }
+
+    fun parseSalesRM(response: String?): List<SalesRM> {
+        val gson = Gson()
+
+        // First, parse the Response object that contains Data as a list of SalesRM
+        val responseObject = gson.fromJson(response, ApiResponse::class.java)
+
+        // Now, extract the Data list from the response object
+        return responseObject.Response.Data
+    }
+    fun buildHierarchy(salesRMs: List<SalesRM>, reportingTo: String?): List<SalesRM> {
+        val hierarchy = mutableListOf<SalesRM>()
+
+        // Find all sales representatives who report to the current `ReportingTo` value
+        for (salesRM in salesRMs) {
+            if (salesRM.ReportingTo == reportingTo) {
+                // Recursively build subordinates for this sales representative
+                val subordinates = buildHierarchy(salesRMs, salesRM.SalesRM)
+                salesRM.subordinates = subordinates  // Assign subordinates
+                hierarchy.add(salesRM)  // Add to the hierarchy
+            }
+        }
+        return hierarchy
+    }
+
+    fun printHierarchy(salesRMs: List<SalesRM>, indent: String = "") {
+        for (salesRM in salesRMs) {
+            println("$indent${salesRM.SalesRM}")
+            if (salesRM.subordinates.isNotEmpty()) {
+                printHierarchy(salesRM.subordinates, "$indent  ")  // Add indentation for subordinates
+            }
+        }
+    }
 }

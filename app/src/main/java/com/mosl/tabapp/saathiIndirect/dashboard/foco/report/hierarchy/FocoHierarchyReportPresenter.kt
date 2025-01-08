@@ -36,7 +36,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
               repository.getRevenueHierarchy(getWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderData, Timber::e)
+          .subscribe(view::renderReportData, Timber::e)
           .addTo(disposable)
 
       screenLoadObs
@@ -45,7 +45,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
               repository.getClientMeetingHierarchy(getWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderData, Timber::e)
+          .subscribe(view::renderReportData, Timber::e)
           .addTo(disposable)
 
       screenLoadObs
@@ -54,7 +54,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
               repository.getIpSalesHierarchy(getWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderData, Timber::e)
+          .subscribe(view::renderReportData, Timber::e)
           .addTo(disposable)
 
       val reportClickObs = view.onReportClickEvent().share()
@@ -64,6 +64,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
           .subscribe {
               val args = Bundle()
               args.putString(MOSLConstants.SYSTEM_NAME, it.widgetName)
+              args.putString(MOSLConstants.EMPLOYEE_CODE, it.employeeCode)
               navigator.openPage(
                   NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args, true,
                   false
@@ -75,6 +76,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
           .subscribe {
               val args = Bundle()
               args.putString(MOSLConstants.SYSTEM_NAME, it.widgetName)
+              args.putString(MOSLConstants.EMPLOYEE_CODE, it.employeeCode)
               navigator.openPage(
                   NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args, true,
                   false
@@ -86,6 +88,7 @@ class FocoHierarchyReportPresenter @Inject constructor(
           .subscribe {
               val args = Bundle()
               args.putString(MOSLConstants.SYSTEM_NAME, it.widgetName)
+              args.putString(MOSLConstants.EMPLOYEE_CODE, it.employeeCode)
               navigator.openPage(
                   NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args, true,
                   false
@@ -95,8 +98,8 @@ class FocoHierarchyReportPresenter @Inject constructor(
   }
 
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", category = "Existing", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "MTD", category = "Existing", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
 }

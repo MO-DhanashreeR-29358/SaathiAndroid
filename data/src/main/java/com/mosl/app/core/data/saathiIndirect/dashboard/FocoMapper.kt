@@ -195,5 +195,5 @@ private fun getTarget(target1 : String?, target2 : String?): String{
             return target2
         }
     }
-    return ""
+    return "0"
 }
