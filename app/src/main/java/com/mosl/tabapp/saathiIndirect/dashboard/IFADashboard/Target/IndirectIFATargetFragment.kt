@@ -1,24 +1,23 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mosl.app.core.events.DataAction
-import com.mosl.app.coreui.spinner.setSpinnerData
-import com.mosl.commons.data.UiModel
-import com.mosl.commons.data.onFailure
-import com.mosl.commons.data.onSuccess
-import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.teamtarget.TeamWidgetUiEvent
 import com.mosl.tabapp.databinding.FragIndirectIfaTargetBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardUIEvent
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import com.mosl.commons.rx.ofType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,10 +27,12 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
 
     @Inject
     lateinit var presenter: IndirectIFATragetPresenter
-    private lateinit var filterAdapter:ArrayAdapter<LookUp>
     private var itemList = mutableListOf<HorinzatalIFATargetWidgetItem>()
     private val widgetUiEvent =
         PublishSubject.create<TeamWidgetUiEvent>()
+
+    private val subject = IndirectIFADashboardUIEvent.getFundUiEvent()
+    var strFilterVal:String=""
     override fun getLayout() = R.layout.frag_indirect_ifa_target
 
     override fun onViewCreated(
@@ -48,8 +49,6 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
 
     private fun setupViews() {
 
-        filterAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-        binding.spFilterBank.adapter = filterAdapter
         val groupAdapter = GroupAdapter<GroupieViewHolder>()
         binding.horizontalRecyclerView.apply {
             layoutManager =
@@ -85,16 +84,14 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
     groupAdapter.addAll(itemList)
     }
 
-    override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
-        uiModel.onSuccess {
-            filterAdapter.setSpinnerData(binding.spFilterBank, it)
-            binding.spFilterBank.setSelection(0)
-        }
-        uiModel.onFailure {
-            Timber.d(it)
-            showOnFailurePopup(it)
-
-        }
+    override fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged> {
+                return  subject.ofType()
     }
+
+    override fun fnRenderFilterEventCalled(strFilterVal: String) {
+      this.strFilterVal=strFilterVal
+        Log.d("my target",this.strFilterVal)
+    }
+
 
 }

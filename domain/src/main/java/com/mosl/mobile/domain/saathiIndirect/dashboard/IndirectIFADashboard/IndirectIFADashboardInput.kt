@@ -9,7 +9,7 @@ data class IndirectIFADashboardInput(
 
     val page: Int? = null,
 
-    val frequency: Any? = null,
+    val frequency: String? = null,
 
     val totalCount: Int? = null,
 

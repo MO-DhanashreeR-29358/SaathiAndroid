@@ -9,6 +9,8 @@ import com.mosl.mobile.domain.dashboardreport.DashboardReportData
 import com.mosl.mobile.domain.productivity.ColHeader
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
+import com.mosl.mobile.domain.snapshot.BusinessSnapshotCombo
+import com.mosl.mobile.domain.snapshot.BusinessSnapshotData
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
@@ -68,10 +70,18 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fnGetIFASalesDashboBuisnessSnapshot(): Observable<String> {
-        return saathiIndrectApi.getIFASalesDashboBuisnessSnapshot(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            Gson().toJson(it.response)
+    override fun fnGetIFASalesDashboBuisnessSnapshot(strFilterValue:String):  Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFASalesDashboBuisnessSnapshot(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency =strFilterValue ))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
         }
+    }
+
+    override fun fnGetIFaSalesDashMyLead(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFaSalesDashMyLead(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
     }
 
     override fun fnGetIFASalesDashMyBuisnessSnapIP(): Observable<String> {
@@ -104,10 +114,55 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun renderBuisnessSnapshotTable(response: String?): BusinessSnapshotCombo{
+        if(response != null) {
+            val jsonObject = JSONObject(response)
+            val jsonArray =
+                if (jsonObject.has("Response") && jsonObject.getJSONObject("Response")
+                        .has("Data")
+                ) {
+                    jsonObject.getJSONObject("Response").getJSONArray("Data")
+                } else null
+            if (jsonArray != null && jsonArray.length() > 0) {
+                val colHeaders: MutableList<com.mosl.mobile.domain.snapshot.ColHeader> =
+                    mutableListOf()
+                val first = jsonArray.getJSONObject(0)
+                val iterator = first.keys()
+                while (iterator.hasNext()) {
+                    val header = iterator.next()
+                        .toString()
+                    colHeaders.add(com.mosl.mobile.domain.snapshot.ColHeader(header))
+                }
+
+                val headers = colHeaders.map {
+                    it.copy(index = response.indexOf(it.label))
+                }
+                    .sortedBy { it.index }
+                    .map { it.label }
+
+                val data: ArrayList<BusinessSnapshotData> = ArrayList()
+                for (i in 0 until jsonArray.length()) {
+                    val json = jsonArray.getJSONObject(i)
+                    val values: ArrayList<String> = ArrayList()
+
+                    headers.forEach { header ->
+                        values.add(json.get(header).toString())
+                    }
+                    data.add(BusinessSnapshotData(setData(values), headers))
+                }
+               return BusinessSnapshotCombo(headers, data = data)
+            } else {
+              return  BusinessSnapshotCombo(emptyList(), data = emptyList())
+            }
+        }
+        else{
+         return   BusinessSnapshotCombo(emptyList(), data = emptyList())
+        }
+    }
 
     private fun renderTable(response: String?): DashboardReportCombo {
         if(response != null) {
-            Log.d("dashboardReportRes", response)
+
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {
                 jsonObject.getJSONObject("Response")

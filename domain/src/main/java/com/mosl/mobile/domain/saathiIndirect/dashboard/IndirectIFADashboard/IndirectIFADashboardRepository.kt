@@ -2,6 +2,7 @@ package com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard
 
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
+import com.mosl.mobile.domain.snapshot.BusinessSnapshotCombo
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectIFADashboardRepository {
@@ -20,7 +21,9 @@ interface IndirectIFADashboardRepository {
 
     fun fnGetIFASalesDashNewLead(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
-    fun fnGetIFASalesDashboBuisnessSnapshot():Observable<String>
+    fun fnGetIFASalesDashboBuisnessSnapshot(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun  fnGetIFaSalesDashMyLead(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
     fun fnGetIFASalesDashMyBuisnessSnapIP():Observable<String>
 

@@ -380,6 +380,9 @@ interface SaathiIndirectApi {
     @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotBrokingWidgetData")
     fun getIFASalesDashboBuisnessSnapshot(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
+    @POST("Dashboard/GetIFASalesDashMyLeadWidgetData")
+    fun getIFaSalesDashMyLead(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
     @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotIPWidgetData")
     fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
 

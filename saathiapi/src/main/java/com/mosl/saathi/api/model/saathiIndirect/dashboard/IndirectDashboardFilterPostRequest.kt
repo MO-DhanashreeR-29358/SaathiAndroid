@@ -16,7 +16,7 @@ val calculatedPage: Int? = null,
 val page: Int? = null,
 
 @JvmField @SerializedName("frequency")
-val frequency: Any? = null,
+val frequency: String? = null,
 
 @JvmField @SerializedName("TotalCount")
 val totalCount: Int? = null,

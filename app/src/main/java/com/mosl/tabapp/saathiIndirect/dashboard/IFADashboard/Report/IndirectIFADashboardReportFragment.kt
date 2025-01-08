@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -23,6 +26,11 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.kotlin.ofType
 import com.mosl.app.core.error.ErrorModel
+import com.mosl.app.coreui.spinner.setSpinnerData
+import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardUIEvent
+import com.mosl.tabapp.util.SpinnerAdapterFactory
+import timber.log.Timber
 import javax.inject.Inject
 
 class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardReportView {
@@ -32,9 +40,12 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
     private lateinit var model: WidgetModel
     private lateinit var dynamicHeaderRow: DynamicHeaderRow
     private lateinit var tableRowAdapter: TableRowAdapter<IndirectIFADashboardReportTableRow>
-    private val navigateEvent = PublishSubject.create<IndirectIFADashboardReportUIEvent.OnReportClick>()
+    private val navigateEvent = IndirectIFADashboardReportUIEvent.getFundUiEvent()
 
     private var strSystemName : String = ""
+    private lateinit var filterAdapter: ArrayAdapter<LookUp>
+    var strFilterVal:String=""
+    var strDateFilterVal:String="2024-10-15"
 
     override fun getLayout(): Int {
         return R.layout.frag_dashboard_report
@@ -47,9 +58,9 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
         super.onViewCreated(view, savedInstanceState)
         binding = FragDashboardReportBinding.bind(view)
         setUpFromArguments()
-        setUpView()
         presenter.start()
-        dataActionSubject.onNext(DataAction.Fetch)
+        setUpView()
+
     }
     private fun setUpFromArguments() {
         try {
@@ -77,6 +88,47 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
             }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
+        if(getWidgetName()==MOSLConstants.INDIRECT_TODAY_BIRTHDAY)
+        {
+
+            binding.linearLayout.visibility=View.GONE
+            binding.spPeriod.visibility=View.GONE
+            navigateEvent.onNext(IndirectIFADashboardReportUIEvent.onFilterChanged(""))
+
+        }
+        else if(getWidgetName()==MOSLConstants.INDIRECT_TEAM_APPOINTMENT ||getWidgetName()==MOSLConstants.INDIRECT_NEW_LEAD)
+        {
+            binding.linearLayout.visibility=View.GONE
+            binding.spPeriod.visibility=View.GONE
+            navigateEvent.onNext(IndirectIFADashboardReportUIEvent.onDateFilterChanged(strDateFilterVal))
+        }
+        else
+        {
+
+            dataActionSubject.onNext(DataAction.Fetch)
+            filterAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+            binding.spPeriod.adapter = filterAdapter
+            binding.linearLayout.visibility=View.VISIBLE
+            binding.spPeriod.visibility=View.VISIBLE
+            binding.spPeriod.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    navigateEvent.onNext(IndirectIFADashboardReportUIEvent.onFilterChanged(binding.spPeriod.selectedItem.toString()))
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+            });
+        }
+
+
 
     }
     override fun renderData(uiModel: UiModel<DashboardReportCombo>) {
@@ -106,5 +158,51 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
 
     override fun getWidgetName(): String {
         return strSystemName
+    }
+
+    override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
+        uiModel.onSuccess {
+            filterAdapter.setSpinnerData(binding.spPeriod, it)
+            // binding.spFilterBank.setSelection(0)
+        }
+        uiModel.onFailure {
+            Timber.d(it)
+            showOnFailurePopup(it)
+
+        }
+    }
+
+    override fun onFilterEventCalled(): Observable<IndirectIFADashboardReportUIEvent.onFilterChanged> {
+        return  navigateEvent.ofType()
+    }
+
+    override fun fnRenderFilterEventCalled(strFilterVal: String) {
+        this.strFilterVal=strFilterVal
+        navigateEvent.onNext(IndirectIFADashboardReportUIEvent.OnCallDataEvent)
+    }
+
+    override fun fngetFilterValue(): String {
+        return this.strFilterVal
+    }
+
+    override fun onCallDataEvent(): Observable<IndirectIFADashboardReportUIEvent.OnCallDataEvent> {
+        return navigateEvent.ofType()
+    }
+
+    override fun onDateFilterEventCalled(): Observable<IndirectIFADashboardReportUIEvent.onDateFilterChanged> {
+        return navigateEvent.ofType()
+    }
+
+    override fun fnRenderDateFilterEventCalled(strDateFilterVal: String) {
+        this.strDateFilterVal=strDateFilterVal
+        navigateEvent.onNext(IndirectIFADashboardReportUIEvent.OnCallDateDataEvent)
+    }
+
+    override fun fngetDateFilterValue(): String {
+        return this.strDateFilterVal
+    }
+
+    override fun onCallDateDataEvent(): Observable<IndirectIFADashboardReportUIEvent.OnCallDateDataEvent> {
+        return navigateEvent.ofType()
     }
 }

@@ -18,11 +18,10 @@ class IndirectIFATragetPresenter @Inject constructor(
 ):BasePresenter<IndirectIFATargetView>(view) {
     override fun start() {
 
-        onFetchCalled().switchMap {
-            indirectRepo.fnGetIFADashboardFilter().compose(applyUiModel())
-        }.subscribe {
-            view.fnRenderFilterList(it)
-        }.addTo(disposable)
+        view.onFilterEventCalled().subscribe {
+            view.fnRenderFilterEventCalled(it.strFilterText)
+        }
+
 
     }
 }
