@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mosl.mobile.domain.saathiIndirect.dashboard.SalesRM
 import com.mosl.tabapp.R
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
@@ -47,8 +48,14 @@ class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
 
         @SuppressLint("SetTextI18n")
         fun bind(salesRM: SalesRM) {
-            salesRMName.text = salesRM.SalesRM
-            revenue.text = ("Revenue : " + salesRM.Revenue)
+            if(sysName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
+                salesRMName.text = salesRM.TMName
+                revenue.text = ("Meetings : " + salesRM.Meeting)
+            }else{
+                salesRMName.text = salesRM.SalesRM
+                revenue.text = ("Revenue : " + salesRM.Revenue)
+            }
+
 
             toggleButton.setImageResource(
                 if (salesRM.isExpanded) R.drawable.ic_collapse else R.drawable.ic_expand
@@ -73,7 +80,13 @@ class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
             }
 
             mainContainer.setOnClickListener {
-                val employeeCode = salesRM.SalesRM.substringAfter("-")
+                var employeeCode : String
+                if(sysName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
+                    employeeCode = salesRM.TMName?.substringAfter("-").toString()
+                }else{
+                    employeeCode = salesRM.SalesRM.substringAfter("-")
+                }
+                
                 publishSubject.onNext(FocoHierarchyReportUIEvent.OnReportClick(sysName, employeeCode))
             }
         }

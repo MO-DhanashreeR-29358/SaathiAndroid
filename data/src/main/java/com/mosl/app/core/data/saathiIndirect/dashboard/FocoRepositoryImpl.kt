@@ -140,7 +140,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getRevenueHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it), "Revenue")
             }
     }
 
@@ -156,7 +156,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getClientMeetingHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it), "NoOfClientsMeeting")
             }
     }
 
@@ -188,7 +188,7 @@ class FocoRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return api.getIpSalesHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it))
+                renderHierarchyTable(Gson().toJson(it),"IpSales")
             }
     }
 
@@ -293,47 +293,57 @@ class FocoRepositoryImpl @Inject constructor(
         return list
     }
 
-    private fun renderHierarchyTable(response: String?) : List<SalesRM> {
+    private fun renderHierarchyTable(response: String?, sysName :String) : List<SalesRM> {
 
-        val salesRMs: List<SalesRM> = parseSalesRM(response)
-
-        // Build the hierarchy starting from the top (SalesRMs that report to 'null')
-        val topLevelSalesRMs = buildHierarchy(salesRMs, null)
-        println("Sales Hierarchy:")
-        printHierarchy(topLevelSalesRMs)
-        return topLevelSalesRMs
-    }
-
-    fun parseSalesRM(response: String?): List<SalesRM> {
         val gson = Gson()
 
         // First, parse the Response object that contains Data as a list of SalesRM
         val responseObject = gson.fromJson(response, ApiResponse::class.java)
 
         // Now, extract the Data list from the response object
-        return responseObject.Response.Data
+        val list = responseObject.Response.Data
+        for(item in list){
+            if(item.TMName?.contains("-Self") == true){
+                item.TMName = item.TMName!!.replace("-Self","")
+            }
+        }
+        // Build the hierarchy starting from the top (SalesRMs that report to 'null')
+        val topLevelSalesRMs = buildHierarchy(list, null, sysName)
+        return topLevelSalesRMs
     }
-    fun buildHierarchy(salesRMs: List<SalesRM>, reportingTo: String?): List<SalesRM> {
+
+    fun buildHierarchy(salesRMs: List<SalesRM>, reportingTo: String?, sysName: String): List<SalesRM> {
         val hierarchy = mutableListOf<SalesRM>()
 
         // Find all sales representatives who report to the current `ReportingTo` value
-        for (salesRM in salesRMs) {
-            if (salesRM.ReportingTo == reportingTo) {
-                // Recursively build subordinates for this sales representative
-                val subordinates = buildHierarchy(salesRMs, salesRM.SalesRM)
-                salesRM.subordinates = subordinates  // Assign subordinates
-                hierarchy.add(salesRM)  // Add to the hierarchy
+        if(sysName == "NoOfClientsMeeting"){
+            for (salesRM in salesRMs) {
+                if (salesRM.ReportingTo == reportingTo ) {
+                    // Recursively build subordinates for this sales representative
+                    val subordinates = buildHierarchy(salesRMs, salesRM.TMName, sysName)
+                    salesRM.subordinates = subordinates  // Assign subordinates
+                    hierarchy.add(salesRM)  // Add to the hierarchy
+                }
+            }
+        }else {
+            for (salesRM in salesRMs) {
+                if (salesRM.ReportingTo == reportingTo) {
+                    // Recursively build subordinates for this sales representative
+                    val subordinates = buildHierarchy(salesRMs, salesRM.SalesRM, sysName)
+                    salesRM.subordinates = subordinates  // Assign subordinates
+                    hierarchy.add(salesRM)  // Add to the hierarchy
+                }
             }
         }
         return hierarchy
     }
 
-    fun printHierarchy(salesRMs: List<SalesRM>, indent: String = "") {
+    /*fun printHierarchy(salesRMs: List<SalesRM>, indent: String = "") {
         for (salesRM in salesRMs) {
             println("$indent${salesRM.SalesRM}")
             if (salesRM.subordinates.isNotEmpty()) {
                 printHierarchy(salesRM.subordinates, "$indent  ")  // Add indentation for subordinates
             }
         }
-    }
+    }*/
 }

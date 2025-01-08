@@ -70,17 +70,19 @@ class FocoHierarchyReportFragment : CommonFragment(),
 
   @SuppressLint("SetTextI18n")
   private fun setUpView() {
+    binding.progressBar.visibility = View.VISIBLE
     binding.txtLables.text = "$strSystemName Hierarchy"
   }
 
   override fun renderReportData(uiModel: UiModel<List<SalesRM>>) {
-    binding.tableWrapper.toggleProgress(uiModel.inProgress)
+    binding.progressBar.visibility = View.GONE
 
     uiModel.onFailure { error ->
-
+      binding.progressBar.visibility = View.GONE
     }
 
     uiModel.onSuccess { data ->
+      binding.recyclerView.visibility = View.VISIBLE
       val adapter = HierarchyListAdapter(data, strSystemName, navigateEvent)
       binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
       binding.recyclerView.adapter = adapter

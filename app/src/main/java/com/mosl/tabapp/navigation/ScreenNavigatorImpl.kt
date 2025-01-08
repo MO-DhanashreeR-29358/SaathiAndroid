@@ -92,7 +92,7 @@ class ScreenNavigatorImpl @Inject constructor(
   @SuppressLint("WrongConstant")
   override fun openHome() {
     if(userManager.getUser()?.isIndirectUser() == true){
-      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
+      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
     }else{
       openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
     }
