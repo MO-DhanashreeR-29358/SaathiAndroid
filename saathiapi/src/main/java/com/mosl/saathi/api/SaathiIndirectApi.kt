@@ -81,9 +81,13 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
-import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFADashboardFilterResponse
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFAWidgetCommonResponse
 import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
+
 
 
 interface SaathiIndirectApi {
@@ -247,8 +251,6 @@ interface SaathiIndirectApi {
     fun getFocoPeriodFilter(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<FocoPeriodResponseObjectMain>
-
-
     @POST("Dashboard/GetFocoDashTalkTimeDetail")
     fun getTalkTimeData(
         @Body request: FOCODashboardFilterpostReq
@@ -349,4 +351,51 @@ interface SaathiIndirectApi {
     fun getTotalMobAppDetail(
         @Body request: FOCODashboardFilterpostReq
     ): Observable<IndirectExtraDataCommonResponse>
+
+
+    /*************IFADashboard Start Here************/
+
+    @POST("Dashboard/GetIFASalesDashFilterWidgetData")
+    fun getIFADashboard(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFADashboardFilterResponse>>
+
+    @POST("Dashboard/GetIFASalesDashTodaysBirtdayAndAnnivarsaryWidgetData")
+    fun getIFABirthdayAnniversary(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashFirstMeetingNotDoneWidgetData")
+    fun getIFASaleshFirstMeetingNotDone(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashLeadsNotUpdatedWidgetData")
+    fun getIFALeadNotUpdate(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+
+    @POST("Dashboard/GetIFASalesDashInactiveIFAsWidgetData")
+    fun getIFASalesDashInactive(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashTeamAppointmentWidgetData")
+    fun getIFASalesDashTeamAppointment(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashNewLeadWidgetData")
+    fun getIFASalesDashNewLead(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotBrokingWidgetData")
+    fun getIFASalesDashboBuisnessSnapshot(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashMyLeadWidgetData")
+    fun getIFaSalesDashMyLead(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotIPWidgetData")
+    fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashRevenueIPWidgetData")
+    fun getIFADashREvenueIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashRevenueBrokingWidgetData")
+    fun getIFADashRevenueBroking(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashMeetingWidgetData")
+    fun getIFADashMeeting(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+
+    @POST("Dashboard/GetIFADashIFAActivationWidgetData")
+    fun getIFADashIFAACtivation(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    /*************IFADashboard End Here************/
 }
