@@ -14,7 +14,5 @@ data class User(
   @SerializedName("Profile") @JvmField val myZoneProfile: String?,
   @SerializedName("UserTypeSeq") @JvmField val userTypeSequence: String?,
   @SerializedName("DefaultBusinessProfile") @JvmField val defaultBusinessProfile: BusinessProfile,
-  @SerializedName(
-      "CurrentBusinessProfile"
-  ) @JvmField val currentBusinessProfile: CurrentBusinessProfile
+  @SerializedName("CurrentBusinessProfile") @JvmField val currentBusinessProfile: CurrentBusinessProfile
 )

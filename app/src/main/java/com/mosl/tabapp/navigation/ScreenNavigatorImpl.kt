@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.mosl.annotations.ActivityScoped
@@ -92,7 +93,19 @@ class ScreenNavigatorImpl @Inject constructor(
   @SuppressLint("WrongConstant")
   override fun openHome() {
     if(userManager.getUser()?.isIndirectUser() == true){
-      openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
+      if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("FOCO",true))
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
+      }
+      else if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("IFA",true))
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
+      }
+      else
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
+      }
+
     }else{
       openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
     }

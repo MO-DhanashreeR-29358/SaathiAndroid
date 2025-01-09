@@ -96,6 +96,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAM
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
@@ -308,5 +310,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectIFAMyLeadModule::class])
     fun provideIndirectIFAMyLeadFragmentFactory():IndirectIFAMyLeadFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFABuisnessSnapshotIpModule::class])
+    fun provideIndirectIFABuisnessSnapshotIpFragmentFactory():IndirectIFABuisnessSnapshotIpFragment
 
 }

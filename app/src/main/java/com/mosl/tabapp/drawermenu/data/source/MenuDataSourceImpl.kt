@@ -26,7 +26,7 @@ open class MenuDataSourceImpl @Inject constructor(
             user = userManager.user
             when {
                 user.isIndirectUser()  -> {
-                    getIndirectUserMenu()
+                        getIndirectUserMenu(user.currentBusinessProfile?.businessUnitName?:"")
                 }
                 user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
@@ -260,9 +260,10 @@ open class MenuDataSourceImpl @Inject constructor(
         return this
     }
 
-    private fun getIndirectUserMenu( ): List<BaseMenu> {
+
+    private fun getIndirectUserMenu(strBuisnessUnitName :String ): List<BaseMenu> {
         return arrayListOf(
-            getIndirectDashboard(),
+            getIndirectDashboard(strBuisnessUnitName),
             getIndirectProspectMeeting(),
             getLogout()
         ).apply { checkForPrime(false,false, false) }
@@ -352,12 +353,22 @@ open class MenuDataSourceImpl @Inject constructor(
             pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
         )
     }
-    private fun getIndirectDashboard(): BaseMenu {
+    @SuppressLint("WrongConstant")
+    private fun getIndirectDashboard(strBuisnessUnitName:String): BaseMenu {
+        var strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+        if(strBuisnessUnitName.equals("FOCO",true))
+        {
+            strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD
+        }
+        else if(strBuisnessUnitName.equals("IFA",true))
+        {
+            strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
+        }
         return BaseMenu(
             icon = R.drawable.ic_menu_dashboard,
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
             enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+            pageId = strPageId
         )
     }
 

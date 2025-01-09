@@ -108,7 +108,8 @@ fun CurrentBusinessProfile.transformCurrentBusinessProfile(): CurrentBusinessPro
         businessProfileId = businessProfileId ?: "0",
         name = name ?: "",
         businessUnitId = businessUnitId ?: "0",
-        businessProfileName = businessProfileName
+        businessProfileName = businessProfileName,
+        businessUnitName =businessUnitName
     )
 }
 
