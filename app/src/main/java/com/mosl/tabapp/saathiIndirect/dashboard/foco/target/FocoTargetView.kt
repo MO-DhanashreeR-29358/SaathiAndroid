@@ -6,6 +6,7 @@ import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.mobile.domain.bank.BranchCodeModel
 import com.mosl.mobile.domain.bank.SubBranchCodeModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.mobile.domain.target.TargetItemModel
 import com.mosl.tabapp.common.FilterRowData
 import com.mosl.tabapp.dashboard.target.WidgetUiEvent
@@ -13,6 +14,10 @@ import com.mosl.tabapp.model.dashboard.WidgetModel
 import io.reactivex.rxjava3.core.Observable
 
 interface FocoTargetView : BaseView {
+
+    fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>)
+    fun onPeriodChange(): Observable<Int>
+    fun getPeriod(): FocoPeriodModel?
     fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun renderData(uiModel: UiModel<FocoDashboardModel>)

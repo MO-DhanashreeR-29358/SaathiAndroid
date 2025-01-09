@@ -3,6 +3,7 @@ package com.mosl.tabapp.saathiIndirect.dashboard.foco.report
 import android.annotation.SuppressLint
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.constants.MOSLConstants
@@ -30,8 +31,29 @@ class FocoDashboardReportPresenter @Inject constructor(
 ) : BasePresenter<FocoDashboardReportView>(view) {
   @SuppressLint("WrongConstant")
   override fun start() {
-      val screenLoadObs = Observable.merge(onFetchCalled(), onRetryCalled())
+      onFetchCalled().switchMap{
+          repository.getPeriodFilter(getWidgetRequest()).compose(applyUiModel())
+      }.subscribe {
+          view.renderPeriodFilter(it)
+      }.addTo(disposable)
+
+      val periodChangedObs = view.onPeriodChange()
+          .filter(InvalidSelectionPredicate)
           .share()
+
+      val clientReactChangedObs = view.onClientReactivationFilterChange()
+          .filter(InvalidSelectionPredicate)
+          .share()
+
+      val userTypeChangedObs = view.onUserTypeChange()
+          .filter(InvalidSelectionPredicate)
+          .share()
+
+      val screenLoadObs = Observable.merge(
+          periodChangedObs,
+          clientReactChangedObs,
+          userTypeChangedObs
+      )
 
       screenLoadObs
           .filter { view.getWidgetName()  == MOSLConstants.INDIRECT_TALK_TIME }
@@ -135,12 +157,12 @@ class FocoDashboardReportPresenter @Inject constructor(
   }
 
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = "MTD", category = "Existing", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = view.getPeriod()?.displayText, category = view.getClientReactivationFilter(), fltUserStatus = view.getUserType(), filter = "", calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
     fun getWidgetRequestForRunrate() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = "", category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+        return  FocoDashboardInput(employeeCode = view.getEmployeeCode(), frequency = "", category = "", fltUserStatus = view.getUserType(), filter = "", calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 }

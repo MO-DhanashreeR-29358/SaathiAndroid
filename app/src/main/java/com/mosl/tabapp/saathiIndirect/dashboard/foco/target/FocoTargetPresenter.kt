@@ -36,6 +36,12 @@ class FocoTargetPresenter @Inject constructor(
     override fun start() {
 
         onFetchCalled().switchMap{
+            indirectRepo.getPeriodFilter(getWidgetRequest()).compose(applyUiModel())
+        }.subscribe {
+            view.renderPeriodFilter(it)
+        }.addTo(disposable)
+
+        view.onPeriodChange().switchMap{
             indirectRepo.getFocoDashRevenueWidgetData(getWidgetRequest()).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
@@ -103,8 +109,8 @@ class FocoTargetPresenter @Inject constructor(
             .addTo(disposable)
     }
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", category = "Existing", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = view.getPeriod()?.displayText, category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
     companion object {
         const val REVENUE = "Revenue"

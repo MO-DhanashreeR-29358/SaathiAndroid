@@ -320,5 +320,6 @@ public interface MOSLConstants extends LabelConfig {
     String INDIRECT_TEAM_APPOINTMENT="Team Appointment";
 
     String INDIRECT_NEW_LEAD="New Lead";
+    String PERIOD_FILTER= "PeriodFilter";
 }
 

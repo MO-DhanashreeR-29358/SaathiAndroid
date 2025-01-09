@@ -17,11 +17,7 @@ class FocoDashboardPresenter @Inject constructor(
     val indirectRepo: FocoRepository
 ) : BasePresenter<FocoDashboardView>(view) {
     override fun start() {
-            onFetchCalled().switchMap{
-                indirectRepo.getPeriodFilter(getWidgetRequest()).compose(applyUiModel())
-            }.subscribe {
-               view.renderPeriodFilter(it)
-            }.addTo(disposable)
+
 
         view.onLeadCreationClicked()
             .subscribe {

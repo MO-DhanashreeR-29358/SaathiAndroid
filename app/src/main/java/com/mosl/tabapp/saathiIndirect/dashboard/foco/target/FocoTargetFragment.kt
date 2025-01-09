@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,12 +25,15 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
 import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
@@ -45,6 +49,7 @@ import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE_GROWTH_DEGROWTH
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.TOTAL_MOB_APP
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
@@ -65,12 +70,6 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
   private val widgetUiEvent =
     PublishSubject.create<FocoTargetUiEvent>()
 
-  private val pieChartEvent =
-    PublishSubject.create<FocoTargetUiEvent>()
-
-  private val summaryCountUiEvent =
-    PublishSubject.create<FocoTargetUiEvent>()
-
   private var previousPosition: Int = 0
   private var itemList = mutableListOf<FocoHorinzatalTargetWidgetItem>()
   private var lableItemList = mutableListOf<FocoTargetLableItem>()
@@ -79,7 +78,8 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   private val summaryCountGroupAdapter = GroupAdapter<GroupieViewHolder>()
   private val labelGroupAdapter = GroupAdapter<GroupieViewHolder>()
-
+  lateinit var periodAdapter: ArrayAdapter<FocoPeriodModel>
+  private var selectedPeriod = ""
   override fun getLayout(): Int {
     return R.layout.fragment_foco_target
   }
@@ -104,8 +104,12 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+
   @SuppressLint("WrongConstant")
   private fun setUpView() {
+    periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spPeriod.adapter = periodAdapter
+
     val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.horizontalRecyclerView.apply {
       layoutManager =
@@ -165,6 +169,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
       val args = Bundle()
       if(widgetModel?.name == REVENUE || widgetModel?.name == IP_SALES || widgetModel?.name == NO_OF_CLIENT_MEETINGS){
         args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        args.putString(MOSLConstants.PERIOD_FILTER, (binding.spPeriod.selectedItem as FocoPeriodModel?)?.displayText)
         navigator.openPage(
           NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT.toString(), args,
           addToStack = true,
@@ -172,6 +177,8 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
         )
       }else{
         args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        args.putString(MOSLConstants.PERIOD_FILTER, (binding.spPeriod.selectedItem as FocoPeriodModel?)?.displayText)
+
         navigator.openPage(
           NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args,
           addToStack = true,
@@ -206,6 +213,23 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+  override fun getPeriod(): FocoPeriodModel? {
+    return binding.spPeriod.selectedItem as? FocoPeriodModel
+  }
+
+  override fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure { error ->
+      Timber.d("renderPeriodFilter ${error.message}")
+    }
+    uiModel.onSuccess {
+      periodAdapter.setSpinnerData(binding.spPeriod, it)
+    }
+  }
+
+  override fun onPeriodChange(): Observable<Int> {
+    return binding.spPeriod.itemSelections()
+  }
 
   override fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick> {
     return widgetUiEvent.ofType()

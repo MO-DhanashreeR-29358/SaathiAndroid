@@ -24,6 +24,7 @@ import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
+import java.io.Serializable
 import javax.inject.Inject
 
 class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboardView{
@@ -32,7 +33,7 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
 
     @Inject
     lateinit var presenter: FocoDashboardPresenter
-    lateinit var periodAdapter: ArrayAdapter<FocoPeriodModel>
+
     override fun getLayout() = R.layout.frag_indirect_foco_dashboard
     override fun onViewCreated(
         view: View,
@@ -47,8 +48,7 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
     }
 
     private fun setupViews() {
-        periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
-        binding.spPeriod.adapter = periodAdapter
+
         if (binding.llTargetAchievementADV.visibility != View.VISIBLE) {
             toggleSection(binding.llTargetAchievementADV, binding.ivTargetAchievementADV)
         }
@@ -63,19 +63,6 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
 
 
 
-    override fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>) {
-
-        toggleProgress(uiModel.inProgress)
-
-        uiModel.onFailure { error ->
-            Timber.d("renderPeriodFilter ${error.message}")
-        }
-
-
-        uiModel.onSuccess {
-            periodAdapter.setSpinnerData(binding.spPeriod, it)
-        }
-    }
 
 
     override fun onActionableInsightsClicked(): Observable<Unit> {
@@ -95,8 +82,6 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
     val args = Bundle()
     private fun loadTargetAchievementFragment() {
         val targetFragment = FocoTargetFragment()
-        args.putSerializable(DashboardFragment.DASHBOARD_MODEL, "currentDashboard")
-        targetFragment.arguments = args
         requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.llTargetAchievementADV, targetFragment)
@@ -138,4 +123,5 @@ class FocoDashboardFragment : CommonFragment(), View.OnClickListener,FocoDashboa
             icon.setImageResource(R.drawable.minus)
         }
     }
+
 }
