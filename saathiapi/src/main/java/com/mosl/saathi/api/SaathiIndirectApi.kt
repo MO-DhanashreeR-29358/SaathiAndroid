@@ -384,7 +384,7 @@ interface SaathiIndirectApi {
     fun getIFaSalesDashMyLead(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     @POST("Dashboard/GetIFASalesDashMyBusinessSnapshotIPWidgetData")
-    fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     @POST("Dashboard/GetIFADashRevenueIPWidgetData")
     fun getIFADashREvenueIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>

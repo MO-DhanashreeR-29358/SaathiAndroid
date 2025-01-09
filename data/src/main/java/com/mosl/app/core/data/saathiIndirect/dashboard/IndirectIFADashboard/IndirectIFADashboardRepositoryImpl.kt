@@ -86,7 +86,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
 
     override fun fnGetIFASalesDashMyBuisnessSnapIP(): Observable<String> {
         return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            it.string()
+            Gson().toJson(it)
         }
     }
 

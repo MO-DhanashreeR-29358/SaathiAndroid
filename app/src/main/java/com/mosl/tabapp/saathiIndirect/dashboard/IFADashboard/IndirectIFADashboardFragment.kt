@@ -22,6 +22,7 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Actionable.IFAActio
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpFragment
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
@@ -113,7 +114,11 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
     }
 
     private fun fnLoadMyBuisSnapshotip(){
-
+        val fragment = IndirectIFABuisnessSnapshotIpFragment()
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.llBusinessSnapshotHeadip, fragment)
+            .commit()
     }
     private fun fnLoadMyBuisSnapshotBroking(){
         val fragment = IndirectIFABuisnessSnapshotFragment()
