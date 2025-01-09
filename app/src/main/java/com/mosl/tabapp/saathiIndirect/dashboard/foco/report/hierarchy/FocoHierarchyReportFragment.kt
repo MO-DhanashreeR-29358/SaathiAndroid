@@ -23,8 +23,10 @@ import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.report.HierarchyReportTableMapper
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportTableMapper
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportTableRow
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
+import com.mosl.tabapp.util.visible
 import com.mosl.tableview.rowadapter.TableRowAdapter
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.kotlin.ofType
@@ -70,20 +72,22 @@ class FocoHierarchyReportFragment : CommonFragment(),
 
   @SuppressLint("SetTextI18n")
   private fun setUpView() {
-    binding.progressBar.visibility = View.VISIBLE
     binding.txtLables.text = "$strSystemName Hierarchy"
+    if(strSystemName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
+      binding.revenue.text = "Meeting"
+    }
   }
 
   override fun renderReportData(uiModel: UiModel<List<SalesRM>>) {
-    binding.progressBar.visibility = View.GONE
 
     uiModel.onFailure { error ->
-      binding.progressBar.visibility = View.GONE
+      binding.circularProgressBar.visibility = View.GONE
     }
 
     uiModel.onSuccess { data ->
+      binding.circularProgressBar.visibility = View.GONE
       binding.recyclerView.visibility = View.VISIBLE
-      val adapter = HierarchyListAdapter(data, strSystemName, navigateEvent)
+      val adapter = HierarchyListAdapter(data, strSystemName, false, navigateEvent)
       binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
       binding.recyclerView.adapter = adapter
     }

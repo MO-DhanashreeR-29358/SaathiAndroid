@@ -3,7 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:background="@color/background"
+  android:background="@color/white"
   android:orientation="vertical">
 
   <RelativeLayout
@@ -83,14 +83,82 @@
 
   </LinearLayout>
 
+  <LinearLayout
+      android:id="@+id/mainContainer"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:layout_gravity="center"
+      android:background="@color/orange"
+      android:layout_below="@+id/labelContainer">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"></View>
 
-  <com.google.android.material.progressindicator.CircularProgressIndicator
-      android:id="@+id/progress_bar"
-      android:layout_width="100dp"
-      android:layout_height="100dp"
-      android:layout_gravity="center_horizontal"
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+      <!-- Toggle button for expand/collapse -->
+      <View
+          android:layout_width="1dp"
+          android:layout_height="match_parent"
+          android:background="@color/gray_light"
+          android:layout_toStartOf="@+id/revenue"></View>
+
+
+      <TextView
+          android:id="@+id/salesRMName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Employee Name"
+          android:textSize="16sp"
+          android:textColor="@color/black"
+          android:layout_centerVertical="true"
+          android:gravity="center"
+          android:layout_toStartOf="@+id/revenueDivider"/>
+      <View
+          android:id="@+id/revenueDivider"
+          android:layout_width="1dp"
+          android:layout_height="match_parent"
+          android:background="@color/gray_light"
+          android:layout_toStartOf="@+id/revenue"></View>
+      <TextView
+          android:id="@+id/revenue"
+          android:layout_width="100dp"
+          android:layout_height="wrap_content"
+          android:textColor="@color/black"
+          android:text="Revenue"
+          android:gravity="right"
+          android:layout_centerVertical="true"
+          android:layout_marginEnd="5dp"
+          android:layout_toStartOf="@+id/lastDivider"/>
+      <View
+          android:id="@+id/lastDivider"
+          android:layout_width="1dp"
+          android:layout_height="match_parent"
+          android:background="@color/gray_light"
+          android:layout_alignParentEnd="true"
+          ></View>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray_light"></View>
+
+  </LinearLayout>
+  <ProgressBar
+      android:id="@+id/circularProgressBar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:indeterminate="true"
+      android:progressDrawable="@drawable/circular_progressbar"
       android:visibility="visible"
-      android:layout_below="@+id/labelContainer"
       />
 
 
@@ -99,6 +167,6 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:visibility="gone"
-      android:layout_below="@+id/labelContainer"/>
+      android:layout_below="@+id/mainContainer"/>
 
 </RelativeLayout>
