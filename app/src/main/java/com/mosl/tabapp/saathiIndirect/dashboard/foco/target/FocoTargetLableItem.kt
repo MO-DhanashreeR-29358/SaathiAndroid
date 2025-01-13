@@ -22,16 +22,16 @@ class FocoTargetLableItem(
 
     override fun bind(viewBinding: TargetLableItemBinding, position: Int) {
         viewBinding.apply {
-            if(sysName == FocoTargetPresenter.REVENUE_GROWTH_DEGROWTH){
+           /* if(sysName == FocoTargetPresenter.REVENUE_GROWTH_DEGROWTH){
                 tvLabel.setText(itemModel.product)
                 val txt = "CM : " + itemModel.currentMonth +"\n" + "LM : " + itemModel.lastMonth
                 tvPercentage.setText(txt)
                 view.setBackgroundColor(Color.rgb(128, 128, 128))
-            }else{
+            }else{*/
                 tvLabel.setText(itemModel.product)
                 tvPercentage.setText(itemModel.Value)
                 view.setBackgroundColor(auTargetView.getColorsArray()[position])
-            }
+            //}
 
 
         }

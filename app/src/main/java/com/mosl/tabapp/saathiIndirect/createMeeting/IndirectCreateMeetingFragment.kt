@@ -1,6 +1,7 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -75,6 +76,9 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
 import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.MeetingAttendeeItem
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 
 class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView , AddedAttendeeAdapter.ClickListenerHandler{
@@ -406,12 +410,12 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
         cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
+        if (getSelectedActivityType().lookUpName.equals("Personal Meeting", ignoreCase = true)
             && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
-        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
+        else if((getSelectedActivityType().lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
             && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
@@ -459,17 +463,23 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
                         "%s %d:%d:00", fromPostingDate, hour,
                         minute
                     ) //dd-MM-yyyy hh:mm:ss
-                val finalSelectedDate =
-                    CRMAppUtil.getDate(finalSelectedDateStr, MoslConstant.dd_MMM_yyyy_hh_mm)
+                //add below date format logic for getting issue 12:30 PM not set properly, instead showing 12:30 AM
+                val df = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH)
+                df.timeZone = TimeZone.getTimeZone("Asia/Kolkata");
+                val date = df.parse(finalSelectedDateStr)
+
+                val outputFormat = SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.ENGLISH)
+                outputFormat.timeZone = TimeZone.getTimeZone("Asia/Kolkata")
+                val formattedDate = outputFormat.format(date)
+                val finalSelectedDate =outputFormat.parse(formattedDate)
+
                 if (CRMAppUtil.isBeforeandEqualDate(
                         finalSelectedDate
                     )
-                ) { //
-                    binding.tvDate.text =
-                        CRMAppUtil.getDBDate(finalSelectedDate,
-                            MOSLConstants.DATE_FORMAT_TO_DISPLAY
-                        )
-
+                ) {
+                    binding.tvDate.text = CRMAppUtil.getDBDate(finalSelectedDate,
+                        MOSLConstants.DATE_FORMAT_TO_DISPLAY
+                    )
                     dialog.dismiss()
                 } else {
                     MSFDialog.alertDialog(

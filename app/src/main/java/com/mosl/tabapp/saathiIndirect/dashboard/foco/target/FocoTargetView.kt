@@ -19,6 +19,7 @@ interface FocoTargetView : BaseView {
     fun onPeriodChange(): Observable<Int>
     fun getPeriod(): FocoPeriodModel?
     fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick>
+    fun getSelectedWidget() : WidgetModel?
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun renderData(uiModel: UiModel<FocoDashboardModel>)
 
