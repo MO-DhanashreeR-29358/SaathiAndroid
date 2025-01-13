@@ -11,7 +11,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 class HorinzatalIFATargetWidgetItem (
     val widgetModel: WidgetModel,
-    private val publishSubject: PublishSubject<TeamWidgetUiEvent>
+    private val publishSubject: PublishSubject<IndirectIFATargetUiEvent>
 ) : BindableItem<HorinzontalWidgetItemBinding>() {
 
     override fun getLayout(): Int {
@@ -52,7 +52,7 @@ class HorinzatalIFATargetWidgetItem (
             cardView.setOnClickListener {
                 if (widgetModel.name.isNotEmpty()) {
                     publishSubject.onNext(
-                        TeamWidgetUiEvent.ItemClick(
+                        IndirectIFATargetUiEvent.ItemClick(
                             widgetModel, position
                         )
                     )

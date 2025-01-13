@@ -387,15 +387,15 @@ interface SaathiIndirectApi {
     fun getIFASalesDashMyBuisnessSnapIP(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     @POST("Dashboard/GetIFADashRevenueIPWidgetData")
-    fun getIFADashREvenueIP(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    fun getIFADashREvenueIP( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
 
     @POST("Dashboard/GetIFADashRevenueBrokingWidgetData")
-    fun getIFADashRevenueBroking(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    fun getIFADashRevenueBroking( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
 
     @POST("Dashboard/GetIFADashMeetingWidgetData")
-    fun getIFADashMeeting(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    fun getIFADashMeeting( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
 
     @POST("Dashboard/GetIFADashIFAActivationWidgetData")
-    fun getIFADashIFAACtivation(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+    fun getIFADashIFAACtivation( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
     /*************IFADashboard End Here************/
 }

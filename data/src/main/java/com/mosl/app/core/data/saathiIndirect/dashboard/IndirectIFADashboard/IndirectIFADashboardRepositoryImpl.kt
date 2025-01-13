@@ -3,10 +3,15 @@ package com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard
 import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardMapper.requestTransform
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardModel
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToIFADashboardMeetingGraph
+import com.mosl.app.core.data.saathiIndirect.dashboard.requestTransform
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.mobile.domain.dashboardreport.DashboardReportData
 import com.mosl.mobile.domain.productivity.ColHeader
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotCombo
@@ -84,33 +89,38 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun fnGetIFASalesDashMyBuisnessSnapIP(): Observable<String> {
-        return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            Gson().toJson(it)
+    override fun fnGetIFASalesDashMyBuisnessSnapIP(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency =strFilterValue ))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
+    }
+
+    override fun fnGetIFADashREvenueIP(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return saathiIndrectApi.getIFADashREvenueIP(req).map {
+            mapToFocoDashboardModel(it)
         }
     }
 
-    override fun fnGetIFADashREvenueIP(): Observable<String> {
-        return saathiIndrectApi.getIFADashREvenueIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-          it.string()
+    override fun fnGetIFADashRevenueBroking(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFADashRevenueBroking(req).map {
+            mapToFocoDashboardModel(it)
         }
     }
 
-    override fun fnGetIFADashRevenueBroking(): Observable<String> {
-        return  saathiIndrectApi.getIFADashRevenueBroking(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            it.string()
+    override fun fnGetIFADashMeeting(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFADashMeeting(req).map {
+            mapToIFADashboardMeetingGraph(it)
         }
     }
 
-    override fun fnGetIFADashMeeting(): Observable<String> {
-        return  saathiIndrectApi.getIFADashMeeting(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            it.string()
-        }
-    }
-
-    override fun fnGetIFADashIFAACtivation(): Observable<String> {
-        return  saathiIndrectApi.getIFADashIFAACtivation(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            it.string()
+    override fun fnGetIFADashIFAACtivation(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFADashIFAACtivation(req).map {
+            mapToFocoDashboardModel(it)
         }
     }
 
