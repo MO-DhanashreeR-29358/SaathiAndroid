@@ -28,7 +28,8 @@ fun FocoDashboardInput.requestTransform(): FOCODashboardFilterpostReq {
         totalCount = totalCount,
         category = category,
         filter = filter,
-        fltUserStatus = fltUserStatus
+        fltUserStatus = fltUserStatus,
+        fitHierarchy = fitHierarchy
     )
 }
 fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {
@@ -43,6 +44,34 @@ fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {
     }
 }
 
+fun mapToIFADashboardMeetingGraph(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.Parameter ,
+                Value = originalGraph.Val,
+                currentMonth = originalGraph.CurrentMonth,
+                lastMonth = originalGraph.LastMonth
+            )
+            graphList.add(graph)
+        }
+    }
+
+    // Extract target and achieved values from ObjectData
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
+    val strAchieved = response.Response?.ObjectData?.strAchieved
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
 fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
     val graphList = ArrayList<Graph>()
 
@@ -51,7 +80,7 @@ fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDash
         // Map the Graph data from the original model to the FocoDashboardModel
         it.forEach { originalGraph ->
             val graph = Graph(
-                product = originalGraph.product,
+                product = originalGraph.product ,
                 Value = originalGraph.Value,
                 currentMonth = originalGraph.CurrentMonth,
                 lastMonth = originalGraph.LastMonth

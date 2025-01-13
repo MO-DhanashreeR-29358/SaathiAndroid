@@ -41,5 +41,8 @@ data class FOCODashboardFilterpostReq(
 	val category: Any? = null,
 
 	@JvmField @SerializedName("fltUserStatus")
-	val fltUserStatus: Any? = null
+	val fltUserStatus: Any? = null,
+
+	@JvmField @SerializedName("flt_Hierarchy")
+	val fitHierarchy:String?=null
 )

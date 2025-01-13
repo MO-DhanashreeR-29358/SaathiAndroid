@@ -4,6 +4,7 @@ import android.util.Log
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
@@ -17,16 +18,29 @@ class IndirectIFABuisnessSnapshotIpPresenter @Inject constructor(
     val indirectRepo: IndirectIFADashboardRepository
 ) :BasePresenter<IndirectIFABuisnessSnapshotIpView>(view){
     override fun start() {
-        onFetchCalled().switchMap {
-indirectRepo.fnGetIFASalesDashMyBuisnessSnapIP().compose(applyUiModel())
-        }.subscribe {
-            it.onFailure {
-                Timber.d("ResponseError"+it.message)
-            }
-            it.onSuccess {
-                Timber.d("ResponseIFA "+it)
-            }
-        }
+//        onFetchCalled().switchMap {
+//indirectRepo.fnGetIFASalesDashMyBuisnessSnapIP().compose(applyUiModel())
+//        }.subscribe {
+//            it.onFailure {
+//                Timber.d("ResponseError"+it.message)
+//            }
+//            it.onSuccess {
+//                Timber.d("ResponseIFA "+it)
+//            }
+//        }
+
+        onFetchCalled()
+            .map {
+                view.fngetFilterValue()
+            }.switchMap {
+                indirectRepo.fnGetIFASalesDashboBuisnessSnapshot(it).compose(applyUiModel())
+            }  .subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+
+        view.onFilterEventCalled().subscribe {
+            view.fnRenderFilterEventCalled(it.strFilterText)
+        }.addTo(disposable)
 
     }
 }
