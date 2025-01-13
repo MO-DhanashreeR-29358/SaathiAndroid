@@ -27,7 +27,7 @@ interface IndirectIFADashboardRepository {
 
     fun  fnGetIFaSalesDashMyLead(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
-    fun fnGetIFASalesDashMyBuisnessSnapIP():Observable<String>
+    fun fnGetIFASalesDashMyBuisnessSnapIP(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
     fun fnGetIFADashREvenueIP(request: FocoDashboardInput): Observable<FocoDashboardModel>
 

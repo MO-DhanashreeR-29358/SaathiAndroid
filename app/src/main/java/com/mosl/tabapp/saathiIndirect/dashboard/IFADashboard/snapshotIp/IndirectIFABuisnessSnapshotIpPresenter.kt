@@ -18,22 +18,12 @@ class IndirectIFABuisnessSnapshotIpPresenter @Inject constructor(
     val indirectRepo: IndirectIFADashboardRepository
 ) :BasePresenter<IndirectIFABuisnessSnapshotIpView>(view){
     override fun start() {
-//        onFetchCalled().switchMap {
-//indirectRepo.fnGetIFASalesDashMyBuisnessSnapIP().compose(applyUiModel())
-//        }.subscribe {
-//            it.onFailure {
-//                Timber.d("ResponseError"+it.message)
-//            }
-//            it.onSuccess {
-//                Timber.d("ResponseIFA "+it)
-//            }
-//        }
 
         onFetchCalled()
             .map {
                 view.fngetFilterValue()
             }.switchMap {
-                indirectRepo.fnGetIFASalesDashboBuisnessSnapshot(it).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashMyBuisnessSnapIP(it).compose(applyUiModel())
             }  .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 

@@ -89,10 +89,11 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun fnGetIFASalesDashMyBuisnessSnapIP(): Observable<String> {
-        return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = "6160")).map {
-            Gson().toJson(it)
-        }
+    override fun fnGetIFASalesDashMyBuisnessSnapIP(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashMyBuisnessSnapIP(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency =strFilterValue ))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
     }
 
     override fun fnGetIFADashREvenueIP(request: FocoDashboardInput): Observable<FocoDashboardModel> {
