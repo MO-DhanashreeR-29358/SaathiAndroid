@@ -173,7 +173,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
 }
 
     binding.edEmpCode.requestFocus()
-    if(KeyboardChecker.isUsingCustomInputMethod(applicationContext))
+    if(!KeyboardChecker.isUsingCustomInputMethod(applicationContext))
     {
         showKeyBoard(binding.edEmpCode)
     }
