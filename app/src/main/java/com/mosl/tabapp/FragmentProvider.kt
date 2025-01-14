@@ -86,6 +86,10 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
@@ -299,8 +303,14 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [IndirectIFADashboardModule::class])
     fun provideIndirectIFADashboardFragmentFactory():IndirectIFADashboardFragment
 
+    @ContributesAndroidInjector(modules = [IndirectIFADashboardDetailsModule::class])
+    fun provideIndirectIFADashboardDetailsFragmentFactory():IndirectIFADashboardDetailsFragment
+
     @ContributesAndroidInjector(modules = [IndirectIFATargetModule::class])
     fun provideIndirectIFATargetFragmentFactory():IndirectIFATargetFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAUniqueModule::class])
+    fun provideIndirectIFAUniqueFragmentFactory():IndirectIFAUniqueFragment
 
     @ContributesAndroidInjector(modules=[IndirectIFADashboardReportModule::class])
     fun provideIndirectIFADashboardReportFragmentFactory():IndirectIFADashboardReportFragment

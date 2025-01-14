@@ -33,6 +33,7 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
@@ -137,6 +138,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> FocoDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->IndirectIFADashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->IndirectIFADashboardDetailsFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT->IndirectIFADashboardReportFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> FocoDashboardReportFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> FocoHierarchyReportFragment()
@@ -207,6 +209,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> true
