@@ -35,4 +35,11 @@ interface IndirectIFADashboardRepository {
     fun fnGetIFADashMeeting(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
     fun fnGetIFADashIFAACtivation(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashMeetingTeamUniqueGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashMeetingMyUniqueGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashRevenueIPProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+    fun fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 }

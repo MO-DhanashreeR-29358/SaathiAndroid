@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardDetailsGraphCommonDataResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFADashboardFilterResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFAWidgetCommonResponse
@@ -397,5 +398,19 @@ interface SaathiIndirectApi {
 
     @POST("Dashboard/GetIFADashIFAActivationWidgetData")
     fun getIFADashIFAACtivation( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetIFASalesDashMeetingTeamUniqueGraph")
+    fun getIFASalesDashMeetingTeamUniqueGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   @POST("Dashboard/GetIFASalesDashMeetingMyUniqueGraph")
+   fun getIFASalesDashMeetingMyUniqueGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   // Revenu Ip product sise sales
+   @POST("Dashboard/GetIFASalesDashRevenueIPProductWiseSalesGraph")
+   fun getIFASalesDashRevenueIPProductWiseSalesGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+    //Revenu Broking product wise sales
+   @POST("Dashboard/GetIFASalesDashRevenueBrokingProductWiseSalesGraph")
+   fun getIFASalesDashRevenueBrokingProductWiseSalesGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
     /*************IFADashboard End Here************/
 }

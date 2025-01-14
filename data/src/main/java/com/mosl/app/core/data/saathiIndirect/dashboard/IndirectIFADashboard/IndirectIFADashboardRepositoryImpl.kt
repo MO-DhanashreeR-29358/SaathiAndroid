@@ -3,6 +3,7 @@ package com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard
 import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardMapper.requestTransform
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardDetailsModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToIFADashboardMeetingGraph
 import com.mosl.app.core.data.saathiIndirect.dashboard.requestTransform
@@ -121,6 +122,34 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         val req = request.requestTransform()
         return  saathiIndrectApi.getIFADashIFAACtivation(req).map {
             mapToFocoDashboardModel(it)
+        }
+    }
+
+    override fun fnGetIFASalesDashMeetingTeamUniqueGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+         return  saathiIndrectApi.getIFASalesDashMeetingTeamUniqueGraph(req).map {
+             mapToFocoDashboardDetailsModel(it)
+         }
+    }
+
+    override fun fnGetIFASalesDashMeetingMyUniqueGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashMeetingMyUniqueGraph(req).map {
+            mapToFocoDashboardDetailsModel(it)
+        }
+    }
+
+    override fun fnGetIFASalesDashRevenueIPProductWiseSalesGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueIPProductWiseSalesGraph(req).map {
+            mapToFocoDashboardDetailsModel(it)
+        }
+    }
+
+    override fun fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueBrokingProductWiseSalesGraph(req).map {
+            mapToFocoDashboardDetailsModel(it)
         }
     }
 

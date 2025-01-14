@@ -42,6 +42,8 @@ import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
 import com.mosl.shared.util.Utility
+import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.navigation.NavigationConstants
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -101,7 +103,8 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
 
     @SuppressLint("WrongConstant")
     private fun setupViews() {
-
+        binding.includeTargetChart.rvSummaryCount.visibility=View.VISIBLE
+        binding.includeTargetChart.imageView.visibility=View.VISIBLE
         val groupAdapter = GroupAdapter<GroupieViewHolder>()
         binding.horizontalRecyclerView.apply {
             layoutManager =
@@ -147,9 +150,15 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
 
     groupAdapter.addAll(itemList)
 
-        binding.includeTargetChart.txtAchievement.setOnClickListener {
-
-        }
+//        binding.includeTargetChart.llAchivement.setOnClickListener {
+//            val args = Bundle()
+//            args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+//            navigator.openPage(
+//                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS.toString(), args,
+//                addToStack = true,
+//                forceReload = false
+//            )
+//        }
     }
 
     override fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged> {
