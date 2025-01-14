@@ -9,8 +9,6 @@ import io.reactivex.rxjava3.core.Observable
 
 interface FocoDashboardView : BaseView {
 
-    fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>)
-
 
 
     fun onActionableInsightsClicked(): Observable<Unit>

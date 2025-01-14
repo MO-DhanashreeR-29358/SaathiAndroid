@@ -6,11 +6,11 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -21,15 +21,17 @@ import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
+import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoPeriodModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.Graph
 import com.mosl.shared.util.Utility.VORDIPLOM_COLORS
 import com.mosl.tabapp.R
@@ -45,10 +47,12 @@ import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.REVENUE_GROWTH_DEGROWTH
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter.Companion.TOTAL_MOB_APP
+import com.mosl.tabapp.util.SpinnerAdapterFactory
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
+import okhttp3.internal.notify
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -65,21 +69,17 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
   private val widgetUiEvent =
     PublishSubject.create<FocoTargetUiEvent>()
 
-  private val pieChartEvent =
-    PublishSubject.create<FocoTargetUiEvent>()
-
-  private val summaryCountUiEvent =
-    PublishSubject.create<FocoTargetUiEvent>()
-
   private var previousPosition: Int = 0
   private var itemList = mutableListOf<FocoHorinzatalTargetWidgetItem>()
   private var lableItemList = mutableListOf<FocoTargetLableItem>()
-
+  private var graphItemList = mutableListOf<Graph>()
   private var widgetModel: WidgetModel? = null
 
   private val summaryCountGroupAdapter = GroupAdapter<GroupieViewHolder>()
   private val labelGroupAdapter = GroupAdapter<GroupieViewHolder>()
-
+  lateinit var periodAdapter: ArrayAdapter<FocoPeriodModel>
+  private var count = 0
+  private var chartCount = 0
   override fun getLayout(): Int {
     return R.layout.fragment_foco_target
   }
@@ -104,8 +104,12 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+
   @SuppressLint("WrongConstant")
   private fun setUpView() {
+    periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+    binding.spPeriod.adapter = periodAdapter
+
     val groupAdapter = GroupAdapter<GroupieViewHolder>()
     binding.horizontalRecyclerView.apply {
       layoutManager =
@@ -165,6 +169,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
       val args = Bundle()
       if(widgetModel?.name == REVENUE || widgetModel?.name == IP_SALES || widgetModel?.name == NO_OF_CLIENT_MEETINGS){
         args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        args.putString(MOSLConstants.PERIOD_FILTER, (binding.spPeriod.selectedItem as FocoPeriodModel?)?.displayText)
         navigator.openPage(
           NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT.toString(), args,
           addToStack = true,
@@ -172,11 +177,47 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
         )
       }else{
         args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+        args.putString(MOSLConstants.PERIOD_FILTER, (binding.spPeriod.selectedItem as FocoPeriodModel?)?.displayText)
+
         navigator.openPage(
           NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT.toString(), args,
           addToStack = true,
           forceReload = false
         )
+      }
+    }
+
+    binding.includeTargetChart.ivLeftArrow.setOnClickListener {
+      binding.includeTargetChart.tvWidgetName.text = ""
+      binding.includeTargetChart.ivRightArrow.visibility = View.VISIBLE
+      count--
+      if(count == 0){
+        binding.includeTargetChart.ivLeftArrow.visibility = View.INVISIBLE
+      }
+      if (count >= 0){
+        setDataForPieArray(graphItemList[count])
+        PieArrayLableView(graphItemList[count])
+      }
+      else
+        count = 0
+
+    }
+    binding.includeTargetChart.ivRightArrow.setOnClickListener {
+      binding.includeTargetChart.tvWidgetName.text = ""
+      binding.includeTargetChart.ivLeftArrow.visibility = View.VISIBLE
+
+      Log.d("count", count.toString())
+      Log.d("chartCount", chartCount.toString())
+      if (count < chartCount) {
+        count++
+      }
+      if(count == chartCount -1){
+        binding.includeTargetChart.ivRightArrow.visibility = View.INVISIBLE
+      }
+
+      if (count < chartCount) {
+        setDataForPieArray(graphItemList[count])
+        PieArrayLableView(graphItemList[count])
       }
     }
 
@@ -206,9 +247,30 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+  override fun getPeriod(): FocoPeriodModel? {
+    return binding.spPeriod.selectedItem as? FocoPeriodModel
+  }
+
+  override fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>) {
+    toggleProgress(uiModel.inProgress)
+    uiModel.onFailure { error ->
+      Timber.d("renderPeriodFilter ${error.message}")
+    }
+    uiModel.onSuccess {
+      periodAdapter.setSpinnerData(binding.spPeriod, it)
+    }
+  }
+
+  override fun onPeriodChange(): Observable<Int> {
+    return binding.spPeriod.itemSelections()
+  }
 
   override fun onWidgetItemClick(): Observable<FocoTargetUiEvent.ItemClick> {
     return widgetUiEvent.ofType()
+  }
+
+  override fun getSelectedWidget(): WidgetModel? {
+    return  widgetModel
   }
 
   override fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int) {
@@ -222,9 +284,14 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   override fun renderData(uiModel: UiModel<FocoDashboardModel>) {
     toggleProgress(uiModel.inProgress)
+
     binding.includeTargetChart.chart.visibility = View.VISIBLE
     binding.includeTargetChart.barChart.visibility = View.GONE
+    binding.includeTargetChart.tvWidgetName.visibility = View.GONE
+    binding.includeTargetChart.ivRightArrow.visibility = View.INVISIBLE
+    binding.includeTargetChart.ivRightArrow.visibility = View.INVISIBLE
     chartClear()
+    barChartClear()
     labelGroupAdapter.clear()
     lableItemList.clear()
     binding.includeTargetChart.txtTarget.text = "0"
@@ -235,14 +302,8 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
     }
 
     uiModel.onSuccess {
-      Timber.d("strTarget ${it.strTarget}")
-      Timber.d("strAchieved ${it.strAchieved}")
       binding.includeTargetChart.txtTarget.text = it.strTarget
       binding.includeTargetChart.txtAchievement.text = it.strAchieved
-      for( gr in it.graph){
-        Timber.d("graph Product ${gr.product}")
-        Timber.d("graph value ${gr.Value}")
-      }
       if (it.graph.isEmpty()) {
         binding.includeTargetChart.chart.clear()
       } else {
@@ -255,6 +316,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   override fun renderBarChartData(uiModel: UiModel<FocoDashboardModel>) {
     toggleProgress(uiModel.inProgress)
+    chartClear()
     barChartClear()
     binding.includeTargetChart.chart.visibility = View.GONE
     binding.includeTargetChart.barChart.visibility = View.VISIBLE
@@ -263,25 +325,46 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
     binding.includeTargetChart.txtTarget.text = "0"
     binding.includeTargetChart.txtAchievement.text = "0"
     uiModel.onFailure { error ->
-      Timber.d("renderPeriodFilter ${error.message}")
       barChartClear()
     }
 
     uiModel.onSuccess {
-      Timber.d("strTarget ${it.strTarget}")
-      Timber.d("strAchieved ${it.strAchieved}")
       binding.includeTargetChart.txtTarget.text = it.strTarget
       binding.includeTargetChart.txtAchievement.text = it.strAchieved
-      for( gr in it.graph){
-        Timber.d("graph Product ${gr.product}")
-        Timber.d("graph value ${gr.Value}")
-      }
+
+      //for bar chart
+     /* binding.includeTargetChart.tvWidgetName.visibility = View.GONE
+      binding.includeTargetChart.ivRightArrow.visibility = View.GONE
+      binding.includeTargetChart.ivLeftArrow.visibility = View.GONE
+      binding.includeTargetChart.barChart.visibility = View.VISIBLE
+
       if (it.graph.isEmpty()) {
         barChartClear()
       } else {
         setBarChart(it.graph)
         LableView(it.graph)
+      }*/
+
+      //for pie chart array
+      count= 0
+      chartCount = it.graph.size
+      graphItemList = it.graph
+      binding.includeTargetChart.txtTarget.text = it.strTarget
+      binding.includeTargetChart.txtAchievement.text = it.strAchieved
+       binding.includeTargetChart.tvWidgetName.visibility = View.VISIBLE
+      binding.includeTargetChart.ivRightArrow.visibility = View.VISIBLE
+      binding.includeTargetChart.barChart.visibility = View.GONE
+       binding.includeTargetChart.chart.visibility = View.VISIBLE
+      if (it.graph.isEmpty()) {
+        binding.includeTargetChart.chart.clear()
+      } else {
+        setDataForPieArray(it.graph[0])
+        PieArrayLableView(it.graph[0])
       }
+      if(graphItemList.size == 1){
+        binding.includeTargetChart.ivRightArrow.visibility = View.INVISIBLE
+      }
+
 
     }
   }
@@ -382,9 +465,67 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   fun chartClear() {
     binding.includeTargetChart.chart.clear()
+    binding.includeTargetChart.tvWidgetName.text = ""
   }
   fun barChartClear() {
     binding.includeTargetChart.barChart.clear()
+  }
+
+  private fun setDataForPieArray(
+    tableItemList: Graph
+  ) {
+
+    val data = getPieDataForPieArray(tableItemList)
+    data.setDrawValues(false) // for text hidden
+    data.setValueTextSize(11f)
+    data.setValueTextColor(Color.WHITE)
+    data.setValueTypeface(Typeface.DEFAULT)
+    binding.includeTargetChart.chart.setData(data)
+    binding.includeTargetChart.chart.setOnChartValueSelectedListener(object :
+      OnChartValueSelectedListener {
+      override fun onValueSelected(
+        e: Entry,
+        h: Highlight
+      ) {
+
+        // pieChartEvent.onNext(FocoTargetUiEvent.PieChartClick(tableItemList[h.x.toInt()].label))
+
+      }
+
+      override fun onNothingSelected() {}
+    })
+    binding.includeTargetChart.chart.invalidate()
+  }
+
+  private fun getPieDataForPieArray(
+    tableItemList: Graph
+
+  ): PieData {
+    val entries = ArrayList<PieEntry>()
+      val value = tableItemList.currentMonth?.toFloat() ?: 0.0f
+      entries.add(
+        PieEntry(
+          value,
+          tableItemList.product, tableItemList
+        )
+      )
+    val lastMonth = tableItemList.lastMonth?.toFloat() ?: 0.0f
+    entries.add(
+      PieEntry(
+        lastMonth,
+        tableItemList.product, tableItemList
+      )
+    )
+
+    val dataSet = PieDataSet(entries, tableItemList.product)
+    dataSet.sliceSpace = 2f
+    dataSet.selectionShift = 5f
+    val colors = ArrayList<Int>()
+    for (i in entries.indices) {
+      colors.add(getColorsArray()[i])
+    }
+    dataSet.colors = colors
+    return PieData(dataSet)
   }
 
   private fun setDataBroking(
@@ -454,8 +595,36 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
 
   }
 
+  fun PieArrayLableView(tableList: Graph) {
+    labelGroupAdapter.clear()
+    lableItemList.clear()
+    binding.includeTargetChart.tvWidgetName.visibility = View.VISIBLE
+    binding.includeTargetChart.tvWidgetName.text = tableList.product
 
-  fun gridSpanCount(listCount: Int): Int {
+    val tableItem = Graph()
+    tableItem.product = "Current Month"
+    tableItem.Value = tableList.currentMonth
+
+    val tableItem2 = Graph()
+    tableItem2.product = "Last Month"
+    tableItem2.Value = tableList.lastMonth
+
+    val list = ArrayList<Graph>()
+    list.add(tableItem)
+    list.add(tableItem2)
+
+    (binding.includeTargetChart.rvLable.getLayoutManager() as GridLayoutManager).spanCount =
+      gridSpanCount(list.size)
+
+    list.mapIndexed { index, tableItemModel ->
+      lableItemList.add(
+        FocoTargetLableItem(widgetModel?.name, tableItemModel, requireContext(), this)
+      )
+    }
+    labelGroupAdapter.addAll(lableItemList)
+  }
+
+  private fun gridSpanCount(listCount: Int): Int {
     return when {
       listCount >= 3 -> 3
       listCount == 2 -> 2

@@ -36,66 +36,81 @@ class FocoTargetPresenter @Inject constructor(
     override fun start() {
 
         onFetchCalled().switchMap{
+            indirectRepo.getPeriodFilter(getWidgetRequest()).compose(applyUiModel())
+        }.subscribe {
+            view.renderPeriodFilter(it)
+        }.addTo(disposable)
+
+        view.onPeriodChange().switchMap{
             indirectRepo.getFocoDashRevenueWidgetData(getWidgetRequest()).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
         }.addTo(disposable)
 
+        val periodChangedObs = view.onPeriodChange()
+            .filter(InvalidSelectionPredicate)
+            .share()
+
         val widgetItemClickObsc = view.onWidgetItemClick().share()
 
-        widgetItemClickObsc
+        val screenLoadObs = Observable.merge(
+            periodChangedObs,
+            widgetItemClickObsc,
+        )
+
+        view.onWidgetItemClick()
             .subscribe {
                 view.renderWidgetData(it.widgetItemInfo, it.currentPosition)
             }.addTo(disposable)
 
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == REVENUE }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == REVENUE }
             .switchMap {
                 indirectRepo.getFocoDashRevenueWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == REVENUE_GROWTH_DEGROWTH }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == REVENUE_GROWTH_DEGROWTH }
             .switchMap {
                 indirectRepo.getFocoDashRevenueGrowthWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderBarChartData, Timber::e)
             .addTo(disposable)
 
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == NO_OF_CLIENT_MEETINGS }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == NO_OF_CLIENT_MEETINGS }
             .switchMap {
                 indirectRepo.getFocoDashNoOfClientsWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == ONLINE_REVENUE }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == ONLINE_REVENUE }
             .switchMap {
                 indirectRepo.getFocoDashOnlineRevenueWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == CLIENT_REACH }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == CLIENT_REACH }
             .switchMap {
                 indirectRepo.getFocoDashClientReachWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == IP_SALES }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == IP_SALES }
             .switchMap {
                 indirectRepo.getFocoDashIPSalesWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
-        widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == TOTAL_MOB_APP }
+        screenLoadObs
+            .filter { view.getSelectedWidget()?.name  == TOTAL_MOB_APP }
             .switchMap {
                 indirectRepo.getFocoDashTotalMobAppWidgetData(getWidgetRequest()).compose(applyUiModel())
             }
@@ -103,8 +118,8 @@ class FocoTargetPresenter @Inject constructor(
             .addTo(disposable)
     }
     fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", category = "Existing", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = view.getPeriod()?.displayText, category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
     companion object {
         const val REVENUE = "Revenue"

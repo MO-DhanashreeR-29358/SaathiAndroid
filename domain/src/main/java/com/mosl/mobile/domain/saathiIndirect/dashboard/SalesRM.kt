@@ -4,6 +4,8 @@ data class SalesRM(
     val SalesRM: String,
     val ReportingTo: String?,
     val Revenue: String?,
+    var TMName : String?,
+    val Meeting : String?,
     var subordinates: List<SalesRM> = mutableListOf(),
     var isExpanded: Boolean = false
 )

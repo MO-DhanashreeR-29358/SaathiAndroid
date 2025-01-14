@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.marginStart
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mosl.mobile.domain.saathiIndirect.dashboard.SalesRM
 import com.mosl.tabapp.R
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
-                           private val sysName: String,
+                           private val sysName: String,private val isChild : Boolean,
     private val publishSubject: PublishSubject<FocoHierarchyReportUIEvent>
 ) : RecyclerView.Adapter<HierarchyListAdapter.SalesRMViewHolder>() {
 
@@ -45,21 +47,34 @@ class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
         private val toggleButton: ImageView = itemView.findViewById(R.id.toggleButton)
         private val mainContainer: LinearLayout = itemView.findViewById(R.id.mainContainer)
 
-        @SuppressLint("SetTextI18n")
+
         fun bind(salesRM: SalesRM) {
-            salesRMName.text = salesRM.SalesRM
-            revenue.text = ("Revenue : " + salesRM.Revenue)
+            if(sysName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
+                salesRMName.text = salesRM.TMName
+                revenue.text = salesRM.Meeting
+            }else{
+                salesRMName.text = salesRM.SalesRM
+                revenue.text = salesRM.Revenue
+            }
+
 
             toggleButton.setImageResource(
                 if (salesRM.isExpanded) R.drawable.ic_collapse else R.drawable.ic_expand
             )
 
             // Handle toggle button visibility based on expanded state
-            toggleButton.visibility = if (salesRM.subordinates.isNotEmpty()) View.VISIBLE else View.GONE
+            toggleButton.visibility = if (salesRM.subordinates.isNotEmpty()) View.VISIBLE else View.INVISIBLE
+            if(isChild && toggleButton.visibility == View.INVISIBLE){
+                salesRMName.setPaddingRelative(50, 0,0,0)
+            }
+            if(isChild && toggleButton.visibility != View.INVISIBLE){
+                val layoutParams = toggleButton.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.marginStart= 50
+            }
             // Set up the RecyclerView for subordinates
             if (salesRM.subordinates.isNotEmpty()) {
                 subordinatesRecyclerView.layoutManager = LinearLayoutManager(itemView.context)
-                subordinatesRecyclerView.adapter = HierarchyListAdapter(salesRM.subordinates,sysName, publishSubject)
+                subordinatesRecyclerView.adapter = HierarchyListAdapter(salesRM.subordinates,sysName,true, publishSubject)
 
                 // Set the visibility of the subordinates RecyclerView based on the expanded state
                 subordinatesRecyclerView.visibility = if (salesRM.isExpanded) View.VISIBLE else View.GONE
@@ -73,7 +88,13 @@ class HierarchyListAdapter(private val salesRMList: List<SalesRM>,
             }
 
             mainContainer.setOnClickListener {
-                val employeeCode = salesRM.SalesRM.substringAfter("-")
+                var employeeCode : String
+                if(sysName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
+                    employeeCode = salesRM.TMName?.substringAfter("-").toString()
+                }else{
+                    employeeCode = salesRM.SalesRM.substringAfter("-")
+                }
+                
                 publishSubject.onNext(FocoHierarchyReportUIEvent.OnReportClick(sysName, employeeCode))
             }
         }

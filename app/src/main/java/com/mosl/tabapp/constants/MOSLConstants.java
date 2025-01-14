@@ -256,6 +256,10 @@ public interface MOSLConstants extends LabelConfig {
     String DATE_FORMAT_TO_SERVER_MEETING_SEND = "yyyy-MM-dd";
     String DATE_FORMAT_OF_DD_MMM_YYYY = "dd-MMM-yyyy";
 
+    String DATE_FORMAT_OF_DD_MMM_YYYY1 = "dd MMM yyyy";
+
+    String DATE_FORMAT_OF_TIME = "hh:mm a";
+
     int FILE_UPLOAD_SIZE_LIMT = 5;
     int FILE_UPLOAD_COUNT_LIMT = 4;
     String FILE_LARGE_MESSAGE =
@@ -320,5 +324,6 @@ public interface MOSLConstants extends LabelConfig {
     String INDIRECT_TEAM_APPOINTMENT="Team Appointment";
 
     String INDIRECT_NEW_LEAD="New Lead";
+    String PERIOD_FILTER= "PeriodFilter";
 }
 
