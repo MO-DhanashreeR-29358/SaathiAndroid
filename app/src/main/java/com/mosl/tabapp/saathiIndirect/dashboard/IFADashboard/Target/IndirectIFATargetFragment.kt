@@ -150,15 +150,21 @@ class IndirectIFATargetFragment:CommonFragment(),IndirectIFATargetView {
 
     groupAdapter.addAll(itemList)
 
-//        binding.includeTargetChart.llAchivement.setOnClickListener {
-//            val args = Bundle()
-//            args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
-//            navigator.openPage(
-//                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS.toString(), args,
-//                addToStack = true,
-//                forceReload = false
-//            )
-//        }
+        binding.includeTargetChart.llAchivement.setOnClickListener {
+            val args = Bundle()
+            args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
+            navigator.openPage(
+                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS.toString(), args,
+                addToStack = true,
+                forceReload = false
+            )
+        }
+    }
+
+
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
     }
 
     override fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged> {

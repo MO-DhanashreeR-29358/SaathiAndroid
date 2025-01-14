@@ -21,10 +21,14 @@ class IndirectIFAUniquePresenter  @Inject constructor(
 ): BasePresenter<IndirectIFAUniqueView>(view) {
     override fun start() {
 
-        view.onMeetingEventCalled().switchMap {
+        view.fnonMeetingEventCalled().switchMap {
                 indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
+        }.addTo(disposable)
+
+        view.fnonRevenuIpEventCalled().subscribe {
+            Log.d("Report","in event called")
         }.addTo(disposable)
 
         val widgetItemClickObsc = view.onWidgetItemClick().share()
@@ -64,9 +68,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
 //            view.renderData(it)
 //        }.addTo(disposable)
 
-        view.onRevenuIpEventCalled().subscribe {
-            Log.d("Report","in event called")
-        }.addTo(disposable)
+
 
     }
     fun getWidgetRequest() : FocoDashboardInput {

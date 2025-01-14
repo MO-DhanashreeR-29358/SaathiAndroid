@@ -72,6 +72,10 @@ class IndirectIFABuisnessSnapshotFragment :CommonFragment(),IndirectIFABuisnessS
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
     }
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
 
 
     override fun getAdditionalParameterMap(

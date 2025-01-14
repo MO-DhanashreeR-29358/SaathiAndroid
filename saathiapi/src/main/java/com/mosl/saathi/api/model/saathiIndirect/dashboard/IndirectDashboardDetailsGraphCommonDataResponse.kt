@@ -71,7 +71,7 @@ data class IndirectDashboardDetailsGraphObjectData(
 	val isAdminMode: Boolean? = null,
 
 	@field:SerializedName("graphMyUnique")
-	val graphMyUnique: List<Any?>? = null,
+	val graphMyUnique: List<GraphTeamUniqueItem?>? = null,
 
 	@field:SerializedName("graphTargetNotMet")
 	val graphTargetNotMet: List<Any?>? = null

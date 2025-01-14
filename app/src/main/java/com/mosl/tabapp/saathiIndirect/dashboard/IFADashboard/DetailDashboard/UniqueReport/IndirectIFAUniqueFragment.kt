@@ -56,8 +56,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     private var itemList = mutableListOf<HorinzatalIFAUniqueWidgetItem>()
 
     //private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
-    private val widgetUiEventIFA =
-        PublishSubject.create<IndirectIFAUniqueUiEvent>()
+    private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueUiEvent>()
     var strFilterVal:String=""
 
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
@@ -150,7 +149,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
-            Toast.makeText(requireContext(),"in else graph",Toast.LENGTH_LONG).show()
+
             val objWidgetMode: WidgetModel = WidgetModel()
             objWidgetMode.name= IndirectIFAUniqueView.strProductWise
             objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
@@ -168,7 +167,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-
+            Toast.makeText(requireContext(),"in else graph before event",Toast.LENGTH_LONG).show()
             widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
@@ -185,6 +184,12 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         strWidgetType= this.arguments?.getString(MOSLConstants.SYSTEM_NAME, "") ?: ""
     }
 
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
+
+
 //    override fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged> {
 //        return  subject.ofType()
 //    }
@@ -194,11 +199,11 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 //        dataActionSubject.onNext(DataAction.Fetch)
 //    }
 
-    override fun onMeetingEventCalled(): Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled> {
+    override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled> {
        return widgetUiEventIFA.ofType()
     }
 
-    override fun onRevenuIpEventCalled(): Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled> {
+    override fun fnonRevenuIpEventCalled(): Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled> {
         return widgetUiEventIFA.ofType()
     }
     override fun fngetFilterValue(): String {

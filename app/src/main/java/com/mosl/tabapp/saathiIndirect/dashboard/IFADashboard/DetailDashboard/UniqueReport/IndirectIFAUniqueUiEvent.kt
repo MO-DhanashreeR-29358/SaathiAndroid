@@ -7,5 +7,5 @@ sealed class IndirectIFAUniqueUiEvent{
         IndirectIFAUniqueUiEvent()
 
     object onMeetingEventCalled: IndirectIFAUniqueUiEvent()
-    object onRevenuIpEventCalled:IndirectIFAUniqueUiEvent()
+    object onRevenuIpEventCalled: IndirectIFAUniqueUiEvent()
 }
