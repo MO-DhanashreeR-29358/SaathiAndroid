@@ -85,6 +85,12 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
     {
         strWidgetType= this.arguments?.getString(MOSLConstants.SYSTEM_NAME, "") ?: ""
     }
+
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
+
     override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
         uiModel.onSuccess {
             filterAdapter.setSpinnerData(binding.spFilterPeriod, it)

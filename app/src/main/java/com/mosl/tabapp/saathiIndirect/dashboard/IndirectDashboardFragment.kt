@@ -101,5 +101,9 @@ class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView{
     override fun onLeadCreationClicked(): Observable<Unit> {
         return binding.leadcreation.clicks()
     }
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
 
 }

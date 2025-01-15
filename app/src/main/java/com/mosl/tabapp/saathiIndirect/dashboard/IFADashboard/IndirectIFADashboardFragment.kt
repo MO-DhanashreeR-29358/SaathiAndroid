@@ -92,6 +92,12 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
 
 
     }
+
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
+
     override fun onLeadCreationClicked(): Observable<Unit> {
         return binding.leadcreation.clicks()
     }

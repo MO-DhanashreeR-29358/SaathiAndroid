@@ -72,6 +72,11 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
 
     }
 
+    override fun onDestroyView() {
+        presenter.stop()
+        super.onDestroyView()
+    }
+
     @SuppressLint("SetTextI18n")
     private fun setUpView() {
         binding.txtLables.text = strSystemName

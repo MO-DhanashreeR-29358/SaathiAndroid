@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardMapper.requestTransform
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardDetailsModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardModel
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardMyUniqueDetailsModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToIFADashboardMeetingGraph
 import com.mosl.app.core.data.saathiIndirect.dashboard.requestTransform
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -135,7 +136,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     override fun fnGetIFASalesDashMeetingMyUniqueGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
         val req = request.requestTransform()
         return  saathiIndrectApi.getIFASalesDashMeetingMyUniqueGraph(req).map {
-            mapToFocoDashboardDetailsModel(it)
+            mapToFocoDashboardMyUniqueDetailsModel(it)
         }
     }
 

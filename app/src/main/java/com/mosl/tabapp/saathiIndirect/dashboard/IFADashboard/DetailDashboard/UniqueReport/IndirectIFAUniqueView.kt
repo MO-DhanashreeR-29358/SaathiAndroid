@@ -12,9 +12,10 @@ interface IndirectIFAUniqueView :BaseView {
 
   //  fun fnRenderFilterEventCalled(strFilterVal:String)
 
-    fun onMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
+    fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
 
-    fun onRevenuIpEventCalled():Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled>
+    fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled>
+    fun fnRenderTest()
     fun onWidgetItemClick(): Observable<IndirectIFAUniqueUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun renderData(uiModel: UiModel<FocoDashboardModel>)

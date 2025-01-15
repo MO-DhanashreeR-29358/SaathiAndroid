@@ -101,6 +101,33 @@ fun mapToFocoDashboardDetailsModel(response: IndirectDashboardDetailsGraphCommon
     )
 }
 
+
+fun mapToFocoDashboardMyUniqueDetailsModel(response: IndirectDashboardDetailsGraphCommonDataResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.response?.objectData?.graphMyUnique?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph?.parameter,
+                Value = originalGraph?.Val,
+                currentMonth = "",
+                lastMonth = ""
+            )
+            graphList.add(graph)
+        }
+    }
+    val strTarget = ""
+    val strAchieved = ""
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
 fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
     val graphList = ArrayList<Graph>()
 
