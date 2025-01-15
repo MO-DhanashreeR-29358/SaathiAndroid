@@ -109,7 +109,7 @@ fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDash
         // Map the Graph data from the original model to the FocoDashboardModel
         it.forEach { originalGraph ->
             val graph = Graph(
-                product = originalGraph.product ,
+                product = originalGraph.product1 ,
                 Value = originalGraph.Value,
                 currentMonth = originalGraph.CurrentMonth,
                 lastMonth = originalGraph.LastMonth
@@ -220,7 +220,7 @@ fun mapToIPSales(response: IndirectExtraDataCommonResponse): FocoDashboardModel 
         // Map the Graph data from the original model to the FocoDashboardModel
         it.forEach { originalGraph ->
             val graph = Graph(
-                product = originalGraph.product,
+                product = originalGraph.product1,
                 Value = originalGraph.Revenue,
                 currentMonth = originalGraph.CurrentMonth,
                 lastMonth = originalGraph.LastMonth
