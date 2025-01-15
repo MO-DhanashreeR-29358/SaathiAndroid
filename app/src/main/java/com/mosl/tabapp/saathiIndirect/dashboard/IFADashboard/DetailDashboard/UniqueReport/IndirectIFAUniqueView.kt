@@ -15,6 +15,7 @@ interface IndirectIFAUniqueView :BaseView {
     fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
 
     fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled>
+    fun fnRenderTest()
     fun onWidgetItemClick(): Observable<IndirectIFAUniqueUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
     fun renderData(uiModel: UiModel<FocoDashboardModel>)

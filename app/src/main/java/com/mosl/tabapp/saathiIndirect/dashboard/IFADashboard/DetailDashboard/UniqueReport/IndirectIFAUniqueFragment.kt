@@ -168,6 +168,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
             Toast.makeText(requireContext(),"in else graph before event",Toast.LENGTH_LONG).show()
+
             widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
@@ -205,6 +206,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 
     override fun fnonRevenuIpEventCalled(): Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled> {
         return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnRenderTest() {
+        Toast.makeText(requireContext(),"in event fun",Toast.LENGTH_LONG).show()
     }
     override fun fngetFilterValue(): String {
         return this.strFilterVal

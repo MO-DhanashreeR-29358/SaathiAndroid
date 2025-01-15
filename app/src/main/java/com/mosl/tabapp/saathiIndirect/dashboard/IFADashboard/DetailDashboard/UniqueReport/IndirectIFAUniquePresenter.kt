@@ -28,7 +28,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         }.addTo(disposable)
 
         view.fnonRevenuIpEventCalled().subscribe {
-            Log.d("Report","in event called")
+            view.fnRenderTest()
         }.addTo(disposable)
 
         val widgetItemClickObsc = view.onWidgetItemClick().share()
