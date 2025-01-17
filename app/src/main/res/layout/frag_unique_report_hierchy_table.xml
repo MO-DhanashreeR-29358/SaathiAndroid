@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/linearLayout41"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/_8sdp"
+            android:layout_marginRight="@dimen/_8sdp"
+            android:layout_marginBottom="2dp"
+            android:orientation="horizontal"
+            >
+
+            <Spinner
+                android:id="@+id/spFilter1"
+                style="@style/DashbordSpinnerSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_weight="1"
+                />
+
+            <Spinner
+                android:id="@+id/spFilter2"
+                style="@style/DashbordSpinnerSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                />
+
+            <Spinner
+                android:id="@+id/spFilter3"
+                style="@style/DashbordSpinnerSelector"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_weight="1"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+        <com.mosl.tabapp.view.TableWrapperView
+            android:id="@+id/table_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:padding="@dimen/_4sdp"
+            />
+
+    </LinearLayout>
+</layout>

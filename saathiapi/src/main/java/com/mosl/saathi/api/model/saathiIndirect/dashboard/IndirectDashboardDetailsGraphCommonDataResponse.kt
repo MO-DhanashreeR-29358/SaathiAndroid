@@ -65,7 +65,7 @@ data class IndirectDashboardDetailsGraphObjectData(
 	val graphBranchWise: List<Any?>? = null,
 
 	@field:SerializedName("graphProductWiseSales")
-	val graphProductWiseSales: List<Any?>? = null,
+	val graphProductWiseSales: List<GraphTeamUniqueItem?>? = null,
 
 	@field:SerializedName("IsAdminMode")
 	val isAdminMode: Boolean? = null,
@@ -74,7 +74,7 @@ data class IndirectDashboardDetailsGraphObjectData(
 	val graphMyUnique: List<GraphTeamUniqueItem?>? = null,
 
 	@field:SerializedName("graphTargetNotMet")
-	val graphTargetNotMet: List<Any?>? = null
+	val graphTargetNotMet: List<GraphTeamUniqueItem?>? = null
 )
 
 data class GraphTeamUniqueItem(
@@ -98,7 +98,7 @@ data class GraphTeamUniqueItem(
 	val revenuePercentage: Any? = null,
 
 	@field:SerializedName("Product")
-	val product: Any? = null,
+	val product: String? = null,
 
 	@field:SerializedName("InApproval")
 	val inApproval: Boolean? = null,
@@ -110,7 +110,7 @@ data class GraphTeamUniqueItem(
 	val approvalFieldList: Any? = null,
 
 	@field:SerializedName("Value")
-	val value: Any? = null,
+	val value: String? = null,
 
 	@field:SerializedName("Parameter")
 	val parameter: String? = null,

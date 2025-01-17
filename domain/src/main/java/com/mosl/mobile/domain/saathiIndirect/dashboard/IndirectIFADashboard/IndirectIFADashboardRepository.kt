@@ -38,8 +38,16 @@ interface IndirectIFADashboardRepository {
 
     fun fnGetIFASalesDashMeetingTeamUniqueGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
+    fun fnGetIFASalesDashMeetingTargetMetNotMetGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
     fun fnGetIFASalesDashMeetingMyUniqueGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
     fun fnGetIFASalesDashRevenueIPProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashRevenueIPDetail(strFilterValue: String):Observable<BusinessSnapshotCombo>
+
     fun fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String):Observable<String>
+    fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String):Observable<String>
+
 }

@@ -14,7 +14,11 @@ interface IndirectIFAUniqueView :BaseView {
 
     fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
 
+    fun fnonIfaActivationEventCalled() :Observable<IndirectIFAUniqueUiEvent.onIfaActivationEventCalled>
+
     fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled>
+
+    fun fnonRevenuBroEventCalled():Observable<IndirectIFAUniqueUiEvent.onRevenuBroEventCalled>
     fun fnRenderTest()
     fun onWidgetItemClick(): Observable<IndirectIFAUniqueUiEvent.ItemClick>
     fun renderWidgetData(widgetModel: WidgetModel, currentPosition: Int)
@@ -29,8 +33,16 @@ interface IndirectIFAUniqueView :BaseView {
      val strTeamUnique="Team Unique"
      val strTargetMetNotMeeting="Target Met Not Met"
      val strMyUnique="My Unique"
+
         val strProductWise="Product Wise sales"
         val strBranchWise="Branch Wise"
         val strTargetMetNotRevIp="Target Met Not Met"
+
+        val strIfaProductWise="Product Wise sales"
+        val strIfaBranchWise="Branch Wise"
+
+        val strRevBroProductWise="Product Wise sales"
+        val strRevBroBranchWise="Branch Wise"
+        val strRevBroTargetMetNotRevIp="Target Met Not Met"
     }
 }

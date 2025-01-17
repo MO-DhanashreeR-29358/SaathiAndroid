@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/margin_small" />
-            <!--OneUp and Head Target vs Achievement-->
+            <!--Report Graph-->
             <LinearLayout
                 android:id="@+id/llTeamUnique"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold"
-                        android:text="Target Vs Achievement"
+                        android:text="Report"
                         />
 
                     <androidx.appcompat.widget.AppCompatImageView
@@ -93,7 +93,7 @@
                 </LinearLayout>
 
             </LinearLayout>
-            <!-- my buisness snapshot IP -->
+            <!--Hierarchy wise -->
             <LinearLayout
                 android:id="@+id/llSnapshotip"
                 android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                 >
 
                 <RelativeLayout
-                    android:id="@+id/rlBusinessSnapshotHeadip"
+                    android:id="@+id/rlBusinessSnapshotHeadHierchyReport"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground"
@@ -113,24 +113,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toStartOf="@+id/tvSnapshotip"
+                        android:layout_toStartOf="@+id/tvHeadTitle1"
                         app:srcCompat="@drawable/ic_new_clients_leads"
                         />
 
                     <TextView
-                        android:id="@+id/tvSnapshotip"
+                        android:id="@+id/tvHeadTitle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="My Business Snapshot -IP"
+                        android:text="Hierarchy wise"
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivBusinessSnapshotHeadip"
+                        android:id="@+id/ivBusinessSnapshotHeadHierchyReport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -142,7 +142,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/llBusinessSnapshotHeadip"
+                    android:id="@+id/llBusinessSnapshotHeadHierchyReport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -150,9 +150,9 @@
 
 
             </LinearLayout>
-            <!-- my buisness snapshot broking -->
+            <!-- Details -->
             <LinearLayout
-                android:id="@+id/llSnapshot"
+                android:id="@+id/llSnapshotReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -160,7 +160,7 @@
                 >
 
                 <RelativeLayout
-                    android:id="@+id/rlBusinessSnapshotHead"
+                    android:id="@+id/rlBusinessSnapshotHeadReport"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:background="@color/titleBarBackground"
@@ -170,24 +170,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toStartOf="@+id/tvSnapshot"
+                        android:layout_toStartOf="@+id/tvHeadTitle2"
                         app:srcCompat="@drawable/ic_new_clients_leads"
                         />
 
                     <TextView
-                        android:id="@+id/tvSnapshot"
+                        android:id="@+id/tvHeadTitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:singleLine="true"
-                        android:text="My Business Snapshot -Broking"
+                        android:text=""
                         android:textColor="@color/alternateTextColor"
                         android:textSize="@dimen/appTitleTextSize"
                         android:textStyle="bold" />
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:id="@+id/ivBusinessSnapshotHead"
+                        android:id="@+id/ivBusinessSnapshotHeadReport"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -199,7 +199,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/llBusinessSnapshotHead"
+                    android:id="@+id/llBusinessSnapshotHeadReport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

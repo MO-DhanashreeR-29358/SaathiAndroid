@@ -39,9 +39,11 @@ val totalCountP: Int? = null,
 @JvmField @SerializedName("category")
 val category: Any? = null,
 
-@JvmField @SerializedName("fltUserStatus")
+@JvmField @SerializedName("flt_userstatus")
 val fltUserStatus: Any? = null,
 
     @JvmField @SerializedName("date")
     val date: String? = null,
+    @JvmField @SerializedName("flt_Hierarchy")
+    val fitHierarchy:String?=null,
 )
