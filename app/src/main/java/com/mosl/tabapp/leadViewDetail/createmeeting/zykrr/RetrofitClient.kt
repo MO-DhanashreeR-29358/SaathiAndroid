@@ -8,31 +8,44 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitClient {
 
     private var BASE_URL: String = ""
+    private var retrofitInstance: Retrofit? = null
 
+    // Set the base URL and reset Retrofit instance when BASE_URL is changed
     fun setBaseUrl(url: String) {
         this.BASE_URL = url
+        retrofitInstance = null  // Clear the cached Retrofit instance
     }
 
-    private val loggingInterceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
+    // Get the Retrofit instance with the updated BASE_URL
+    val retrofit: Retrofit
+        get() {
+            // If the Retrofit instance is null (not created yet), create a new one
+            if (retrofitInstance == null) {
+                if (BASE_URL.isEmpty()) {
+                    throw IllegalStateException("Base URL must be set before calling retrofit.")
+                }
 
-    private val okHttpClient = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
+                val loggingInterceptor = HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
 
-    val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+                val okHttpClient = OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build()
 
+                retrofitInstance = Retrofit.Builder()
+                    .baseUrl(BASE_URL)  // Use the updated BASE_URL
+                    .client(okHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+            }
+
+            return retrofitInstance!!
+        }
 }
 
-object ApiClient {
+class ApiClient(retrofit: Retrofit) {
     val apiService: ApiService by lazy {
-        RetrofitClient.retrofit.create(ApiService::class.java)
+        retrofit.create(ApiService::class.java)
     }
 }

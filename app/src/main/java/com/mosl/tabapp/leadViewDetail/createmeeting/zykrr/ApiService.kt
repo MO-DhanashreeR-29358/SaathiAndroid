@@ -4,17 +4,18 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("login")
+    @POST("login")
     fun getToken(
         @Header("username") username: String,
         @Header("password") password: String
     ): Call<tokenModel>
 
-    @GET("rulesEngine")
+    @POST("rulesEngine")
     fun registerParticipants(
         @Header("Content-Type") contentType: String,
         @Header("Cookie") token : String,

@@ -1697,8 +1697,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun callZykrrApi(){
-        RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/")
-        val callToken = ApiClient.apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
+        RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
+        val retro = RetrofitClient.retrofit
+        val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
 
         callToken.enqueue(object : Callback<tokenModel> {
             override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
@@ -1720,9 +1721,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun callZykrrRegisterApi(tokenModel: tokenModel){
-        RetrofitClient.setBaseUrl("'https://zapi.api.zykrr.com/api/rest/")
+        RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
+        val retro = RetrofitClient.retrofit
         val registerData = registerRequest(registerData(binding.layoutTopSection.tvLeadId.text.toString(),getMeetingData()))
-        val call = ApiClient.apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
+        val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
 
         call.enqueue(object : Callback<registerResponse> {
             override fun onResponse(call: Call<registerResponse>, response: Response<registerResponse>) {
@@ -1746,8 +1748,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         val list = ArrayList<MeetingFeedbackData>()
         try {
             val strDateTime  = getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE9)
-            val arrDateTime =  strDateTime.split("\'T\'")
-
+            val arrDateTime =  strDateTime.split(" ")
+            Timber.d("strDateTime: ${strDateTime}")
+            Timber.d("strDate: ${arrDateTime[0]}")
+            Timber.d("strTime: ${arrDateTime[1]}")
             val attendeeList = if (getAttendeeList()
                     .isEmpty()
             ) {
@@ -1756,11 +1760,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 .map {
                     AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
                 }
-            val strAttendee = Gson().toJson(attendeeList)
+            val strAttendee =if(attendeeList.isNotEmpty()) Gson().toJson(attendeeList) else ""
             val feedback = MeetingFeedbackData(
                 LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
                 RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
-                ActivityType = getSelectedMeetingLocation().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
+                ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
                 AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
                 MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()))
 
