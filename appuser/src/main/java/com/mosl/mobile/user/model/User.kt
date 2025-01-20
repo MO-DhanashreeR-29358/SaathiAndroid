@@ -188,8 +188,10 @@ data class User(
 
     fun isAttendanceAllowedForPCG(): Boolean {
         var flag = false
+
         if (myZoneProfile.equals("Group Leader-PCG Wealth", ignoreCase = true) ||
-            myZoneProfile.equals("PCG Wealth", ignoreCase = true)) {
+            myZoneProfile.equals("PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("HNI Sales", ignoreCase = true)) {
             flag = true
         }
         return flag
