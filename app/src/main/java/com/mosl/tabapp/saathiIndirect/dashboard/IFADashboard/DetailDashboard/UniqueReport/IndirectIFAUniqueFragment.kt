@@ -87,8 +87,8 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         binding = FragIndirectIfaUniqueBinding.bind(view)
         hideAppTitle()
         fnSetUpArgument()
-        setupViews()
         presenter.start()
+        setupViews()
         if (itemList.size > 0) {
             widgetUiEventIFA.onNext(
                 IndirectIFAUniqueUiEvent.ItemClick(
@@ -146,6 +146,19 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.name= IndirectIFAUniqueView.strIfaProductWise
+            objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
+            objWidgetMode.isSelected=true
+            itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
+
+            val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.name= IndirectIFAUniqueView.strIfaBranchWise
+            objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
+            objWidgetMode2.isSelected=false
+            itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
+
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
 
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
@@ -167,11 +180,28 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-            Toast.makeText(requireContext(),"in else graph before event",Toast.LENGTH_LONG).show()
 
             widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.name= IndirectIFAUniqueView.strRevBroProductWise
+            objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
+            objWidgetMode.isSelected=true
+            itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
+
+            val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.name= IndirectIFAUniqueView.strRevBroBranchWise
+            objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
+            objWidgetMode2.isSelected=false
+            itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
+
+            val objWidgetMode3: WidgetModel = WidgetModel()
+            objWidgetMode3.name= IndirectIFAUniqueView.strRevBroTargetMetNotRevIp
+            objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
+            objWidgetMode3.isSelected=false
+            itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
 
         }
 
@@ -204,7 +234,15 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
        return widgetUiEventIFA.ofType()
     }
 
+    override fun fnonIfaActivationEventCalled(): Observable<IndirectIFAUniqueUiEvent.onIfaActivationEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
     override fun fnonRevenuIpEventCalled(): Observable<IndirectIFAUniqueUiEvent.onRevenuIpEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnonRevenuBroEventCalled(): Observable<IndirectIFAUniqueUiEvent.onRevenuBroEventCalled> {
         return widgetUiEventIFA.ofType()
     }
 
