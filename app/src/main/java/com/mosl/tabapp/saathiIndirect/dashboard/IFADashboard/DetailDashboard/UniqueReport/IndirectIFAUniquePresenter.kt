@@ -21,6 +21,11 @@ class IndirectIFAUniquePresenter  @Inject constructor(
 ): BasePresenter<IndirectIFAUniqueView>(view) {
     override fun start() {
 
+        view.onFilterEventCalled().subscribe {
+            view.fnRenderFilterEventCalled(it.strFilterText)
+        }.addTo(disposable)
+
+
         view.fnonMeetingEventCalled().switchMap {
                 indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
         }.subscribe {
@@ -36,7 +41,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             }.addTo(disposable)
 
         widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strTeamUnique }
+            .filter { it.widgetItemInfo.id  == "1" }
             .switchMap {
                 indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
             }
@@ -44,7 +49,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             .addTo(disposable)
 
         widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strTargetMetNotMeeting }
+            .filter { it.widgetItemInfo.id  == "2" }
             .switchMap {
                 indirectRepo.fnGetIFASalesDashMeetingTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
             }
@@ -52,13 +57,32 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             .addTo(disposable)
 
         widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strMyUnique }
+            .filter { it.widgetItemInfo.id  == "3" }
             .switchMap {
                 indirectRepo.fnGetIFASalesDashMeetingMyUniqueGraph(getWidgetRequest()).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
+        view.fnonIfaActivationEventCalled().switchMap {
+            indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+        }.subscribe {
+            view.renderData(it)
+        }.addTo(disposable)
 
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "4" }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "5" }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashIFAActivationBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
         view.fnonRevenuIpEventCalled().switchMap {
 indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
         }.subscribe {
@@ -66,9 +90,53 @@ indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestRev
         }.addTo(disposable)
 
         widgetItemClickObsc
-            .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strMyUnique }
+            .filter { it.widgetItemInfo.id  == "6" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingMyUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "7"  }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueIPBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "8" }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+
+
+        view.fnonRevenuBroEventCalled()
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+            }.subscribe {
+                view.renderData(it)
+            }.addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "9"  }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.id  == "10"  }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueBrokingBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
+        widgetItemClickObsc
+            .filter {it.widgetItemInfo.id  == "11"  }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 

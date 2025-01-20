@@ -83,6 +83,7 @@ import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardDetailsGraphCommonDataResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFADashboardFilterResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFAWidgetCommonResponse
 import com.mosl.saathi.api.model.search.SearchResponse
@@ -412,21 +413,65 @@ interface SaathiIndirectApi {
    @POST("Dashboard/GetIFASalesDashRevenueIPProductWiseSalesGraph")
    fun getIFASalesDashRevenueIPProductWiseSalesGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
 
-   // revenu Ip details
-   @POST("Dashboard/GetIFASalesDashRevenueIPDetail")
-   fun getIFASalesDashRevenueIPDetail(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+   @POST("Dashboard/GetIFASalesDashRevenueIPBranchWiseGraph")
+   fun getIFASalesDashRevenueIPBranchWiseGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   @POST("Dashboard/GetIFASalesDashRevenueIPTargetMetNotMetGraph")
+   fun getIFASalesDashRevenueIPTargetMetNotMetGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   // ifa activation product wize
+   @POST("Dashboard/GetIFASalesDashIFAActivationProductWiseGraph")
+   fun getIFASalesDashIFAActivationProductWiseGraph ( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   // ifa activation branch wise
+
+   @POST("Dashboard/GetIFASalesDashIFAActivationBranchWiseGraph")
+   fun getIFASalesDashIFAActivationBranchWiseGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
 
     //Revenu Broking product wise sales
    @POST("Dashboard/GetIFASalesDashRevenueBrokingProductWiseSalesGraph")
    fun getIFASalesDashRevenueBrokingProductWiseSalesGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
 
-   // Revenu Broking hierchy
+   // Revenu broking branch wise
+   @POST("Dashboard/GetIFASalesDashRevenueBrokingBranchWiseGraph")
+   fun getIFASalesDashRevenueBrokingBranchWiseGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+   @POST("Dashboard/GetIFASalesDashRevenueBrokingTargetMetNotMetGraph")
+   fun getIFASalesDashRevenueBrokingTargetMetNotMetGraph( @Body request: FOCODashboardFilterpostReq):Observable<IndirectDashboardDetailsGraphCommonDataResponse>
+
+    // Revenu Broking hierchy
    @POST("Dashboard/GetIFASalesDashRevenueBrokingHierarchy")
-   fun getIFASalesDashRevenueBrokingHierarchy(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+   fun getIFASalesDashRevenueBrokingHierarchy(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     // Revenu Broking details
    @POST("Dashboard/GetIFASalesDashRevenueBrokingDetail")
-   fun getIFASalesDashRevenueBrokingDetail(@Body request: IndirectDashboardFilterPostRequest):Observable<ResponseBody>
+   fun getIFASalesDashRevenueBrokingDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+
+   @POST("Dashboard/GetIFASalesDashMeetingDetail")
+   fun getIFASalesDashMeetingDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+
+   // ifa details
+   @POST("Dashboard/GetIFASalesDashIFAActivationDetail")
+   fun getIFASalesDashIFAActivationDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetIFASalesDashRevenueIPDetail")
+   fun getIFASalesDashRevenueIPDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+
+//meeting hierchy
+    @POST("Dashboard/GetIFASalesDashMeetingHierarchy")
+    fun getIFASalesDashMeetingHierarchy(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    // ifa hierchy
+    @POST("Dashboard/GetIFASalesDashIFAActivationHierarchy")
+    fun  GetIFASalesDashIFAActivationHierarchy (@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    //Revenu ip hierchy
+   @POST("Dashboard/GetIFASalesDashRevenueIPHierarchy")
+   fun getIFASalesDashRevenueIPHierarchy(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     /*************IFADashboard End Here************/
 }

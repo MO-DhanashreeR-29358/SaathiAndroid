@@ -11,7 +11,15 @@ interface IndirectIFAUniqueReportHierchyTableView :BaseView {
     fun renderData(uiModel: UiModel<BusinessSnapshotCombo>)
 
     fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged>
-
     fun fnRenderFilterEventCalled(strFilterVal:String)
+
     fun fngetFilterValue():String
+
+    fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled>
+
+    fun fnonIfaActivationEventCalled() :Observable<IndirectIFAUniqueReportHierchyUiEvent.onIfaActivationEventCalled>
+
+    fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueReportHierchyUiEvent.onRevenuIpEventCalled>
+
+    fun fnonRevenuBroEventCalled():Observable<IndirectIFAUniqueReportHierchyUiEvent.onRevenuBroEventCalled>
 }

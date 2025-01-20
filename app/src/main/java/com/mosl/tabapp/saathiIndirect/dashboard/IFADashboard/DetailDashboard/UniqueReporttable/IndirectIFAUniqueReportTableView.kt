@@ -11,7 +11,14 @@ interface IndirectIFAUniqueReportTableView :BaseView {
     fun renderData(uiModel: UiModel<BusinessSnapshotCombo>)
 
     fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged>
-
     fun fnRenderFilterEventCalled(strFilterVal:String)
     fun fngetFilterValue():String
+
+    fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled>
+
+    fun fnonIfaActivationEventCalled() :Observable<IndirectIFAUniqueTableReportUiEvent.onIfaActivationEventCalled>
+
+    fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuIpEventCalled>
+
+    fun fnonRevenuBroEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled>
 }

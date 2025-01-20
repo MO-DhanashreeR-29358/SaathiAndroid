@@ -2,6 +2,7 @@ package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.Un
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
@@ -17,6 +18,7 @@ import com.mosl.tabapp.databinding.FragUniqueReportHierchyTableBinding
 import com.mosl.tabapp.databinding.FragUniqueReportTableBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
 import com.mosl.tableview.rowadapter.TableRowAdapter
@@ -35,6 +37,8 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
     private val navigateEvent = PublishSubject.create<MutableMap<String, String>>()
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     var strFilterVal:String="Last FY"
+    var strWidgetType:String =""
+    private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueReportHierchyUiEvent>()
 
     override fun getLayout(): Int {
         return R.layout.frag_unique_report_hierchy_table
@@ -43,9 +47,9 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragUniqueReportHierchyTableBinding.bind(view)
+        fnSetUpArgument()
         presenter.start()
         setUpView()
-        dataActionSubject.onNext(DataAction.Fetch)
 
     }
     private fun setUpView() {
@@ -72,6 +76,24 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
                 }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
+
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuBroEventCalled)
+        }
+    }
+    private fun fnSetUpArgument()
+    {
+        strWidgetType= this.arguments?.getString(MOSLConstants.SYSTEM_NAME, "") ?: ""
     }
     override fun onDestroyView() {
         presenter.stop()
@@ -124,6 +146,7 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
 
     override fun fnRenderFilterEventCalled(strFilterVal: String) {
         this.strFilterVal=strFilterVal
+        Toast.makeText(requireContext(),"value hierchy table "+this.strFilterVal, Toast.LENGTH_LONG).show()
         //dataActionSubject.onNext(DataAction.Fetch)
     }
 
@@ -131,5 +154,20 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
         return this.strFilterVal
     }
 
+    override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnonIfaActivationEventCalled(): Observable<IndirectIFAUniqueReportHierchyUiEvent.onIfaActivationEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnonRevenuIpEventCalled(): Observable<IndirectIFAUniqueReportHierchyUiEvent.onRevenuIpEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnonRevenuBroEventCalled(): Observable<IndirectIFAUniqueReportHierchyUiEvent.onRevenuBroEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
 
 }

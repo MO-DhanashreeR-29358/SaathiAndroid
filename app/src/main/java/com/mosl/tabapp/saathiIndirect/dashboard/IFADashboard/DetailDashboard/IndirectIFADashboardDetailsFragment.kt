@@ -69,7 +69,7 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
                 position: Int,
                 id: Long
             ) {
-               // subject.onNext(IndirectIFADashboardUIEvent.onFilterChanged(binding.spFilterBank.selectedItem.toString()))
+                subject.onNext(IndirectIFADashboardDetailsUiEvent.onFilterChanged(binding.spFilterPeriod.selectedItem.toString()))
 
             }
 
