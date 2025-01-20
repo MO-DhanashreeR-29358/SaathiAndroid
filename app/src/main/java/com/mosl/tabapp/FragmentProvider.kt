@@ -90,6 +90,10 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.Ind
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyTableModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReporttable.IndirectIFAUniqueReportTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReporttable.IndirectIFAUniqueReportTableModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
@@ -323,5 +327,12 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectIFABuisnessSnapshotIpModule::class])
     fun provideIndirectIFABuisnessSnapshotIpFragmentFactory():IndirectIFABuisnessSnapshotIpFragment
+
+
+    @ContributesAndroidInjector(modules = [IndirectIFAUniqueReportTableModule::class])
+    fun provideIndirectIFAUniqueReportFragmentFactory():IndirectIFAUniqueReportTableFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAUniqueReportHierchyTableModule::class])
+    fun provideIndirectIFAUniqueReportHierchyFragmentFactory():IndirectIFAUniqueReportHierchyTableFragment
 
 }

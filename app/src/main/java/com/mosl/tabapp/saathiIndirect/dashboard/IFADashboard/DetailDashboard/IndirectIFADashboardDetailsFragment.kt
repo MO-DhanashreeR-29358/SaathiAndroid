@@ -19,7 +19,14 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.dashboard.base.DashboardFragment
 import com.mosl.tabapp.databinding.FragIndirectIfaDashboardBinding
 import com.mosl.tabapp.databinding.FragIndirectIfaDashboardDetailsBinding
+import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.HorinzatalIFAUniqueWidgetItem
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueView
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReporttable.IndirectIFAUniqueReportTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
@@ -46,8 +53,8 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         binding = FragIndirectIfaDashboardDetailsBinding.bind(view)
         hideAppTitle()
         fnSetUpArgument()
-        setupViews()
         presenter.start()
+        setupViews()
         dataActionSubject.onNext(DataAction.Fetch)
     }
 
@@ -77,7 +84,39 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
                 binding.llTeamUniqueAchievement, binding.ivTeamUniqueAchievement
             )
         }
+
+        binding.ivBusinessSnapshotHeadHierchyReport.setOnClickListener {
+            toggleSection(
+                binding.llBusinessSnapshotHeadHierchyReport, binding.ivBusinessSnapshotHeadHierchyReport
+            )
+        }
+
+        binding.ivBusinessSnapshotHeadReport.setOnClickListener {
+            toggleSection(
+                binding.llBusinessSnapshotHeadReport, binding.ivBusinessSnapshotHeadReport
+            )
+        }
         loadTeamTargetAchievementFragment()
+        loadHierchyReportTable()
+        loadReporttable()
+
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            binding.tvHeadTitle1.setText("Hierarchy wise meetings")
+            binding.tvHeadTitle2.setText("Meeting Details")
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            binding.tvHeadTitle1.setText("Hierarchy wise IFA Activation")
+            binding.tvHeadTitle2.setText("FA Activation Details")
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            binding.tvHeadTitle1.setText("Hierarchy wise meetings")
+            binding.tvHeadTitle2.setText("Revenue IP Details")
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            binding.tvHeadTitle1.setText("Hierarchy wise Broking")
+            binding.tvHeadTitle2.setText("Revenue Broking Details")
+        }
 
     }
 
@@ -123,6 +162,31 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         requireActivity().supportFragmentManager
             .beginTransaction()
             .replace(R.id.llTeamUniqueAchievement, leadsFragment)
+            .commit()
+    }
+
+    private fun loadHierchyReportTable()
+    {
+
+        val args = Bundle()
+        val leadsFragment = IndirectIFAUniqueReportHierchyTableFragment()
+        args.putSerializable(MOSLConstants.SYSTEM_NAME, strWidgetType)
+        leadsFragment.arguments = args
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.llBusinessSnapshotHeadHierchyReport, leadsFragment)
+            .commit()
+    }
+
+    private  fun loadReporttable()
+    {
+        val args = Bundle()
+        val leadsFragment = IndirectIFAUniqueReportTableFragment()
+        args.putSerializable(MOSLConstants.SYSTEM_NAME, strWidgetType)
+        leadsFragment.arguments = args
+        requireActivity().supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.llBusinessSnapshotHeadReport, leadsFragment)
             .commit()
     }
 

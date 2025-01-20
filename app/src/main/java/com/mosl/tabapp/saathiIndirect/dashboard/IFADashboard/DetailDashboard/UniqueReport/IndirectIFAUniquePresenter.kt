@@ -27,9 +27,6 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             view.renderData(it)
         }.addTo(disposable)
 
-        view.fnonRevenuIpEventCalled().subscribe {
-            view.fnRenderTest()
-        }.addTo(disposable)
 
         val widgetItemClickObsc = view.onWidgetItemClick().share()
 
@@ -49,7 +46,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         widgetItemClickObsc
             .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strTargetMetNotMeeting }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashMeetingTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
@@ -62,11 +59,19 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             .addTo(disposable)
 
 
-//        view.onRevenuIpEventCalled().switchMap {
-//            indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
-//        }.subscribe {
-//            view.renderData(it)
-//        }.addTo(disposable)
+        view.fnonRevenuIpEventCalled().switchMap {
+indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+        }.subscribe {
+            view.renderData(it)
+        }.addTo(disposable)
+
+        widgetItemClickObsc
+            .filter { it.widgetItemInfo.name  == IndirectIFAUniqueView.strMyUnique }
+            .switchMap {
+                indirectRepo.fnGetIFASalesDashMeetingMyUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+            }.subscribe(view::renderData, Timber::e)
+            .addTo(disposable)
+
 
 
 
