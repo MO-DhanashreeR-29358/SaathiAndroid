@@ -14,9 +14,8 @@ interface ApiService {
         @Header("password") password: String
     ): Call<tokenModel>
 
-    @GET("rest/{meetingId}/registerParticipantsForSurvey")
+    @GET("rulesEngine")
     fun registerParticipants(
-        @Path("meetingId") meetingId: String,
         @Header("Content-Type") contentType: String,
         @Header("Cookie") token : String,
         @Body request: registerRequest

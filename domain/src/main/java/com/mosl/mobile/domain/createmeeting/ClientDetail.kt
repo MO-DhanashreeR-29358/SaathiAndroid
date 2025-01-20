@@ -11,7 +11,8 @@ data class ClientDetail(
   @JvmField val isPotentialPMSProduct: String,
   @JvmField val sourceName: String,
   @JvmField val prospectSource: String,
-  @JvmField val activateOTPInApp: String
+  @JvmField val activateOTPInApp: String,
+  @JvmField val leadCreationDate: String
 )
 
 data class LookUp(

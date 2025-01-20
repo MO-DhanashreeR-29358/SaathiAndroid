@@ -27,7 +27,8 @@ object CreateMeetingMapper {
             isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: "",
             sourceName = clientDetailItem.sourceName?: "",
             prospectSource = clientDetailItem.prospectSource?: "",
-            activateOTPInApp = clientDetailItem.ActivateOTPInApp?: ""
+            activateOTPInApp = clientDetailItem.ActivateOTPInApp?: "",
+            leadCreationDate = clientDetailItem.creationDate?: ""
         )
     }
 
@@ -66,7 +67,8 @@ object CreateMeetingMapper {
             isOnlyClient = false,
             sourceName = leadViewItem.sourceName?: "",
             prospectSource = leadViewItem.prospectSource?: "",
-            activateOTPInApp = leadViewItem.ActivateOTPInApp?: ""
+            activateOTPInApp = leadViewItem.ActivateOTPInApp?: "",
+            leadCreationDate = leadViewItem.creationDate?:""
         )
     }
 
