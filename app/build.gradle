@@ -84,7 +84,7 @@ android {
         uat {
             versionCode versionProps['uatCode'].toInteger()
             versionName versionProps['uatName']
-            //applicationIdSuffix '.uat'
+            applicationIdSuffix '.uat'
             signingConfig signingConfigs.internal
             buildConfigField 'boolean', 'LOGOUT_ON_UPDATE', "${versionProps['clearUserLogin']}"
             dimension 'releaseType'

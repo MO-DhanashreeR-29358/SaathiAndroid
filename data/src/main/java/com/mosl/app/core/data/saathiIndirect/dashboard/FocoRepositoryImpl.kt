@@ -210,7 +210,6 @@ class FocoRepositoryImpl @Inject constructor(
 
     private fun renderTable(response: String?): DashboardReportCombo {
         if(response != null) {
-            Log.d("dashboardReportRes", response)
             val jsonObject = JSONObject(response)
             val jsonArray = if (jsonObject.has("Response")) {
                 jsonObject.getJSONObject("Response")
@@ -240,8 +239,10 @@ class FocoRepositoryImpl @Inject constructor(
                     val values: ArrayList<String> = ArrayList()
                     val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                     headers.forEach { header ->
-                        if (!header.equals("WidgetSystemName", ignoreCase = true) &&
-                            !header.equals("flg_empcode", ignoreCase = true)
+                        if (!header.equals("IsAdminMode", ignoreCase = true) &&
+                            !header.equals("Status", ignoreCase = true) &&
+                            !header.equals("InApproval", ignoreCase = true) &&
+                            !header.equals("CreationDate", ignoreCase = true)
                         ) {
                             headerData.add(header)
                             try {
