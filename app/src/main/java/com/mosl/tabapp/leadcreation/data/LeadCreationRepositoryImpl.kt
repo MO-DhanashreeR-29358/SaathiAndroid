@@ -277,6 +277,17 @@ class LeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(request)
     }
 
+    override fun getStandardRemarkList(lookupTypeId : Int): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = lookupTypeId
+        )
+        return saathiApi.getAllLookup(request)
+            .map { it.mapToRowDatasWithNoDefault() }
+    }
+
     override fun getChipsList(): Observable<List<RowData>> {
         return saathiApi.getChipsList(ChipsEventsRequest(userManager.getUser()!!.employeeCode))
             .map { it.chipsItemsToRowDatas() }

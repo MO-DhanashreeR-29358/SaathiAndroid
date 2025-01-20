@@ -1,8 +1,10 @@
 package com.mosl.tabapp.navigation
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import com.mosl.annotations.ActivityScoped
@@ -88,8 +90,25 @@ class ScreenNavigatorImpl @Inject constructor(
     openPage(FragmentNavigationEntry.goBackWithResult(result))
   }
 
+  @SuppressLint("WrongConstant")
   override fun openHome() {
-    openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
+    if(userManager.getUser()?.isIndirectUser() == true){
+      if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("FOCO",true))
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
+      }
+      else if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("IFA",true))
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
+      }
+      else
+      {
+        openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
+      }
+
+    }else{
+      openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)
+    }
   }
 
   @Deprecated("prefer openPage(NavigationRequest)")
@@ -246,24 +265,32 @@ class ScreenNavigatorImpl @Inject constructor(
       putString(UCID, data.ucid)
       putString(MEETING_ID, data.meetingId)
     }
-    openPage(NAVIGATE_TO_SET_APPOINTMENT.toString(), args, true)
+    if(userManager.getUser()?.isIndirectUser() == true){
+      openPage(NAVIGATE_TO_INDIRECT_APPOINTMENT.toString(), args, true)
+    }else{
+      openPage(NAVIGATE_TO_SET_APPOINTMENT.toString(), args, true)
+    }
+
   }
 
   override fun openUpdateMeetingScreen(data: Appointment) {
 
     val updateMeetingScreenData = data.mapToUpdateMeetingScreenData()
 
-        val args = Bundle().apply {
-            /*putString(MEETING, data.meetingId)
-            putString(LEAD_ID, data.leadId)
-            putString(DATE, data.date)
-            putString(TIME, data.time)
-            putString(PRODUCT, data.product)
-            putString(UCID, data.ucid)*/
-            putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
-        }
+    if(userManager.getUser()?.isIndirectUser() == true){
+      val args = Bundle().apply {
+        putString(LEAD_ID, data.leadId)
+        putString(UCID, data.ucid)
+        putString(MEETING_ID, data.meetingId)
+      }
+      openPage(NAVIGATE_TO_INDIRECT_CREATE_MEETING.toString(), args, true)
+    }else{
+      val args = Bundle().apply {
+        putParcelable(ARG_UPDATE_MEETING, updateMeetingScreenData)
+      }
+      openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
+    }
 
-    openPage(NAVIGATE_TO_UPDATE_MEETING.toString(), args, true)
   }
 
   override fun navigateToSecondLevelDashboard(

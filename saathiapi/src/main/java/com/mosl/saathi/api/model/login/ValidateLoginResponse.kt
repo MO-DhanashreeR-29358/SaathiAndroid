@@ -17,7 +17,7 @@ data class ValidateLoginResponse(
 	@JvmField val isChequeApprovalEnable: Int? = null,
 
 	@SerializedName("User")
-	@JvmField val user: Any? = null,
+	@JvmField val user: NewUser? = null,
 
 	@SerializedName("IsPrimeUser")
 	@JvmField val isPrimeUser: Int? = null,

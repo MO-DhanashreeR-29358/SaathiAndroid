@@ -22,16 +22,23 @@ class LeadActivitiesDetailFragment : CommonFragment() {
     super.onViewCreated(view, savedInstanceState)
     binding = FragLeadActDetailConstraintBinding.bind(view)
     setAppTitle(arguments?.getString("MeetingReason") ?: "Activities Details")
-    setUpView()
+    if(userManager.getUser()?.isIndirectUser() == true){
+      setInDirectUpView()
+    }else{
+      setDirectUpView()
+    }
+
+
   }
 
-  private fun setUpView() {
+  private fun setDirectUpView() {
 
     try {
       val data = arguments?.getParcelable<MeetingParcel>(ARG_MEETING_DETAILS)
       data?.let {
 
         binding.apply {
+          indirectContainer.visibility = View.GONE
           tvMonthDate.text = it.date
           tvTime.text = it.time
           tvMobile.text = it.mobileNumber
@@ -48,7 +55,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvMeetingDuration.text = it.meetingDuration
           tvActionable.text = it.actionable
           tvCategory.text = it.category
-          tvQueryDesc.text = it.queryDescription
+          tvQueryDesc.text = it.queryDescription.ifEmpty { it.meetingDescription }
           tvComments.text = it.comment
           tvLocation.text = it.location
           tvMeetingAddress.text = it.meetingAddress
@@ -56,7 +63,7 @@ class LeadActivitiesDetailFragment : CommonFragment() {
           tvTravellingMode.text = it.travellingMode
           tvAmount.text = it.amount
           tvGeoMeetingLocation.text = it.location
-          tvGeoTag.text = it.geoTag
+          tvGeoTag.text = it.geoTag.ifEmpty { "false" }
 
           if(it.touchedUntouched.isNotEmpty() && it.feedback.isNotEmpty()){
             groupTouchedFeedback.visibility = View.VISIBLE
@@ -87,6 +94,46 @@ class LeadActivitiesDetailFragment : CommonFragment() {
 
   }
 
+  private fun setInDirectUpView() {
+
+    try {
+      val data = arguments?.getParcelable<MeetingParcel>(ARG_MEETING_DETAILS)
+      data?.let {
+
+        binding.apply {
+          directContainer.visibility = View.GONE
+          tvMonthDate.text = it.meetingDate
+          tvTime.text = it.time
+
+          tvLead.text = it.leadId
+          tvActionDate.text = it.actionDate
+          tvActionTime.text = it.actionTime
+          tvMeetingDate.text = it.meetingDate
+          tvMeetingTime.text = it.time
+          tvStage.text = it.stage
+          tvCreatedBy.text = it.createdBy
+          tvIndirectMeetingDuartion.text = it.meetingDuration
+          tvCreateFromAppoint.text = "No"
+          tvIndirectStatus.text = it.statusName
+          tvInterestedIn.text = it.prodType
+          tvIndirectAcitvityType.text = it.activityType
+          tvIndirectMeetingReason.text = it.meetingReason
+          tvIndirectCategory.text = it.category
+          tvIndirectMeetingDesc.text =  it.meetingDescription
+          tvGeoTagStatus.text = it.geoTag.ifEmpty { "false" }
+
+          when {
+            it.attendeeEmployee.isNotEmpty() -> {
+              tvAttendees.text =  it.attendeeEmployee
+            }
+          }
+        }
+      }
+    } catch (e: Exception) {
+      e.printStackTrace()
+    }
+
+  }
   companion object {
     const val ARG_MEETING_DETAILS = "arg_meeting_details"
   }

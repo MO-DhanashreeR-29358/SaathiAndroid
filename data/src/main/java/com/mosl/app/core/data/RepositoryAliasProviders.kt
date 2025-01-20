@@ -19,6 +19,11 @@ import com.mosl.app.core.data.pendingapproval.report.PendingForApprovalRepositor
 import com.mosl.app.core.data.productivity.ProductivityRepositoryImpl
 import com.mosl.app.core.data.reactivation.ReactivationRepositoryImpl
 import com.mosl.app.core.data.report.HierarchyReportRepositoryImpl
+import com.mosl.app.core.data.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepositoryImpl
+import com.mosl.app.core.data.saathiIndirect.SetAppointment.IndirectSetAppointmentRepositoryImpl
+import com.mosl.app.core.data.saathiIndirect.createMeeting.IndirectCreateMeetingRepositroyImpl
+import com.mosl.app.core.data.saathiIndirect.dashboard.DashboardIndirectRepositoryImpl
+import com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepositoryImpl
 import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
@@ -41,6 +46,11 @@ import com.mosl.mobile.domain.pendingapproval.PendingForApprovalRepository
 import com.mosl.mobile.domain.productivity.ProductivityRepository
 import com.mosl.mobile.domain.reactivation.ReactivationRepository
 import com.mosl.mobile.domain.report.HierarchyReportRepository
+import com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepository
+import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository
+import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
+import com.mosl.mobile.domain.saathiIndirect.dashboard.DashboardIndirctRepository
+import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotRepository
 import com.mosl.mobile.domain.target.TargetRepository
 import com.mosl.mobile.domain.teamtarget.TeamTargetRepository
@@ -121,4 +131,20 @@ interface RepositoryAliasProviders {
 
     @Binds
     fun bindsReactivationRepository(repository: ReactivationRepositoryImpl): ReactivationRepository
+
+    @Binds
+    fun provideDashboardIndirctRepository(repository: DashboardIndirectRepositoryImpl
+    ): DashboardIndirctRepository
+
+    @Binds
+    fun provideIndirectSetAppointmentRepository(repository:IndirectSetAppointmentRepositoryImpl): IndirectSetAppointmentRepository
+
+    @Binds
+    fun provideIndirectCreateMeetingRepository(repository: IndirectCreateMeetingRepositroyImpl):IndirectCreateMeetingRepository
+
+    @Binds
+    fun provideIndirectProspestMeetingRepository(repository: IndirectProspestMeetingRepositoryImpl):IndirectProspestMeetingRepository
+
+    @Binds
+    fun  provideIndirectIFADashboardRepository(repository: IndirectIFADashboardRepositoryImpl): IndirectIFADashboardRepository
 }

@@ -89,7 +89,8 @@ fun LeadViewItem.leadViewItemToLeadDetail(): LeadDetail {
       bandhanBankEmpCode = BandhanBankEmployeeCode?: emptyString(),
       auBankName = auBankName?: emptyString(),
       auBankBranchCode = auBankBranchCode ?: emptyString(),
-      isStageCompleted = IsStageCompleted
+      isStageCompleted = IsStageCompleted,
+      standardRemarksId = standardRemarksId
   )
 }
 

@@ -15,6 +15,7 @@ import com.mosl.app.core.data.HRMSResponseWrapper;
 import com.mosl.app.core.data.MOSLResponseWrapper;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.data.meta.MyZoneAPIRetrofit;
+import com.mosl.app.core.data.meta.SaathiIndirectAPIRetrofit;
 import com.mosl.app.core.rx.RxDispatchers;
 import com.mosl.commons.rx.Dispatchers;
 import com.mosl.mobile.coredata.PreferenceDataModule;
@@ -56,6 +57,18 @@ public abstract class BaseDataModule {
                                                       ScalarsConverterFactory scalarsConverterFactory) {
         return new Retrofit.Builder().client(client)
             .addConverterFactory(scalarsConverterFactory)
+                .addConverterFactory(moslResponseWrapper)
+                .addConverterFactory(gsonConverterFactory)
+                .addCallAdapterFactory(rxJava2CallAdapterFactory);
+    }
+
+    @Provides
+    @Singleton
+    @SaathiIndirectAPIRetrofit
+    static  Retrofit.Builder proivdeSaathiIndrectRetrofitBuilder(OkHttpClient client,
+                                                                 HRMSResponseWrapper moslResponseWrapper, GsonConverterFactory gsonConverterFactory,
+                                                                 RxJava3CallAdapterFactory rxJava2CallAdapterFactory){
+        return new Retrofit.Builder().client(client)
                 .addConverterFactory(moslResponseWrapper)
                 .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJava2CallAdapterFactory);

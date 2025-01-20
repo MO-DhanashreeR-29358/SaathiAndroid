@@ -1,0 +1,11 @@
+Version : 2.6.9
+Upload Date : 20.12.2014
+Release Note :  adding indirect flow for pcg advisory and pcg admin
+                Modules cover - lead creation, lead view details, create meeting, set appointment,
+                                menu drawer, prospect meeting, lead search on dashboard.
+---------------------------------------------------------------------------------------------
+Version : 2.7.0
+Upload Date : 23.12.2014
+Release Note :  1. attendance for pcg (reverted code pushed)
+                2. Standard remark drop down added in lead detail page for alliance profile for AUSFBMAIN only
+                    Field should be mandatory and by default first value selected.

@@ -182,6 +182,20 @@ internal fun List<LookupItem>.mapToRowDatas(): List<RowData> {
     }.addSelectRowData()
 }
 
+internal fun List<LookupItem>.mapToRowDatasWithNoDefault(): List<RowData> {
+    return mapIndexedNotNull { index: Int, lookupItem: LookupItem ->
+        try {
+            RowData(
+                index,
+                "${lookupItem.lookUpid}",
+                lookupItem.lookUpName ?: "",
+                lookupItem.sysName ?: ""
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+}
 internal fun List<LookupItem>.mapToClientTypeRowDatas(): List<RowData> {
     return mapIndexedNotNull { index: Int, lookupItem: LookupItem ->
         try {

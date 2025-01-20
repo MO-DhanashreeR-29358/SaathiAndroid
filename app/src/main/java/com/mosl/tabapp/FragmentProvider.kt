@@ -58,8 +58,6 @@ import com.mosl.tabapp.leadViewDetail.history.MappingHistoryFragment
 import com.mosl.tabapp.leadViewDetail.history.MappingHistoryModule
 import com.mosl.tabapp.leadcreation.ui.LeadCreationFragment
 import com.mosl.tabapp.leadcreation.ui.LeadCreationModule
-import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
-import com.mosl.tabapp.login.otpverification.OtpVerificationModule
 import com.mosl.tabapp.notification.NotificationFragment
 import com.mosl.tabapp.notification.NotificationModule
 import com.mosl.tabapp.pendingApproval.PendingApprovalFragment
@@ -84,12 +82,48 @@ import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.ReportModule
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportModule
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportModule
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportModule
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetModule
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainModule
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentModule
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentModule
 import com.mosl.tabapp.smt.SMTFragment
 import com.mosl.tabapp.webview.WebviewFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestMeetingModule
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 
 @Module(includes = [LeadViewDetailFragmentProvider::class])
 interface FragmentProvider {
@@ -99,6 +133,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector
     fun provideLeadViewMainFactory(): LeadViewMainFragment
+
+    @ContributesAndroidInjector(modules = [IndirectLeadDetailMainModule::class])
+    fun provideIndirectLeadViewMainFactory(): IndirectLeadDetailMainFragment
 
     @ContributesAndroidInjector
     fun provideLeadViewDetailFactory(): LeadViewDetailFragment
@@ -132,6 +169,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [TargetModule::class])
     fun provideAuTargetVsAchievementFragmentFactory(): TargetFragment
+
+    @ContributesAndroidInjector(modules = [FocoTargetModule::class])
+    fun provideFocoTargetVsAchievementFragmentFactory(): FocoTargetFragment
 
     @ContributesAndroidInjector(modules = [MonthOnMonthTrendsModule::class])
     fun provideMonthOnMonthTrendsFragmentFactory(): MonthOnMonthTrendsFragment
@@ -235,5 +275,53 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [VerifyOtpModule::class])
     fun provideVerifyDialogFragmentFactory(): VerifyDialogFragment
+
+    @ContributesAndroidInjector(modules = [IndirectDashboardModule::class])
+    fun provideIndirectDashboardFragmentFactory(): IndirectDashboardFragment
+
+    @ContributesAndroidInjector(modules = [FocoDashboardModule::class])
+    fun provideIndirectFocoDashboardFragmentFactory(): FocoDashboardFragment
+
+    @ContributesAndroidInjector(modules = [FocoDashboardReportModule::class])
+    fun provideIndirectFocoDashboardReportFragmentFactory(): FocoDashboardReportFragment
+
+    @ContributesAndroidInjector(modules = [FocoHierarchyReportModule::class])
+    fun provideIndirectFocoHierarchyReportFragmentFactory(): FocoHierarchyReportFragment
+
+    @ContributesAndroidInjector(modules = [IndirectLeadCreationModule::class])
+    fun provideIndirectLeadCreationFactory(): IndirectLeadCreationFragment
+
+    @ContributesAndroidInjector(modules=[IndirectSetAppointmentModule::class])
+    fun provideIndirectSetAppointmentFragmentFactory(): IndirectSetAppointmentFragment
+
+    @ContributesAndroidInjector (modules = [IndirectCreateMeetingModule::class])
+    fun provideIndirectCreateMeetingFragmentFactory():IndirectCreateMeetingFragment
+
+    @ContributesAndroidInjector(modules=[IndirectProspestMeetingModule::class])
+    fun provideIndirectProspectMeetingFragmentFactory():IndirectProspestmeetingFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFADashboardModule::class])
+    fun provideIndirectIFADashboardFragmentFactory():IndirectIFADashboardFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFADashboardDetailsModule::class])
+    fun provideIndirectIFADashboardDetailsFragmentFactory():IndirectIFADashboardDetailsFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFATargetModule::class])
+    fun provideIndirectIFATargetFragmentFactory():IndirectIFATargetFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAUniqueModule::class])
+    fun provideIndirectIFAUniqueFragmentFactory():IndirectIFAUniqueFragment
+
+    @ContributesAndroidInjector(modules=[IndirectIFADashboardReportModule::class])
+    fun provideIndirectIFADashboardReportFragmentFactory():IndirectIFADashboardReportFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFABuisnessSnapshotModule::class])
+    fun provideIndirectIFABuisnessSnapshotFragmentFactory():IndirectIFABuisnessSnapshotFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAMyLeadModule::class])
+    fun provideIndirectIFAMyLeadFragmentFactory():IndirectIFAMyLeadFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFABuisnessSnapshotIpModule::class])
+    fun provideIndirectIFABuisnessSnapshotIpFragmentFactory():IndirectIFABuisnessSnapshotIpFragment
 
 }

@@ -21,6 +21,12 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl;
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository;
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoRepository;
+import com.mosl.app.core.data.saathiIndirect.dashboard.FocoRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository;
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepositoryImpl;
 import com.mosl.tabapp.urls.ApiBaseUrlImpl;
 
 import dagger.Binds;
@@ -48,11 +54,20 @@ public abstract class CommonDataModule {
     @Binds abstract LeadCreationRepository bindLeadCreationRepository(
         LeadCreationRepositoryImpl repository);
 
+    @Binds abstract IndirectLeadCreationRepository bindIndirectLeadCreationRepository(
+            IndirectLeadCreationRepositoryImpl repository);
+
+    @Binds abstract IndirectLeadDetailRepository bindIndirectLeadDetailRepository(
+            IndirectLeadDetailRepositoryImpl repository);
+
     @Binds abstract LeadDetailRepository bindLeadDetailRepository(
         LeadDetailRepositoryImpl repository);
 
     @Binds abstract AttendanceRepository bindAttendanceRepository(
             AttendanceRepositoryImpl repository);
+
+    @Binds abstract FocoRepository bindFocoDashboardRepository(
+            FocoRepositoryImpl repository);
 
     @Singleton
     @Provides

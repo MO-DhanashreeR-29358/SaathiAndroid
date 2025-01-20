@@ -6,5 +6,6 @@ data class CurrentBusinessProfile(
     @SerializedName("BusinessProfileId") @JvmField val businessProfileId: String?,
     @SerializedName("Name") @JvmField val name: String?,
     @SerializedName("BusinessUnitId") @JvmField val businessUnitId: String?,
-    @SerializedName("BusinessProfileName") @JvmField val businessProfileName: String?
+    @SerializedName("BusinessProfileName") @JvmField val businessProfileName: String?,
+    @SerializedName("BusinessUnitName") @JvmField val businessUnitName:String?
 )

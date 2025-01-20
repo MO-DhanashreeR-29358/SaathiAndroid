@@ -32,11 +32,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.jakewharton.rxbinding4.view.clicks
-import com.jakewharton.rxbinding4.widget.editorActions
 import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.core.rx.applyUiModel
+import com.mosl.app.core.utils.showKeyBoard
 import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -64,11 +63,11 @@ import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
 import com.mosl.tabapp.permission.PermissionCheckHelper
+import com.mosl.tabapp.util.keylogger.KeyboardChecker
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -143,9 +142,11 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     if (!sharedPreferences.getBoolean(getString(R.string.consent_value), false)) {
       showDiscloserDilog()
     }
-    isCallOtp=userManager.isOtpEnable()
+   isCallOtp=userManager.isOtpEnable()
+
 
     binding.btnLogin.setOnClickListener {
+      Log.d("isCallOtp",isCallOtp.toString());
       if(isCallOtp)
       {
 
@@ -170,6 +171,35 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   }
   false
 }
+
+    binding.edEmpCode.requestFocus()
+    if(!KeyboardChecker.isUsingCustomInputMethod(applicationContext))
+    {
+        showKeyBoard(binding.edEmpCode)
+    }
+    else{
+      val builder = AlertDialog.Builder(this)
+
+
+      builder.setMessage("A third-party keyboard is enable")
+
+
+      builder.setTitle("Alert !")
+
+      builder.setCancelable(false)
+
+      builder.setPositiveButton("Yes",
+        DialogInterface.OnClickListener { dialog: DialogInterface?, which: Int ->
+          // When the user click yes button then app will close
+          this.finish()
+        } as DialogInterface.OnClickListener)
+
+
+      val alertDialog = builder.create()
+
+      alertDialog.show()
+
+    }
 
   }
 
@@ -598,8 +628,9 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   override fun fnRenderNewLogin(uiModdel: UiModel<ValidateLoingResponseModel>) {
     toggleProgressBar(uiModdel.inProgress)
     uiModdel.onSuccess {
-     /* subject.onNext(LoginActivityUiEvent.OnCallGenerateOtp)*/
       try {
+      editor.putInt("AuthState",it.authState?:1)
+        editor.commit();
        runOnUiThread {
          val otpBottomSheet = OtpVerificationFragment()
          otpBottomSheet.fnSetData(fnGetLoginData(), it.strMessage ?: "")

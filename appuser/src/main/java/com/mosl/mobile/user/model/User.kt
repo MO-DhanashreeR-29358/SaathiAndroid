@@ -29,8 +29,12 @@ data class User(
     @JvmField var EventListRequired: Boolean,
     @JvmField val collectionOfficer: Boolean = false,
     @JvmField var myZoneProfile: String,
-    @JvmField var isBankMeeting: Boolean
+    @JvmField var isBankMeeting: Boolean,
+    @JvmField var authState: Int,
+    @JvmField var usertype:Int
 ) {
+
+
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
     }
@@ -58,8 +62,19 @@ data class User(
     }
 
     fun isAuBankSalesSupport(): Boolean {
-
         return isBankMeeting
+    }
+
+    fun isIndirectUser(): Boolean {
+        Log.d("user type",usertype.toString())
+        if(usertype==0)
+        {
+            return authState==9
+        }
+        else{
+            return usertype==9
+        }
+
     }
 
     fun isRetail(): Boolean {
@@ -166,6 +181,17 @@ data class User(
         var flag = false
         if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
             myZoneProfile.equals("Sales Team Leader", ignoreCase = true)) {
+            flag = true
+        }
+        return flag
+    }
+
+    fun isAttendanceAllowedForPCG(): Boolean {
+        var flag = false
+
+        if (myZoneProfile.equals("Group Leader-PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("HNI Sales", ignoreCase = true)) {
             flag = true
         }
         return flag

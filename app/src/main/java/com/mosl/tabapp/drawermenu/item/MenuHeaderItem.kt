@@ -2,6 +2,7 @@ package com.mosl.tabapp.drawermenu.item
 
 import android.view.View
 import androidx.constraintlayout.widget.Group
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.databinding.ViewMenuHeaderBinding
 import com.mosl.tabapp.drawermenu.data.AppMenu
@@ -15,6 +16,7 @@ class MenuHeaderItem(
     val partnerName: String,
     val branchCode: String?,
     val imageUrl: String,
+    val userManager: UserManager,
     val closeSelectSubject: PublishSubject<View>,
     val subject: PublishSubject<AppMenu>
 ) : BindableItem<ViewMenuHeaderBinding>() {
@@ -32,9 +34,11 @@ class MenuHeaderItem(
         viewBinding.txtBusinessProfileName.text = branchCode
 
         viewBinding.group.setAllOnClickListener(View.OnClickListener {
-            subject.onNext(
-                OtherMenu(NavigationConstants.NAVIGATE_TO_BRANCH_CODE)
-            )
+            if(userManager.getUser()?.isIndirectUser() == false) {
+                subject.onNext(
+                    OtherMenu(NavigationConstants.NAVIGATE_TO_BRANCH_CODE)
+                )
+            }
         })
 
         viewBinding.imgClose.setOnClickListener { it ->

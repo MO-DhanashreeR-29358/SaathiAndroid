@@ -1,5 +1,6 @@
 package com.mosl.tabapp.util.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -45,6 +46,7 @@ class AutoCompleteAdapter(
     this.msgDialog = msgDialog
   }
 
+  @SuppressLint("WrongConstant")
   override fun getView(
     position: Int,
     oldView: View?,
@@ -142,17 +144,32 @@ class AutoCompleteAdapter(
         }
       }
 
+      if(userManager.getUser()?.isIndirectUser() == true){
+        holderView.rlOpenAccount.visibility = View.GONE
+        holderView.rlOAOForm.visibility = View.GONE
+        holderView.rlDiyLink.visibility = View.GONE
+      }
       val bundle = Bundle()
       bundle.putString(LEADID, resultModel.leadId)
       bundle.putString(UCID, resultModel.ucid)
       bundle.putString(FLG_REACTIVATION_CLIENT, resultModel.flgReactivationClient)
       holderView.rlSetAppointment.setOnClickListener {
-        openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
+        if(userManager.getUser()?.isIndirectUser() == true){
+          openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT, bundle)
+        }else{
+          openPage(NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT, bundle)
+        }
+
       }
       holderView.rlCreateMeeting.setOnClickListener {
         when (creacteMeetingId) {
           0 -> {
-            openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
+            if(userManager.getUser()?.isIndirectUser() == true){
+              openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING, bundle)
+            }else{
+              openPage(NavigationConstants.NAVIGATE_TO_CREATE_MEETING, bundle)
+            }
+
           }
           1 -> {
             msgDialog.erroMsgDialog(context.resources.getString(R.string.mgs_update_address))
@@ -168,7 +185,12 @@ class AutoCompleteAdapter(
       }
       holderView.rlViewDetail.setOnClickListener {
         bundle.putString(MOBILE, resultModel.mobileNo)
-        openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
+        if(userManager.getUser()?.isIndirectUser() == true){
+          openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN, bundle)
+        }else{
+          openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER, bundle)
+        }
+
       }
       holderView.rlOpenAccount.setOnClickListener {
         clearAll()

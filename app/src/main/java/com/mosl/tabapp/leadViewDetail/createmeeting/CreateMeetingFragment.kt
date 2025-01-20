@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -30,7 +31,6 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
-import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
@@ -49,6 +49,8 @@ import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY1
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_TIME
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
 import com.mosl.tabapp.constants.MoslConstant.dd_MM_yyyy
@@ -56,6 +58,8 @@ import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
@@ -69,6 +73,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_M
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIONABLE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIVITY_TYPE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_EVENT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_FEEDBACK
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_DURATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
@@ -105,6 +110,7 @@ import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -131,7 +137,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
     private lateinit var splAttendeeAdapter: AttendeeAdapter
     private lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
-    var isAreaRestricted :Boolean = true
+    private var isAreaRestricted :Boolean = true
 
     @Inject
     lateinit var presenter: CreateMeetingPresenter
@@ -196,7 +202,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         if (permissionCheckHelper.locationPermission()) {
             // fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
         }
@@ -261,7 +267,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             isAreaRestricted = false
             if(getSelectedMeetingLocation().lookUpName != "Branch") {
                 val dialog = GeoTaggingFragment()
-                dialog.setData(uiSubject, isAreaRestricted)
+                dialog.setData(uiSubject, isAreaRestricted, userManager)
                 dialog.show(activity?.supportFragmentManager!!, "UserAddress")
             }
         }
@@ -448,12 +454,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
         cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
+        if (getSelectedActivityType().lookUpName.equals("Personal Meeting", ignoreCase = true)
             && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
-        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
+        else if((getSelectedActivityType().lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
             && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
@@ -501,16 +507,23 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                         "%s %d:%d:00", fromPostingDate, hour,
                         minute
                     ) //dd-MM-yyyy hh:mm:ss
-                val finalSelectedDate =
-                    CRMAppUtil.getDate(finalSelectedDateStr, dd_MMM_yyyy_hh_mm)
+                //add below date format logic for getting issue 12:30 PM not set properly, instead showing 12:30 AM
+                val df = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH)
+                df.timeZone = TimeZone.getTimeZone("Asia/Kolkata");
+                val date = df.parse(finalSelectedDateStr)
+
+                val outputFormat = SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.ENGLISH)
+                outputFormat.timeZone = TimeZone.getTimeZone("Asia/Kolkata")
+                val formattedDate = outputFormat.format(date)
+                val finalSelectedDate =outputFormat.parse(formattedDate)
+
                 if (CRMAppUtil.isBeforeandEqualDate(
                         finalSelectedDate
                     )
                 ) { //
-                    binding.tvDate.text =
-                        CRMAppUtil.getDBDate(finalSelectedDate, DATE_FORMAT_TO_DISPLAY)
+                    binding.tvDate.text = CRMAppUtil.getDBDate(finalSelectedDate, DATE_FORMAT_TO_DISPLAY)
 
-                    dialog.dismiss()
+                     dialog.dismiss()
                 } else {
                     MSFDialog.alertDialog(
                         requireContext(), 0,
@@ -1142,7 +1155,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             //fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
             false
@@ -1362,7 +1375,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
                     //fusedLocation.initDispatcher(this)
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject, true)
+                    dialog.setData(uiSubject, true, userManager)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
@@ -1422,7 +1435,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             // Toast.makeText(requireContext(),"call fusedLocation.initDispatcher",Toast.LENGTH_LONG).show()
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
             //fusedLocation.initDispatcher(this)
 
@@ -1528,7 +1541,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     if (permissionCheckHelper.locationPermission()) {
                         // fusedLocation.initDispatcher(this)
                         val dialog = GeoTaggingFragment()
-                        dialog.setData(uiSubject, true)
+                        dialog.setData(uiSubject, true, userManager)
                         dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
                     }
@@ -1614,7 +1627,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     isMockLocation(meetingApptModel)
                 } else {
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject, true)
+                    dialog.setData(uiSubject, true, userManager)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }

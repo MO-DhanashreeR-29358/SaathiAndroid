@@ -38,6 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,6 +110,7 @@ public class CRMAppUtil {
     public static Date getDate(String date, String format) {
         try {
             SimpleDateFormat df = new SimpleDateFormat(format, Locale.ENGLISH);
+            df.setTimeZone(TimeZone.getTimeZone("Asia/Kolkata"));
             return df.parse(date);
         } catch (Exception ex) {
             ex.printStackTrace();

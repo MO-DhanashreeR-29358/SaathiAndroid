@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.main
 
 import android.os.Bundle
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -28,7 +29,8 @@ interface LeadViewDetailNavigator {
 
 class LeadViewDetailNavigatorImpl @Inject constructor(
     val screenNavigator: ScreenNavigatorImpl,
-    val ekycNavigator: EkycNavigator
+    val ekycNavigator: EkycNavigator,
+    val userManager: UserManager
 ) : LeadViewDetailNavigator {
 
     override fun navigateToSuggestMe(url: String) {
@@ -54,11 +56,19 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.LEAD_ID, leadId)
             putString(MOSLConstants.UCID, ucId)
         }
-        screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_CREATE_MEETING.toString(),
-            bundle,
-            true
-        )
+        if(userManager.getUser()?.isIndirectUser() == true) {
+            screenNavigator.openPage(
+                NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING.toString(),
+                bundle,
+                true
+            )
+        }else{
+            screenNavigator.openPage(
+                NavigationConstants.NAVIGATE_TO_CREATE_MEETING.toString(),
+                bundle,
+                true
+            )
+        }
     }
 
     override fun openDocument(
@@ -84,10 +94,19 @@ class LeadViewDetailNavigatorImpl @Inject constructor(
             putString(MOSLConstants.LEAD_ID, leadId)
             putString(MOSLConstants.UCID, ucId)
         }
-        screenNavigator.openPage(
-            NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT.toString(),
-            bundle,
-            true
-        )
+        if(userManager.getUser()?.isIndirectUser() == true) {
+            screenNavigator.openPage(
+                NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT.toString(),
+                bundle,
+                true
+            )
+        }else{
+            screenNavigator.openPage(
+                NavigationConstants.NAVIGATE_TO_SET_APPOINTMENT.toString(),
+                bundle,
+                true
+            )
+        }
+
     }
 }

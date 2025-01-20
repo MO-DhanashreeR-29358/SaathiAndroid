@@ -8,4 +8,14 @@ interface MappingHistoryRepository {
     ucId: String,
     eventType: String
   ): Observable<MappingHistoryCombo>
+
+  fun getIndirectLeadHistoryData(
+    leadId: String,
+    ucId: String
+  ): Observable<MappingHistoryCombo>
+
+  fun getIndirectLeadMappingHistoryData(
+    leadId: String,
+    ucId: String
+  ): Observable<MappingHistoryCombo>
 }

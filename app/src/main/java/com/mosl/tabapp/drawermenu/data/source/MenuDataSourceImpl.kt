@@ -25,6 +25,9 @@ open class MenuDataSourceImpl @Inject constructor(
         return Observable.fromCallable {
             user = userManager.user
             when {
+                user.isIndirectUser()  -> {
+                        getIndirectUserMenu(user.currentBusinessProfile?.businessUnitName?:"")
+                }
                 user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
                 }
@@ -257,6 +260,15 @@ open class MenuDataSourceImpl @Inject constructor(
         return this
     }
 
+
+    private fun getIndirectUserMenu(strBuisnessUnitName :String ): List<BaseMenu> {
+        return arrayListOf(
+            getIndirectDashboard(strBuisnessUnitName),
+            getIndirectProspectMeeting(),
+            getLogout()
+        ).apply { checkForPrime(false,false, false) }
+    }
+
     private fun getAufsbUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
         return arrayListOf(
             getDashboard(),
@@ -339,6 +351,33 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
+        )
+    }
+    @SuppressLint("WrongConstant")
+    private fun getIndirectDashboard(strBuisnessUnitName:String): BaseMenu {
+        var strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+        if(strBuisnessUnitName.equals("FOCO",true))
+        {
+            strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD
+        }
+        else if(strBuisnessUnitName.equals("IFA",true))
+        {
+            strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
+        }
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dashboard,
+            label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
+            enabled = true,
+            pageId = strPageId
+        )
+    }
+
+    private fun getIndirectProspectMeeting(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_prime_entry,
+            label = R.string.MOSL_MENU_PROSPECT_MEETING_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING
         )
     }
 

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    >
+
+
+    <RelativeLayout
+        android:id="@+id/llMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <ScrollView
+        android:id="@id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/_20sdp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:id="@+id/sp_filter_bank"
+                style="@style/DashbordSpinnerSelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/margin_small" />
+            <!--OneUp and Head Target vs Achievement-->
+            <LinearLayout
+                    android:id="@+id/llTeamTarget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    >
+
+                    <RelativeLayout
+                        android:id="@+id/rlTeamTargetAchievement"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_35sdp"
+                        android:background="@color/titleBarBackground"
+                        >
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_toStartOf="@+id/txtTeamTarget"
+                            app:srcCompat="@drawable/ic_target_achievement"
+                            />
+
+                        <TextView
+                            android:id="@+id/txtTeamTarget"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="@dimen/_5sdp"
+                            android:singleLine="true"
+                            android:textColor="@color/alternateTextColor"
+                            android:textSize="@dimen/appTitleTextSize"
+                            android:textStyle="bold"
+                            android:text="Target Vs Achievement"
+                            />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/ivTeamTargetAchievement"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/_3sdp"
+                            app:srcCompat="@drawable/minus"
+                            />
+
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/llTeamTargetAchievement"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            <!-- my buisness snapshot IP -->
+            <LinearLayout
+                android:id="@+id/llSnapshotip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlBusinessSnapshotHeadip"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/tvSnapshotip"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvSnapshotip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="My Business Snapshot -IP"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivBusinessSnapshotHeadip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        app:srcCompat="@drawable/minus"
+                        />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llBusinessSnapshotHeadip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+
+            </LinearLayout>
+            <!-- my buisness snapshot broking -->
+            <LinearLayout
+                android:id="@+id/llSnapshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlBusinessSnapshotHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/tvSnapshot"
+                        app:srcCompat="@drawable/ic_new_clients_leads"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvSnapshot"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="My Business Snapshot -Broking"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivBusinessSnapshotHead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        app:srcCompat="@drawable/minus"
+                        />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llBusinessSnapshotHead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+
+            </LinearLayout>
+            <!-- my lead -->
+            <LinearLayout
+                android:id="@+id/llSnapshotlead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="vertical"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rlBusinessSnapshotHeadlead"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:background="@color/titleBarBackground"
+                    >
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toStartOf="@+id/tvSnapshotlead"
+                        app:srcCompat="@drawable/ic_new_clients_leads" />
+
+                    <TextView
+                        android:id="@+id/tvSnapshotlead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:singleLine="true"
+                        android:text="My Lead"
+                        android:textColor="@color/alternateTextColor"
+                        android:textSize="@dimen/appTitleTextSize"
+                        android:textStyle="bold" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/ivBusinessSnapshotHeadlead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        app:srcCompat="@drawable/minus"
+                        />
+                </RelativeLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/llBusinessSnapshotHeadlead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/ivActionableInsights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_12sdp"
+        app:srcCompat="@drawable/ic_actionable"
+        />
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/floatingActionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        fab:fab_addButtonColorNormal="#f54d41"
+        fab:fab_addButtonColorPressed="@color/white_pressed"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style"
+        >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/leadcreation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_create_lead"
+            fab:fab_colorNormal="#ffffff"
+            fab:fab_colorPressed="#ffffff"
+            fab:fab_size="mini"
+            fab:fab_title="Create Lead"
+            />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+
+</RelativeLayout>
