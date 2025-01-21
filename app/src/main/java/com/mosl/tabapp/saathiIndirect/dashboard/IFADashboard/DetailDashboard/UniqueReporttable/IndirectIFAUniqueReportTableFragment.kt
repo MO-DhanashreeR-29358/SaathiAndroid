@@ -111,7 +111,7 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         uiModel.onSuccess { data ->
             val headerData = mutableListOf<String>()
             data.headers.map {
-                headerData.add(CRMAppUtil.getRefreshColumnName(it))
+                headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it))
             }
             dynamicHeaderRow.setHeader(headerData)
             val hierarchyReport: List<IndirectIFAUniqueReportTableRow> =
