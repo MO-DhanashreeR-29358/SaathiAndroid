@@ -223,14 +223,14 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     }
 
     override fun fnGetIFASalesDashMeetingHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
-        return saathiIndrectApi.getIFASalesDashMeetingHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, category = "A"))
+        return saathiIndrectApi.getIFASalesDashMeetingHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, category = "Achieved", fitHierarchy = "Team"))
             .map {
                 renderBuisnessSnapshotTable(Gson().toJson(it))
             }
     }
 
     override fun fnGetIFASalesDashIFAActivationHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
-        return saathiIndrectApi.GetIFASalesDashIFAActivationHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue))
+        return saathiIndrectApi.GetIFASalesDashIFAActivationHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team"))
             .map {
                 renderBuisnessSnapshotTable(Gson().toJson(it))
             }

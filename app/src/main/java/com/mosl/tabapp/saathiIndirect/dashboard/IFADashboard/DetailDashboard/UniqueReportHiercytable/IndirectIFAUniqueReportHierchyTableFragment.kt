@@ -48,8 +48,8 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
         super.onViewCreated(view, savedInstanceState)
         binding = FragUniqueReportHierchyTableBinding.bind(view)
         fnSetUpArgument()
-        presenter.start()
         setUpView()
+        presenter.start()
 
     }
     private fun setUpView() {
@@ -76,20 +76,6 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
                 }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
-
-        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
-        {
-            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onIfaActivationEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuIpEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuBroEventCalled)
-        }
     }
     private fun fnSetUpArgument()
     {
@@ -146,8 +132,19 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
 
     override fun fnRenderFilterEventCalled(strFilterVal: String) {
         this.strFilterVal=strFilterVal
-        Toast.makeText(requireContext(),"value hierchy table "+this.strFilterVal, Toast.LENGTH_LONG).show()
-        //dataActionSubject.onNext(DataAction.Fetch)
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueReportHierchyUiEvent.onRevenuBroEventCalled)
+        }
     }
 
     override fun fngetFilterValue(): String {

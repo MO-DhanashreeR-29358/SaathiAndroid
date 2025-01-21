@@ -39,6 +39,7 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
     @Inject
     lateinit var presenter: IndirectIFADashboardDetailsPresenter
     private lateinit var filterAdapter: ArrayAdapter<LookUp>
+    private lateinit var filterCategoryAdapter: ArrayAdapter<LookUp>
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     var strFilterVal:String=""
     var strWidgetType:String =""
@@ -62,6 +63,14 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         filterAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterPeriod.adapter = filterAdapter
 
+        filterCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spFilterCategory.adapter = filterCategoryAdapter
+
+        var lstFilterCategory= mutableListOf<LookUp>()
+        lstFilterCategory.add(LookUp(0,"Achieved"))
+        lstFilterCategory.add(LookUp(1,"Unique"))
+        filterCategoryAdapter.setSpinnerData(binding.spFilterCategory,lstFilterCategory)
+
         binding.spFilterPeriod.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -70,6 +79,23 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
                 id: Long
             ) {
                 subject.onNext(IndirectIFADashboardDetailsUiEvent.onFilterChanged(binding.spFilterPeriod.selectedItem.toString()))
+
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+        });
+
+        binding.spFilterCategory.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                subject.onNext(IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged(binding.spFilterCategory.selectedItem.toString()))
 
             }
 
@@ -102,18 +128,22 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
 
         if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
         {
+            binding.spFilterCategory.visibility=View.VISIBLE
             binding.tvHeadTitle1.setText("Hierarchy wise meetings")
             binding.tvHeadTitle2.setText("Meeting Details")
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            binding.spFilterCategory.visibility=View.GONE
             binding.tvHeadTitle1.setText("Hierarchy wise IFA Activation")
             binding.tvHeadTitle2.setText("FA Activation Details")
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            binding.spFilterCategory.visibility=View.GONE
             binding.tvHeadTitle1.setText("Hierarchy wise meetings")
             binding.tvHeadTitle2.setText("Revenue IP Details")
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            binding.spFilterCategory.visibility=View.GONE
             binding.tvHeadTitle1.setText("Hierarchy wise Broking")
             binding.tvHeadTitle2.setText("Revenue Broking Details")
         }

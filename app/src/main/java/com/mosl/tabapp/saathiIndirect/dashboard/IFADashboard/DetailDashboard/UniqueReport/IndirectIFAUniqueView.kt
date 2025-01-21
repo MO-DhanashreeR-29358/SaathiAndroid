@@ -12,6 +12,10 @@ interface IndirectIFAUniqueView :BaseView {
     fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged>
     fun fnRenderFilterEventCalled(strFilterVal:String)
 
+    fun onFilterCategoryEventCalled():Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged>
+
+    fun fnRenderFilterCategoryEventCalled(strFilterCatVal:String)
+
     fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
 
     fun fnonIfaActivationEventCalled() :Observable<IndirectIFAUniqueUiEvent.onIfaActivationEventCalled>
@@ -27,6 +31,7 @@ interface IndirectIFAUniqueView :BaseView {
     fun renderBarChartData(uiModel: UiModel<FocoDashboardModel>)
     fun getColorsArray(): IntArray
     fun fngetFilterValue():String
+    fun fngetFilterCatValue():String
 
 
     companion object{

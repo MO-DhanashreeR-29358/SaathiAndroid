@@ -46,8 +46,8 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         super.onViewCreated(view, savedInstanceState)
         binding = FragUniqueReportTableBinding.bind(view)
         fnSetUpArgument()
-        presenter.start()
         setUpView()
+        presenter.start()
 
     }
     private fun setUpView() {
@@ -74,20 +74,6 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
                 }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
-
-        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
-        {
-          widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onIfaActivationEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuIpEventCalled)
-        }
-        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
-            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled)
-        }
     }
     private fun fnSetUpArgument()
     {
@@ -144,8 +130,19 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
 
     override fun fnRenderFilterEventCalled(strFilterVal: String) {
         this.strFilterVal=strFilterVal
-        Toast.makeText(requireContext(),"value report table "+this.strFilterVal, Toast.LENGTH_LONG).show()
-        //dataActionSubject.onNext(DataAction.Fetch)
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled)
+        }
     }
 
     override fun fngetFilterValue(): String {

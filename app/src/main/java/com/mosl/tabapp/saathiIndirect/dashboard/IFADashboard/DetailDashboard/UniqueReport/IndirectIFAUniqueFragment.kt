@@ -39,6 +39,7 @@ import com.mosl.tabapp.databinding.FragIndirectIfaUniqueBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyUiEvent
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -58,7 +59,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueUiEvent>()
     var strFilterVal:String=""
-
+    var strFilterCatVal:String="Achieved"
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
 //    private val widgetUiEventIFA =
@@ -146,7 +147,6 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
             val objWidgetMode: WidgetModel = WidgetModel()
@@ -162,9 +162,6 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode2.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
-
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
-
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
 
@@ -188,8 +185,6 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
             val objWidgetMode: WidgetModel = WidgetModel()
@@ -212,11 +207,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
-
         }
-
-
         groupAdapter.addAll(itemList)
 
     }
@@ -238,8 +229,40 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 
     override fun fnRenderFilterEventCalled(strFilterVal: String) {
         this.strFilterVal=strFilterVal
-        Toast.makeText(requireContext(),"value details "+this.strFilterVal,Toast.LENGTH_LONG).show()
-       // dataActionSubject.onNext(DataAction.Fetch)
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
+        }
+    }
+
+    override fun onFilterCategoryEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged> {
+        return  subject.ofType()
+    }
+
+    override fun fnRenderFilterCategoryEventCalled(strFilterCatVal: String) {
+        this.strFilterCatVal=strFilterCatVal
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
+        }
     }
 
     override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled> {
@@ -263,6 +286,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     }
     override fun fngetFilterValue(): String {
         return this.strFilterVal
+    }
+
+    override fun fngetFilterCatValue(): String {
+        return this.strFilterCatVal
     }
 
 

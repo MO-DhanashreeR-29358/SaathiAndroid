@@ -25,9 +25,15 @@ class IndirectIFAUniquePresenter  @Inject constructor(
             view.fnRenderFilterEventCalled(it.strFilterText)
         }.addTo(disposable)
 
+        view.onFilterCategoryEventCalled().subscribe {
+            view.fnRenderFilterCategoryEventCalled(it.strFilterCatText)
+        }.addTo(disposable)
 
-        view.fnonMeetingEventCalled().switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+
+        view.fnonMeetingEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+                indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest(it)).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
         }.addTo(disposable)
@@ -43,7 +49,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "1" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashMeetingTeamUniqueGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
@@ -51,7 +57,7 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "2" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashMeetingTargetMetNotMetGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }
             .subscribe(view::renderData, Timber::e)
             .addTo(disposable)
@@ -59,12 +65,14 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "3" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashMeetingMyUniqueGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashMeetingMyUniqueGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
-        view.fnonIfaActivationEventCalled().switchMap {
-            indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+        view.fnonIfaActivationEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+            indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequestReveIp(it)).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
         }.addTo(disposable)
@@ -73,18 +81,18 @@ class IndirectIFAUniquePresenter  @Inject constructor(
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "4" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashIFAActivationProductWiseGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "5" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashIFAActivationBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashIFAActivationBranchWiseGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
         view.fnonRevenuIpEventCalled().switchMap {
-indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestReveIp( view.fngetFilterValue())).compose(applyUiModel())
         }.subscribe {
             view.renderData(it)
         }.addTo(disposable)
@@ -92,29 +100,30 @@ indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestRev
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "6" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "7"  }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueIPBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueIPBranchWiseGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "8" }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
 
 
-        view.fnonRevenuBroEventCalled()
-            .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequestReveIp()).compose(applyUiModel())
+        view.fnonRevenuBroEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequestReveIp(it)).compose(applyUiModel())
             }.subscribe {
                 view.renderData(it)
             }.addTo(disposable)
@@ -122,21 +131,21 @@ indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestRev
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "9"  }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc
             .filter { it.widgetItemInfo.id  == "10"  }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueBrokingBranchWiseGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueBrokingBranchWiseGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
         widgetItemClickObsc
             .filter {it.widgetItemInfo.id  == "11"  }
             .switchMap {
-                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest()).compose(applyUiModel())
+                indirectRepo.fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(getWidgetRequest( view.fngetFilterValue())).compose(applyUiModel())
             }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 
@@ -144,13 +153,13 @@ indirectRepo.fnGetIFASalesDashRevenueIPProductWiseSalesGraph(getWidgetRequestRev
 
 
     }
-    fun getWidgetRequest() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, fitHierarchy = "Team" , category = "Achieved")
+    fun getWidgetRequest(strFilter :String) : FocoDashboardInput {
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilter, calculatedPageP = 0,
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, fitHierarchy = "Team" , category = view.fngetFilterCatValue())
     }
 
-    fun getWidgetRequestReveIp() : FocoDashboardInput {
-        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "Last FY", calculatedPageP = 0,
+    fun getWidgetRequestReveIp(strFilter: String) : FocoDashboardInput {
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilter, calculatedPageP = 0,
             pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, fitHierarchy = "Team" )
     }
 }
