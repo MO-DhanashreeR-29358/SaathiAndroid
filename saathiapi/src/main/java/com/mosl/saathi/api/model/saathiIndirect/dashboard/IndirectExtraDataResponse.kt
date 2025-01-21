@@ -39,6 +39,7 @@ data class ObjectData (
 data class Graph (
 
   @SerializedName("Product"           ) var product           : String?  = null,
+  @SerializedName("product"           ) var product1           : String?  = null,
   @SerializedName("Value"             ) var Value             : String?  = null,
   @SerializedName("Parameter"         ) var Parameter         : String?  = null,
   @SerializedName("Val"               ) var Val               : String?     = null,

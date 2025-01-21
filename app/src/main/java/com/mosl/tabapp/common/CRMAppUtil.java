@@ -46,7 +46,6 @@ import static com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_SERVER;
 import static com.mosl.tabapp.constants.MOSLConstants.FILE_UPLOAD_SIZE_LIMT;
 
 import timber.log.Timber;
-
 /**
  * Created by Pramod on 20-01-2016.
  */
@@ -485,6 +484,16 @@ public class CRMAppUtil {
         columnName = columnName.replace("_", " ");
 
         return columnName;
+    }
+
+    public static String getRefreshIndirectColumnName(String columnName) {
+        String str = addSpacesToCapitalLetters(columnName);
+        str = str.replace("Proj", "Projected");
+        return str;
+    }
+    public static String addSpacesToCapitalLetters(String input) {
+        // Use a regular expression to match lowercase followed by uppercase letters
+        return input.replaceAll("([a-z])([A-Z])", "$1 $2");
     }
 
     public static void expand(final View v) {

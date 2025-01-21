@@ -360,6 +360,7 @@ class FocoTargetFragment : CommonFragment(), FocoTargetView {
       } else {
         setDataForPieArray(it.graph[0])
         PieArrayLableView(it.graph[0])
+        Log.d("widgetname:", it.graph[0].product.toString())
       }
       if(graphItemList.size == 1){
         binding.includeTargetChart.ivRightArrow.visibility = View.INVISIBLE
