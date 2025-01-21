@@ -1723,7 +1723,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private fun callZykrrRegisterApi(tokenModel: tokenModel){
         RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
         val retro = RetrofitClient.retrofit
-        val registerData = registerRequest(registerData(binding.layoutTopSection.tvLeadId.text.toString(),getMeetingData()))
+        val registerData = registerRequest(registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData()))
         val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
 
         call.enqueue(object : Callback<registerResponse> {
@@ -1766,7 +1766,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
                 ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
                 AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
-                MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()))
+                MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")
 
             list.add(feedback)
 
