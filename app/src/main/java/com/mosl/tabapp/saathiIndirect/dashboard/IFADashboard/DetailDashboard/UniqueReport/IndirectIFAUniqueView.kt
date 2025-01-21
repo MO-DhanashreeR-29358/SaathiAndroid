@@ -4,13 +4,17 @@ import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.tabapp.model.dashboard.WidgetModel
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsUiEvent
 import io.reactivex.rxjava3.core.Observable
 
 interface IndirectIFAUniqueView :BaseView {
 
-   // fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged>
+    fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged>
+    fun fnRenderFilterEventCalled(strFilterVal:String)
 
-  //  fun fnRenderFilterEventCalled(strFilterVal:String)
+    fun onFilterCategoryEventCalled():Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged>
+
+    fun fnRenderFilterCategoryEventCalled(strFilterCatVal:String)
 
     fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled>
 
@@ -27,6 +31,7 @@ interface IndirectIFAUniqueView :BaseView {
     fun renderBarChartData(uiModel: UiModel<FocoDashboardModel>)
     fun getColorsArray(): IntArray
     fun fngetFilterValue():String
+    fun fngetFilterCatValue():String
 
 
     companion object{

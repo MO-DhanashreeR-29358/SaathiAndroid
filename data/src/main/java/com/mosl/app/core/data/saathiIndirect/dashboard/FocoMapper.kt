@@ -128,7 +128,6 @@ fun mapToFocoDashboardMyTargetMetNotModel(response: IndirectDashboardDetailsGrap
     )
 }
 
-
 fun mapToFocoDashboardMyUniqueDetailsModel(response: IndirectDashboardDetailsGraphCommonDataResponse): FocoDashboardModel {
     val graphList = ArrayList<Graph>()
 
@@ -183,6 +182,59 @@ fun mapToFocoDashboardRevenueIpProductwiseModel(response: IndirectDashboardDetai
     )
 }
 
+fun mapToFocoDashboardRevenueIpBranchwiseModel(response: IndirectDashboardDetailsGraphCommonDataResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.response?.objectData?.graphBranchWise?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph?.branch,
+                Value = originalGraph?.revenuePercentage,
+                currentMonth = "",
+                lastMonth = ""
+            )
+            graphList.add(graph)
+        }
+    }
+    val strTarget = ""
+    val strAchieved = ""
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+
+fun mapToFocoDashboardRevenueIpMetOrNotwiseModel(response: IndirectDashboardDetailsGraphCommonDataResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.response?.objectData?.graphTargetNotMet?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph?.category,
+                Value = originalGraph?.Val,
+                currentMonth = "",
+                lastMonth = ""
+            )
+            graphList.add(graph)
+        }
+    }
+    val strTarget = ""
+    val strAchieved = ""
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
 fun mapToFocoDashboardModel(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
     val graphList = ArrayList<Graph>()
 

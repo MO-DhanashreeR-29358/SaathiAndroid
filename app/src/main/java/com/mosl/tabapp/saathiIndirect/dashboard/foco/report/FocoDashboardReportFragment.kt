@@ -68,7 +68,7 @@ class FocoDashboardReportFragment : CommonFragment(),
   private fun setUpFromArguments() {
     try {
       strSystemName =this.arguments?.getString(MOSLConstants.SYSTEM_NAME, "") ?: ""
-      strEmployeeCode = (this.arguments?.getString(MOSLConstants.EMPLOYEE_CODE, "") ?: userManager.getUser()?.employeeCode).toString()
+      strEmployeeCode = this.arguments?.getString(MOSLConstants.EMPLOYEE_CODE, "") ?: ""
       strSelectedPeriod = this.arguments?.getString(MOSLConstants.PERIOD_FILTER, "") ?: ""
 
       Log.d("systemName", strSystemName)
@@ -141,7 +141,7 @@ class FocoDashboardReportFragment : CommonFragment(),
     uiModel.onSuccess { data ->
       val headerData = mutableListOf<String>()
       data.headers.map {
-        headerData.add(CRMAppUtil.getRefreshColumnName(it))
+        headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it))
       }
       dynamicHeaderRow.setHeader(headerData)
       val hierarchyReport: List<FocoDashboardReportTableRow> =
@@ -161,7 +161,7 @@ class FocoDashboardReportFragment : CommonFragment(),
   }
 
   override fun getEmployeeCode(): String {
-    return strEmployeeCode
+    return strEmployeeCode.ifEmpty { userManager.getUser()?.employeeCode!! }
   }
   override fun renderPeriodFilter(uiModel: UiModel<List<FocoPeriodModel>>) {
     toggleProgress(uiModel.inProgress)

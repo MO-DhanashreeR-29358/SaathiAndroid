@@ -5,6 +5,9 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 sealed class IndirectIFADashboardDetailsUiEvent {
     data class onFilterChanged(val strFilterText:String): IndirectIFADashboardDetailsUiEvent()
 
+    data class  onFilterCategoryChanged(val strFilterCatText:String): IndirectIFADashboardDetailsUiEvent()
+
+
     object  OnDetailsDataCall:IndirectIFADashboardDetailsUiEvent()
 
     companion object{

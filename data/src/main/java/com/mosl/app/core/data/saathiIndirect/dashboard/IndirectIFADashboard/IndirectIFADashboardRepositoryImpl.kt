@@ -7,6 +7,8 @@ import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardDetails
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardMyTargetMetNotModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardMyUniqueDetailsModel
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardRevenueIpBranchwiseModel
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardRevenueIpMetOrNotwiseModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardRevenueIpProductwiseModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToIFADashboardMeetingGraph
 import com.mosl.app.core.data.saathiIndirect.dashboard.requestTransform
@@ -23,6 +25,7 @@ import com.mosl.mobile.domain.snapshot.BusinessSnapshotData
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
 import javax.inject.Inject
@@ -156,28 +159,117 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun fnGetIFASalesDashRevenueIPDetail(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+    override fun fnGetIFASalesDashRevenueIPBranchWiseGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueIPBranchWiseGraph(req).map {
+            mapToFocoDashboardRevenueIpBranchwiseModel(it)
+        }
+    }
 
-        return  saathiIndrectApi.getIFASalesDashRevenueIPDetail(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team", fltUserStatus = "Select")).map {
-            renderBuisnessSnapshotTable(Gson().toJson(it))
+    override fun fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueIPTargetMetNotMetGraph(req).map {
+            mapToFocoDashboardRevenueIpMetOrNotwiseModel(it)
+        }
+    }
+
+
+    override fun fnGetIFASalesDashIFAActivationProductWiseGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashIFAActivationProductWiseGraph(req).map {
+            mapToFocoDashboardRevenueIpProductwiseModel(it)
+        }
+    }
+
+    override fun fnGetIFASalesDashIFAActivationBranchWiseGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashIFAActivationBranchWiseGraph(req).map {
+            mapToFocoDashboardRevenueIpBranchwiseModel(it)
         }
     }
 
     override fun fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
         val req = request.requestTransform()
         return  saathiIndrectApi.getIFASalesDashRevenueBrokingProductWiseSalesGraph(req).map {
-            mapToFocoDashboardDetailsModel(it)
+            mapToFocoDashboardRevenueIpProductwiseModel(it)
         }
     }
 
-    override fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String): Observable<String> {
-        return  saathiIndrectApi.getIFASalesDashRevenueBrokingHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team")).map {
-            it.string()
+    override fun fnGetIFASalesDashRevenueBrokingBranchWiseGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueBrokingBranchWiseGraph(req).map {
+            mapToFocoDashboardRevenueIpBranchwiseModel(it)
         }
     }
-    override fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String): Observable<String> {
-        return  saathiIndrectApi.getIFASalesDashRevenueBrokingDetail(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team", fltUserStatus = "Select")).map {
-            it.string()
+
+    override fun fnGetIFASalesDashRevenueBrokingTargetMetNotMetGraph(request: FocoDashboardInput): Observable<FocoDashboardModel> {
+        val req = request.requestTransform()
+        return  saathiIndrectApi.getIFASalesDashRevenueBrokingTargetMetNotMetGraph(req).map {
+            mapToFocoDashboardRevenueIpMetOrNotwiseModel(it)
+        }
+    }
+    override fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashRevenueBrokingHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team")).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+    override fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashRevenueBrokingDetail(IndirectDetailsTablePostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue,
+            fltUserstatus = "Select",  calculatedPageP = 0, pageSizeP = 20, totalCountP = 0,
+            pageP = 1,fltHierarchy = "Team", pageSize = 20, page = 1, calculatedPage = 0, totalCount = 0)
+        ).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+
+    override fun fnGetIFASalesDashMeetingHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFASalesDashMeetingHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, category = "Achieved", fitHierarchy = "Team"))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
+    }
+
+    override fun fnGetIFASalesDashIFAActivationHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.GetIFASalesDashIFAActivationHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team"))
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
+    }
+    override fun fnGetIFASalesDashMeetingDetail(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFASalesDashMeetingDetail(
+            IndirectDetailsTablePostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue,
+            fltUserstatus = "Select", category ="Achieved", calculatedPageP = 0,  pageSizeP = 20, totalCountP = 0,
+                pageP = 1,fltHierarchy = "Team", pageSize = 20, page = 1, calculatedPage = 0, totalCount = 0)
+        )
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
+    }
+
+    override fun fnGetIFASalesDashIFAActivationDetail(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFASalesDashIFAActivationDetail(
+            IndirectDetailsTablePostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue,
+                fltUserstatus = "Select", category ="Achieved", calculatedPageP = 0,  pageSizeP = 20, totalCountP = 0,
+                pageP = 1,fltHierarchy = "Team", pageSize = 20, page = 1, calculatedPage = 0, totalCount = 0)
+        )
+            .map {
+                renderBuisnessSnapshotTable(Gson().toJson(it))
+            }
+    }
+
+    override fun fnGetIFASalesDashRevenueIPDetail(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+
+        return  saathiIndrectApi.getIFASalesDashRevenueIPDetail(IndirectDetailsTablePostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue,
+            fltUserstatus = "Select",  calculatedPageP = 0, pageSizeP = 20, totalCountP = 0,
+            pageP = 1,fltHierarchy = "Team", pageSize = 20, page = 1, calculatedPage = 0, totalCount = 0)
+        ).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+
+    override fun fnGetIFASalesDashRevenueIPHierarchy(strFilterValue: String): Observable<BusinessSnapshotCombo> {
+        return saathiIndrectApi.getIFASalesDashRevenueIPHierarchy(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team")).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
         }
     }
 
@@ -213,7 +305,14 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                     val values: ArrayList<String> = ArrayList()
 
                     headers.forEach { header ->
-                        values.add(json.get(header).toString())
+                        if(json.isNull(header))
+                        {
+                            values.add("")
+                        }
+                        else{
+                            values.add(json.get(header).toString())
+                        }
+
                     }
                     data.add(BusinessSnapshotData(setData(values), headers))
                 }

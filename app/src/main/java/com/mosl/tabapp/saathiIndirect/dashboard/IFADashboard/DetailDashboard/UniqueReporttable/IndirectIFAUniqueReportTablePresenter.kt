@@ -18,21 +18,42 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
     val indirectRepo: IndirectIFADashboardRepository
 ): BasePresenter<IndirectIFAUniqueReportTableView>(view) {
     override fun start() {
-        onFetchCalled().map {
+        view.fnonMeetingEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashRevenueBrokingHierarchy(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashMeetingDetail(it).compose(applyUiModel())
         } .subscribe {
-            it.onSuccess {
-                Log.d("table Response ",it)
-            }
-            it.onFailure {
-                Log.d("table Response f",it.message.toString())
-            }
+           view.renderData(it)
         }
+
+        view.fnonIfaActivationEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+            indirectRepo.fnGetIFASalesDashIFAActivationDetail(it).compose(applyUiModel())
+        } .subscribe {
+            view.renderData(it)
+        }
+
+        view.fnonRevenuIpEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+            indirectRepo.fnGetIFASalesDashRevenueIPDetail(it).compose(applyUiModel())
+        } .subscribe {
+            view.renderData(it)
+        }
+
+        view.fnonRevenuBroEventCalled().map {
+            view.fngetFilterValue()
+        }.switchMap {
+            indirectRepo.fnGetIFASalesDashRevenueBrokingDetail(it).compose(applyUiModel())
+        } .subscribe {
+            view.renderData(it)
+        }
+
+
 
         view.onFilterEventCalled().subscribe {
             view.fnRenderFilterEventCalled(it.strFilterText)
-        }
+        }.addTo(disposable)
     }
 }

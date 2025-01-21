@@ -43,11 +43,33 @@ interface IndirectIFADashboardRepository {
 
     fun fnGetIFASalesDashRevenueIPProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
-    fun fnGetIFASalesDashRevenueIPDetail(strFilterValue: String):Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashRevenueIPBranchWiseGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashRevenueIPTargetMetNotMetGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+
+    fun fnGetIFASalesDashIFAActivationProductWiseGraph (request: FocoDashboardInput):Observable<FocoDashboardModel>
+
+    fun fnGetIFASalesDashIFAActivationBranchWiseGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
     fun fnGetIFASalesDashRevenueBrokingProductWiseSalesGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
 
-    fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String):Observable<String>
-    fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String):Observable<String>
+    fun fnGetIFASalesDashRevenueBrokingBranchWiseGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+    fun fnGetIFASalesDashRevenueBrokingTargetMetNotMetGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
+    fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String):Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String):Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashMeetingHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashIFAActivationHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashMeetingDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashIFAActivationDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashRevenueIPDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
+    fun fnGetIFASalesDashRevenueIPHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
+
 
 }

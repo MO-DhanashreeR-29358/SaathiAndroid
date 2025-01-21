@@ -39,6 +39,7 @@ import com.mosl.tabapp.databinding.FragIndirectIfaUniqueBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyUiEvent
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -55,10 +56,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     lateinit var presenter: IndirectIFAUniquePresenter
     private var itemList = mutableListOf<HorinzatalIFAUniqueWidgetItem>()
 
-    //private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
+    private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueUiEvent>()
     var strFilterVal:String=""
-
+    var strFilterCatVal:String="Achieved"
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
 //    private val widgetUiEventIFA =
@@ -127,85 +128,86 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
         {
             val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.id="1"
             objWidgetMode.name= IndirectIFAUniqueView.strTeamUnique
             objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode.isSelected=true
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
 
             val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.id="2"
             objWidgetMode2.name= IndirectIFAUniqueView.strTargetMetNotMeeting
             objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode2.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
 
             val objWidgetMode3: WidgetModel = WidgetModel()
+            objWidgetMode3.id="3"
             objWidgetMode3.name= IndirectIFAUniqueView.strMyUnique
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
             val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.id="4"
             objWidgetMode.name= IndirectIFAUniqueView.strIfaProductWise
             objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode.isSelected=true
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
 
             val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.id="5"
             objWidgetMode2.name= IndirectIFAUniqueView.strIfaBranchWise
             objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode2.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
-
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
-
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
 
             val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.id="6"
             objWidgetMode.name= IndirectIFAUniqueView.strProductWise
             objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode.isSelected=true
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
 
             val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.id="7"
             objWidgetMode2.name= IndirectIFAUniqueView.strBranchWise
             objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode2.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
 
             val objWidgetMode3: WidgetModel = WidgetModel()
+            objWidgetMode3.id="8"
             objWidgetMode3.name= IndirectIFAUniqueView.strTargetMetNotRevIp
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
             val objWidgetMode: WidgetModel = WidgetModel()
+            objWidgetMode.id="9"
             objWidgetMode.name= IndirectIFAUniqueView.strRevBroProductWise
             objWidgetMode.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode.isSelected=true
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode,widgetUiEventIFA))
 
             val objWidgetMode2: WidgetModel = WidgetModel()
+            objWidgetMode2.id="10"
             objWidgetMode2.name= IndirectIFAUniqueView.strRevBroBranchWise
             objWidgetMode2.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode2.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode2,widgetUiEventIFA))
 
             val objWidgetMode3: WidgetModel = WidgetModel()
+            objWidgetMode3.id="11"
             objWidgetMode3.name= IndirectIFAUniqueView.strRevBroTargetMetNotRevIp
             objWidgetMode3.iconUrl2="https://saathiuat.motilaloswal.com:1023/image/Icon/W_TA_Self_Advisor_Talktime.png"
             objWidgetMode3.isSelected=false
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
-            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
-
         }
-
-
         groupAdapter.addAll(itemList)
 
     }
@@ -221,14 +223,47 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     }
 
 
-//    override fun onFilterEventCalled(): Observable<IndirectIFADashboardUIEvent.onFilterChanged> {
-//        return  subject.ofType()
-//    }
-//
-//    override fun fnRenderFilterEventCalled(strFilterVal: String) {
-//        this.strFilterVal=strFilterVal
-//        dataActionSubject.onNext(DataAction.Fetch)
-//    }
+    override fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged> {
+        return  subject.ofType()
+    }
+
+    override fun fnRenderFilterEventCalled(strFilterVal: String) {
+        this.strFilterVal=strFilterVal
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
+        }
+    }
+
+    override fun onFilterCategoryEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged> {
+        return  subject.ofType()
+    }
+
+    override fun fnRenderFilterCategoryEventCalled(strFilterCatVal: String) {
+        this.strFilterCatVal=strFilterCatVal
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueUiEvent.onRevenuBroEventCalled)
+        }
+    }
 
     override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueUiEvent.onMeetingEventCalled> {
        return widgetUiEventIFA.ofType()
@@ -251,6 +286,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     }
     override fun fngetFilterValue(): String {
         return this.strFilterVal
+    }
+
+    override fun fngetFilterCatValue(): String {
+        return this.strFilterCatVal
     }
 
 
