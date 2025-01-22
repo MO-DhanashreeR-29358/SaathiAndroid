@@ -36,7 +36,8 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
     private lateinit var tableRowAdapter: TableRowAdapter<IndirectIFAUniqueReportHierchyTableRow>
     private val navigateEvent = PublishSubject.create<MutableMap<String, String>>()
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
-    var strFilterVal:String="Last FY"
+    var strFilterVal:String=""
+    var strstrFilterCatVal:String=""
     var strWidgetType:String =""
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueReportHierchyUiEvent>()
 
@@ -76,6 +77,14 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
                 }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
+
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            strstrFilterCatVal ="Achieved"
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            strstrFilterCatVal ="Select"
+        }
     }
     private fun fnSetUpArgument()
     {
@@ -147,8 +156,20 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
         }
     }
 
+    override fun onFilterCategoryEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged> {
+        return  subject.ofType()
+    }
+
+    override fun fnRenderFilterCategoryEventCalled(strFilterCatVal: String) {
+        this.strstrFilterCatVal=strstrFilterCatVal
+    }
+
     override fun fngetFilterValue(): String {
         return this.strFilterVal
+    }
+
+    override fun fngetFilterProductValue(): String {
+        return this.strstrFilterCatVal
     }
 
     override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueReportHierchyUiEvent.onMeetingEventCalled> {

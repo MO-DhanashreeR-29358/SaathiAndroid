@@ -116,7 +116,7 @@ data class GraphTeamUniqueItem(
 	val parameter: String? = null,
 
 	@field:SerializedName("Region")
-	val region: Any? = null,
+	val region: String? = null,
 
 	@field:SerializedName("IsAdminMode")
 	val isAdminMode: Boolean? = null

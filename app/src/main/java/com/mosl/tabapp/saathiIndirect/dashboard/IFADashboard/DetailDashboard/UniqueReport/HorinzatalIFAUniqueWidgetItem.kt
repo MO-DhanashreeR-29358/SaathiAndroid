@@ -1,5 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport
 
+import android.view.View
 import androidx.core.content.ContextCompat
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.CRMAppUtil
@@ -25,6 +26,7 @@ class HorinzatalIFAUniqueWidgetItem (
     override fun bind(viewBinding: HorinzontalWidgetItemBinding, position: Int) {
         val context = viewBinding.root.context
         viewBinding.apply {
+            imageView.visibility= View.GONE
             if (widgetModel.isSelected()) {
                 tvWidgetName.setTextColor(ContextCompat.getColor(context, R.color.white))
                 CRMAppUtil.setImageUrl(
@@ -46,6 +48,7 @@ class HorinzatalIFAUniqueWidgetItem (
                 )
                 tvWidgetName.setText(widgetModel.getName())
                 cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.white))
+
             }
 
             cardView.setOnClickListener {

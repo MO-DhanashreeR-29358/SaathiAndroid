@@ -12,7 +12,12 @@ interface IndirectIFAUniqueReportTableView :BaseView {
 
     fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged>
     fun fnRenderFilterEventCalled(strFilterVal:String)
+
+    fun onFilterCategoryEventCalled():Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged>
+
+    fun fnRenderFilterCategoryEventCalled(strFilterCatVal:String)
     fun fngetFilterValue():String
+    fun fngetFilterProductValue():String
 
     fun fnonMeetingEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled>
 

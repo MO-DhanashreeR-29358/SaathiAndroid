@@ -2,7 +2,7 @@ package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
-import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import io.reactivex.rxjava3.core.Observable
 
@@ -10,7 +10,7 @@ interface IndirectIFADashboardReportView :BaseView {
     fun getWidgetName() : String
     fun renderData(uiModel: UiModel<DashboardReportCombo>)
     fun onReportClickEvent() : Observable<IndirectIFADashboardReportUIEvent.OnReportClick>
-    fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>)
+    fun fnRenderFilterList(uiModel: UiModel<IndirectFilterDataClass>)
 
     fun onFilterEventCalled(): Observable<IndirectIFADashboardReportUIEvent.onFilterChanged>
 
