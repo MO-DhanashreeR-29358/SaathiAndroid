@@ -59,7 +59,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueUiEvent>()
     var strFilterVal:String=""
-    var strFilterCatVal:String="Achieved"
+    var strFilterCatVal:String=""
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
 //    private val widgetUiEventIFA =
@@ -127,6 +127,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 
         if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
         {
+            strFilterCatVal ="Achieved"
             val objWidgetMode: WidgetModel = WidgetModel()
             objWidgetMode.id="1"
             objWidgetMode.name= IndirectIFAUniqueView.strTeamUnique
@@ -149,6 +150,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            strFilterCatVal ="Select"
             val objWidgetMode: WidgetModel = WidgetModel()
             objWidgetMode.id="4"
             objWidgetMode.name= IndirectIFAUniqueView.strIfaProductWise

@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -23,12 +22,11 @@ import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
 import com.mosl.tableview.rowadapter.TableRowAdapter
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.kotlin.ofType
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.coreui.spinner.setSpinnerData
+import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.createmeeting.LookUp
-import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardUIEvent
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import timber.log.Timber
 import javax.inject.Inject
@@ -165,9 +163,9 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
         return strSystemName
     }
 
-    override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
+    override fun fnRenderFilterList(uiModel: UiModel<IndirectFilterDataClass>) {
         uiModel.onSuccess {
-            filterAdapter.setSpinnerData(binding.spPeriod, it)
+            filterAdapter.setSpinnerData(binding.spPeriod, it.lstPeriods)
             // binding.spFilterBank.setSelection(0)
         }
         uiModel.onFailure {

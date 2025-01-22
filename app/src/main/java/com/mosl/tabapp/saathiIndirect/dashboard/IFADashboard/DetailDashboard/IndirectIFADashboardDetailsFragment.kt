@@ -5,25 +5,19 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.Toast
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.R
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
-import com.mosl.tabapp.dashboard.base.DashboardFragment
-import com.mosl.tabapp.databinding.FragIndirectIfaDashboardBinding
 import com.mosl.tabapp.databinding.FragIndirectIfaDashboardDetailsBinding
-import com.mosl.tabapp.model.dashboard.WidgetModel
-import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.HorinzatalIFAUniqueWidgetItem
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
-import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueUiEvent
-import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueView
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyTableFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReporttable.IndirectIFAUniqueReportTableFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
@@ -66,10 +60,7 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         filterCategoryAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spFilterCategory.adapter = filterCategoryAdapter
 
-        var lstFilterCategory= mutableListOf<LookUp>()
-        lstFilterCategory.add(LookUp(0,"Achieved"))
-        lstFilterCategory.add(LookUp(1,"Unique"))
-        filterCategoryAdapter.setSpinnerData(binding.spFilterCategory,lstFilterCategory)
+
 
         binding.spFilterPeriod.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -133,7 +124,7 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
             binding.tvHeadTitle2.setText("Meeting Details")
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
-            binding.spFilterCategory.visibility=View.GONE
+            binding.spFilterCategory.visibility=View.VISIBLE
             binding.tvHeadTitle1.setText("Hierarchy wise IFA Activation")
             binding.tvHeadTitle2.setText("FA Activation Details")
         }
@@ -160,9 +151,23 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         super.onDestroyView()
     }
 
-    override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
+    override fun fnRenderFilterList(uiModel: UiModel<IndirectFilterDataClass>) {
         uiModel.onSuccess {
-            filterAdapter.setSpinnerData(binding.spFilterPeriod, it)
+            filterAdapter.setSpinnerData(binding.spFilterPeriod, it.lstPeriods)
+
+
+
+            if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+            {
+                var lstFilterCategory= mutableListOf<LookUp>()
+                lstFilterCategory.add(LookUp(0,"Achieved"))
+                lstFilterCategory.add(LookUp(1,"Unique"))
+                filterCategoryAdapter.setSpinnerData(binding.spFilterCategory,lstFilterCategory)
+            }
+            else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+                filterCategoryAdapter.setSpinnerData(binding.spFilterCategory,it.lstProduct)
+            }
+
             subject.onNext(IndirectIFADashboardDetailsUiEvent.OnDetailsDataCall)
         }
         uiModel.onFailure {

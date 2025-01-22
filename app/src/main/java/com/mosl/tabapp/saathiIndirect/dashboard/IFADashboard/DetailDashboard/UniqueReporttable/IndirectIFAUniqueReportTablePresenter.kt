@@ -21,7 +21,7 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
         view.fnonMeetingEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashMeetingDetail(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashMeetingDetail(it,view.fngetFilterProductValue()).compose(applyUiModel())
         } .subscribe {
            view.renderData(it)
         }
@@ -29,7 +29,7 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
         view.fnonIfaActivationEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashIFAActivationDetail(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashIFAActivationDetail(it,view.fngetFilterProductValue()).compose(applyUiModel())
         } .subscribe {
             view.renderData(it)
         }
@@ -37,7 +37,7 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
         view.fnonRevenuIpEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashRevenueIPDetail(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashRevenueIPDetail(it,view.fngetFilterProductValue()).compose(applyUiModel())
         } .subscribe {
             view.renderData(it)
         }
@@ -45,7 +45,7 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
         view.fnonRevenuBroEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashRevenueBrokingDetail(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashRevenueBrokingDetail(it,view.fngetFilterProductValue()).compose(applyUiModel())
         } .subscribe {
             view.renderData(it)
         }
@@ -54,6 +54,10 @@ class IndirectIFAUniqueReportTablePresenter @Inject constructor(
 
         view.onFilterEventCalled().subscribe {
             view.fnRenderFilterEventCalled(it.strFilterText)
+        }.addTo(disposable)
+
+        view.onFilterCategoryEventCalled().subscribe {
+            view.fnRenderFilterCategoryEventCalled(it.strFilterCatText)
         }.addTo(disposable)
     }
 }
