@@ -3,6 +3,7 @@ package com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard
 import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.data.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardMapper.requestTransform
+import com.mosl.app.core.data.saathiIndirect.dashboard.mapTOIFADashboardModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardDetailsModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardModel
 import com.mosl.app.core.data.saathiIndirect.dashboard.mapToFocoDashboardMyTargetMetNotModel
@@ -106,14 +107,14 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     override fun fnGetIFADashREvenueIP(request: FocoDashboardInput): Observable<FocoDashboardModel> {
         val req = request.requestTransform()
         return saathiIndrectApi.getIFADashREvenueIP(req).map {
-            mapToFocoDashboardModel(it)
+            mapTOIFADashboardModel(it)
         }
     }
 
     override fun fnGetIFADashRevenueBroking(request: FocoDashboardInput): Observable<FocoDashboardModel> {
         val req = request.requestTransform()
         return  saathiIndrectApi.getIFADashRevenueBroking(req).map {
-            mapToFocoDashboardModel(it)
+            mapTOIFADashboardModel(it)
         }
     }
 
@@ -127,7 +128,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     override fun fnGetIFADashIFAACtivation(request: FocoDashboardInput): Observable<FocoDashboardModel> {
         val req = request.requestTransform()
         return  saathiIndrectApi.getIFADashIFAACtivation(req).map {
-            mapToFocoDashboardModel(it)
+            mapTOIFADashboardModel(it)
         }
     }
 
