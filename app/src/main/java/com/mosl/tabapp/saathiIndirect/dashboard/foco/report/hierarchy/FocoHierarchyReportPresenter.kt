@@ -41,28 +41,28 @@ class FocoHierarchyReportPresenter @Inject constructor(
       screenLoadObs
           .filter { view.getWidgetName()  == REVENUE}
           .switchMap {
-              repository.getRevenueHierarchy(getWidgetRequest())
+              repository.getRevenueHierarchy(getHierarchyWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderReportData, Timber::e)
+          .subscribe(view::renderData, Timber::e)
           .addTo(disposable)
 
       screenLoadObs
           .filter { view.getWidgetName()  == NO_OF_CLIENT_MEETINGS}
           .switchMap {
-              repository.getClientMeetingHierarchy(getWidgetRequest())
+              repository.getClientMeetingHierarchy(getHierarchyWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderReportData, Timber::e)
+          .subscribe(view::renderData, Timber::e)
           .addTo(disposable)
 
       screenLoadObs
           .filter { view.getWidgetName()  == IP_SALES}
           .switchMap {
-              repository.getIpSalesHierarchy(getWidgetRequest())
+              repository.getIpSalesHierarchy(getHierarchyWidgetRequest())
                   .compose(applyUiModel())
           }
-          .subscribe(view::renderReportData, Timber::e)
+          .subscribe(view::renderData, Timber::e)
           .addTo(disposable)
 
       val reportClickObs = view.onReportClickEvent().share()
@@ -111,6 +111,10 @@ class FocoHierarchyReportPresenter @Inject constructor(
     fun getWidgetRequest() : FocoDashboardInput {
         return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = view.getPeriod()?.displayText, category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+    }
+    fun getHierarchyWidgetRequest() : FocoDashboardInput {
+        return  FocoDashboardInput(employeeCode = userManager.getUser()?.employeeCode, fltPeriod = view.getPeriod()?.displayText, fitHierarchy = "Team", category = "", fltUserStatus = "Select", filter = "", calculatedPageP = 0,
+            pageSizeP = 0,  pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 
 }

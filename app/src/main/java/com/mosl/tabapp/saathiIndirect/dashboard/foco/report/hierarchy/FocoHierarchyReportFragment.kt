@@ -47,6 +47,9 @@ class FocoHierarchyReportFragment : CommonFragment(),
   @Inject
   lateinit var presenter: FocoHierarchyReportPresenter
   private val navigateEvent = PublishSubject.create<FocoHierarchyReportUIEvent>()
+  private lateinit var model: WidgetModel
+  private lateinit var dynamicHeaderRow: DynamicHeaderRow
+  private lateinit var tableRowAdapter: TableRowAdapter<FocoDashboardReportTableRow>
 
   private var strSystemName : String = ""
   private var strSelectedPeriod : String = ""
@@ -88,7 +91,7 @@ class FocoHierarchyReportFragment : CommonFragment(),
     }
     return 0
   }
-  @SuppressLint("SetTextI18n")
+
   private fun setUpView() {
     binding.txtLables.text = "$strSystemName Hierarchy"
     if(strSystemName == FocoTargetPresenter.NO_OF_CLIENT_MEETINGS){
@@ -96,6 +99,23 @@ class FocoHierarchyReportFragment : CommonFragment(),
     }
     periodAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
     binding.spPeriod.adapter = periodAdapter
+
+    binding.tableWrapper.setRetryListener(onRetryClick)
+    dynamicHeaderRow = HierarchyReportTableMapper.header(
+      requireContext()
+    ) as DynamicHeaderRow
+    val mfAdapter = requireContext().createRowAdapter<FocoDashboardReportTableRow>(dynamicHeaderRow)
+      .apply {
+        viewProvider.rowClickListener = { row, _ ->
+           val reportData = tableRowAdapter.getItem(row).data
+           val rmName = reportData.hasMap["SalesRM"] ?: ""
+          val employeeCode = rmName.substringAfter("-")
+          navigateEvent.onNext(FocoHierarchyReportUIEvent.OnReportClick(strSystemName, employeeCode))
+        }
+      }
+    tableRowAdapter = mfAdapter
+    binding.tableWrapper.setAdapter(tableRowAdapter)
+
   }
 
   override fun renderReportData(uiModel: UiModel<List<SalesRM>>) {
@@ -108,6 +128,27 @@ class FocoHierarchyReportFragment : CommonFragment(),
       val adapter = HierarchyListAdapter(data, strSystemName, false, navigateEvent)
       binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
       binding.recyclerView.adapter = adapter
+    }
+  }
+
+  override fun renderData(uiModel: UiModel<DashboardReportCombo>) {
+    binding.tableWrapper.toggleProgress(uiModel.inProgress)
+
+    uiModel.onFailure { error ->
+      binding.tableWrapper.showError(error)
+    }
+
+    uiModel.onSuccess { data ->
+      val headerData = mutableListOf<String>()
+      data.headers.map {
+        headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it))
+      }
+      dynamicHeaderRow.setHeader(headerData)
+      val hierarchyReport: List<FocoDashboardReportTableRow> =
+        FocoDashboardReportTableMapper.map(data.data)
+      binding.tableWrapper.setData(
+        hierarchyReport, ErrorModel.noData(getString(R.string.error_message_no_data_available))
+      )
     }
   }
 
