@@ -62,14 +62,6 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     var strFilterCatVal:String=""
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
-//    private val widgetUiEventIFA =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
-//
-//    private val pieChartEvent =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
-//
-//    private val summaryCountUiEvent =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
 
     private var previousPosition: Int = 0
     private var lableItemList = mutableListOf<IndirectIFAUniqueLableItem>()
@@ -99,12 +91,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         }
         makeChart()
 
-
     }
 
     @SuppressLint("WrongConstant")
     private fun setupViews() {
-
         binding.includeTargetChart.rvSummaryCount.visibility=View.GONE
         binding.includeTargetChart.imageView.visibility=View.GONE
 

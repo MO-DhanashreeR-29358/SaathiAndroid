@@ -318,7 +318,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                 for (i in 0 until jsonArray.length()) {
                     val json = jsonArray.getJSONObject(i)
                     val values: ArrayList<String> = ArrayList()
-
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                     headers.forEach { header ->
                         if(json.isNull(header))
                         {
@@ -338,10 +338,16 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                             }
 
                         }
-
+                        if(!json.isNull(header)){
+                            hasMap[header] = json.get(header)
+                                .toString()
+                        }
+                        else{
+                            hasMap[header] = ""
+                        }
 
                     }
-                    data.add(BusinessSnapshotData(setData(values), headers))
+                    data.add(BusinessSnapshotData(setData(values), headers,hasMap))
                 }
                return BusinessSnapshotCombo(headers, data = data)
             } else {
