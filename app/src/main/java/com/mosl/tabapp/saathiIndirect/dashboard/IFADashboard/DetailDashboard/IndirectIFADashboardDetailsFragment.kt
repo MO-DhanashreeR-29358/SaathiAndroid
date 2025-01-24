@@ -20,6 +20,7 @@ import com.mosl.tabapp.databinding.FragIndirectIfaDashboardDetailsBinding
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReportHiercytable.IndirectIFAUniqueReportHierchyTableFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReporttable.IndirectIFAUniqueReportTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardView
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import io.reactivex.rxjava3.core.Observable
@@ -155,6 +156,13 @@ class IndirectIFADashboardDetailsFragment:CommonFragment(),IndirectIFADashboardD
         uiModel.onSuccess {
             filterAdapter.setSpinnerData(binding.spFilterPeriod, it.lstPeriods)
 
+            it.lstPeriods.forEachIndexed { index, lookUp ->
+                if(lookUp.lookUpName.equals(IndirectIFADashboardView.strSelectedFilter))
+                {
+                    binding.spFilterPeriod.setSelection(index)
+                    return@forEachIndexed
+                }
+            }
 
 
             if(strWidgetType.equals(IndirectIFATargetView.strMeeting))

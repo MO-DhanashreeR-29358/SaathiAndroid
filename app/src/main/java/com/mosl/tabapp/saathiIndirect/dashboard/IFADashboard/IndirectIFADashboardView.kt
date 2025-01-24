@@ -10,6 +10,9 @@ interface IndirectIFADashboardView :BaseView{
     fun onActionableInsightsClicked(): Observable<Unit>
     fun showInsightsDialog()
     fun fnRenderFilterList(uiModel: UiModel<IndirectFilterDataClass>)
+    companion object{
+        var strSelectedFilter:String=""
+    }
 
 
 

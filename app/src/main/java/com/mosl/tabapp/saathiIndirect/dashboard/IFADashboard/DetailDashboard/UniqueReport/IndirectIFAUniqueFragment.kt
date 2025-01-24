@@ -509,8 +509,8 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         uiModel.onSuccess {
             Timber.d("strTarget ${it.strTarget}")
             Timber.d("strAchieved ${it.strAchieved}")
-            binding.includeTargetChart.txtTarget.text = it.strTarget
-            binding.includeTargetChart.txtAchievement.text = it.strAchieved
+            binding.includeTargetChart.txtTarget.text = it.strTarget?.replace(".0","")
+            binding.includeTargetChart.txtAchievement.text = it.strAchieved?.replace(".0","")
             for( gr in it.graph){
                 Timber.d("graph Product ${gr.product}")
                 Timber.d("graph value ${gr.Value}")
