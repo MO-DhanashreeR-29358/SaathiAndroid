@@ -57,8 +57,6 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
         binding.spFilter1.visibility= View.GONE
         binding.spFilter2.visibility= View.GONE
         binding.spFilter3.visibility= View.GONE
-
-
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = IndirectIFAUniqueReportHierchyTableMapper.header(requireContext()) as DynamicHeaderRow
         val mfAdapter =
@@ -95,15 +93,11 @@ class IndirectIFAUniqueReportHierchyTableFragment : CommonFragment(),
         super.onDestroyView()
     }
 
-
     override fun getAdditionalParameterMap(
         rowData: String?,
         columnData: String?
     ): MutableMap<String, String> {
         val additionalParameterMap: MutableMap<String, String> = HashMap()
-        /*  getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }*/
         columnData?.let {
             additionalParameterMap[MOSLConstants.COL_FILTER] =
                 columnData

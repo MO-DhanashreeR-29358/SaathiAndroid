@@ -12,7 +12,8 @@ data class BusinessSnapshotTableItemModel(
 
 data class BusinessSnapshotData(
   @JvmField val data: List<String>,
-  @JvmField val headers: List<String>
+  @JvmField val headers: List<String>,
+  @JvmField val hasMap: Map<String, String>
 )
 
 data class BusinessSnapshotCombo(

@@ -26,4 +26,6 @@ interface IndirectIFAUniqueReportTableView :BaseView {
     fun fnonRevenuIpEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuIpEventCalled>
 
     fun fnonRevenuBroEventCalled():Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled>
+
+    fun fnOnReportRowClicked():Observable<IndirectIFAUniqueTableReportUiEvent.onReportRowClicked>
 }

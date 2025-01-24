@@ -292,7 +292,20 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                 while (iterator.hasNext()) {
                     val header = iterator.next()
                         .toString()
-                    colHeaders.add(com.mosl.mobile.domain.snapshot.ColHeader(header))
+                    if(!header.equals("R_no",true) && !header.equals("Product",true)
+                        && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
+                        && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
+                        && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true)
+                        && !header.equals("SelectedPeriod",true) && !header.equals("R",true)
+                        && !header.equals("level_0_Name",true) && !header.equals("level_1_Name",true)
+                        && !header.equals("level_2_Name",true) && !header.equals("level_3_Name",true)
+                        && !header.equals("level_4_Name",true) && !header.equals("level_5_Name",true)
+                        && !header.equals("level_6_Name",true) && !header.equals("level_7_Name",true)
+                        && !header.equals("level_8_Name",true) && !header.equals("level_9_Name",true)
+                        && !header.equals("level_10_Name",true))
+                    {
+                            colHeaders.add(com.mosl.mobile.domain.snapshot.ColHeader(header))
+                    }
                 }
 
                 val headers = colHeaders.map {
@@ -305,18 +318,36 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                 for (i in 0 until jsonArray.length()) {
                     val json = jsonArray.getJSONObject(i)
                     val values: ArrayList<String> = ArrayList()
-
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                     headers.forEach { header ->
                         if(json.isNull(header))
                         {
                             values.add("")
                         }
                         else{
-                            values.add(json.get(header).toString())
+                            if(json.get(header).toString().equals("0.0"))
+                            {
+                                values.add("0")
+                            }
+                            else if(json.get(header).toString().endsWith(".0"))
+                            {
+                                values.add(json.get(header).toString().substringBefore("."))
+                            }
+                            else{
+                                values.add(json.get(header).toString())
+                            }
+
+                        }
+                        if(!json.isNull(header)){
+                            hasMap[header] = json.get(header)
+                                .toString()
+                        }
+                        else{
+                            hasMap[header] = ""
                         }
 
                     }
-                    data.add(BusinessSnapshotData(setData(values), headers))
+                    data.add(BusinessSnapshotData(setData(values), headers,hasMap))
                 }
                return BusinessSnapshotCombo(headers, data = data)
             } else {
@@ -327,6 +358,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
          return   BusinessSnapshotCombo(emptyList(), data = emptyList())
         }
     }
+
 
     private fun renderTable(response: String?): DashboardReportCombo {
         if(response != null) {
@@ -343,7 +375,13 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                 while (iterator.hasNext()) {
                     val header = iterator.next()
                         .toString()
-                    colHeaders.add(ColHeader(header))
+                    if(!header.equals("R_no",true) && !header.equals("Product",true)
+                        && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
+                        && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
+                        && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true))
+                    {
+                        colHeaders.add(ColHeader(header))
+                    }
                 }
 
                 val headers = colHeaders.map {
@@ -361,7 +399,11 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                     val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
                     headers.forEach { header ->
                         if (!header.equals("WidgetSystemName", ignoreCase = true) &&
-                            !header.equals("flg_empcode", ignoreCase = true)
+                            !header.equals("flg_empcode", ignoreCase = true)&& !header.equals("R_no",true) && !header.equals("Product",true)
+                                && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
+                                && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
+                                && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true)
+
                         ) {
                             headerData.add(header)
                             try {
@@ -376,7 +418,15 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                                             values.add("0")
                                         } else {
                                             if (json.get(header).toString().contains(".")) {
-                                                values.add(toDouble.toBigDecimal().toPlainString())
+                                                if(json.get(header).toString().endsWith(".0"))
+                                                {
+                                                    values.add(json.get(header).toString().substringBefore("."))
+                                                }
+                                                else
+                                                {
+                                                    values.add(toDouble.toBigDecimal().toPlainString())
+                                                }
+
                                             } else {
                                                 values.add(json.get(header).toString())
                                             }

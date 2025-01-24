@@ -57,22 +57,18 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         binding.spFilter1.visibility= View.GONE
         binding.spFilter2.visibility= View.GONE
         binding.spFilter3.visibility= View.GONE
-
-
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = IndirectIFAUniqueReportTableMapper.header(requireContext()) as DynamicHeaderRow
-        val mfAdapter =
-            requireContext().createRowAdapter<IndirectIFAUniqueReportTableRow>(dynamicHeaderRow)
+        val mfAdapter = requireContext().createRowAdapter<IndirectIFAUniqueReportTableRow>(dynamicHeaderRow)
                 .apply {
                     viewProvider.rowClickListener = { row, view ->
-                        val column = view.getTag(R.id.tag_column) as Int
                         val reportData = tableRowAdapter.getItem(row).data
-                        navigateEvent.onNext(
-                            getAdditionalParameterMap(
-                                reportData.data[0],
-                                reportData.headers[column + 1]
-                            )
-                        )
+                        var leadId=reportData.hasMap["LeadID"]
+                        if(leadId.toString().endsWith(".0"))
+                        {
+                            leadId=leadId.toString().substringBefore(".")
+                        }
+                        widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onReportRowClicked(leadId?:""))
                     }
                 }
         tableRowAdapter = mfAdapter
@@ -94,15 +90,11 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         super.onDestroyView()
     }
 
-
     override fun getAdditionalParameterMap(
         rowData: String?,
         columnData: String?
     ): MutableMap<String, String> {
         val additionalParameterMap: MutableMap<String, String> = HashMap()
-        /*  getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }*/
         columnData?.let {
             additionalParameterMap[MOSLConstants.COL_FILTER] =
                 columnData
@@ -132,7 +124,6 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
             )
         }
     }
-
 
     override fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged> {
         return  subject.ofType()
@@ -197,6 +188,10 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
     }
 
     override fun fnonRevenuBroEventCalled(): Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnOnReportRowClicked(): Observable<IndirectIFAUniqueTableReportUiEvent.onReportRowClicked> {
         return widgetUiEventIFA.ofType()
     }
 

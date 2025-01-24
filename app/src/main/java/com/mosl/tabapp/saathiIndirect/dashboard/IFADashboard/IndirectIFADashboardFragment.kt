@@ -79,6 +79,7 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
                 position: Int,
                 id: Long
             ) {
+                IndirectIFADashboardView.strSelectedFilter=binding.spFilterBank.selectedItem.toString()
                 subject.onNext(IndirectIFADashboardUIEvent.onFilterChanged(binding.spFilterBank.selectedItem.toString()))
 
             }
