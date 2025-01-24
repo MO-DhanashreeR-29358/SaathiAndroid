@@ -30,7 +30,8 @@ fun FocoDashboardInput.requestTransform(): FOCODashboardFilterpostReq {
         category = category,
         filter = filter,
         fltUserStatus = fltUserStatus,
-        fitHierarchy = fitHierarchy
+        fitHierarchy = fitHierarchy,
+        fltPeriod = fltPeriod
     )
 }
 fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {

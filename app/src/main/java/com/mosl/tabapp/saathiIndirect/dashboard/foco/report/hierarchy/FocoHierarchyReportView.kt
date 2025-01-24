@@ -16,6 +16,8 @@ interface FocoHierarchyReportView : BaseView {
     fun onPeriodChange(): Observable<Int>
     fun getPeriod(): FocoPeriodModel?
     fun getWidgetName() : String
+
+    fun renderData(uiModel: UiModel<DashboardReportCombo>)
     fun renderReportData(uiModel: UiModel<List<SalesRM>>)
     fun onReportClickEvent() : Observable<FocoHierarchyReportUIEvent.OnReportClick>
 }
