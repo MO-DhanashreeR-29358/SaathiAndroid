@@ -49,6 +49,15 @@
           />
 
     </LinearLayout>
+    <Spinner
+        android:id="@+id/spFilterPeriodMyLead"
+        style="@style/DashbordSpinnerSelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_weight="1"
+        />
 
     <com.mosl.tabapp.view.TableWrapperView
         android:id="@+id/table_wrapper"

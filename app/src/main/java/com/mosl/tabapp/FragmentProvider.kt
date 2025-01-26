@@ -102,6 +102,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFAT
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpFragment
@@ -334,5 +336,9 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectIFAUniqueReportHierchyTableModule::class])
     fun provideIndirectIFAUniqueReportHierchyFragmentFactory():IndirectIFAUniqueReportHierchyTableFragment
+
+
+    @ContributesAndroidInjector(modules = [IndirectIFAMyLeadDetailsModule::class])
+    fun provideIndiredctIFAMyLeadDetailsFragmentFactory():IndirectIFAMyLeadDetailsFragment
 
 }

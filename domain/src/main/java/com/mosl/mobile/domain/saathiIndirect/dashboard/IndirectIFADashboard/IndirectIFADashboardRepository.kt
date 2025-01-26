@@ -72,5 +72,7 @@ interface IndirectIFADashboardRepository {
 
     fun fnGetIFASalesDashRevenueIPHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
+    fun fngetIFASalesDashMyLeadsDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
+
 
 }

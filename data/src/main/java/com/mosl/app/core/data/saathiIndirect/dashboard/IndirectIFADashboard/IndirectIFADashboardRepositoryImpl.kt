@@ -22,12 +22,14 @@ import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardModel
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
+import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFAMyLeadDetailsFilter
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotCombo
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotData
 import com.mosl.mobile.user.login.UserManagerImpl
 import com.mosl.saathi.api.SaathiIndirectApi
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.MyLeadDetailsRequestPost
 import io.reactivex.rxjava3.core.Observable
 import org.json.JSONObject
 import javax.inject.Inject
@@ -92,7 +94,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     }
 
     override fun fnGetIFaSalesDashMyLead(strFilterValue: String): Observable<BusinessSnapshotCombo> {
-        return saathiIndrectApi.getIFaSalesDashMyLead(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue))
+        return saathiIndrectApi.getIFaSalesDashMyLead(IndirectDashboardFilterPostRequest(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, fitHierarchy = "Team"))
             .map {
                 renderBuisnessSnapshotTable(Gson().toJson(it))
             }
@@ -275,6 +277,18 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun fngetIFASalesDashMyLeadsDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashMyLeadsDetail(
+            MyLeadDetailsRequestPost(
+                employeeCode = userManager.getUser()?.employeeCode, fltUserstatus = objIndirectIFAMyLeadDetailsFilter.strSelFilterBy, category = objIndirectIFAMyLeadDetailsFilter.strSelCategory,
+                calculatedPageP = 0, pageSizeP = 20, totalCountP = 0, pageP = 1, stageCode = objIndirectIFAMyLeadDetailsFilter.strSelStaqeCode, fltPeriod = objIndirectIFAMyLeadDetailsFilter.strSelPeriods,
+                rowfilter = "Self", colfilter = objIndirectIFAMyLeadDetailsFilter.strSelStaqeCode, fltHierarchy = "Team", pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0
+            )
+        ).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+
     private fun renderBuisnessSnapshotTable(response: String?): BusinessSnapshotCombo{
         if(response != null) {
             val jsonObject = JSONObject(response)
@@ -380,6 +394,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                         && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
                         && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true))
                     {
+
                         colHeaders.add(ColHeader(header))
                     }
                 }

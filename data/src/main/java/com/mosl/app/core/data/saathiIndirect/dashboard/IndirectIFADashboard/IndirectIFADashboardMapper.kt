@@ -13,7 +13,8 @@ object IndirectIFADashboardMapper {
 
         return  IndirectFilterDataClass(
             lstPeriods=objIndirectIFADashboardFilterResponse?.lstPeriod?.map { LookUp(0, it?.displayText?:"") }?: emptyList(),
-            lstProduct = objIndirectIFADashboardFilterResponse?.lstProduct?.map { LookUp(0, it?.displayText?:"") }?: emptyList()
+            lstProduct = objIndirectIFADashboardFilterResponse?.lstProduct?.map { LookUp(0, it?.displayText?:"") }?: emptyList(),
+            lstStageCode = objIndirectIFADashboardFilterResponse?.lstStageCode?.map { LookUp(0, it?.displayText?:"") }?: emptyList()
         )
 
     }

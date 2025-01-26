@@ -27,6 +27,7 @@ import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadUiEvent
 import com.mosl.tabapp.util.SpinnerAdapterFactory
 import timber.log.Timber
 import javax.inject.Inject
@@ -87,7 +88,14 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
         ) as DynamicHeaderRow
         val mfAdapter = requireContext().createRowAdapter<IndirectIFADashboardReportTableRow>(dynamicHeaderRow)
             .apply {
-
+                if(getWidgetName()==MOSLConstants.INDIRECT_1ST_MEETING || getWidgetName()==MOSLConstants.INDIRECT_LEADS_NOT_UPDATED)
+                {
+                    viewProvider.rowClickListener = { row, view ->
+                        val column = view.getTag(R.id.tag_column) as Int
+                        val reportData = tableRowAdapter.getItem(row).data
+                        navigateEvent.onNext(IndirectIFADashboardReportUIEvent.OnReportClick(""))
+                    }
+                }
             }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
@@ -144,7 +152,26 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
         uiModel.onSuccess { data ->
             val headerData = mutableListOf<String>()
             data.headers.map {
-                headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it))
+                var strtempHeader=it
+                if(strtempHeader.equals("Greaterhenseven",true))
+                {
+                    strtempHeader=">7"
+                }
+                if(strtempHeader.equals("Greaterthenfiftin",true))
+                {
+                    strtempHeader=">15"
+                }
+
+                if(strtempHeader.equals("Greaterthenthirty",true))
+                {
+                    strtempHeader=">30"
+                }
+
+                if(strtempHeader.equals("Greaterthensixty",true))
+                {
+                    strtempHeader=">60"
+                }
+                headerData.add(CRMAppUtil.getRefreshIndirectColumnName(strtempHeader))
             }
             dynamicHeaderRow.setHeader(headerData)
             val hierarchyReport: List<IndirectIFADashboardReportTableRow> =

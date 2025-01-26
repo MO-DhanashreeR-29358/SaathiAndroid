@@ -89,7 +89,7 @@ import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectIFAWidgetCommo
 import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
-
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.MyLeadDetailsRequestPost
 
 
 interface SaathiIndirectApi {
@@ -472,6 +472,12 @@ interface SaathiIndirectApi {
     //Revenu ip hierchy
    @POST("Dashboard/GetIFASalesDashRevenueIPHierarchy")
    fun getIFASalesDashRevenueIPHierarchy(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+
+   // my leads details
+
+   @POST("Dashboard/GetIFASalesDashMyLeadsDetail")
+   fun getIFASalesDashMyLeadsDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     /*************IFADashboard End Here************/
 }
