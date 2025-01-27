@@ -107,10 +107,21 @@ class FocoHierarchyReportFragment : CommonFragment(),
     val mfAdapter = requireContext().createRowAdapter<FocoDashboardReportTableRow>(dynamicHeaderRow)
       .apply {
         viewProvider.rowClickListener = { row, _ ->
-           val reportData = tableRowAdapter.getItem(row).data
-           val rmName = reportData.hasMap["SalesRM"] ?: ""
-          val employeeCode = rmName.substringAfter("-")
-          navigateEvent.onNext(FocoHierarchyReportUIEvent.OnReportClick(strSystemName, employeeCode))
+         var  employeeCode = ""
+          try{
+            val reportData = tableRowAdapter.getItem(row).data
+            val rmName = reportData.hasMap["SalesRM"] ?: ""
+            val tmName = reportData.hasMap["TMName"] ?: ""
+            if(rmName.isNotEmpty()){
+              employeeCode = rmName.substringAfter("-")
+            }else{
+              employeeCode = tmName.substringAfter("-")
+            }
+            navigateEvent.onNext(FocoHierarchyReportUIEvent.OnReportClick(strSystemName, employeeCode))
+
+          }catch (ex :Exception){
+            ex.printStackTrace()
+          }
         }
       }
     tableRowAdapter = mfAdapter
