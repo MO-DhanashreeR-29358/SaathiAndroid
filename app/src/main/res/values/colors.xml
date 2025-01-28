@@ -40,7 +40,7 @@
     <color name="counter_text_bg">#BDBDBD</color>
     <color name="email_all_view">#CFCFCF</color>
     <color name="list_head_row_color">@color/primaryTextColor</color>
-    <color name="titleBarBackground">#414143</color>
+    <color name="titleBarBackground">@color/secondaryBackground</color>
     <color name="primaryTextColor">#000000</color>
     <color name="menu_list_divider">#650b14</color>
     <color name="loginTextColor">#8f6101</color>
@@ -53,7 +53,7 @@
     <color name="shadow_start">#80000000</color>
     <color name="margin_dark_bar">#FF414143</color>
     <color name="market_grey_text">#7F7F7F</color>
-    <color name="colorPrimary">@color/yellow_header</color>
+    <color name="colorPrimary">@color/titleBarBackground</color>
     <!--#3F51B5-->
     <color name="secondaryTextColor">#7f7f7f</color>
     <color name="list_subhead_row_color">@color/secondaryTextColor</color>
@@ -91,12 +91,12 @@
     <color name="colorAccent">#FF4081</color>
     <color name="red">#FF4081</color>
     <color name="red_textcolor">#DA0000</color>
-    <color name="actions_sel">#C58C2A</color>
+    <color name="actions_sel">#006EB9</color>
     <color name="mutual_fund_color">#FF6F3F</color>
     <color name="yellow_menu">#F9AF4E</color>
     <color name="orange">#FBB230</color>
     <color name="side_strip_color">@color/secondaryBackground</color>
-    <color name="secondaryBackground">#fbb030</color>
+    <color name="secondaryBackground">#2E2A94</color>
     <color name="sip_color">#FFB00A</color>
     <color name="yellow_header">#fbb12f</color>
     <!--#fdaf32-->
@@ -243,7 +243,7 @@
     <color name="background_color_query">#FFDCD7D7</color>
     <color name="text_color_dark_orange">@color/dark_orange</color>
 
-    <color name="menu_header_background_color">#414143</color>
+    <color name="menu_header_background_color">@color/secondaryBackground</color>
     <color name="text_color_disabled">#42000000</color>
     <color name="sathi_red_textcolor">#DA0000</color>
 
@@ -264,7 +264,7 @@
     <color name="color_negative">@color/red</color>
     <color name="text_color_red">#DA0000</color>
     <color name="button_text_color">@color/white</color>
-    <color name="button_primary_background_color">#fca517</color>
+    <color name="button_primary_background_color">#2E2A94</color>
     <color name="button_primary_disabled_background_color">#BDBDBD</color>
     <color name="colorPrimaryAttendance">#fca517</color>
     <color name="light_blue_700">#0091ea</color>

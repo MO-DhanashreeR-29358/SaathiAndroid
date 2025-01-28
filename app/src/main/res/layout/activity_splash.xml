@@ -7,7 +7,7 @@
         android:id="@+id/splash_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/splash"
+        android:background="@drawable/new_splash"
         >
         <ProgressBar
             android:id="@+id/progress_bar"

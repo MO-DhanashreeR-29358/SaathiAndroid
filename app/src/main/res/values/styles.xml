@@ -4,9 +4,9 @@
         <item name="android:background">@color/white_subheading</item>
         <item name="tabTextAppearance">@style/MyCustomTabText</item>
         <item name="android:textAllCaps">false</item>
-        <item name="tabSelectedTextColor">@color/orange</item>
+        <item name="tabSelectedTextColor">@color/secondaryBackground</item>
         <item name="tabBackground">@color/white_subheading</item>
-        <item name="tabIndicatorColor">@color/orange</item>
+        <item name="tabIndicatorColor">@color/secondaryBackground</item>
         <item name="tabMode">fixed</item>
     </style>
 
@@ -36,7 +36,7 @@
 
 
     <style name="CRMMOSLTheme" parent="CRMAppTheme.Base">
-        <item name="colorAccent">#FF959595</item>
+        <item name="colorAccent">#FF006EB9</item>
     </style>
 
     <style name="MOSLTheme.AppBarOverlay" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge" />
@@ -57,7 +57,9 @@
         <item name="android:checkboxStyle">@style/CRMCheckBoxSelector</item>
         <item name="editTextStyle">@style/CRMEdittextSelector</item>
         <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
-
+        <item name="android:statusBarColor">#FF006EB9</item>
+        <!-- Optionally, set the status bar icons to light (for dark backgrounds) -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 
@@ -288,7 +290,7 @@
         parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
         <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
-        <item name="android:statusBarColor">@color/ekyc_bright_orange</item>
+        <item name="android:statusBarColor">@color/secondaryBackground</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
