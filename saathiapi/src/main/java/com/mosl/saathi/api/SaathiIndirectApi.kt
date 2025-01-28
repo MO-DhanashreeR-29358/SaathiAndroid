@@ -479,5 +479,12 @@ interface SaathiIndirectApi {
    @POST("Dashboard/GetIFASalesDashMyLeadsDetail")
    fun getIFASalesDashMyLeadsDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
+
+   @POST("Dashboard/GetIFASalesDashFirstMeetingNotDoneDetail")
+   fun getIFASalesDashFirstMeetingNotDoneDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+   @POST("Dashboard/GetIFASalesDashLeadsNotUpdatedDetail")
+   fun getIFASalesDashLeadsNotUpdatedDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
     /*************IFADashboard End Here************/
 }

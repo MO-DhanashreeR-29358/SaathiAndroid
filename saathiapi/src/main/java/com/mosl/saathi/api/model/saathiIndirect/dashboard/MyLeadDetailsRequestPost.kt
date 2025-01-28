@@ -31,7 +31,7 @@ data class MyLeadDetailsRequestPost(
 	@field:SerializedName("StageCode")
 	val stageCode: String? = null,
 	@field:SerializedName("Days")
-	val days: Any? = null,
+	val days: String? = null,
 	@field:SerializedName("flt_product")
 	val fltProduct: Any? = null,
 	@field:SerializedName("flt_prospect")

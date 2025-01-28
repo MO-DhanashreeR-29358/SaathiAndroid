@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.mosl.app.core.events.DataAction
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
@@ -93,7 +94,16 @@ class IndirectIFADashboardReportFragment:CommonFragment(),IndirectIFADashboardRe
                     viewProvider.rowClickListener = { row, view ->
                         val column = view.getTag(R.id.tag_column) as Int
                         val reportData = tableRowAdapter.getItem(row).data
-                        navigateEvent.onNext(IndirectIFADashboardReportUIEvent.OnReportClick(""))
+                        var strStageCode=""
+                        if(getWidgetName()==MOSLConstants.INDIRECT_1ST_MEETING)
+                        {
+                            strStageCode=reportData.hasMap["StageCodeDays"].toString()
+                        }
+                        if(getWidgetName()==MOSLConstants.INDIRECT_LEADS_NOT_UPDATED)
+                        {
+                            strStageCode=reportData.hasMap["StagecodeDays"].toString()
+                        }
+                        navigateEvent.onNext(IndirectIFADashboardReportUIEvent.OnReportClick(getWidgetName(),strStageCode))
                     }
                 }
             }

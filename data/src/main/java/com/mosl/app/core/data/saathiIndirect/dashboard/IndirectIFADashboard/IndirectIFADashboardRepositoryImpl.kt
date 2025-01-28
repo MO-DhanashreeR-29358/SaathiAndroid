@@ -47,42 +47,42 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     override fun fnGetTodaysBirthdayAnniversary(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return  saathiIndrectApi.getIFABirthdayAnniversary(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),false)
         }
     }
 
     override fun fnGetFirstMeetingNotDone(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return saathiIndrectApi.getIFASaleshFirstMeetingNotDone(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),false)
         }
     }
 
     override fun fnGetLeadsNotUpdated(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return saathiIndrectApi.getIFALeadNotUpdate(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),false)
         }
     }
 
     override fun fnGetSalesDashInactive(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return saathiIndrectApi.getIFASalesDashInactive(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),true)
         }
     }
 
     override fun fnGetIFASalesDashTeamAppointment(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return saathiIndrectApi.getIFASalesDashTeamAppointment(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),false)
         }
     }
 
     override fun fnGetIFASalesDashNewLead(objIndirectIFADashboardInput: IndirectIFADashboardInput): Observable<DashboardReportCombo> {
         val targetRequest = objIndirectIFADashboardInput.requestTransform()
         return saathiIndrectApi.getIFASalesDashNewLead(targetRequest).map {
-            renderTable(Gson().toJson(it))
+            renderTable(Gson().toJson(it),false)
         }
     }
 
@@ -289,6 +289,32 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun fngetIFASalesDashFirstMeetingNotDoneDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashFirstMeetingNotDoneDetail(
+            MyLeadDetailsRequestPost(
+                employeeCode = userManager.getUser()?.employeeCode, frequency = null, fltUserstatus = objIndirectIFAMyLeadDetailsFilter.strSelFilterBy,
+                category = null,product = null,parameter = null,date = null,filter = null,
+                calculatedPageP = 0, pageSizeP = 20, totalCountP = 0, pageP = 1, stageCode = objIndirectIFAMyLeadDetailsFilter.strSelStaqeCode,days=objIndirectIFAMyLeadDetailsFilter.strSelPeriods,
+                fltProduct = null, fltProspect = null, fltPeriod = null,rowfilter = null, colfilter = null, key1 = null,
+                 fltHierarchy = "Team", pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0)
+        ).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+
+    override fun fngetIFASalesDashLeadsNotUpdatedDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter): Observable<BusinessSnapshotCombo> {
+        return  saathiIndrectApi.getIFASalesDashLeadsNotUpdatedDetail(
+            MyLeadDetailsRequestPost(
+                employeeCode = userManager.getUser()?.employeeCode, frequency = null, fltUserstatus =objIndirectIFAMyLeadDetailsFilter.strSelFilterBy,
+                category = null,product = null,parameter = null,date = null,filter = null,
+                calculatedPageP = 0, pageSizeP = 20, totalCountP = 0, pageP = 1, stageCode = objIndirectIFAMyLeadDetailsFilter.strSelStaqeCode,days=objIndirectIFAMyLeadDetailsFilter.strSelPeriods,
+                fltProduct = null, fltProspect = null, fltPeriod = null,rowfilter = null, colfilter = null, key1 = null,
+                fltHierarchy = "Team", pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0)
+        ).map {
+            renderBuisnessSnapshotTable(Gson().toJson(it))
+        }
+    }
+
     private fun renderBuisnessSnapshotTable(response: String?): BusinessSnapshotCombo{
         if(response != null) {
             val jsonObject = JSONObject(response)
@@ -374,7 +400,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
     }
 
 
-    private fun renderTable(response: String?): DashboardReportCombo {
+    private fun renderTable(response: String?,isInActiveIFA:Boolean): DashboardReportCombo {
         if(response != null) {
 
             val jsonObject = JSONObject(response)
@@ -389,14 +415,29 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                 while (iterator.hasNext()) {
                     val header = iterator.next()
                         .toString()
-                    if(!header.equals("R_no",true) && !header.equals("Product",true)
-                        && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
-                        && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
-                        && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true))
+                    if(isInActiveIFA)
                     {
+                        if(!header.equals("R_no",true) && !header.equals("Product",true)
+                            && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
+                            && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
+                            && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true)
+                            && !header.equals("IFA_Code",true) && !header.equals("IFA_Name",true))
+                        {
 
-                        colHeaders.add(ColHeader(header))
+                            colHeaders.add(ColHeader(header))
+                        }
                     }
+                    else{
+                        if(!header.equals("R_no",true) && !header.equals("Product",true)
+                            && !header.equals("IsAdminMode",true) && !header.equals("Status",true)
+                            && !header.equals("InApproval",true) && !header.equals("ApprovalFieldList",true)
+                            && !header.equals("CreatedBy",true) && !header.equals("CreationDate",true))
+                        {
+
+                            colHeaders.add(ColHeader(header))
+                        }
+                    }
+
                 }
 
                 val headers = colHeaders.map {
@@ -427,7 +468,6 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                                 } else {
                                     if(!json.isNull(header))
                                     {
-                                        Log.d("Header Loop",json.get(header).toString());
                                         val toDouble = json.get(header).toString().toDouble()
                                         if (toDouble == 0.0) {
                                             values.add("0")
@@ -449,7 +489,7 @@ class IndirectIFADashboardRepositoryImpl @Inject constructor(
                                         }
                                     }
                                     else{
-                                        Log.d("Header Loop","else");
+
                                         values.add("")
                                     }
 

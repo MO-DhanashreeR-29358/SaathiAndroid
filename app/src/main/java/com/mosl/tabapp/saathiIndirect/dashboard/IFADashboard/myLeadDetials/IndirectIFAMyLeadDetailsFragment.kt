@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.mosl.app.core.error.ErrorModel
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
@@ -60,6 +61,7 @@ class IndirectIFAMyLeadDetailsFragment: CommonFragment(),IndirectIFAMyLeadDetail
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragMyLeadDetailsBinding.bind(view)
+        setUpFromArguments()
         setUpView()
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)
@@ -168,6 +170,16 @@ class IndirectIFAMyLeadDetailsFragment: CommonFragment(),IndirectIFAMyLeadDetail
         })
 
     }
+
+    private fun setUpFromArguments() {
+        try {
+            strSelCategory =this.arguments?.getString(MOSLConstants.SEL_CATEGORY, "Category") ?: "Category"
+            strSelPeriods=this.arguments?.getString(MOSLConstants.SEL_FILTER, "Since Inception") ?: "Since Inception"
+    } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
     override fun onDestroyView() {
         presenter.stop()
         super.onDestroyView()
@@ -220,16 +232,29 @@ class IndirectIFAMyLeadDetailsFragment: CommonFragment(),IndirectIFAMyLeadDetail
                 lstTempPeriods.add(lookUp)
             }
             lstTempPeriods.add(LookUp(100,"Since Inception"))
-
             filterAdapterPeriod.setSpinnerData(binding.spFilterPeriod, lstTempPeriods)
+
+            lstTempPeriods.forEachIndexed { index, lookUp ->
+                if(lookUp.lookUpName.equals(strSelPeriods,true))
+                {
+                    binding.spFilterPeriod.setSelection(index)
+                }
+            }
 
             var lstCategory= mutableListOf<LookUp>()
             lstCategory.add(LookUp(lookUpID = 0, lookUpName = "Category"))
             lstCategory.add(LookUp(lookUpID = 0, lookUpName = "Assigned"))
             lstCategory.add(LookUp(lookUpID = 0, lookUpName = "Self"))
             lstCategory.add(LookUp(lookUpID = 0, lookUpName = "Total"))
-
             filterAdapterCategory.setSpinnerData(binding.spFilterCategory,lstCategory)
+            lstCategory.forEachIndexed { index, lookUp ->
+                if(strSelCategory.equals(lookUp.lookUpName,true))
+                {
+                    binding.spFilterCategory.setSelection(index)
+                }
+            }
+
+
 
             var lstFilterBy=mutableListOf<LookUp>()
             lstFilterBy.add(LookUp(lookUpID = 0, lookUpName ="Select"))

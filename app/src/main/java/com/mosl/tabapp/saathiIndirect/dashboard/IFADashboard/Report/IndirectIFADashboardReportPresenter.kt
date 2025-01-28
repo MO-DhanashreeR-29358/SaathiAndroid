@@ -110,9 +110,16 @@ class IndirectIFADashboardReportPresenter @Inject constructor(
 
         view.onReportClickEvent().subscribe {
             val bundle = Bundle()
-
+            bundle.putString(
+                MOSLConstants.PAGE_TYPE,
+                it.widgetName
+            )
+            bundle.putString(
+                MOSLConstants.STAGE_CODE,
+                it.strStageCode
+            )
             navigator.openPage(
-                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS.toString(), bundle,
+                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS.toString(), bundle,
                 addToStack = true,
                 forceReload = false
             )
@@ -123,12 +130,12 @@ class IndirectIFADashboardReportPresenter @Inject constructor(
 
     fun getWidgetRequest(strFilterValue:String) : IndirectIFADashboardInput {
         return  IndirectIFADashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, category = "", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 , fitHierarchy = "Team")
     }
 
     fun getWidgetRequestWithDate(strFilterDateValue:String) : IndirectIFADashboardInput {
         return  IndirectIFADashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "", category = "", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, date = strFilterDateValue )
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, date = strFilterDateValue, fitHierarchy = "Team" )
     }
 
 }

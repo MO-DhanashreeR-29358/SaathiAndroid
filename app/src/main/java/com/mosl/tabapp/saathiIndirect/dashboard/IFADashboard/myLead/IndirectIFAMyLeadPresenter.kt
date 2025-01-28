@@ -38,7 +38,14 @@ class IndirectIFAMyLeadPresenter @Inject constructor(
 
         view.onTableRowClicked().subscribe {
             val bundle = Bundle()
-
+            bundle.putString(
+                MOSLConstants.SEL_CATEGORY,
+                it.strCategory
+            )
+            bundle.putString(
+                MOSLConstants.SEL_FILTER,
+                it.strFilter
+            )
             navigator.openPage(
                 NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS.toString(), bundle,
                 addToStack = true,

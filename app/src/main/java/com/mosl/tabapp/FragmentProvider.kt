@@ -98,6 +98,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboar
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadFragment
@@ -340,5 +342,8 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectIFAMyLeadDetailsModule::class])
     fun provideIndiredctIFAMyLeadDetailsFragmentFactory():IndirectIFAMyLeadDetailsFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAReportDetailsModule::class])
+    fun provideIndirectIFAReportDetailsFragmentFactory():IndirectIFAReportDetailsFragment
 
 }

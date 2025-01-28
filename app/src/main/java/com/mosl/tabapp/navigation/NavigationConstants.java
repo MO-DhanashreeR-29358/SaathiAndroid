@@ -148,4 +148,6 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS=68;
 
+    int NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS=69;
+
 }

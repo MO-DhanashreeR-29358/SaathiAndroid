@@ -74,5 +74,8 @@ interface IndirectIFADashboardRepository {
 
     fun fngetIFASalesDashMyLeadsDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
 
+    fun fngetIFASalesDashFirstMeetingNotDoneDetail(objIndirectIFAMyLeadDetailsFilter:IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
+
+    fun fngetIFASalesDashLeadsNotUpdatedDetail(objIndirectIFAMyLeadDetailsFilter:IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
 
 }

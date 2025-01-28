@@ -90,7 +90,7 @@ class IndirectIFAMyLeadFragment :CommonFragment(),IndirectIFAMyLeadView {
                     viewProvider.rowClickListener = { row, view ->
                         val column = view.getTag(R.id.tag_column) as Int
                         val reportData = tableRowAdapter.getItem(row).data
-                        MyLeadSubject.onNext(IndirectIFAMyLeadUiEvent.onTableRowClicked(""))
+                        MyLeadSubject.onNext(IndirectIFAMyLeadUiEvent.onTableRowClicked(reportData.hasMap["Category"].toString(),strFilterVal))
                     }
                 }
         tableRowAdapter = mfAdapter

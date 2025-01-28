@@ -34,7 +34,8 @@ object IndirectIFADashboardMapper {
             category = category,
             filter = filter,
             fltUserStatus = fltUserStatus,
-            date = date
+            date = date,
+            fitHierarchy = fitHierarchy
         )
     }
 }

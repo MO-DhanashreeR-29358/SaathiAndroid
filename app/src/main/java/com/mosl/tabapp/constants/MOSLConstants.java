@@ -325,5 +325,9 @@ public interface MOSLConstants extends LabelConfig {
 
     String INDIRECT_NEW_LEAD="New Lead";
     String PERIOD_FILTER= "PeriodFilter";
+    String PAGE_TYPE="pagetype";
+    String STAGE_CODE="stagecode";
+    String SEL_CATEGORY="selcategory";
+    String SEL_FILTER="selfilter";
 }
 
