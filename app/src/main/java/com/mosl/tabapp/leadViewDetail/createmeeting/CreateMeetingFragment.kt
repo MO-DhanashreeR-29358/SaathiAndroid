@@ -1761,13 +1761,22 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
                 }
             val strAttendee =if(attendeeList.isNotEmpty()) Gson().toJson(attendeeList) else ""
-            val feedback = MeetingFeedbackData(
+           /* val feedback = MeetingFeedbackData(
                 LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
-                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
+                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  "Test",
                 ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
                 AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
                 MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
-                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
+*/
+
+            val feedback = MeetingFeedbackData(
+                LeadId =  "", RMName = "",
+                RMEmpcode =  "", Clientcode =  "Test",
+                ActivityType = "", MeetingDate = "", MeetingTime = "",
+                AttendeeDetails = "", LeadCreationDate = "",
+                MeetingCreationDate = "", MeetingDescription = "", Role = "",
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
 
             list.add(feedback)
 
