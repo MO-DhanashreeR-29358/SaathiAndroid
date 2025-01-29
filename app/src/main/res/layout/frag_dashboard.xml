@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/mark_attendance"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/white"
+        android:gravity="center"
         android:background="@drawable/btn_attendance_background"/>
 
     <ScrollView
@@ -740,7 +742,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        fab:fab_addButtonColorNormal="@color/titleBarBackground"
+        fab:fab_addButtonColorNormal="@color/secondaryBackground"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style"

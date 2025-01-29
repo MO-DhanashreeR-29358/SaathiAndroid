@@ -3,6 +3,7 @@ package com.mosl.tabapp.settings
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import com.mosl.tabapp.R
 import com.mosl.tabapp.common.FusedLocation
 import com.mosl.tabapp.core.CommonActivity
@@ -14,12 +15,13 @@ class SettingActivity : DaggerAppCompatActivity() {
         setContentView(R.layout.activity_setting)
 //        setupPage()
         findViewById<Toolbar>(R.id.toolbar).apply {
-            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
             setNavigationOnClickListener {
 //                startActivity(Intent(this@SettingActivity, CommonActivity::class.java))
                 finish()
             }
             title = getString(R.string.MOSL_MENU_SETTING)
+            setTitleTextColor(ContextCompat.getColor(this@SettingActivity, R.color.white))
         }
     }
 

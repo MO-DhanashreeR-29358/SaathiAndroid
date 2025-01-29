@@ -2,14 +2,14 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <item android:drawable="@color/white" android:state_enabled="false" />
+    <item android:drawable="@color/secondaryTextColor" android:state_enabled="false" />
 
     <!-- Button Focused-->
-    <item android:drawable="@color/white" android:state_focused="true" android:state_pressed="false" />
+    <item android:drawable="@color/secondaryTextColor" android:state_focused="true" android:state_pressed="false" />
     <!-- Button Focused Pressed-->
-    <item android:drawable="@color/white" android:state_focused="true" android:state_pressed="true" />
+    <item android:drawable="@color/secondaryTextColor" android:state_focused="true" android:state_pressed="true" />
     <!-- Button Pressed-->
-    <item android:drawable="@color/white" android:state_focused="false" android:state_pressed="true" />
+    <item android:drawable="@color/secondaryTextColor" android:state_focused="false" android:state_pressed="true" />
     <item android:drawable="@color/secondaryBackground" />
 
 

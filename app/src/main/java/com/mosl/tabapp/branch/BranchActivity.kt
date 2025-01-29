@@ -55,6 +55,7 @@ class BranchActivity : LeanBaseActivity(), BranchContract.View {
                 finish()
             }
             title = getString(R.string.PAGE_TITLE_BRANCH_LIST)
+            setTitleTextColor(ContextCompat.getColor(this@BranchActivity, R.color.white))
         }
         presenter.start()
         dataActionSubject.onNext(DataAction.Fetch)

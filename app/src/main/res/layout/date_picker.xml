@@ -78,6 +78,6 @@
             android:gravity="center"
             android:padding="8dp"
             android:text="@string/btn_submit"
-            android:textColor="@color/black" />
+            android:textColor="@color/white" />
     </RelativeLayout>
 </ScrollView>

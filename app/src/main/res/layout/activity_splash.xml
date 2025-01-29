@@ -23,7 +23,7 @@
             android:layout_gravity="bottom"
             android:gravity="center_horizontal"
             android:padding="@dimen/padding_large"
-            android:textColor="@color/light_black"
+            android:textColor="@color/colorYellow"
             android:textStyle="bold"
             tools:text="@string/alert_dialog_title"
             />

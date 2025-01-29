@@ -40,7 +40,7 @@
     <color name="counter_text_bg">#BDBDBD</color>
     <color name="email_all_view">#CFCFCF</color>
     <color name="list_head_row_color">@color/primaryTextColor</color>
-    <color name="titleBarBackground">@color/secondaryBackground</color>
+    <color name="titleBarBackground">#006EB9</color>
     <color name="primaryTextColor">#000000</color>
     <color name="menu_list_divider">#650b14</color>
     <color name="loginTextColor">#8f6101</color>
@@ -48,18 +48,18 @@
     <color name="black">#000000</color>
     <color name="light_black">#373737</color>
     <color name="dark_color">#c1c1c1</color>
-    <color name="title_black">#0C0D0F</color><!--color black-->
+    <color name="title_black">@color/titleBarBackground</color><!--color black-->
     <color name="text_color">#808080</color>
     <color name="shadow_start">#80000000</color>
     <color name="margin_dark_bar">#FF414143</color>
     <color name="market_grey_text">#7F7F7F</color>
-    <color name="colorPrimary">@color/titleBarBackground</color>
+    <color name="colorPrimary">@color/secondaryBackground</color>
     <!--#3F51B5-->
     <color name="secondaryTextColor">#7f7f7f</color>
     <color name="list_subhead_row_color">@color/secondaryTextColor</color>
     <color name="calendar_gray">#C4C4C4</color>
     <color name="actionable_gray">#e6e6e6</color>
-    <color name="white_subheading">#cccccc</color>
+    <color name="white_subheading">@color/secondaryBackground</color>
     <color name="counter_text_color">#c5c4c4</color>
     <color name="separator_grey">#d7d7d7</color>
     <color name="separator">#FFDBDBDB</color>
@@ -93,8 +93,8 @@
     <color name="red_textcolor">#DA0000</color>
     <color name="actions_sel">#006EB9</color>
     <color name="mutual_fund_color">#FF6F3F</color>
-    <color name="yellow_menu">#F9AF4E</color>
-    <color name="orange">#FBB230</color>
+    <color name="yellow_menu">@color/secondaryBackground</color>
+    <color name="orange">@color/white</color>
     <color name="side_strip_color">@color/secondaryBackground</color>
     <color name="secondaryBackground">#2E2A94</color>
     <color name="sip_color">#FFB00A</color>
