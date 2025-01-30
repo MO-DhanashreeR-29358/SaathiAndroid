@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import com.google.api.Distribution.BucketOptions.Linear
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
@@ -101,8 +102,27 @@ class AutoCompleteAdapter(
 
         holderView.clientID.text = String.format("Emp Id: %s,", resultModel.empCode)
         holderView.error.visibility = View.GONE
-        holderView.txtContactMobile.text=resultModel.mobileNo
-        holderView.txtEmailID.text=resultModel.email
+
+        if(resultModel.mobileNo.isNullOrEmpty())
+        {
+          holderView.linMobileContainer.visibility=View.GONE
+        }
+        else
+        {
+          holderView.linMobileContainer.visibility=View.VISIBLE
+          holderView.txtContactMobile.text=resultModel.mobileNo
+        }
+
+        if(resultModel.email.isNullOrEmpty())
+        {
+          holderView.linEmailContainer.visibility=View.GONE
+        }
+        else
+        {
+          holderView.linEmailContainer.visibility=View.VISIBLE
+          holderView.txtEmailID.text=resultModel.email
+        }
+
       }
     } else {
       holderView.clientName.text = name
@@ -347,6 +367,8 @@ class AutoCompleteAdapter(
     val imgCopyMobile: AppCompatImageView =parent.findViewById(R.id.imgCopyMobile)
     val txtEmailID:AppCompatTextView=parent.findViewById(R.id.txtEmailID)
     val imgCopyEmail: AppCompatImageView =parent.findViewById(R.id.imgCopyEmail)
+    var linEmailContainer:LinearLayout=parent.findViewById(R.id.linEmailContainer)
+    var linMobileContainer:LinearLayout=parent.findViewById(R.id.linMobileContainer)
   }
 
   companion object {
