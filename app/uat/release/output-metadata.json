@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 200,
-      "versionName": "2.0.0",
-      "outputFile": "app-uatRelease-2.0.0.apk"
+      "versionCode": 282,
+      "versionName": "2.8.2",
+      "outputFile": "app-uatRelease-2.8.2.apk"
     }
   ],
   "elementType": "File"
