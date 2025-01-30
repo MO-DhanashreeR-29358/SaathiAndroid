@@ -131,7 +131,7 @@
                         android:background="@drawable/btn_yellow_background"
                         android:fontFamily="@font/lato_reg"
                         android:text="@string/str_search"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/white"
                         android:textFontWeight="500"
                         android:textSize="@dimen/_14ssp" />
 

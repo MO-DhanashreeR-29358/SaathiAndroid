@@ -15,6 +15,7 @@ import com.mosl.saathi.api.model.lead.StateProvinceRequest
 import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.leadcreation.data.cityItemsToRowDatas
@@ -89,11 +90,17 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun getInterestInRowDatas(): Observable<List<RowData>> {
+        var interestedInId: Int
+        if(BuildConfig.FLAVOR == "prod"){
+            interestedInId = MOSLConstants.INDIRECT_INTERESTED_IN_LIVE
+        }else{
+            interestedInId = MOSLConstants.INDIRECT_INTERESTED_IN_UAT
+        }
         val categoryRequest = LookupRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" }),
-            lookupTypeId = MOSLConstants.INDIRECT_INTERESTED_IN
+            lookupTypeId = interestedInId
         )
         return getRowDatas(categoryRequest)
     }
