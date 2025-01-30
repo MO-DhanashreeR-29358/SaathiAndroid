@@ -120,7 +120,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/margin_medium"
-            android:background="@drawable/ekyc_button_default_bg"
+            android:background="@color/secondaryBackground"
             android:paddingStart="@dimen/padding_medium"
             android:paddingEnd="@dimen/padding_medium"
             android:text="@string/button_label_save_location"

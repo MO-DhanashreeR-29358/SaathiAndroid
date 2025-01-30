@@ -1007,7 +1007,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                 )
             )
         }
-        button.background = ContextCompat.getDrawable(requireContext(), drawable.orange)
+        button.background = ContextCompat.getDrawable(requireContext(), drawable.orange_background)
         button.setTextColor(ContextCompat.getColor(requireContext(), color.white))
     }
 

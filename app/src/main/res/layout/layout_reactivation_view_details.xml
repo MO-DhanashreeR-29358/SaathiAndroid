@@ -400,10 +400,10 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
-                        android:background="@drawable/btn_yellow_background"
+                        android:background="@drawable/button_state_bg"
                         android:fontFamily="@font/lato_reg"
                         android:text="@string/lbl_react_close"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/white"
                         android:textFontWeight="500"
                         android:textSize="@dimen/_14ssp" />
 

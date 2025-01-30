@@ -11,6 +11,6 @@
         android:topLeftRadius="@dimen/_6sdp"
         android:topRightRadius="@dimen/_6sdp"/>
     <stroke
-        android:color="@color/clr_yellow_border"
+        android:color="@color/titleBarBackground"
         android:width="@dimen/_1sdp"/>
 </shape>

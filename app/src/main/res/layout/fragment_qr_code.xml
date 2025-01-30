@@ -44,6 +44,7 @@
         android:background="@drawable/button_highlight"
         android:text="Download"
         android:layout_marginTop="20dp"
+        android:textColor="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/container"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

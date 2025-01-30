@@ -14,7 +14,7 @@
         android:strokeLineJoin="miter"
         android:strokeWidth="1" />
     <path
-        android:fillColor="#FAB02E"
+        android:fillColor="@color/secondaryBackground"
         android:pathData="M70.47,33.88C70.47,26.49 70.47,26.04 70.47,18.65C69.65,15.3 68.54,12.1 66.32,9.36C63.07,5.37 59.11,2.61 53.93,1.84C53.71,1.8 53.52,1.61 53.31,1.5C41.76,1.5 30.21,1.5 18.65,1.5C15.35,2.27 12.22,3.39 9.52,5.53C5.43,8.77 2.64,12.77 1.83,18.02C1.8,18.24 1.61,18.44 1.5,18.65C1.5,26.04 1.5,26.5 1.5,33.88L70.47,33.88Z" />
     <path
         android:fillColor="#00000000"

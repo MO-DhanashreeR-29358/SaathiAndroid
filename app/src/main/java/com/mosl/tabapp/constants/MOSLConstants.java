@@ -300,9 +300,9 @@ public interface MOSLConstants extends LabelConfig {
     int INDIRECT_CATEGORY = 23;
 
     //UAT
-    //int INDIRECT_INTERESTED_IN = 183;
+    int INDIRECT_INTERESTED_IN_UAT = 183;
     //Live
-    int INDIRECT_INTERESTED_IN = 179;
+    int INDIRECT_INTERESTED_IN_LIVE = 179;
 
     int INDIRECT_WORK_EXP = 147;
 
