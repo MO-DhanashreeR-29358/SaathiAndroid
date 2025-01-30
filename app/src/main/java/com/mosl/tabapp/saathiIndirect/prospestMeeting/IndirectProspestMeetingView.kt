@@ -96,4 +96,6 @@ interface IndirectProspestMeetingView:BaseView {
     fun renderLocationSave(locationItem: LocationItem)
 
     fun toggleOTPVisibility(show: Boolean)
+
+    fun getInterestedInLookUpId() : Int
 }

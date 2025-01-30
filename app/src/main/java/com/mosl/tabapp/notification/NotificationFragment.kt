@@ -45,7 +45,7 @@ class NotificationFragment : CommonFragment(), NotificationView {
   ) {
     super.onViewCreated(view, savedInstanceState)
     binding = FragNotificationBinding.bind(view)
-
+    hideAppTitle()
     setUpView()
     setUpRecyclerView()
     presenter.start()

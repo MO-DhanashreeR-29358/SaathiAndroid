@@ -45,6 +45,7 @@ import com.mosl.mobile.domain.createmeeting.MeetingByIdItemResponse
 import com.mosl.mobile.user.login.user
 import com.mosl.shared.util.AppDateFormats
 import com.mosl.shared.util.getFormatedDate
+import com.mosl.tabapp.BuildConfig
 import com.mosl.tabapp.R
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
@@ -1064,6 +1065,14 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
     override fun toggleOTPVisibility(show: Boolean) {
         enableDisableField(binding.llLocationGroup, show)
 
+    }
+
+    override fun getInterestedInLookUpId(): Int {
+        if(BuildConfig.FLAVOR == "prod"){
+            return MOSLConstants.INDIRECT_INTERESTED_IN_LIVE
+        }else{
+            return MOSLConstants.INDIRECT_INTERESTED_IN_UAT
+        }
     }
 
 }

@@ -99,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/icon_app_saathi"
-                android:scaleType="fitXY"
+                android:scaleType="fitCenter"
                 />
         </LinearLayout>
 

@@ -141,7 +141,10 @@ class IndirectLeadCreationFragment : CommonFragment(),
         presenter.start()
         dataActionSubject.onNext(Fetch)
     }
-
+    override fun onFragmentResume() {
+        super.onFragmentResume()
+        setAppTitle(R.string.page_title_lead_creation)
+    }
     private fun createDefaultSelectList() {
         selectedList.add(LeadCreationRepositoryImpl.SELECT_ROW_DATA)
     }

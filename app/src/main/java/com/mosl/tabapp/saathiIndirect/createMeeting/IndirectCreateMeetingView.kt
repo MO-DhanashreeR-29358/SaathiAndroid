@@ -93,4 +93,5 @@ interface IndirectCreateMeetingView :BaseView{
     fun renderMeetingByID(uiModel: UiModel<MeetingByIdItemResponse>)
     fun toggleOTPVisibility(show: Boolean)
 
+    fun getInterestedInLookUpId() : Int
 }
