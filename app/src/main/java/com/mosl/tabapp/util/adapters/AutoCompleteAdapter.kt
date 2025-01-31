@@ -7,6 +7,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,7 @@ import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import timber.log.Timber
 
 
 class AutoCompleteAdapter(
@@ -112,8 +114,7 @@ class AutoCompleteAdapter(
           holderView.linMobileContainer.visibility=View.VISIBLE
           holderView.txtContactMobile.text=resultModel.mobileNo
         }
-
-        if(resultModel.email.isNullOrEmpty())
+        if(resultModel.email.isNullOrEmpty() || resultModel.email == "")
         {
           holderView.linEmailContainer.visibility=View.GONE
         }
@@ -126,8 +127,24 @@ class AutoCompleteAdapter(
       }
     } else {
       holderView.clientName.text = name
-      holderView.txtContactMobile.text=resultModel.mobileNo
-      holderView.txtEmailID.text=resultModel.email
+      if(resultModel.mobileNo.isNullOrEmpty())
+      {
+        holderView.linMobileContainer.visibility=View.GONE
+      }
+      else
+      {
+        holderView.linMobileContainer.visibility=View.VISIBLE
+        holderView.txtContactMobile.text=resultModel.mobileNo
+      }
+      if(resultModel.email.isNullOrEmpty() || resultModel.email == "")
+      {
+        holderView.linEmailContainer.visibility=View.GONE
+      }
+      else
+      {
+        holderView.linEmailContainer.visibility=View.VISIBLE
+        holderView.txtEmailID.text=resultModel.email
+      }
       val clientCode = resultModel.clientCode
       val creacteMeetingId = resultModel.createMeetingId
       if (resultModel.hasClientCode()) {

@@ -24667,6 +24667,8 @@ com.mosl.app.core.utils.Intents
 com.mosl.app.core.utils.Keyboards:
     public static final void hideKeyBoard(android.view.View)
     public static final void showKeyBoard(android.view.View)
+    public static final void showKeyBoard(android.view.View,int)
+    public static synthetic void showKeyBoard$default(android.view.View,int,int,java.lang.Object)
 com.mosl.app.core.utils.SpinnerUtils
 com.mosl.app.core.utils.StringUtils
 com.mosl.app.core.utils.Utils:
@@ -41153,10 +41155,6 @@ com.mosl.tabapp.util.adapters.AutoCompleteAdapter:
     public final android.content.Context getContext()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
 com.mosl.tabapp.util.adapters.SpinnerAdapter
-com.mosl.tabapp.util.keylogger.KeyboardChecker:
-    public void <init>()
-    private static boolean isSystemKeyboard(java.lang.String)
-    public static boolean isThirdPartyKeyboardEnabled(android.content.Context)
 com.mosl.tabapp.util.rootbeer.Const:
     static final java.lang.String BINARY_BUSYBOX
     static final java.lang.String BINARY_SU
@@ -78929,7 +78927,6 @@ com.mosl.app.core.data.lead.reports.LeadsReportRepositoryImpl:
 com.mosl.app.core.data.lead.reports.LeadsReportsMapperKt
 com.mosl.app.core.data.leadviewdetail.activities.ActivityMapperKt:
     public static final void dispatchItemSelection(android.widget.Spinner,int)
-    public static final android.view.inputmethod.InputMethodManager getInputManager(android.content.Context)
     public static synthetic void hideKeyBoard$default(android.widget.AutoCompleteTextView)
     public static void injectActivityDelegate()
     public static void injectDispatchers()
@@ -88457,7 +88454,6 @@ com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl:
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$151fdec31bf6c5e8dd4aff5dde93e9ead6cebc554657f9a79fc6846f9b24179d$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$1
-com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$1
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$4$d72b5c49e2dbe68ed163cb99a69613163b840bbc28f24fdf6ac6d154a897f015$0
@@ -92019,9 +92015,6 @@ com.mosl.tabapp.util.adapters.AutoCompleteAdapter:
     public static void setErrorMsgDialogListener()
     public static void setNavigator()
     public static void setScreenNavigator()
-com.mosl.tabapp.util.keylogger.KeyboardChecker
-com.mosl.tabapp.util.keylogger.MyAccessibilityService:
-    public static void notifyUserToSwitchKeyboard()
 com.mosl.tabapp.util.rootbeer.Const:
     public static final java.lang.String[] knownRootCloakingPackages
 com.mosl.tabapp.util.rootbeer.RootBeer:

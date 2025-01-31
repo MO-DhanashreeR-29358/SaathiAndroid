@@ -356,14 +356,14 @@ open class MenuDataSourceImpl @Inject constructor(
     @SuppressLint("WrongConstant")
     private fun getIndirectDashboard(strBuisnessUnitName:String): BaseMenu {
         var strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
-        if(strBuisnessUnitName.equals("FOCO",true))
+       /* if(strBuisnessUnitName.equals("FOCO",true))
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD
         }
         else if(strBuisnessUnitName.equals("IFA",true))
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
-        }
+        }*/
         return BaseMenu(
             icon = R.drawable.ic_menu_dashboard,
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,

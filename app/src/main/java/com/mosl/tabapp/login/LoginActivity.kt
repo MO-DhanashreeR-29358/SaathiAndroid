@@ -63,7 +63,6 @@ import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
 import com.mosl.tabapp.permission.PermissionCheckHelper
-import com.mosl.tabapp.util.keylogger.KeyboardChecker
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
@@ -172,7 +171,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   false
 }
 
-    binding.edEmpCode.requestFocus()
+   /* binding.edEmpCode.requestFocus()
     if(!KeyboardChecker.isUsingCustomInputMethod(applicationContext))
     {
         showKeyBoard(binding.edEmpCode)
@@ -199,7 +198,7 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
 
       alertDialog.show()
 
-    }
+    }*/
 
   }
 
