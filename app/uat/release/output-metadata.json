@@ -4,16 +4,16 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.mosl.tabapp.uat",
+  "applicationId": "com.mosl.tabapp",
   "variantName": "uatRelease",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 282,
-      "versionName": "2.8.2",
-      "outputFile": "app-uatRelease-2.8.2.apk"
+      "versionCode": 287,
+      "versionName": "2.8.7",
+      "outputFile": "app-uatRelease-2.8.7.apk"
     }
   ],
   "elementType": "File"
