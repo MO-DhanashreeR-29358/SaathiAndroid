@@ -45,6 +45,7 @@
         android:icon="@mipmap/icon_app_saathi"
         android:label="@string/main_app_name"
         android:largeHeap="true"
+        android:isAccessibilityTool="false"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
