@@ -19,6 +19,6 @@ interface ApiService {
     fun registerParticipants(
         @Header("Content-Type") contentType: String,
         @Header("Cookie") token : String,
-        @Body request: registerRequest
+        @Body request: registerData
     ): Call<registerResponse>
 }

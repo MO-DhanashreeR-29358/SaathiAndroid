@@ -119,7 +119,6 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ApiClient
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.MeetingFeedbackData
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
-import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerRequest
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
 import retrofit2.Call
@@ -1723,7 +1722,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private fun callZykrrRegisterApi(tokenModel: tokenModel){
         RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
         val retro = RetrofitClient.retrofit
-        val registerData = registerRequest(registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData()))
+        val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
         val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
 
         call.enqueue(object : Callback<registerResponse> {
@@ -1761,23 +1760,22 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
                 }
             val strAttendee =if(attendeeList.isNotEmpty()) Gson().toJson(attendeeList) else ""
-           /* val feedback = MeetingFeedbackData(
+            val feedback = MeetingFeedbackData(
                 LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
-                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  "Test",
+                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
                 ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
                 AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
                 MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
-                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
-*/
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")
 
-            val feedback = MeetingFeedbackData(
+          /*  val feedback = MeetingFeedbackData(
                 LeadId =  "", RMName = "",
                 RMEmpcode =  "", Clientcode =  "Test",
                 ActivityType = "", MeetingDate = "", MeetingTime = "",
                 AttendeeDetails = "", LeadCreationDate = "",
                 MeetingCreationDate = "", MeetingDescription = "", Role = "",
                 RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
-
+*/
             list.add(feedback)
 
        }catch (ex: Exception){

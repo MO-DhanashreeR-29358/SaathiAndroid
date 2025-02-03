@@ -2,9 +2,7 @@ package com.mosl.tabapp.leadViewDetail.createmeeting.zykrr
 
 import com.google.gson.annotations.SerializedName
 
-data class registerRequest (
-    @SerializedName("data" ) var data : registerData? = registerData()
-)
+
 data class registerData (
     @SerializedName("campaignId" ) var campaignId : String?         = null,
     @SerializedName("data"       ) var data       : ArrayList<MeetingFeedbackData> = arrayListOf()
