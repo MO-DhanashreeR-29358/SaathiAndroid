@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.viewpager.widget.ViewPager
+import com.app.aspirecollection.Util.FridaDetect
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
@@ -42,10 +43,10 @@ class SliderActivity : LeanBaseActivity() {
 
      val rootBeer = RootBeer(this)
 
-    if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
+   /* if (!isEmulator() && (FridaDetect.isFridaDetected() || rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck)) {
       showRootedMessage()
       return
-    }
+    }*/
 
     if (userManager.isLoggedIn()) {
       launchSplash()
