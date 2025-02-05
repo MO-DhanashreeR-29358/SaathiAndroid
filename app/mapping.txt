@@ -3,8 +3,8 @@
 # min_api: 26
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.0"}
-# pg_map_id: b637c38
-# pg_map_hash: SHA-256 b637c387ab111a784284e66bb3eefab57c5075915a595ef05454e12b2c3a5f97
+# pg_map_id: 8eac2a7
+# pg_map_hash: SHA-256 8eac2a7cc2a539004f68b3cd852b4b34ce9de1ed65e61bff0cfcd6b5d5c8e503
 a.a.a.c -> a.a:
 # {"id":"sourceFile","fileName":"SourceFile"}
 a.a.a.d -> a.b:
@@ -158185,44 +158185,44 @@ com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedul
       # {"id":"com.android.tools.r8.synthesized"}
     44:55:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0:0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    56:63:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):0:0 -> run
+    56:63:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):0:0 -> run
     56:63:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    64:68:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):634:634 -> run
+    64:68:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):647:647 -> run
     64:68:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    69:82:com.mosl.mobile.user.model.LoginInfo com.mosl.tabapp.login.LoginActivity.fnGetLoginData():215:215 -> run
-    69:82:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635 -> run
+    69:82:com.mosl.mobile.user.model.LoginInfo com.mosl.tabapp.login.LoginActivity.fnGetLoginData():228:228 -> run
+    69:82:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648 -> run
     69:82:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     83:85:void com.mosl.mobile.user.model.LoginInfo.<init>(java.lang.String,java.lang.String,java.lang.String):0:0 -> run
-    83:85:com.mosl.mobile.user.model.LoginInfo com.mosl.tabapp.login.LoginActivity.fnGetLoginData():214 -> run
-    83:85:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635 -> run
+    83:85:com.mosl.mobile.user.model.LoginInfo com.mosl.tabapp.login.LoginActivity.fnGetLoginData():227 -> run
+    83:85:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648 -> run
     83:85:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    86:91:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635:635 -> run
+    86:91:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648:648 -> run
     86:91:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     92:98:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.fnSetData(com.mosl.mobile.user.model.LoginInfo,java.lang.String):143:143 -> run
-    92:98:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635 -> run
+    92:98:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648 -> run
     92:98:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     99:100:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.fnSetData(com.mosl.mobile.user.model.LoginInfo,java.lang.String):144:144 -> run
-    99:100:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635 -> run
+    99:100:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648 -> run
     99:100:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     101:110:void com.mosl.tabapp.login.otpverification.OtpVerificationFragment.fnSetData(com.mosl.mobile.user.model.LoginInfo,java.lang.String):145:145 -> run
-    101:110:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):635 -> run
+    101:110:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):648 -> run
     101:110:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    111:117:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):636:636 -> run
+    111:117:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):649:649 -> run
     111:117:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     118:124:androidx.fragment.app.FragmentTransaction androidx.fragment.app.FragmentManager.beginTransaction():464:464 -> run
-    118:124:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):636 -> run
+    118:124:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):649 -> run
     118:124:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
-    125:128:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$20$lambda$19(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):636:636 -> run
+    125:128:void com.mosl.tabapp.login.LoginActivity.fnRenderNewLogin$lambda$21$lambda$20(com.mosl.tabapp.login.LoginActivity,com.mosl.mobile.user.model.ValidateLoingResponseModel):649:649 -> run
     125:128:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0 -> run
       # {"id":"com.android.tools.r8.synthesized"}
     129:139:void com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService$$InternalSyntheticLambda$1$7809082a59defe6a9a70b816ddd2e50a958122660d01b228136ba81d3d683d54$0.run$bridge():0:0 -> run
@@ -446746,16 +446746,16 @@ com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$ExternalSyntheticLamb
     537:539:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):0:0 -> onClick
     537:539:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    540:544:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):148:148 -> onClick
+    540:544:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):150:150 -> onClick
     540:544:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    545:548:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):149:149 -> onClick
+    545:548:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):151:151 -> onClick
     545:548:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    549:556:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):152:152 -> onClick
+    549:556:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):154:154 -> onClick
     549:556:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    557:564:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):156:156 -> onClick
+    557:564:void com.mosl.tabapp.login.LoginActivity.setUpView$lambda$0(com.mosl.tabapp.login.LoginActivity,android.view.View):158:158 -> onClick
     557:564:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
     565:570:void com.mosl.tabapp.attendancedialog.AttendanceDialogFragment$$InternalSyntheticLambda$1$95290f7faaf2f93fa8f056b58530cad66d24bf4270dc7d31cda0af813505bae4$0.onClick$bridge(android.view.View):0:0 -> onClick
@@ -449548,16 +449548,16 @@ com.mosl.tabapp.bankmeeting.BankMeetingFragment$$ExternalSyntheticLambda2 -> mj.
     29:33:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):0:0 -> onEditorAction
     29:33:boolean com.mosl.tabapp.bankmeeting.BankMeetingFragment$$InternalSyntheticLambda$2$14f462e56035486d0ad6fe60408d37fce01ac94f74ea132996f5f3b066f6cecd$0.onEditorAction$bridge(android.widget.TextView,int,android.view.KeyEvent):0 -> onEditorAction
       # {"id":"com.android.tools.r8.synthesized"}
-    34:44:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):160:160 -> onEditorAction
+    34:44:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):162:162 -> onEditorAction
     34:44:boolean com.mosl.tabapp.bankmeeting.BankMeetingFragment$$InternalSyntheticLambda$2$14f462e56035486d0ad6fe60408d37fce01ac94f74ea132996f5f3b066f6cecd$0.onEditorAction$bridge(android.widget.TextView,int,android.view.KeyEvent):0 -> onEditorAction
       # {"id":"com.android.tools.r8.synthesized"}
-    45:48:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):161:161 -> onEditorAction
+    45:48:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):163:163 -> onEditorAction
     45:48:boolean com.mosl.tabapp.bankmeeting.BankMeetingFragment$$InternalSyntheticLambda$2$14f462e56035486d0ad6fe60408d37fce01ac94f74ea132996f5f3b066f6cecd$0.onEditorAction$bridge(android.widget.TextView,int,android.view.KeyEvent):0 -> onEditorAction
       # {"id":"com.android.tools.r8.synthesized"}
-    49:56:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):164:164 -> onEditorAction
+    49:56:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):166:166 -> onEditorAction
     49:56:boolean com.mosl.tabapp.bankmeeting.BankMeetingFragment$$InternalSyntheticLambda$2$14f462e56035486d0ad6fe60408d37fce01ac94f74ea132996f5f3b066f6cecd$0.onEditorAction$bridge(android.widget.TextView,int,android.view.KeyEvent):0 -> onEditorAction
       # {"id":"com.android.tools.r8.synthesized"}
-    57:64:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):168:168 -> onEditorAction
+    57:64:boolean com.mosl.tabapp.login.LoginActivity.setUpView$lambda$1(com.mosl.tabapp.login.LoginActivity,android.widget.TextView,int,android.view.KeyEvent):170:170 -> onEditorAction
     57:64:boolean com.mosl.tabapp.bankmeeting.BankMeetingFragment$$InternalSyntheticLambda$2$14f462e56035486d0ad6fe60408d37fce01ac94f74ea132996f5f3b066f6cecd$0.onEditorAction$bridge(android.widget.TextView,int,android.view.KeyEvent):0 -> onEditorAction
       # {"id":"com.android.tools.r8.synthesized"}
 com.mosl.tabapp.bankmeeting.BankMeetingFragment$$ExternalSyntheticLambda3 -> mj.e:
@@ -529913,829 +529913,877 @@ com.mosl.tabapp.login.LoginActivity -> com.mosl.tabapp.login.LoginActivity:
     int PERMISSIONS_REQUEST_ENABLE_GPS -> p
     int ERROR_DIALOG_REQUEST -> q
     com.mosl.tabapp.helper.FirebaseHelper firebaseHelper -> C
-    1:5:void access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74:74 -> <init>
-    1:5:void <init>():74 -> <init>
-    6:9:void <init>():76:76 -> <init>
-    10:13:void <init>():77:77 -> <init>
-    14:15:void <init>():78:78 -> <init>
+    1:5:void access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76:76 -> <init>
+    1:5:void <init>():76 -> <init>
+    6:9:void <init>():78:78 -> <init>
+    10:13:void <init>():79:79 -> <init>
+    14:15:void <init>():80:80 -> <init>
     16:19:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent.access$getInstance$cp():6:6 -> <init>
     16:19:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent$Companion.getLoginUIEvent():13 -> <init>
-    16:19:void <init>():109 -> <init>
-    20:24:void onCreate(android.os.Bundle):118:118 -> <init>
-    20:24:io.reactivex.rxjava3.subjects.PublishSubject io.reactivex.rxjava3.subjects.PublishSubject.create():118 -> <init>
+    16:19:void <init>():111 -> <init>
+    20:24:io.reactivex.rxjava3.subjects.PublishSubject io.reactivex.rxjava3.subjects.PublishSubject.create():118:118 -> <init>
     20:24:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent$Companion.getLoginUIEvent():15 -> <init>
-    20:24:void <init>():109 -> <init>
+    20:24:void <init>():111 -> <init>
     25:26:void com.mosl.tabapp.login.LoginActivityUiEvent.access$setInstance$cp(io.reactivex.rxjava3.subjects.PublishSubject):6:6 -> <init>
     25:26:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent$Companion.getLoginUIEvent():15 -> <init>
-    25:26:void <init>():109 -> <init>
+    25:26:void <init>():111 -> <init>
     27:30:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent.access$getInstance$cp():6:6 -> <init>
     27:30:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent$Companion.getLoginUIEvent():17 -> <init>
-    27:30:void <init>():109 -> <init>
+    27:30:void <init>():111 -> <init>
     31:33:io.reactivex.rxjava3.subjects.PublishSubject com.mosl.tabapp.login.LoginActivityUiEvent$Companion.getLoginUIEvent():17:17 -> <init>
-    31:33:void <init>():109 -> <init>
-    34:36:void <init>():109:109 -> <init>
-    0:65535:void showProgress():617:617 -> G1
-    0:65535:void hideAppTitle():598:598 -> I4
-    1:4:void setShortcutHelper(com.mosl.tabapp.helper.shortcuts.ShortcutHelper):90:90 -> Jb
-    1:4:com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper():90 -> Jb
-    1:4:void openCommonActivity():536 -> Jb
-    5:7:void openCommonActivity():536:536 -> Jb
-    8:14:void openCommonActivity():537:537 -> Jb
-    15:17:void openCommonActivity():538:538 -> Jb
-    18:23:void openCommonActivity():539:539 -> Jb
-    24:28:void setShortcutHelper(com.mosl.tabapp.helper.shortcuts.ShortcutHelper):90:90 -> Jb
-    24:28:com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper():90 -> Jb
-    24:28:void openCommonActivity():536 -> Jb
+    31:33:void <init>():111 -> <init>
+    34:36:void <init>():111:111 -> <init>
+    0:65535:void showProgress():630:630 -> G1
+    0:65535:void hideAppTitle():611:611 -> I4
+    1:4:void setShortcutHelper(com.mosl.tabapp.helper.shortcuts.ShortcutHelper):92:92 -> Jb
+    1:4:com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper():92 -> Jb
+    1:4:void openCommonActivity():549 -> Jb
+    5:7:void openCommonActivity():549:549 -> Jb
+    8:14:void openCommonActivity():550:550 -> Jb
+    15:17:void openCommonActivity():551:551 -> Jb
+    18:23:void openCommonActivity():552:552 -> Jb
+    24:28:void setShortcutHelper(com.mosl.tabapp.helper.shortcuts.ShortcutHelper):92:92 -> Jb
+    24:28:com.mosl.tabapp.helper.shortcuts.ShortcutHelper getShortcutHelper():92 -> Jb
+    24:28:void openCommonActivity():549 -> Jb
     void onLatLongChanged(android.location.Location) -> L5
     int getLayout() -> Oa
-    0:65535:void authorizationDialog(kotlin.jvm.functions.Function1):572:572 -> P6
-    1:2:io.reactivex.rxjava3.core.Observable fnCallOtpLogin():210:210 -> Q9
+    0:65535:void authorizationDialog(kotlin.jvm.functions.Function1):585:585 -> P6
+    1:2:io.reactivex.rxjava3.core.Observable fnCallOtpLogin():223:223 -> Q9
     3:14:io.reactivex.rxjava3.core.Observable com.mosl.commons.rx.RxUtils.ofType(io.reactivex.rxjava3.core.Observable):65:65 -> Q9
-    3:14:io.reactivex.rxjava3.core.Observable fnCallOtpLogin():210 -> Q9
-    6:9:void renderReportsData(com.mosl.commons.data.UiModel):469:469 -> Rc
-    10:13:void toggleProgressBar(boolean):553:553 -> Rc
-    10:13:void renderReportsData(com.mosl.commons.data.UiModel):469 -> Rc
-    14:16:void toggleProgressBar(boolean):555:555 -> Rc
-    14:16:void renderReportsData(com.mosl.commons.data.UiModel):469 -> Rc
+    3:14:io.reactivex.rxjava3.core.Observable fnCallOtpLogin():223 -> Q9
+    6:9:void renderReportsData(com.mosl.commons.data.UiModel):482:482 -> Rc
+    10:13:void toggleProgressBar(boolean):566:566 -> Rc
+    10:13:void renderReportsData(com.mosl.commons.data.UiModel):482 -> Rc
+    14:16:void toggleProgressBar(boolean):568:568 -> Rc
+    14:16:void renderReportsData(com.mosl.commons.data.UiModel):482 -> Rc
     17:20:void com.mosl.commons.data.UiModelHelper.onSuccess(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):31:31 -> Rc
-    17:20:void renderReportsData(com.mosl.commons.data.UiModel):470 -> Rc
+    17:20:void renderReportsData(com.mosl.commons.data.UiModel):483 -> Rc
     21:27:void com.mosl.commons.data.UiModelHelper.onSuccess(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):32:32 -> Rc
-    21:27:void renderReportsData(com.mosl.commons.data.UiModel):470 -> Rc
-    28:35:void renderReportsData(com.mosl.commons.data.UiModel):471:471 -> Rc
-    36:51:void renderReportsData(com.mosl.commons.data.UiModel):472:472 -> Rc
+    21:27:void renderReportsData(com.mosl.commons.data.UiModel):483 -> Rc
+    28:35:void renderReportsData(com.mosl.commons.data.UiModel):484:484 -> Rc
+    36:51:void renderReportsData(com.mosl.commons.data.UiModel):485:485 -> Rc
     52:55:boolean com.mosl.mobile.user.model.ReportType.isPreDefinedReports():9:9 -> Rc
-    52:55:void renderReportsData(com.mosl.commons.data.UiModel):473 -> Rc
+    52:55:void renderReportsData(com.mosl.commons.data.UiModel):486 -> Rc
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
     56:61:boolean com.mosl.mobile.user.model.ReportType.isPreDefinedReports():9:9 -> Rc
-    56:61:void renderReportsData(com.mosl.commons.data.UiModel):473 -> Rc
-    62:63:void renderReportsData(com.mosl.commons.data.UiModel):474:474 -> Rc
-    64:79:void renderReportsData(com.mosl.commons.data.UiModel):475:475 -> Rc
+    56:61:void renderReportsData(com.mosl.commons.data.UiModel):486 -> Rc
+    62:63:void renderReportsData(com.mosl.commons.data.UiModel):487:487 -> Rc
+    64:79:void renderReportsData(com.mosl.commons.data.UiModel):488:488 -> Rc
     80:83:boolean com.mosl.mobile.user.model.ChildMenu.isBasicReports():11:11 -> Rc
-    80:83:void renderReportsData(com.mosl.commons.data.UiModel):476 -> Rc
+    80:83:void renderReportsData(com.mosl.commons.data.UiModel):489 -> Rc
       # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
     84:89:boolean com.mosl.mobile.user.model.ChildMenu.isBasicReports():11:11 -> Rc
-    84:89:void renderReportsData(com.mosl.commons.data.UiModel):476 -> Rc
-    90:94:void setUserManager(com.mosl.mobile.user.login.UserManager):87:87 -> Rc
-    90:94:com.mosl.mobile.user.login.UserManager getUserManager():87 -> Rc
-    90:94:void renderReportsData(com.mosl.commons.data.UiModel):477 -> Rc
-    95:99:void renderReportsData(com.mosl.commons.data.UiModel):477:477 -> Rc
-    100:103:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):105:105 -> Rc
-    100:103:io.reactivex.rxjava3.disposables.CompositeDisposable getDisposables():105 -> Rc
-    100:103:void fetchDigitalSalesKitParentMenu():491 -> Rc
-    100:103:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    104:107:void setLoginRepository(com.mosl.mobile.user.login.LoginRepositoryImpl):107:107 -> Rc
-    104:107:com.mosl.mobile.user.login.LoginRepositoryImpl getLoginRepository():107 -> Rc
-    104:107:void fetchDigitalSalesKitParentMenu():492 -> Rc
-    104:107:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
+    84:89:void renderReportsData(com.mosl.commons.data.UiModel):489 -> Rc
+    90:94:void setUserManager(com.mosl.mobile.user.login.UserManager):89:89 -> Rc
+    90:94:com.mosl.mobile.user.login.UserManager getUserManager():89 -> Rc
+    90:94:void renderReportsData(com.mosl.commons.data.UiModel):490 -> Rc
+    95:99:void renderReportsData(com.mosl.commons.data.UiModel):490:490 -> Rc
+    100:103:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):107:107 -> Rc
+    100:103:io.reactivex.rxjava3.disposables.CompositeDisposable getDisposables():107 -> Rc
+    100:103:void fetchDigitalSalesKitParentMenu():504 -> Rc
+    100:103:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    104:107:void setLoginRepository(com.mosl.mobile.user.login.LoginRepositoryImpl):109:109 -> Rc
+    104:107:com.mosl.mobile.user.login.LoginRepositoryImpl getLoginRepository():109 -> Rc
+    104:107:void fetchDigitalSalesKitParentMenu():505 -> Rc
+    104:107:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
     108:113:io.reactivex.rxjava3.core.Observable com.mosl.mobile.user.login.LoginRepositoryImpl.fetchDigitalSalesKitParentMenu():41:41 -> Rc
-    108:113:void fetchDigitalSalesKitParentMenu():492 -> Rc
-    108:113:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    114:121:void fetchDigitalSalesKitParentMenu():492:492 -> Rc
-    114:121:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    122:130:void fetchDigitalSalesKitParentMenu():493:493 -> Rc
-    122:130:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    131:136:void fetchDigitalSalesKitParentMenu():491:491 -> Rc
-    131:136:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    137:142:void setLoginRepository(com.mosl.mobile.user.login.LoginRepositoryImpl):107:107 -> Rc
-    137:142:com.mosl.mobile.user.login.LoginRepositoryImpl getLoginRepository():107 -> Rc
-    137:142:void fetchDigitalSalesKitParentMenu():492 -> Rc
-    137:142:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    143:148:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):105:105 -> Rc
-    143:148:io.reactivex.rxjava3.disposables.CompositeDisposable getDisposables():105 -> Rc
-    143:148:void fetchDigitalSalesKitParentMenu():491 -> Rc
-    143:148:void renderReportsData(com.mosl.commons.data.UiModel):478 -> Rc
-    149:152:void setUserManager(com.mosl.mobile.user.login.UserManager):87:87 -> Rc
-    149:152:com.mosl.mobile.user.login.UserManager getUserManager():87 -> Rc
-    149:152:void renderReportsData(com.mosl.commons.data.UiModel):477 -> Rc
+    108:113:void fetchDigitalSalesKitParentMenu():505 -> Rc
+    108:113:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    114:121:void fetchDigitalSalesKitParentMenu():505:505 -> Rc
+    114:121:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    122:130:void fetchDigitalSalesKitParentMenu():506:506 -> Rc
+    122:130:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    131:136:void fetchDigitalSalesKitParentMenu():504:504 -> Rc
+    131:136:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    137:142:void setLoginRepository(com.mosl.mobile.user.login.LoginRepositoryImpl):109:109 -> Rc
+    137:142:com.mosl.mobile.user.login.LoginRepositoryImpl getLoginRepository():109 -> Rc
+    137:142:void fetchDigitalSalesKitParentMenu():505 -> Rc
+    137:142:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    143:148:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):107:107 -> Rc
+    143:148:io.reactivex.rxjava3.disposables.CompositeDisposable getDisposables():107 -> Rc
+    143:148:void fetchDigitalSalesKitParentMenu():504 -> Rc
+    143:148:void renderReportsData(com.mosl.commons.data.UiModel):491 -> Rc
+    149:152:void setUserManager(com.mosl.mobile.user.login.UserManager):89:89 -> Rc
+    149:152:com.mosl.mobile.user.login.UserManager getUserManager():89 -> Rc
+    149:152:void renderReportsData(com.mosl.commons.data.UiModel):490 -> Rc
     153:156:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):37:37 -> Rc
-    153:156:void renderReportsData(com.mosl.commons.data.UiModel):485 -> Rc
+    153:156:void renderReportsData(com.mosl.commons.data.UiModel):498 -> Rc
     157:158:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):38:38 -> Rc
-    157:158:void renderReportsData(com.mosl.commons.data.UiModel):485 -> Rc
-    159:162:void renderReportsData(com.mosl.commons.data.UiModel):486:486 -> Rc
-    0:65535:void clearTitles():578:578 -> T5
-    0:65535:java.lang.String getPassword():233:233 -> T8
-    1:6:boolean getIsAllowedAllPermission():242:242 -> V9
-    7:12:boolean getIsAllowedAllPermission():241:241 -> V9
-    13:18:boolean getIsAllowedAllPermission():246:246 -> V9
-    19:28:boolean getIsAllowedAllPermission():245:245 -> V9
-    0:65535:void setBinding(com.mosl.tabapp.databinding.ActivityLoginNewBinding):81:81 -> Va
-    0:65535:com.mosl.tabapp.databinding.ActivityLoginNewBinding getBinding():81 -> Va
-    0:65535:io.reactivex.rxjava3.core.Observable onDataAction():566:566 -> Xb
-    1:18:java.lang.String getEmpCode():228:228 -> Z0
-    19:23:java.lang.String getEmpCode():229:229 -> Z0
-    0:65535:void hideProgress():604:604 -> a2
-    1:6:void getLocationPermission():381:381 -> fb
-    7:14:void getLocationPermission():380:380 -> fb
-    15:18:void getLocationPermission():386:386 -> fb
-    19:25:void getLocationPermission():385:385 -> fb
-    26:28:void getLocationPermission():391:391 -> fb
-    29:32:void getLocationPermission():394:394 -> fb
-    33:34:void getLocationPermission():395:395 -> fb
-    35:38:void getLocationPermission():393:393 -> fb
-    0:65535:java.lang.String getAppVersion():237:237 -> getAppVersion
-    0:65535:boolean isDataEmpty():560:560 -> hf
-    0:65535:void gotoPage(com.mosl.navigator.FragmentNavigationEntry):592:592 -> l6
-    0:65535:void setAppTitle(java.lang.String,com.mosl.navigator.AppTitle):611:611 -> n9
-    6:9:void renderLogin(com.mosl.commons.data.UiModel):254:254 -> nb
-    10:13:void toggleProgressBar(boolean):553:553 -> nb
-    10:13:void renderLogin(com.mosl.commons.data.UiModel):254 -> nb
-    14:16:void toggleProgressBar(boolean):555:555 -> nb
-    14:16:void renderLogin(com.mosl.commons.data.UiModel):254 -> nb
+    157:158:void renderReportsData(com.mosl.commons.data.UiModel):498 -> Rc
+    159:162:void renderReportsData(com.mosl.commons.data.UiModel):499:499 -> Rc
+    0:65535:void clearTitles():591:591 -> T5
+    0:65535:java.lang.String getPassword():246:246 -> T8
+    1:6:boolean getIsAllowedAllPermission():255:255 -> V9
+    7:12:boolean getIsAllowedAllPermission():254:254 -> V9
+    13:18:boolean getIsAllowedAllPermission():259:259 -> V9
+    19:28:boolean getIsAllowedAllPermission():258:258 -> V9
+    0:65535:void setBinding(com.mosl.tabapp.databinding.ActivityLoginNewBinding):83:83 -> Va
+    0:65535:com.mosl.tabapp.databinding.ActivityLoginNewBinding getBinding():83 -> Va
+    0:65535:io.reactivex.rxjava3.core.Observable onDataAction():579:579 -> Xb
+    1:18:java.lang.String getEmpCode():241:241 -> Z0
+    19:23:java.lang.String getEmpCode():242:242 -> Z0
+    0:65535:void hideProgress():617:617 -> a2
+    1:6:void getLocationPermission():394:394 -> fb
+    7:14:void getLocationPermission():393:393 -> fb
+    15:18:void getLocationPermission():399:399 -> fb
+    19:25:void getLocationPermission():398:398 -> fb
+    26:28:void getLocationPermission():404:404 -> fb
+    29:32:void getLocationPermission():407:407 -> fb
+    33:34:void getLocationPermission():408:408 -> fb
+    35:38:void getLocationPermission():406:406 -> fb
+    0:65535:java.lang.String getAppVersion():250:250 -> getAppVersion
+    0:65535:boolean isDataEmpty():573:573 -> hf
+    0:65535:void gotoPage(com.mosl.navigator.FragmentNavigationEntry):605:605 -> l6
+    0:65535:void setAppTitle(java.lang.String,com.mosl.navigator.AppTitle):624:624 -> n9
+    6:9:void renderLogin(com.mosl.commons.data.UiModel):267:267 -> nb
+    10:13:void toggleProgressBar(boolean):566:566 -> nb
+    10:13:void renderLogin(com.mosl.commons.data.UiModel):267 -> nb
+    14:16:void toggleProgressBar(boolean):568:568 -> nb
+    14:16:void renderLogin(com.mosl.commons.data.UiModel):267 -> nb
     17:20:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):37:37 -> nb
-    17:20:void renderLogin(com.mosl.commons.data.UiModel):257 -> nb
+    17:20:void renderLogin(com.mosl.commons.data.UiModel):270 -> nb
     21:24:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):38:38 -> nb
-    21:24:void renderLogin(com.mosl.commons.data.UiModel):257 -> nb
-    25:28:void renderLogin(com.mosl.commons.data.UiModel):258:258 -> nb
-    29:32:void renderLogin(com.mosl.commons.data.UiModel):259:259 -> nb
-    33:58:void renderLogin(com.mosl.commons.data.UiModel):260:260 -> nb
-    59:62:void renderLogin(com.mosl.commons.data.UiModel):261:261 -> nb
-    63:84:void renderLogin(com.mosl.commons.data.UiModel):263:263 -> nb
-    85:88:void renderLogin(com.mosl.commons.data.UiModel):268:268 -> nb
-    1:3:void onActivityResult(int,int,android.content.Intent):447:447 -> onActivityResult
-    4:7:void onActivityResult(int,int,android.content.Intent):450:450 -> onActivityResult
-    8:11:void onActivityResult(int,int,android.content.Intent):451:451 -> onActivityResult
-    12:15:void onActivityResult(int,int,android.content.Intent):454:454 -> onActivityResult
-    1:8:void onCreate(android.os.Bundle):118:118 -> onCreate
-    9:11:void onCreate(android.os.Bundle):119:119 -> onCreate
-    12:16:void onCreate(android.os.Bundle):120:120 -> onCreate
-    17:18:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):105:105 -> onCreate
-    17:18:void onCreate(android.os.Bundle):120 -> onCreate
-    19:21:void onCreate(android.os.Bundle):121:121 -> onCreate
-    22:26:void setFusedLocation(com.mosl.tabapp.common.FusedLocation):96:96 -> onCreate
-    22:26:com.mosl.tabapp.common.FusedLocation getFusedLocation():96 -> onCreate
-    22:26:void onCreate(android.os.Bundle):122 -> onCreate
+    21:24:void renderLogin(com.mosl.commons.data.UiModel):270 -> nb
+    25:28:void renderLogin(com.mosl.commons.data.UiModel):271:271 -> nb
+    29:32:void renderLogin(com.mosl.commons.data.UiModel):272:272 -> nb
+    33:58:void renderLogin(com.mosl.commons.data.UiModel):273:273 -> nb
+    59:62:void renderLogin(com.mosl.commons.data.UiModel):274:274 -> nb
+    63:84:void renderLogin(com.mosl.commons.data.UiModel):276:276 -> nb
+    85:88:void renderLogin(com.mosl.commons.data.UiModel):281:281 -> nb
+    1:3:void onActivityResult(int,int,android.content.Intent):460:460 -> onActivityResult
+    4:7:void onActivityResult(int,int,android.content.Intent):463:463 -> onActivityResult
+    8:11:void onActivityResult(int,int,android.content.Intent):464:464 -> onActivityResult
+    12:15:void onActivityResult(int,int,android.content.Intent):467:467 -> onActivityResult
+    1:8:void onCreate(android.os.Bundle):120:120 -> onCreate
+    9:11:void onCreate(android.os.Bundle):121:121 -> onCreate
+    12:16:void onCreate(android.os.Bundle):122:122 -> onCreate
+    17:18:void setDisposables(io.reactivex.rxjava3.disposables.CompositeDisposable):107:107 -> onCreate
+    17:18:void onCreate(android.os.Bundle):122 -> onCreate
+    19:21:void onCreate(android.os.Bundle):123:123 -> onCreate
+    22:26:void setFusedLocation(com.mosl.tabapp.common.FusedLocation):98:98 -> onCreate
+    22:26:com.mosl.tabapp.common.FusedLocation getFusedLocation():98 -> onCreate
+    22:26:void onCreate(android.os.Bundle):124 -> onCreate
     27:28:void com.mosl.tabapp.common.FusedLocation.initDispatcher(com.mosl.tabapp.common.FusedLocation$LatLongDispatcher):70:70 -> onCreate
-    27:28:void onCreate(android.os.Bundle):122 -> onCreate
+    27:28:void onCreate(android.os.Bundle):124 -> onCreate
     29:34:void com.mosl.tabapp.common.FusedLocation.initDispatcher(com.mosl.tabapp.common.FusedLocation$LatLongDispatcher):71:71 -> onCreate
-    29:34:void onCreate(android.os.Bundle):122 -> onCreate
-    35:40:void onCreate(android.os.Bundle):123:123 -> onCreate
+    29:34:void onCreate(android.os.Bundle):124 -> onCreate
+    35:40:void onCreate(android.os.Bundle):125:125 -> onCreate
     41:47:com.mosl.tabapp.databinding.ActivityLoginNewBinding com.mosl.tabapp.databinding.ActivityLoginNewBinding.bind(android.view.View):97:97 -> onCreate
-    41:47:void onCreate(android.os.Bundle):123 -> onCreate
-    48:55:void <init>():109:109 -> onCreate
+    41:47:void onCreate(android.os.Bundle):125 -> onCreate
+    48:55:void setLoginRepository(com.mosl.mobile.user.login.LoginRepositoryImpl):109:109 -> onCreate
     48:55:com.mosl.tabapp.databinding.ActivityLoginNewBinding com.mosl.tabapp.databinding.ActivityLoginNewBinding.bind(android.view.View,java.lang.Object):109 -> onCreate
     48:55:com.mosl.tabapp.databinding.ActivityLoginNewBinding com.mosl.tabapp.databinding.ActivityLoginNewBinding.bind(android.view.View):97 -> onCreate
-    48:55:void onCreate(android.os.Bundle):123 -> onCreate
-    56:58:void onCreate(android.os.Bundle):123:123 -> onCreate
-    59:60:void setBinding(com.mosl.tabapp.databinding.ActivityLoginNewBinding):81:81 -> onCreate
-    59:60:void onCreate(android.os.Bundle):123 -> onCreate
-    61:64:void setPresenter(com.mosl.tabapp.login.LoginPresenter):84:84 -> onCreate
-    61:64:com.mosl.tabapp.login.LoginPresenter getPresenter():84 -> onCreate
-    61:64:void onCreate(android.os.Bundle):124 -> onCreate
+    48:55:void onCreate(android.os.Bundle):125 -> onCreate
+    56:58:void onCreate(android.os.Bundle):125:125 -> onCreate
+    59:60:void setBinding(com.mosl.tabapp.databinding.ActivityLoginNewBinding):83:83 -> onCreate
+    59:60:void onCreate(android.os.Bundle):125 -> onCreate
+    61:64:void setPresenter(com.mosl.tabapp.login.LoginPresenter):86:86 -> onCreate
+    61:64:com.mosl.tabapp.login.LoginPresenter getPresenter():86 -> onCreate
+    61:64:void onCreate(android.os.Bundle):126 -> onCreate
     65:72:void com.mosl.tabapp.login.LoginPresenter.start():18:18 -> onCreate
-    65:72:void onCreate(android.os.Bundle):124 -> onCreate
+    65:72:void onCreate(android.os.Bundle):126 -> onCreate
     73:81:void com.mosl.tabapp.login.LoginPresenter.start():19:19 -> onCreate
-    73:81:void onCreate(android.os.Bundle):124 -> onCreate
+    73:81:void onCreate(android.os.Bundle):126 -> onCreate
     82:90:void com.mosl.tabapp.login.LoginPresenter.start():24:24 -> onCreate
-    82:90:void onCreate(android.os.Bundle):124 -> onCreate
+    82:90:void onCreate(android.os.Bundle):126 -> onCreate
     91:104:void com.mosl.tabapp.login.LoginPresenter.start():29:29 -> onCreate
-    91:104:void onCreate(android.os.Bundle):124 -> onCreate
+    91:104:void onCreate(android.os.Bundle):126 -> onCreate
     105:106:void com.mosl.tabapp.login.LoginPresenter.start():40:40 -> onCreate
-    105:106:void onCreate(android.os.Bundle):124 -> onCreate
-    107:109:void setEditor(android.content.SharedPreferences$Editor):99:99 -> onCreate
-    107:109:void com.mosl.tabapp.login.LoginPresenter.start():99 -> onCreate
-    107:109:void onCreate(android.os.Bundle):124 -> onCreate
+    105:106:void onCreate(android.os.Bundle):126 -> onCreate
+    107:109:void com.mosl.tabapp.login.LoginPresenter.start():99:99 -> onCreate
+    107:109:void onCreate(android.os.Bundle):126 -> onCreate
     110:117:void com.mosl.tabapp.login.LoginPresenter.start():42:42 -> onCreate
-    110:117:void onCreate(android.os.Bundle):124 -> onCreate
+    110:117:void onCreate(android.os.Bundle):126 -> onCreate
     118:126:void com.mosl.tabapp.login.LoginPresenter.start():43:43 -> onCreate
-    118:126:void onCreate(android.os.Bundle):124 -> onCreate
+    118:126:void onCreate(android.os.Bundle):126 -> onCreate
     127:135:void com.mosl.tabapp.login.LoginPresenter.start():51:51 -> onCreate
-    127:135:void onCreate(android.os.Bundle):124 -> onCreate
+    127:135:void onCreate(android.os.Bundle):126 -> onCreate
     136:147:void com.mosl.tabapp.login.LoginPresenter.start():57:57 -> onCreate
-    136:147:void onCreate(android.os.Bundle):124 -> onCreate
+    136:147:void onCreate(android.os.Bundle):126 -> onCreate
     148:149:void com.mosl.tabapp.login.LoginPresenter.start():59:59 -> onCreate
-    148:149:void onCreate(android.os.Bundle):124 -> onCreate
-    150:152:void com.mosl.tabapp.login.LoginPresenter.start():100:100 -> onCreate
-    150:152:void onCreate(android.os.Bundle):124 -> onCreate
+    148:149:void onCreate(android.os.Bundle):126 -> onCreate
+    150:152:void setSharedPreferences(android.content.SharedPreferences):100:100 -> onCreate
+    150:152:void com.mosl.tabapp.login.LoginPresenter.start():100 -> onCreate
+    150:152:void onCreate(android.os.Bundle):126 -> onCreate
     153:160:void com.mosl.tabapp.login.LoginPresenter.start():62:62 -> onCreate
-    153:160:void onCreate(android.os.Bundle):124 -> onCreate
+    153:160:void onCreate(android.os.Bundle):126 -> onCreate
     161:169:void com.mosl.tabapp.login.LoginPresenter.start():63:63 -> onCreate
-    161:169:void onCreate(android.os.Bundle):124 -> onCreate
+    161:169:void onCreate(android.os.Bundle):126 -> onCreate
     170:181:void com.mosl.tabapp.login.LoginPresenter.start():66:66 -> onCreate
-    170:181:void onCreate(android.os.Bundle):124 -> onCreate
+    170:181:void onCreate(android.os.Bundle):126 -> onCreate
     182:183:void com.mosl.tabapp.login.LoginPresenter.start():68:68 -> onCreate
-    182:183:void onCreate(android.os.Bundle):124 -> onCreate
-    184:186:void com.mosl.tabapp.login.LoginPresenter.start():101:101 -> onCreate
-    184:186:void onCreate(android.os.Bundle):124 -> onCreate
-    187:197:void setUpView():136:136 -> onCreate
-    187:197:void onCreate(android.os.Bundle):125 -> onCreate
-    198:206:void setUpView():135:135 -> onCreate
-    198:206:void onCreate(android.os.Bundle):125 -> onCreate
-    207:208:void setSharedPreferences(android.content.SharedPreferences):98:98 -> onCreate
-    207:208:void setUpView():135 -> onCreate
-    207:208:void onCreate(android.os.Bundle):125 -> onCreate
-    209:217:void setUpView():139:139 -> onCreate
-    209:217:void onCreate(android.os.Bundle):125 -> onCreate
-    218:219:void setEditor(android.content.SharedPreferences$Editor):99:99 -> onCreate
-    218:219:void setUpView():139 -> onCreate
-    218:219:void onCreate(android.os.Bundle):125 -> onCreate
-    220:226:void setSharedPreferences(android.content.SharedPreferences):98:98 -> onCreate
-    220:226:android.content.SharedPreferences getSharedPreferences():98 -> onCreate
-    220:226:void setUpView():141 -> onCreate
-    220:226:void onCreate(android.os.Bundle):125 -> onCreate
-    227:236:void setUpView():141:141 -> onCreate
-    227:236:void onCreate(android.os.Bundle):125 -> onCreate
-    237:241:void showDiscloserDilog():274:274 -> onCreate
-    237:241:void setUpView():142 -> onCreate
-    237:241:void onCreate(android.os.Bundle):125 -> onCreate
-    242:255:void showDiscloserDilog():275:275 -> onCreate
-    242:255:void setUpView():142 -> onCreate
-    242:255:void onCreate(android.os.Bundle):125 -> onCreate
-    256:269:void showDiscloserDilog():276:276 -> onCreate
-    256:269:void setUpView():142 -> onCreate
-    256:269:void onCreate(android.os.Bundle):125 -> onCreate
-    270:272:void showDiscloserDilog():277:277 -> onCreate
-    270:272:void setUpView():142 -> onCreate
-    270:272:void onCreate(android.os.Bundle):125 -> onCreate
-    273:282:void showDiscloserDilog():278:278 -> onCreate
-    273:282:void setUpView():142 -> onCreate
-    273:282:void onCreate(android.os.Bundle):125 -> onCreate
-    283:285:void showDiscloserDilog():282:282 -> onCreate
-    283:285:void setUpView():142 -> onCreate
-    283:285:void onCreate(android.os.Bundle):125 -> onCreate
-    286:289:void setUserManager(com.mosl.mobile.user.login.UserManager):87:87 -> onCreate
-    286:289:com.mosl.mobile.user.login.UserManager getUserManager():87 -> onCreate
-    286:289:void setUpView():144 -> onCreate
-    286:289:void onCreate(android.os.Bundle):125 -> onCreate
-    290:295:void setUpView():144:144 -> onCreate
-    290:295:void onCreate(android.os.Bundle):125 -> onCreate
-    296:311:void setUpView():147:147 -> onCreate
-    296:311:void onCreate(android.os.Bundle):125 -> onCreate
-    312:329:void setUpView():159:159 -> onCreate
-    312:329:void onCreate(android.os.Bundle):125 -> onCreate
-    330:335:void setUserManager(com.mosl.mobile.user.login.UserManager):87:87 -> onCreate
-    330:335:com.mosl.mobile.user.login.UserManager getUserManager():87 -> onCreate
-    330:335:void setUpView():144 -> onCreate
-    330:335:void onCreate(android.os.Bundle):125 -> onCreate
-    336:341:void setSharedPreferences(android.content.SharedPreferences):98:98 -> onCreate
-    336:341:android.content.SharedPreferences getSharedPreferences():98 -> onCreate
-    336:341:void setUpView():141 -> onCreate
-    336:341:void onCreate(android.os.Bundle):125 -> onCreate
-    342:347:void setPresenter(com.mosl.tabapp.login.LoginPresenter):84:84 -> onCreate
-    342:347:com.mosl.tabapp.login.LoginPresenter getPresenter():84 -> onCreate
-    342:347:void onCreate(android.os.Bundle):124 -> onCreate
-    348:351:void setFusedLocation(com.mosl.tabapp.common.FusedLocation):96:96 -> onCreate
-    348:351:com.mosl.tabapp.common.FusedLocation getFusedLocation():96 -> onCreate
-    348:351:void onCreate(android.os.Bundle):122 -> onCreate
-    1:4:void setPresenter(com.mosl.tabapp.login.LoginPresenter):84:84 -> onDestroy
-    1:4:com.mosl.tabapp.login.LoginPresenter getPresenter():84 -> onDestroy
-    1:4:void onDestroy():129 -> onDestroy
-    5:7:void onDestroy():129:129 -> onDestroy
-    8:13:void onDestroy():130:130 -> onDestroy
-    14:18:void setPresenter(com.mosl.tabapp.login.LoginPresenter):84:84 -> onDestroy
-    14:18:com.mosl.tabapp.login.LoginPresenter getPresenter():84 -> onDestroy
-    14:18:void onDestroy():129 -> onDestroy
-    11:14:void onRequestPermissionsResult(int,java.lang.String[],int[]):427:427 -> onRequestPermissionsResult
-    15:16:void onRequestPermissionsResult(int,java.lang.String[],int[]):428:428 -> onRequestPermissionsResult
-    17:20:void onRequestPermissionsResult(int,java.lang.String[],int[]):430:430 -> onRequestPermissionsResult
-    21:23:void onRequestPermissionsResult(int,java.lang.String[],int[]):433:433 -> onRequestPermissionsResult
-    24:28:void onRequestPermissionsResult(int,java.lang.String[],int[]):434:434 -> onRequestPermissionsResult
-    29:31:void onRequestPermissionsResult(int,java.lang.String[],int[]):436:436 -> onRequestPermissionsResult
-    0:65535:androidx.fragment.app.Fragment getFragment(java.lang.String):588:588 -> q4
+    182:183:void onCreate(android.os.Bundle):126 -> onCreate
+    184:186:void setEditor(android.content.SharedPreferences$Editor):101:101 -> onCreate
+    184:186:void com.mosl.tabapp.login.LoginPresenter.start():101 -> onCreate
+    184:186:void onCreate(android.os.Bundle):126 -> onCreate
+    187:197:void setUpView():138:138 -> onCreate
+    187:197:void onCreate(android.os.Bundle):127 -> onCreate
+    198:206:void setUpView():137:137 -> onCreate
+    198:206:void onCreate(android.os.Bundle):127 -> onCreate
+    207:208:void setSharedPreferences(android.content.SharedPreferences):100:100 -> onCreate
+    207:208:void setUpView():137 -> onCreate
+    207:208:void onCreate(android.os.Bundle):127 -> onCreate
+    209:217:void setUpView():141:141 -> onCreate
+    209:217:void onCreate(android.os.Bundle):127 -> onCreate
+    218:219:void setEditor(android.content.SharedPreferences$Editor):101:101 -> onCreate
+    218:219:void setUpView():141 -> onCreate
+    218:219:void onCreate(android.os.Bundle):127 -> onCreate
+    220:226:void setSharedPreferences(android.content.SharedPreferences):100:100 -> onCreate
+    220:226:android.content.SharedPreferences getSharedPreferences():100 -> onCreate
+    220:226:void setUpView():143 -> onCreate
+    220:226:void onCreate(android.os.Bundle):127 -> onCreate
+    227:237:void setUpView():143:143 -> onCreate
+    227:237:void onCreate(android.os.Bundle):127 -> onCreate
+    238:242:void showDiscloserDilog():287:287 -> onCreate
+    238:242:void setUpView():144 -> onCreate
+    238:242:void onCreate(android.os.Bundle):127 -> onCreate
+    243:256:void showDiscloserDilog():288:288 -> onCreate
+    243:256:void setUpView():144 -> onCreate
+    243:256:void onCreate(android.os.Bundle):127 -> onCreate
+    257:270:void showDiscloserDilog():289:289 -> onCreate
+    257:270:void setUpView():144 -> onCreate
+    257:270:void onCreate(android.os.Bundle):127 -> onCreate
+    271:273:void showDiscloserDilog():290:290 -> onCreate
+    271:273:void setUpView():144 -> onCreate
+    271:273:void onCreate(android.os.Bundle):127 -> onCreate
+    274:283:void showDiscloserDilog():291:291 -> onCreate
+    274:283:void setUpView():144 -> onCreate
+    274:283:void onCreate(android.os.Bundle):127 -> onCreate
+    284:286:void showDiscloserDilog():295:295 -> onCreate
+    284:286:void setUpView():144 -> onCreate
+    284:286:void onCreate(android.os.Bundle):127 -> onCreate
+    287:290:void setUserManager(com.mosl.mobile.user.login.UserManager):89:89 -> onCreate
+    287:290:com.mosl.mobile.user.login.UserManager getUserManager():89 -> onCreate
+    287:290:void setUpView():146 -> onCreate
+    287:290:void onCreate(android.os.Bundle):127 -> onCreate
+    291:296:void setUpView():146:146 -> onCreate
+    291:296:void onCreate(android.os.Bundle):127 -> onCreate
+    297:312:void setUpView():149:149 -> onCreate
+    297:312:void onCreate(android.os.Bundle):127 -> onCreate
+    313:329:void setUpView():161:161 -> onCreate
+    313:329:void onCreate(android.os.Bundle):127 -> onCreate
+    330:335:void setUserManager(com.mosl.mobile.user.login.UserManager):89:89 -> onCreate
+    330:335:com.mosl.mobile.user.login.UserManager getUserManager():89 -> onCreate
+    330:335:void setUpView():146 -> onCreate
+    330:335:void onCreate(android.os.Bundle):127 -> onCreate
+    336:341:void setSharedPreferences(android.content.SharedPreferences):100:100 -> onCreate
+    336:341:android.content.SharedPreferences getSharedPreferences():100 -> onCreate
+    336:341:void setUpView():143 -> onCreate
+    336:341:void onCreate(android.os.Bundle):127 -> onCreate
+    342:347:void setPresenter(com.mosl.tabapp.login.LoginPresenter):86:86 -> onCreate
+    342:347:com.mosl.tabapp.login.LoginPresenter getPresenter():86 -> onCreate
+    342:347:void onCreate(android.os.Bundle):126 -> onCreate
+    348:351:void setFusedLocation(com.mosl.tabapp.common.FusedLocation):98:98 -> onCreate
+    348:351:com.mosl.tabapp.common.FusedLocation getFusedLocation():98 -> onCreate
+    348:351:void onCreate(android.os.Bundle):124 -> onCreate
+    1:4:void setPresenter(com.mosl.tabapp.login.LoginPresenter):86:86 -> onDestroy
+    1:4:com.mosl.tabapp.login.LoginPresenter getPresenter():86 -> onDestroy
+    1:4:void onDestroy():131 -> onDestroy
+    5:7:void onDestroy():131:131 -> onDestroy
+    8:13:void onDestroy():132:132 -> onDestroy
+    14:18:void setPresenter(com.mosl.tabapp.login.LoginPresenter):86:86 -> onDestroy
+    14:18:com.mosl.tabapp.login.LoginPresenter getPresenter():86 -> onDestroy
+    14:18:void onDestroy():131 -> onDestroy
+    11:14:void onRequestPermissionsResult(int,java.lang.String[],int[]):440:440 -> onRequestPermissionsResult
+    15:16:void onRequestPermissionsResult(int,java.lang.String[],int[]):441:441 -> onRequestPermissionsResult
+    17:20:void onRequestPermissionsResult(int,java.lang.String[],int[]):443:443 -> onRequestPermissionsResult
+    21:23:void onRequestPermissionsResult(int,java.lang.String[],int[]):446:446 -> onRequestPermissionsResult
+    24:28:void onRequestPermissionsResult(int,java.lang.String[],int[]):447:447 -> onRequestPermissionsResult
+    29:31:void onRequestPermissionsResult(int,java.lang.String[],int[]):449:449 -> onRequestPermissionsResult
+    1:5:void onResume():179:179 -> onResume
+    6:16:boolean isUsingCustomInputMethod():203:203 -> onResume
+    6:16:void checkKeyLogger():183 -> onResume
+    6:16:void onResume():180 -> onResume
+    17:25:boolean isUsingCustomInputMethod():204:204 -> onResume
+    17:25:void checkKeyLogger():183 -> onResume
+    17:25:void onResume():180 -> onResume
+    26:34:boolean isUsingCustomInputMethod():205:205 -> onResume
+    26:34:void checkKeyLogger():183 -> onResume
+    26:34:void onResume():180 -> onResume
+    35:40:boolean isUsingCustomInputMethod():207:207 -> onResume
+    35:40:void checkKeyLogger():183 -> onResume
+    35:40:void onResume():180 -> onResume
+    41:60:boolean isUsingCustomInputMethod():208:208 -> onResume
+    41:60:void checkKeyLogger():183 -> onResume
+    41:60:void onResume():180 -> onResume
+    61:78:boolean isUsingCustomInputMethod():209:209 -> onResume
+    61:78:void checkKeyLogger():183 -> onResume
+    61:78:void onResume():180 -> onResume
+    79:85:void showExitPopup():189:189 -> onResume
+    79:85:void checkKeyLogger():184 -> onResume
+    79:85:void onResume():180 -> onResume
+    86:90:void showExitPopup():190:190 -> onResume
+    86:90:void checkKeyLogger():184 -> onResume
+    86:90:void onResume():180 -> onResume
+    91:93:void showExitPopup():191:191 -> onResume
+    91:93:void checkKeyLogger():184 -> onResume
+    91:93:void onResume():180 -> onResume
+    94:96:void showExitPopup():192:192 -> onResume
+    94:96:void checkKeyLogger():184 -> onResume
+    94:96:void onResume():180 -> onResume
+    97:106:void showExitPopup():193:193 -> onResume
+    97:106:void checkKeyLogger():184 -> onResume
+    97:106:void onResume():180 -> onResume
+    107:110:void showExitPopup():198:198 -> onResume
+    107:110:void checkKeyLogger():184 -> onResume
+    107:110:void onResume():180 -> onResume
+    111:114:void showExitPopup():199:199 -> onResume
+    111:114:void checkKeyLogger():184 -> onResume
+    111:114:void onResume():180 -> onResume
+    0:65535:androidx.fragment.app.Fragment getFragment(java.lang.String):601:601 -> q4
     int getContainerViewId() -> s9
-    6:9:void showOnFailurePopup(java.lang.Throwable):543:543 -> sc
-    10:26:void showOnFailurePopup(java.lang.Throwable):544:544 -> sc
-    6:9:void fnRenderNewLogin(com.mosl.commons.data.UiModel):628:628 -> u9
-    10:13:void toggleProgressBar(boolean):553:553 -> u9
-    10:13:void fnRenderNewLogin(com.mosl.commons.data.UiModel):628 -> u9
-    14:16:void toggleProgressBar(boolean):555:555 -> u9
-    14:16:void fnRenderNewLogin(com.mosl.commons.data.UiModel):628 -> u9
+    6:9:void showOnFailurePopup(java.lang.Throwable):556:556 -> sc
+    10:26:void showOnFailurePopup(java.lang.Throwable):557:557 -> sc
+    6:9:void fnRenderNewLogin(com.mosl.commons.data.UiModel):641:641 -> u9
+    10:13:void toggleProgressBar(boolean):566:566 -> u9
+    10:13:void fnRenderNewLogin(com.mosl.commons.data.UiModel):641 -> u9
+    14:16:void toggleProgressBar(boolean):568:568 -> u9
+    14:16:void fnRenderNewLogin(com.mosl.commons.data.UiModel):641 -> u9
     17:20:void com.mosl.commons.data.UiModelHelper.onSuccess(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):31:31 -> u9
-    17:20:void fnRenderNewLogin(com.mosl.commons.data.UiModel):629 -> u9
+    17:20:void fnRenderNewLogin(com.mosl.commons.data.UiModel):642 -> u9
     21:27:void com.mosl.commons.data.UiModelHelper.onSuccess(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):32:32 -> u9
-    21:27:void fnRenderNewLogin(com.mosl.commons.data.UiModel):629 -> u9
-    28:36:void setEditor(android.content.SharedPreferences$Editor):99:99 -> u9
-    28:36:android.content.SharedPreferences$Editor getEditor():99 -> u9
-    28:36:void fnRenderNewLogin(com.mosl.commons.data.UiModel):631 -> u9
-    37:49:void fnRenderNewLogin(com.mosl.commons.data.UiModel):631:631 -> u9
-    50:53:void setEditor(android.content.SharedPreferences$Editor):99:99 -> u9
-    50:53:android.content.SharedPreferences$Editor getEditor():99 -> u9
-    50:53:void fnRenderNewLogin(com.mosl.commons.data.UiModel):632 -> u9
-    54:56:void fnRenderNewLogin(com.mosl.commons.data.UiModel):632:632 -> u9
-    57:67:void fnRenderNewLogin(com.mosl.commons.data.UiModel):633:633 -> u9
-    68:73:void setEditor(android.content.SharedPreferences$Editor):99:99 -> u9
-    68:73:android.content.SharedPreferences$Editor getEditor():99 -> u9
-    68:73:void fnRenderNewLogin(com.mosl.commons.data.UiModel):632 -> u9
-    74:77:void setEditor(android.content.SharedPreferences$Editor):99:99 -> u9
-    74:77:android.content.SharedPreferences$Editor getEditor():99 -> u9
-    74:77:void fnRenderNewLogin(com.mosl.commons.data.UiModel):631 -> u9
-    78:80:void fnRenderNewLogin(com.mosl.commons.data.UiModel):641:641 -> u9
+    21:27:void fnRenderNewLogin(com.mosl.commons.data.UiModel):642 -> u9
+    28:36:void setEditor(android.content.SharedPreferences$Editor):101:101 -> u9
+    28:36:android.content.SharedPreferences$Editor getEditor():101 -> u9
+    28:36:void fnRenderNewLogin(com.mosl.commons.data.UiModel):644 -> u9
+    37:49:void fnRenderNewLogin(com.mosl.commons.data.UiModel):644:644 -> u9
+    50:53:void setEditor(android.content.SharedPreferences$Editor):101:101 -> u9
+    50:53:android.content.SharedPreferences$Editor getEditor():101 -> u9
+    50:53:void fnRenderNewLogin(com.mosl.commons.data.UiModel):645 -> u9
+    54:56:void fnRenderNewLogin(com.mosl.commons.data.UiModel):645:645 -> u9
+    57:67:void fnRenderNewLogin(com.mosl.commons.data.UiModel):646:646 -> u9
+    68:73:void setEditor(android.content.SharedPreferences$Editor):101:101 -> u9
+    68:73:android.content.SharedPreferences$Editor getEditor():101 -> u9
+    68:73:void fnRenderNewLogin(com.mosl.commons.data.UiModel):645 -> u9
+    74:77:void setEditor(android.content.SharedPreferences$Editor):101:101 -> u9
+    74:77:android.content.SharedPreferences$Editor getEditor():101 -> u9
+    74:77:void fnRenderNewLogin(com.mosl.commons.data.UiModel):644 -> u9
+    78:80:void fnRenderNewLogin(com.mosl.commons.data.UiModel):654:654 -> u9
     81:84:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):37:37 -> u9
-    81:84:void fnRenderNewLogin(com.mosl.commons.data.UiModel):644 -> u9
+    81:84:void fnRenderNewLogin(com.mosl.commons.data.UiModel):657 -> u9
     85:88:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):38:38 -> u9
-    85:88:void fnRenderNewLogin(com.mosl.commons.data.UiModel):644 -> u9
-    89:92:void fnRenderNewLogin(com.mosl.commons.data.UiModel):645:645 -> u9
-    1:2:io.reactivex.rxjava3.core.Observable fnOnOtpSucess():666:666 -> ua
+    85:88:void fnRenderNewLogin(com.mosl.commons.data.UiModel):657 -> u9
+    89:92:void fnRenderNewLogin(com.mosl.commons.data.UiModel):658:658 -> u9
+    1:2:io.reactivex.rxjava3.core.Observable fnOnOtpSucess():679:679 -> ua
     3:14:io.reactivex.rxjava3.core.Observable com.mosl.commons.rx.RxUtils.ofType(io.reactivex.rxjava3.core.Observable):65:65 -> ua
-    3:14:io.reactivex.rxjava3.core.Observable fnOnOtpSucess():666 -> ua
-    1:2:io.reactivex.rxjava3.core.Observable fnCallLogin():206:206 -> xb
+    3:14:io.reactivex.rxjava3.core.Observable fnOnOtpSucess():679 -> ua
+    1:2:io.reactivex.rxjava3.core.Observable fnCallLogin():219:219 -> xb
     3:14:io.reactivex.rxjava3.core.Observable com.mosl.commons.rx.RxUtils.ofType(io.reactivex.rxjava3.core.Observable):65:65 -> xb
-    3:14:io.reactivex.rxjava3.core.Observable fnCallLogin():206 -> xb
-    3:8:void setUserProperty(com.mosl.mobile.user.model.User):462:462 -> z9
-    9:12:void setFirebaseHelper(com.mosl.tabapp.helper.FirebaseHelper):103:103 -> z9
-    9:12:com.mosl.tabapp.helper.FirebaseHelper getFirebaseHelper():103 -> z9
-    9:12:void setUserProperty(com.mosl.mobile.user.model.User):463 -> z9
-    13:20:void setUserProperty(com.mosl.mobile.user.model.User):463:463 -> z9
-    21:26:void setFirebaseHelper(com.mosl.tabapp.helper.FirebaseHelper):103:103 -> z9
-    21:26:com.mosl.tabapp.helper.FirebaseHelper getFirebaseHelper():103 -> z9
-    21:26:void setUserProperty(com.mosl.mobile.user.model.User):463 -> z9
+    3:14:io.reactivex.rxjava3.core.Observable fnCallLogin():219 -> xb
+    3:8:void setUserProperty(com.mosl.mobile.user.model.User):475:475 -> z9
+    9:12:void setFirebaseHelper(com.mosl.tabapp.helper.FirebaseHelper):105:105 -> z9
+    9:12:com.mosl.tabapp.helper.FirebaseHelper getFirebaseHelper():105 -> z9
+    9:12:void setUserProperty(com.mosl.mobile.user.model.User):476 -> z9
+    13:20:void setUserProperty(com.mosl.mobile.user.model.User):476:476 -> z9
+    21:26:void setFirebaseHelper(com.mosl.tabapp.helper.FirebaseHelper):105:105 -> z9
+    21:26:com.mosl.tabapp.helper.FirebaseHelper getFirebaseHelper():105 -> z9
+    21:26:void setUserProperty(com.mosl.mobile.user.model.User):476 -> z9
 com.mosl.tabapp.login.LoginActivity$$ExternalSyntheticLambda0 -> sl.a:
 # {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
 # {"id":"com.android.tools.r8.synthesized"}
-    com.mosl.tabapp.login.LoginActivity com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.f$0 -> b
-    int com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.$r8$classId -> a
-    0:65535:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.<init>(com.mosl.tabapp.login.LoginActivity):0:0 -> <init>
-    0:65535:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.$r8$init$synthetic(com.mosl.tabapp.login.LoginActivity,int):0 -> <init>
+    com.mosl.tabapp.login.LoginActivity com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.f$0 -> b
+    int com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.$r8$classId -> a
+    0:65535:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.<init>(com.mosl.tabapp.login.LoginActivity):0:0 -> <init>
+    0:65535:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.$r8$init$synthetic(com.mosl.tabapp.login.LoginActivity,int):0 -> <init>
       # {"id":"com.android.tools.r8.synthesized"}
-    18:23:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
-    18:23:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    18:23:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
+    18:23:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    24:31:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):333:333 -> onClick
-    24:31:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    24:31:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):346:346 -> onClick
+    24:31:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    32:34:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):334:334 -> onClick
-    32:34:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    32:34:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):347:347 -> onClick
+    32:34:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    35:38:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):335:335 -> onClick
-    35:38:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    35:38:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):348:348 -> onClick
+    35:38:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    39:42:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
+    39:42:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    43:48:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
-    43:48:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    43:48:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
+    43:48:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    49:55:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():99:99 -> onClick
-    49:55:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):306 -> onClick
-    49:55:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    49:55:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():101:101 -> onClick
+    49:55:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):319 -> onClick
+    49:55:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    56:69:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):306:306 -> onClick
-    56:69:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    56:69:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):319:319 -> onClick
+    56:69:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    70:73:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():99:99 -> onClick
-    70:73:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):307 -> onClick
-    70:73:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    70:73:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():101:101 -> onClick
+    70:73:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):320 -> onClick
+    70:73:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    74:76:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):307:307 -> onClick
-    74:76:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    74:76:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):320:320 -> onClick
+    74:76:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    77:79:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):308:308 -> onClick
-    77:79:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    77:79:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):321:321 -> onClick
+    77:79:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    80:85:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):309:309 -> onClick
-    80:85:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    80:85:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):322:322 -> onClick
+    80:85:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    86:97:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():404:404 -> onClick
-    86:97:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    86:97:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    86:97:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    86:97:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():417:417 -> onClick
+    86:97:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    86:97:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    86:97:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    98:107:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():409:409 -> onClick
-    98:107:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    98:107:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    98:107:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    98:107:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():422:422 -> onClick
+    98:107:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    98:107:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    98:107:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    108:111:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():412:412 -> onClick
-    108:111:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    108:111:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    108:111:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    108:111:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():425:425 -> onClick
+    108:111:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    108:111:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    108:111:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    112:120:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():413:413 -> onClick
-    112:120:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    112:120:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    112:120:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    112:120:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():426:426 -> onClick
+    112:120:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    112:120:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    112:120:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    121:126:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():414:414 -> onClick
-    121:126:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    121:126:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    121:126:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    121:126:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():427:427 -> onClick
+    121:126:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    121:126:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    121:126:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    127:138:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():416:416 -> onClick
-    127:138:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():343 -> onClick
-    127:138:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    127:138:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    127:138:boolean com.mosl.tabapp.login.LoginActivity.isServicesOK():429:429 -> onClick
+    127:138:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():356 -> onClick
+    127:138:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    127:138:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    139:151:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():364:364 -> onClick
-    139:151:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    139:151:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    139:151:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    139:151:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():377:377 -> onClick
+    139:151:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    139:151:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    139:151:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    152:157:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():365:365 -> onClick
-    152:157:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    152:157:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    152:157:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    152:157:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():378:378 -> onClick
+    152:157:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    152:157:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    152:157:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    158:164:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():352:352 -> onClick
-    158:164:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    158:164:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    158:164:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    158:164:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    158:164:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():365:365 -> onClick
+    158:164:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    158:164:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    158:164:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    158:164:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    165:168:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():353:353 -> onClick
-    165:168:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    165:168:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    165:168:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    165:168:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    165:168:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():366:366 -> onClick
+    165:168:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    165:168:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    165:168:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    165:168:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    169:172:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():354:354 -> onClick
-    169:172:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    169:172:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    169:172:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    169:172:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    169:172:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():367:367 -> onClick
+    169:172:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    169:172:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    169:172:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    169:172:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    173:183:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():355:355 -> onClick
-    173:183:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    173:183:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    173:183:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    173:183:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    173:183:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():368:368 -> onClick
+    173:183:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    173:183:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    173:183:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    173:183:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    184:187:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():359:359 -> onClick
-    184:187:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    184:187:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    184:187:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    184:187:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    184:187:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():372:372 -> onClick
+    184:187:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    184:187:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    184:187:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    184:187:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    188:198:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():360:360 -> onClick
-    188:198:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():366 -> onClick
-    188:198:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():344 -> onClick
-    188:198:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):310 -> onClick
-    188:198:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    188:198:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps():373:373 -> onClick
+    188:198:boolean com.mosl.tabapp.login.LoginActivity.isMapsEnabled():379 -> onClick
+    188:198:boolean com.mosl.tabapp.login.LoginActivity.checkMapServices():357 -> onClick
+    188:198:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323 -> onClick
+    188:198:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    199:202:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):311:311 -> onClick
-    199:202:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    199:202:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):324:324 -> onClick
+    199:202:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    203:205:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):314:314 -> onClick
-    203:205:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    203:205:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):327:327 -> onClick
+    203:205:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    206:209:com.mosl.tabapp.permission.PermissionCheckHelper com.mosl.tabapp.login.LoginActivity.getPermissionCheckHelper():93:93 -> onClick
-    206:209:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    206:209:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    206:209:com.mosl.tabapp.permission.PermissionCheckHelper com.mosl.tabapp.login.LoginActivity.getPermissionCheckHelper():95:95 -> onClick
+    206:209:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    206:209:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
     210:221:void com.mosl.tabapp.permission.PermissionCheckHelper.requestAllPermissions():52:52 -> onClick
-    210:221:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    210:221:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    210:221:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    210:221:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
     222:225:void com.mosl.tabapp.permission.PermissionCheckHelper.requestAllPermissions():55:55 -> onClick
-    222:225:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    222:225:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    222:225:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    222:225:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
     226:227:void com.mosl.tabapp.permission.PermissionCheckHelper.requestAllPermissions():56:56 -> onClick
-    226:227:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    226:227:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    226:227:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    226:227:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
     228:230:void com.mosl.tabapp.permission.PermissionCheckHelper.requestAllPermissions():52:52 -> onClick
-    228:230:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    228:230:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    228:230:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    228:230:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    231:235:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):319:319 -> onClick
-    231:235:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    231:235:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):332:332 -> onClick
+    231:235:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    236:246:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):320:320 -> onClick
-    236:246:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    236:246:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):333:333 -> onClick
+    236:246:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    247:257:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):321:321 -> onClick
-    247:257:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    247:257:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):334:334 -> onClick
+    247:257:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    258:265:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):322:322 -> onClick
-    258:265:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    258:265:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):335:335 -> onClick
+    258:265:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    266:271:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):323:323 -> onClick
-    266:271:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    266:271:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):336:336 -> onClick
+    266:271:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    272:274:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):325:325 -> onClick
-    272:274:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    272:274:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):338:338 -> onClick
+    272:274:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    275:298:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):326:326 -> onClick
-    275:298:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    275:298:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):339:339 -> onClick
+    275:298:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    299:304:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):328:328 -> onClick
-    299:304:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    299:304:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):341:341 -> onClick
+    299:304:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    305:308:com.mosl.tabapp.permission.PermissionCheckHelper com.mosl.tabapp.login.LoginActivity.getPermissionCheckHelper():93:93 -> onClick
-    305:308:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):318 -> onClick
-    305:308:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    305:308:com.mosl.tabapp.permission.PermissionCheckHelper com.mosl.tabapp.login.LoginActivity.getPermissionCheckHelper():95:95 -> onClick
+    305:308:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):331 -> onClick
+    305:308:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    309:312:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():99:99 -> onClick
-    309:312:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):307 -> onClick
-    309:312:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    309:312:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():101:101 -> onClick
+    309:312:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):320 -> onClick
+    309:312:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    313:316:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():99:99 -> onClick
-    313:316:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):306 -> onClick
-    313:316:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    313:316:android.content.SharedPreferences$Editor com.mosl.tabapp.login.LoginActivity.getEditor():101:101 -> onClick
+    313:316:void com.mosl.tabapp.login.LoginActivity.showConsentDialog$lambda$6(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):319 -> onClick
+    313:316:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    317:320:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
+    317:320:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    321:326:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
-    321:326:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    321:326:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
+    321:326:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    327:329:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):279:279 -> onClick
-    327:329:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    327:329:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):292:292 -> onClick
+    327:329:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    330:337:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():287:287 -> onClick
-    330:337:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    330:337:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    330:337:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():300:300 -> onClick
+    330:337:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    330:337:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    338:340:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():291:291 -> onClick
-    338:340:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    338:340:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    338:340:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():304:304 -> onClick
+    338:340:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    338:340:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    341:345:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():292:292 -> onClick
-    341:345:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    341:345:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    341:345:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():305:305 -> onClick
+    341:345:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    341:345:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    346:357:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():293:293 -> onClick
-    346:357:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    346:357:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    346:357:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():306:306 -> onClick
+    346:357:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    346:357:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    358:360:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():294:294 -> onClick
-    358:360:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    358:360:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    358:360:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():307:307 -> onClick
+    358:360:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    358:360:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    361:363:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():295:295 -> onClick
-    361:363:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    361:363:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    361:363:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():308:308 -> onClick
+    361:363:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    361:363:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    364:379:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():296:296 -> onClick
-    364:379:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    364:379:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    364:379:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():309:309 -> onClick
+    364:379:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    364:379:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    380:384:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():297:297 -> onClick
-    380:384:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    380:384:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    380:384:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():310:310 -> onClick
+    380:384:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    380:384:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    385:387:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():298:298 -> onClick
-    385:387:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    385:387:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    385:387:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():311:311 -> onClick
+    385:387:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    385:387:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    388:394:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():299:299 -> onClick
-    388:394:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    388:394:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    388:394:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():312:312 -> onClick
+    388:394:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    388:394:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    395:397:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():300:300 -> onClick
-    395:397:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    395:397:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    395:397:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():313:313 -> onClick
+    395:397:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    395:397:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    398:402:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():301:301 -> onClick
-    398:402:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    398:402:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    398:402:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():314:314 -> onClick
+    398:402:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    398:402:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    403:416:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():302:302 -> onClick
-    403:416:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    403:416:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    403:416:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():315:315 -> onClick
+    403:416:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    403:416:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    417:419:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():304:304 -> onClick
-    417:419:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    417:419:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    417:419:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():317:317 -> onClick
+    417:419:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    417:419:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    420:429:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():305:305 -> onClick
-    420:429:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    420:429:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    420:430:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():318:318 -> onClick
+    420:430:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    420:430:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    430:440:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():330:330 -> onClick
-    430:440:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    430:440:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    431:441:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():343:343 -> onClick
+    431:441:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    431:441:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    441:443:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():337:337 -> onClick
-    441:443:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    441:443:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    442:444:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():350:350 -> onClick
+    442:444:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    442:444:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    444:446:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():338:338 -> onClick
-    444:446:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    444:446:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    445:447:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():351:351 -> onClick
+    445:447:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    445:447:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    447:450:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():339:339 -> onClick
-    447:450:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$4(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):280 -> onClick
-    447:450:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    448:451:void com.mosl.tabapp.login.LoginActivity.showConsentDialog():352:352 -> onClick
+    448:451:void com.mosl.tabapp.login.LoginActivity.showDiscloserDilog$lambda$5(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):293 -> onClick
+    448:451:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    451:454:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
+    452:455:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    455:457:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
-    455:457:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    456:458:void com.mosl.tabapp.login.LoginActivity.showExitPopup$lambda$2(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
+    456:458:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    458:464:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):356:356 -> onClick
-    458:464:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    459:462:void com.mosl.tabapp.login.LoginActivity.showExitPopup$lambda$2(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):196:196 -> onClick
+    459:462:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
-    465:470:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$7(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):357:357 -> onClick
-    465:470:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+    463:466:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0:0 -> onClick
+      # {"id":"com.android.tools.r8.synthesized"}
+    467:469:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$8(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):0:0 -> onClick
+    467:469:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+      # {"id":"com.android.tools.r8.synthesized"}
+    470:476:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$8(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):369:369 -> onClick
+    470:476:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
+      # {"id":"com.android.tools.r8.synthesized"}
+    477:482:void com.mosl.tabapp.login.LoginActivity.buildAlertMessageNoGps$lambda$8(com.mosl.tabapp.login.LoginActivity,android.content.DialogInterface,int):370:370 -> onClick
+    477:482:void com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$4dae2bd71d3d9f71a94cf9dcea8c6a1c65bded8eee452ee7f79aa9ab69fdc7af$0.onClick$bridge(android.content.DialogInterface,int):0 -> onClick
       # {"id":"com.android.tools.r8.synthesized"}
 com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1 -> sl.b:
 # {"id":"sourceFile","fileName":"LoginActivity.kt"}
     com.mosl.tabapp.login.LoginActivity this$0 -> a
-    1:4:void accept(java.lang.Object):493:493 -> accept
+    1:4:void accept(java.lang.Object):506:506 -> accept
     5:7:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):0:0 -> accept
-    5:7:void accept(java.lang.Object):493 -> accept
-    8:11:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494:494 -> accept
-    8:11:void accept(java.lang.Object):493 -> accept
-    12:14:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74:74 -> accept
-    12:14:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    12:14:void accept(java.lang.Object):493 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):683:683 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    15:18:void accept(java.lang.Object):493 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):684:684 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    19:25:void accept(java.lang.Object):493 -> accept
-    26:30:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):685:685 -> accept
-    26:30:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    26:30:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    26:30:void accept(java.lang.Object):493 -> accept
-    31:47:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):686:686 -> accept
-    31:47:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    31:47:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    31:47:void accept(java.lang.Object):493 -> accept
-    48:59:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):501:501 -> accept
-    48:59:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    48:59:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    48:59:void accept(java.lang.Object):493 -> accept
-    60:63:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):686:686 -> accept
-    60:63:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    60:63:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    60:63:void accept(java.lang.Object):493 -> accept
-    64:65:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):501:501 -> accept
-    64:65:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    64:65:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    64:65:void accept(java.lang.Object):493 -> accept
-    66:69:com.mosl.mobile.user.login.LoginRepositoryImpl com.mosl.tabapp.login.LoginActivity.getLoginRepository():107:107 -> accept
-    66:69:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):502 -> accept
-    66:69:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    66:69:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    66:69:void accept(java.lang.Object):493 -> accept
+    5:7:void accept(java.lang.Object):506 -> accept
+    8:11:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507:507 -> accept
+    8:11:void accept(java.lang.Object):506 -> accept
+    12:14:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76:76 -> accept
+    12:14:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    12:14:void accept(java.lang.Object):506 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):696:696 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    15:18:void accept(java.lang.Object):506 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):697:697 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    19:25:void accept(java.lang.Object):506 -> accept
+    26:30:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):698:698 -> accept
+    26:30:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    26:30:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    26:30:void accept(java.lang.Object):506 -> accept
+    31:47:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):699:699 -> accept
+    31:47:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    31:47:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    31:47:void accept(java.lang.Object):506 -> accept
+    48:59:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):514:514 -> accept
+    48:59:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    48:59:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    48:59:void accept(java.lang.Object):506 -> accept
+    60:63:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):699:699 -> accept
+    60:63:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    60:63:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    60:63:void accept(java.lang.Object):506 -> accept
+    64:65:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):514:514 -> accept
+    64:65:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    64:65:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    64:65:void accept(java.lang.Object):506 -> accept
+    66:69:com.mosl.mobile.user.login.LoginRepositoryImpl com.mosl.tabapp.login.LoginActivity.getLoginRepository():109:109 -> accept
+    66:69:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):515 -> accept
+    66:69:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    66:69:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    66:69:void accept(java.lang.Object):506 -> accept
     70:75:io.reactivex.rxjava3.core.Observable com.mosl.mobile.user.login.LoginRepositoryImpl.fetchDigitalSalesKitChildMenu():45:45 -> accept
-    70:75:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):502 -> accept
-    70:75:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    70:75:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    70:75:void accept(java.lang.Object):493 -> accept
-    76:83:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):502:502 -> accept
-    76:83:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    76:83:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    76:83:void accept(java.lang.Object):493 -> accept
-    84:94:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):503:503 -> accept
-    84:94:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    84:94:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    84:94:void accept(java.lang.Object):493 -> accept
-    95:99:com.mosl.mobile.user.login.LoginRepositoryImpl com.mosl.tabapp.login.LoginActivity.getLoginRepository():107:107 -> accept
-    95:99:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):502 -> accept
-    95:99:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    95:99:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    95:99:void accept(java.lang.Object):493 -> accept
-    100:103:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):689:689 -> accept
-    100:103:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    100:103:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    100:103:void accept(java.lang.Object):493 -> accept
-    104:105:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):690:690 -> accept
-    104:105:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    104:105:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    104:105:void accept(java.lang.Object):493 -> accept
-    106:109:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):508:508 -> accept
-    106:109:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    106:109:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):494 -> accept
-    106:109:void accept(java.lang.Object):493 -> accept
+    70:75:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):515 -> accept
+    70:75:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    70:75:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    70:75:void accept(java.lang.Object):506 -> accept
+    76:83:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):515:515 -> accept
+    76:83:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    76:83:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    76:83:void accept(java.lang.Object):506 -> accept
+    84:94:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):516:516 -> accept
+    84:94:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    84:94:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    84:94:void accept(java.lang.Object):506 -> accept
+    95:99:com.mosl.mobile.user.login.LoginRepositoryImpl com.mosl.tabapp.login.LoginActivity.getLoginRepository():109:109 -> accept
+    95:99:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):515 -> accept
+    95:99:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    95:99:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    95:99:void accept(java.lang.Object):506 -> accept
+    100:103:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):702:702 -> accept
+    100:103:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    100:103:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    100:103:void accept(java.lang.Object):506 -> accept
+    104:105:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):703:703 -> accept
+    104:105:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    104:105:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    104:105:void accept(java.lang.Object):506 -> accept
+    106:109:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitParentData(com.mosl.commons.data.UiModel):521:521 -> accept
+    106:109:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitParentData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    106:109:void com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1.accept(com.mosl.commons.data.UiModel):507 -> accept
+    106:109:void accept(java.lang.Object):506 -> accept
 com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2 -> sl.c:
 # {"id":"sourceFile","fileName":"LoginActivity.kt"}
     com.mosl.tabapp.login.LoginActivity this$0 -> a
-    1:4:void accept(java.lang.Object):503:503 -> accept
+    1:4:void accept(java.lang.Object):516:516 -> accept
     5:7:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):0:0 -> accept
-    5:7:void accept(java.lang.Object):503 -> accept
-    8:11:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504:504 -> accept
-    8:11:void accept(java.lang.Object):503 -> accept
-    12:14:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74:74 -> accept
-    12:14:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    12:14:void accept(java.lang.Object):503 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):693:693 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    15:18:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    15:18:void accept(java.lang.Object):503 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):694:694 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    19:25:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    19:25:void accept(java.lang.Object):503 -> accept
-    26:32:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):514:514 -> accept
-    26:32:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    26:32:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    26:32:void accept(java.lang.Object):503 -> accept
-    33:41:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):695:695 -> accept
-    33:41:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    33:41:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    33:41:void accept(java.lang.Object):503 -> accept
-    42:55:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):696:696 -> accept
-    42:55:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    42:55:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    42:55:void accept(java.lang.Object):503 -> accept
-    56:57:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):697:697 -> accept
-    56:57:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    56:57:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    56:57:void accept(java.lang.Object):503 -> accept
-    58:62:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):698:698 -> accept
-    58:62:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    58:62:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    58:62:void accept(java.lang.Object):503 -> accept
-    63:81:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):699:699 -> accept
-    63:81:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    63:81:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    63:81:void accept(java.lang.Object):503 -> accept
-    82:96:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):516:516 -> accept
-    82:96:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    82:96:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    82:96:void accept(java.lang.Object):503 -> accept
+    5:7:void accept(java.lang.Object):516 -> accept
+    8:11:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517:517 -> accept
+    8:11:void accept(java.lang.Object):516 -> accept
+    12:14:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76:76 -> accept
+    12:14:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    12:14:void accept(java.lang.Object):516 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):706:706 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    15:18:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    15:18:void accept(java.lang.Object):516 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):707:707 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    19:25:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    19:25:void accept(java.lang.Object):516 -> accept
+    26:32:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):527:527 -> accept
+    26:32:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    26:32:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    26:32:void accept(java.lang.Object):516 -> accept
+    33:41:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):708:708 -> accept
+    33:41:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    33:41:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    33:41:void accept(java.lang.Object):516 -> accept
+    42:55:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):709:709 -> accept
+    42:55:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    42:55:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    42:55:void accept(java.lang.Object):516 -> accept
+    56:57:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):710:710 -> accept
+    56:57:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    56:57:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    56:57:void accept(java.lang.Object):516 -> accept
+    58:62:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):711:711 -> accept
+    58:62:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    58:62:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    58:62:void accept(java.lang.Object):516 -> accept
+    63:81:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):712:712 -> accept
+    63:81:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    63:81:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    63:81:void accept(java.lang.Object):516 -> accept
+    82:96:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):529:529 -> accept
+    82:96:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    82:96:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    82:96:void accept(java.lang.Object):516 -> accept
     97:102:boolean kotlin.text.StringsKt__StringsJVMKt.equals$default(java.lang.String,java.lang.String,boolean,int,java.lang.Object):53:53 -> accept
-    97:102:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):516 -> accept
-    97:102:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    97:102:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    97:102:void accept(java.lang.Object):503 -> accept
-    103:106:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):699:699 -> accept
-    103:106:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    103:106:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    103:106:void accept(java.lang.Object):503 -> accept
-    107:115:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):701:701 -> accept
-    107:115:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    107:115:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    107:115:void accept(java.lang.Object):503 -> accept
-    116:129:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):702:702 -> accept
-    116:129:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    116:129:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    116:129:void accept(java.lang.Object):503 -> accept
-    130:131:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):703:703 -> accept
-    130:131:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    130:131:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    130:131:void accept(java.lang.Object):503 -> accept
-    132:133:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):518:518 -> accept
-    132:133:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    132:133:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    132:133:void accept(java.lang.Object):503 -> accept
-    134:135:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):519:519 -> accept
-    134:135:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    134:135:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    134:135:void accept(java.lang.Object):503 -> accept
-    136:137:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):520:520 -> accept
-    136:137:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    136:137:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    136:137:void accept(java.lang.Object):503 -> accept
-    138:139:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):521:521 -> accept
-    138:139:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    138:139:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    138:139:void accept(java.lang.Object):503 -> accept
-    140:141:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):522:522 -> accept
-    140:141:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    140:141:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    140:141:void accept(java.lang.Object):503 -> accept
-    142:144:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):518:518 -> accept
-    142:144:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    142:144:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    142:144:void accept(java.lang.Object):503 -> accept
-    145:148:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):703:703 -> accept
-    145:148:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    145:148:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    145:148:void accept(java.lang.Object):503 -> accept
-    149:150:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):515:515 -> accept
-    149:150:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    149:150:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    149:150:void accept(java.lang.Object):503 -> accept
-    151:152:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):525:525 -> accept
-    151:152:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    151:152:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    151:152:void accept(java.lang.Object):503 -> accept
-    153:156:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):697:697 -> accept
-    153:156:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    153:156:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    153:156:void accept(java.lang.Object):503 -> accept
-    157:160:com.mosl.mobile.user.login.UserManager com.mosl.tabapp.login.LoginActivity.getUserManager():87:87 -> accept
-    157:160:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):526 -> accept
-    157:160:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    157:160:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    157:160:void accept(java.lang.Object):503 -> accept
-    161:167:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):526:526 -> accept
-    161:167:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    161:167:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    161:167:void accept(java.lang.Object):503 -> accept
-    168:171:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):528:528 -> accept
-    168:171:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    168:171:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    168:171:void accept(java.lang.Object):503 -> accept
-    172:177:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):526:526 -> accept
-    172:177:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    172:177:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    172:177:void accept(java.lang.Object):503 -> accept
-    178:181:com.mosl.mobile.user.login.UserManager com.mosl.tabapp.login.LoginActivity.getUserManager():87:87 -> accept
-    178:181:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):526 -> accept
-    178:181:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    178:181:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    178:181:void accept(java.lang.Object):503 -> accept
-    182:185:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):514:514 -> accept
-    182:185:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    182:185:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    182:185:void accept(java.lang.Object):503 -> accept
-    186:189:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):707:707 -> accept
-    186:189:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    186:189:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    186:189:void accept(java.lang.Object):503 -> accept
-    190:191:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):708:708 -> accept
-    190:191:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    190:191:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    190:191:void accept(java.lang.Object):503 -> accept
-    192:195:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):531:531 -> accept
-    192:195:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):74 -> accept
-    192:195:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):504 -> accept
-    192:195:void accept(java.lang.Object):503 -> accept
+    97:102:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):529 -> accept
+    97:102:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    97:102:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    97:102:void accept(java.lang.Object):516 -> accept
+    103:106:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):712:712 -> accept
+    103:106:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    103:106:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    103:106:void accept(java.lang.Object):516 -> accept
+    107:115:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):714:714 -> accept
+    107:115:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    107:115:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    107:115:void accept(java.lang.Object):516 -> accept
+    116:129:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):715:715 -> accept
+    116:129:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    116:129:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    116:129:void accept(java.lang.Object):516 -> accept
+    130:131:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):716:716 -> accept
+    130:131:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    130:131:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    130:131:void accept(java.lang.Object):516 -> accept
+    132:133:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):531:531 -> accept
+    132:133:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    132:133:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    132:133:void accept(java.lang.Object):516 -> accept
+    134:135:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):532:532 -> accept
+    134:135:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    134:135:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    134:135:void accept(java.lang.Object):516 -> accept
+    136:137:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):533:533 -> accept
+    136:137:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    136:137:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    136:137:void accept(java.lang.Object):516 -> accept
+    138:139:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):534:534 -> accept
+    138:139:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    138:139:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    138:139:void accept(java.lang.Object):516 -> accept
+    140:141:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):535:535 -> accept
+    140:141:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    140:141:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    140:141:void accept(java.lang.Object):516 -> accept
+    142:144:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):531:531 -> accept
+    142:144:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    142:144:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    142:144:void accept(java.lang.Object):516 -> accept
+    145:148:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):716:716 -> accept
+    145:148:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    145:148:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    145:148:void accept(java.lang.Object):516 -> accept
+    149:150:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):528:528 -> accept
+    149:150:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    149:150:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    149:150:void accept(java.lang.Object):516 -> accept
+    151:152:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):538:538 -> accept
+    151:152:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    151:152:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    151:152:void accept(java.lang.Object):516 -> accept
+    153:156:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):710:710 -> accept
+    153:156:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    153:156:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    153:156:void accept(java.lang.Object):516 -> accept
+    157:160:com.mosl.mobile.user.login.UserManager com.mosl.tabapp.login.LoginActivity.getUserManager():89:89 -> accept
+    157:160:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):539 -> accept
+    157:160:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    157:160:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    157:160:void accept(java.lang.Object):516 -> accept
+    161:167:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):539:539 -> accept
+    161:167:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    161:167:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    161:167:void accept(java.lang.Object):516 -> accept
+    168:171:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):541:541 -> accept
+    168:171:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    168:171:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    168:171:void accept(java.lang.Object):516 -> accept
+    172:177:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):539:539 -> accept
+    172:177:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    172:177:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    172:177:void accept(java.lang.Object):516 -> accept
+    178:181:com.mosl.mobile.user.login.UserManager com.mosl.tabapp.login.LoginActivity.getUserManager():89:89 -> accept
+    178:181:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):539 -> accept
+    178:181:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    178:181:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    178:181:void accept(java.lang.Object):516 -> accept
+    182:185:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):527:527 -> accept
+    182:185:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    182:185:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    182:185:void accept(java.lang.Object):516 -> accept
+    186:189:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):720:720 -> accept
+    186:189:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    186:189:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    186:189:void accept(java.lang.Object):516 -> accept
+    190:191:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):721:721 -> accept
+    190:191:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    190:191:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    190:191:void accept(java.lang.Object):516 -> accept
+    192:195:void com.mosl.tabapp.login.LoginActivity.renderDigitalSalesKitChildData(com.mosl.commons.data.UiModel):544:544 -> accept
+    192:195:void com.mosl.tabapp.login.LoginActivity.access$renderDigitalSalesKitChildData(com.mosl.tabapp.login.LoginActivity,com.mosl.commons.data.UiModel):76 -> accept
+    192:195:void com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2.accept(com.mosl.commons.data.UiModel):517 -> accept
+    192:195:void accept(java.lang.Object):516 -> accept
 com.mosl.tabapp.login.LoginActivityModule$1 -> sl.d:
     0:65535:void onBackNavigation():31:31 -> a
     0:65535:void onPageOpened(androidx.fragment.app.Fragment,boolean):27:27 -> b
@@ -531133,9 +531181,9 @@ com.mosl.tabapp.login.otpverification.OtpVerificationFragment -> com.mosl.tabapp
     54:56:void setIsshowTimer(boolean):69:69 -> <init>
     54:56:void <init>():69 -> <init>
     6:20:void renderResend(com.mosl.commons.data.UiModel):229:229 -> A2
-    21:24:void com.mosl.tabapp.login.LoginActivity.toggleProgressBar(boolean):553:553 -> A2
+    21:24:void com.mosl.tabapp.login.LoginActivity.toggleProgressBar(boolean):566:566 -> A2
     21:24:void renderResend(com.mosl.commons.data.UiModel):229 -> A2
-    25:27:void com.mosl.tabapp.login.LoginActivity.toggleProgressBar(boolean):555:555 -> A2
+    25:27:void com.mosl.tabapp.login.LoginActivity.toggleProgressBar(boolean):568:568 -> A2
     25:27:void renderResend(com.mosl.commons.data.UiModel):229 -> A2
     28:35:void com.mosl.commons.data.UiModelHelper.onFailure(com.mosl.commons.data.UiModel,kotlin.jvm.functions.Function1):37:37 -> A2
     28:35:void renderResend(com.mosl.commons.data.UiModel):231 -> A2
@@ -531163,7 +531211,7 @@ com.mosl.tabapp.login.otpverification.OtpVerificationFragment -> com.mosl.tabapp
     119:122:void renderResend(com.mosl.commons.data.UiModel):245 -> A2
     123:125:void com.mosl.tabapp.login.LoginActivity.fnShowAlert(java.lang.String):0:0 -> A2
     123:125:void renderResend(com.mosl.commons.data.UiModel):245 -> A2
-    126:129:void com.mosl.tabapp.login.LoginActivity.fnShowAlert(java.lang.String):548:548 -> A2
+    126:129:void com.mosl.tabapp.login.LoginActivity.fnShowAlert(java.lang.String):561:561 -> A2
     126:129:void renderResend(com.mosl.commons.data.UiModel):245 -> A2
     130:140:void renderResend(com.mosl.commons.data.UiModel):248:248 -> A2
     141:149:void renderResend(com.mosl.commons.data.UiModel):249:249 -> A2

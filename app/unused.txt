@@ -88458,6 +88458,7 @@ com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl:
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$151fdec31bf6c5e8dd4aff5dde93e9ead6cebc554657f9a79fc6846f9b24179d$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$1
+com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$1
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$4$d72b5c49e2dbe68ed163cb99a69613163b840bbc28f24fdf6ac6d154a897f015$0
@@ -88467,6 +88468,7 @@ com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
     public final void buildAlertMessageNoGps()
+    public static void checkKeyLogger()
     public final boolean checkMapServices()
     public final void fetchDigitalSalesKitParentMenu()
     public final com.mosl.mobile.user.model.LoginInfo fnGetLoginData()
@@ -88483,6 +88485,7 @@ com.mosl.tabapp.login.LoginActivity:
     public final com.mosl.mobile.user.login.UserManager getUserManager()
     public final boolean isMapsEnabled()
     public final boolean isServicesOK()
+    public static boolean isUsingCustomInputMethod()
     public final void renderDigitalSalesKitChildData()
     public final void renderDigitalSalesKitParentData()
     public static void setBinding$14()
@@ -88492,6 +88495,7 @@ com.mosl.tabapp.login.LoginActivity:
     public final void setUpView()
     public static void showConsentDialog()
     public static void showDiscloserDilog()
+    public static void showExitPopup()
     public final void toggleProgressBar(boolean)
 com.mosl.tabapp.login.LoginActivityModule
 com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:
