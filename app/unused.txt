@@ -30571,21 +30571,17 @@ com.mosl.mobile.user.login.LoginRepositoryImpl_Factory:
     public static com.mosl.mobile.user.login.LoginRepositoryImpl newInstance(com.mosl.mobile.user.login.AppUserRepository,com.mosl.mobile.user.login.UserManagerImpl)
 com.mosl.mobile.user.login.UserCache:
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
     public abstract void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl_Factory:
     public static com.mosl.mobile.user.login.UserCacheImpl newInstance(com.google.gson.Gson,com.mosl.mobile.user.helper.UserPrefStore,com.mosl.app.core.prefs.IntegerPreference)
 com.mosl.mobile.user.login.UserManager:
     public abstract void fnSetIsOtpEnable(boolean)
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
 com.mosl.mobile.user.login.UserManagerImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public final void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserManagerImpl_Factory:
     public static com.mosl.mobile.user.login.UserManagerImpl newInstance(com.mosl.mobile.user.login.UserCache)
@@ -31910,14 +31906,16 @@ com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest:
     public final java.lang.String component30()
     public final java.lang.String component31()
     public final java.lang.String component32()
+    public final java.lang.String component33()
+    public final java.lang.String component34()
     public final java.lang.String component4()
     public final java.lang.String component5()
     public final java.lang.String component6()
     public final java.lang.String component7()
     public final java.lang.String component8()
     public final java.lang.String component9()
-    public final com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy$default(com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
+    public final com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public static synthetic com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy$default(com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
     public final java.lang.String getBandhanBankEmployeeCode()
     public final java.lang.String getBgId()
     public final java.lang.String getBranchCode()
@@ -31932,6 +31930,8 @@ com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest:
     public final java.lang.String getIsBandhanBankEmployee()
     public final java.lang.String getLeadAccountTypeId()
     public final java.lang.String getLeadCategoryID()
+    public final java.lang.String getLeadCategoryId()
+    public final java.lang.String getLeadCategoryText()
     public final java.lang.String getLeadName()
     public final java.lang.String getLeadSourceDetails()
     public final java.lang.String getLeadSourceDetailsID()
@@ -88471,7 +88471,6 @@ com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1:
 com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
-    public boolean isCallOtp
     public final void buildAlertMessageNoGps()
     public static void checkKeyLogger()
     public final boolean checkMapServices()
@@ -88508,8 +88507,6 @@ com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:
     public final com.mosl.navigator.NavigationCallback get()
 com.mosl.tabapp.login.LoginActivityModule_ProvidePermissionCheckHelperFactory
 com.mosl.tabapp.login.LoginActivityUiEvent$Companion
-com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin:
-    public static final com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin INSTANCE
 com.mosl.tabapp.login.LoginActivityUiEvent$OnOtpSucess:
     public static com.mosl.mobile.user.model.User getUser()
 com.mosl.tabapp.login.LoginActivityUiEvent:

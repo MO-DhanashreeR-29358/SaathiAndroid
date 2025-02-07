@@ -22,3 +22,10 @@ Release Note :  1. SAAT- 2542 : Mobile app rebranding
                     this generate small video upload to drive and set its link to solve this policy issue
                 6. Also getting READ_MEDIA_IMAGE and READ_MEDIA_VIDEO declaration issue. mark the declaration and send to review
 
+---------------------------------------------------------------------------------------------
+Version : 2.9.5
+Update Date : 8.2.2025
+Release Note :  1. SAAT- 1335 : Indirect dashboard IFA and FOCO
+                2. Resolve issue rooted device by adding FridaDetect classs
+                3. Resolve issue Key logger
+                4. Lead creation bug fixes for Indirect Foco user.
