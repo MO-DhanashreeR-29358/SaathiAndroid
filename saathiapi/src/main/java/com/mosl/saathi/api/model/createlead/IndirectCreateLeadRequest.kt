@@ -34,7 +34,10 @@ data class IndirectCreateLeadRequest(
     @SerializedName("AccountTypeID") val leadAccountTypeId: String = "-1",
     @SerializedName("ChipsEventIdName") val chipsEventIdName: String? = "",
     @SerializedName("IsBandhanBankEmp") val IsBandhanBankEmployee: String? = "",
-    @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String? = ""
+    @SerializedName("BandhanBankEmployeeCode") val BandhanBankEmployeeCode: String? = "",
+    @SerializedName("LeadCategoryID") val leadCategoryId: String? = "",
+    @SerializedName("LeadCategoryText") val LeadCategoryText: String? = ""
+
 )
 
 data class IndirectCreateLeadContact(
@@ -47,7 +50,7 @@ data class IndirectCreateLeadContact(
     @SerializedName("MobileRi") val mobileNoRi: String = "",
     @SerializedName("LandlineNo") val landLineNo: String = "",
     @SerializedName("EKYCMobileNo") val ekycMobileNo: String = "",
-    @SerializedName("PanNumber") val panNo: String = "",
+    @SerializedName("PanNumber") val panNo: String? = "",
     @SerializedName("AadharNumber") val aadharNo: String = "",
     @SerializedName("IsSameAsAbove") val sameAsAbove: Boolean = false,
     @SerializedName("contactAddress") val addresses: List<CreateLeadAddressDetails>
