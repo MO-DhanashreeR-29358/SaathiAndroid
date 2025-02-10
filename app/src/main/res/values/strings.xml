@@ -61,6 +61,7 @@
     <string name="MOSL_MENU_QUERY_FORM">Raise Your Query</string>
     <string name="MOSL_MENU_REACTIVATION_REQ">Reactivation Request
 Page </string>
+    <string name="MOSL_MENU_ADV_SEARCH">Advance Search</string>
     <string name="txt_lable_diy_link">DIY Link</string>
     <string name="SELECTED_WEEK">Select Week-Day(s) on which it should be repeated</string>
     <string name="NEXT">Next</string>
@@ -803,5 +804,6 @@ Page </string>
     <string name="label_search_lead_id">Search Lead Id</string>
     <string name="label_search_FCode">Enter Franchisee Code</string>
     <string name="label_FCode">Franchiseee Code</string>
+    <string name="label_quick">Quick Search</string>
 
 </resources>

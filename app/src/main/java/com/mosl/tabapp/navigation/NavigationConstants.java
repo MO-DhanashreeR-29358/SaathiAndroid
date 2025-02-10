@@ -150,4 +150,6 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS=69;
 
+    int NAVIGATE_TO_ADVANCE_SEARCH=70;
+
 }

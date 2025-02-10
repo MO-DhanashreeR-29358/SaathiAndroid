@@ -62,6 +62,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
@@ -90,6 +91,7 @@ open class MenuDataSourceImpl @Inject constructor(
         } else {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
@@ -128,6 +130,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -153,6 +156,7 @@ open class MenuDataSourceImpl @Inject constructor(
         } else {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                  // hide as per requirement
                  // getSip(),
                 getDormantReactivationCreate(),
@@ -188,6 +192,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
@@ -217,6 +222,7 @@ open class MenuDataSourceImpl @Inject constructor(
         } else {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
                 getDeleteRequest(),
                 getLASAccount(),
@@ -698,6 +704,14 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_QUERY_FORM,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_QUERY_FORM
+        )
+    }
+    private fun getAdvanceSearch():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_search_black_24dp,
+            label = R.string.MOSL_MENU_ADV_SEARCH,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH
         )
     }
 
