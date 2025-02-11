@@ -23,4 +23,10 @@ interface QuickSearchTabView :BaseView {
     fun fnRenderSearchButtonClicked()
 
     fun fnRenderResetButtonClicked()
+    fun onSetAppointmentClick(): Observable<QuickSearchUiEvent.SetAppointmentClick>
+    fun onCreateMeetingClicked(): Observable<QuickSearchUiEvent.CreateMeetingClick>
+    fun onViewDetailsClicked():Observable<QuickSearchUiEvent.ViewDetailsClicked>
+    fun getLeadId(): String
+
+    fun getUcid(): String
 }

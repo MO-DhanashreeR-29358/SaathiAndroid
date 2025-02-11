@@ -23,7 +23,7 @@ data class AdvanceSearchData(
 	val clientProfile: Any? = null,
 
 	@SerializedName("ProductName")
-	val productName: Any? = null,
+	val productName: String? = null,
 
 	@SerializedName("StateName")
 	val stateName: Any? = null,

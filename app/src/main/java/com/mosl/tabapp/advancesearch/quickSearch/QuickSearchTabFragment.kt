@@ -29,6 +29,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput
+import com.mosl.tabapp.databinding.DialogAdvanceSearchViewBinding
 import com.mosl.tabapp.databinding.DialogIndirectLeadviewBinding
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadViewDetailUiEvent
 import javax.inject.Inject
@@ -41,6 +42,7 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
     private lateinit var tableRowAdapter: TableRowAdapter<QuickSearchTableRow>
     private val Subject= PublishSubject.create<QuickSearchUiEvent>()
     var isLeadSearch:Boolean=true
+    private var leadId: String = "0"
     override fun getLayout() = R.layout.frag_tab_quick_search
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -131,8 +133,9 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
     }
 
     override fun fnRenderTableRowClicked(strLeadId: String) {
+        leadId=strLeadId
         Dialog(requireContext()).apply {
-            val dialogBinding = DialogIndirectLeadviewBinding.inflate(layoutInflater)
+            val dialogBinding = DialogAdvanceSearchViewBinding.inflate(layoutInflater)
             requestWindowFeature(Window.FEATURE_NO_TITLE)
             setCanceledOnTouchOutside(false)
             setContentView(dialogBinding.root)
@@ -142,25 +145,19 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            dialogBinding.ivCall.visibility=View.GONE
-            dialogBinding.ivSms.visibility=View.GONE
 
-//            dialogBinding.ivCreateMeeting.setOnClickListener {
-//                dismiss()
-//                subject.onNext(IndirectLeadViewDetailUiEvent.CreateMeetingClick(createMeetingId))
-//            }
-//            dialogBinding.ivSetAppointment.setOnClickListener {
-//                dismiss()
-//                subject.onNext(IndirectLeadViewDetailUiEvent.SetAppointmentClick)
-//            }
-//            dialogBinding.ivCall.setOnClickListener {
-//                dismiss()
-//                subject.onNext(IndirectLeadViewDetailUiEvent.CallClick)
-//            }
-//            dialogBinding.ivSms.setOnClickListener {
-//                dismiss()
-//                subject.onNext(IndirectLeadViewDetailUiEvent.SMSClick)
-//            }
+            dialogBinding.ivCreateMeeting.setOnClickListener {
+                dismiss()
+                Subject.onNext(QuickSearchUiEvent.CreateMeetingClick(0))
+            }
+            dialogBinding.ivSetAppointment.setOnClickListener {
+                dismiss()
+                Subject.onNext(QuickSearchUiEvent.SetAppointmentClick)
+            }
+            dialogBinding.ivView.setOnClickListener {
+                dismiss()
+                Subject.onNext(QuickSearchUiEvent.ViewDetailsClicked)
+            }
             dialogBinding.ivClose.setOnClickListener { dismiss() }
 
         }
@@ -301,5 +298,25 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                  binding.edtUcid.setText("")
                binding.edtfamilyUcid.setText("")
         }
+    }
+
+    override fun onSetAppointmentClick(): Observable<QuickSearchUiEvent.SetAppointmentClick> {
+        return Subject.ofType()
+    }
+
+    override fun onCreateMeetingClicked(): Observable<QuickSearchUiEvent.CreateMeetingClick> {
+        return Subject.ofType()
+    }
+
+    override fun onViewDetailsClicked(): Observable<QuickSearchUiEvent.ViewDetailsClicked> {
+        return Subject.ofType()
+    }
+
+    override fun getLeadId(): String {
+        return  leadId
+    }
+
+    override fun getUcid(): String {
+        return  "0"
     }
 }

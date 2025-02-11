@@ -50,60 +50,28 @@ leadID = objAdvanceSearchInput.leadId,
                 val first = jsonArray.getJSONObject(0)
                 val iterator = first.keys()
                 while (iterator.hasNext()) {
-                    val header = iterator.next()
-                        .toString()
-                    if(!header.equals("Equity",true) && !header.equals("CallDate",true)
-                        && !header.equals("CallTime",true) && !header.equals("ProductID",true)
-                        && !header.equals("PAN",true) && !header.equals("EquityCode",true)
-                        && !header.equals("UCID",true) && !header.equals("EquityAdvisor",true)
-                        && !header.equals("ClientCode",true) && !header.equals("FamilyUCID",true)
-                        && !header.equals("EncLeadID",true) && !header.equals("EncUCID",true)
-                        && !header.equals("SourceID",true) && !header.equals("ProspectSourceID",true)
-                        && !header.equals("InterestedInID",true) && !header.equals("LeadProfileID",true)
-                        && !header.equals("StageCodeID",true) && !header.equals("StatusNameID",true)
-                        && !header.equals("StateName",true) && !header.equals("StateID",true)
-                        && !header.equals("CityID",true) && !header.equals("CityName",true)
-                        && !header.equals("LeadTypeID",true) && !header.equals("MeetingID",true)
-                        && !header.equals("ActionableID",true) && !header.equals("ClientProfileID",true)
-                        && !header.equals("ClientProfile",true) && !header.equals("ProductCategoryID",true)
-                        && !header.equals("ClientStatusID",true) && !header.equals("DPValueID",true)
-                        && !header.equals("DPValue",true) && !header.equals("AumValue",true)
-                        && !header.equals("AumID",true) && !header.equals("SourceList",true)
-                        && !header.equals("ProspectSourceList",true) && !header.equals("InterestedInList",true)
-                        && !header.equals("LeadProfileList",true) && !header.equals("StageCodeList",true)
-                        && !header.equals("StatusNameList",true) && !header.equals("CityList",true)
-                        && !header.equals("LeadTypeList",true) && !header.equals("MeetingCallList",true)
-                        && !header.equals("ActionablesList",true) && !header.equals("ClientProfileList",true)
-                        && !header.equals("ProductCategoryList",true) && !header.equals("ClientStatusList",true)
-                        && !header.equals("DPValueList",true) && !header.equals("AUMList",true)
-                        && !header.equals("ActivityDate",true) && !header.equals("LeadAssignedDate",true)
-                        && !header.equals("Status",true) && !header.equals("FirstTradedDate",true)
-                        && !header.equals("LastMeetingDate",true) && !header.equals("CreatedBy",true)
-                        && !header.equals("res",true) && !header.equals("AdvancedSearchID",true)
-                        && !header.equals("Branch",true) && !header.equals("SubbrokerCode",true)
-                        && !header.equals("AUM",true) && !header.equals("MTDRevenue",true)
-                        && !header.equals("SearchTypeId",true) && !header.equals("ActivityTypeId",true)
-                        && !header.equals("ProductName",true) && !header.equals("SavedSearchName",true)
-
-
-                        )
+                    val header = iterator.next().toString()
+                    if(  header.equals("Stage",true)
+                        ||header.equals("InterestedIn",true) || header.equals("Source",true)
+                        ||header.equals("ProspectSource",true) || header.equals("City",true)
+                        ||header.equals("Profile",true) || header.equals("AadhaarNumber",true)
+                        ||header.equals("Status",true) || header.equals("AssignedTo",true)
+                        || header.equals("ProductName",true))
                     {
-
-                            colHeaders.add(com.mosl.mobile.domain.snapshot.ColHeader(header))
-
+                        colHeaders.add(com.mosl.mobile.domain.snapshot.ColHeader(header))
                     }
                 }
-
+                colHeaders.add(0,com.mosl.mobile.domain.snapshot.ColHeader("LeadID"))
+                colHeaders.add(1,com.mosl.mobile.domain.snapshot.ColHeader("Name"))
+                colHeaders.add(2,com.mosl.mobile.domain.snapshot.ColHeader("Mobile"))
+                colHeaders.add(3,com.mosl.mobile.domain.snapshot.ColHeader("Email"))
                 val headers = colHeaders.map {
                     it.copy(index = response.indexOf(it.label))
-                }
-                    .sortedBy { it.index }
-                    .map { it.label }
+                }.map { it.label }
 
                 val data: ArrayList<AdvanceSearchData> = ArrayList()
                 for (i in 0 until jsonArray.length()) {
                     val json = jsonArray.getJSONObject(i)
-                    Log.d("json",""+Gson().toJson(json))
                     val values: ArrayList<Any> = ArrayList()
                     val hasMap: MutableMap<String, Any> = mutableMapOf<String, Any>()
                     headers.forEach { header ->
