@@ -1,5 +1,6 @@
 package com.mosl.tabapp.advancesearch.quickSearch
 
+import com.google.gson.Gson
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.advanceSearch.AdvanceSearchRepository
@@ -12,14 +13,18 @@ class QuickSearchTabPresenter @Inject constructor(
     view: QuickSearchTabView,
     val navigator: ScreenNavigatorImpl,
     val userManager: UserManager,
-    val repo:AdvanceSearchRepository
+    val repo:AdvanceSearchRepository,
+    val validator:QuickSearchTabValidator
 ): BasePresenter<QuickSearchTabView>(view) {
     override fun start() {
 
         onFetchCalled().map {
             view.fnGetSearchInput()
-        }.switchMap {
-            repo.fnGetAdvanceSearch(it).compose(applyUiModel())
+        }.flatMap {
+                input->validator.validate(input)
+            .flatMap {
+                repo.fnGetAdvanceSearch(it)
+            }.compose(applyUiModel())
         }.subscribe(view::renderData, Timber::e)
             .addTo(disposable)
 

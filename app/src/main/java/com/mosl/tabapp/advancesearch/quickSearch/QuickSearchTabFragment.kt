@@ -107,8 +107,7 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
         binding.tableWrapper.toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure { error ->
-            binding.tableWrapper.showError(error)
-
+            showOnFailurePopup(error)
         }
 
         uiModel.onSuccess { data ->
@@ -214,14 +213,57 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
             )
         }
         else{
+
+
+            var clientCode:String?=null
+
+            if(binding.edtclientCode.text.toString().isNotEmpty())
+            {
+                clientCode= binding.edtclientCode.text.toString()
+            }
+
+            var mobileNo:String?=null
+            if(binding.edtCMobileNumber.text.toString().isNotEmpty())
+            {
+                mobileNo=binding.edtCMobileNumber.text.toString()
+            }
+            var emailId:String?=null
+            if(binding.edtCEmailAddress.text.toString().isNotEmpty())
+            {
+                emailId=binding.edtCEmailAddress.text.toString()
+            }
+
+            var aadharNo:String?=null
+
+            if(binding.edtCAadharNo.text.toString().isNotEmpty())
+            {
+                aadharNo = binding.edtCAadharNo.text.toString()
+            }
+            var panNo:String?=null
+            if(binding.edtCPanNo.text.toString().isNotEmpty())
+            {
+                panNo = binding.edtCPanNo.text.toString()
+            }
+
+            var ucId:Int?=null
+            if(binding.edtUcid.text.toString().isNotEmpty())
+            {
+                ucId =Integer.parseInt(binding.edtUcid.text.toString())
+            }
+            var fucId:Int?=null
+            if(binding.edtfamilyUcid.text.toString().isNotEmpty())
+            {
+                fucId =Integer.parseInt(binding.edtfamilyUcid.text.toString())
+            }
+
             return AdvanceSearchInput(
-                clientCode = binding.edtclientCode.text.toString(),
-                mobileNo = binding.edtCMobileNumber.text.toString(),
-                emailId = binding.edtCEmailAddress.text.toString(),
-                aadharNo = binding.edtCAadharNo.text.toString(),
-                panNo = binding.edtCPanNo.text.toString(),
-                ucId = Integer.parseInt(binding.edtUcid.text.toString()),
-                fucId = Integer.parseInt(binding.edtfamilyUcid.text.toString())
+                clientCode =clientCode,
+                mobileNo = mobileNo,
+                emailId = emailId,
+                aadharNo = aadharNo,
+                panNo = panNo,
+                ucId = ucId,
+                fucId = fucId
             )
         }
     }
