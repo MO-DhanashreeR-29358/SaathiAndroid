@@ -23,7 +23,7 @@
                 android:id="@+id/appCompatTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/clr_heading"
+                android:background="@color/titleBarBackground"
                 android:fontFamily="@font/roboto_reg"
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingBottom="@dimen/_5sdp"
@@ -396,10 +396,10 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_yellow_background"
+                    android:background="@drawable/button_state_bg"
                     android:fontFamily="@font/lato_reg"
                     android:text="@string/lead_detail_button_update"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/white"
                     android:textFontWeight="500"
                     android:textSize="@dimen/_14ssp" />
 

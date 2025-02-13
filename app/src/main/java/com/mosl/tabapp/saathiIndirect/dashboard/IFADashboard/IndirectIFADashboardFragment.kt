@@ -6,14 +6,13 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.Toast
 import com.jakewharton.rxbinding4.view.clicks
-import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.tabapp.R
 import com.mosl.tabapp.core.CommonFragment
@@ -80,6 +79,7 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
                 position: Int,
                 id: Long
             ) {
+                IndirectIFADashboardView.strSelectedFilter=binding.spFilterBank.selectedItem.toString()
                 subject.onNext(IndirectIFADashboardUIEvent.onFilterChanged(binding.spFilterBank.selectedItem.toString()))
 
             }
@@ -143,9 +143,9 @@ class IndirectIFADashboardFragment  : CommonFragment(), IndirectIFADashboardView
 
     }
 
-    override fun fnRenderFilterList(uiModel: UiModel<List<LookUp>>) {
+    override fun fnRenderFilterList(uiModel: UiModel<IndirectFilterDataClass>) {
         uiModel.onSuccess {
-            filterAdapter.setSpinnerData(binding.spFilterBank, it)
+            filterAdapter.setSpinnerData(binding.spFilterBank, it.lstPeriods)
            // binding.spFilterBank.setSelection(0)
         }
         uiModel.onFailure {

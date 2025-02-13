@@ -667,7 +667,7 @@
                     android:layout_width="@dimen/_60sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:text="Save"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/white" />
 
                 <Button
                     android:id="@+id/btnReset"

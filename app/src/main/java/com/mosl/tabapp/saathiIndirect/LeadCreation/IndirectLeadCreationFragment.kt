@@ -141,7 +141,10 @@ class IndirectLeadCreationFragment : CommonFragment(),
         presenter.start()
         dataActionSubject.onNext(Fetch)
     }
-
+    override fun onFragmentResume() {
+        super.onFragmentResume()
+        setAppTitle(R.string.page_title_lead_creation)
+    }
     private fun createDefaultSelectList() {
         selectedList.add(LeadCreationRepositoryImpl.SELECT_ROW_DATA)
     }
@@ -926,9 +929,9 @@ class IndirectLeadCreationFragment : CommonFragment(),
             (binding.spCountry.selectedItem as? RowData)?.key
                 ?: IndirectLeadCreationView.INVALID_SELECTION_KEY,
             (binding.spState.selectedItem as? RowData)?.key
-                ?: "",
+                ?:  IndirectLeadCreationView.INVALID_SELECTION_KEY,
             (binding.spCity.selectedItem as? RowData)?.key
-                ?: "",
+                ?:  IndirectLeadCreationView.INVALID_SELECTION_KEY,
             binding.etPincode.text.toString(),
             binding.cbPrimaryAddress.isChecked,
             userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: "0"
@@ -942,9 +945,9 @@ class IndirectLeadCreationFragment : CommonFragment(),
             (binding.spOffCountry.selectedItem as? RowData)?.key
                 ?: IndirectLeadCreationView.INVALID_SELECTION_KEY,
             (binding.spOffState.selectedItem as? RowData)?.key
-                ?: "",
+                ?:  IndirectLeadCreationView.INVALID_SELECTION_KEY,
             (binding.spOffCity.selectedItem as? RowData)?.key
-                ?: "",
+                ?:  IndirectLeadCreationView.INVALID_SELECTION_KEY,
             binding.etOffPincode.text.toString(),
             binding.cbOffPrimaryAddress.isChecked,
             userManager.getUser()?.currentBusinessProfile?.businessUnitId ?: "0"

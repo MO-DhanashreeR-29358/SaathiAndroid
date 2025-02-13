@@ -1,8 +1,13 @@
 package com.mosl.tabapp.util.adapters
 
+import android.R.attr.label
+import android.R.attr.text
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +18,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
+import com.google.api.Distribution.BucketOptions.Linear
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
 import com.mosl.tabapp.actionbar.Actionbar.Companion.SEARCH_TYPE_CLIENT
@@ -22,6 +31,8 @@ import com.mosl.tabapp.core.EkycModule
 import com.mosl.tabapp.model.SearchModelNew
 import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
+import timber.log.Timber
+
 
 class AutoCompleteAdapter(
   val context: Context,
@@ -65,9 +76,11 @@ class AutoCompleteAdapter(
       holderView.llExpand.visibility = View.GONE
     }else if(name == NO_RECORDS_FOUND){
       holderView.llDropDownMenuLayout.visibility = View.GONE
+      holderView.lineContact.visibility=View.GONE
     } else {
       holderView.llDropDownMenuLayout.visibility = View.VISIBLE
       holderView.llExpand.visibility = View.VISIBLE
+      holderView.lineContact.visibility=View.VISIBLE
     }
     if (resultModel.isEmpType(resultModel.searchType)) {
       if (name == NO_RECORDS_FOUND) {
@@ -75,6 +88,7 @@ class AutoCompleteAdapter(
         holderView.clientID.visibility = View.GONE
         holderView.clientUcid.visibility = View.GONE
         holderView.error.visibility = View.VISIBLE
+        holderView.lineContact.visibility=View.GONE
       } else {
         holderView.llExpand.setOnClickListener {
           val bundle = Bundle()
@@ -90,9 +104,47 @@ class AutoCompleteAdapter(
 
         holderView.clientID.text = String.format("Emp Id: %s,", resultModel.empCode)
         holderView.error.visibility = View.GONE
+
+        if(resultModel.mobileNo.isNullOrEmpty())
+        {
+          holderView.linMobileContainer.visibility=View.GONE
+        }
+        else
+        {
+          holderView.linMobileContainer.visibility=View.VISIBLE
+          holderView.txtContactMobile.text=resultModel.mobileNo
+        }
+        if(resultModel.email.isNullOrEmpty() || resultModel.email == "")
+        {
+          holderView.linEmailContainer.visibility=View.GONE
+        }
+        else
+        {
+          holderView.linEmailContainer.visibility=View.VISIBLE
+          holderView.txtEmailID.text=resultModel.email
+        }
+
       }
     } else {
       holderView.clientName.text = name
+      if(resultModel.mobileNo.isNullOrEmpty())
+      {
+        holderView.linMobileContainer.visibility=View.GONE
+      }
+      else
+      {
+        holderView.linMobileContainer.visibility=View.VISIBLE
+        holderView.txtContactMobile.text=resultModel.mobileNo
+      }
+      if(resultModel.email.isNullOrEmpty() || resultModel.email == "")
+      {
+        holderView.linEmailContainer.visibility=View.GONE
+      }
+      else
+      {
+        holderView.linEmailContainer.visibility=View.VISIBLE
+        holderView.txtEmailID.text=resultModel.email
+      }
       val clientCode = resultModel.clientCode
       val creacteMeetingId = resultModel.createMeetingId
       if (resultModel.hasClientCode()) {
@@ -244,6 +296,21 @@ class AutoCompleteAdapter(
         holderView.ivDropDownArrow.visibility = View.VISIBLE
         holderView.error.visibility = View.GONE
       }
+
+      holderView.imgCopyMobile.setOnClickListener {
+        val cm: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("saathiContact", holderView.txtContactMobile.text)
+        cm.setPrimaryClip(clip)
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+
+      }
+
+      holderView.imgCopyEmail.setOnClickListener {
+        val cm: ClipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("saathiEmail", holderView.txtEmailID.text)
+        cm.setPrimaryClip(clip)
+        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
+      }
     }
     return convertView
   }
@@ -312,6 +379,13 @@ class AutoCompleteAdapter(
     val rlOpenAccount: RelativeLayout = parent.findViewById(R.id.rlOpenAccount)
     val rlOAOForm: RelativeLayout = parent.findViewById(R.id.rlOAOForm)
     val ivDropDownArrow: ImageView = parent.findViewById(R.id.ivDropDownArrow)
+    val lineContact:LinearLayout=parent.findViewById(R.id.lineContact)
+    val txtContactMobile:AppCompatTextView=parent.findViewById(R.id.txtContactMobile)
+    val imgCopyMobile: AppCompatImageView =parent.findViewById(R.id.imgCopyMobile)
+    val txtEmailID:AppCompatTextView=parent.findViewById(R.id.txtEmailID)
+    val imgCopyEmail: AppCompatImageView =parent.findViewById(R.id.imgCopyEmail)
+    var linEmailContainer:LinearLayout=parent.findViewById(R.id.linEmailContainer)
+    var linMobileContainer:LinearLayout=parent.findViewById(R.id.linMobileContainer)
   }
 
   companion object {

@@ -44,7 +44,7 @@
                             android:layout_marginStart="@dimen/_8sdp"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:singleLine="true"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/txt_size"
                             android:textStyle="bold" />
 
@@ -55,7 +55,7 @@
                             android:layout_marginStart="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:singleLine="true"
-                            android:textColor="@color/black"
+                            android:textColor="@color/white"
                             android:textSize="@dimen/txt_size" />
 
 

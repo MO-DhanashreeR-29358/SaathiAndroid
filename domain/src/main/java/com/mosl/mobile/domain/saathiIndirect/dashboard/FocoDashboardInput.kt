@@ -28,5 +28,6 @@ data class FocoDashboardInput(
     val category: Any? = null,
 
     val fltUserStatus: Any? = null,
-   val fitHierarchy:String?=null
+    val fitHierarchy:String?=null,
+    val fltPeriod: String? = null
 )

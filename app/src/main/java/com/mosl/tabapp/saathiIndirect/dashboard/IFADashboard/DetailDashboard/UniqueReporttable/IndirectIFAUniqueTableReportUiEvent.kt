@@ -8,4 +8,6 @@ sealed class IndirectIFAUniqueTableReportUiEvent{
     object onRevenuIpEventCalled: IndirectIFAUniqueTableReportUiEvent()
 
     object onRevenuBroEventCalled: IndirectIFAUniqueTableReportUiEvent()
+
+    data class onReportRowClicked(var strLeadId:String):IndirectIFAUniqueTableReportUiEvent()
 }

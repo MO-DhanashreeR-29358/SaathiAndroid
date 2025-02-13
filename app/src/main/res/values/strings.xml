@@ -804,7 +804,4 @@ Page </string>
     <string name="label_search_FCode">Enter Franchisee Code</string>
     <string name="label_FCode">Franchiseee Code</string>
 
-    <string name="accessibility_service_description">
-        "This service helps monitor and manage keyboard usage, ensuring a consistent typing experience."
-    </string>
 </resources>

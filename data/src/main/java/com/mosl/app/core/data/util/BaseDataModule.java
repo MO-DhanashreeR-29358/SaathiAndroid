@@ -70,7 +70,6 @@ public abstract class BaseDataModule {
                                                                  RxJava3CallAdapterFactory rxJava2CallAdapterFactory){
         return new Retrofit.Builder().client(client)
                 .addConverterFactory(moslResponseWrapper)
-                .addConverterFactory(gsonConverterFactory)
                 .addCallAdapterFactory(rxJava2CallAdapterFactory);
     }
 

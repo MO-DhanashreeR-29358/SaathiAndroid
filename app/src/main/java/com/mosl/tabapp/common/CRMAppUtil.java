@@ -489,6 +489,7 @@ public class CRMAppUtil {
     public static String getRefreshIndirectColumnName(String columnName) {
         String str = addSpacesToCapitalLetters(columnName);
         str = str.replace("Proj", "Projected");
+        str= str.replace("_"," ");
         return str;
     }
     public static String addSpacesToCapitalLetters(String input) {

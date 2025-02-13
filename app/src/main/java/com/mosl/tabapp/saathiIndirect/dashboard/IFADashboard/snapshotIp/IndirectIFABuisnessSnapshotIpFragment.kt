@@ -50,7 +50,7 @@ class IndirectIFABuisnessSnapshotIpFragment :CommonFragment(),IndirectIFABuisnes
         binding.spFilter1.visibility=View.GONE
         binding.spFilter2.visibility=View.GONE
         binding.spFilter3.visibility=View.GONE
-
+        binding.spFilterPeriodMyLead.visibility=View.GONE
 
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = IndirectIFABusinessSnapshotIpTableMapper.header(requireContext()) as DynamicHeaderRow

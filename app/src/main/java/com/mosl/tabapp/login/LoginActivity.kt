@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
@@ -23,6 +24,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -63,7 +65,6 @@ import com.mosl.tabapp.helper.FirebaseHelper
 import com.mosl.tabapp.helper.shortcuts.ShortcutHelper
 import com.mosl.tabapp.login.otpverification.OtpVerificationFragment
 import com.mosl.tabapp.permission.PermissionCheckHelper
-import com.mosl.tabapp.util.keylogger.KeyboardChecker
 import com.mosl.validator.exception.ValidationException
 import dagger.android.AndroidInjection
 import io.reactivex.rxjava3.core.Observable
@@ -171,37 +172,48 @@ binding.edPassword.setOnEditorActionListener { v, actionId, event ->
   }
   false
 }
-
-    binding.edEmpCode.requestFocus()
-    if(!KeyboardChecker.isUsingCustomInputMethod(applicationContext))
-    {
-        showKeyBoard(binding.edEmpCode)
-    }
-    else{
-      val builder = AlertDialog.Builder(this)
+}
 
 
-      builder.setMessage("A third-party keyboard is enable")
-
-
-      builder.setTitle("Alert !")
-
-      builder.setCancelable(false)
-
-      builder.setPositiveButton("Yes",
-        DialogInterface.OnClickListener { dialog: DialogInterface?, which: Int ->
-          // When the user click yes button then app will close
-          this.finish()
-        } as DialogInterface.OnClickListener)
-
-
-      val alertDialog = builder.create()
-
-      alertDialog.show()
-
-    }
-
+  override fun onResume() {
+    super.onResume()
+    checkKeyLogger()
   }
+  fun checkKeyLogger() {
+    if (isUsingCustomInputMethod()) {
+      showExitPopup()
+    }
+  }
+
+  private fun showExitPopup(){
+    val builder = AlertDialog.Builder(this)
+    builder.setMessage("A third-party keyboard is enable")
+    builder.setTitle("Alert !")
+    builder.setCancelable(false)
+    builder.setPositiveButton("Okay",
+      DialogInterface.OnClickListener { dialog: DialogInterface?, which: Int ->
+        // When the user click yes button then app will close
+        this.finish()
+      } as DialogInterface.OnClickListener)
+    val alertDialog = builder.create()
+    alertDialog.show()
+  }
+
+  private fun isUsingCustomInputMethod(): Boolean {
+    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+    val mInputMethodProperties = imm.enabledInputMethodList
+    val N = mInputMethodProperties.size
+    for (i in 0 until N) {
+      val imi = mInputMethodProperties[i]
+      if (imi.id == Settings.Secure.getString(contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD)) {
+        if ((imi.serviceInfo.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM) == 0) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
 
   override fun fnCallLogin(): Observable<LoginActivityUiEvent.OnCallLogin> {
      return subject.ofType()

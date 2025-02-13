@@ -1,5 +1,7 @@
 package com.mosl.app.core.data;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.data.meta.MyZoneAPIClient;
@@ -16,6 +18,7 @@ import dagger.Provides;
 import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module public abstract class BaseApiModule {
 
@@ -38,7 +41,9 @@ import retrofit2.Retrofit;
     @Provides @Singleton
     static SaathiIndirectApi provideSaathiIndirectApi(@SaathiIndrectAPIClient OkHttpClient internalOkClient,
                                                       @SaathiIndirectAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+        Gson objGSOn =new GsonBuilder().disableHtmlEscaping().create();
         return builder.client(internalOkClient).baseUrl(apiBaseUrls.getSaathiIndirectUrl())
+                .addConverterFactory( GsonConverterFactory.create(objGSOn))
                 .build()
                 .create(SaathiIndirectApi.class);
     }

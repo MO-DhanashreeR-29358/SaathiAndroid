@@ -98,10 +98,14 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboar
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLead.IndirectIFAMyLeadModule
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshot.IndirectIFABuisnessSnapshotModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpFragment
@@ -334,5 +338,12 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectIFAUniqueReportHierchyTableModule::class])
     fun provideIndirectIFAUniqueReportHierchyFragmentFactory():IndirectIFAUniqueReportHierchyTableFragment
+
+
+    @ContributesAndroidInjector(modules = [IndirectIFAMyLeadDetailsModule::class])
+    fun provideIndiredctIFAMyLeadDetailsFragmentFactory():IndirectIFAMyLeadDetailsFragment
+
+    @ContributesAndroidInjector(modules = [IndirectIFAReportDetailsModule::class])
+    fun provideIndirectIFAReportDetailsFragmentFactory():IndirectIFAReportDetailsFragment
 
 }

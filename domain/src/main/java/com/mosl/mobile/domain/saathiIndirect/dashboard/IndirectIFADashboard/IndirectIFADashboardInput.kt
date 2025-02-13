@@ -26,6 +26,7 @@ data class IndirectIFADashboardInput(
     val category: Any? = null,
 
     val fltUserStatus: Any? = null,
-    val date:String?=null
+    val date:String?=null,
+    val fitHierarchy:String?=null
 
 )

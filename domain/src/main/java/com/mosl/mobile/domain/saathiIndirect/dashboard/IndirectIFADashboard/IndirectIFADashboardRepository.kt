@@ -1,5 +1,6 @@
 package com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard
 
+import com.mosl.mobile.domain.createmeeting.IndirectFilterDataClass
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.dashboardreport.DashboardReportCombo
 import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
@@ -9,7 +10,7 @@ import io.reactivex.rxjava3.core.Observable
 
 interface IndirectIFADashboardRepository {
 
-    fun fnGetIFADashboardFilter():Observable<List<LookUp>>
+    fun fnGetIFADashboardFilter():Observable<IndirectFilterDataClass>
 
     fun fnGetTodaysBirthdayAnniversary(objIndirectIFADashboardInput:IndirectIFADashboardInput):Observable<DashboardReportCombo>
 
@@ -57,19 +58,24 @@ interface IndirectIFADashboardRepository {
     fun fnGetIFASalesDashRevenueBrokingBranchWiseGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
     fun fnGetIFASalesDashRevenueBrokingTargetMetNotMetGraph(request: FocoDashboardInput):Observable<FocoDashboardModel>
     fun fnGetIFASalesDashRevenueBrokingHierarchy(strFilterValue: String):Observable<BusinessSnapshotCombo>
-    fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String):Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashRevenueBrokingDetail(strFilterValue: String,strFilterProduct:String):Observable<BusinessSnapshotCombo>
 
-    fun fnGetIFASalesDashMeetingHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashMeetingHierarchy(strFilterValue:String,strFilterProduct: String): Observable<BusinessSnapshotCombo>
 
     fun fnGetIFASalesDashIFAActivationHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
-    fun fnGetIFASalesDashMeetingDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashMeetingDetail(strFilterValue:String,strFilterProduct:String): Observable<BusinessSnapshotCombo>
 
-    fun fnGetIFASalesDashIFAActivationDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashIFAActivationDetail(strFilterValue:String,strFilterProduct:String): Observable<BusinessSnapshotCombo>
 
-    fun fnGetIFASalesDashRevenueIPDetail(strFilterValue:String): Observable<BusinessSnapshotCombo>
+    fun fnGetIFASalesDashRevenueIPDetail(strFilterValue:String,strFilterProduct:String): Observable<BusinessSnapshotCombo>
 
     fun fnGetIFASalesDashRevenueIPHierarchy(strFilterValue:String): Observable<BusinessSnapshotCombo>
 
+    fun fngetIFASalesDashMyLeadsDetail(objIndirectIFAMyLeadDetailsFilter: IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
+
+    fun fngetIFASalesDashFirstMeetingNotDoneDetail(objIndirectIFAMyLeadDetailsFilter:IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
+
+    fun fngetIFASalesDashLeadsNotUpdatedDetail(objIndirectIFAMyLeadDetailsFilter:IndirectIFAMyLeadDetailsFilter):Observable<BusinessSnapshotCombo>
 
 }

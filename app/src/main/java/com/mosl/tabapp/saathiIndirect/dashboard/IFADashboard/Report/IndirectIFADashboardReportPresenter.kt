@@ -1,15 +1,14 @@
 package com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report
 
+import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.addTo
-import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoDashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardInput
 import com.mosl.mobile.domain.saathiIndirect.dashboard.IndirectIFADashboard.IndirectIFADashboardRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
-import com.mosl.tabapp.saathiIndirect.dashboard.foco.target.FocoTargetPresenter
-import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -109,17 +108,34 @@ class IndirectIFADashboardReportPresenter @Inject constructor(
                .subscribe(view::renderData, Timber::e)
                .addTo(disposable)
 
+        view.onReportClickEvent().subscribe {
+            val bundle = Bundle()
+            bundle.putString(
+                MOSLConstants.PAGE_TYPE,
+                it.widgetName
+            )
+            bundle.putString(
+                MOSLConstants.STAGE_CODE,
+                it.strStageCode
+            )
+            navigator.openPage(
+                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS.toString(), bundle,
+                addToStack = true,
+                forceReload = false
+            )
+        } .addTo(disposable)
+
 
     }
 
     fun getWidgetRequest(strFilterValue:String) : IndirectIFADashboardInput {
         return  IndirectIFADashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = strFilterValue, category = "", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 , fitHierarchy = "Team")
     }
 
     fun getWidgetRequestWithDate(strFilterDateValue:String) : IndirectIFADashboardInput {
         return  IndirectIFADashboardInput(employeeCode = userManager.getUser()?.employeeCode, frequency = "", category = "", calculatedPageP = 0,
-            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, date = strFilterDateValue )
+            pageSizeP = 0, totalCountP = 0, pageP = 0, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0, date = strFilterDateValue, fitHierarchy = "Team" )
     }
 
 }

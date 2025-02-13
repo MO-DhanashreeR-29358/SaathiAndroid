@@ -59,17 +59,9 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueUiEvent>()
     var strFilterVal:String=""
-    var strFilterCatVal:String="Achieved"
+    var strFilterCatVal:String=""
     private var widgetModelList: MutableList<WidgetModel> = mutableListOf()
 
-//    private val widgetUiEventIFA =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
-//
-//    private val pieChartEvent =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
-//
-//    private val summaryCountUiEvent =
-//        PublishSubject.create<IndirectIFATargetUiEvent>()
 
     private var previousPosition: Int = 0
     private var lableItemList = mutableListOf<IndirectIFAUniqueLableItem>()
@@ -99,12 +91,10 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         }
         makeChart()
 
-
     }
 
     @SuppressLint("WrongConstant")
     private fun setupViews() {
-
         binding.includeTargetChart.rvSummaryCount.visibility=View.GONE
         binding.includeTargetChart.imageView.visibility=View.GONE
 
@@ -127,6 +117,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
 
         if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
         {
+            strFilterCatVal ="Achieved"
             val objWidgetMode: WidgetModel = WidgetModel()
             objWidgetMode.id="1"
             objWidgetMode.name= IndirectIFAUniqueView.strTeamUnique
@@ -149,6 +140,7 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
             itemList.add(HorinzatalIFAUniqueWidgetItem(objWidgetMode3,widgetUiEventIFA))
         }
         else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            strFilterCatVal ="Select"
             val objWidgetMode: WidgetModel = WidgetModel()
             objWidgetMode.id="4"
             objWidgetMode.name= IndirectIFAUniqueView.strIfaProductWise
@@ -507,8 +499,8 @@ class IndirectIFAUniqueFragment:CommonFragment(),IndirectIFAUniqueView {
         uiModel.onSuccess {
             Timber.d("strTarget ${it.strTarget}")
             Timber.d("strAchieved ${it.strAchieved}")
-            binding.includeTargetChart.txtTarget.text = it.strTarget
-            binding.includeTargetChart.txtAchievement.text = it.strAchieved
+            binding.includeTargetChart.txtTarget.text = it.strTarget?.replace(".0","")
+            binding.includeTargetChart.txtAchievement.text = it.strAchieved?.replace(".0","")
             for( gr in it.graph){
                 Timber.d("graph Product ${gr.product}")
                 Timber.d("graph value ${gr.Value}")

@@ -18,6 +18,8 @@ import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragUniqueReportTableBinding
 import com.mosl.tabapp.model.dashboard.WidgetModel
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsUiEvent
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.HorinzatalIFAUniqueWidgetItem
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueView
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Target.IndirectIFATargetView
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tabapp.table.createRowAdapter
@@ -35,8 +37,9 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
     private lateinit var tableRowAdapter: TableRowAdapter<IndirectIFAUniqueReportTableRow>
     private val navigateEvent = PublishSubject.create<MutableMap<String, String>>()
     private val subject = IndirectIFADashboardDetailsUiEvent.getFundUiEvent()
-    var strFilterVal:String="Last FY"
+    var strFilterVal:String=""
     var strWidgetType:String =""
+    var strFilterCatVal:String=""
     private val widgetUiEventIFA = PublishSubject.create<IndirectIFAUniqueTableReportUiEvent>()
     override fun getLayout(): Int {
         return R.layout.frag_unique_report_table
@@ -54,26 +57,29 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         binding.spFilter1.visibility= View.GONE
         binding.spFilter2.visibility= View.GONE
         binding.spFilter3.visibility= View.GONE
-
-
         binding.tableWrapper.setRetryListener(onRetryClick)
         dynamicHeaderRow = IndirectIFAUniqueReportTableMapper.header(requireContext()) as DynamicHeaderRow
-        val mfAdapter =
-            requireContext().createRowAdapter<IndirectIFAUniqueReportTableRow>(dynamicHeaderRow)
+        val mfAdapter = requireContext().createRowAdapter<IndirectIFAUniqueReportTableRow>(dynamicHeaderRow)
                 .apply {
                     viewProvider.rowClickListener = { row, view ->
-                        val column = view.getTag(R.id.tag_column) as Int
                         val reportData = tableRowAdapter.getItem(row).data
-                        navigateEvent.onNext(
-                            getAdditionalParameterMap(
-                                reportData.data[0],
-                                reportData.headers[column + 1]
-                            )
-                        )
+                        var leadId=reportData.hasMap["LeadID"]
+                        if(leadId.toString().endsWith(".0"))
+                        {
+                            leadId=leadId.toString().substringBefore(".")
+                        }
+                        widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onReportRowClicked(leadId?:""))
                     }
                 }
         tableRowAdapter = mfAdapter
         binding.tableWrapper.setAdapter(tableRowAdapter)
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            strFilterCatVal ="Achieved"
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            strFilterCatVal ="Select"
+        }
     }
     private fun fnSetUpArgument()
     {
@@ -84,15 +90,11 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         super.onDestroyView()
     }
 
-
     override fun getAdditionalParameterMap(
         rowData: String?,
         columnData: String?
     ): MutableMap<String, String> {
         val additionalParameterMap: MutableMap<String, String> = HashMap()
-        /*  getFilter1()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter2()?.let { additionalParameterMap[it.keyValue] = it.value }
-          getFilter3()?.let { additionalParameterMap[it.keyValue] = it.value }*/
         columnData?.let {
             additionalParameterMap[MOSLConstants.COL_FILTER] =
                 columnData
@@ -123,7 +125,6 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         }
     }
 
-
     override fun onFilterEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterChanged> {
         return  subject.ofType()
     }
@@ -149,6 +150,31 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
         return this.strFilterVal
     }
 
+    override fun onFilterCategoryEventCalled(): Observable<IndirectIFADashboardDetailsUiEvent.onFilterCategoryChanged> {
+        return  subject.ofType()
+    }
+
+    override fun fnRenderFilterCategoryEventCalled(strFilterCatVal: String) {
+        this.strFilterCatVal=strFilterCatVal
+        if(strWidgetType.equals(IndirectIFATargetView.strMeeting))
+        {
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strIFAActivation)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onIfaActivationEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveIP)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuIpEventCalled)
+        }
+        else if(strWidgetType.equals(IndirectIFATargetView.strReveBro)){
+            widgetUiEventIFA.onNext(IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled)
+        }
+    }
+
+    override fun fngetFilterProductValue(): String {
+        return  this.strFilterCatVal
+    }
+
     override fun fnonMeetingEventCalled(): Observable<IndirectIFAUniqueTableReportUiEvent.onMeetingEventCalled> {
         return widgetUiEventIFA.ofType()
     }
@@ -162,6 +188,10 @@ class IndirectIFAUniqueReportTableFragment : CommonFragment(), IndirectIFAUnique
     }
 
     override fun fnonRevenuBroEventCalled(): Observable<IndirectIFAUniqueTableReportUiEvent.onRevenuBroEventCalled> {
+        return widgetUiEventIFA.ofType()
+    }
+
+    override fun fnOnReportRowClicked(): Observable<IndirectIFAUniqueTableReportUiEvent.onReportRowClicked> {
         return widgetUiEventIFA.ofType()
     }
 

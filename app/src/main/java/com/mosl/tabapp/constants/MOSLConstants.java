@@ -300,9 +300,9 @@ public interface MOSLConstants extends LabelConfig {
     int INDIRECT_CATEGORY = 23;
 
     //UAT
-    //int INDIRECT_INTERESTED_IN = 183;
+    int INDIRECT_INTERESTED_IN_UAT = 5;
     //Live
-    int INDIRECT_INTERESTED_IN = 179;
+    int INDIRECT_INTERESTED_IN_LIVE = 5;
 
     int INDIRECT_WORK_EXP = 147;
 
@@ -325,5 +325,9 @@ public interface MOSLConstants extends LabelConfig {
 
     String INDIRECT_NEW_LEAD="New Lead";
     String PERIOD_FILTER= "PeriodFilter";
+    String PAGE_TYPE="pagetype";
+    String STAGE_CODE="stagecode";
+    String SEL_CATEGORY="selcategory";
+    String SEL_FILTER="selfilter";
 }
 

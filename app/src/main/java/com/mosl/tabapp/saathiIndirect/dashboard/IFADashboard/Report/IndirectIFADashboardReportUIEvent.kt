@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 sealed class IndirectIFADashboardReportUIEvent{
 
     data class OnReportClick(
-        @JvmField val widgetName: String
+        @JvmField val widgetName: String, var strStageCode:String
     ) :IndirectIFADashboardReportUIEvent()
 
     data class onFilterChanged(val strFilterText:String): IndirectIFADashboardReportUIEvent()

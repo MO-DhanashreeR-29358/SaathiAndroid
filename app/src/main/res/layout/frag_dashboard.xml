@@ -12,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/mark_attendance"
-        android:layout_margin="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:foreground="?android:attr/selectableItemBackground"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
+        android:gravity="center"
         android:background="@drawable/btn_attendance_background"/>
 
     <ScrollView
@@ -313,7 +315,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@drawable/orange"
+                            android:background="@color/secondaryBackground"
                             android:text="@string/CLIENTS"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -324,7 +326,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@drawable/orange"
+                            android:background="@color/secondaryBackground"
                             android:text="@string/SNAPSHOT"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -335,7 +337,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@drawable/orange"
+                            android:background="@color/secondaryBackground"
                             android:text="@string/SNAPSHOT"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -346,7 +348,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:background="@drawable/orange"
+                            android:background="@color/secondaryBackground"
                             android:text="@string/PRODUCTIVITY"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_14sdp"
@@ -589,7 +591,7 @@
                             android:padding="10dp"
                             android:text="@string/txt_label_current_quarter_status"
                             android:textAlignment="center"
-                            android:textColor="@color/flush_orange"
+                            android:textColor="@color/secondaryBackground"
                             android:textSize="@dimen/_14sdp"
                             />
 
@@ -624,7 +626,7 @@
                             android:padding="10dp"
                             android:text="@string/txt_label_current_quarter_status"
                             android:textAlignment="center"
-                            android:textColor="@color/flush_orange"
+                            android:textColor="@color/secondaryBackground"
                             android:textSize="@dimen/_14sdp"
                             />
 
@@ -632,7 +634,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/_8sdp"
-                            android:background="@color/cape_honey"
+                            android:background="@color/secondaryBackground"
                             android:orientation="vertical"
                             >
 
@@ -740,7 +742,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        fab:fab_addButtonColorNormal="#f54d41"
+        fab:fab_addButtonColorNormal="@color/secondaryBackground"
         fab:fab_addButtonColorPressed="@color/white_pressed"
         fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style"

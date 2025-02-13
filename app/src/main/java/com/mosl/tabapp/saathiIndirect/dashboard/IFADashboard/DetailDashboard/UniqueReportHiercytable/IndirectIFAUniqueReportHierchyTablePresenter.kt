@@ -26,7 +26,7 @@ class IndirectIFAUniqueReportHierchyTablePresenter@Inject constructor(
         view.fnonMeetingEventCalled().map {
             view.fngetFilterValue()
         }.switchMap {
-            indirectRepo.fnGetIFASalesDashMeetingHierarchy(it).compose(applyUiModel())
+            indirectRepo.fnGetIFASalesDashMeetingHierarchy(it,view.fngetFilterProductValue()).compose(applyUiModel())
         } .subscribe {
             view.renderData(it)
         }

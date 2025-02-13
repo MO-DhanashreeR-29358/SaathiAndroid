@@ -72,6 +72,88 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/lineContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/linear"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/linMobileContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="5dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_call_grey_24dp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txtContactMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text=""
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:maxLength="15"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgCopyMobile"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:src="@drawable/ic_copy_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linEmailContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_email" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/txtEmailID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:text=""
+                        android:singleLine="true"
+                        android:maxLines="1"
+                        android:maxLength="30"
+                        android:ellipsize="end"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11ssp" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/imgCopyEmail"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:src="@drawable/ic_copy_text" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+<!--modify here  -->
 
             <TextView
                 android:id="@+id/tvError"

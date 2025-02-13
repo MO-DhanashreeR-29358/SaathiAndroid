@@ -9,3 +9,23 @@ Upload Date : 23.12.2014
 Release Note :  1. attendance for pcg (reverted code pushed)
                 2. Standard remark drop down added in lead detail page for alliance profile for AUSFBMAIN only
                     Field should be mandatory and by default first value selected.
+
+---------------------------------------------------------------------------------------------
+Version : 2.9.3
+Update Date : 1.2.2025
+Release Note :  1. SAAT- 2542 : Mobile app rebranding
+                2. SAAT-2530 : Client PII unmasking and copy option
+                3. Create meeting page : resolve date format issue - while selecting 12 or 00 time shows 12 AM only.
+                                         while select 12 it should shows 12 PM and for 00 should shows 12 AM.
+                4. Adding 'HNI Sales' in PCG profile to show attendance button by request of Tausif Sir.
+                5. After upload app to play store getting isAccessibilityTools api service issue, to solve
+                    this generate small video upload to drive and set its link to solve this policy issue
+                6. Also getting READ_MEDIA_IMAGE and READ_MEDIA_VIDEO declaration issue. mark the declaration and send to review
+
+---------------------------------------------------------------------------------------------
+Version : 2.9.5
+Update Date : 8.2.2025
+Release Note :  1. SAAT- 1335 : Indirect dashboard IFA and FOCO
+                2. Resolve issue rooted device by adding FridaDetect classs
+                3. Resolve issue Key logger
+                4. Lead creation bug fixes for Indirect Foco user.

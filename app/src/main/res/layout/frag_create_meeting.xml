@@ -88,7 +88,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_margin="@dimen/margin_small"
             android:text="@string/btn_label_send_otp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -752,7 +752,7 @@
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:text="@string/btn_lable_save"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnReset"

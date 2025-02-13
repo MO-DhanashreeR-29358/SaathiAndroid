@@ -136,11 +136,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getRevenueHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
+    override fun getRevenueHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
         val req = request.requestTransform()
         return api.getRevenueHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it), "Revenue")
+                renderHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -152,11 +152,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getClientMeetingHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
+    override fun getClientMeetingHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
         val req = request.requestTransform()
         return api.getClientMeetingHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it), "NoOfClientsMeeting")
+                renderMeetingsHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -184,11 +184,11 @@ class FocoRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun getIpSalesHierarchy(request: FocoDashboardInput): Observable<List<SalesRM>> {
+    override fun getIpSalesHierarchy(request: FocoDashboardInput): Observable<DashboardReportCombo> {
         val req = request.requestTransform()
         return api.getIpSalesHierarchy(req)
             .map {
-                renderHierarchyTable(Gson().toJson(it),"IpSales")
+                renderHierarchyTable(Gson().toJson(it))
             }
     }
 
@@ -294,17 +294,171 @@ class FocoRepositoryImpl @Inject constructor(
         return list
     }
 
-    private fun renderHierarchyTable(response: String?, sysName :String) : List<SalesRM> {
+    private fun renderHierarchyTable(response: String?): DashboardReportCombo {
+        if(response != null) {
+            val jsonObject = JSONObject(response)
+            val jsonArray = if (jsonObject.has("Response")) {
+                jsonObject.getJSONObject("Response")
+                    .getJSONArray("Data")
+            } else null
+            if (jsonArray != null && jsonArray.length() > 0) {
+                val colHeaders: MutableList<ColHeader> = mutableListOf()
+                val first = jsonArray.getJSONObject(0)
+                val iterator = first.keys()
+                while (iterator.hasNext()) {
+                    val header = iterator.next()
+                        .toString()
+                    colHeaders.add(ColHeader(header))
+                }
+                val revenueExists = colHeaders.any { it.label == "Revenue" }
+                if(!revenueExists){
+                    colHeaders.add(ColHeader("Revenue"))
+                }
+
+
+                val headers = colHeaders.map {
+                    it.copy(index = response.indexOf(it.label))
+                }
+                    .sortedBy { it.index }
+                    .map { it.label }
+
+                val data: ArrayList<DashboardReportData> = ArrayList()
+                val headerData = mutableListOf<String>()
+                for (i in 0 until jsonArray.length()) {
+                    headerData.clear()
+                    val json = jsonArray.getJSONObject(i)
+                    val values: ArrayList<String> = ArrayList()
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
+                    headers.forEach { header ->
+                        if (header.equals("SalesRM", ignoreCase = true) ||
+                            header.equals("Revenue", ignoreCase = true) ||
+                            header.equals("ReportingTo", ignoreCase = true)
+                        ) {
+                            headerData.add(header)
+                            try{
+                                if(!json.isNull(header))
+                                {
+                                    values.add(json.get(header).toString())
+                                }else{
+                                    values.add("")
+                                }
+                            }catch (e: Exception){
+                                if(!json.isNull(header)){ values.add(json.get(header).toString()) }
+                                else
+                                {values.add("") }
+                            }
+
+                        }
+                        if(!json.isNull(header)){
+                                hasMap[header] = json.get(header)
+                                    .toString()
+                        }
+                        else{
+                            hasMap[header] = ""
+                        }
+
+                    }
+
+                    data.add(DashboardReportData(setData(values), headerData, hasMap))
+                }
+                return DashboardReportCombo(headerData, data = data)
+            } else {
+                return DashboardReportCombo(emptyList(), data = emptyList())
+            }
+        }else{
+            return DashboardReportCombo(emptyList(), data = emptyList())
+        }
+    }
+
+    private fun renderMeetingsHierarchyTable(response: String?): DashboardReportCombo {
+        if(response != null) {
+            val jsonObject = JSONObject(response)
+            val jsonArray = if (jsonObject.has("Response")) {
+                jsonObject.getJSONObject("Response")
+                    .getJSONArray("Data")
+            } else null
+            if (jsonArray != null && jsonArray.length() > 0) {
+                val colHeaders: MutableList<ColHeader> = mutableListOf()
+                val first = jsonArray.getJSONObject(0)
+                val iterator = first.keys()
+                while (iterator.hasNext()) {
+                    val header = iterator.next()
+                        .toString()
+                    colHeaders.add(ColHeader(header))
+                }
+                val revenueExists = colHeaders.any { it.label == "Meeting" }
+                if(!revenueExists){
+                    colHeaders.add(ColHeader("Meeting"))
+                }
+
+                val headers = colHeaders.map {
+                    it.copy(index = response.indexOf(it.label))
+                }
+                    .sortedBy { it.index }
+                    .map { it.label }
+
+                val data: ArrayList<DashboardReportData> = ArrayList()
+                val headerData = mutableListOf<String>()
+                for (i in 0 until jsonArray.length()) {
+                    headerData.clear()
+                    val json = jsonArray.getJSONObject(i)
+                    val values: ArrayList<String> = ArrayList()
+                    val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
+                    headers.forEach { header ->
+                        if ( header.equals("TMName", ignoreCase = true) ||
+                            header.equals("Meeting", ignoreCase = true) ||
+                            header.equals("ReportingTo", ignoreCase = true)
+                        ) {
+                            headerData.add(header)
+                            try{
+                                if(!json.isNull(header))
+                                {
+                                  values.add(json.get(header).toString())
+
+                                }else{
+
+                                    values.add("")
+                                }
+                            }catch (e: Exception){
+                                if(!json.isNull(header)){ values.add(json.get(header).toString()) }
+                                else
+                                {values.add("") }
+                            }
+
+                        }
+                        if(!json.isNull(header)){
+                                hasMap[header] = json.get(header)
+                                    .toString()
+                        }
+                        else{
+                            hasMap[header] = ""
+                        }
+                    }
+
+                    data.add(DashboardReportData(setData(values), headerData, hasMap))
+                }
+                return DashboardReportCombo(headerData, data = data)
+            } else {
+                return DashboardReportCombo(emptyList(), data = emptyList())
+            }
+        }else{
+            return DashboardReportCombo(emptyList(), data = emptyList())
+        }
+    }
+
+    private fun renderHierarchyTable1(response: String?, sysName :String) : List<SalesRM> {
 
         val gson = Gson()
 
         // First, parse the Response object that contains Data as a list of SalesRM
         val responseObject = gson.fromJson(response, ApiResponse::class.java)
-
+        if (responseObject?.Response == null) {
+            Log.e("HierarchyDebug", "Failed to parse response")
+        }
         // Now, extract the Data list from the response object
         val list = responseObject.Response.Data
         for(item in list){
-            if(item.TMName?.contains("-Self") == true){
+            if(item.TMName != null && item.TMName?.contains("-Self") == true){
                 item.TMName = item.TMName!!.replace("-Self","")
             }
         }

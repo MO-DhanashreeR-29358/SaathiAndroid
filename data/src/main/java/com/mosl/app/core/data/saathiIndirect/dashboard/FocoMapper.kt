@@ -30,7 +30,8 @@ fun FocoDashboardInput.requestTransform(): FOCODashboardFilterpostReq {
         category = category,
         filter = filter,
         fltUserStatus = fltUserStatus,
-        fitHierarchy = fitHierarchy
+        fitHierarchy = fitHierarchy,
+        fltPeriod = fltPeriod
     )
 }
 fun List<FocoPeriodResponse>.itemTransform(): List<FocoPeriodModel> {
@@ -190,7 +191,7 @@ fun mapToFocoDashboardRevenueIpBranchwiseModel(response: IndirectDashboardDetail
         // Map the Graph data from the original model to the FocoDashboardModel
         it.forEach { originalGraph ->
             val graph = Graph(
-                product = originalGraph?.branch,
+                product = originalGraph?.branch?: originalGraph?.region,
                 Value = originalGraph?.revenuePercentage,
                 currentMonth = "",
                 lastMonth = ""
@@ -227,6 +228,33 @@ fun mapToFocoDashboardRevenueIpMetOrNotwiseModel(response: IndirectDashboardDeta
     }
     val strTarget = ""
     val strAchieved = ""
+
+    // Return the mapped FocoDashboardModel
+    return FocoDashboardModel(
+        graph = graphList,
+        strTarget = strTarget,
+        strAchieved = strAchieved
+    )
+}
+// create this another
+fun mapTOIFADashboardModel(response: IndirectExtraDataCommonResponse): FocoDashboardModel {
+    val graphList = ArrayList<Graph>()
+
+    // Check if the response has valid data
+    response.Response?.ObjectData?.graph?.let {
+        // Map the Graph data from the original model to the FocoDashboardModel
+        it.forEach { originalGraph ->
+            val graph = Graph(
+                product = originalGraph.product,
+                Value = originalGraph.Value,
+                currentMonth = originalGraph.CurrentMonth,
+                lastMonth = originalGraph.LastMonth
+            )
+            graphList.add(graph)
+        }
+    }
+    val strTarget = getTarget(response.Response?.ObjectData?.strTarget, response.Response?.ObjectData?.target2)
+    val strAchieved = response.Response?.ObjectData?.strAchieved
 
     // Return the mapped FocoDashboardModel
     return FocoDashboardModel(

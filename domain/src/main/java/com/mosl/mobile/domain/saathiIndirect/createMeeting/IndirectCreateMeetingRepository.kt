@@ -12,7 +12,7 @@ interface IndirectCreateMeetingRepository {
     fun getMeetingObjective(): Observable<List<LookUp>>
     fun getLocationAddress(): Observable<List<LookUp>>
     fun getTravellingMode():Observable<List<LookUp>>
-    fun getInteresedIn():Observable<List<LookUp>>
+    fun getInteresedIn(interestedInId : Int):Observable<List<LookUp>>
     fun getAttendeeData(searchText: String): Observable<List<Attendee>>
 
     fun getAddress(

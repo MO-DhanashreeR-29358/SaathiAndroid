@@ -28,6 +28,7 @@ import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
+import com.mosl.saathi.data.BuildConfig
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
 import okhttp3.RequestBody
@@ -74,9 +75,9 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
         }
     }
 
-    override fun getInteresedIn(): Observable<List<LookUp>> {
+    override fun getInteresedIn( interestedInId : Int): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
-            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId= 179,
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId= interestedInId,
                 parentId="0",IgnoreBusinessUnit=false)
         ).map {
             SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(INTERESTEDIN))
