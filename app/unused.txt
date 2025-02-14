@@ -31946,14 +31946,16 @@ com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest:
     public final java.lang.String component30()
     public final java.lang.String component31()
     public final java.lang.String component32()
+    public final java.lang.String component33()
+    public final java.lang.String component34()
     public final java.lang.String component4()
     public final java.lang.String component5()
     public final java.lang.String component6()
     public final java.lang.String component7()
     public final java.lang.String component8()
     public final java.lang.String component9()
-    public final com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
-    public static synthetic com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy$default(com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
+    public final com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy(java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String)
+    public static synthetic com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest copy$default(com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.mosl.saathi.api.model.createlead.IndirectCreateLeadContact,java.util.List,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,int,java.lang.Object)
     public final java.lang.String getBandhanBankEmployeeCode()
     public final java.lang.String getBgId()
     public final java.lang.String getBranchCode()
@@ -31968,6 +31970,8 @@ com.mosl.saathi.api.model.createlead.IndirectCreateLeadRequest:
     public final java.lang.String getIsBandhanBankEmployee()
     public final java.lang.String getLeadAccountTypeId()
     public final java.lang.String getLeadCategoryID()
+    public final java.lang.String getLeadCategoryId()
+    public final java.lang.String getLeadCategoryText()
     public final java.lang.String getLeadName()
     public final java.lang.String getLeadSourceDetails()
     public final java.lang.String getLeadSourceDetailsID()
@@ -71443,6 +71447,10 @@ com.android.installreferrer.api.InstallReferrerClientImpl:
     public static boolean isPlayStoreCompatible()
 com.android.installreferrer.api.ReferrerDetails
 com.android.installreferrer.commons.InstallReferrerCommons
+com.app.aspirecollection.Util.FridaDetect$isFridaPortDetected$1:
+    public int label
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
+com.app.aspirecollection.Util.FridaDetect
 com.appsflyer.internal.ag:
     public static void <clinit>()
 com.astuetz.PagerSlidingTabStrip$SavedState$1:
@@ -88790,6 +88798,7 @@ com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl:
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$151fdec31bf6c5e8dd4aff5dde93e9ead6cebc554657f9a79fc6846f9b24179d$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$1$62eaeb125e8ddc2d8ac05dcb9162b968ffebee5beb3479abbd325303552f16a5$1
+com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$2$7d0f7cb2f055acb89e5b10ebcd5b8090ec20dc0fc9e96faa8059e2f9d22d1ec7$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$0
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$3$88ab2e5e8f3a2e2fbb4eb37f4d67e45dd7d800eca2cb7071c0063e57294712fc$1
 com.mosl.tabapp.login.LoginActivity$$InternalSyntheticLambda$4$d72b5c49e2dbe68ed163cb99a69613163b840bbc28f24fdf6ac6d154a897f015$0
@@ -88799,6 +88808,7 @@ com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
     public final void buildAlertMessageNoGps()
+    public static void checkKeyLogger()
     public final boolean checkMapServices()
     public final void fetchDigitalSalesKitParentMenu()
     public final com.mosl.mobile.user.model.LoginInfo fnGetLoginData()
@@ -88815,6 +88825,7 @@ com.mosl.tabapp.login.LoginActivity:
     public final com.mosl.mobile.user.login.UserManager getUserManager()
     public final boolean isMapsEnabled()
     public final boolean isServicesOK()
+    public static boolean isUsingCustomInputMethod()
     public final void renderDigitalSalesKitChildData()
     public final void renderDigitalSalesKitParentData()
     public static void setBinding$14()
@@ -88824,6 +88835,7 @@ com.mosl.tabapp.login.LoginActivity:
     public final void setUpView()
     public static void showConsentDialog()
     public static void showDiscloserDilog()
+    public static void showExitPopup()
     public final void toggleProgressBar(boolean)
 com.mosl.tabapp.login.LoginActivityModule
 com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:

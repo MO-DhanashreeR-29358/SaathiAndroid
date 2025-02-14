@@ -93,7 +93,7 @@ class ScreenNavigatorImpl @Inject constructor(
   @SuppressLint("WrongConstant")
   override fun openHome() {
     if(userManager.getUser()?.isIndirectUser() == true){
-     /* if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("FOCO",true))
+      if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("FOCO",true))
       {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD.toString(), false)
       }
@@ -102,9 +102,9 @@ class ScreenNavigatorImpl @Inject constructor(
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
       }
       else
-      {*/
+      {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
-      //}
+      }
 
     }else{
       openPage(NavigationConstants.NAVIGATE_TO_DASHBOARD.toString(), false)

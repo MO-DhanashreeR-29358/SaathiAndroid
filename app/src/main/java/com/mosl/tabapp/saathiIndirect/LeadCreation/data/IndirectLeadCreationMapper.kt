@@ -18,6 +18,8 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationUserInput
 object IndirectLeadCreationMapper {
 
 
+    //adding LeadCategoryId and LeadCategoryText hardcoded because of Foco lead was not get created without these value
+    // set hardcode as per the backend developer suggestion
 internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: User?): IndirectCreateLeadRequest {
 
     val model = mapToLeadCreationModel(user)
@@ -48,7 +50,9 @@ internal infix fun IndirectLeadCreationUserInput.mapToCreateLeadRequest(user: Us
         prospectRefereMobile = model.prospectRefereMobile,
         productMapping = listOfCreateLeadProduct,
         contact = leadContact,
-        expectedMargin = model.expMargin
+        expectedMargin = model.expMargin,
+        leadCategoryId = "2815",
+        LeadCategoryText = "Individual"
     )
 }
 
