@@ -127,4 +127,6 @@ interface CreateMeetingView : BaseView {
   fun onChipsApiCall(): Observable<CallChipsApi>
   fun renderChipsList(uiModel: UiModel<List<String>>)
 
+  fun onZykrrSurveyLinkEventFired() : Observable<OnZykrrSurveyLink>
+  fun renderSurveyLink(uiModel: UiModel<String>)
 }

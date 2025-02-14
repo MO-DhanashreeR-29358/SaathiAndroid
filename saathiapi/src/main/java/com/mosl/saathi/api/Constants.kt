@@ -6,4 +6,5 @@ object ApiEndpoints {
   const val ValidateLogin="ValidateLogin"
   const val GenerateOTP="GenerateOTP"
   const val ValidateOTP="ValidateOTP"
+  const val SendSurveyLink="TriggerMeetingFeedbackEmailSMS"
 }

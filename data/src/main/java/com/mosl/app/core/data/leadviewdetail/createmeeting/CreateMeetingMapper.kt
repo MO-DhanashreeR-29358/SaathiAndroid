@@ -90,7 +90,8 @@ object CreateMeetingMapper {
     fun transformAddUpdateMeeting(addUpdateMeetingItem: AddUpdateMeetingItem): AddUpdateMeeting {
         return AddUpdateMeeting(
             leadId = addUpdateMeetingItem.leadId ?: 0,
-            ucidId = addUpdateMeetingItem.uCID ?: 0
+            ucidId = addUpdateMeetingItem.uCID ?: 0,
+            meetingId = addUpdateMeetingItem.meetingID ?:0
         )
     }
 
@@ -98,7 +99,8 @@ object CreateMeetingMapper {
     fun transformAddUpdateMeetingNew(addUpdateMeetingItem: AddUpdateMeetingNewResposne):AddUpdateMeeting  {
         return AddUpdateMeeting(
             leadId = addUpdateMeetingItem.response?.leadId ?: 0,
-            ucidId = addUpdateMeetingItem.response?.uCID ?: 0
+            ucidId = addUpdateMeetingItem.response?.uCID ?: 0,
+            meetingId = addUpdateMeetingItem.response?.meetingID ?: 0
         )
     }
     fun mapToSendOtpResponse(

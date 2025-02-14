@@ -17,6 +17,7 @@ import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
@@ -178,6 +179,21 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         return saathiApi.getStartMeeting(request)
             .map {
                 mapToSendOtpResponse(it.status, it.getMessage())
+            }
+    }
+
+    override fun sendSurveyLink(data: SurveyLinkData): Observable<String> {
+        val request = SurveyLinkRequest(
+            leadId = data.leadId.toInt(),
+            clientCode = data.clientCode,
+            meetingId = data.meetingId,
+            rmCode = data.rmCode,
+            mobile = data.mobileNumber,
+            surveyLink = data.surveyLink
+        )
+        return saathiApi.sendSurveyLink(request)
+            .map {
+                it.getMessage()
             }
     }
 

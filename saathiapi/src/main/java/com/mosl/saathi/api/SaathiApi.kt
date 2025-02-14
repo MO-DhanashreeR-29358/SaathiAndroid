@@ -68,6 +68,7 @@ import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
@@ -836,4 +837,10 @@ interface SaathiApi {
 
     @POST("SMSCampaign/InsertReactivationWithFile")
     fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
+
+    @POST("Common/TriggerMeetingFeedbackEmailSMS")
+    fun sendSurveyLink(
+        @Body request: SurveyLinkRequest
+    ): Observable<SaathiCommonResponse<String>>
+
 }

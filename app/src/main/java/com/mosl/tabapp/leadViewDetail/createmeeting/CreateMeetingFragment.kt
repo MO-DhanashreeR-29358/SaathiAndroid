@@ -327,6 +327,17 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
     }
 
+    override fun onZykrrSurveyLinkEventFired(): Observable<OnZykrrSurveyLink> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderSurveyLink(uiModel: UiModel<String>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            showOnFailurePopup(it)
+        }
+    }
+
     override fun onTouchedUntouchedEventFired(): Observable<TouchedUntouchedRequest> {
         return uiSubject.ofType()
     }
@@ -1682,7 +1693,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
-            callZykrrApi()
+            callZykrrApi(it.meetingId)
             MSFDialog.alertDialog(
                 requireContext(), 0, resources.getString(string.motilal_oswal),
                 MOSLConstants.CREATE_MEETING, "OK", true
@@ -1695,7 +1706,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
     }
 
-    private fun callZykrrApi(){
+    private fun callZykrrApi( meetingId : Int){
         RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
         val retro = RetrofitClient.retrofit
         val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
@@ -1705,7 +1716,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 if (response.isSuccessful) {
                     val post = response.body() as tokenModel
                     Timber.d("TokenResponse: ${post.token}")
-                    callZykrrRegisterApi(post)
+                    callZykrrRegisterApi(post, meetingId)
                 } else {
                     Timber.d("TokenResponse: ${response.toString()}")
                 }
@@ -1719,7 +1730,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     }
 
-    private fun callZykrrRegisterApi(tokenModel: tokenModel){
+    private fun callZykrrRegisterApi(tokenModel: tokenModel, meetingId :Int){
         RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
         val retro = RetrofitClient.retrofit
         val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
@@ -1731,7 +1742,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 if (response.isSuccessful) {
                     val post = response.body() as registerResponse
                     Timber.d("registerResponse: ${post.surveyLinks}")
-                    // Handle the retrieved post data
+                    uiSubject.onNext(OnZykrrSurveyLink(post.surveyLinks[0], meetingId = meetingId, clientCode = binding.layoutTopSection.tvClientCode.text.toString() ))
+
                 } else {
                     Timber.d("registerResponse: ${response.toString()}")
                 }
