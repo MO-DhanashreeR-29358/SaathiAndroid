@@ -3,60 +3,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center_horizontal"
-    android:layout_width="@dimen/_200sdp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_gravity="center_horizontal"
-        android:layout_width="@dimen/_200sdp"
+    <RelativeLayout
+        android:layout_margin="@dimen/_15sdp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:background="@color/titleBarBackground">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivCreateMeeting"
-            android:layout_width="wrap_content"
+        android:background="@color/titleBarBackground"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:padding="@dimen/_10sdp"
-            android:tint="@color/white"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_calendar"
-            app:tint="@color/white" />
+            android:layout_centerInParent="true"
+            >
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivSetAppointment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:padding="@dimen/_10sdp"
-            android:tint="@color/white"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/ivView"
-            app:layout_constraintStart_toEndOf="@id/ivCreateMeeting"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/login_user"
-            app:tint="@color/white" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivCreateMeeting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:padding="@dimen/_10sdp"
+                android:tint="@color/white"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_calendar"
+                app:tint="@color/white" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/ivView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            android:padding="@dimen/_10sdp"
-            android:tint="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_search"
-            app:tint="@color/white" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivSetAppointment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:padding="@dimen/_10sdp"
+                android:tint="@color/white"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivView"
+                app:layout_constraintStart_toEndOf="@id/ivCreateMeeting"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/login_user"
+                app:tint="@color/white" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_10sdp"
+                android:padding="@dimen/_10sdp"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_search"
+                app:tint="@color/white" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivClose"

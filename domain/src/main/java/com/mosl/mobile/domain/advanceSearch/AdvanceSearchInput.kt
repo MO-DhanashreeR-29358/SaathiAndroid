@@ -9,5 +9,6 @@ data class AdvanceSearchInput(
     var aadharNo:String?=null,
     var panNo:String?=null,
     var ucId:Int?=null,
-    var fucId:Int?=null
+    var fucId:Int?=null,
+    var searchTypeId:Int?=null
 )

@@ -20,11 +20,6 @@ class QuickSearchTabValidator @Inject constructor(val context: Context):Validato
             (input.mobileNo?.isNotEmpty() == true && input.mobileNo?.length!! < 10)->{
                 "Mobile number should be 10 digit."
             }
-            (input.mobileNo?.isNotEmpty() == true && input.mobileNo?.matches(
-                "^[6789]\\d{9}$".toRegex()
-            )!!)->{
-                "Mobile number should be valid."
-            }
             (input.emailId?.isNotEmpty() == true && !input.emailId.isValidEmail())->{
                 "Please enter valid email id"
             }
@@ -62,7 +57,8 @@ class QuickSearchTabValidator @Inject constructor(val context: Context):Validato
                 aadharNo = input.aadharNo,
                 panNo = input.panNo,
                 ucId = input.ucId,
-                fucId = input.fucId
+                fucId = input.fucId,
+                searchTypeId = input.searchTypeId
             )
             )
         }

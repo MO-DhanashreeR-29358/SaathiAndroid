@@ -2,6 +2,7 @@ package com.mosl.app.core.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.data.meta.MyZoneAPIClient;
@@ -25,7 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
     @Provides @Singleton
     static SaathiApi provideSaathiApi(@InternalAPIClient OkHttpClient internalOkClient,
         @InternalAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+        Gson objGSOn =new GsonBuilder().disableHtmlEscaping().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create();
         return builder.client(internalOkClient).baseUrl(apiBaseUrls.getSaathiApiUrl())
+                .addConverterFactory( GsonConverterFactory.create(objGSOn))
             .build()
             .create(SaathiApi.class);
     }

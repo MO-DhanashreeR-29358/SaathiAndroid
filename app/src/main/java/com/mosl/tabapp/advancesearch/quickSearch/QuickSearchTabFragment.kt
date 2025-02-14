@@ -67,8 +67,8 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                     binding.llClientSearch.visibility=View.VISIBLE
                     isLeadSearch=false
                 }
-
             }
+            fnClearFilteronRadioClick()
         }
 
         binding.tableWrapper.setRetryListener(onRetryClick)
@@ -113,18 +113,26 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
         }
 
         uiModel.onSuccess { data ->
-            binding.tableWrapper.visibility=View.VISIBLE
-            val headerData = mutableListOf<String>()
-            data.headers.map {
-                headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it.toString()))
+            if(data.headers.isNotEmpty())
+            {
+                binding.tableWrapper.visibility=View.VISIBLE
+                val headerData = mutableListOf<String>()
+                data.headers.map {
+                    headerData.add(CRMAppUtil.getRefreshIndirectColumnName(it.toString()))
+                }
+                dynamicHeaderRow.setHeader(headerData)
+                val hierarchyReport: List<QuickSearchTableRow> =
+                    QuickSearchTableMapper.map(data.data)
+                binding.tableWrapper.setData(
+                    hierarchyReport,
+                    ErrorModel.noData(getString(R.string.error_message_no_data_available))
+                )
             }
-            dynamicHeaderRow.setHeader(headerData)
-            val hierarchyReport: List<QuickSearchTableRow> =
-                QuickSearchTableMapper.map(data.data)
-            binding.tableWrapper.setData(
-                hierarchyReport,
-                ErrorModel.noData(getString(R.string.error_message_no_data_available))
-            )
+            else
+            {
+                showSuccessToast(getString(R.string.error_message_no_data_available))
+            }
+
         }
     }
 
@@ -206,7 +214,8 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                 emailId = emailId,
                 name = name,
                 aadharNo = aadharNo,
-                panNo = panNo
+                panNo = panNo,
+                searchTypeId = 1
             )
         }
         else{
@@ -260,7 +269,8 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                 aadharNo = aadharNo,
                 panNo = panNo,
                 ucId = ucId,
-                fucId = fucId
+                fucId = fucId,
+                searchTypeId = 2
             )
         }
     }
@@ -297,6 +307,30 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                  binding.edtCPanNo.setText("")
                  binding.edtUcid.setText("")
                binding.edtfamilyUcid.setText("")
+        }
+    }
+
+    private fun fnClearFilteronRadioClick()
+    {
+        binding.tableWrapper.visibility=View.GONE
+        if(!isLeadSearch)
+        {
+            binding.edtleadID.setText("")
+            binding.edtMobileNumber.setText("")
+            binding.edtEmailAddress.setText("")
+            binding.edtleadName.setText("")
+            binding.edtAadharNo.setText("")
+            binding.edtPanNo.setText("")
+
+        }
+        else{
+            binding.edtclientCode.setText("")
+            binding.edtCMobileNumber.setText("")
+            binding.edtCEmailAddress.setText("")
+            binding.edtCAadharNo.setText("")
+            binding.edtCPanNo.setText("")
+            binding.edtUcid.setText("")
+            binding.edtfamilyUcid.setText("")
         }
     }
 

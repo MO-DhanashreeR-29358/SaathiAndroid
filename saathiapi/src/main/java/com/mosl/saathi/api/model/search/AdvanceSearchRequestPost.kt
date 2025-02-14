@@ -74,7 +74,7 @@ data class AdvanceSearchRequestPost(
 	@JvmField var stateID: Int? = 0,
 
 	@SerializedName("SearchTypeId")
-	@JvmField var searchTypeId: Int? = 1,
+	@JvmField var searchTypeId: Int? = 0,
 
 	@SerializedName("Mobile")
 	@JvmField var mobile: String? = null,

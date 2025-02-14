@@ -22171,7 +22171,6 @@ com.google.gson.GsonBuilder:
     public com.google.gson.GsonBuilder setLenient()
     public com.google.gson.GsonBuilder setLongSerializationPolicy(com.google.gson.LongSerializationPolicy)
     public com.google.gson.GsonBuilder setNumberToNumberStrategy(com.google.gson.ToNumberStrategy)
-    public com.google.gson.GsonBuilder setObjectToNumberStrategy(com.google.gson.ToNumberStrategy)
     public com.google.gson.GsonBuilder setPrettyPrinting()
     public com.google.gson.GsonBuilder setVersion(double)
 com.google.gson.JsonArray:
@@ -28792,6 +28791,7 @@ com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData:
     public static synthetic com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData copy$default(com.mosl.mobile.domain.addupdatemeeting.SetAppointmentResponseData,java.lang.String,java.lang.String,java.lang.String,java.util.List,java.lang.String,int,int,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,int,java.lang.Object)
 com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput:
     public final java.lang.Integer component1()
+    public final java.lang.Integer component10()
     public final java.lang.String component2()
     public final java.lang.String component3()
     public final java.lang.String component4()
@@ -28800,8 +28800,8 @@ com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput:
     public final java.lang.String component7()
     public final java.lang.Integer component8()
     public final java.lang.Integer component9()
-    public final com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput copy(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer)
-    public static synthetic com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput copy$default(com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput,java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
+    public final com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput copy(java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer)
+    public static synthetic com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput copy$default(com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput,java.lang.Integer,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.Integer,int,java.lang.Object)
     public final void setAadharNo(java.lang.String)
     public final void setClientCode(java.lang.String)
     public final void setEmailId(java.lang.String)
@@ -28810,6 +28810,7 @@ com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput:
     public final void setMobileNo(java.lang.String)
     public final void setName(java.lang.String)
     public final void setPanNo(java.lang.String)
+    public final void setSearchTypeId(java.lang.Integer)
     public final void setUcId(java.lang.Integer)
 com.mosl.mobile.domain.attendance.AppInfo:
     public final java.lang.String component1()
@@ -77725,6 +77726,7 @@ com.google.gson.GsonBuilder:
     public static void addTypeAdaptersForDate()
     public static com.google.gson.GsonBuilder disableHtmlEscaping()
     public static com.google.gson.GsonBuilder setDateFormat()
+    public static com.google.gson.GsonBuilder setObjectToNumberStrategy()
 com.google.gson.JsonArray:
     public final void add(com.google.gson.JsonElement)
 com.google.gson.JsonDeserializationContext
@@ -77756,7 +77758,6 @@ com.google.gson.ToNumberPolicy$4:
     public static java.math.BigDecimal readNumber()
 com.google.gson.ToNumberPolicy:
     public static final enum com.google.gson.ToNumberPolicy$4 BIG_DECIMAL
-    public static final enum com.google.gson.ToNumberPolicy$3 LONG_OR_DOUBLE
 com.google.gson.TypeAdapter:
     public abstract com.google.gson.JsonElement toJsonTree()
 com.google.gson.annotations.Expose
@@ -78928,7 +78929,6 @@ com.mosl.app.core.data.advanceSearch.AdvanceSearchRepositoryImp:
     public final com.mosl.mobile.user.login.UserManagerImpl userManager
     public final io.reactivex.rxjava3.core.Observable fnGetAdvanceSearch()
     public static com.mosl.mobile.domain.snapshot.AdvanceSearchDataCombo renderBuisnessSnapshotTable()
-    public static java.util.ArrayList setData()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getNearestOfficeLocation$1:
     public static com.mosl.mobile.domain.attendance.model.UserLocationInfo apply()
 com.mosl.app.core.data.attendance.AttendanceRepositoryImpl$getOfficeLocationList$1:
@@ -82100,6 +82100,7 @@ com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput:
     public static java.lang.String getMobileNo()
     public static java.lang.String getName()
     public static java.lang.String getPanNo()
+    public static java.lang.Integer getSearchTypeId()
     public static java.lang.Integer getUcId()
 com.mosl.mobile.domain.advanceSearch.AdvanceSearchRepository:
     public abstract io.reactivex.rxjava3.core.Observable fnGetAdvanceSearch()
@@ -84004,6 +84005,7 @@ com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment$$InternalSynthe
 com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment$setupViews$mfAdapter$1$1:
     public final void invoke$5()
 com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment:
+    public static void fnClearFilteronRadioClick()
     public final com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabPresenter getPresenter()
     public static void setBinding$app_uatRelease$2()
     public final void setupViews()

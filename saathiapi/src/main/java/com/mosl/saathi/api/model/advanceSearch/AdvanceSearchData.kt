@@ -4,243 +4,243 @@ import com.google.gson.annotations.SerializedName
 
 data class AdvanceSearchData(
 
-	@SerializedName("EquityAdvisor")
+	@JvmField  @SerializedName("EquityAdvisor")
 	val equityAdvisor: Any? = null,
 
-	@SerializedName("CreationDate")
+	@JvmField @SerializedName("CreationDate")
 	val creationDate: String? = null,
 
-	@SerializedName("LastModifiedDate")
+	@JvmField @SerializedName("LastModifiedDate")
 	val lastModifiedDate: String? = null,
 
-	@SerializedName("ActionablesList")
+	@JvmField @SerializedName("ActionablesList")
 	val actionablesList: List<Any?>? = null,
 
-	@SerializedName("Email")
+	@JvmField @SerializedName("Email")
 	val email: String? = null,
 
-	@SerializedName("ClientProfile")
+	@JvmField @SerializedName("ClientProfile")
 	val clientProfile: Any? = null,
 
-	@SerializedName("ProductName")
+	@JvmField @SerializedName("ProductName")
 	val productName: String? = null,
 
-	@SerializedName("StateName")
+	@JvmField @SerializedName("StateName")
 	val stateName: Any? = null,
 
-	@SerializedName("ClientStatusList")
+	@JvmField @SerializedName("ClientStatusList")
 	val clientStatusList: List<Any?>? = null,
 
-	@SerializedName("StageStatus")
+	@JvmField @SerializedName("StageStatus")
 	val stageStatus: String? = null,
 
-	@SerializedName("ProspectSourceList")
+	@JvmField @SerializedName("ProspectSourceList")
 	val prospectSourceList: List<Any?>? = null,
 
-	@SerializedName("UCID")
+	@JvmField @SerializedName("UCID")
 	val uCID: Int? = null,
 
-	@SerializedName("Name")
+	@JvmField @SerializedName("Name")
 	val name: String? = null,
 
-	@SerializedName("ProspectSource")
+	@JvmField @SerializedName("ProspectSource")
 	val prospectSource: String? = null,
 
-	@SerializedName("StatusNameID")
+	@JvmField @SerializedName("StatusNameID")
 	val statusNameID: Int? = null,
 
-	@SerializedName("AumValue")
+	@JvmField @SerializedName("AumValue")
 	val aumValue: Any? = null,
 
-	@SerializedName("LeadTypeList")
+	@JvmField @SerializedName("LeadTypeList")
 	val leadTypeList: List<Any?>? = null,
 
-	@SerializedName("Stage")
+	@JvmField @SerializedName("Stage")
 	val stage: String? = null,
 
-	@SerializedName("AUM")
+	@JvmField @SerializedName("AUM")
 	val aUM: Any? = null,
 
-	@SerializedName("Status")
+	@JvmField @SerializedName("Status")
 	val status: Int? = null,
 
-	@SerializedName("res")
+	@JvmField @SerializedName("res")
 	val res: Int? = null,
 
-	@SerializedName("CreatedBy")
+	@JvmField @SerializedName("CreatedBy")
 	val createdBy: Any? = null,
 
-	@SerializedName("ActivityDate")
+	@JvmField @SerializedName("ActivityDate")
 	val activityDate: Any? = null,
 
-	@SerializedName("City")
+	@JvmField @SerializedName("City")
 	val city: String? = null,
 
-	@SerializedName("CityName")
+	@JvmField @SerializedName("CityName")
 	val cityName: Any? = null,
 
-	@SerializedName("SearchTypeId")
+	@JvmField @SerializedName("SearchTypeId")
 	val searchTypeId: Int? = null,
 
-	@SerializedName("StageCodeID")
+	@JvmField @SerializedName("StageCodeID")
 	val stageCodeID: Int? = null,
 
-	@SerializedName("LeadProfileID")
+	@JvmField @SerializedName("LeadProfileID")
 	val leadProfileID: Int? = null,
 
-	@SerializedName("LastMeetingDate")
+	@JvmField @SerializedName("LastMeetingDate")
 	val lastMeetingDate: Any? = null,
 
-	@SerializedName("LeadTypeID")
+	@JvmField @SerializedName("LeadTypeID")
 	val leadTypeID: Int? = null,
 
-	@SerializedName("DPValueID")
+	@JvmField @SerializedName("DPValueID")
 	val dPValueID: Int? = null,
 
-	@SerializedName("AadhaarNumber")
+	@JvmField @SerializedName("AadhaarNumber")
 	val aadhaarNumber: Any? = null,
 
-	@SerializedName("CityID")
+	@JvmField @SerializedName("CityID")
 	val cityID: Int? = null,
 
-	@SerializedName("AUMList")
+	@JvmField @SerializedName("AUMList")
 	val aUMList: List<Any?>? = null,
 
-	@SerializedName("ClientProfileList")
+	@JvmField @SerializedName("ClientProfileList")
 	val clientProfileList: List<Any?>? = null,
 
-	@SerializedName("ClientProfileID")
+	@JvmField @SerializedName("ClientProfileID")
 	val clientProfileID: Int? = null,
 
-	@SerializedName("EncUCID")
+	@JvmField @SerializedName("EncUCID")
 	val encUCID: Any? = null,
 
-	@SerializedName("AumID")
+	@JvmField @SerializedName("AumID")
 	val aumID: Int? = null,
 
-	@SerializedName("FamilyUCID")
+	@JvmField @SerializedName("FamilyUCID")
 	val familyUCID: Int? = null,
 
-	@SerializedName("CallDate")
+	@JvmField @SerializedName("CallDate")
 	val callDate: Any? = null,
 
-	@SerializedName("AcActivationDate")
+	@JvmField @SerializedName("AcActivationDate")
 	val acActivationDate: String? = null,
 
-	@SerializedName("LeadAssignedDate")
+	@JvmField @SerializedName("LeadAssignedDate")
 	val leadAssignedDate: Any? = null,
 
-	@SerializedName("ActivityTypeId")
+	@JvmField @SerializedName("ActivityTypeId")
 	val activityTypeId: Int? = null,
 
-	@SerializedName("Equity")
+	@JvmField @SerializedName("Equity")
 	val equity: String? = null,
 
-	@SerializedName("AdvancedSearchID")
+	@JvmField @SerializedName("AdvancedSearchID")
 	val advancedSearchID: Any? = null,
 
-	@SerializedName("Source")
+	@JvmField @SerializedName("Source")
 	val source: String? = null,
 
-	@SerializedName("Profile")
+	@JvmField @SerializedName("Profile")
 	val profile: Any? = null,
 
-	@SerializedName("DPValue")
+	@JvmField @SerializedName("DPValue")
 	val dPValue: Any? = null,
 
-	@SerializedName("CityList")
+	@JvmField @SerializedName("CityList")
 	val cityList: List<Any?>? = null,
 
-	@SerializedName("Branch")
+	@JvmField @SerializedName("Branch")
 	val branch: Any? = null,
 
-	@SerializedName("ProductCategoryID")
+	@JvmField @SerializedName("ProductCategoryID")
 	val productCategoryID: Int? = null,
 
-	@SerializedName("MeetingID")
+	@JvmField @SerializedName("MeetingID")
 	val meetingID: Int? = null,
 
-	@SerializedName("ActionableID")
+	@JvmField @SerializedName("ActionableID")
 	val actionableID: Int? = null,
 
-	@SerializedName("ProductCategoryList")
+	@JvmField @SerializedName("ProductCategoryList")
 	val productCategoryList: List<Any?>? = null,
 
-	@SerializedName("ProspectSourceID")
+	@JvmField @SerializedName("ProspectSourceID")
 	val prospectSourceID: Int? = null,
 
-	@SerializedName("InterestedInList")
+	@JvmField @SerializedName("InterestedInList")
 	val interestedInList: List<Any?>? = null,
 
-	@SerializedName("LeadProfileList")
+	@JvmField @SerializedName("LeadProfileList")
 	val leadProfileList: List<Any?>? = null,
 
-	@SerializedName("EquityCode")
+	@JvmField @SerializedName("EquityCode")
 	val equityCode: Any? = null,
 
-	@SerializedName("StageCodeList")
+	@JvmField @SerializedName("StageCodeList")
 	val stageCodeList: List<Any?>? = null,
 
-	@SerializedName("SourceID")
+	@JvmField @SerializedName("SourceID")
 	val sourceID: Int? = null,
 
-	@SerializedName("StateID")
+	@JvmField @SerializedName("StateID")
 	val stateID: Int? = null,
 
-	@SerializedName("StatusNameList")
+	@JvmField @SerializedName("StatusNameList")
 	val statusNameList: List<Any?>? = null,
 
-	@SerializedName("ProductID")
+	@JvmField @SerializedName("ProductID")
 	val productID: Int? = null,
 
-	@SerializedName("SubbrokerCode")
+	@JvmField @SerializedName("SubbrokerCode")
 	val subbrokerCode: Any? = null,
 
-	@SerializedName("Mobile")
+	@JvmField @SerializedName("Mobile")
 	val mobile: String? = null,
 
-	@SerializedName("SavedSearchName")
+	@JvmField @SerializedName("SavedSearchName")
 	val savedSearchName: Any? = null,
 
-	@SerializedName("InterestedIn")
+	@JvmField @SerializedName("InterestedIn")
 	val interestedIn: String? = null,
 
-	@SerializedName("AssignedTo")
+	@JvmField @SerializedName("AssignedTo")
 	val assignedTo: String? = null,
 
-	@SerializedName("FirstTradedDate")
+	@JvmField @SerializedName("FirstTradedDate")
 	val firstTradedDate: Any? = null,
 
-	@SerializedName("ClientStatusID")
+	@JvmField @SerializedName("ClientStatusID")
 	val clientStatusID: Int? = null,
 
-	@SerializedName("MeetingCallList")
+	@JvmField @SerializedName("MeetingCallList")
 	val meetingCallList: List<Any?>? = null,
 
-	@SerializedName("SourceList")
+	@JvmField @SerializedName("SourceList")
 	val sourceList: List<Any?>? = null,
 
-	@SerializedName("ClientCode")
+	@JvmField @SerializedName("ClientCode")
 	val clientCode: Any? = null,
 
-	@SerializedName("EncLeadID")
+	@JvmField @SerializedName("EncLeadID")
 	val encLeadID: Any? = null,
 
-	@SerializedName("InterestedInID")
+	@JvmField @SerializedName("InterestedInID")
 	val interestedInID: Int? = null,
 
-	@SerializedName("LeadID")
+	@JvmField @SerializedName("LeadID")
 	val leadID: Int? = null,
 
-	@SerializedName("CallTime")
+	@JvmField @SerializedName("CallTime")
 	val callTime: Any? = null,
 
-	@SerializedName("PAN")
+	@JvmField @SerializedName("PAN")
 	val pAN: Any? = null,
 
-	@SerializedName("MTDRevenue")
+	@JvmField @SerializedName("MTDRevenue")
 	val mTDRevenue: Any? = null,
 
-	@SerializedName("DPValueList")
+	@JvmField @SerializedName("DPValueList")
 	val dPValueList: List<Any?>? = null
 )
