@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 295,
-      "versionName": "2.9.5",
-      "outputFile": "app-prodRelease-2.9.5.apk"
+      "versionCode": 300,
+      "versionName": "3.0.0",
+      "outputFile": "app-prodRelease-3.0.0.apk"
     }
   ],
   "elementType": "File"
