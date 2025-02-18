@@ -354,22 +354,6 @@ class CreateMeetingPresenter @Inject constructor(
                 view.renderLocationSave(it.data)
             }
             .addTo(disposable)
-
-        view.onZykrrSurveyLinkEventFired()
-            .switchMap {
-                repository.sendSurveyLink(
-                    SurveyLinkData(
-                        leadId = createMeetingData.leadId,
-                        clientCode = it.clientCode,
-                        meetingId = it.meetingId,
-                        rmCode = userManager.getUser()?.employeeCode!!,
-                        mobileNumber = view.getMobileNumberType().contactNumber,
-                        surveyLink = it.surveyLink
-                    )
-                )
-                    .compose(applyUiModel())
-            }.subscribe(view::renderSurveyLink)
-            .addTo(disposable)
   }
 
     private fun getInputData(): MeetingApptModel {

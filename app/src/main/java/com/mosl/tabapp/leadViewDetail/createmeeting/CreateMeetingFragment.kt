@@ -40,6 +40,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
 import com.mosl.shared.util.getFormatedDate
@@ -121,6 +122,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
+import com.mosl.tabapp.urls.ApiBaseUrlImpl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -324,17 +326,6 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             chipsAdapter.setSpinnerData(binding.spChips, it)
-        }
-    }
-
-    override fun onZykrrSurveyLinkEventFired(): Observable<OnZykrrSurveyLink> {
-        return uiSubject.ofType()
-    }
-
-    override fun renderSurveyLink(uiModel: UiModel<String>) {
-        toggleProgress(uiModel.inProgress)
-        uiModel.onFailure {
-            showOnFailurePopup(it)
         }
     }
 
@@ -1693,7 +1684,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
-            callZykrrApi(it.meetingId)
+
             MSFDialog.alertDialog(
                 requireContext(), 0, resources.getString(string.motilal_oswal),
                 MOSLConstants.CREATE_MEETING, "OK", true
@@ -1701,6 +1692,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
+                    if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                            ignoreCase = true)){
+                        callZykrrApi(it.meetingId)
+                    }
                 }
             }
         }
@@ -1742,14 +1737,38 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 if (response.isSuccessful) {
                     val post = response.body() as registerResponse
                     Timber.d("registerResponse: ${post.surveyLinks}")
-                    uiSubject.onNext(OnZykrrSurveyLink(post.surveyLinks[0], meetingId = meetingId, clientCode = binding.layoutTopSection.tvClientCode.text.toString() ))
-
+                    sendSurveyLink(post.surveyLinks[0], meetingId)
                 } else {
                     Timber.d("registerResponse: ${response.toString()}")
                 }
             }
 
             override fun onFailure(call: Call<registerResponse>, t: Throwable) {
+                Timber.d("registerResponse: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun sendSurveyLink(surveyLink: String, meetingId :Int){
+        RetrofitClient.setBaseUrl(ApiBaseUrlImpl.SAATHI_BASE_URL)
+        val retro = RetrofitClient.retrofit
+       val data =  SurveyLinkRequest(
+            leadId = binding.layoutTopSection.tvLeadId.text.toString().toInt(),
+            clientCode = binding.layoutTopSection.tvClientCode.text.toString(),
+            meetingId = meetingId,
+            rmCode = userManager.getUser()?.employeeCode!!,
+            mobile = getMobileNumberType().contactNumber,
+            surveyLink = surveyLink
+        )
+         val call = ApiClient(retro).apiService.sendSurveyLink(data)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    uiSubject.onNext(SaveConfirmClick)
+                }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 Timber.d("registerResponse: ${t.localizedMessage}")
             }
         })

@@ -13,6 +13,7 @@ import com.mosl.saathi.api.ApiEndpoints.ValidateOTP
 import com.mosl.shared.Encryptor.AESEncryptor
 import com.mosl.shared.util.getDeviceID
 import okhttp3.Interceptor
+import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 import javax.inject.Inject
@@ -33,29 +34,45 @@ class HeaderInterceptor @Inject constructor(
 
     val builder = original.newBuilder()
 
-    if (chain.request().url().pathSegments().last() != LoginEndPoint && chain.request().url().pathSegments().last() != AppVersionEndPoint && chain.request().url().pathSegments().last()!= ValidateLogin &&  chain.request().url().pathSegments().last()!= GenerateOTP && chain.request().url().pathSegments().last()!=ValidateOTP && chain.request().url().pathSegments().last() != SendSurveyLink) {
+    // Check if the request is one of the excluded endpoints
+    if (!isExcludedEndpoint(original)) {
       val user = userManager.user
       builder.header(API_HEADER_CONTENT_TYPE, encryptor.encrypt(API_HEADER_CONTENT_TYPE_VALUE))
       builder.header(API_HEADER_CLIENT_INFO, encryptor.encrypt(API_HEADER_CLIENT_INFO_VALUE))
       builder.header(API_HEADER_IP_ADDRESS, encryptor.encrypt(getLocalIpAddress()))
       builder.header(
-          API_HEADER_MAC_ADDRESS, encryptor.encrypt(getDeviceID(context.contentResolver))
+        API_HEADER_MAC_ADDRESS, encryptor.encrypt(getDeviceID(context.contentResolver))
       )
       builder.header(API_HEADER_APP_ID, encryptor.encrypt(API_HEADER_APP_ID_VALUE))
       builder.header(API_HEADER_TOKEN, encryptor.encrypt(user.token))
       builder.header(API_HEADER_USER_ID, encryptor.encrypt(user.userId))
       builder.header(
-          API_HEADER_BUSINESS_UNIT_ID, encryptor.encrypt(
+        API_HEADER_BUSINESS_UNIT_ID, encryptor.encrypt(
           user.currentBusinessProfile.businessUnitId ?: "0"
-      )
+        )
       )
       builder.header(API_HEADER_EMPLOYEE_CODE, encryptor.encrypt(userManager.user.employeeCode))
-      builder.header("currentBusinessProfileId",encryptor.encrypt(userManager.user.currentBusinessProfile.businessProfileId ?:"0"))
+      builder.header(
+        "currentBusinessProfileId",
+        encryptor.encrypt(userManager.user.currentBusinessProfile.businessProfileId ?: "0")
+      )
 
     }
-    val response = chain.proceed(builder.build())
 
-    return response
+    // Proceed with the request and obtain the response
+    val newRequest = builder.build()
+
+    return chain.proceed(newRequest)
+  }
+
+  private fun isExcludedEndpoint(request: Request): Boolean {
+    val lastPathSegment = request.url().pathSegments().last()
+    return lastPathSegment == LoginEndPoint ||
+            lastPathSegment == AppVersionEndPoint ||
+            lastPathSegment == ValidateLogin ||
+            lastPathSegment == GenerateOTP ||
+            lastPathSegment == ValidateOTP ||
+            lastPathSegment == SendSurveyLink
   }
 
   companion object {

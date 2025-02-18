@@ -1,5 +1,8 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting.zykrr
 
+import com.mosl.saathi.api.model.common.ExtraDataWrapper
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
+import io.reactivex.rxjava3.core.Observable
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -21,4 +24,9 @@ interface ApiService {
         @Header("Cookie") token : String,
         @Body request: registerData
     ): Call<registerResponse>
+
+    @POST("Common/TriggerMeetingFeedbackEmailSMS")
+    fun sendSurveyLink(
+        @Body request: SurveyLinkRequest
+    ): Call<String>
 }

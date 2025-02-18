@@ -182,21 +182,6 @@ class CreateMeetingRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun sendSurveyLink(data: SurveyLinkData): Observable<String> {
-        val request = SurveyLinkRequest(
-            leadId = data.leadId.toInt(),
-            clientCode = data.clientCode,
-            meetingId = data.meetingId,
-            rmCode = data.rmCode,
-            mobile = data.mobileNumber,
-            surveyLink = data.surveyLink
-        )
-        return saathiApi.sendSurveyLink(request)
-            .map {
-                it.getMessage()
-            }
-    }
-
     fun getType(type: Int): String {
         return when (type) {
             INTERESTEDIN -> "Select Product"

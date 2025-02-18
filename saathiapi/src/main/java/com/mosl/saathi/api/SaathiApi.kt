@@ -838,9 +838,6 @@ interface SaathiApi {
     @POST("SMSCampaign/InsertReactivationWithFile")
     fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
 
-    @POST("Common/TriggerMeetingFeedbackEmailSMS")
-    fun sendSurveyLink(
-        @Body request: SurveyLinkRequest
-    ): Observable<SaathiCommonResponse<String>>
+
 
 }
