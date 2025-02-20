@@ -79351,10 +79351,17 @@ com.mosl.app.core.data.report.HierarchyReportRepositoryImpl:
     public static java.util.ArrayList setData()
 com.mosl.app.core.data.report.ReportMapperKt
 com.mosl.app.core.data.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepositoryImpl$fnSearchProspectMeetingClient$1:
-    public static java.util.List apply$3()
+    public final java.util.List apply$3()
+com.mosl.app.core.data.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepositoryImpl$fnSearchProspectMeetingFRCode$1:
+    public final java.util.List apply$3()
 com.mosl.app.core.data.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepositoryImpl:
+    public final io.reactivex.rxjava3.core.Observable fnSearchProspectMeetingClient()
+    public final io.reactivex.rxjava3.core.Observable fnSearchProspectMeetingFRCode()
     public static java.lang.String getType()
-com.mosl.app.core.data.saathiIndirect.ProspestMeeting.ProspestMeetingMapper
+com.mosl.app.core.data.saathiIndirect.ProspestMeeting.ProspestMeetingMapper:
+    public static final com.mosl.app.core.data.saathiIndirect.ProspestMeeting.ProspestMeetingMapper INSTANCE
+    public static void <clinit>()
+    public void <init>()
 com.mosl.app.core.data.saathiIndirect.SetAppointment.IndirectSetAppointmentRepositoryImpl$getActivitytype$1:
     public final java.util.List apply$4()
 com.mosl.app.core.data.saathiIndirect.SetAppointment.IndirectSetAppointmentRepositoryImpl$getAttendeeData$1:
@@ -82287,7 +82294,8 @@ com.mosl.mobile.domain.report.HierarchyReportRepository:
     public abstract io.reactivex.rxjava3.core.Observable getBranch()
     public abstract io.reactivex.rxjava3.core.Observable getDashboardData(com.mosl.mobile.domain.report.HierarchyReportInput)
 com.mosl.mobile.domain.saathiIndirect.ProspestMeeting.IndirectProspestMeetingRepository:
-    public abstract io.reactivex.rxjava3.core.Observable fnSearchProspectMeetingClient(java.lang.String,java.lang.String)
+    public abstract io.reactivex.rxjava3.core.Observable fnSearchProspectMeetingClient()
+    public abstract io.reactivex.rxjava3.core.Observable fnSearchProspectMeetingFRCode()
 com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointmentRepository:
     public abstract io.reactivex.rxjava3.core.Observable getActivitytype()
     public abstract io.reactivex.rxjava3.core.Observable getAttendeeData()

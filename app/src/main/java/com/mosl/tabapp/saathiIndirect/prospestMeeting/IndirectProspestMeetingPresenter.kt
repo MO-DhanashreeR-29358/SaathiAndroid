@@ -37,7 +37,7 @@ class IndirectProspestMeetingPresenter @Inject constructor(
         }.addTo(disposable)
 
         view.onFCodeTextSearchCalled().filter { it.text.length > 2 }.switchMap {
-            indirectProRepo.fnSearchProspectMeetingClient(null,it.text,null).compose(applyUiModel())
+            indirectProRepo.fnSearchProspectMeetingFRCode(null,it.text,null).compose(applyUiModel())
         }.subscribe {
             view.onFCodeTextSearchRender(it)
         }.addTo(disposable)

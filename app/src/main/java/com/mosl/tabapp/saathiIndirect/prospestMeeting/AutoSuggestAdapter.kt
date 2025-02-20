@@ -32,7 +32,13 @@ class AutoSuggestAdapter(context: Context, resource: Int) :
 //    }
 
     override fun getItem(position: Int): String? {
-        return  mlistData[position].clientCODE+"/"+mlistData[position].leadId
+        var code  = ""
+        if(mlistData[position].clientCODE.isNotEmpty()){
+            code = mlistData[position].clientCODE +"/"
+        }else if(mlistData[position].franchiseeCode.isNotEmpty()){
+            code = mlistData[position].franchiseeCode +"/"
+        }
+        return  code + mlistData[position].leadId
     }
     /**
      * Used to Return the full object directly from adapter.
