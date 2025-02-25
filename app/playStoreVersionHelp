@@ -29,3 +29,8 @@ Release Note :  1. SAAT- 1335 : Indirect dashboard IFA and FOCO
                 2. Resolve issue rooted device by adding FridaDetect classs
                 3. Resolve issue Key logger
                 4. Lead creation bug fixes for Indirect Foco user.
+---------------------------------------------------------------------------------------------
+Version : 3.0.0
+Update Date : 14.2.2025
+Release Note :  1. SAATH- 2557 : Advance search in mobile
+                2. add this functionality in menu for all channel

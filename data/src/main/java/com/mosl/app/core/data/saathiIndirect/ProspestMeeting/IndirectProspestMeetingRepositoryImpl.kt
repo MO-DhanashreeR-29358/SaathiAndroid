@@ -37,6 +37,20 @@ class IndirectProspestMeetingRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun fnSearchProspectMeetingFRCode(
+        strClientCode: String?,
+        strFranchieeCode: String?,
+        strLeadId: String?
+    ): Observable<List<ClientSearchModel>> {
+        return saathiIndrectApi.fnSearchProspectMeetingFRCode(ProspestMeetingSearchRequest(
+            clientCODE = strClientCode, franchiseeCode = strFranchieeCode, leadId = strLeadId, businessUnitId = userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString()
+        )).map {
+            ProspestMeetingMapper.transformListData(it.response?: mutableListOf(), getType(
+                ACTIVITYTYPE
+            ))
+        }
+    }
+
     fun getType(type: Int): String {
         return when (type) {
             INTERESTEDIN -> "Select Product"
