@@ -3,8 +3,7 @@ package com.mosl.tabapp.navigation
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.mosl.tabapp.advancesearch.AdvanceSearchFragment
-import com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment
+import com.mosl.tabapp.advancesearch.QuickSearchTabFragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment

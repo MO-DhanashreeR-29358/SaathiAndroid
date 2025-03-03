@@ -1,10 +1,9 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -15,9 +14,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.mobile.domain.snapshot.AdvanceSearchDataCombo
-import com.mosl.mobile.domain.snapshot.BusinessSnapshotCombo
 import com.mosl.tabapp.R
-import com.mosl.tabapp.advancesearch.AdvanceSearchPresenter
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
@@ -30,11 +27,9 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput
 import com.mosl.tabapp.databinding.DialogAdvanceSearchViewBinding
-import com.mosl.tabapp.databinding.DialogIndirectLeadviewBinding
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadViewDetailUiEvent
 import javax.inject.Inject
 
-class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
+class QuickSearchTabFragment :CommonFragment(), QuickSearchTabView {
     internal lateinit var binding: FragTabQuickSearchBinding
     @Inject
     lateinit var presenter: QuickSearchTabPresenter
@@ -43,6 +38,7 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
     private val Subject= PublishSubject.create<QuickSearchUiEvent>()
     var isLeadSearch:Boolean=true
     private var leadId: String = "0"
+    private  var ucId:String="0"
     override fun getLayout() = R.layout.frag_tab_quick_search
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +75,25 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
                     viewProvider.rowClickListener = { row, view ->
                         val column = view.getTag(R.id.tag_column) as Int
                         val reportData = tableRowAdapter.getItem(row).data
-                        Subject.onNext(QuickSearchUiEvent.onTableRowClicked(reportData.hasMap["LeadID"].toString()))
+                        if(isLeadSearch)
+                        {
+                            Subject.onNext(
+                                QuickSearchUiEvent.onTableRowClicked(
+                                    reportData.hasMap["LeadID"].toString(),
+                                    "0"
+                                )
+                            )
+                        }
+                        else
+                        {
+                            Subject.onNext(
+                                QuickSearchUiEvent.onTableRowClicked(
+                                    "0",
+                                    reportData.hasMap["UCID"].toString()
+                                )
+                            )
+                        }
+
                     }
                 }
         tableRowAdapter = mfAdapter
@@ -140,8 +154,9 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
         return Subject.ofType()
     }
 
-    override fun fnRenderTableRowClicked(strLeadId: String) {
+    override fun fnRenderTableRowClicked(strLeadId: String, strUcId: String) {
         leadId=strLeadId
+        ucId=strUcId
         Dialog(requireContext()).apply {
             val dialogBinding = DialogAdvanceSearchViewBinding.inflate(layoutInflater)
             requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -351,6 +366,6 @@ class QuickSearchTabFragment :CommonFragment(),QuickSearchTabView {
     }
 
     override fun getUcid(): String {
-        return  "0"
+        return  ucId
     }
 }

@@ -1,4 +1,4 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import com.mosl.mobile.domain.snapshot.AdvanceSearchData
 import com.mosl.mobile.domain.snapshot.BusinessSnapshotData

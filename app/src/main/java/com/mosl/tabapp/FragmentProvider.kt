@@ -1,12 +1,8 @@
 package com.mosl.tabapp
 
 import com.mosl.mobile.pdf.OTPModule
-import com.mosl.tabapp.advancesearch.AdvanceSearchFragment
-import com.mosl.tabapp.advancesearch.AdvanceSearchModule
-import com.mosl.tabapp.advancesearch.advanceSearch.AdvanceSearchTabFragment
-import com.mosl.tabapp.advancesearch.advanceSearch.AdvanceSearchTabModule
-import com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment
-import com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabModule
+import com.mosl.tabapp.advancesearch.QuickSearchTabFragment
+import com.mosl.tabapp.advancesearch.QuickSearchTabModule
 import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment
 import com.mosl.tabapp.attendancedialog.AttendanceDialogModule
 import com.mosl.tabapp.attendancedialog.verifyotp.VerifyDialogFragment
@@ -353,13 +349,8 @@ interface FragmentProvider {
     fun provideIndirectIFAReportDetailsFragmentFactory():IndirectIFAReportDetailsFragment
 
 
-    @ContributesAndroidInjector(modules = [AdvanceSearchModule::class])
-    fun provideAdvanceSearchFragmetnFactory():AdvanceSearchFragment
-
-    @ContributesAndroidInjector(modules = [AdvanceSearchTabModule::class])
-    fun proivdeAdvanceSearchTabFragmentFactory():AdvanceSearchTabFragment
 
     @ContributesAndroidInjector(modules = [QuickSearchTabModule::class])
-    fun proivdeQuickSearchTabModuleFactory():QuickSearchTabFragment
+    fun proivdeQuickSearchTabModuleFactory(): QuickSearchTabFragment
 
 }

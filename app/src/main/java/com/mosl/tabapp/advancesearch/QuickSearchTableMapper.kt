@@ -1,8 +1,7 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import android.content.Context
 import com.mosl.mobile.domain.snapshot.AdvanceSearchData
-import com.mosl.mobile.domain.snapshot.BusinessSnapshotData
 import com.mosl.tabapp.table.DynamicHeaderRow
 import com.mosl.tableview.rowadapter.HeaderRow
 import com.mosl.tableviewx.TableRowDataMapper

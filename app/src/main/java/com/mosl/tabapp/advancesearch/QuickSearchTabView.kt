@@ -1,4 +1,4 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
@@ -12,7 +12,7 @@ interface QuickSearchTabView :BaseView {
     fun renderData(uiModel: UiModel<AdvanceSearchDataCombo>)
 
     fun onTableRowClicked():Observable<QuickSearchUiEvent.onTableRowClicked>
-    fun fnRenderTableRowClicked(strLeadId:String)
+    fun fnRenderTableRowClicked(strLeadId:String,strUcId:String)
 
     fun fnGetSearchInput(): AdvanceSearchInput
 
