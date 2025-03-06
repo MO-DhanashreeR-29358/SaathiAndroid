@@ -1704,7 +1704,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private fun callZykrrApi( meetingId : Int){
         RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
         val retro = RetrofitClient.retrofit
+        //UAT
         val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
+        //Live
+        //val callToken = ApiClient(retro).apiService.getToken("tech_mofsl_user_meetingfeedback","ae552240")
 
         callToken.enqueue(object : Callback<tokenModel> {
             override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
@@ -1728,7 +1731,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private fun callZykrrRegisterApi(tokenModel: tokenModel, meetingId :Int){
         RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
         val retro = RetrofitClient.retrofit
+        //UAT
         val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+        //Live
+        //val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+
         val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
 
         call.enqueue(object : Callback<registerResponse> {
