@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorWhite">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/titleBarBackground"
+                android:fontFamily="@font/roboto_reg"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_5sdp"
+                android:text="@string/label_quick"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textFontWeight="500"
+                android:textSize="@dimen/_16ssp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <RadioGroup
+                android:id="@+id/radio_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_btn_lead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/lato_reg"
+                    android:text="Lead Search"
+                    android:textColor="@color/colorBlack"
+                    android:textFontWeight="400"
+                    android:buttonTint="@color/light_blue_700"
+                    android:checked="true"
+                    android:textSize="@dimen/_14ssp" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/radio_btn_client"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:fontFamily="@font/lato_reg"
+                    android:text="Client Search"
+                    android:textColor="@color/colorBlack"
+                    android:textFontWeight="400"
+                    android:buttonTint="@color/light_blue_700"
+                    android:textSize="@dimen/_14ssp" />
+            </RadioGroup>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radio_selection">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llleadSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/hint_text_lead_id"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtleadID"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/roboto_reg"
+                        android:inputType="number"
+                        android:maxLength="15"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/text_label_mobile_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/roboto_reg"
+                        android:inputType="phone"
+                        android:padding="@dimen/_5sdp"
+                        android:maxLength="10"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/text_label_email_address"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:fontFamily="@font/roboto_reg"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/txt_label_name"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtleadName"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/hint_lead_creation_aadhar_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtAadharNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/roboto_reg"
+                        android:inputType="number"
+                        android:maxLength="12"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lead_detail_pan_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtPanNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:maxLength="10"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/llClientSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_10sdp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/txt_lable_client_code"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtclientCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/text_label_mobile_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCMobileNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:inputType="phone"
+                        android:digits="0123456789"
+                        android:maxLength="10"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/text_label_email_address"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCEmailAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                      android:inputType="textEmailAddress"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/hint_lead_creation_aadhar_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCAadharNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:digits="0123456789"
+                        android:maxLength="12"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lead_detail_ucid"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtUcid"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:inputType="number"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lead_detail_family_ucid"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtfamilyUcid"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                      android:inputType="number"
+                        android:digits="0123456789"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_15sdp"
+                        android:fontFamily="@font/roboto_reg"
+                        android:text="@string/lead_detail_pan_number"
+                        android:textColor="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edtCPanNo"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/bg_edit_text"
+                        android:cursorVisible="true"
+                        android:imeOptions="actionDone"
+                        android:maxLength="10"
+                        android:fontFamily="@font/roboto_reg"
+                        android:padding="@dimen/_5sdp"
+                        android:textColor="@color/colorBlack"
+                        android:textCursorDrawable="@color/colorBlack"
+                        android:textFontWeight="500"
+                        android:textSize="@dimen/_14ssp" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </RelativeLayout>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/llbuttoncontainer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_search_lead"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_state_bg"
+                    android:fontFamily="@font/lato_reg"
+                    android:text="@string/SS_SEARCH"
+                    android:textColor="@color/white"
+                    android:textFontWeight="500"
+                    android:textSize="@dimen/_14ssp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_reset_lead"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_gray_background"
+                    android:fontFamily="@font/lato_reg"
+                    android:text="@string/lbl_reset"
+                    android:textColor="@color/clr_btn_reset"
+                    android:textFontWeight="500" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <com.mosl.tabapp.view.TableWrapperView
+                android:id="@+id/table_wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:padding="@dimen/_4sdp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/llbuttoncontainer"
+                />
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

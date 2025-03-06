@@ -57,8 +57,6 @@
         app:layout_constraintStart_toEndOf="@id/ivCall"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_new_sms" />
-
-
   </androidx.constraintlayout.widget.ConstraintLayout>
 
   <androidx.appcompat.widget.AppCompatImageView

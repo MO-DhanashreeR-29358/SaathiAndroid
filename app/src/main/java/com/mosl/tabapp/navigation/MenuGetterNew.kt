@@ -3,6 +3,8 @@ package com.mosl.tabapp.navigation
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.mosl.tabapp.advancesearch.AdvanceSearchFragment
+import com.mosl.tabapp.advancesearch.quickSearch.QuickSearchTabFragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
@@ -136,6 +138,9 @@ object MenuGetterNew {
                 args.putString(WebviewFragment.PAGE_ID, WebviewFragment.QUERY_FORM_ID)
                 arguments = args
             }
+            NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH-> QuickSearchTabFragment()
+
+
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> FocoDashboardFragment()
@@ -225,6 +230,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->true
+            NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH->true
             else -> return false
         }
     }

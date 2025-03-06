@@ -4,6 +4,7 @@ import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
+import com.mosl.saathi.api.model.advanceSearch.AdvanceSearchCommonResponse
 import com.mosl.saathi.api.model.assignto.SecondaryRmFilterRequest
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.attendance.*
@@ -107,6 +108,7 @@ import com.mosl.saathi.api.model.reactivation.*
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.search.AdvanceSearchRequestPost
 import com.mosl.saathi.api.model.search.DiyLinkResponse
 import com.mosl.saathi.api.model.search.DiyRequest
 import com.mosl.saathi.api.model.search.SearchResponse
@@ -838,6 +840,6 @@ interface SaathiApi {
     @POST("SMSCampaign/InsertReactivationWithFile")
     fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
 
-
-
+    @POST("Client/SearchClient")
+    fun fnSearchClient(@Body request: AdvanceSearchRequestPost):Observable<SaathiCommonResponse<AdvanceSearchCommonResponse>>
 }

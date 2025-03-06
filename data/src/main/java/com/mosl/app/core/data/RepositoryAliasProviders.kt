@@ -1,5 +1,6 @@
 package com.mosl.app.core.data
 
+import com.mosl.app.core.data.advanceSearch.AdvanceSearchRepositoryImp
 import com.mosl.app.core.data.autarget.TargetRepositoryImpl
 import com.mosl.app.core.data.bank.BankRepositoryImpl
 import com.mosl.app.core.data.birthdayanniversary.BirthdayAnniversaryRepositoryImpl
@@ -28,6 +29,7 @@ import com.mosl.app.core.data.snapshot.BusinessSnapshotRepositoryImpl
 import com.mosl.app.core.data.teamtarget.TeamTargetRepositoryImpl
 import com.mosl.app.core.data.tradeyesterday.ClientTradeYesterdayRepositoryImpl
 import com.mosl.app.core.data.trends.TrendsRepositoryImpl
+import com.mosl.mobile.domain.advanceSearch.AdvanceSearchRepository
 import com.mosl.mobile.domain.bank.BankRepository
 import com.mosl.mobile.domain.birthdayanniversary.BirthdayAnniversaryRepository
 import com.mosl.mobile.domain.branch.BranchRepository
@@ -147,4 +149,7 @@ interface RepositoryAliasProviders {
 
     @Binds
     fun  provideIndirectIFADashboardRepository(repository: IndirectIFADashboardRepositoryImpl): IndirectIFADashboardRepository
+
+    @Binds
+    fun provideAdvanceSearchRepository(repository: AdvanceSearchRepositoryImp):AdvanceSearchRepository
 }

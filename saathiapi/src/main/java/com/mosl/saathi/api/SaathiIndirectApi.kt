@@ -123,6 +123,10 @@ interface SaathiIndirectApi {
     @POST("UserApi/GetClientCodesAuto")
     fun fnSearchProspectMeetingClient(@Body request: ProspestMeetingSearchRequest):Observable<ProspestMeetingSearchResponse>
 
+    @POST("UserApi/GetFranchiseeCodesAuto")
+    fun fnSearchProspectMeetingFRCode(@Body request: ProspestMeetingSearchRequest):Observable<ProspestMeetingSearchResponse>
+
+
     @POST("Lead/GetAddressByLeadId")
     fun getAddressByLeadId(@Body request: AddressByLeadIdRequest): Observable<AddressByLeadIdResponse>
 
