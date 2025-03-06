@@ -846,8 +846,13 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         objPostData. amount=data.amount
         objPostData. product=data.product
         var tempList :MutableList<MeetingAttendeeItem?> =getAttendeeList().map {
-            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType)
+            MeetingAttendeeItem(it.attended,it.attendeeName,"0",it.attendeeCode,it.attendeeType,false)
         }.toMutableList()
+
+        tempList.add(MeetingAttendeeItem(
+                true,userManager.user.firstName+""+userManager.user.lastName,"0",userManager.user.employeeCode,"R",true
+            ))
+
         objPostData. meetingAttendee=tempList
         objPostData. meetingLongitude =data.meetingLongitude
         objPostData. meetingDurationID=data.meetingDurationID
@@ -875,6 +880,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             }
         }
         objPostData.attendeeCode=aId
+
 
         return objPostData
     }

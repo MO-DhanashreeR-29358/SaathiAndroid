@@ -17,7 +17,7 @@ data class AdvisoryMappingTypesItem(
   @JvmField val lookupType: Int,
 
   @SerializedName("EmployeeCode")
-  @JvmField val employeeCode: Any,
+  @JvmField val employeeCode: Any?=null,
 
   @SerializedName("LookUpid")
   @JvmField val lookUpid: Int,

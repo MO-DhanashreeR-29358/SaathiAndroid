@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class Product(
 
   @SerializedName("GroupName")
-  @JvmField val groupName: Any,
+  @JvmField val groupName: Any?=null,
 
   @SerializedName("Status")
   @JvmField val status: Int,
@@ -26,19 +26,19 @@ data class Product(
   @JvmField val backOfficeProductId: Int,
 
   @SerializedName("ClientProducts")
-  @JvmField val clientProducts: Any,
+  @JvmField val clientProducts: Any?=null,
 
   @SerializedName("InApproval")
   @JvmField val inApproval: Boolean,
 
   @SerializedName("ApprovalFieldList")
-  @JvmField val approvalFieldList: Any,
+  @JvmField val approvalFieldList: Any?=null,
 
   @SerializedName("IsAdminMode")
   @JvmField val isAdminMode: Boolean,
 
   @SerializedName("EffectiveFrom")
-  @JvmField val effectiveFrom: Any,
+  @JvmField val effectiveFrom: Any?=null,
 
   @SerializedName("AdvisoryMappingTypes")
   @JvmField val advisoryMappingTypes: List<AdvisoryMappingTypesItem>
