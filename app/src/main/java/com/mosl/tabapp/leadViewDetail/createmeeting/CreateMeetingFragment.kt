@@ -186,6 +186,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var strProspectSource : String = ""
     var strActivateOTPInApp : String = ""
     var strLeadCreationDate : String = ""
+    var defaultMobileNumber : String = "0"
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -375,6 +376,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             val clientDetail = it.clientDetail
+            if(it.listMobileNumber.size > 1){
+                defaultMobileNumber =  it.listMobileNumber[1].contactNumber
+            } else if(it.listMobileNumber.size == 1){
+                defaultMobileNumber =  it.listMobileNumber[0].contactNumber
+            }
+
             strLeadCreationDate = it.clientDetail.leadCreationDate
             strActivateOTPInApp = it.clientDetail.activateOTPInApp
             strSourceName = clientDetail.sourceName
@@ -1705,9 +1712,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
         val retro = RetrofitClient.retrofit
         //UAT
-        val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
+        //val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
         //Live
-        //val callToken = ApiClient(retro).apiService.getToken("tech_mofsl_user_meetingfeedback","ae552240")
+        val callToken = ApiClient(retro).apiService.getToken("tech_mofsl_user_meetingfeedback","ae552240")
 
         callToken.enqueue(object : Callback<tokenModel> {
             override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
@@ -1732,9 +1739,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
         val retro = RetrofitClient.retrofit
         //UAT
-        val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+       // val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
         //Live
-        //val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+        val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
 
         val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
 
@@ -1759,12 +1766,16 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private fun sendSurveyLink(surveyLink: String, meetingId :Int){
         RetrofitClient.setBaseUrl(ApiBaseUrlImpl.SAATHI_BASE_URL)
         val retro = RetrofitClient.retrofit
+        var mobile  = getMobileNumberType().contactNumber
+        if(getMobileNumberType().contactNumber.isEmpty() || getMobileNumberType().contactNumber == "0" ){
+                mobile = defaultMobileNumber
+        }
        val data =  SurveyLinkRequest(
             leadId = binding.layoutTopSection.tvLeadId.text.toString().toInt(),
             clientCode = binding.layoutTopSection.tvClientCode.text.toString(),
             meetingId = meetingId,
             rmCode = userManager.getUser()?.employeeCode!!,
-            mobile = getMobileNumberType().contactNumber,
+            mobile = mobile,
             surveyLink = surveyLink
         )
          val call = ApiClient(retro).apiService.sendSurveyLink(data)
