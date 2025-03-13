@@ -29,6 +29,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
 import com.mosl.app.core.events.DataAction
@@ -39,6 +40,7 @@ import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
 import com.mosl.shared.util.getFormatedDate
@@ -113,6 +115,17 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ApiClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.MeetingFeedbackData
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
+import com.mosl.tabapp.urls.ApiBaseUrlImpl
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
@@ -172,7 +185,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var strSourceName : String = ""
     var strProspectSource : String = ""
     var strActivateOTPInApp : String = ""
-
+    var strLeadCreationDate : String = ""
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -362,6 +375,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
         uiModel.onSuccess {
             val clientDetail = it.clientDetail
+            strLeadCreationDate = it.clientDetail.leadCreationDate
             strActivateOTPInApp = it.clientDetail.activateOTPInApp
             strSourceName = clientDetail.sourceName
             strProspectSource = clientDetail.prospectSource
@@ -1670,6 +1684,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
+
             MSFDialog.alertDialog(
                 requireContext(), 0, resources.getString(string.motilal_oswal),
                 MOSLConstants.CREATE_MEETING, "OK", true
@@ -1677,9 +1692,134 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
+                    if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                            ignoreCase = true)){
+                        callZykrrApi(it.meetingId)
+                    }
                 }
             }
         }
+    }
+
+    private fun callZykrrApi( meetingId : Int){
+        RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
+        val retro = RetrofitClient.retrofit
+        //UAT
+        val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
+        //Live
+        //val callToken = ApiClient(retro).apiService.getToken("tech_mofsl_user_meetingfeedback","ae552240")
+
+        callToken.enqueue(object : Callback<tokenModel> {
+            override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
+                if (response.isSuccessful) {
+                    val post = response.body() as tokenModel
+                    Timber.d("TokenResponse: ${post.token}")
+                    callZykrrRegisterApi(post, meetingId)
+                } else {
+                    Timber.d("TokenResponse: ${response.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<tokenModel>, t: Throwable) {
+                Timber.d("TokenResponse: ${t.localizedMessage}")
+            }
+        })
+
+
+    }
+
+    private fun callZykrrRegisterApi(tokenModel: tokenModel, meetingId :Int){
+        RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
+        val retro = RetrofitClient.retrofit
+        //UAT
+        val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+        //Live
+        //val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+
+        val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
+
+        call.enqueue(object : Callback<registerResponse> {
+            override fun onResponse(call: Call<registerResponse>, response: Response<registerResponse>) {
+
+                if (response.isSuccessful) {
+                    val post = response.body() as registerResponse
+                    Timber.d("registerResponse: ${post.surveyLinks}")
+                    sendSurveyLink(post.surveyLinks[0], meetingId)
+                } else {
+                    Timber.d("registerResponse: ${response.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<registerResponse>, t: Throwable) {
+                Timber.d("registerResponse: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun sendSurveyLink(surveyLink: String, meetingId :Int){
+        RetrofitClient.setBaseUrl(ApiBaseUrlImpl.SAATHI_BASE_URL)
+        val retro = RetrofitClient.retrofit
+       val data =  SurveyLinkRequest(
+            leadId = binding.layoutTopSection.tvLeadId.text.toString().toInt(),
+            clientCode = binding.layoutTopSection.tvClientCode.text.toString(),
+            meetingId = meetingId,
+            rmCode = userManager.getUser()?.employeeCode!!,
+            mobile = getMobileNumberType().contactNumber,
+            surveyLink = surveyLink
+        )
+         val call = ApiClient(retro).apiService.sendSurveyLink(data)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    uiSubject.onNext(SaveConfirmClick)
+                }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Timber.d("registerResponse: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun getMeetingData() : ArrayList<MeetingFeedbackData>{
+        val list = ArrayList<MeetingFeedbackData>()
+        try {
+            val strDateTime  = getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE9)
+            val arrDateTime =  strDateTime.split(" ")
+            Timber.d("strDateTime: ${strDateTime}")
+            Timber.d("strDate: ${arrDateTime[0]}")
+            Timber.d("strTime: ${arrDateTime[1]}")
+            val attendeeList = if (getAttendeeList()
+                    .isEmpty()
+            ) {
+                emptyList()
+            } else getAttendeeList()
+                .map {
+                    AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+                }
+            val strAttendee =if(attendeeList.isNotEmpty()) Gson().toJson(attendeeList) else ""
+            val feedback = MeetingFeedbackData(
+                LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
+                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
+                ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
+                AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
+                MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")
+
+          /*  val feedback = MeetingFeedbackData(
+                LeadId =  "", RMName = "",
+                RMEmpcode =  "", Clientcode =  "Test",
+                ActivityType = "", MeetingDate = "", MeetingTime = "",
+                AttendeeDetails = "", LeadCreationDate = "",
+                MeetingCreationDate = "", MeetingDescription = "", Role = "",
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
+*/
+            list.add(feedback)
+
+       }catch (ex: Exception){
+           ex.printStackTrace()
+       }
+        return list
     }
 
     companion object {

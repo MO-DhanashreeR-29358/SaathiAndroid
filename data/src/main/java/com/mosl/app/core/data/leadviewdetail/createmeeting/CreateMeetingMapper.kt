@@ -27,7 +27,8 @@ object CreateMeetingMapper {
             isPotentialPMSProduct = clientDetailItem.isPotentialPMSProduct ?: "",
             sourceName = clientDetailItem.sourceName?: "",
             prospectSource = clientDetailItem.prospectSource?: "",
-            activateOTPInApp = clientDetailItem.ActivateOTPInApp?: ""
+            activateOTPInApp = clientDetailItem.ActivateOTPInApp?: "",
+            leadCreationDate = clientDetailItem.creationDate?: ""
         )
     }
 
@@ -66,7 +67,8 @@ object CreateMeetingMapper {
             isOnlyClient = false,
             sourceName = leadViewItem.sourceName?: "",
             prospectSource = leadViewItem.prospectSource?: "",
-            activateOTPInApp = leadViewItem.ActivateOTPInApp?: ""
+            activateOTPInApp = leadViewItem.ActivateOTPInApp?: "",
+            leadCreationDate = leadViewItem.creationDate?:""
         )
     }
 
@@ -88,7 +90,8 @@ object CreateMeetingMapper {
     fun transformAddUpdateMeeting(addUpdateMeetingItem: AddUpdateMeetingItem): AddUpdateMeeting {
         return AddUpdateMeeting(
             leadId = addUpdateMeetingItem.leadId ?: 0,
-            ucidId = addUpdateMeetingItem.uCID ?: 0
+            ucidId = addUpdateMeetingItem.uCID ?: 0,
+            meetingId = addUpdateMeetingItem.meetingID ?:0
         )
     }
 
@@ -96,7 +99,8 @@ object CreateMeetingMapper {
     fun transformAddUpdateMeetingNew(addUpdateMeetingItem: AddUpdateMeetingNewResposne):AddUpdateMeeting  {
         return AddUpdateMeeting(
             leadId = addUpdateMeetingItem.response?.leadId ?: 0,
-            ucidId = addUpdateMeetingItem.response?.uCID ?: 0
+            ucidId = addUpdateMeetingItem.response?.uCID ?: 0,
+            meetingId = addUpdateMeetingItem.response?.meetingID ?: 0
         )
     }
     fun mapToSendOtpResponse(

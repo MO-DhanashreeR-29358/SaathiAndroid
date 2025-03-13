@@ -11,7 +11,8 @@ data class ClientDetail(
   @JvmField val isPotentialPMSProduct: String,
   @JvmField val sourceName: String,
   @JvmField val prospectSource: String,
-  @JvmField val activateOTPInApp: String
+  @JvmField val activateOTPInApp: String,
+  @JvmField val leadCreationDate: String
 )
 
 data class LookUp(
@@ -76,9 +77,19 @@ data class OTPRequestData(
 
 )
 
+data class SurveyLinkData(
+  @JvmField val leadId: String,
+  @JvmField val clientCode: String,
+  @JvmField val meetingId: Int,
+  @JvmField val rmCode: String,
+  @JvmField val mobileNumber: String,
+  @JvmField val surveyLink: String
+)
+
 data class AddUpdateMeeting(
   @JvmField val leadId: Int,
-  @JvmField val ucidId: Int
+  @JvmField val ucidId: Int,
+  @JvmField val meetingId: Int
 )
 
 data class SendOtpResponse(
