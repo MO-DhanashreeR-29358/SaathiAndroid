@@ -64,6 +64,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                 // hide as per requirement
@@ -93,6 +94,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                  // hide as per requirement
@@ -194,6 +196,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                  // hide as per requirement
@@ -224,6 +227,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getDashboard(),
                 getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                  // hide as per requirement
@@ -279,6 +283,7 @@ open class MenuDataSourceImpl @Inject constructor(
         return arrayListOf(
             getDashboard(),
             getOpenAccount(),
+            getQuickLink(),
             getDeleteRequest(),
             getLogout()
         ).apply { checkForPrime(false,isShowQRCode, false) }
@@ -301,6 +306,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -327,6 +333,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
@@ -506,6 +513,41 @@ open class MenuDataSourceImpl @Inject constructor(
                     navigateKey = ""
                 )
             )
+        )
+    }
+
+    private fun getQuickLink():BaseMenu{
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label=R.string.MOSL_MENU_QUICKLINK,
+            enabled = true,
+            children = arrayListOf(
+                ChildMenu(
+                    label =R.string.MOSL_MENU_DEMAT_ACC,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_ONLY_MFD,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD ,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_DEMAT_MFD,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD ,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_NON_BROKING,
+                enabled = true,
+                pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
+                navigateKey = ""
+            )
+            )
+
         )
     }
 

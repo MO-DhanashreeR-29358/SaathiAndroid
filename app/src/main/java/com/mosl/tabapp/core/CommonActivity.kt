@@ -785,6 +785,18 @@ class CommonActivity : BaseActivity(),
                     gotoEkycExpressPage(false, WebviewFragment.EQUITY_AND_MFD_ID)
                     binding.drawerLayout.closeDrawers()
                 }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC){
+                    screenNavigator.openUrlInAppCrome("https://ekycuat.motilaloswaluat.com/superjetapi?")
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD){
+                    screenNavigator.openUrlInAppCrome("https://ekycuat.motilaloswaluat.com/superJetApi/mfd/?")
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD){
+                    screenNavigator.openUrlInAppCrome("https://ekycuat.motilaloswaluat.com/superjetapi?")
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING){
+                    screenNavigator.openUrlInAppCrome("https://ekycuat.motilaloswaluat.com/superJetApi/nonbroking/?")
+                }
 
                 activityNavHelper.onMenuClicked(menu)
 
