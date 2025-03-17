@@ -40,3 +40,10 @@ Version : 3.0.1
 Update Date : 21.2.2025
 Release Note :  1. Resolve live issue: 1200 code not able to search in prospect meeting
                 - Indirect prospect meeting change api for client code search.
+---------------------------------------------------------------------------------------------
+Version : 3.0.2
+Update Date : 13.3.2025
+Release Note :  1. ZohoId - ASZ-I341
+                   Resolve live issue: getting object reference not set to instance on create meeting page,
+                    while searching client code through advance search and moving to create meeting page.
+
