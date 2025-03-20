@@ -30608,21 +30608,17 @@ com.mosl.mobile.user.login.LoginRepositoryImpl_Factory:
     public static com.mosl.mobile.user.login.LoginRepositoryImpl newInstance(com.mosl.mobile.user.login.AppUserRepository,com.mosl.mobile.user.login.UserManagerImpl)
 com.mosl.mobile.user.login.UserCache:
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
     public abstract void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl_Factory:
     public static com.mosl.mobile.user.login.UserCacheImpl newInstance(com.google.gson.Gson,com.mosl.mobile.user.helper.UserPrefStore,com.mosl.app.core.prefs.IntegerPreference)
 com.mosl.mobile.user.login.UserManager:
     public abstract void fnSetIsOtpEnable(boolean)
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
 com.mosl.mobile.user.login.UserManagerImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public final void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserManagerImpl_Factory:
     public static com.mosl.mobile.user.login.UserManagerImpl newInstance(com.mosl.mobile.user.login.UserCache)
@@ -88716,7 +88712,6 @@ com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1:
 com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
-    public boolean isCallOtp
     public final void buildAlertMessageNoGps()
     public static void checkKeyLogger()
     public final boolean checkMapServices()
@@ -88753,8 +88748,6 @@ com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:
     public final com.mosl.navigator.NavigationCallback get()
 com.mosl.tabapp.login.LoginActivityModule_ProvidePermissionCheckHelperFactory
 com.mosl.tabapp.login.LoginActivityUiEvent$Companion
-com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin:
-    public static final com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin INSTANCE
 com.mosl.tabapp.login.LoginActivityUiEvent$OnOtpSucess:
     public static com.mosl.mobile.user.model.User getUser()
 com.mosl.tabapp.login.LoginActivityUiEvent:
