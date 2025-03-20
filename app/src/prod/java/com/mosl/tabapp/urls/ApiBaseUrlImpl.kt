@@ -40,6 +40,6 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_DEMAT_ACCOUNT_LINK = "https://www.motilaloswal.com/open-demat-account/?"
     const val EKYC_ONLY_MFD_LINK = "https://ekyc.motilaloswal.com/partner/mfd/?"
     const val EKYC_MFD_LINK =  "https://www.motilaloswal.com/open-demat-account/?"
-    const val EKYC_NON_BROKING_PRODUCT_LINK = "https://www.motilaloswal.com/open-demat-account/?"
+    const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/partner/nonbroking/?"
   }
 }
