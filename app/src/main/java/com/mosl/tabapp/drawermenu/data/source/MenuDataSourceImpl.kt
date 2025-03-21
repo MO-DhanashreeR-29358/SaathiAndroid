@@ -370,6 +370,10 @@ open class MenuDataSourceImpl @Inject constructor(
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
         }
+        else if(strBuisnessUnitName.equals("CC",true))
+        {
+            strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_CC_DASHBOARD
+        }
         return BaseMenu(
             icon = R.drawable.ic_menu_dashboard,
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,

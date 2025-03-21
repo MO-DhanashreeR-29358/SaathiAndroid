@@ -152,4 +152,6 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_ADVANCE_SEARCH=70;
 
+    int NAVIGATE_TO_INDIRECT_CC_DASHBOARD = 71;
+
 }
