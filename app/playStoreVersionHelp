@@ -47,7 +47,8 @@ Release Note :  1. ZohoId - ASZ-I341
                    Resolve live issue: getting object reference not set to instance on create meeting page,
                     while searching client code through advance search and moving to create meeting page.
 ---------------------------------------------------------------------------------------------
-Version : 3.0.3
-Update Date : 21.3.2025
+Version : 3.0.4
+Update Date : 24.3.2025
 Release Note :  1. Resolve live issue: Bank meeting page for au user getting 'Enter bank' issue on bank drop down.
                 2. Adding quick link menu in left menu drawer.
+                3. Comment Zykrr code.
