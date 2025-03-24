@@ -18,4 +18,4 @@ sealed class CreateMeetingUiEvent {
   data class OnLocationSaveClick(val data: LocationItem) : CreateMeetingUiEvent()
 
   object CallChipsApi : CreateMeetingUiEvent()
-}
+ }

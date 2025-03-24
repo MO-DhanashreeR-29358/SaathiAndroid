@@ -44,6 +44,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
 import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
 import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
@@ -58,8 +60,6 @@ import com.mosl.tabapp.webview.WebviewFragment.Companion.MOST_GUIDE_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.PRIME_ENTRY_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.SIP_ID
 import com.mosl.tabapp.webview.WebviewFragment.Companion.STADIUM_PITCH_ID
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
-import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
 
 object MenuGetterNew {
     @SuppressLint("WrongConstant")
@@ -233,6 +233,10 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->true
             NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH->true
+            NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC->true
+            NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD->true
+            NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD->true
+            NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING->true
             else -> return false
         }
     }

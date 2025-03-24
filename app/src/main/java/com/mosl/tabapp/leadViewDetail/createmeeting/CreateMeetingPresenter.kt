@@ -7,6 +7,8 @@ import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
 import com.mosl.mobile.domain.createmeeting.OTPRequestData
+import com.mosl.mobile.domain.createmeeting.SurveyLinkData
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_LEAD_ID
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_UCID
@@ -28,7 +30,8 @@ class CreateMeetingPresenter @Inject constructor(
     view: CreateMeetingView,
     val repository: CreateMeetingRepository,
     private val createMeetingData: CreateMeetingData,
-    val screenNavigator: ScreenNavigatorImpl
+    val screenNavigator: ScreenNavigatorImpl,
+    val userManager: UserManager
 ) : BasePresenter<CreateMeetingView>(view) {
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
