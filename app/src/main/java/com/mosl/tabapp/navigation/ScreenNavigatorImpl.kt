@@ -101,6 +101,20 @@ class ScreenNavigatorImpl @Inject constructor(
       {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
       }
+      else if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("CURRENCYCOMMODITY",true))
+      {
+        if(userManager.getUser()?.currentBusinessProfile?.businessProfileName.equals("CNC foco advisory admin",true))
+        {
+          openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD.toString(), false)
+        }
+        else if(userManager.getUser()?.currentBusinessProfile?.businessProfileName.equals("CNC Admin",true))
+        {
+          openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD.toString(), false)
+        }
+        else{
+          openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)
+        }
+      }
       else
       {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD.toString(), false)

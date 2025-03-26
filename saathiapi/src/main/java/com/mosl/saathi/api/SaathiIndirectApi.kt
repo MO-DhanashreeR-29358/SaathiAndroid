@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardCncAdminFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardDetailsGraphCommonDataResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
@@ -491,4 +492,15 @@ interface SaathiIndirectApi {
    fun getIFASalesDashLeadsNotUpdatedDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     /*************IFADashboard End Here************/
+
+    /********************CNC Dashboard Start here ************/
+
+    @POST("Dashboard/GetCNCFocoDashFilter")
+    fun getCNCFocoDashFilter(@Body request: IndirectDashboardCncAdminFilterPostRequest):Observable<ResponseBody>
+
+
+    /********************CNC Dashboard End here ************/
+
+
+
 }

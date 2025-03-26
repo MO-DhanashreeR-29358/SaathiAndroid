@@ -40,6 +40,8 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFAD
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.cncadmin.CncAdminDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
@@ -155,6 +157,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()  //use this for navigation
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD-> CncFocoDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->CncAdminDashboardFragment()
             else -> null
         }
     }
@@ -234,6 +238,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD->true
             NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD->true
             NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->true
             else -> return false
         }
     }
