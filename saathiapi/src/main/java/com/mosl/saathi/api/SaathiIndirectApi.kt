@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectCCDashboardFilterResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardDetailsGraphCommonDataResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
@@ -491,4 +492,18 @@ interface SaathiIndirectApi {
    fun getIFASalesDashLeadsNotUpdatedDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     /*************IFADashboard End Here************/
+
+    //-----------CC Dashboard starts ----------------//
+    @POST("Dashboard/GetCCFiltersWidgetData")
+    fun getCCDashboardFilter(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectCCDashboardFilterResponse>>
+    @POST("Dashboard/GetCCDashMeetingSummaryZonalHeadWidgetData")
+    fun getCCDashMeetingSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCCDashMeetingReachZonalHeadSummaryWidgetData")
+    fun getCCDashMeetingReachSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
 }

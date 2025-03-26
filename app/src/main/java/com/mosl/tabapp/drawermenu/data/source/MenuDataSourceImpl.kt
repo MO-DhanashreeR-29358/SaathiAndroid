@@ -377,7 +377,7 @@ open class MenuDataSourceImpl @Inject constructor(
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
         }
-        else if(strBuisnessUnitName.equals("CC",true))
+        else if(strBuisnessUnitName.equals("CURRENCYCOMMODITY",true))
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_CC_DASHBOARD
         }

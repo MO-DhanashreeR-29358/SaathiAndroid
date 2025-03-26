@@ -101,7 +101,7 @@ class ScreenNavigatorImpl @Inject constructor(
       {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD.toString(), false)
       }
-      else if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("CC",true))
+      else if(userManager.getUser()?.currentBusinessProfile?.businessUnitName.equals("CURRENCYCOMMODITY",true))
       {
         openPage(NavigationConstants.NAVIGATE_TO_INDIRECT_CC_DASHBOARD.toString(), false)
       }

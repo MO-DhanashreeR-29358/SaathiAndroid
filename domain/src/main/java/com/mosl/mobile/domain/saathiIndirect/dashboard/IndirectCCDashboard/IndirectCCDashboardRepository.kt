@@ -10,7 +10,8 @@ import io.reactivex.rxjava3.core.Observable
 
 interface IndirectCCDashboardRepository {
 
-    fun fnGetCCDashboardFilter():Observable<IndirectFilterDataClass>
+    fun fnGetCCDashboardFilter():Observable<IndirectCCFilterDataClass>
+    fun getMeetingSummary(request : CCDashboardInput): Observable<DashboardReportCombo>
 
-
+    fun getMeetingReachSummary(request : CCDashboardInput): Observable<DashboardReportCombo>
 }
