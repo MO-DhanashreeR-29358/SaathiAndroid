@@ -1,4 +1,4 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import dagger.Binds
 import dagger.Module

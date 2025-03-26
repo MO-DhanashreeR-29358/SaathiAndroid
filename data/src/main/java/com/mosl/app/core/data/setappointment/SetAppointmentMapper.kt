@@ -206,18 +206,18 @@ fun LeadViewItem.responseLeadViewItemTransform(): LeadViewItemResponse {
 
 fun Product.transformProductResponse(): ProductResponse {
   return ProductResponse(
-    groupName = groupName,
+    groupName = groupName?:"",
     status = status,
     productName = productName,
     includeInGroup = includeInGroup,
     traderCode = traderCode,
     productId = productId,
     backOfficeProductId = backOfficeProductId,
-    clientProducts = clientProducts,
+    clientProducts = clientProducts?:"",
     inApproval = inApproval,
-    approvalFieldList = approvalFieldList,
+    approvalFieldList = approvalFieldList?:"",
     isAdminMode = isAdminMode,
-    effectiveFrom = effectiveFrom,
+    effectiveFrom = effectiveFrom?:"",
     advisoryMappingTypes = advisoryMappingTypes.responseAdvisoryMappingTypesItemTransform()
   )
 }
@@ -254,7 +254,7 @@ fun List<AdvisoryMappingTypesItem>.responseAdvisoryMappingTypesItemTransform()
       status = it.status,
       active = it.active,
       lookupType = it.lookupType,
-      employeeCode = it.employeeCode,
+      employeeCode = it.employeeCode?:"",
       lookUpid = it.lookUpid,
       lookUpName = it.lookUpName,
       businessUnitId = it.businessUnitId,

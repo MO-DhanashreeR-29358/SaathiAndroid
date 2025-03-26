@@ -1,4 +1,4 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 
 import android.os.Bundle
@@ -19,7 +19,7 @@ class QuickSearchTabPresenter @Inject constructor(
     val navigatorScreen: ScreenNavigatorImpl,
     val userManager: UserManager,
     val repo:AdvanceSearchRepository,
-    val validator:QuickSearchTabValidator
+    val validator: QuickSearchTabValidator
 ): BasePresenter<QuickSearchTabView>(view) {
     override fun start() {
 
@@ -34,7 +34,7 @@ class QuickSearchTabPresenter @Inject constructor(
             .addTo(disposable)
 
         view.onTableRowClicked().subscribe {
-            view.fnRenderTableRowClicked(it.strLeadId)
+            view.fnRenderTableRowClicked(it.strLeadId,it.strUcId)
         } .addTo(disposable)
 
         view.onSearchButtonClicked().subscribe {
@@ -63,6 +63,7 @@ class QuickSearchTabPresenter @Inject constructor(
                 MOSLConstants.LEAD_ID,
                 view.getLeadId()
             )
+            bundle.putString(MOSLConstants.UCID,   view.getUcid())
             navigatorScreen.openPage(NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle, true, false)
         }.addTo(disposable)
 

@@ -1,9 +1,7 @@
-package com.mosl.tabapp.advancesearch.quickSearch
+package com.mosl.tabapp.advancesearch
 
 import android.content.Context
-import com.mosl.app.core.utils.isEmailValid
 import com.mosl.mobile.domain.advanceSearch.AdvanceSearchInput
-import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 import javax.inject.Inject

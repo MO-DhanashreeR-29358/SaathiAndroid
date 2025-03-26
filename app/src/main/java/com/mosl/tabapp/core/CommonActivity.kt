@@ -44,6 +44,7 @@ import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.data.util.CommonBaseUrls
 import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
@@ -77,6 +78,7 @@ import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
+import com.mosl.tabapp.urls.ApiBaseUrlImpl
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
@@ -784,6 +786,18 @@ class CommonActivity : BaseActivity(),
                 }else if (menu.pageId == NavigationConstants.NAVIGATE_TO_EQUITY_MFD) {
                     gotoEkycExpressPage(false, WebviewFragment.EQUITY_AND_MFD_ID)
                     binding.drawerLayout.closeDrawers()
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_DEMAT_ACCOUNT_LINK)
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_ONLY_MFD_LINK)
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_MFD_LINK)
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NON_BROKING_PRODUCT_LINK)
                 }
 
                 activityNavHelper.onMenuClicked(menu)

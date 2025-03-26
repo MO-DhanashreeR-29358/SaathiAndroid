@@ -159,7 +159,7 @@ class BankMeetingFragment : CommonFragment() {
             try {
 //        cityCodeStr = (spCity.getSelectedItem() as RowData).key
                 binding.tvMeetingTypeError.visibility = View.GONE
-                meetingTypeSpinnerChange()
+                meetingTypeSpinnerChange(position)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -678,10 +678,10 @@ class BankMeetingFragment : CommonFragment() {
         }
     }
 
-    private fun meetingTypeSpinnerChange() {
+    private fun meetingTypeSpinnerChange(intposition:Int) {
         binding.apply {
             clientNameList.clear()
-            when (spMeetingType.getMeetingType()) {
+            when (intposition) {
                 BRANCH_VISIT -> {
                     groupBankBranch.toggelVisibility(true)
                     ilSubject.toggelInputLayoutVisibility(false)

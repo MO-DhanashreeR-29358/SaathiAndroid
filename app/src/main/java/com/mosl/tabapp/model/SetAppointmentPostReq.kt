@@ -71,6 +71,8 @@ data class MeetingAttendeeItem(
 	var attendeeEmplyeeCode: String? = null,
 
 	@SerializedName("AttendeeType")
-	var attendeeType: String? = null
+	var attendeeType: String? = null,
+	@SerializedName("DefaultAttendee")
+	var defaultAttendee :Boolean?=null
 )
 

@@ -59,7 +59,11 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT,
         NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING,
         NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN,
-        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW
+        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW,
+        NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+        NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+        NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
+        NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING
 
 
 })
@@ -151,5 +155,10 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS=69;
 
     int NAVIGATE_TO_ADVANCE_SEARCH=70;
+
+    int NAVIGATE_TO_QUICK_DEMAT_ACC=71;
+    int NAVIGATE_TO_QUICK_ONLY_MFD=72;
+    int NAVIGATE_TO_QUICK_DEMAT_MFD=73;
+    int NAVIGATE_TO_QUICK_NON_BROKING=74;
 
 }
