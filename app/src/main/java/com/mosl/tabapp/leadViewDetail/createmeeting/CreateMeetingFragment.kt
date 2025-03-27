@@ -1692,10 +1692,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
-                    if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                   /* if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
                             ignoreCase = true)){
                         callZykrrApi(it.meetingId)
-                    }
+                    }*/
                 }
             }
         }

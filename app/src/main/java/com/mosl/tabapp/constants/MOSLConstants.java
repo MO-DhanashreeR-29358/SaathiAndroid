@@ -329,5 +329,9 @@ public interface MOSLConstants extends LabelConfig {
     String STAGE_CODE="stagecode";
     String SEL_CATEGORY="selcategory";
     String SEL_FILTER="selfilter";
+
+    String INDIRECT_CC_METTING_SUMMARY = "Meeting Summary";
+
+    String INDIRECT_CC_MEETING_REACH_SUMMARY = "Meeting Reach Summary";
 }
 

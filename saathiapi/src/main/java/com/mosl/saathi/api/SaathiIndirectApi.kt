@@ -91,6 +91,7 @@ import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.MyLeadDetailsRequestPost
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectCCDashboardFilterResponse
 
 
 interface SaathiIndirectApi {
@@ -498,6 +499,17 @@ interface SaathiIndirectApi {
     @POST("Dashboard/GetCNCFocoDashFilter")
     fun getCNCFocoDashFilter(@Body request: IndirectDashboardCncAdminFilterPostRequest):Observable<ResponseBody>
 
+    @POST("Dashboard/GetCCFiltersWidgetData")
+    fun getCCDashboardFilter(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectCCDashboardFilterResponse>>
+    @POST("Dashboard/GetCCDashMeetingSummaryZonalHeadWidgetData")
+    fun getCCDashMeetingSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCCDashMeetingReachZonalHeadSummaryWidgetData")
+    fun getCCDashMeetingReachSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
 
     /********************CNC Dashboard End here ************/
 

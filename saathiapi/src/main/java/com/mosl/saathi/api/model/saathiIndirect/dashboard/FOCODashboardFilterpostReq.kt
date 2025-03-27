@@ -47,5 +47,8 @@ data class FOCODashboardFilterpostReq(
 	val fitHierarchy:String?=null,
 
 	@JvmField @SerializedName("flt_period")
-	val fltPeriod:String?=null
+	val fltPeriod:String?=null,
+
+	@JvmField @SerializedName("flt_AdvisorEmpCode")
+	val fltAdvisorEmpCode:String?=null
 )
