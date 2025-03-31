@@ -42,7 +42,6 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.Indir
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
-import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.cncadmin.CncAdminDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
@@ -147,7 +146,6 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> FocoDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->IndirectIFADashboardFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_CC_DASHBOARD -> CCDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->IndirectIFADashboardDetailsFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS ->IndirectIFAMyLeadDetailsFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS->IndirectIFAReportDetailsFragment()
@@ -160,7 +158,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD-> CncFocoDashboardFragment()
-            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->CncAdminDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->CCDashboardFragment()
             else -> null
         }
     }
@@ -223,7 +221,6 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->true
-            NavigationConstants.NAVIGATE_TO_INDIRECT_CC_DASHBOARD ->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS->true
