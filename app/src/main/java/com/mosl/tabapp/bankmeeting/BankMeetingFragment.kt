@@ -974,9 +974,9 @@ class BankMeetingFragment : CommonFragment() {
 
     companion object {
         const val BRANCH_VISIT = 1
-        const val TRAINING = 2
-        const val CLIENT_MEETING = 3
-        const val BranchVisit = "Branch Visit/ Met AU Emp."
+        const val TRAINING = 3
+        const val CLIENT_MEETING = 2
+        const val BranchVisit = "Branch Visit/ Met Bank Employee"
         const val TrainingValue = "Training"
         const val ClientMeeting = "Client Meeting"
 
