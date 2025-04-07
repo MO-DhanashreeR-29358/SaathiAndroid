@@ -10,6 +10,8 @@ data class IndirectDetailsTablePostRequest(
 	val frequency: String? = null,
 	@field:SerializedName("flt_userstatus")
 	val fltUserstatus: String? = null,
+	@field:SerializedName("fltUserStatus")
+	val fltUserStatus: String? = null,
 	@field:SerializedName("category")
 	val category: String? = null,
 	@field:SerializedName("Product")

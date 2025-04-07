@@ -517,6 +517,11 @@ interface SaathiIndirectApi {
     @POST("Dashboard/GetCNCFocoDashNoOfClientMeetingWidgetData")
     fun getCNCFocoDashNoOfClientMeetingWidgetData( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
 
+    @POST("Dashboard/GetCNCFocoDashMeetingDetail")
+    fun getCNCFocoDashMeetingDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetCNCFocoDashRevenueDetail")
+    fun getCNCFocoDashRevenueDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
     /********************CNC Dashboard End here ************/
 
 

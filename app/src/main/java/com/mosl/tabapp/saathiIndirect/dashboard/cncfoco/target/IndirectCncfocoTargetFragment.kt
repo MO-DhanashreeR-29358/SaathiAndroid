@@ -137,7 +137,7 @@ class IndirectCncfocoTargetFragment:CommonFragment(),IndirectCncTargetView {
             val args = Bundle()
             args.putString(MOSLConstants.SYSTEM_NAME, widgetModel?.name)
             navigator.openPage(
-                NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS.toString(), args,
+                NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS.toString(), args,
                 addToStack = true,
                 forceReload = false
             )

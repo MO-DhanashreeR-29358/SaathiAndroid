@@ -118,6 +118,10 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.cncUniqueReportTable.IndirectCncAdminUniqueReportTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.cncUniqueReportTable.IndirectCncAdminUniqueReportTableModule
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.target.IndirectCncfocoTargetFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.target.IndirectCncfocoTargetModule
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
@@ -366,6 +370,12 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [IndirectCncfocoTargetModule::class])
     fun  provideIndirectCncfocoTargetFragmentModuleFactory():IndirectCncfocoTargetFragment
+
+    @ContributesAndroidInjector(modules = [IndirectCncFocoDashboardDetailsModule::class])
+    fun provideIndirectCncFocoDashboardDetailsModuleFactory():IndirectCncFocoDashboardDetailsFragment
+
+    @ContributesAndroidInjector(modules = [IndirectCncAdminUniqueReportTableModule::class])
+    fun provideIndirectCncAdminUniqueReportTableModuleFactory(): IndirectCncAdminUniqueReportTableFragment
 
 
 }

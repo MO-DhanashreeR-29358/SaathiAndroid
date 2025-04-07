@@ -42,6 +42,7 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.Indir
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
@@ -159,6 +160,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD-> CncFocoDashboardFragment()
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->CCDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS->IndirectCncFocoDashboardDetailsFragment()
             else -> null
         }
     }
@@ -240,6 +242,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD->true
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS->true
             else -> return false
         }
     }
