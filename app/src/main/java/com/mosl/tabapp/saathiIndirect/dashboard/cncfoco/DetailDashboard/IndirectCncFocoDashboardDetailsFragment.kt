@@ -80,7 +80,7 @@ class IndirectCncFocoDashboardDetailsFragment:CommonFragment(),IndirectCncFocoDa
         var lstFilterCategory= mutableListOf<LookUp>()
         lstFilterCategory.add(LookUp(0,"Select"))
         lstFilterCategory.add(LookUp(1,"Active"))
-        lstFilterCategory.add(LookUp(1,"InActive"))
+        lstFilterCategory.add(LookUp(2,"InActive"))
         filterAdapterCategory.setSpinnerData(binding.spFiltercncAdmin, lstFilterCategory)
         binding.spFiltercncAdmin.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
