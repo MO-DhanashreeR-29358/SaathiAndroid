@@ -64,7 +64,7 @@ class CCDashboardPresenter @Inject constructor(
     }
 
     fun getWidgetRequest() : CCDashboardInput {
-        return  CCDashboardInput(employeeCode = userManager.getUser()?.employeeCode, fltPeriod = view.getPeriod(), fltAdvisorEmpCode = view.getAdvisor(),  filter = "", calculatedPageP = 0,
+        return  CCDashboardInput(employeeCode = userManager.getUser()?.employeeCode, fltPeriod = view.getPeriod(), fltAdvisorEmpCode = view.getAdvisor(), calculatedPageP = 0,
             pageSizeP = 20,  pageP = 1, pageSize = 10, page = 1, calculatedPage = 0, totalCount = 0 )
     }
 

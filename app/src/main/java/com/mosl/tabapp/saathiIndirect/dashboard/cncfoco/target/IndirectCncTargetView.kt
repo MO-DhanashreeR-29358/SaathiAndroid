@@ -22,7 +22,7 @@ interface IndirectCncTargetView:BaseView {
     fun fngetFilterValue():String
 
     companion object{
-        val strReve="Revenu"
+        val strReve="Revenue"
         val strNoOfClient="No. of Client Meetings"
 
     }

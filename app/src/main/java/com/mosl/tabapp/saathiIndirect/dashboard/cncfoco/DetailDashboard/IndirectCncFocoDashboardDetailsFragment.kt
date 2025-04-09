@@ -109,7 +109,7 @@ class IndirectCncFocoDashboardDetailsFragment:CommonFragment(),IndirectCncFocoDa
 
         if(strWidgetType.equals(IndirectCncTargetView.strReve))
         {
-            binding.tvHeadTitle2.setText("Revenu Details")
+            binding.tvHeadTitle2.setText("Revenue Details")
         }
         else if(strWidgetType.equals(IndirectCncTargetView.strNoOfClient)){
             binding.tvHeadTitle2.setText(IndirectCncTargetView.strNoOfClient)
