@@ -842,4 +842,14 @@ interface SaathiApi {
 
     @POST("Client/SearchClient")
     fun fnSearchClient(@Body request: AdvanceSearchRequestPost):Observable<SaathiCommonResponse<AdvanceSearchCommonResponse>>
+
+    //-------------Alliance sent otp ----------------------
+    @POST("BankMeeting/GenerateBankMeetingOTP")
+    fun generateBankMeetingOTP(
+        @Body request: BankMeetingSendOTPRequest
+    ): Observable<SaathiCommonResponse<String>>
+    @POST("BankMeeting/VerifyBankMeetingOTP")
+    fun verifyOtpForBankMeeting(
+        @Body request: BankMeetingVerifyOTPRequest
+    ): Observable<SubmitOTPResponse>
 }
