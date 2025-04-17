@@ -42,7 +42,7 @@
         android:name=".SaathiAppImpl"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/icon_app_saathi"
+        android:icon="@mipmap/icon_app_saathi_new"
         android:label="@string/main_app_name"
         android:largeHeap="true"
         android:isAccessibilityTool="false"
