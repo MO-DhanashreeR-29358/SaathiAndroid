@@ -254,6 +254,9 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [OTPModule::class])
     fun provideOTPFactory(): OTPFragment
 
+    @ContributesAndroidInjector(modules = [com.mosl.tabapp.bankmeeting.otp.OTPModule::class])
+    fun provideAllianceOTPFactory(): com.mosl.tabapp.bankmeeting.otp.OTPFragment
+
     @ContributesAndroidInjector(modules = [BusinessSnapshotAdvModule::class])
     fun provideBusinessSnapshotAdvFragmentFactory(): BusinessSnapshotAdvFragment
 

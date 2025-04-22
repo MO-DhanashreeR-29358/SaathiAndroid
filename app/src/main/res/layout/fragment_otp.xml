@@ -53,6 +53,7 @@
             android:layout_margin="@dimen/margin_small"
             android:background="@drawable/button_highlight"
             android:text="@string/btn_label_submit_otp"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ilMobile" />
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_small"
             android:text="@string/txt_label_resend_otp"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_submit_otp" />

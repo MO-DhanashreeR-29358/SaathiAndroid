@@ -100,7 +100,7 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             val resendOtpFlag = 1
             val request = BankMeetingSendOTPRequest(
-               bankId, bankBranchCode
+               bankId.toInt(), bankBranchCode
             )
             val disposable = saathiApi.generateBankMeetingOTP(request)
                 .compose(applyUiModel())
@@ -130,9 +130,9 @@ class OTPFragment : BaseDialogFragment(), OTPContract {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             randomInt = Random.nextInt()
             val request = BankMeetingVerifyOTPRequest(
-                bankId = bankId,
+                bankId = bankId.toInt(),
                 bankBranchCode = bankBranchCode,
-                otp = binding.etOtp.text.toString()
+                otp = binding.etOtp.text.toString().toInt()
             )
             val disposable: Disposable = saathiApi.verifyOtpForBankMeeting(request)
                 .compose(applyUiModel())
