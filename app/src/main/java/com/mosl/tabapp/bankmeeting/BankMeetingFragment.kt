@@ -187,13 +187,12 @@ class BankMeetingFragment : CommonFragment(), OTPFragment.OTPDialogListener {
 
     private fun sendOTPRequest() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
-            val resendOtpFlag = 1
             val request = BankMeetingSendOTPRequest(
                 bankId.toInt(), bankBranchCode
             )
-            val disposable = saathiApi.generateBankMeetingOTP(request)
+            disposable.add(saathiApi.generateBankMeetingOTP(request)
                 .compose(applyUiModel())
-                .subscribe { this.renderSendOTP(it) }
+                .subscribe { this.renderSendOTP(it) })
         } else {
             noInternetConnectionDialog()
         }
