@@ -88,6 +88,8 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
 import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationModule
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
 import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingModule
+import com.mosl.tabapp.saathiIndirect.dashboard.CCDashboard.CCDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.CCDashboard.CCDashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.UniqueReport.IndirectIFAUniqueFragment
@@ -114,6 +116,14 @@ import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.Indirect
 import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuisnessSnapshotIpModule
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.cncUniqueReportTable.IndirectCncAdminUniqueReportTableFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.cncUniqueReportTable.IndirectCncAdminUniqueReportTableModule
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.target.IndirectCncfocoTargetFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.target.IndirectCncfocoTargetModule
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardModule
 import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
@@ -244,6 +254,9 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [OTPModule::class])
     fun provideOTPFactory(): OTPFragment
 
+    @ContributesAndroidInjector(modules = [com.mosl.tabapp.bankmeeting.otp.OTPModule::class])
+    fun provideAllianceOTPFactory(): com.mosl.tabapp.bankmeeting.otp.OTPFragment
+
     @ContributesAndroidInjector(modules = [BusinessSnapshotAdvModule::class])
     fun provideBusinessSnapshotAdvFragmentFactory(): BusinessSnapshotAdvFragment
 
@@ -313,6 +326,8 @@ interface FragmentProvider {
     @ContributesAndroidInjector(modules = [IndirectIFADashboardModule::class])
     fun provideIndirectIFADashboardFragmentFactory():IndirectIFADashboardFragment
 
+    @ContributesAndroidInjector(modules = [CCDashboardModule::class])
+    fun provideIndirectCCDashboardFragmentFactory():CCDashboardFragment
     @ContributesAndroidInjector(modules = [IndirectIFADashboardDetailsModule::class])
     fun provideIndirectIFADashboardDetailsFragmentFactory():IndirectIFADashboardDetailsFragment
 
@@ -352,5 +367,18 @@ interface FragmentProvider {
 
     @ContributesAndroidInjector(modules = [QuickSearchTabModule::class])
     fun proivdeQuickSearchTabModuleFactory(): QuickSearchTabFragment
+
+    @ContributesAndroidInjector(modules = [CncFocoDashboardModule::class])
+    fun provideCncFocoDashboardModuleFactory(): CncFocoDashboardFragment
+
+    @ContributesAndroidInjector(modules = [IndirectCncfocoTargetModule::class])
+    fun  provideIndirectCncfocoTargetFragmentModuleFactory():IndirectCncfocoTargetFragment
+
+    @ContributesAndroidInjector(modules = [IndirectCncFocoDashboardDetailsModule::class])
+    fun provideIndirectCncFocoDashboardDetailsModuleFactory():IndirectCncFocoDashboardDetailsFragment
+
+    @ContributesAndroidInjector(modules = [IndirectCncAdminUniqueReportTableModule::class])
+    fun provideIndirectCncAdminUniqueReportTableModuleFactory(): IndirectCncAdminUniqueReportTableFragment
+
 
 }

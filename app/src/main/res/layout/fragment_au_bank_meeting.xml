@@ -305,6 +305,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_bank_branch_name_label">
 
             </androidx.appcompat.widget.AppCompatEditText>
+
+            <Button
+                android:id="@+id/btnSendOtp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_margin="@dimen/margin_small"
+                android:text="@string/btn_label_send_otp"
+                android:textColor="@color/white"
+                app:layout_constraintTop_toBottomOf="@+id/tvBankBranchName"
+                android:visibility="visible" />
+
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_sub_broker"
                 android:layout_width="match_parent"
@@ -313,7 +325,7 @@
                 app:hintEnabled="false"
                 android:layout_marginTop="@dimen/_10sdp"
                 app:hintTextAppearance="@style/InputLayout"
-                app:layout_constraintTop_toBottomOf="@+id/tvBankBranchName">
+                app:layout_constraintTop_toBottomOf="@+id/btnSendOtp">
 
                 <org.droidparts.widget.ClearableEditText
                     android:id="@+id/actv_sub_broker"
@@ -412,14 +424,17 @@
                     />
             </android.support.design.widget.TextInputLayout>-->
 
+
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/group_bank_branch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 app:constraint_referenced_ids="tv_bank_label,sp_bank,tv_branch_label,sp_branch,
-                il_bank_branch,il_sub_broker,ll_bank_employee,tvBankBranchName, tv_bank_branch_name_label, tv_bank_branch_label"
+                il_bank_branch,il_sub_broker,ll_bank_employee,tvBankBranchName, tv_bank_branch_name_label, tv_bank_branch_label, btnSendOtp"
                 tools:visibility="visible" />
+
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/il_subject"

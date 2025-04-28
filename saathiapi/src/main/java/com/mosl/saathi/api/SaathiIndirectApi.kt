@@ -81,6 +81,7 @@ import com.mosl.saathi.api.model.notification.NotificationRequest
 import com.mosl.saathi.api.model.notification.NotificationResponse
 import com.mosl.saathi.api.model.saathiIndirect.SetAppointment.LookUpResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.FOCODashboardFilterpostReq
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardCncAdminFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardDetailsGraphCommonDataResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDashboardFilterPostRequest
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectDetailsTablePostRequest
@@ -90,6 +91,7 @@ import com.mosl.saathi.api.model.search.SearchResponse
 import retrofit2.http.Path
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectExtraDataCommonResponse
 import com.mosl.saathi.api.model.saathiIndirect.dashboard.MyLeadDetailsRequestPost
+import com.mosl.saathi.api.model.saathiIndirect.dashboard.IndirectCCDashboardFilterResponse
 
 
 interface SaathiIndirectApi {
@@ -491,4 +493,37 @@ interface SaathiIndirectApi {
    fun getIFASalesDashLeadsNotUpdatedDetail(@Body request: MyLeadDetailsRequestPost):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
 
     /*************IFADashboard End Here************/
+
+    /********************CNC Dashboard Start here ************/
+
+    @POST("Dashboard/GetCNCFocoDashFilter")
+    fun getCNCFocoDashFilter(@Body request: IndirectDashboardCncAdminFilterPostRequest):Observable<SaathiCommonResponse<IndirectIFADashboardFilterResponse>>
+
+    @POST("Dashboard/GetCCFiltersWidgetData")
+    fun getCCDashboardFilter(@Body request: IndirectDashboardFilterPostRequest):Observable<SaathiCommonResponse<IndirectCCDashboardFilterResponse>>
+    @POST("Dashboard/GetCCDashMeetingSummaryZonalHeadWidgetData")
+    fun getCCDashMeetingSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCCDashMeetingReachZonalHeadSummaryWidgetData")
+    fun getCCDashMeetingReachSummary(
+        @Body request: FOCODashboardFilterpostReq
+    ): Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCNCFocoDashRevenueWidgetData")
+    fun  getCNCFocoDashRevenueWidgetData( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCNCFocoDashNoOfClientMeetingWidgetData")
+    fun getCNCFocoDashNoOfClientMeetingWidgetData( @Body request: FOCODashboardFilterpostReq):Observable<IndirectExtraDataCommonResponse>
+
+    @POST("Dashboard/GetCNCFocoDashMeetingDetail")
+    fun getCNCFocoDashMeetingDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+
+    @POST("Dashboard/GetCNCFocoDashRevenueDetail")
+    fun getCNCFocoDashRevenueDetail(@Body request: IndirectDetailsTablePostRequest):Observable<SaathiCommonResponse<IndirectIFAWidgetCommonResponse>>
+    /********************CNC Dashboard End here ************/
+
+
+
 }

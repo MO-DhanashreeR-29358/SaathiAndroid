@@ -26,7 +26,7 @@ open class MenuDataSourceImpl @Inject constructor(
             user = userManager.user
             when {
                 user.isIndirectUser()  -> {
-                        getIndirectUserMenu(user.currentBusinessProfile?.businessUnitName?:"")
+                        getIndirectUserMenu(user.currentBusinessProfile?.businessUnitName?:"",user.currentBusinessProfile?.businessProfileName?:"")
                 }
                 user.isAufsb()  -> {
                     getAufsbUserMenu(user.isQRDownload)
@@ -271,9 +271,9 @@ open class MenuDataSourceImpl @Inject constructor(
     }
 
 
-    private fun getIndirectUserMenu(strBuisnessUnitName :String ): List<BaseMenu> {
+    private fun getIndirectUserMenu(strBuisnessUnitName :String ,strBuisnessProfileName:String): List<BaseMenu> {
         return arrayListOf(
-            getIndirectDashboard(strBuisnessUnitName),
+            getIndirectDashboard(strBuisnessUnitName,strBuisnessProfileName),
             getIndirectProspectMeeting(),
             getLogout()
         ).apply { checkForPrime(false,false, false) }
@@ -367,7 +367,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
     @SuppressLint("WrongConstant")
-    private fun getIndirectDashboard(strBuisnessUnitName:String): BaseMenu {
+    private fun getIndirectDashboard(strBuisnessUnitName:String,strBuisnessProfileName:String): BaseMenu {
         var strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
         if(strBuisnessUnitName.equals("FOCO",true))
         {
@@ -376,6 +376,20 @@ open class MenuDataSourceImpl @Inject constructor(
         else if(strBuisnessUnitName.equals("IFA",true))
         {
             strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
+        }
+        else if(strBuisnessUnitName.equals("CURRENCYCOMMODITY",true))
+        {
+            if(strBuisnessProfileName.equals("CNC foco advisory admin",true))
+            {
+                strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD
+            }
+            else if(strBuisnessProfileName.equals("CNC Admin",true))
+            {
+                strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD
+            }
+            else{
+                strPageId=NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+            }
         }
         return BaseMenu(
             icon = R.drawable.ic_menu_dashboard,

@@ -52,3 +52,18 @@ Update Date : 24.3.2025
 Release Note :  1. Resolve live issue: Bank meeting page for au user getting 'Enter bank' issue on bank drop down.
                 2. Adding quick link menu in left menu drawer.
                 3. Comment Zykrr code.
+---------------------------------------------------------------------------------------------
+Version : 3.0.5
+Update Date : 11.4.2025
+Release Note :  1. Resolve live issue: Bank meeting page - meeting type drop down item change validation issue
+                2. Indirect dashboard - CC Admin and CNC foco advisory admin
+                3. SAAT-I2568 : OTP-Based Authentication in Client Meetings- Alliance
+---------------------------------------------------------------------------------------------
+Version : 3.0.6
+Update Date : 17.4.2025
+Release Note :  1. Saathi icon change due to app removed by console because of privacy policy.
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.7
+Update Date : 25.4.2025
+Release Note :  1. SAAT-I2548 OTP Verification for Branch Visit Meetings in Saathi Web - Alliance
