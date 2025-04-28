@@ -38,6 +38,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
 
   companion object {
     const val SAATHI_BASE_URL = "https://saathiuat.motilaloswaluat.com:1023/api/"
+    const val INDIRECT_SAATHI_BASE_URL = "https://saathiuat.motilaloswaluat.com:1024/api/"
     const val EKYC_DEMAT_ACCOUNT_LINK = "https://ekycuat.motilaloswaluat.com/superjetapi?"
     const val EKYC_ONLY_MFD_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/mfd/?"
     const val EKYC_MFD_LINK =  "https://ekycuat.motilaloswaluat.com/superjetapi?"

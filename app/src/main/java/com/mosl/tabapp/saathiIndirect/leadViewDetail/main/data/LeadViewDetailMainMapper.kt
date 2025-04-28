@@ -35,7 +35,8 @@ fun IndirectLeadViewItem.leadViewItemToLeadDetailMain(): IndirectLeadDetailMain 
         oaoUserId = oAOUserid,
         leadProducts = leadProducts,
         clientType = clientType?: "",
-        leadName = leadName ?: emptyString()
+        leadName = leadName ?: emptyString(),
+        leadCreationDate = creationDate ?:emptyString()
     )
 }
 
