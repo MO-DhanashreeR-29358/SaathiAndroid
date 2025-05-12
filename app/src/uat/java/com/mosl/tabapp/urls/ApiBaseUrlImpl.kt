@@ -43,6 +43,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_ONLY_MFD_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/mfd/?"
     const val EKYC_MFD_LINK =  "https://ekycuat.motilaloswaluat.com/superjetapi?"
     const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/nonbroking/?"
+    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/nri/tpp"
   }
 
 }

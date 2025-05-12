@@ -559,7 +559,16 @@ open class MenuDataSourceImpl @Inject constructor(
                 enabled = true,
                 pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
                 navigateKey = ""
-            )
+            )/*
+           comment because of live link not getting , requirment is the show this menu for nri business only
+           and hide MFD + Demat and for other profiles show MFD + demat and hide NRI menu
+            ,
+                ChildMenu(
+                    label =R.string.MOSL_MENU_NRI_BROKING,
+                    enabled = false,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING ,
+                    navigateKey = ""
+                )*/
             )
 
         )

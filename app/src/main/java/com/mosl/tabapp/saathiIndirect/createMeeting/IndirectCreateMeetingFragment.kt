@@ -945,7 +945,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             )
             { action: MSFDialog.Action, _: Array<Any?>? ->
                 if (action == MSFDialog.Action.OK) {
-                    callZykrrApi(it.meetingId)
+                   // callZykrrApi(it.meetingId)
                     val bundle = Bundle()
                     bundle.putString(
                         MOSLConstants.LEAD_ID,

@@ -167,11 +167,10 @@ data class User(
     fun isAttendanceAllowed(): Boolean {
         var flag = false
         if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
-                myZoneProfile.equals("Key Account Manager", ignoreCase = true)||
-            myZoneProfile.equals("Sales Manager-Branch", ignoreCase = true)||
+                myZoneProfile.equals("Priority Relationship Manager", ignoreCase = true)||
+            myZoneProfile.equals("Cluster Manager", ignoreCase = true)||
             myZoneProfile.equals("Area Sales Manager", ignoreCase = true)||
-            myZoneProfile.equals("Regional Sales Manager", ignoreCase = true)||
-            myZoneProfile.equals("Cluster Head", ignoreCase = true)) {
+            myZoneProfile.equals("Regional Sales Manager", ignoreCase = true)) {
             flag = true
         }
         return flag

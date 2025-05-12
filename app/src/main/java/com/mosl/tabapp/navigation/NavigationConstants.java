@@ -63,7 +63,8 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
         NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
         NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
-        NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING
+        NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+        NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING
 
 
 })
@@ -165,5 +166,8 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD=76;
     int NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS=77;
+
+    int NAVIGATE_TO_QUICK_NRI_BROKING=78;
+
 
 }

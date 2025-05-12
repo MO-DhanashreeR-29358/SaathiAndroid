@@ -799,6 +799,9 @@ class CommonActivity : BaseActivity(),
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING){
                     screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NON_BROKING_PRODUCT_LINK)
                 }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NRI_NON_BROKING_PRODUCT_LINK)
+                }
 
                 activityNavHelper.onMenuClicked(menu)
 
