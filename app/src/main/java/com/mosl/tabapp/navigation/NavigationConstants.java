@@ -64,7 +64,8 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
         NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
         NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
-        NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING
+        NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING,
+        NavigationConstants.NAVIGATE_TO_IP_EXECUTION
 
 
 })
@@ -169,5 +170,6 @@ public @interface NavigationConstants {
 
     int NAVIGATE_TO_QUICK_NRI_BROKING=78;
 
+    int NAVIGATE_TO_IP_EXECUTION=79;
 
 }

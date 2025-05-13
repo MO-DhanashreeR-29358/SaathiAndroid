@@ -67,6 +67,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -97,6 +98,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -133,6 +135,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getAdvanceSearch(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -159,6 +162,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getAdvanceSearch(),
+                getIPExecution(),
                  // hide as per requirement
                  // getSip(),
                 getDormantReactivationCreate(),
@@ -199,6 +203,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -230,6 +235,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -284,6 +290,7 @@ open class MenuDataSourceImpl @Inject constructor(
             getDashboard(),
             getOpenAccount(),
             getQuickLink(),
+            getIPExecution(),
             getDeleteRequest(),
             getLogout()
         ).apply { checkForPrime(false,isShowQRCode, false) }
@@ -309,6 +316,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                  // hide as per requirement
                 // getSip(),
@@ -336,6 +344,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 // hide as per requirement
                 // getSip(),
@@ -780,5 +789,13 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    private fun getIPExecution(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_IP_EXECUTION,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_IP_EXECUTION
+        )
+    }
 
 }
