@@ -101,6 +101,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import kotlin.collections.set
+import com.mosl.tabapp.BuildConfig
 
 
 class CommonActivity : BaseActivity(),
@@ -805,8 +806,11 @@ class CommonActivity : BaseActivity(),
                     screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NRI_NON_BROKING_PRODUCT_LINK)
                 }
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_IP_EXECUTION){
-                    val strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
-                    Log.d("IPExecutionUrl", strUrl)
+                    var strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    if(BuildConfig.FLAVOR == "prod"){
+                        strUrl = "https://investmentproduct.motilaloswal.com/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    }
+                   Log.d("IPExecutionUrl", strUrl)
                     screenNavigator.openUrlInAppCrome(strUrl)
                 }
 
