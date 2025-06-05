@@ -72,3 +72,9 @@ Release Note :  1. SAAT-I2548 OTP Verification for Branch Visit Meetings in Saat
 Version : 3.0.8
 Update Date : 9.5.2025
 Release Note :  1. Resolve attendance issue : adding myzone profiles in user class for retail profile
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.9
+Update Date : 30.5.2025
+Release Note :  SAAT-I2577 : IP Execution Dealer 2.0
+                SAAT-I2615 : NRI Non Broking Product KYC CTA in Saathi
