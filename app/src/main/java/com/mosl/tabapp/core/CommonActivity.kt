@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.text.Html
+import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
@@ -100,6 +101,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import kotlin.collections.set
+import com.mosl.tabapp.BuildConfig
 
 
 class CommonActivity : BaseActivity(),
@@ -288,6 +290,7 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAA onStop")
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public fun distaLoginApiCall(){
         // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
@@ -801,6 +804,14 @@ class CommonActivity : BaseActivity(),
                 }
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING){
                     screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NRI_NON_BROKING_PRODUCT_LINK)
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_IP_EXECUTION){
+                    var strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    if(BuildConfig.FLAVOR == "prod"){
+                        strUrl = "https://investmentproduct.motilaloswal.com/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    }
+                   Log.d("IPExecutionUrl", strUrl)
+                    screenNavigator.openUrlInAppCrome(strUrl)
                 }
 
                 activityNavHelper.onMenuClicked(menu)

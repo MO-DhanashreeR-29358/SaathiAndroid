@@ -42,6 +42,6 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_ONLY_MFD_LINK = "https://ekyc.motilaloswal.com/partner/mfd/?"
     const val EKYC_MFD_LINK =  "https://www.motilaloswal.com/open-demat-account/?"
     const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/partner/nonbroking/?"
-    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/nri/tpp"
+    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/nri/tpp?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
   }
 }

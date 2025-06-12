@@ -67,6 +67,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -97,6 +98,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -133,6 +135,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getAdvanceSearch(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -159,6 +162,7 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getAdvanceSearch(),
+                getIPExecution(),
                  // hide as per requirement
                  // getSip(),
                 getDormantReactivationCreate(),
@@ -199,6 +203,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -230,6 +235,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                  // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -283,7 +289,6 @@ open class MenuDataSourceImpl @Inject constructor(
         return arrayListOf(
             getDashboard(),
             getOpenAccount(),
-            getQuickLink(),
             getDeleteRequest(),
             getLogout()
         ).apply { checkForPrime(false,isShowQRCode, false) }
@@ -309,6 +314,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                  // hide as per requirement
                 // getSip(),
@@ -336,6 +342,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 // hide as per requirement
                 // getSip(),
@@ -531,11 +538,47 @@ open class MenuDataSourceImpl @Inject constructor(
     }
 
     private fun getQuickLink():BaseMenu{
-        return BaseMenu(
-            icon = R.drawable.ic_menu_dormant_reactivation,
-            label=R.string.MOSL_MENU_QUICKLINK,
-            enabled = true,
-            children = arrayListOf(
+        if(user.isMoInternationUser()){
+            /*comment because of live link not getting , requirment is the show this menu for nri business only
+            and hide MFD + Demat and for other profiles show MFD + demat and hide NRI menu*/
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label=R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                ChildMenu(
+                    label =R.string.MOSL_MENU_DEMAT_ACC,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_ONLY_MFD,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD ,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_NON_BROKING,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
+                    navigateKey = ""
+                ),
+                ChildMenu(
+                    label =R.string.MOSL_MENU_NRI_BROKING,
+                    enabled = true,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING ,
+                    navigateKey = ""
+                )
+            )
+            )
+        }
+        else{
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label=R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
                 ChildMenu(
                     label =R.string.MOSL_MENU_DEMAT_ACC,
                     enabled = true,
@@ -556,229 +599,229 @@ open class MenuDataSourceImpl @Inject constructor(
                 ),
                 ChildMenu(
                     label =R.string.MOSL_MENU_NON_BROKING,
-                enabled = true,
-                pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
-                navigateKey = ""
-            )/*
-           comment because of live link not getting , requirment is the show this menu for nri business only
-           and hide MFD + Demat and for other profiles show MFD + demat and hide NRI menu
-            ,
-                ChildMenu(
-                    label =R.string.MOSL_MENU_NRI_BROKING,
-                    enabled = false,
-                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING ,
-                    navigateKey = ""
-                )*/
-            )
-
-        )
-    }
-
-    private fun getBandhanOpenAccount(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_update_ekyc,
-            label = R.string.MOSL_MENU_EKYC_TXT,
-            enabled = true,
-            children = arrayListOf(
-                ChildMenu(
-                    label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
                     enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
-                    navigateKey = ""
-                ),
-                ChildMenu(
-                    label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
-                    enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+                    pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
                     navigateKey = ""
                 )
             )
         )
     }
 
-    private fun getLASAccount(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_las,
-            label = R.string.MOSL_MENU_LAS_TXT,
-            enabled = true,
-            children = arrayListOf(
-                ChildMenu(
-                    label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
-                    enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
-                    navigateKey = ""
-                ),
-                ChildMenu(
-                    label = R.string.MOSL_MENU_RESUME_APPLICATIONS_TXT,
-                    enabled = true,
-                    pageId = NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
-                    navigateKey = ""
-                )
-            )
-        )
-    }
+}
 
-    private fun getDeleteRequest(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_delete,
-            label = R.string.MOSL_MENU_DELETE_REQUEST,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_DELETE_REQUEST
-        )
-    }
-    @SuppressLint("WrongConstant")
-    private fun getEModification(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_emodification,
-            label = R.string.MOSL_MENU_E_MODIFICATION_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_E_MODIFICATION
-        )
-    }
+private fun getBandhanOpenAccount(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_update_ekyc,
+label = R.string.MOSL_MENU_EKYC_TXT,
+enabled = true,
+children = arrayListOf(
+    ChildMenu(
+        label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
+        enabled = true,
+        pageId = NavigationConstants.NAVIGATE_TO_FRESH_REG,
+        navigateKey = ""
+    ),
+    ChildMenu(
+        label = R.string.MOSL_MENU_EXISTING_APPLICATIONS_TXT,
+        enabled = true,
+        pageId = NavigationConstants.NAVIGATE_TO_EXISTING_APP,
+        navigateKey = ""
+    )
+)
+)
+}
 
-    private fun getSip(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_menu_sip,
-            label = R.string.MOSL_MENU_SIP_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_SIP
-        )
-    }
+private fun getLASAccount(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_las,
+label = R.string.MOSL_MENU_LAS_TXT,
+enabled = true,
+children = arrayListOf(
+    ChildMenu(
+        label = R.string.MOSL_MENU_NEW_APPLICATIONS_TXT,
+        enabled = true,
+        pageId = NavigationConstants.NAVIGATE_TO_LAS_NEW_APPLICATION,
+        navigateKey = ""
+    ),
+    ChildMenu(
+        label = R.string.MOSL_MENU_RESUME_APPLICATIONS_TXT,
+        enabled = true,
+        pageId = NavigationConstants.NAVIGATE_TO_LAS_RESUME_APPLICATION,
+        navigateKey = ""
+    )
+)
+)
+}
 
-    private fun getPrimeEntry(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_prime_entry,
-            label = R.string.MOSL_MENU_PRIME_ENTRY_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_PRIME_ENTRY
-        )
-    }
+private fun getDeleteRequest(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_delete,
+label = R.string.MOSL_MENU_DELETE_REQUEST,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_DELETE_REQUEST
+)
+}
+@SuppressLint("WrongConstant")
+private fun getEModification(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_emodification,
+label = R.string.MOSL_MENU_E_MODIFICATION_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_E_MODIFICATION
+)
+}
 
-    private fun getSalesBrochure(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_sales_brochure,
-            label = R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
-        )
-    }
+private fun getSip(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_menu_sip,
+label = R.string.MOSL_MENU_SIP_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_SIP
+)
+}
 
-    private fun getSalesStadium(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_sales_stadium,
-            label = R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_SALES_STADIUM
-        )
-    }
+private fun getPrimeEntry(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_prime_entry,
+label = R.string.MOSL_MENU_PRIME_ENTRY_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_PRIME_ENTRY
+)
+}
 
-    private fun getCalendar(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_calendar,
-            label = R.string.MOSL_MENU_CALENDAR_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_CALENDAR
-        )
-    }
+private fun getSalesBrochure(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_sales_brochure,
+label = R.string.MOSL_MENU_KNOWLEDGE_CENTRE_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_SALES_BROCHURE
+)
+}
 
-    private fun getPendingApproval(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_my_pending_approvals,
-            label = R.string.MOSL_MENU_PENDING_APPROVALS_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
-        )
-    }
+private fun getSalesStadium(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_sales_stadium,
+label = R.string.MOSL_MENU_SALES_STADIUM_PITCH_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_SALES_STADIUM
+)
+}
 
-    private fun getBirthdayAnniversary(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_menu_birthday_aniversary,
-            label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
-        )
-    }
+private fun getCalendar(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_calendar,
+label = R.string.MOSL_MENU_CALENDAR_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_CALENDAR
+)
+}
 
-    private fun getQuery(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_query,
-            label = R.string.MOSL_MENU_QUERY_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_QUERY
-        )
-    }
+private fun getPendingApproval(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_my_pending_approvals,
+label = R.string.MOSL_MENU_PENDING_APPROVALS_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_PENDING_APPROVAL
+)
+}
 
-    private fun getSuggestMe(enabled: Boolean = true): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_menu_suggest_me_tool,
-            label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
-            enabled = enabled,
-            pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
-        )
-    }
+private fun getBirthdayAnniversary(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_menu_birthday_aniversary,
+label = R.string.MOSL_MENU_BIRTHDAY_ANIVERSARY_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_BIRTHDAY_ANNIVERSARY
+)
+}
 
-    private fun getSetting(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_setting,
-            label = R.string.MOSL_MENU_SETTING,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_SETTING
-        )
-    }
+private fun getQuery(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_query,
+label = R.string.MOSL_MENU_QUERY_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_QUERY
+)
+}
 
-    private fun getLogout(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_logout,
-            label = R.string.MOSL_MENU_LOGOUT_TXT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_LOGOUT
-        )
-    }
+private fun getSuggestMe(enabled: Boolean = true): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_menu_suggest_me_tool,
+label = R.string.MOSL_MENU_SUGGEST_ME_TXT,
+enabled = enabled,
+pageId = NavigationConstants.NAVIGATE_TO_SUGGEST_ME_MENU
+)
+}
 
-    @SuppressLint("WrongConstant")
-    private fun getReactivation(): BaseMenu {
-        return BaseMenu(
-            icon = R.drawable.ic_menu_most_guide,
-            label = R.string.MOSL_MENU_REACTIVATION,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY
-        )
-    }
+private fun getSetting(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_setting,
+label = R.string.MOSL_MENU_SETTING,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_SETTING
+)
+}
 
-    private fun getReactivationCreate():BaseMenu{
-        return BaseMenu(
-            icon = R.drawable.ic_menu_reactivation_req,
-            label = R.string.MOSL_MENU_REACTIVATION_REQ,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE
-        )
-    }
+private fun getLogout(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_logout,
+label = R.string.MOSL_MENU_LOGOUT_TXT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_LOGOUT
+)
+}
 
-    private fun getDormantReactivationCreate():BaseMenu{
-        return BaseMenu(
-            icon = R.drawable.ic_menu_dormant_reactivation,
-            label = R.string.MOSL_MENU_DORMANT,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_DORMANT
-        )
-    }
+@SuppressLint("WrongConstant")
+private fun getReactivation(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_menu_most_guide,
+label = R.string.MOSL_MENU_REACTIVATION,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_SUMMARY
+)
+}
 
-    private fun getQueryFormCreate():BaseMenu{
-        return BaseMenu(
-            icon = R.drawable.ic_menu_dormant_reactivation,
-            label = R.string.MOSL_MENU_QUERY_FORM,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_QUERY_FORM
-        )
-    }
-    private fun getAdvanceSearch():BaseMenu{
-        return BaseMenu(
-            icon = R.drawable.ic_search_black_24dp,
-            label = R.string.MOSL_MENU_ADV_SEARCH,
-            enabled = true,
-            pageId = NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH
-        )
-    }
+private fun getReactivationCreate():BaseMenu{
+return BaseMenu(
+icon = R.drawable.ic_menu_reactivation_req,
+label = R.string.MOSL_MENU_REACTIVATION_REQ,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE
+)
+}
 
+private fun getDormantReactivationCreate():BaseMenu{
+return BaseMenu(
+icon = R.drawable.ic_menu_dormant_reactivation,
+label = R.string.MOSL_MENU_DORMANT,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_DORMANT
+)
+}
+
+private fun getQueryFormCreate():BaseMenu{
+return BaseMenu(
+icon = R.drawable.ic_menu_dormant_reactivation,
+label = R.string.MOSL_MENU_QUERY_FORM,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_QUERY_FORM
+)
+}
+private fun getAdvanceSearch():BaseMenu{
+return BaseMenu(
+icon = R.drawable.ic_search_black_24dp,
+label = R.string.MOSL_MENU_ADV_SEARCH,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH
+)
+}
+
+private fun getIPExecution(): BaseMenu {
+return BaseMenu(
+icon = R.drawable.ic_menu_dormant_reactivation,
+label = R.string.MOSL_MENU_IP_EXECUTION,
+enabled = true,
+pageId = NavigationConstants.NAVIGATE_TO_IP_EXECUTION
+)
+}
 
 }

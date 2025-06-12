@@ -43,7 +43,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_ONLY_MFD_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/mfd/?"
     const val EKYC_MFD_LINK =  "https://ekycuat.motilaloswaluat.com/superjetapi?"
     const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/nonbroking/?"
-    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/nri/tpp"
+    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/Nri/TPP?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
   }
 
 }
