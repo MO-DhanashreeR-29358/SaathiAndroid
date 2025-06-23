@@ -24,10 +24,74 @@ class LeadCreationPresenter @Inject constructor(
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
             .switchMap {
-                repository.getLeadCreationPageData()
+                repository.getCategoryRowDatas()
                     .compose(applyUiModel())
             }
-            .subscribe(view::renderLeadCreationPageData, Timber::e)
+            .subscribe(view::renderCategoryList, Timber::e)
+            .addTo(disposable)
+
+        view.onClientTypeCall()
+            .switchMap {
+                repository.getClientTypeRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderClientTypeList, Timber::e)
+            .addTo(disposable)
+
+        view.onProfessionCall()
+            .switchMap {
+                repository.getProfessionRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderProfessionList, Timber::e)
+            .addTo(disposable)
+
+        view.onInterestedInCall()
+            .switchMap {
+                repository.getInterestInRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderInterestedInList, Timber::e)
+            .addTo(disposable)
+
+        view.onSourceCall()
+            .switchMap {
+                repository.getSourceRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderSourceList, Timber::e)
+            .addTo(disposable)
+
+        view.onStageCall()
+            .switchMap {
+                repository.getStageRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderInitialStageList, Timber::e)
+            .addTo(disposable)
+
+        view.onCountryCall()
+            .switchMap {
+                repository.getCountryRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderCountryList, Timber::e)
+            .addTo(disposable)
+
+        view.onBankCall()
+            .switchMap {
+                repository.getBankFilter()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderBankList, Timber::e)
+            .addTo(disposable)
+
+        view.onSTDCodeCall()
+            .switchMap {
+                repository.getSTDCodeRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderSTDCodeList, Timber::e)
             .addTo(disposable)
 
         val bankChangeObsc = view.onBankChange().share()
@@ -37,9 +101,6 @@ class LeadCreationPresenter @Inject constructor(
                 bankRepository.getBranchFilter(view.getBank()!!.bankName)
                     .compose(applyUiModel())
             }.subscribe(view::renderBranchFilter).addTo(disposable)
-
-
-
 
         view.onPrimaryCheckboxChanged()
             .skip(1)

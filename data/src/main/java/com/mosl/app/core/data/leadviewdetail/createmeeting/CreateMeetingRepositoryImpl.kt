@@ -21,6 +21,7 @@ import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function3
 import io.reactivex.rxjava3.functions.Function8
 import io.reactivex.rxjava3.functions.Function9
 import okhttp3.MediaType
@@ -75,7 +76,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         }
     }
 
-    fun getClientData(ucid: String): Observable<ClientData> {
+   /* fun getClientData(ucid: String): Observable<ClientData> {
         return Observable.zip(
             getClientDetail(ucid.toInt()),
             getClientImage(ucid.toInt()),
@@ -90,10 +91,20 @@ class CreateMeetingRepositoryImpl @Inject constructor(
                         t5: List<LookUp>, t6: List<LookUp>, t7: List<LookUp>, t8: List<LookUp>, t9: List<LookUp> ->
                 ClientData(t1, t2, t3, t4, t5, t6, t7, t8, t9)
             })
+    }*/
+
+    fun getClientData(ucid: String): Observable<ClientData> {
+        return Observable.zip(
+            getClientDetail(ucid.toInt()),
+            getClientImage(ucid.toInt()),
+            getMobileList(leadId = "0", ucid = ucid),
+            Function3 { t1: ClientDetail, t2: String,  t3: List<MobileListData> ->
+                ClientData(t1, t2, t3)
+            })
     }
 
 
-    fun getLeadData(leadId: String): Observable<ClientData> {
+   /* fun getLeadData(leadId: String): Observable<ClientData> {
         return Observable.zip(getLeadView(leadId),
             getLookup(ACTIVITYTYPE),
             getMobileList(leadId = leadId, ucid = "0"),
@@ -109,6 +120,16 @@ class CreateMeetingRepositoryImpl @Inject constructor(
                 ClientData(t1, "", t2, t3, t4, t5, t6, t7, t8)
             })
     }
+*/
+   fun getLeadData(leadId: String): Observable<ClientData> {
+       return Observable.zip(getLeadView(leadId),
+           getMobileList(leadId = leadId, ucid = "0"),
+
+           BiFunction { t1: ClientDetail,  t2: List<MobileListData>  ->
+               ClientData(t1, "", t2)
+           })
+   }
+
 
     override fun getAddress(
         meetingID: String,

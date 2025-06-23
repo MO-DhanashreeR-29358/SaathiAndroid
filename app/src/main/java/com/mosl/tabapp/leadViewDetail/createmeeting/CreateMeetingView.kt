@@ -3,6 +3,7 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.createmeeting.*
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
@@ -127,4 +128,21 @@ interface CreateMeetingView : BaseView {
   fun onChipsApiCall(): Observable<CallChipsApi>
   fun renderChipsList(uiModel: UiModel<List<String>>)
 
+  fun onActivityTypeCall(): Observable<CallActivityTypeApi>
+  fun renderActivityTypeList(uiModel: UiModel<List<LookUp>>)
+
+  fun onMeetingDurationApiCall(): Observable<CallMeetingDurationApi>
+  fun renderMeetingDurationList(uiModel: UiModel<List<LookUp>>)
+
+  fun onInterestedInApiCall(): Observable<CallInterestedInApi>
+  fun renderInterestedInList(uiModel: UiModel<List<LookUp>>)
+
+  fun onMeetingObjectiveApiCall(): Observable<CallMeetingObjectiveApi>
+  fun renderMeetingObjectiveList(uiModel: UiModel<List<LookUp>>)
+
+  fun onTravellingModeApiCall(): Observable<CallTravellingModeApi>
+  fun renderTravellingModeList(uiModel: UiModel<List<LookUp>>)
+
+  fun onMeetingAddressApiCall(): Observable<CallMeetingAddressApi>
+  fun renderMeetingAddressList(uiModel: UiModel<List<LookUp>>)
 }

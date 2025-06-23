@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class registerResponse(
 
-@SerializedName("shortSMSLinks"       ) var surveyLinks       : ArrayList<String> = arrayListOf(),
+@SerializedName("surveyLinks"       ) var surveyLinks       : ArrayList<String> = arrayListOf(),
 @SerializedName("participantListId" ) var participantListId : String?           = null,
 @SerializedName("scheduleId"        ) var scheduleId        : String?           = null
 

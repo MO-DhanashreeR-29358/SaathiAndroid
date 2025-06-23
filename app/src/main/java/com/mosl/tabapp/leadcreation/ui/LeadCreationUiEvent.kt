@@ -11,4 +11,12 @@ sealed class LeadCreationUiEvent {
   object CallAccountType : LeadCreationUiEvent()
   object CreateLeadEvent : LeadCreationUiEvent()
   object CallChipsApi : LeadCreationUiEvent()
+  object CallClientType : LeadCreationUiEvent()
+  object CallProfession : LeadCreationUiEvent()
+  object CallInterestedIn : LeadCreationUiEvent()
+  object CallSource : LeadCreationUiEvent()
+  object CallStage : LeadCreationUiEvent()
+  object CallCountry : LeadCreationUiEvent()
+  object CallBankFilter : LeadCreationUiEvent()
+  object CallSTDCode : LeadCreationUiEvent()
 }

@@ -2,6 +2,12 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.INTERESTEDIN
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGADDRESSID
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGDURATION
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGOBJECTIVE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
@@ -40,6 +46,54 @@ class CreateMeetingPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe(view::render)
+            .addTo(disposable)
+
+        view.onActivityTypeCall()
+            .switchMap {
+                repository.getLookup(ACTIVITYTYPE)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderActivityTypeList)
+            .addTo(disposable)
+
+        view.onMeetingDurationApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGDURATION)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingDurationList)
+            .addTo(disposable)
+
+        view.onInterestedInApiCall()
+            .switchMap {
+                repository.getLookup(INTERESTEDIN)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderInterestedInList)
+            .addTo(disposable)
+
+        view.onMeetingObjectiveApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGOBJECTIVE)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingObjectiveList)
+            .addTo(disposable)
+
+        view.onTravellingModeApiCall()
+            .switchMap {
+                repository.getLookup(TRAVELLINGMODEID, true)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderTravellingModeList)
+            .addTo(disposable)
+
+        view.onMeetingAddressApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGADDRESSID, true)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingAddressList)
             .addTo(disposable)
 
         val activityTypeSelectedObs = view.onActivityTypeSelected()
@@ -87,9 +141,8 @@ class CreateMeetingPresenter @Inject constructor(
             .addTo(disposable)
 
         productSelectedObs.filter { it != CreateMeetingConstants.SELECT_PRODUCT }
-            .subscribe {
-                view.getSelectedProduct()
-                    ?.let { it1 -> view.renderOnProductClick(it1) }
+            .map {view.getSelectedProduct()}
+            .subscribe {view.renderOnProductClick(it)
             }
             .addTo(disposable)
 

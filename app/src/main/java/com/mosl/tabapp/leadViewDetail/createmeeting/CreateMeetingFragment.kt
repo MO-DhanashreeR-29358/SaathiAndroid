@@ -50,6 +50,7 @@ import com.mosl.tabapp.R.string
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
+import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY1
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_TIME
@@ -210,6 +211,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun setupViews() {
+        toggleProgress(true)
         meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         productAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
@@ -323,10 +325,135 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             chipsAdapter.setSpinnerData(binding.spChips, it)
+        }
+    }
+
+    override fun onActivityTypeCall(): Observable<CallActivityTypeApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderActivityTypeList(uiModel: UiModel<List<LookUp>>) {
+       // toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingDurationApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            activityAdapter.setSpinnerData(binding.spActivityType, it)
+            uiSubject.onNext(CallMeetingDurationApi)
+        }
+    }
+
+    override fun onMeetingDurationApiCall(): Observable<CallMeetingDurationApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingDurationList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallInterestedInApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it)
+            uiSubject.onNext(CallInterestedInApi)
+        }
+    }
+
+    override fun onInterestedInApiCall(): Observable<CallInterestedInApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderInterestedInList(uiModel: UiModel<List<LookUp>>) {
+       // toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingObjectiveApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            var list = it.toMutableList()
+            list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
+            list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
+
+            productAdapter.setSpinnerData(binding.spProduct, list)
+
+            uiSubject.onNext(CallMeetingObjectiveApi)
+        }
+    }
+
+    override fun onMeetingObjectiveApiCall(): Observable<CallMeetingObjectiveApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingObjectiveList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallTravellingModeApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            meetingObjectiveAdapter.setSpinnerData(
+                binding.spMeetingObjective,
+                it
+            )
+
+            uiSubject.onNext(CallTravellingModeApi)
+        }
+    }
+
+    override fun onTravellingModeApiCall(): Observable<CallTravellingModeApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderTravellingModeList(uiModel: UiModel<List<LookUp>>) {
+         //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingAddressApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it)
+
+            uiSubject.onNext(CallMeetingAddressApi)
+        }
+    }
+
+    override fun onMeetingAddressApiCall(): Observable<CallMeetingAddressApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingAddressList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+           // showOnFailurePopup(it)
+            toggleProgress(false)
+        }
+
+        uiModel.onSuccess {
+            meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it)
+            toggleProgress(false)
         }
     }
 
@@ -340,7 +467,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderTouchedUntouchedList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             touchedUntouchedAdapter.setSpinnerData(binding.spTouchedUntouched, it)
@@ -358,7 +486,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderFeedbackList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            //showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             feedbackAdapter.setSpinnerData(binding.spFeedback, it)
@@ -366,12 +495,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun render(uiModel: UiModel<ClientData>) {
-        toggleProgress(uiModel.inProgress)
+        //toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment render showOnFailurePopup ${it.message}")
-
-            showOnFailurePopup(it)
+            uiSubject.onNext(CallActivityTypeApi)
+           // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -400,20 +529,20 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 CRMAppUtil.setImage(imageUrl, binding.layoutTopSection.ivLead, requireContext())
             }
             binding.tvDate.text = CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY)
-            var list = it.listInterestedIn.toMutableList()
+           /* var list = it.listInterestedIn.toMutableList()
             list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
             list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
 
-            productAdapter.setSpinnerData(binding.spProduct, list)
-            meetingObjectiveAdapter.setSpinnerData(
+            productAdapter.setSpinnerData(binding.spProduct, list)*/
+            /* meetingObjectiveAdapter.setSpinnerData(
                 binding.spMeetingObjective,
                 it.listMeetingObjective
-            )
-            meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
-            activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
+            )*/
+            //meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
+            //activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
             mobileNumberAdapter.setSpinnerData(binding.spMobileNumber, it.listMobileNumber)
-            meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
-            travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
+            //meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
+           // travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
             isOnlyClient = clientDetail.isOnlyClient
             isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
             mainFromDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
@@ -425,6 +554,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.tilTouchedUntouched.visibility = View.GONE
                 binding.tilFeedback.visibility = View.GONE
             }
+            uiSubject.onNext(CallActivityTypeApi)
         }
     }
 
@@ -581,7 +711,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderMeetingReason showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it)
+           // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -598,7 +728,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderSubCategory showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             if (it.size > 1) {
@@ -618,7 +749,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderCustomerServiceData showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it)
+           // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -1606,7 +1737,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderOTP showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            //showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             if(it.status ){
@@ -1699,7 +1831,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
-                    /*if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                   /* if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
                             ignoreCase = true) && userManager.user.isRetail()){
                         callZykrrApi(it.meetingId)
                     }*/

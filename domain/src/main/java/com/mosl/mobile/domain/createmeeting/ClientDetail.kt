@@ -54,16 +54,23 @@ data class AddedAttendee(
   }
 }
 
+/*
 data class ClientData(
   @JvmField val clientDetail: ClientDetail,
   @JvmField val imageUrl: String,
-  @JvmField val listActivity: List<LookUp>,
   @JvmField val listMobileNumber: List<MobileListData>,
+  @JvmField val listActivity: List<LookUp>,
   @JvmField val listMeetingDuration: List<LookUp>,
   @JvmField val listInterestedIn: List<LookUp>,
   @JvmField val listMeetingObjective: List<LookUp>,
   @JvmField val listTravellingMode: List<LookUp>,
   @JvmField val listMeetingAdressID: List<LookUp>
+)
+*/
+data class ClientData(
+  @JvmField val clientDetail: ClientDetail,
+  @JvmField val imageUrl: String,
+  @JvmField val listMobileNumber: List<MobileListData>
 )
 
 

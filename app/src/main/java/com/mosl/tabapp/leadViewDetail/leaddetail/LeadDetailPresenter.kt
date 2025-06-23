@@ -81,7 +81,7 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe { view.renderArguments(data) }
             .addTo(disposable)
 
-        screenLoadObs
+        /*screenLoadObs
             .switchMap {
                 Observable.zip(
                     repository.getProfileRowDatas(),
@@ -104,6 +104,86 @@ class LeadDetailPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe(view::render, Timber::e)
+            .addTo(disposable)*/
+
+        screenLoadObs
+            .switchMap {
+               repository.getProfileRowDatas()
+               .compose(applyUiModel())
+            }
+            .subscribe(view::renderProfileList, Timber::e)
+            .addTo(disposable)
+
+        view.onBrokingProfileEventFired()
+            .switchMap {
+            repository.getBrokingProfileRowDatas()
+                .compose(applyUiModel())
+        }
+            .subscribe(view::renderBrokingProfileList, Timber::e)
+            .addTo(disposable)
+
+        view.onIpProfileEventFired()
+            .switchMap {
+                repository.getIpProfileRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderIpProfileList, Timber::e)
+            .addTo(disposable)
+
+        view.onFinalProfileEventFired()
+            .switchMap {
+                repository.getFinalProfileRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderFinalProfileList, Timber::e)
+            .addTo(disposable)
+
+        view.onInterestedInEventFired()
+            .switchMap {
+                repository.getInterestInRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderInterestedInList, Timber::e)
+            .addTo(disposable)
+
+        view.onCountyListEventFired()
+            .switchMap {
+                repository.getCountryRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderCountryList, Timber::e)
+            .addTo(disposable)
+
+        view.onChipListEventFired()
+            .switchMap {
+                repository.getChipsList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderChipList, Timber::e)
+            .addTo(disposable)
+
+        view.onSectorListEventFired()
+            .switchMap {
+                repository.getSectorList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderSectorList, Timber::e)
+            .addTo(disposable)
+
+        view.onDesignationListEventFired()
+            .switchMap {
+                repository.getDesignationList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderDesignationList, Timber::e)
+            .addTo(disposable)
+
+        view.onNetworthListEventFired()
+            .switchMap {
+                repository.getNetworthList()
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderNetworthList, Timber::e)
             .addTo(disposable)
 
         view.onCallAccountTypeFired()

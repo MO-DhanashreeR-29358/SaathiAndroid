@@ -4,12 +4,12 @@ import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
 import io.reactivex.rxjava3.core.Observable
 
@@ -92,6 +92,33 @@ interface LeadDetailView : BaseView {
     fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
     fun render(uiModel: UiModel<LeadDetailPageData>)
+    fun renderProfileList(uiModel: UiModel<List<RowData>>)
+    fun onBrokingProfileEventFired() : Observable<CallBrokingProfile>
+    fun renderBrokingProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onIpProfileEventFired() : Observable<CallIpProfile>
+    fun renderIpProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onFinalProfileEventFired() : Observable<CallFinalProfile>
+    fun renderFinalProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onInterestedInEventFired() : Observable<CallInterestedIn>
+    fun renderInterestedInList(uiModel: UiModel<List<RowData>>)
+    fun onCountyListEventFired() : Observable<CallCountry>
+    fun renderCountryList(uiModel: UiModel<List<RowData>>)
+
+    fun onSectorListEventFired() : Observable<CallSectorList>
+    fun renderSectorList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onDesignationListEventFired() : Observable<CallDesignationList>
+    fun renderDesignationList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onNetworthListEventFired() : Observable<CallNetworthList>
+    fun renderNetworthList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onChipListEventFired() : Observable<CallEventChipList>
+    fun renderChipList(uiModel: UiModel<List<RowData>>)
+
     fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
 
     fun onUpdateProfileEventFired(): Observable<UpdateProfile>

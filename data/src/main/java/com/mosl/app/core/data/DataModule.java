@@ -30,8 +30,8 @@ public abstract class DataModule {
     }*/
 
     private static OkHttpClient.Builder createOkHttpClient(CertificatePinner pinner) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().readTimeout(300, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS);
 
         if (pinner != null) {
             builder.certificatePinner(pinner);

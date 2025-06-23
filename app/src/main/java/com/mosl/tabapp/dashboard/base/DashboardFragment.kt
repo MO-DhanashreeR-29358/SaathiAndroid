@@ -821,7 +821,7 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                 val jsonObject = response.getJSONObject(RESPONSE)
                 renderCurrentQuarterStatus(jsonObject)
             } else {
-                throw ServiceFailureException(response.get(MESSAGE).toString())
+               // throw ServiceFailureException(response.get(MESSAGE).toString())
             }
         }
     }

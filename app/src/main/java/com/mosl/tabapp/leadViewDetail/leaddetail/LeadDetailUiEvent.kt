@@ -26,3 +26,13 @@ object UpdateLeadSection : LeadDetailUiEvent()
 object CallAccountType : LeadDetailUiEvent()
 
 data class StandardRemarks(val lookupId: Int) : LeadDetailUiEvent()
+
+object CallBrokingProfile : LeadDetailUiEvent()
+object CallIpProfile : LeadDetailUiEvent()
+object CallFinalProfile : LeadDetailUiEvent()
+object CallInterestedIn : LeadDetailUiEvent()
+object CallCountry : LeadDetailUiEvent()
+object CallEventChipList : LeadDetailUiEvent()
+object CallSectorList : LeadDetailUiEvent()
+object CallDesignationList : LeadDetailUiEvent()
+object CallNetworthList : LeadDetailUiEvent()

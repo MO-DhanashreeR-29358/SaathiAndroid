@@ -515,7 +515,7 @@ public class MeetingApptModel implements Serializable {
         return json;
     }
 
-    private String getProductJson() {
+   /* private String getProductJson() {
         String json = "[";
         for (CreateMeetingProductModel model : productList) {
             String meetingJson = model.getId();
@@ -525,6 +525,23 @@ public class MeetingApptModel implements Serializable {
         json = json.substring(0, json.length() - 1); //remove lash comma
         json += "]";
         return json;
+    }*/
+
+    private String getProductJson() {
+       if (productList == null || productList.isEmpty()) {
+            return "[]"; // Return empty array JSON if no products
+        }
+
+        StringBuilder json = new StringBuilder("[");
+        for (CreateMeetingProductModel model : productList) {
+            // Assuming getId() returns the product ID as a string,
+            // you need to add quotes around it for valid JSON strings:
+            json.append(model.getId()).append(",");
+        }
+
+        json.deleteCharAt(json.length() - 1); // Remove last comma
+        json.append("]");
+        return json.toString();
     }
 
     private String getTravellingJson() {
