@@ -189,6 +189,32 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         return false;
     }
 
+    String getAddedProductNameList() {
+        StringBuilder sb = new StringBuilder();
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            sb.append(model.getInterestedIn() + ",");
+        }
+        if (sb.length() > 0) {
+            String str = sb.toString();
+            if (!str.isEmpty()) {
+                return str.substring(0, str.length() - 1); // "exampl"
+            }
+        }
+        return "";
+    }
+    boolean checkMFDProductAvailable() {
+     for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            if (model.getInterestedIn().equalsIgnoreCase("Equity") ||
+                    model.getInterestedIn().equalsIgnoreCase("Only MFD") ||
+                    model.getInterestedIn().equalsIgnoreCase("Only MFD (Mutual Fund Distribution)") ||
+                    model.getInterestedIn().equalsIgnoreCase("Only Mutual Fund Distribution") ||
+                    model.getInterestedIn().equalsIgnoreCase("Equity & Mutual Fund Distribution") ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @SuppressLint("ViewHolder")
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {

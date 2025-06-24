@@ -872,6 +872,28 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         true,
                         null
                     )
+                } else if(leadDetailAddProductAdapter?.checkMFDProductAvailable() == true){
+                    MSFDialog.alertDialog(
+                        requireActivity(),
+                        0,
+                        resources.getString(R.string.motilal_oswal),
+                        getString(R.string.error_message_mfd_product_added,leadDetailAddProductAdapter?.getAddedProductNameList(), interestedInDisplayText),
+                        getString(R.string.button_label_ok),
+                        getString(R.string.button_label_cancel),
+                        false
+                    ) { action: Action, _: Array<Any?>? ->
+                         if (action == OK) {
+                             addMFDProduct(
+                                 (addProductDialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                 (addProductDialogBinding.spStage.selectedItem as RowData).key,
+                                 (addProductDialogBinding.spStatus.selectedItem as RowData).key,
+                                 "" )
+                         }else{
+                             dismiss()
+                         }
+
+                    }
+
                 } else {
                     if (isPotentialPMSProduct) {
                         MSFDialog.alertDialog(
@@ -914,6 +936,29 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             (addProductDialogBinding.spStatus.selectedItem as RowData).key,
             productMapping
         )
+    }
+
+    private fun addMFDProduct(
+        interestedIn: String,
+        stage: String,
+        status: String,
+        productMapping: String
+    ) {
+        //data
+        val data = InsertMFDLeadProductRequest(
+            leadId,
+            ucId,
+            interestedIn,
+            interestedIn,
+            primaryRm ?: "",
+            specialistAdd ?: "",
+            userManager.getUser()?.employeeCode.toString(),
+            CRMAppUtil.getDBDate(),
+            stage,
+            status,
+            productMapping
+        )
+        subject.onNext(AddMFDProductEvent(data))
     }
 
     private fun addProduct(
