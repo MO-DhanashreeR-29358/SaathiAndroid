@@ -262,6 +262,7 @@
                 android:layout_margin="@dimen/_3sdp"
                 android:background="@drawable/button_state_bg"
                 android:padding="@dimen/_10sdp"
+                android:textColor="@color/white"
                 android:text="Save" />
 
             <Button
@@ -271,6 +272,7 @@
                 android:layout_margin="@dimen/_3sdp"
                 android:background="@drawable/button_state_bg"
                 android:padding="@dimen/_10sdp"
+                android:textColor="@color/white"
                 android:text="Cancel" />
 
         </LinearLayout>

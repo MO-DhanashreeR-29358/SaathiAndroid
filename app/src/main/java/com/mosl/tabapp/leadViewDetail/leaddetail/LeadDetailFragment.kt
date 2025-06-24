@@ -633,6 +633,91 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    override fun mfdAddProductEventFired(): Observable<AddMFDProductEvent> {
+        return subject.ofType()
+    }
+
+    override fun renderMfdAddProduct(uiModel: UiModel<List<AddProductData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderAddProduct showOnFailurePopup %s", it.message)
+
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.text_message_success),
+                Toast.LENGTH_LONG
+            ).show()
+
+            if ("0".equals(leadId, ignoreCase = true)) {
+
+                val leadID = it[0].leadId
+                val uCID = it[0].ucId
+
+                MSFDialog.alertDialog(
+                    requireActivity(), 0,
+                    resources.getString(
+                        R.string.motilal_oswal
+                    ), getString(R.string.text_msg_success_add_product),
+                    getString(R.string.button_label_ok), true
+                ) { action: Action, _: Array<Any?>? ->
+                    if (action == OK) {
+                        val bundle = Bundle()
+                        bundle.putString(LEAD_ID, leadID)
+                        bundle.putString(UCID, uCID)
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_LEAD_VIEW_PAGER.toString(), bundle,
+                            true,
+                            forceReload = false
+                        )
+                    }
+                }
+            } else {
+                if (it.isNotEmpty()) {
+                    for (datum in it) {
+                        val potentialPMSProduct = stringOrEmpty(datum.potentialPmsProduct)
+                        isPotentialPMSProduct = potentialPMSProduct.isEmpty()
+                        pmsProductAdapter.setSpinnerDataWithSelection(
+                            binding.spPmsProduct, pmsList, potentialPMSProduct
+                        )
+                        leadDetailAddProductList.add(getLeadDetailAddProductModel(datum))
+                    }
+                    leadDetailAddProductAdapter =
+                        LeadDetailAddProductAdapter(
+                            saathiApi,
+                            requireContext(),
+                            leadDetailAddProductList,
+                            binding.lvAddProduct,
+                            leadId,
+                            getPrimaryRM(),
+                            isLeadEditable,
+                            statusData,
+                            statusAdapter,
+                            stageAdapter,
+                            userManager.getUser()?.employeeCode,
+                            userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                            (binding.spPmsProduct.selectedItem as? RowData)?.value
+                                ?: emptyString(),
+                            this
+                        )
+                    binding.lvAddProduct.adapter = leadDetailAddProductAdapter
+                    //CRMMOSLCommon.setListViewHeightBasedOnChildrenDetail(binding.lvAddProduct)
+                }
+                MSFDialog.alertDialog(
+                    requireActivity(),
+                    0,
+                    resources.getString(R.string.motilal_oswal),
+                    getString(R.string.text_msg_success_add_product),
+                    getString(R.string.button_label_ok),
+                    true
+                ) { _: Action?, _: Array<Any?>? ->
+                }
+            }
+        }
+    }
+
     private fun getPrimaryRM(): String =
         if (isBlank(leadOwner.trim())) advisoryCode else leadOwner.trim()
 
@@ -867,12 +952,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         requireContext(),
                         0,
                         resources.getString(R.string.motilal_oswal),
-                        getString(R.string.error_message_already_added, interestedInDisplayText),
+                        getString(R.string.error_message_already_added),
                         getString(R.string.button_label_ok),
                         true,
                         null
                     )
-                } else if(leadDetailAddProductAdapter?.checkMFDProductAvailable() == true){
+                } else if(leadDetailAddProductAdapter?.checkMFDProductAvailable(interestedInDisplayText) == true){
                     MSFDialog.alertDialog(
                         requireActivity(),
                         0,
@@ -885,13 +970,12 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                          if (action == OK) {
                              addMFDProduct(
                                  (addProductDialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                 (addProductDialogBinding.spInterestedIn.selectedItem as RowData).value,
                                  (addProductDialogBinding.spStage.selectedItem as RowData).key,
-                                 (addProductDialogBinding.spStatus.selectedItem as RowData).key,
-                                 "" )
-                         }else{
-                             dismiss()
+                                 (addProductDialogBinding.spStatus.selectedItem as RowData).key)
+                            dismiss()
+                             dialogBinding.btnClose.performClick()
                          }
-
                     }
 
                 } else {
@@ -907,11 +991,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         ) { action: Action, _: Array<Any?>? ->
                             val productMapping = if (action == OK) YES else NO
                             callAddProduct(productMapping)
+                            dismiss()
+                            dialogBinding.btnClose.performClick()
                         }
                     } else
                         callAddProduct()
+                    dismiss()
                 }
-                dismiss()
+
             }
 
             dialogBinding.btnClose.setOnClickListener {
@@ -940,23 +1027,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private fun addMFDProduct(
         interestedIn: String,
+        productName: String,
         stage: String,
-        status: String,
-        productMapping: String
+        status: String
     ) {
         //data
         val data = InsertMFDLeadProductRequest(
             leadId,
-            ucId,
             interestedIn,
-            interestedIn,
-            primaryRm ?: "",
-            specialistAdd ?: "",
-            userManager.getUser()?.employeeCode.toString(),
-            CRMAppUtil.getDBDate(),
+            productName,
+            getPrimaryRM() ?: "",
+            oaoUserId = "",
+            "",
+            "",
             stage,
             status,
-            productMapping
+            profileName = userManager.getUser()?.currentBusinessProfile?.businessProfileName,
+            createdBy = userManager.getUser()?.employeeCode.toString(),
+            extra1 = "",
+            extra2 = "" ,
+            extra3 = ""
+
         )
         subject.onNext(AddMFDProductEvent(data))
     }

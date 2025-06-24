@@ -563,7 +563,7 @@ Page </string>
     <string name="error_message_bank">Select Bank</string>
     <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>
-    <string name="error_message_already_added">%s is already selected</string>
+    <string name="error_message_already_added">Current Product and New Product are same, It should be different, Product change not allowed. </string>
     <string name="error_message_mfd_product_added">You already have a %s process in progress. Do you want to continue with %s?</string>
     <string name="error_message_alphabets">Only alphabets are allowed</string>
     <string name="error_message_contact">Enter contact person</string>

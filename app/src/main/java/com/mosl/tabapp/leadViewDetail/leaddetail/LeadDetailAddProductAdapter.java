@@ -192,7 +192,7 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
     String getAddedProductNameList() {
         StringBuilder sb = new StringBuilder();
         for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            sb.append(model.getInterestedIn() + ",");
+            sb.append(model.getInterestedInValue() + ",");
         }
         if (sb.length() > 0) {
             String str = sb.toString();
@@ -202,16 +202,15 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         }
         return "";
     }
-    boolean checkMFDProductAvailable() {
-     for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
-            if (model.getInterestedIn().equalsIgnoreCase("Equity") ||
-                    model.getInterestedIn().equalsIgnoreCase("Only MFD") ||
-                    model.getInterestedIn().equalsIgnoreCase("Only MFD (Mutual Fund Distribution)") ||
-                    model.getInterestedIn().equalsIgnoreCase("Only Mutual Fund Distribution") ||
-                    model.getInterestedIn().equalsIgnoreCase("Equity & Mutual Fund Distribution") ) {
+    boolean checkMFDProductAvailable(String name) {
+         if (name.equalsIgnoreCase("Equity") ||
+                 name.equalsIgnoreCase("Only MFD") ||
+                 name.equalsIgnoreCase("Only MFD (Mutual Fund Distribution)") ||
+                 name.equalsIgnoreCase("Only Mutual Fund Distribution") ||
+                 name.equalsIgnoreCase("Equity & Mutual Fund Distribution") ) {
                 return true;
             }
-        }
+
         return false;
     }
 

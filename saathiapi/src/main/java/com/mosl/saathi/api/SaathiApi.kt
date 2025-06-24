@@ -229,6 +229,11 @@ interface SaathiApi {
         @Body request: InsertLeadProductRequest
     ): Observable<List<LeadProductMappingItem>>
 
+    @POST("Lead/AddUpdateLeadProduct")
+    fun addUpdateLeadProduct(
+        @Body request: InsertMFDLeadProductRequest
+    ): Observable<List<LeadProductMappingItem>>
+
     @POST("Stage/GetStageList")
     fun getStageList(
         @Body request: StageRequest

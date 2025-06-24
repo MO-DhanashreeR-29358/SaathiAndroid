@@ -52,6 +52,14 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe(view::renderAddProduct)
             .addTo(disposable)
 
+        view.mfdAddProductEventFired()
+            .switchMap {
+                detailRepository.mfdAddProduct(it.addProduct)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMfdAddProduct)
+            .addTo(disposable)
+
         screenLoadObs
             .map { data.leadId }
             .filter { it != "0" }

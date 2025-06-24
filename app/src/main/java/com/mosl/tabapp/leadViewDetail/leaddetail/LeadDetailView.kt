@@ -99,6 +99,10 @@ interface LeadDetailView : BaseView {
     fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>)
     fun addProductEventFired(): Observable<AddProductEvent>
     fun renderAddProduct(uiModel: UiModel<List<AddProductData>>)
+
+    fun mfdAddProductEventFired(): Observable<AddMFDProductEvent>
+    fun renderMfdAddProduct(uiModel: UiModel<List<AddProductData>>)
+
     fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>)
     fun onAssignToEventFired(): Observable<AssignToEvent>
     fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)
@@ -138,6 +142,7 @@ interface LeadDetailView : BaseView {
 
     fun onStandardRemarkFired(): Observable<StandardRemarks>
     fun renderStandardRemark(uiModel: UiModel<List<RowData>>)
+
 
     companion object {
         const val INVALID_SELECTION_KEY = "-1"

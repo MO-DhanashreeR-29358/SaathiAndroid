@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 200,
-      "versionName": "2.0.0",
-      "outputFile": "app-uatDebug-2.0.0.apk"
+      "versionCode": 299,
+      "versionName": "2.9.9",
+      "outputFile": "app-uatDebug-2.9.9.apk"
     }
   ],
   "elementType": "File"
