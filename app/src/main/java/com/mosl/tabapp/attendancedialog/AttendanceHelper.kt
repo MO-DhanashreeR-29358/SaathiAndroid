@@ -71,7 +71,7 @@ class AttendanceHelper @Inject constructor(
         // user that have biometric assigned will show attendance popup forcible
         // PCG user needs to mark attendance like work from home , but attendance type will be biometric means 3.
 
-        if (userManager.user.isPCG() && userManager.user.isAttendanceAllowedForPCG()) {
+       /* if (userManager.user.isPCG() && userManager.user.isAttendanceAllowedForPCG()) {
             disposable.add(latLngObservable
                 .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
                 .map { t -> t.second }
@@ -80,7 +80,7 @@ class AttendanceHelper @Inject constructor(
                         .compose(applyUiModel())
                 }
                 .subscribe(this::showAttendancePopupWFH))
-        }else{
+        }else{*/
             disposable.add(latLngObservable
                 .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
                 .map { t -> t.second }
@@ -89,7 +89,7 @@ class AttendanceHelper @Inject constructor(
                         .compose(applyUiModel())
                 }
                 .subscribe(this::showAttendancePopupGeoFancing))
-        }
+       // }
         
         disposable.add(latLngObservable
             .filter { t -> t.first.attendanceCount == 1 }
