@@ -805,6 +805,9 @@ class CommonActivity : BaseActivity(),
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING){
                     screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_NRI_NON_BROKING_PRODUCT_LINK)
                 }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_INSURANCE){
+                    screenNavigator.openUrlInAppCrome(ApiBaseUrlImpl.EKYC_INSURANCE)
+                }
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_IP_EXECUTION){
                     var strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
                     if(BuildConfig.FLAVOR == "prod"){

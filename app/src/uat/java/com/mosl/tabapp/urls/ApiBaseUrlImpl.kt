@@ -44,6 +44,8 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_MFD_LINK =  "https://ekycuat.motilaloswaluat.com/superjetapi?"
     const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/nonbroking/?"
     const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/Nri/TPP?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
+    const val EKYC_INSURANCE = "https://ekycuat.motilaloswaluat.com/superjetapi/nonBroking/?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrfIKcevcrXV9Qf4tI3NGiqbtcUwCS9gmi6IDf7dmXkCAw=="
+
   }
 
 }

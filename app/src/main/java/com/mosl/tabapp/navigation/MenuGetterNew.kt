@@ -245,6 +245,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS->true
             NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING->true
             NavigationConstants.NAVIGATE_TO_IP_EXECUTION-> true
+            NavigationConstants.NAVIGATE_TO_INSURANCE->true
             else -> return false
         }
     }

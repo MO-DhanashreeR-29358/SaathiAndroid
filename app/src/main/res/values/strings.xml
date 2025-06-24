@@ -42,6 +42,7 @@
     <string name="MOSL_MENU_ONLY_MFD">"Only MFD <br/>(Mutual Fund Distribution)  "</string>
     <string name="MOSL_MENU_DEMAT_MFD">"MFD (Mutual Fund Non-Demat) +<br/> Demat account (Equity, FnO)  "</string>
     <string name="MOSL_MENU_NON_BROKING">"Non Broking Product KYC  "</string>
+    <string name="MOSL_MENU_INSURANCE">"Insurance  "</string>
     <string name="MOSL_MENU_NRI_BROKING">"NRI Non Broking Product  "</string>
     <string name="preference_location_summary">Location tracking needed for Conveyance</string>
     <string name="preference_location_title">24x7 Location Tracking</string>
