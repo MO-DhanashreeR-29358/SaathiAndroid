@@ -78,3 +78,7 @@ Version : 3.0.9
 Update Date : 30.5.2025
 Release Note :  SAAT-I2577 : IP Execution Dealer 2.0
                 SAAT-I2615 : NRI Non Broking Product KYC CTA in Saathi
+---------------------------------------------------------------------------------------------
+Version : 3.1.0
+Update Date : 13.6.2025
+Release Note :  Zykrr integration for direct channel only

@@ -1,6 +1,12 @@
 package com.mosl.app.core.data.interceptor
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.mosl.app.core.utils.getLocalIpAddress
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
@@ -15,7 +21,14 @@ import com.mosl.shared.util.getDeviceID
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
+import okhttp3.ResponseBody
+import okio.Buffer
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 /**
@@ -31,9 +44,12 @@ class HeaderInterceptor @Inject constructor(
   @Throws(IOException::class)
   override fun intercept(chain: Interceptor.Chain): Response {
     val original = chain.request()
+    val startTime = System.nanoTime()
 
     val builder = original.newBuilder()
+    val endpoint = original.url().toString().substringAfterLast('/')
 
+    writeLogToFile(context, "$endpoint--> ${original.method()} ${original.url()}")
     // Check if the request is one of the excluded endpoints
     if (!isExcludedEndpoint(original)) {
       val user = userManager.user
@@ -61,8 +77,56 @@ class HeaderInterceptor @Inject constructor(
 
     // Proceed with the request and obtain the response
     val newRequest = builder.build()
+    if(endpoint.equals("GetNotificationMessageMobile")) {
+      for (name in newRequest.headers().names()) {
+        val value = newRequest.header(name)
+        writeLogToFile(context, "$endpoint: Header: $name = $value")
+      }
+    }
+    val requestBody = newRequest.body()
+    var requestBodyString = ""
 
-    return chain.proceed(newRequest)
+    if (requestBody != null) {
+      try {
+        val buffer = Buffer()
+        requestBody.writeTo(buffer)
+
+        val contentType = requestBody.contentType()
+        val charset = contentType?.charset(Charsets.UTF_8) ?: Charsets.UTF_8
+
+        requestBodyString = buffer.readString(charset)
+        writeLogToFile(context, "$endpoint: Request: $requestBodyString")
+      } catch (e: Exception) {
+      }
+    }
+
+
+    val response = try {
+      chain.proceed(newRequest)
+    } catch (e: Exception) {
+      writeLogToFile(context, "<--$endpoint: HTTP FAILED: ${e.localizedMessage}")
+      throw e
+    }
+
+    val endTime = System.nanoTime()
+    val durationMs = (endTime - startTime) / 1_000_000
+
+    writeLogToFile(context, "$endpoint: ${response.code()} ${response.message()} (${durationMs}ms)")
+
+    // Optional: log response body (be careful with large or sensitive data)
+    //val responseBody = response.peekBody(1024 * 1024) // up to 1MB
+    val responseBody = response.body()
+    val responseBodyString = responseBody?.string() ?: ""
+
+    writeLogToFile(context, "<--$endpoint:Response Body: $responseBodyString")
+
+    // Recreate the response so Retrofit can still read it
+    val contentType = responseBody?.contentType()
+    val newResponseBody = ResponseBody.create(contentType, responseBodyString)
+
+    return response.newBuilder()
+      .body(newResponseBody)
+      .build()
   }
 
   private fun isExcludedEndpoint(request: Request): Boolean {
@@ -88,6 +152,34 @@ class HeaderInterceptor @Inject constructor(
     private val API_HEADER_CONTENT_TYPE_VALUE = "application/json; charset=UTF-8"
     private val API_HEADER_CLIENT_INFO_VALUE = "android"
     private val API_HEADER_APP_ID_VALUE = "2"
-
   }
+
+  fun getDailyLogFile(context: Context): File {
+    val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    val fileName = "http_logs_$date.txt"
+    val logDir = File(context.getExternalFilesDir(null), "logs")
+
+    if (!logDir.exists()) logDir.mkdirs()
+
+    return File(logDir, fileName)
+  }
+
+  fun writeLogToFile(context: Context, logText: String) {
+    val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+    val logLine = "[$timestamp] $logText"
+
+    val logFile = getDailyLogFile(context)
+
+    try {
+      FileOutputStream(logFile, true).bufferedWriter().use { writer ->
+        writer.appendLine(logLine)
+      }
+    } catch (e: IOException) {
+      Log.e("Logger", "Failed to write log: ${e.localizedMessage}")
+    }
+  }
+
+
+
+
 }
