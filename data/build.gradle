@@ -47,6 +47,9 @@ dependencies {
   implementation deps.retrofit.scalar
   implementation deps.kotlin
   implementation deps.timber
+  implementation project(':artifact_lib')
+  implementation files('..\\libs\\annotations-2.0.1.jar')
+  implementation files('..\\libs\\moslcommons-1.2.1.jar')
   //api deps.mofslArtifacts.appcore
 
   implementation deps.dagger.core

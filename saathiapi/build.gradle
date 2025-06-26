@@ -7,7 +7,7 @@ dependencies {
     implementation deps.retrofit.core
     implementation deps.gson
     implementation deps.kotlin
-    //implementation files('libs\\annotations-2.0.1.jar')
+   // implementation files('libs\\annotations-2.0.1.jar')
 }
 
 sourceCompatibility = "17"

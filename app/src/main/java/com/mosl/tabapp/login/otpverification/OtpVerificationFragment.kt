@@ -27,7 +27,6 @@ import com.mosl.app.coreui.base.BaseFragment
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
-import com.mosl.ekycexpress.user.model.emptyString
 import com.mosl.mobile.user.model.LoginInfo
 import com.mosl.mobile.user.model.ResumeOtp
 import com.mosl.mobile.user.model.Status
@@ -184,7 +183,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
 
     private fun toggleResend(enable: Boolean) {
         if (enable){
-            binding.ekycJetOtpError.text = emptyString
+            binding.ekycJetOtpError.text = ""
             binding.tvResendOtp.isEnabled = enable
             binding.tvResendOtp.setTextColor(resources.getColor(R.color.light_red))
           /*  parentFragment?.requireContext()?.getColor(R.color.light_red)?.let {
@@ -206,7 +205,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     override fun onInteractionListener() {
         Timber.i("Otp Sheet 1 ${binding.ekycJetOtpView.otp.toString()}")
         if (binding.ekycJetOtpError.text.isNullOrEmpty().not()){
-            binding.ekycJetOtpError.text = emptyString
+            binding.ekycJetOtpError.text = ""
         }
 
     }
@@ -245,8 +244,8 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
                 (activity as LoginActivity ).fnShowAlert(it.message)
                 return
             }
-            binding.ekycJetOtpView.setOTP(emptyString)
-            binding.ekycJetOtpError.text = emptyString
+            binding.ekycJetOtpView.setOTP("")
+            binding.ekycJetOtpError.text = ""
             if(it.message.isNotEmpty())
             {
                 intCount=it.message.substringAfter(":-")
@@ -272,7 +271,7 @@ class OtpVerificationFragment:BottomSheetDialogFragment(),OtpVerificationView, O
     }
     override fun fnOnProccedClicked(): Observable<Unit> {
         return binding.ekycJetbtnProceed.clicks().doOnNext { binding.ekycJetbtnProceed.isEnabled = false
-            binding.ekycJetOtpError.text = emptyString }
+            binding.ekycJetOtpError.text = "" }
     }
 
     override fun fnRenderValidateOtp(uiModel: UiModel<User>) {

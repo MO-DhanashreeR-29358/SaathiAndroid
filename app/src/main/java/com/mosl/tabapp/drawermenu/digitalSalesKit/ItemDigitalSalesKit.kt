@@ -8,7 +8,6 @@ import com.mosl.tabapp.databinding.BranchItemBinding
 import com.mosl.tabapp.databinding.DigitalSalesKitItemBinding
 import com.xwray.groupie.databinding.BindableItem
 import io.reactivex.rxjava3.subjects.PublishSubject
-import okhttp3.internal.notifyAll
 
 class ItemDigitalSalesKit(
     val childMenu: DigitalSalesKitData,

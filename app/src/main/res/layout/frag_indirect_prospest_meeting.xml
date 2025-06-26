@@ -25,7 +25,7 @@
                     android:text="@string/label_lead_id"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +43,7 @@
                     android:text=""
                     android:textColor="@color/colorBlack"
                     android:inputType="number"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
 
@@ -55,7 +55,7 @@
                     android:text="@string/label_FCode"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
                     android:text=""
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3" />
 
@@ -87,7 +87,7 @@
                     android:text="@string/text_label_client_code"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     android:layout_marginTop="@dimen/_10sdp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -106,7 +106,7 @@
                     android:hint="@string/text_label_client_code"
                     android:text=""
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ,@!#&amp;()_"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView4" />
@@ -133,7 +133,7 @@
                         android:text="@string/str_search"
                         android:textColor="@color/white"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_reset_lead"
@@ -527,7 +527,7 @@
                         android:text="@string/text_button_save"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnReset"

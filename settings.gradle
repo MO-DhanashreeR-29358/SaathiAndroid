@@ -1,2 +1,4 @@
 include ':app', ':saathiapi', ':data',':appuserMyzone',
-    ':shared',':appuser',':domain',':digio-esign2',':google-pay-client-api-1.0.1',':nsdl-esign-2.1-v-1.3.1'
+    ':shared',':appuser',':domain',':digio-esign2',':google-pay-client-api-1.0.1',':nsdl-esign-2.1-v-1.3.1',':artifact_lib',
+':mosl_tokenmanager',':mosl_tableview',':mosl_tableextension',':mosl_scanner',':mosl_rxpref',':mosl_navigator',':mosl_groupie',
+        ':mosl_appcoreui',':dista-sdk',':html-text'

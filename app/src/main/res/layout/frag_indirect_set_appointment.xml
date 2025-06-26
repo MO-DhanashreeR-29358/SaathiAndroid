@@ -318,7 +318,7 @@
                 android:text="@string/text_button_save"
                 android:textColor="@color/white"
                 android:textFontWeight="500"
-                android:textSize="@dimen/_14ssp" />
+                android:textSize="@dimen/_14sdp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnReset"

@@ -27,7 +27,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textFontWeight="500"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,7 +52,7 @@
                     android:textFontWeight="400"
                     android:buttonTint="@color/light_blue_700"
                     android:checked="true"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radio_btn_client"
@@ -64,7 +64,7 @@
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
                     android:buttonTint="@color/light_blue_700"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
             </RadioGroup>
             <RelativeLayout
                 android:id="@+id/relativeLayout3"
@@ -93,7 +93,7 @@
                         android:text="@string/hint_text_lead_id"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtleadID"
@@ -111,7 +111,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -121,7 +121,7 @@
                         android:text="@string/text_label_mobile_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMobileNumber"
@@ -139,7 +139,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
                         android:text="@string/text_label_email_address"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtEmailAddress"
@@ -165,7 +165,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                         android:text="@string/txt_label_name"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtleadName"
@@ -191,7 +191,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -201,7 +201,7 @@
                         android:text="@string/hint_lead_creation_aadhar_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtAadharNo"
@@ -219,7 +219,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -229,7 +229,7 @@
                         android:text="@string/lead_detail_pan_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtPanNo"
@@ -245,7 +245,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -265,7 +265,7 @@
                         android:text="@string/txt_lable_client_code"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtclientCode"
@@ -280,7 +280,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -290,7 +290,7 @@
                         android:text="@string/text_label_mobile_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCMobileNumber"
@@ -308,7 +308,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -318,7 +318,7 @@
                         android:text="@string/text_label_email_address"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCEmailAddress"
@@ -334,7 +334,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -345,7 +345,7 @@
                         android:text="@string/hint_lead_creation_aadhar_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCAadharNo"
@@ -363,7 +363,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -373,7 +373,7 @@
                         android:text="@string/lead_detail_ucid"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtUcid"
@@ -390,7 +390,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -400,7 +400,7 @@
                         android:text="@string/lead_detail_family_ucid"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtfamilyUcid"
@@ -417,7 +417,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -427,7 +427,7 @@
                         android:text="@string/lead_detail_pan_number"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCPanNo"
@@ -443,7 +443,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </RelativeLayout>
@@ -469,7 +469,7 @@
                     android:text="@string/SS_SEARCH"
                     android:textColor="@color/white"
                     android:textFontWeight="500"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_reset_lead"

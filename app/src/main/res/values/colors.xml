@@ -46,6 +46,7 @@
     <color name="loginTextColor">#8f6101</color>
     <color name="header_bg">#414042</color>
     <color name="black">#000000</color>
+    <color name="colorBlack">#000000</color>
     <color name="light_black">#373737</color>
     <color name="dark_color">#c1c1c1</color>
     <color name="title_black">@color/titleBarBackground</color><!--color black-->
@@ -59,6 +60,7 @@
     <color name="list_subhead_row_color">@color/secondaryTextColor</color>
     <color name="calendar_gray">#C4C4C4</color>
     <color name="actionable_gray">#e6e6e6</color>
+    <color name="gray_light">#e6e6e6</color>
     <color name="white_subheading">@color/secondaryBackground</color>
     <color name="counter_text_color">#c5c4c4</color>
     <color name="separator_grey">#d7d7d7</color>
@@ -99,6 +101,7 @@
     <color name="secondaryBackground">#2E2A94</color>
     <color name="sip_color">#FFB00A</color>
     <color name="yellow_header">#fbb12f</color>
+    <color name="colorYellow">#fbb12f</color>
     <!--#fdaf32-->
     <color name="yellow_summary">#FECA0D</color>
     <color name="summary_txt">#0B0011</color>
@@ -234,6 +237,7 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#000000</color>
     <color name="blue_semi_transparent_pressed">#000000</color>
+    <color name="ekyc_transparent">#00000000</color>
 
     <color name="contact_number">#FFA96602</color>
     <color name="mosl_web_color">#F9AF29</color>
@@ -272,5 +276,6 @@
     <color name="ekyc_dark_grey">#444444</color>
     <color name="ekyc_text_color_black">#000000</color>
     <color name="ekyc_white">#FFFFFF</color>
+    <color name="colorWhite">#FFFFFF</color>
 
 </resources>

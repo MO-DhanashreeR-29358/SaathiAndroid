@@ -177,7 +177,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
                 AttendanceDialogView.COLLECTION_OFFICER -> {
                     binding.tvMessage.visibility = View.GONE
                     binding.tvCollectionOfficerMessage.visibility = View.VISIBLE
-                    binding.btnSubmit.setText(R.string.ekyc_btn_ok)
+                    binding.btnSubmit.setText(R.string.dialog_ok)
                     binding.linearMarkAttendance.moodView.visibility = View.GONE
                 }
             }
@@ -188,7 +188,7 @@ class AttendanceDialogFragment : DialogFragment(), AttendanceDialogView {
            // (requireActivity() as CommonActivity).getProfileInfo()
             dismiss()
         }
-        binding.tvSkip.text = setUnderLineSpannable(getString(R.string.ekyc_btn_label_skip))
+        binding.tvSkip.text = setUnderLineSpannable(getString(R.string.skip))
     }
 
     private fun setUnderLineSpannable(

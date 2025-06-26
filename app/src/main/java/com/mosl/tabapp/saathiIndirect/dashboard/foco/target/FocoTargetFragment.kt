@@ -52,7 +52,6 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
-import okhttp3.internal.notify
 import timber.log.Timber
 import javax.inject.Inject
 

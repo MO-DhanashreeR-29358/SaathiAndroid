@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('groupie_extensions-1.1.5-alpha1.aar'))

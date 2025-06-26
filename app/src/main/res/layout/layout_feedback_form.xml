@@ -12,7 +12,7 @@
             android:layout_height="wrap_content"
             android:text="@string/lbl_feedback"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_13ssp"
+            android:textSize="@dimen/_13sdp"
             android:padding="@dimen/_10sdp"
             android:background="@color/colorYellow"
             app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/text_label_feedback"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11ssp"
+            android:textSize="@dimen/_11sdp"
             android:paddingStart="@dimen/_10sdp"
             android:paddingTop="@dimen/_5sdp"
             android:paddingBottom="@dimen/_5sdp"
@@ -53,7 +53,7 @@
             android:paddingBottom="@dimen/_5sdp"
             android:text="@string/lbl_remark"
             android:textColor="@color/text_color_personal"
-            android:textSize="@dimen/_11ssp"
+            android:textSize="@dimen/_11sdp"
             android:layout_marginTop="@dimen/_10sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +120,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:background="@drawable/button_highlight"
                     android:text="@string/search_dialog_close"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -137,7 +137,7 @@
                     android:layout_margin="@dimen/_5sdp"
                     android:background="@drawable/button_highlight"
                     android:text="@string/btn_submit"
-                    android:textSize="@dimen/_12ssp" />
+                    android:textSize="@dimen/_12sdp" />
             </LinearLayout>
 
         </LinearLayout>

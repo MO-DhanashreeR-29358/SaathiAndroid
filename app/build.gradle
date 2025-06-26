@@ -241,8 +241,20 @@ dependencies {
     //implementation deps.mofslArtifacts.navigator
     //implementation deps.rx.preferences
 
-    //implementation files('libs/moslcommons-1.2.1.jar')
-    //implementation files('libs/validator-1.2.1.jar')
+    implementation files('..\\libs\\moslcommons-1.2.1.jar')
+    implementation files('..\\libs\\validator-1.2.1.jar')
+    implementation files('..\\libs\\annotations-2.0.1.jar')
+    implementation project(':mosl_rxpref')
+    implementation project(':mosl_appcoreui')
+    implementation project(':artifact_lib')
+    implementation project(':mosl_groupie')
+    implementation project(':mosl_tokenmanager')
+    implementation project(':mosl_navigator')
+    implementation project(':mosl_tableview')
+    implementation project(':mosl_tableextension')
+    implementation project(':html-text')
+    implementation project(':dista-sdk')
+    implementation "com.github.yalantis:ucrop:2.2.6"
 
 
     // Dagger

@@ -94,7 +94,7 @@
                     <androidx.appcompat.widget.AppCompatImageView
                         android:layout_width="@dimen/_18sdp"
                         android:layout_height="@dimen/_18sdp"
-                        android:src="@drawable/ic_call_grey_24dp" />
+                        android:src="@drawable/ic_call_grey" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/txtContactMobile"
@@ -107,7 +107,7 @@
                         android:maxLength="15"
                         android:ellipsize="end"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgCopyMobile"
@@ -141,7 +141,7 @@
                         android:maxLength="30"
                         android:ellipsize="end"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/_11ssp" />
+                        android:textSize="@dimen/_11sdp" />
 
                     <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/imgCopyEmail"

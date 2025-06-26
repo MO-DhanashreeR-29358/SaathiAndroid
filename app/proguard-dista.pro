@@ -9,8 +9,8 @@
 -keep class ma.dista.activities.reports.models.** {*;}
 -keep class ma.dista.activities.poimapsview.providers.** {*;}
 -keep class processors.coreProcessors.ActionType {*;}
-#-keep class
-dataRepository.preferences.encryptedPreferences.EncryptedSharedPref {*;}
+#
+-keep class dataRepository.preferences.encryptedPreferences.EncryptedSharedPref {*;}
 -keep class com.google.crypto.** { *; }
 -keep class com.google.firebase.firestore.** { *; }
 #~~~~~~~~~~~ Custom Form Listener
@@ -51,11 +51,11 @@ public static <methods>;
 #Use 5 step of optimization
 -optimizationpasses 5
 #When not preverifing in a case-insensitive filing system, such as Windows.
-This tool will unpack your processed jars,(if using windows you should then
-use):
+#This tool will unpack your processed jars,(if using windows you should then
+#use):
 -dontusemixedcaseclassnames
 #Specifies not to ignore non-public library classes. As of version 4.5, this
-is the default setting
+#is the default setting
 -dontskipnonpubliclibraryclasses
 # Optimization is turned off by default. Dex does not like code run
 # through the ProGuard optimize and preverify steps (and performs some

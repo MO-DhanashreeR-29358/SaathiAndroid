@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.mosl.ekycexpress.user.model.emptyString
 import com.mosl.tabapp.R
 import java.util.*
 import java.util.regex.Pattern
@@ -192,7 +191,7 @@ class OtpTextView : FrameLayout {
     }
 
     fun resetApiError() : String{
-        return emptyString
+        return ""
     }
 
     fun resetState() {

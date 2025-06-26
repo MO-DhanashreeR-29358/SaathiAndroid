@@ -15,7 +15,6 @@ import com.mosl.mobile.domain.location.LocationRepository;
 import com.mosl.mobile.domain.saathiIndirect.dashboard.cncfoco.CncFocoRepository;
 import com.mosl.tabapp.BuildConfig;
 import com.mosl.tabapp.CertPinProviderImpl;
-import com.mosl.tabapp.EkycAPIModule;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSource;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSourceImpl;
@@ -36,7 +35,7 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
-@Module(includes = { BaseDataModule.class, RepositoryAliasProviders.class, EkycAPIModule.class })
+@Module(includes = { BaseDataModule.class, RepositoryAliasProviders.class })
 public abstract class CommonDataModule {
     @Provides
     @Singleton
