@@ -46,7 +46,7 @@ ext.versions = ["compileSdkVersion"   : 34,
                 'retrofit'            : '2.9.0',
                 'rxJava'              : '2.2.8',
                 'rxBinding'           : '4.0.0',
-                'groupie'             : '2.9.0',
+                'groupie'             : '2.10.1',
                 'room'                : '2.1.0',
                 'picasso'             : '2.5.2',
                 'androidx'            : '1.0.0',
@@ -88,7 +88,7 @@ ext.deps = [
                 'platform': "com.jakewharton.rxbinding4:rxbinding:${versions.rxBinding}",
                 'material'    : "com.jakewharton.rxbinding4:rxbinding-material:${versions.rxBinding}"
         ],
-        'mofslArtifacts'          : [
+        /*'mofslArtifacts'          : [
                 'validator'   : "MofslTraderArtifacts:validator:1.2.1",
                 'annotation'  : "MofslTraderArtifacts:annotations:2.0.1",
                 'appcore'     : "MofslTraderArtifacts:appcore:1.2.3",
@@ -99,9 +99,9 @@ ext.deps = [
                 'groupie'     : "MofslTraderArtifacts:groupie_extensions:1.1.5-alpha1",
                 'tokenmanager': "MofslArtifacts:tokenmanager:1.2.2",
                 'moslcommons' : "MofslTraderArtifacts:moslcommons:1.2.1"
-        ],
-        'groupie'                 : ['core'       : "com.xwray:groupie:${versions.groupie}",
-                                     'dataBinding': "com.xwray:groupie-databinding:${versions.groupie}"],
+        ],*/
+        'groupie'                 : ['core'       : "com.github.lisawray.groupie:groupie:${versions.groupie}",
+                                     'dataBinding': "com.github.lisawray.groupie:groupie-databinding:${versions.groupie}"],
         'kotlin'                  : "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlin_version}",
         'constraintLayout'        : "androidx.constraintlayout:constraintlayout:1.1.3",
 
@@ -164,7 +164,7 @@ ext.deps = [
         'gson'                    : "com.google.code.gson:gson:${versions.gson}",
         'commonsLang'             : "org.apache.commons:commons-lang3:3.4",
         'segmented'               : "info.hoang8f:android-segmented:1.0.6",
-        'htmlTextview'            : "org.sufficientlysecure:html-textview:3.4",
+        /*'htmlTextview'            : "org.sufficientlysecure:html-textview:3.4",*/
         'slidinguppanel'          : "com.sothree.slidinguppanel:library:3.1.1",
         'playService'             : "com.google.android.gms:play-services:${versions.firebase}",
         'compressor'              : "id.zelory:compressor:2.1.0",
@@ -172,7 +172,7 @@ ext.deps = [
         'location'                : "com.google.android.gms:play-services-location:21.0.1",
         'work'                    : "androidx.work:work-runtime-ktx:2.7.1",
         'javax'                   : "javax.annotation:jsr250-api:1.0",
-        'EkycArtifactDependencies': [
+        /*'EkycArtifactDependencies': [
                 'app' : "EkycArtifacts:ekycapp:1.0.0-alpha11",
                 'core' : "EkycArtifacts:ekyccore:1.0.0-alpha3",
                 'api' : "EkycArtifacts:ekycapi:1.0.2",
@@ -183,7 +183,7 @@ ext.deps = [
                 'mockData' : "EkycArtifacts:ekycmockdata:0.0.7",
                 'coreUi' : "EkycArtifacts:ekyccoreui:1.0.0-alpha3",
                 'appUser' : "EkycArtifacts:ekycappuser:1.0.0-alpha3"
-        ],
+        ],*/
         'lottie'                 : "com.airbnb.android:lottie:3.0.6"
 
 ]
