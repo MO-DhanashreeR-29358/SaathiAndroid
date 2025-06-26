@@ -57,6 +57,15 @@
 
         <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="true" />
 
+        <receiver
+            android:name="com.instacart.library.truetime.BootCompletedBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".slider.SliderActivity"
             android:clearTaskOnLaunch="true"

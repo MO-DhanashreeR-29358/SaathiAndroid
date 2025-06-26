@@ -252,9 +252,12 @@ dependencies {
     implementation project(':mosl_navigator')
     implementation project(':mosl_tableview')
     implementation project(':mosl_tableextension')
+    implementation project(':mosl_scanner')
     implementation project(':html-text')
     implementation project(':dista-sdk')
+    implementation project(':true-time')
     implementation "com.github.yalantis:ucrop:2.2.6"
+
 
 
     // Dagger
