@@ -47,9 +47,9 @@ class HeaderInterceptor @Inject constructor(
     val startTime = System.nanoTime()
 
     val builder = original.newBuilder()
-    val endpoint = original.url().toString().substringAfterLast('/')
+    val endpoint = original.url.toString().substringAfterLast('/')
 
-    writeLogToFile(context, "$endpoint--> ${original.method()} ${original.url()}")
+    writeLogToFile(context, "$endpoint--> ${original.method} ${original.url}")
     // Check if the request is one of the excluded endpoints
     if (!isExcludedEndpoint(original)) {
       val user = userManager.user
@@ -78,12 +78,12 @@ class HeaderInterceptor @Inject constructor(
     // Proceed with the request and obtain the response
     val newRequest = builder.build()
     if(endpoint.equals("GetNotificationMessageMobile")) {
-      for (name in newRequest.headers().names()) {
+      for (name in newRequest.headers.names()) {
         val value = newRequest.header(name)
         writeLogToFile(context, "$endpoint: Header: $name = $value")
       }
     }
-    val requestBody = newRequest.body()
+    val requestBody = newRequest.body
     var requestBodyString = ""
 
     if (requestBody != null) {
@@ -111,11 +111,11 @@ class HeaderInterceptor @Inject constructor(
     val endTime = System.nanoTime()
     val durationMs = (endTime - startTime) / 1_000_000
 
-    writeLogToFile(context, "$endpoint: ${response.code()} ${response.message()} (${durationMs}ms)")
+    writeLogToFile(context, "$endpoint: ${response.code} ${response.message} (${durationMs}ms)")
 
     // Optional: log response body (be careful with large or sensitive data)
     //val responseBody = response.peekBody(1024 * 1024) // up to 1MB
-    val responseBody = response.body()
+    val responseBody = response.body
     val responseBodyString = responseBody?.string() ?: ""
 
     writeLogToFile(context, "<--$endpoint:Response Body: $responseBodyString")
@@ -130,7 +130,7 @@ class HeaderInterceptor @Inject constructor(
   }
 
   private fun isExcludedEndpoint(request: Request): Boolean {
-    val lastPathSegment = request.url().pathSegments().last()
+    val lastPathSegment = request.url.pathSegments.last()
     return lastPathSegment == LoginEndPoint ||
             lastPathSegment == AppVersionEndPoint ||
             lastPathSegment == ValidateLogin ||
@@ -165,7 +165,7 @@ class HeaderInterceptor @Inject constructor(
   }
 
   fun writeLogToFile(context: Context, logText: String) {
-    val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+   /* val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
     val logLine = "[$timestamp] $logText"
 
     val logFile = getDailyLogFile(context)
@@ -176,7 +176,7 @@ class HeaderInterceptor @Inject constructor(
       }
     } catch (e: IOException) {
       Log.e("Logger", "Failed to write log: ${e.localizedMessage}")
-    }
+    }*/
   }
 
 

@@ -24,6 +24,7 @@ import io.reactivex.rxjava3.functions.BiFunction
 import io.reactivex.rxjava3.functions.Function8
 import io.reactivex.rxjava3.functions.Function9
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -202,7 +203,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
     }
 
     override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
-        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiApi.postAddUpdateMeeting(request)
             .map {
                 CreateMeetingMapper.transformAddUpdateMeeting(it)

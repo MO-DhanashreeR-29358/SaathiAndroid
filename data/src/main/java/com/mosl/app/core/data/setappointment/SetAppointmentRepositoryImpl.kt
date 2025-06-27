@@ -16,6 +16,7 @@ import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import org.json.JSONObject
 import java.net.URLEncoder
@@ -62,7 +63,7 @@ class SetAppointmentRepositoryImpl @Inject constructor(
 
   override fun setAppointmentMeeting(meetingApptModel: String): Observable<SetAppointmentResponseData> {
     var json = JSONObject(meetingApptModel)
-    val request = RequestBody.create(MediaType.parse("text/plain"), json.toString())
+    val request = RequestBody.create("text/plain".toMediaTypeOrNull(), json.toString())
     return saathiApi.setAppointmentMeeting(request)
       .map {
         it.responseSetAppointmentTransform()

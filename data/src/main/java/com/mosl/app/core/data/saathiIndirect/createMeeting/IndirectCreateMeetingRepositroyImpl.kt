@@ -31,6 +31,7 @@ import com.mosl.saathi.api.model.lead.LookupRequestNew
 import com.mosl.saathi.data.BuildConfig
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -103,7 +104,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
 
     override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
         Log.d("Meeting Post Json",data)
-        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiIndrectApi.postAddUpdateMeeting(request)
             .map {
                 CreateMeetingMapper.transformAddUpdateMeetingNew(it)
@@ -112,7 +113,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
 
     override fun saveRequetProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
         Log.d("ProMeeting Post Json",data)
-        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiIndrectApi.postAddUpdateMeeting(request)
 
     }

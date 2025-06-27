@@ -957,7 +957,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         true,
                         null
                     )
-                } else if(leadDetailAddProductAdapter?.checkMFDProductAvailable(interestedInDisplayText) == true){
+                } /*else if(leadDetailAddProductAdapter?.checkMFDProductAvailable(interestedInDisplayText) == true){
                     MSFDialog.alertDialog(
                         requireActivity(),
                         0,
@@ -978,7 +978,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                          }
                     }
 
-                } else {
+                }*/ else {
                     if (isPotentialPMSProduct) {
                         MSFDialog.alertDialog(
                             requireActivity(),
