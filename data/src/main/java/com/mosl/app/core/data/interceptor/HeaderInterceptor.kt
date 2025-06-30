@@ -165,7 +165,7 @@ class HeaderInterceptor @Inject constructor(
   }
 
   fun writeLogToFile(context: Context, logText: String) {
-    val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+   /* val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
     val logLine = "[$timestamp] $logText"
 
     val logFile = getDailyLogFile(context)
@@ -176,7 +176,7 @@ class HeaderInterceptor @Inject constructor(
       }
     } catch (e: IOException) {
       Log.e("Logger", "Failed to write log: ${e.localizedMessage}")
-    }
+    }*/
   }
 
 

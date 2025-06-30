@@ -145,7 +145,6 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
     }
    isCallOtp=userManager.isOtpEnable()
 
-
     binding.btnLogin.setOnClickListener {
       Log.d("isCallOtp",isCallOtp.toString());
       if(isCallOtp)

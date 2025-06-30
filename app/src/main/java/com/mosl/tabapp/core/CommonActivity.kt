@@ -704,7 +704,7 @@ class CommonActivity : BaseActivity(),
     }
 
     private fun setupObservables() {
-        val mainThread = dispatchers.main
+       // val mainThread = dispatchers.main
         disposable.add(
             tokenPref.asObservable()
                 .distinctUntilChanged()
@@ -716,7 +716,7 @@ class CommonActivity : BaseActivity(),
                 }
                 .subscribe())
 
-        val Threshold = TimeUnit.SECONDS.toNanos(10)
+      /*  val Threshold = TimeUnit.SECONDS.toNanos(10)
         eventListenerFactory.getApiStatsObservable()
             .filter { callTime -> callTime > Threshold }
             .observeOn(mainThread)
@@ -726,7 +726,7 @@ class CommonActivity : BaseActivity(),
                     snackbar = showConnectivityIssueSnackbar()
                 }
             }
-            .addTo(disposable)
+            .addTo(disposable)*/
 
 
     }

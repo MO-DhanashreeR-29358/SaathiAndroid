@@ -936,7 +936,9 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            //showOnFailurePopup(it)
+        }
         uiModel.onSuccess { data ->
             //binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
            // binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
@@ -1683,7 +1685,7 @@ class LeadCreationFragment : CommonFragment(),
     override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { error ->
-            showOnFailurePopup(error)
+           // showOnFailurePopup(error)
         }
 
         uiModel.onSuccess {
@@ -1723,7 +1725,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderStageList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spStage.setSpinnerData(stageAdapter, it)
         }
@@ -1735,7 +1738,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { //showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spAccountType.setSpinnerData(accountTypeAdapter, it)
         }
@@ -1903,7 +1907,8 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+          //  showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             binding.spChips.setSpinnerData(chipsAdapter, it)

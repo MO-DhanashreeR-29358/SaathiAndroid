@@ -1,0 +1,331 @@
+<resources>
+
+    <style name="MyCustomTabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:background">@color/white</item>
+        <item name="tabTextAppearance">@style/MyCustomTabText</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="tabSelectedTextColor">@color/secondaryBackground</item>
+        <item name="tabBackground">@color/white</item>
+        <item name="tabIndicatorColor">@color/secondaryBackground</item>
+        <item name="tabMode">fixed</item>
+    </style>
+
+    <style name="MyCustomTabText" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <style name="MineCustomTabText" parent="Base.Widget.Design.TabLayout">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="DrawerItem" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SaathiTheme.AppBarOverlay" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge" />
+    <style name="DrawerItem.Child">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+
+    <style name="CRMMOSLTheme" parent="CRMAppTheme.Base">
+        <item name="colorAccent">#FF006EB9</item>
+    </style>
+
+    <style name="MOSLTheme.AppBarOverlay" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge" />
+
+    <style name="MOSLTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="CRMAppTheme.Base" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+        <!--<item name="alertDialogStyle"></item>-->
+        <item name="android:buttonStyle">@style/CRMButtonSelector</item>
+        <item name="android:spinnerStyle">@style/CRMSpinnerSelector</item>
+        <item name="android:textCursorDrawable">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:radioButtonStyle">@style/CRMRadioButton</item>
+        <item name="android:checkboxStyle">@style/CRMCheckBoxSelector</item>
+        <item name="editTextStyle">@style/CRMEdittextSelector</item>
+        <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
+        <item name="android:statusBarColor">#FF006EB9</item>
+        <!-- Optionally, set the status bar icons to light (for dark backgrounds) -->
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+
+    <style name="SaathiTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="CRMEdittextSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/lead_creation_txt_border</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:textColor">@drawable/background</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="CRMEdittextLeadSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/edittext_background_select</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:padding">@dimen/_5sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:textColor">@drawable/background</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="EditTextHint" parent="Base.Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_20sdp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+        <item name="android:padding">@dimen/_3sdp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:enabled">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:textColorHint">@color/text_color_personal</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="spinnerTheme">
+        <item name="android:textColor">@color/text_color_personal</item>
+        <item name="tabTextColor">@color/text_color_personal</item>
+    </style>
+
+    <style name="CRMButtonSelector">
+        <item name="android:background">@drawable/button_state_bg</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textSize">@dimen/_14sdp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:layout_height">@dimen/buttonHeight</item>
+    </style>
+
+    <style name="CRMSpinnerSelector">
+        <item name="android:background">@drawable/spinner_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">6dp</item>
+    </style>
+    <style name="CRMSpinnerSelector_leadView">
+        <item name="android:background">@drawable/spinner_background_lead_detail</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">6dp</item>
+    </style>
+
+
+    <style name="CRMCheckBoxSelector" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/crm_checkbox</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+    </style>
+
+    <style name="DashbordSpinnerSelector">
+        <item name="android:background">@drawable/spinner_background</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_13sdp</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:dropDownSelector">@android:drawable/list_selector_background</item>
+        <item name="android:popupBackground">@android:drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-10dip</item>
+        <item name="android:dropDownHorizontalOffset">0dip</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CustomLinePageIndicator">
+        <item name="strokeWidth">2dp</item>
+
+    </style>
+
+    <style name="CRMRadioButton" parent="@android:style/Widget.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radiobuttonbackground</item>
+        <item name="android:paddingLeft">@dimen/_3sdp</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+    </style>
+
+    <style name="DateDialogCustom" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
+
+    <style name="PocketProgressBar" parent="SmoothProgressBar">
+        <item name="spb_stroke_separator_length">0dp</item>
+        <item name="spb_sections_count">4</item>
+        <item name="spb_speed">1</item>
+        <item name="spb_colors">@array/pocket_bar_colors</item>
+        <item name="spb_generate_background_with_colors">false</item>
+        <item name="spb_gradients">true</item>
+        <item name="android:interpolator">@android:anim/decelerate_interpolator</item>
+    </style>
+
+    <style name="menu_labels_style">
+        <item name="android:background">@drawable/fab_label_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/_11sdp</item>
+    </style>
+
+
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/light_grey</item>
+    </style>
+
+    <style name="TableRowTheme" parent="@android:style/TextAppearance">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorAccent">@android:color/black</item>
+    </style>
+    <style name="InputLayout" parent="@android:style/TextAppearance">
+        <!--textColorHint-->
+
+        <item name="android:textColorHint">@android:color/black</item>
+        <item name="android:textSize">@dimen/_10sdp</item>
+
+    </style>
+    <!-- PopUpAnimation  -->
+    <style name="Animations" />
+
+    <!-- PopDownMenu -->
+    <style name="Animations.PopDownMenu" />
+
+    <style name="Animations.PopDownMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_top</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottom</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topleft_to_bottomright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomright_to_topleft</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_topright_to_bottomleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_bottomleft_to_topright</item>
+    </style>
+
+    <style name="Animations.PopDownMenu.Reflect">
+        <item name="android:windowEnterAnimation">@anim/pump_top</item>
+        <item name="android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <!-- PopUpMenu -->
+    <style name="Animations.PopUpMenu" />
+
+    <style name="Animations.PopUpMenu.Center">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_top</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Left">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomleft_to_topright</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topright_to_bottomleft</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Right">
+        <item name="android:windowEnterAnimation">@anim/grow_from_bottomright_to_topleft</item>
+        <item name="android:windowExitAnimation">@anim/shrink_from_topleft_to_bottomright</item>
+    </style>
+
+    <style name="Animations.PopUpMenu.Reflect">
+        <item name="android:windowEnterAnimation">@anim/pump_bottom</item>
+        <item name="android:windowExitAnimation">@anim/disappear</item>
+    </style>
+
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/red_textcolor</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="edittextSelector" parent="Base.Widget.AppCompat.EditText">
+        <item name="colorControlNormal">#FF959595</item>
+        <item name="colorControlActivated">#FF646464</item>
+        <item name="colorControlHighlight">#FF646464</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:padding">6dp</item>
+        <item name="android:colorBackground">@drawable/edittext_background_color</item>
+        <item name="android:textColor">@drawable/edittext_color</item>
+        <item name="android:textSize">@dimen/text_size_normal</item>
+    </style>
+
+    <style name="CustomAlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/feedback_background</item>
+    </style>
+    <!-- PopUpAnimation end -->
+    <style name="EkycAppBottomSheetDialogTheme"
+        parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+        <item name="android:statusBarColor">@color/secondaryBackground</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="CustomBottomSheetStyle"
+        parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/saathi_shape_round_dialog</item>
+    </style>
+    <style name="Ekyc.Jet.MyApp.Widget.TextView.Black.Roboto.Bold" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/ekyc_text_color_black</item>
+        <item name="android:paddingBottom">@dimen/_8sdp</item>
+    </style>
+
+    <style name="Ekyc.JetApp.MyApp.Widget.Button.Upload.Filled" parent="Widget.AppCompat.Button">
+        <item name="borderlessButtonStyle">@attr/borderlessButtonStyle</item>
+        <item name="android:background">@drawable/sathi_button_upload_filled_bg</item>
+        <item name="fontFamily">@font/roboto_bold</item>
+        <item name="android:textColor">@color/ekyc_white</item>
+        <item name="android:textSize">@dimen/ekyc_text_size_large</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="AppTheme.PrimaryButton" parent="Theme.AppCompat.Light">
+        <item name="android:background">@drawable/btn_primary_background</item>
+        <item name="android:textAppearance">@style/AppTheme.TextAppearance.Button.Inverse</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Button.Inverse" parent="TextAppearance.AppCompat.Button">
+        <item name="android:textColor">@color/button_text_color</item>
+    </style>
+
+</resources>
