@@ -36,3 +36,5 @@ object CallEventChipList : LeadDetailUiEvent()
 object CallSectorList : LeadDetailUiEvent()
 object CallDesignationList : LeadDetailUiEvent()
 object CallNetworthList : LeadDetailUiEvent()
+
+object CallLeadDetail : LeadDetailUiEvent()

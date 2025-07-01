@@ -42,7 +42,7 @@
     <string name="MOSL_MENU_ONLY_MFD">"Only MFD <br/>(Mutual Fund Distribution)  "</string>
     <string name="MOSL_MENU_DEMAT_MFD">"MFD (Mutual Fund Non-Demat) +<br/> Demat account (Equity, FnO)  "</string>
     <string name="MOSL_MENU_NON_BROKING">"Non Broking Product KYC  "</string>
-    <string name="MOSL_MENU_INSURANCE">"Insurance  "</string>
+    <string name="MOSL_MENU_INSURANCE">"Non Broking Product - Insurance  "</string>
     <string name="MOSL_MENU_NRI_BROKING">"NRI Non Broking Product  "</string>
     <string name="preference_location_summary">Location tracking needed for Conveyance</string>
     <string name="preference_location_title">24x7 Location Tracking</string>
@@ -565,7 +565,7 @@ Page </string>
     <string name="error_message_bank">Select Bank</string>
     <string name="error_message_branch">Select Branch</string>
     <string name="error_message_cat_name">Select %s name</string>
-    <string name="error_message_already_added">Current Product and New Product are same, It should be different, Product change not allowed. </string>
+    <string name="error_message_already_added">This Product Already Added.</string>
     <string name="error_message_mfd_product_added">You already have a %s process in progress. Do you want to continue with %s?</string>
     <string name="error_message_alphabets">Only alphabets are allowed</string>
     <string name="error_message_contact">Enter contact person</string>
@@ -604,6 +604,7 @@ Page </string>
     <string name="error_message_select_status">Select Status</string>
     <string name="error_message_product_id">Select Product Id</string>
     <string name="error_message_delete_all_products">Can\'t Delete All Products</string>
+    <string name="error_message_mfd_product_delete">You cannot delete the product as %s journey is already in progress</string>
     <string name="error_message_enter_three_digits">At least enter 3 digits</string>
     <string name="lead_detail_client_detail">Client Detail</string>
     <string name="lead_detail_client_code">Client Code</string>

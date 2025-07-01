@@ -18,7 +18,7 @@ interface LeadDetailRepository {
   fun getClientDetailWithPortfolioAndProfitLoss(ucId: String): Observable<ClientDetailWithPortfolioAndProfitLoss>
   fun addProduct(request: InsertLeadProductRequest): Observable<List<AddProductData>>
 
-  fun mfdAddProduct(request: InsertMFDLeadProductRequest): Observable<List<AddProductData>>
+  fun mfdAddProduct(request: InsertMFDLeadProductRequest): Observable<String>
 
   fun updateProduct(request: UpdateLeadRequest): Observable<UpdateLeadResponse>
 

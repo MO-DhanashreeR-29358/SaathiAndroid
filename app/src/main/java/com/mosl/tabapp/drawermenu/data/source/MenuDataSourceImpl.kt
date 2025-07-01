@@ -602,13 +602,13 @@ open class MenuDataSourceImpl @Inject constructor(
                     enabled = true,
                     pageId =NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING ,
                     navigateKey = ""
-                )/*,
+                ),
                     ChildMenu(
                         label =R.string.MOSL_MENU_INSURANCE,
                         enabled = true,
                         pageId =NavigationConstants.NAVIGATE_TO_INSURANCE ,
                         navigateKey = ""
-                    )*/
+                    )
             )
         )
     }

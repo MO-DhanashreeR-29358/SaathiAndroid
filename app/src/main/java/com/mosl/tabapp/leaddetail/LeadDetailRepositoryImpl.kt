@@ -51,11 +51,10 @@ class LeadDetailRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun mfdAddProduct(request: InsertMFDLeadProductRequest): Observable<List<AddProductData>> {
-        return saathiApi.addUpdateLeadProduct(request)
-            .map {
-                it.leadProductMappingItemsToAddProductDatas()
-            }
+    override fun mfdAddProduct(request: InsertMFDLeadProductRequest): Observable<String> {
+        return saathiApi.addUpdateLeadProduct(request).map {
+            it.response.toString()
+        }
     }
     override fun updateProduct(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
         return saathiApi.updateLead(request)

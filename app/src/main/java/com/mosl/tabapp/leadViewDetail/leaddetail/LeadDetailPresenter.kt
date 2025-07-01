@@ -114,6 +114,14 @@ class LeadDetailPresenter @Inject constructor(
             .subscribe(view::renderProfileList, Timber::e)
             .addTo(disposable)
 
+        view.onLeadDetailEventFired()
+            .switchMap {
+                    detailRepository.getLeadDetail(data.leadId)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderLeadDetail, Timber::e)
+            .addTo(disposable)
+
         view.onBrokingProfileEventFired()
             .switchMap {
             repository.getBrokingProfileRowDatas()
