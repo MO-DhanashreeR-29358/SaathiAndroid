@@ -914,12 +914,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         meetingProductAdapter.addProduct(
             CreateMeetingProductModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
+        meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
     }
 
     override fun renderOnTravellingModeClick(lookUp: LookUp) {
         travellingAdapter.addTravellingMode(
             CreateMeetingTravellingModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
+        travellingAdapter.notifyDataSetChanged()
     }
 
     override fun toggleSearchState(
@@ -1136,8 +1138,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.etCustomerComment.setText("")
         binding.btnSendOtp.text = SEND_OTP_LABEL
         isSendOTPSuccesssful = false
-        meetingProductAdapter.deleteAllProduct()
-        travellingAdapter.deleteAllProduct()
+         meetingProductAdapter.deleteAllProduct()
+         meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+         travellingAdapter.deleteAllProduct()
+         travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
     }
 
 
@@ -1169,7 +1173,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         isSendOTPSuccesssful = false
         toggleOTPVisibility(false)
         meetingProductAdapter.deleteAllProduct()
+        meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
         travellingAdapter.deleteAllProduct()
+        travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
     }
 
     private fun errorDisabled() {
