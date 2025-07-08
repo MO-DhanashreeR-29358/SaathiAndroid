@@ -24136,7 +24136,6 @@ com.mosl.app.core.data.interceptor.EncryptionInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.EncryptionInterceptor newInstance(com.mosl.shared.Encryptor.AESEncryptor)
 com.mosl.app.core.data.interceptor.HeaderInterceptor:
     public final android.content.Context getContext()
-    public final java.io.File getDailyLogFile(android.content.Context)
     public final com.mosl.shared.Encryptor.AESEncryptor getEncryptor()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
 com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
@@ -76104,6 +76103,7 @@ com.mosl.app.core.data.interceptor.HeaderInterceptor:
     public static final java.lang.String API_HEADER_USER_ID
     public static final com.mosl.app.core.data.interceptor.HeaderInterceptor$Companion Companion
     public static void <clinit>()
+    public static java.io.File getDailyLogFile()
     public static boolean isExcludedEndpoint()
 com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.HeaderInterceptor get()
