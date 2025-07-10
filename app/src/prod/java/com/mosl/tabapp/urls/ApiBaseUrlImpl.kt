@@ -43,7 +43,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     const val EKYC_MFD_LINK =  "https://www.motilaloswal.com/open-demat-account/?"
     const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/partner/nonbroking/?"
     const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/nri/tpp?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
-    const val EKYC_INSURANCE = "https://ekycuat.motilaloswaluat.com/superjetapi/insurance/?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzHmJ8xx8LymloudFurCG5ujvwVsFN9O6F4FpYQVAg9FhSUPoewKZrlazOj5UdxiNNoHZTNFz1UL2j8iF+wiMJ1R6EB28ZPwaY54aqRdBA4WM"
+    const val EKYC_INSURANCE = "https://ekyc.motilaloswal.com/partner/insurance?ri2Al2H3rY/1xfyl0Y7wB3V70hFFkc0qn1nG3fyT+5e/xSTcg9OGV4YYHEa3PpYy+WnpU0KhQhOsKzVMCnng2zkqgZF594qjC/XbgTJtYgmc/xVy6fe3zxbii+s/9SZRK2o1q6Ep0+HnMbZe992iTg"
 
   }
 }

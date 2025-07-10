@@ -1062,6 +1062,9 @@ class LeadCreationFragment : CommonFragment(),
             var list = data.toMutableList()
             list.removeIf { it.value == "Equity" }
             list.removeIf { it.value == "Only MFD" }
+            list.removeIf { it.value == "Only Mutual Fund Distribution" }
+            list.removeIf { it.value == "Equity & Mutual Fund Distribution" }
+
             binding.spInterestIn.setSpinnerData(interestInAdapter, list)
 
             subject.onNext(CallSource)
