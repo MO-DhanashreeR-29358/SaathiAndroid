@@ -1141,7 +1141,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
                 if (response.isSuccessful) {
                     val post = response.body() as registerResponse
                     Timber.d("registerResponse: ${post.surveyLinks}")
-                    sendSurveyLink(post.surveyLinks[0], meetingId)
+                    sendSurveyLink(post.surveyLinks[0],post.shortLinks[0],post.shortSMSLinks[0], meetingId)
                 } else {
                     Timber.d("registerResponse: ${response.toString()}")
                 }
@@ -1153,7 +1153,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         })
     }
 
-    private fun sendSurveyLink(surveyLink: String, meetingId :Int){
+    private fun sendSurveyLink(surveyLink: String,shortLink: String,shortSmsLink: String ,meetingId :Int){
         RetrofitClient.setBaseUrl(ApiBaseUrlImpl.INDIRECT_SAATHI_BASE_URL)
         val retro = RetrofitClient.retrofit
 
@@ -1163,7 +1163,9 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             meetingId = meetingId,
             rmCode = userManager.getUser()?.employeeCode!!,
             mobile = defaultMobileNumber,
-            surveyLink = surveyLink
+            surveyLink = surveyLink,
+            shortLink = shortLink,
+            shortSmsLink = shortSmsLink
         )
         val call = ApiClient(retro).apiService.sendSurveyLink(data)
 

@@ -1839,10 +1839,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
-                    /* if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                     if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
                              ignoreCase = true) && userManager.user.isRetail()){
                          callZykrrApi(it.meetingId)
-                     }*/
+                     }
                 }
             }
         }
@@ -1891,7 +1891,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 if (response.isSuccessful) {
                     val post = response.body() as registerResponse
                     Timber.d("registerResponse: ${post.surveyLinks}")
-                    sendSurveyLink(post.surveyLinks[0], meetingId)
+                    sendSurveyLink(post.surveyLinks[0],post.shortLinks[0],post.shortSMSLinks[0], meetingId)
                 } else {
                     Timber.d("registerResponse: ${response.toString()}")
                 }
@@ -1903,7 +1903,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         })
     }
 
-    private fun sendSurveyLink(surveyLink: String, meetingId :Int){
+    private fun sendSurveyLink(surveyLink: String,shortLink: String,shortSmsLink: String, meetingId :Int){
         RetrofitClient.setBaseUrl(ApiBaseUrlImpl.SAATHI_BASE_URL)
         val retro = RetrofitClient.retrofit
         var mobile  = getMobileNumberType().contactNumber
@@ -1916,7 +1916,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             meetingId = meetingId,
             rmCode = userManager.getUser()?.employeeCode!!,
             mobile = mobile,
-            surveyLink = surveyLink
+            surveyLink = surveyLink,
+            shortLink = shortLink,
+            shortSmsLink = shortSmsLink
         )
         val call = ApiClient(retro).apiService.sendSurveyLink(data)
 
