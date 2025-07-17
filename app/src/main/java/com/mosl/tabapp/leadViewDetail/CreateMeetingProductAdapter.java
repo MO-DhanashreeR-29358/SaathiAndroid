@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.mosl.tabapp.R;
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent;
 import com.mosl.tabapp.ui.MSFDialog;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.TreeSet;
 import org.jetbrains.annotations.NotNull;
 
 import static com.mosl.tabapp.ui.MSFDialog.alertDialog;
+
+import io.reactivex.rxjava3.subjects.PublishSubject;
 
 /**
  * Created by Raju on 20-07-2018.
@@ -27,8 +30,11 @@ public class CreateMeetingProductAdapter
         new ArrayList<CreateMeetingProductModel>();
     private Context mContext;
 
-    public CreateMeetingProductAdapter(Context context) {
+    private PublishSubject<CreateMeetingUiEvent> uiSubject = PublishSubject.create();
+
+    public CreateMeetingProductAdapter(Context context,PublishSubject<CreateMeetingUiEvent> publishSubject) {
         this.mContext = context;
+        this.uiSubject = publishSubject;
     }
 
     private CreateMeetingProductModel getDocumentById(String id) {
@@ -54,6 +60,7 @@ public class CreateMeetingProductAdapter
         CreateMeetingProductModel model = getDocumentById(id);
         productList.remove(model);
         notifyDataSetChanged();
+        uiSubject.onNext(new CreateMeetingUiEvent.OnProductDelete(id));
     }
 
     public void addProduct(CreateMeetingProductModel createMeetingProductModel) {

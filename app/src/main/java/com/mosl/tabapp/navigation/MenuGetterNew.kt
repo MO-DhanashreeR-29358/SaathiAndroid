@@ -246,6 +246,7 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING->true
             NavigationConstants.NAVIGATE_TO_IP_EXECUTION-> true
             NavigationConstants.NAVIGATE_TO_INSURANCE->true
+            NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT->true
             else -> return false
         }
     }

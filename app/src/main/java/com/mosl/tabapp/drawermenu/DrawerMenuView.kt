@@ -151,6 +151,10 @@ class DrawerMenuView : FrameLayout {
           )
         )
       }
+    source.getMenuItems(userManager, userManager.getReportMenuList(), userManager.getDigitalSalesKitMenuList())
+      .compose(applyUiModel())
+      .subscribe(this::render)
+      .addTo(disposable)
 
   }
 

@@ -2,12 +2,14 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
-import com.mosl.tabapp.common.RowData
+
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent.*
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.model.MeetingApptModel
 import io.reactivex.rxjava3.core.Observable
 
@@ -145,4 +147,19 @@ interface CreateMeetingView : BaseView {
 
   fun onMeetingAddressApiCall(): Observable<CallMeetingAddressApi>
   fun renderMeetingAddressList(uiModel: UiModel<List<LookUp>>)
+
+  fun onProductDeleteEventFired(): Observable<OnProductDelete>
+  fun renderProductDelete(id: String)
+
+  fun onLeadStageDetailEventFired(): Observable<CallLeadStageDetailApi>
+  fun renderLeadStageDetail(uiModel: UiModel<List<LeadStageDetail>>)
+  fun getProductIdList() : List<String>
+
+  fun onStageCall(): Observable<CallStage>
+  fun renderInitialStageList(uiModel: UiModel<List<RowData>>)
+  fun onStageSelected(): Observable<Int>
+  fun getSelectedStage(): RowData
+  fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>)
+  fun getSelectedStatus(): RowData
+
 }

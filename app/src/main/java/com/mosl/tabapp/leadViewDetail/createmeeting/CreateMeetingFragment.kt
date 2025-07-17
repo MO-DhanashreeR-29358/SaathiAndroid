@@ -38,6 +38,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.login.user
 import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
@@ -50,7 +51,6 @@ import com.mosl.tabapp.R.string
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
-import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY1
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_TIME
@@ -84,6 +84,8 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MOBILE_NUMBER
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_STAGE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_STATUS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TOUCHED_UNTOUCHED
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
@@ -123,6 +125,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.urls.ApiBaseUrlImpl
 import retrofit2.Call
 import retrofit2.Callback
@@ -163,6 +166,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     private lateinit var chipsAdapter: ArrayAdapter<String>
+    private var addedProductList: ArrayList<CreateMeetingProductModel> = ArrayList()
+    private val stageAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+    private val statusAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
 
     private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
     private lateinit var mainFromDate: String
@@ -212,7 +222,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
     private fun setupViews() {
         toggleProgress(true)
-        meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
+        meetingProductAdapter = CreateMeetingProductAdapter(requireContext(), uiSubject)
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         productAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spProduct.adapter = productAdapter
@@ -448,12 +458,112 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
             // showOnFailurePopup(it)
-            toggleProgress(false)
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                uiSubject.onNext(CallStage)
+            }else{
+                toggleProgress(false)
+            }
         }
 
         uiModel.onSuccess {
             meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it)
-            toggleProgress(false)
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                uiSubject.onNext(CallStage)
+            }else{
+                toggleProgress(false)
+            }
+
+        }
+    }
+
+    override fun onProductDeleteEventFired(): Observable<OnProductDelete> {
+       return uiSubject.ofType()
+    }
+
+    override fun renderProductDelete(id: String) {
+        addedProductList.removeAll { it.id == id }
+        if(addedProductList.size == 0){
+            binding.spProduct.setSelection(0)
+            binding.spStage.setSelection(0)
+            binding.spStatus.setSelection(0)
+            binding.lnrLeadStageDetail.isVisible = false
+        }else{
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                binding.spStage.setSelection(0)
+                binding.spStatus.setSelection(0)
+                uiSubject.onNext(CallLeadStageDetailApi)
+            }
+        }
+    }
+
+    override fun onLeadStageDetailEventFired(): Observable<CallLeadStageDetailApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderLeadStageDetail(uiModel: UiModel<List<LeadStageDetail>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            binding.lnrLeadStageDetail.isVisible = false
+        }
+
+        uiModel.onSuccess {
+            binding.lnrLeadStageDetail.isVisible = it.isNotEmpty()
+        }
+    }
+
+    override fun getProductIdList(): List<String> {
+        val idList: List<String> = addedProductList.map { it.id }
+        return idList
+    }
+
+    override fun onStageCall(): Observable<CallStage> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderInitialStageList(uiModel: UiModel<List<RowData>>) {
+
+        uiModel.onFailure {
+            toggleProgressBar(false)
+        }
+        uiModel.onSuccess { data ->
+            toggleProgressBar(false)
+            val list = data.toMutableList()
+            list.removeIf { it.value.contains("C1") }
+            binding.spStage.setSpinnerData(stageAdapter, list)
+        }
+    }
+    fun Spinner.setSpinnerData(
+        arrayAdapter: ArrayAdapter<RowData>,
+        rowData: List<RowData>
+    ) {
+        adapter = arrayAdapter
+        arrayAdapter.setSpinnerData(this, rowData)
+    }
+
+
+    override fun onStageSelected(): Observable<Int> {
+        return binding.spStage.itemSelections()
+    }
+
+    override fun getSelectedStage(): RowData {
+        if(binding.lnrLeadStageDetail.isVisible) {
+            return binding.spStage.selectedItem as RowData
+        }else{
+            return RowData("-1", "Select")
+        }
+    }
+
+    override fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {  }
+        uiModel.onSuccess { binding.spStatus.setSpinnerData(statusAdapter, it) }
+    }
+
+    override fun getSelectedStatus(): RowData {
+        if(binding.lnrLeadStageDetail.isVisible) {
+            return binding.spStatus.selectedItem as RowData
+        }else{
+            return RowData("0", "Select")
         }
     }
 
@@ -915,6 +1025,11 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             CreateMeetingProductModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
         meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.add(CreateMeetingProductModel(lookUp.lookUpID.toString(), lookUp.lookUpName))
+        addedProductList = addedProductList.distinctBy { it.id } as ArrayList<CreateMeetingProductModel>
+        if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+            uiSubject.onNext(CallLeadStageDetailApi)
+        }
     }
 
     override fun renderOnTravellingModeClick(lookUp: LookUp) {
@@ -1070,8 +1185,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getproductList(): List<CreateMeetingProductModel> {
-        val list = meetingProductAdapter.getListProduct()
-        return list
+        //val list = meetingProductAdapter.getListProduct()
+        //return list
+        return addedProductList
     }
 
     override fun getGeoArea(): String {
@@ -1144,6 +1260,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
          meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
          travellingAdapter.deleteAllProduct()
          travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.clear()
         }
 
 
@@ -1178,6 +1295,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
         travellingAdapter.deleteAllProduct()
         travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.clear()
     }
 
     private fun errorDisabled() {
@@ -1197,6 +1315,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.tilEtCategory.disableErrorMessages()
         binding.tilEtSubCategory.disableErrorMessages()
         binding.tilMeetingLocation.disableErrorMessages()
+        binding.tilStage.disableErrorMessages()
+        binding.tilStatus.disableErrorMessages()
     }
 
     override fun validateFormData(): Boolean {
@@ -1253,6 +1373,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             false
         } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
             binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
+            false
+        } else if (binding.lnrLeadStageDetail.isVisible && getSelectedStage().key == "-1") {
+            binding.tilStage.setErrorMessages(MSG_SELECT_STAGE)
+            false
+        } else if (binding.lnrLeadStageDetail.isVisible && getSelectedStatus().key == "-1") {
+            binding.tilStatus.setErrorMessages(MSG_SELECT_STATUS)
             false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spActionables

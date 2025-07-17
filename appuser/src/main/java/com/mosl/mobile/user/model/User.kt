@@ -195,4 +195,15 @@ data class User(
         }
         return flag
     }
+
+    fun isShowLeadStageUpdateInMeeting(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("1") &&
+            (currentBusinessProfile.businessProfileId.equals("12") ||
+                    currentBusinessProfile.businessProfileId.equals("1276")) ) {
+            flag = true
+        }
+        return flag
+    }
+
 }

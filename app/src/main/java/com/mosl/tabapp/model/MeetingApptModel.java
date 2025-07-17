@@ -94,6 +94,26 @@ public class MeetingApptModel implements Serializable {
     private String feedbackId;
     private String meetingEventId;
 
+    private int leadStageId = 0;
+
+    private int leadStatusId = 0;
+
+    public int getLeadStageId() {
+        return leadStageId;
+    }
+
+    public void setLeadStageId(int leadStageId) {
+        this.leadStageId = leadStageId;
+    }
+
+    public int getLeadStatusId() {
+        return leadStatusId;
+    }
+
+    public void setLeadStatusId(int leadStatusId) {
+        this.leadStatusId = leadStatusId;
+    }
+
     public String getMeetingEventId() {
         return meetingEventId;
     }
@@ -510,6 +530,8 @@ public class MeetingApptModel implements Serializable {
         json += ",\"TouchedUntouchedID\":" + getTouchedUntouchedId();
         json += ",\"FeedbackID\":" + getFeedbackId();
         json += ",\"MeetingEventId\":\"" + getMeetingEventId()+ "\"";
+        json += ",\"LeadMeetingStageID\":\"" + getLeadStageId()+ "\"";
+        json += ",\"LeadMeetingStatusID\":\"" + getLeadStatusId()+ "\"";
         json += "}";
 
         return json;

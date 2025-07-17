@@ -70,4 +70,6 @@ object CreateMeetingConstants {
   const val MSG_ENTER_CLIENT_NAME = "Enter Client Name"
   const val MSG_SELECT_TOUCHED_UNTOUCHED = "Select Sub Touched Untouched"
   const val MSG_SELECT_FEEDBACK = "Select Feedback"
+  const val MSG_SELECT_STAGE = "Select Stage"
+  const val MSG_SELECT_STATUS = "Select Status"
 }

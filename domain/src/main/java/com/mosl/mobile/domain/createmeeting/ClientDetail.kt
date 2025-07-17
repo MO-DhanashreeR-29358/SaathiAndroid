@@ -117,5 +117,9 @@ data class ChipsEvent(
   override fun toString(): String {
     return eventName
   }
-
 }
+
+data class LeadStageDetail(
+  @JvmField val leadId: String?,
+  @JvmField val interestedIn: String?
+)

@@ -23,6 +23,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
+import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.*
@@ -77,6 +78,7 @@ import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
 import com.mosl.saathi.api.model.leadviewactivities.*
+import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadHistoryResponse
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
@@ -863,5 +865,11 @@ interface SaathiApi {
     fun getQuickLinkMenuURL(
         @Body request: QuickLinkRequest
     ): Observable<SaathiCommonResponse<String?>>
+
+    @ExcludeWrapper
+    @POST("Lead/PullLeadStageDetailByID")
+    fun getLeadStageDetailById(
+        @Body request: LeadStageDetailRequest
+    ): Observable<ExtraDataCommonResponse<List<LeadStageDetailResponse>>>
 
 }

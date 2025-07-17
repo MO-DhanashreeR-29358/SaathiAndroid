@@ -1,9 +1,13 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapLeadStageDetailList
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapToSendOtpResponse
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.stageItemsToRowDatas
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.statusItemsToRowDatas
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformEventChipsList
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformMobileList
 import com.mosl.app.core.data.pendingapproval.report.mapToMultiUpdateApprovalresponse
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
@@ -13,8 +17,11 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.ChipsEventsRequest
+import com.mosl.saathi.api.model.createmeeting.LeadStageDetailRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
@@ -230,6 +237,33 @@ class CreateMeetingRepositoryImpl @Inject constructor(
                 CreateMeetingMapper.transformAddUpdateMeeting(it)
             }
     }
+
+    override fun getLeadStageDetailById(
+        leadId: String,
+        productList: List<String>
+    ): Observable<List<LeadStageDetail>> {
+        val request = LeadStageDetailRequest(leadId = leadId, productIdList = productList)
+        return saathiApi.getLeadStageDetailById(request).map {
+            mapLeadStageDetailList(it.data!!)
+        }
+    }
+
+    override fun getStageRowDatas(): Observable<List<RowData>> {
+        val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            stageID = "2"
+        )
+        return saathiApi.getStageList(stageRequest)
+            .map { it.stageItemsToRowDatas() }
+    }
+
+    override fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>> {
+        val statusRequest = StatusRequest(stageID = selectedStage)
+        return saathiApi.getStatusList(statusRequest)
+            .map { it.statusItemsToRowDatas() }
+    }
 }
 
 const val INTERESTEDIN = 5
@@ -246,3 +280,4 @@ const val OUTSTATIONMEETING = 17
 const val BACLIENTMEETING = 16
 const val TOUCHEDUNTOUCHED = 132
 const val FEEDBACK = 133
+

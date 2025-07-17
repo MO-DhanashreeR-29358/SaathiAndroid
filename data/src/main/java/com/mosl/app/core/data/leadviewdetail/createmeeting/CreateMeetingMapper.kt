@@ -3,6 +3,7 @@ package com.mosl.app.core.data.leadviewdetail.createmeeting
 import android.util.Log
 import com.google.gson.Gson
 import com.mosl.app.core.data.util.addDefaultSelection
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.domain.dashboardreport.STPLeadTransferResponse
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
@@ -10,8 +11,11 @@ import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
 import com.mosl.saathi.api.model.clientdetail.ClientDetailItem
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeItem
 import com.mosl.saathi.api.model.createmeeting.ChipsEventResponse
+import com.mosl.saathi.api.model.createmeeting.LeadStageDetailResponse
 import com.mosl.saathi.api.model.lead.LeadViewItem
 import com.mosl.saathi.api.model.lead.LookupItem
+import com.mosl.saathi.api.model.lead.StageItem
+import com.mosl.saathi.api.model.lead.StatusItem
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListResponse
 
 object CreateMeetingMapper {
@@ -132,5 +136,52 @@ object CreateMeetingMapper {
             it.eventName
         }.addDefaultSelection("Select Event")
 
+    }
+
+    fun mapLeadStageDetailList(
+        list: List<LeadStageDetailResponse>
+    ): List<LeadStageDetail> {
+        return list.map {
+            LeadStageDetail(
+                it.LeadID,
+                it.InterestedIn)
+        }
+
+    }
+
+    internal fun List<StageItem>.stageItemsToRowDatas(): List<RowData> {
+        return mapIndexedNotNull { index: Int, stageItem: StageItem ->
+            try {
+                RowData(
+                    index + 1,
+                    "${stageItem.stageID}",
+                    stageItem.stageName
+                )
+            } catch (_: Exception) {
+                null
+            }
+        }.addSelectRowData()
+    }
+
+    internal fun List<StatusItem>.statusItemsToRowDatas(): List<RowData> {
+        return mapIndexedNotNull { index: Int, statusItem: StatusItem ->
+            try {
+                RowData(
+                    index + 1,
+                    "${statusItem.statusID}",
+                    statusItem.statusName
+                )
+            } catch (_: Error) {
+                null
+            }
+        }.addSelectRowData()
+    }
+
+    val SELECT_ROW_DATA = RowData(0, "-1", "Select")
+    internal fun List<RowData>.addSelectRowData(): List<RowData> {
+        return toMutableList().apply {
+            add(0, SELECT_ROW_DATA)
+        }
+            .toList()
     }
 }

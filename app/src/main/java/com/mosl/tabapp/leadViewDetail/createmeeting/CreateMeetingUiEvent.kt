@@ -26,4 +26,8 @@ sealed class CreateMeetingUiEvent {
   object CallTravellingModeApi : CreateMeetingUiEvent()
   object CallMeetingAddressApi : CreateMeetingUiEvent()
 
- }
+  data class OnProductDelete(val id: String) : CreateMeetingUiEvent()
+
+  object CallLeadStageDetailApi : CreateMeetingUiEvent()
+  object CallStage : CreateMeetingUiEvent()
+}
