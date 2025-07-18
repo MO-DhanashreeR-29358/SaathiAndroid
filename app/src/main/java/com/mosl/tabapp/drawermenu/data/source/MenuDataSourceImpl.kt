@@ -618,11 +618,48 @@ open class MenuDataSourceImpl @Inject constructor(
                 )
             )
         } else {
-            return getQuickLinkMenu()
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    )
+                )
+            )
         }
 
     }
 
+    //comment joint account because of ekyc was not live
     private fun getQuickLinkMenu(): BaseMenu {
         if(branchCodePreference.get().equals("RETMUMONE") ||
             branchCodePreference.get().equals("RJHANDEAMC") ||

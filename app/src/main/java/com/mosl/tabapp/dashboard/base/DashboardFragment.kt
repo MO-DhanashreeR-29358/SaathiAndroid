@@ -2,6 +2,7 @@ package com.mosl.tabapp.dashboard.base
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
@@ -318,7 +319,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     setClientLayoutVisibililty(systemName)
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
-                    loadClientsFragment()
+                    binding.ivClientLeads.tag = systemName
+                    //loadClientsFragment()
                     DashboardSystemModel.setLeadSystemName(systemName)
                     DashboardSystemModel.setClientSystemName(systemName)
                 }
@@ -326,24 +328,27 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadsFragment()
+                    //loadLeadsFragment()
                     DashboardSystemModel.setLeadSystemName(systemName)
                 }
                 MY_LEAD_AU_SUPPORT -> {
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadsFragment()
+                    //loadLeadsFragment()
                     DashboardSystemModel.setLeadSystemName(systemName)
                 }
                 MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY -> {
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadClientsFragment()
+                    //loadClientsFragment()
                     DashboardSystemModel.setBusSnapshotAdvisorSystemName(systemName)
                     DashboardSystemModel.setClientSystemName(systemName)
                     DashboardSystemModel.setProductivitySystemName(systemName)
@@ -352,8 +357,9 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadBusinessSnapshotFragment()
+                    //loadLeadBusinessSnapshotFragment()
                     DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
                     DashboardSystemModel.setLeadSystemName(systemName)
                 }
@@ -361,16 +367,18 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadsFragment()
+                    //loadLeadsFragment()
                     DashboardSystemModel.setLeadSystemName(systemName)
                 }
                 SYS_MY_CLIENTS_SNAPSHOOT -> {
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadClientsFragment()
+                    //loadClientsFragment()
                     DashboardSystemModel.setClientSystemName(systemName)
                     DashboardSystemModel.setClientTradedSystemName(systemName)
                 }
@@ -378,24 +386,27 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadClientsFragment()
+                    //loadClientsFragment()
                     DashboardSystemModel.setClientSystemName(systemName)
                 }
                 SYS_TEAM_SNAPSHOT -> {
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadBusinessSnapshotFragment()
+                    //loadLeadBusinessSnapshotFragment()
                     DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
                 }
                 SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT -> {
                     binding.llClient.visibility = View.VISIBLE
                     linearLayout = binding.llClientsLeads
                     icon = binding.ivClientLeads
+                    binding.ivClientLeads.tag = systemName
                     setClientLayoutVisibililty(systemName)
-                    loadLeadBusinessSnapshotFragment()
+                    //loadLeadBusinessSnapshotFragment()
                     DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
                     DashboardSystemModel.setLeadSystemName(systemName)
                 }
@@ -404,7 +415,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llSnapshot.visibility = View.VISIBLE
                     linearLayout = binding.llBusinessSnapshotHead
                     icon = binding.ivBusinessSnapshotHead
-                    loadBusinessSnapShot()
+                    binding.ivBusinessSnapshotHead.tag = systemName
+                    //loadBusinessSnapShot()
                     DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
                 }
                 SYS_RH_BUSINESS_SNAPSHOT -> {
@@ -412,7 +424,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llSnapshot.visibility = View.VISIBLE
                     linearLayout = binding.llBusinessSnapshotHead
                     icon = binding.ivBusinessSnapshotHead
-                    loadBusinessSnapShot()
+                    binding.ivBusinessSnapshotHead.tag = systemName
+                    //loadBusinessSnapShot()
                     DashboardSystemModel.setBusinessSnapshotSystemName(systemName)
                 }
                 SELF_TARGET_ACHIEVEMNET -> {
@@ -420,7 +433,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llTarget.visibility = View.VISIBLE
                     linearLayout = binding.llTargetAchievementADV
                     icon = binding.ivTargetAchievementADV
-                    loadTargetAchievementFragment()
+                    binding.ivTargetAchievementADV.tag = systemName
+                    //loadTargetAchievementFragment()
                     DashboardSystemModel.setTargetAchivementSystemName(systemName)
                 }
                 AUSFB_TARGET_ACHIEVEMNET -> {
@@ -428,7 +442,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llTarget.visibility = View.VISIBLE
                     linearLayout = binding.llTargetAchievementADV
                     icon = binding.ivTargetAchievementADV
-                    loadTargetAchievementFragment()
+                    binding.ivTargetAchievementADV.tag = systemName
+                    //loadTargetAchievementFragment()
                     DashboardSystemModel.setTargetAchivementSystemName(systemName)
                 }
                 TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT -> {
@@ -437,7 +452,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llTeamTarget.visibility = View.VISIBLE
                     linearLayout = binding.llTeamTargetAchievement
                     icon = binding.ivTeamTargetAchievement
-                    loadTeamTargetAchievementFragment()
+                    binding.ivTeamTargetAchievement.tag = systemName
+                    //loadTeamTargetAchievementFragment()
                     DashboardSystemModel.setTargetAchivementSystemName(systemName)
                 }
                 MONTH_ON_MONTH -> {
@@ -445,7 +461,8 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llMonthTrend.visibility = View.VISIBLE
                     linearLayout = binding.llMonthvsTrends
                     icon = binding.ivMonthOnMonth
-                    loadMonthTrendsFragment()
+                    binding.ivMonthOnMonth.tag = systemName
+                    //loadMonthTrendsFragment()
                     DashboardSystemModel.setMonthTrends(systemName)
                 }
                 MONTH_ON_MONTH_ACCOUNT_REVENUE -> {
@@ -453,11 +470,12 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llMonthTrend.visibility = View.VISIBLE
                     linearLayout = binding.llMonthvsTrends
                     icon = binding.ivMonthOnMonth
-                    loadMonthTrendsFragment()
+                    binding.ivMonthOnMonth.tag = systemName
+                    //loadMonthTrendsFragment()
                     DashboardSystemModel.setMonthTrends(systemName)
                 }
                 PERFORMANCE_INCENTIVE_ACHIEVEMNET -> {
-                    setIncentiveVisibility(systemName)
+                    //setIncentiveVisibility(systemName)
                     binding.tvPerformanceAndIncentivesHeader.text =
                         currentDashboard.getGroupModel(
                             PERFORMANCE_INCENTIVE_ACHIEVEMNET
@@ -466,9 +484,10 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llPerformanceAndIncentives.visibility = View.VISIBLE
                     linearLayout = binding.llPerformanceAndIncentivesHeader
                     icon = binding.ivPerformanceAndIncentivesHeader
+                    binding.ivPerformanceAndIncentivesHeader.tag = systemName
                 }
                 PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE -> {
-                    setIncentiveVisibility(systemName)
+                    //setIncentiveVisibility(systemName)
                     binding.tvPerformanceAndIncentivesHeader.text =
                         currentDashboard.getGroupModel(
                             PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE
@@ -477,9 +496,10 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llPerformanceAndIncentives.visibility = View.VISIBLE
                     linearLayout = binding.llPerformanceAndIncentivesHeader
                     icon = binding.ivPerformanceAndIncentivesHeader
+                    binding.ivPerformanceAndIncentivesHeader.tag = systemName
                 }
                 OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES -> {
-                    setIncentiveVisibility(systemName)
+                    //setIncentiveVisibility(systemName)
                     binding.tvPerformanceAndIncentivesHeader.text =
                         currentDashboard.getGroupModel(
                             OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES
@@ -488,9 +508,10 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llPerformanceAndIncentives.visibility = View.VISIBLE
                     linearLayout = binding.llPerformanceAndIncentivesHeader
                     icon = binding.ivPerformanceAndIncentivesHeader
+                    binding.ivPerformanceAndIncentivesHeader.tag = systemName
                 }
                 MY_PERFORMANCE_INCENTIVE -> {
-                    setIncentiveVisibility(systemName)
+                    //setIncentiveVisibility(systemName)
                     binding.tvPerformanceAndIncentivesHeader.text =
                         currentDashboard.getGroupModel(
                             MY_PERFORMANCE_INCENTIVE
@@ -499,17 +520,87 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
                     binding.llPerformanceAndIncentives.visibility = View.VISIBLE
                     linearLayout = binding.llPerformanceAndIncentivesHeader
                     icon = binding.ivPerformanceAndIncentivesHeader
+                    binding.ivPerformanceAndIncentivesHeader.tag = systemName
                 }
             }
             if (systemName != ACTIONABLE) {
-                setIcon(linearLayout, icon)
+                icon.setImageResource(drawable.plus)
+                linearLayout.visibility = View.GONE
+               /* setIcon(linearLayout, icon)
                 if (linearLayout.visibility != View.VISIBLE) {
-                    toggleSection(linearLayout, icon)
-                }
+                    toggleSection(linearLayout, icon, false)
+                }*/
             }
         }
     }
 
+    private fun callChildDashboard(systemName : String){
+        when (systemName) {
+            MyClient_MyLead -> {
+                loadClientsFragment()
+            }
+            MY_LEAD -> {
+                loadLeadsFragment()
+            }
+            MY_LEAD_AU_SUPPORT -> {
+                loadLeadsFragment()
+            }
+            MYCLIENTS_MYSNAPSHOT_PRODUCTIVITY -> {
+                loadClientsFragment()
+            }
+            SYS_LEAD_SNAPSHOT -> {
+                loadLeadBusinessSnapshotFragment()
+            }
+            TEAM_LEAD -> {
+                loadLeadsFragment()
+            }
+            SYS_MY_CLIENTS_SNAPSHOOT -> {
+                loadClientsFragment()
+            }
+            SYS_Chart_MyClients_Alliance -> {
+                loadClientsFragment()
+            }
+            SYS_TEAM_SNAPSHOT -> {
+                loadLeadBusinessSnapshotFragment()
+            }
+            SNAPSHOT_PRODUCTSALESDIRECT1UP_BUSINESSSNAPSHOT -> {
+                loadLeadBusinessSnapshotFragment()
+            }
+            SYS_BUSINESS_SNAPSHOT -> {
+                loadBusinessSnapShot()
+            }
+            SYS_RH_BUSINESS_SNAPSHOT -> {
+                loadBusinessSnapShot()
+            }
+            SELF_TARGET_ACHIEVEMNET -> {
+                loadTargetAchievementFragment()
+            }
+            AUSFB_TARGET_ACHIEVEMNET -> {
+                loadTargetAchievementFragment()
+            }
+            TEAM_TARGETVSACHIEVEMENT_TAB1CONTENT -> {
+                loadTeamTargetAchievementFragment()
+            }
+            MONTH_ON_MONTH -> {
+                loadMonthTrendsFragment()
+            }
+            MONTH_ON_MONTH_ACCOUNT_REVENUE -> {
+                loadMonthTrendsFragment()
+            }
+            PERFORMANCE_INCENTIVE_ACHIEVEMNET -> {
+                setIncentiveVisibility(systemName)
+            }
+            PERFORMANCE_INCENTIVE_ACHIEVEMNET_ONE -> {
+                setIncentiveVisibility(systemName)
+            }
+            OAOSALESONEUP_TEAMPERFORMANCEANDINCENTIVES -> {
+                setIncentiveVisibility(systemName)
+            }
+            MY_PERFORMANCE_INCENTIVE -> {
+                setIncentiveVisibility(systemName)
+            }
+        }
+    }
     override fun onFragmentReopened(args: Bundle) {
         super.onFragmentReopened(args)
         for (floatingActionButton in dashboardBtnList) {
@@ -631,7 +722,9 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
 
     private fun toggleSection(
         parent: View,
-        icon: ImageView
+        icon: ImageView,
+        isLoadChild : Boolean
+
     ) {
         if (parent.visibility == View.VISIBLE) {
             parent.visibility = View.GONE
@@ -639,6 +732,10 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
         } else {
             parent.visibility = View.VISIBLE
             icon.setImageResource(drawable.minus)
+            if(isLoadChild){
+                callChildDashboard(icon.tag.toString())
+            }
+
         }
     }
 
@@ -1187,19 +1284,19 @@ class DashboardFragment : CommonFragment(), DashboardView, View.OnClickListener,
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.rlClientLeads -> toggleSection(binding.llClientsLeads, binding.ivClientLeads)
+            R.id.rlClientLeads -> toggleSection(binding.llClientsLeads, binding.ivClientLeads, true)
             R.id.rlTargetAchievementADV -> toggleSection(
-                binding.llTargetAchievementADV, binding.ivTargetAchievementADV
+                binding.llTargetAchievementADV, binding.ivTargetAchievementADV, true
             )
-            R.id.rlMonthOnMonth -> toggleSection(binding.llMonthvsTrends, binding.ivMonthOnMonth)
+            R.id.rlMonthOnMonth -> toggleSection(binding.llMonthvsTrends, binding.ivMonthOnMonth, true)
             R.id.rlBusinessSnapshotHead -> toggleSection(
-                binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead
+                binding.llBusinessSnapshotHead, binding.ivBusinessSnapshotHead, true
             )
             R.id.rlTeamTargetAchievement -> toggleSection(
-                binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement
+                binding.llTeamTargetAchievement, binding.ivTeamTargetAchievement, true
             )
             R.id.rlPerformanceAndIncentivesHeader -> toggleSection(
-                binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader
+                binding.llPerformanceAndIncentivesHeader, binding.ivPerformanceAndIncentivesHeader, true
             )
         }
     }
