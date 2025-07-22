@@ -1374,10 +1374,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
             binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
             false
-        } else if (binding.lnrLeadStageDetail.isVisible && getSelectedStage().key == "-1") {
+        } else if (binding.lnrLeadStageDetail.isVisible &&
+            userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true
+            && getSelectedStage().key == "-1") {
             binding.tilStage.setErrorMessages(MSG_SELECT_STAGE)
             false
-        } else if (binding.lnrLeadStageDetail.isVisible && getSelectedStatus().key == "-1") {
+        } else if (binding.lnrLeadStageDetail.isVisible &&
+            userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true &&
+            getSelectedStatus().key == "-1") {
             binding.tilStatus.setErrorMessages(MSG_SELECT_STATUS)
             false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
