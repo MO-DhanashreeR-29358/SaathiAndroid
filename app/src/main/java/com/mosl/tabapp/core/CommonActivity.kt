@@ -820,6 +820,12 @@ class CommonActivity : BaseActivity(),
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT){
                     getQuickLinkURL(this, "" )
                 }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT){
+                    getQuickLinkURL(this, "MINOR" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD){
+                    getQuickLinkURL(this, "MFDNRI" )
+                }
                 else if(menu.pageId==NavigationConstants.NAVIGATE_TO_IP_EXECUTION){
                     var strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
                     if(BuildConfig.FLAVOR == "prod"){

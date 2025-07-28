@@ -604,6 +604,12 @@ open class MenuDataSourceImpl @Inject constructor(
                         navigateKey = ""
                     ),
                     ChildMenu(
+                        label = R.string.MOSL_MENU_NRI_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
                         label = R.string.MOSL_MENU_NON_BROKING,
                         enabled = true,
                         pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
@@ -614,47 +620,23 @@ open class MenuDataSourceImpl @Inject constructor(
                         enabled = true,
                         pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING,
                         navigateKey = ""
-                    )
-                )
-            )
-        } else {
-            return BaseMenu(
-                icon = R.drawable.ic_menu_dormant_reactivation,
-                label = R.string.MOSL_MENU_QUICKLINK,
-                enabled = true,
-                children = arrayListOf(
-                    ChildMenu(
-                        label = R.string.MOSL_MENU_DEMAT_ACC,
-                        enabled = true,
-                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
-                        navigateKey = ""
-                    ),
-                    ChildMenu(
-                        label = R.string.MOSL_MENU_ONLY_MFD,
-                        enabled = true,
-                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
-                        navigateKey = ""
-                    ),
-                    ChildMenu(
-                        label = R.string.MOSL_MENU_DEMAT_MFD,
-                        enabled = true,
-                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
-                        navigateKey = ""
-                    ),
-                    ChildMenu(
-                        label = R.string.MOSL_MENU_NON_BROKING,
-                        enabled = true,
-                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
-                        navigateKey = ""
                     ),
                     ChildMenu(
                         label = R.string.MOSL_MENU_INSURANCE,
                         enabled = true,
                         pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
                         navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_MINOR_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
+                        navigateKey = ""
                     )
                 )
             )
+        } else {
+            return getQuickLinkMenu()
         }
 
     }
@@ -704,6 +686,12 @@ open class MenuDataSourceImpl @Inject constructor(
                         label = R.string.MOSL_MENU_JOINT_ACC,
                         enabled = true,
                         pageId = NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_MINOR_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
                         navigateKey = ""
                     )
                 )

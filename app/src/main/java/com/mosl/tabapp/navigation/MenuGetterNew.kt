@@ -247,6 +247,8 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_IP_EXECUTION-> true
             NavigationConstants.NAVIGATE_TO_INSURANCE->true
             NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT->true
+            NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT->true
+            NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD->true
             else -> return false
         }
     }

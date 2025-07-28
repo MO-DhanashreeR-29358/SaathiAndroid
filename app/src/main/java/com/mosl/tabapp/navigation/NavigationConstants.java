@@ -67,7 +67,9 @@ import java.lang.annotation.RetentionPolicy;
         NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING,
         NavigationConstants.NAVIGATE_TO_IP_EXECUTION,
         NavigationConstants.NAVIGATE_TO_INSURANCE,
-        NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT
+        NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT,
+        NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
+        NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD
 
 
 })
@@ -177,5 +179,7 @@ public @interface NavigationConstants {
     int NAVIGATE_TO_INSURANCE=80;
 
     int NAVIGATE_TO_JOINT_ACCOUNT=81;
+    int NAVIGATE_TO_MINOR_ACCOUNT=82;
 
+    int NAVIGATE_TO_QUICK_NRI_ONLY_MFD=83;
 }
