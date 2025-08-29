@@ -165,7 +165,12 @@ class IndirectCreateMeetingPresenter @Inject constructor(
                     view.getInputData()
                 }.flatMap {
                     input->validator.validate(input).flatMap {
-            indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
+           /* if(userManager.getUser()?.isBDMUser() == true){
+                indirectrepoCreateMeeting.saveBDMRequest(Gson().toJson(it))
+            }else{*/
+                indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
+            //}
+
         }.compose(applyUiModel())
         }.subscribe {
           view.renderSaveRequest(it)

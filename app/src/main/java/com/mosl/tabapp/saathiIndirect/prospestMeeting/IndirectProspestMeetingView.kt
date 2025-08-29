@@ -98,4 +98,11 @@ interface IndirectProspestMeetingView:BaseView {
     fun toggleOTPVisibility(show: Boolean)
 
     fun getInterestedInLookUpId() : Int
+
+    fun isEnterValueInFranchiseeCode(): Boolean
+
+    fun onSaveCall():Observable<IndirectProspestMeetingUiEvent.OnSaveCall>
+
+    fun onBDMSaveCall():Observable<IndirectProspestMeetingUiEvent.OnBDMSaveCall>
+
 }

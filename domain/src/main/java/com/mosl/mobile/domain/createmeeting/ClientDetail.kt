@@ -98,7 +98,13 @@ data class AddUpdateMeeting(
   @JvmField val ucidId: Int,
   @JvmField val meetingId: Int
 )
-
+data class AddUpdateMeetingIndirect(
+  @JvmField val leadId: Int,
+  @JvmField val ucidId: Int,
+  @JvmField val meetingId: Int,
+  @JvmField val message: String,
+  @JvmField val status: Boolean
+)
 data class SendOtpResponse(
   @JvmField val status: Boolean,
   @JvmField val errorMessage: String

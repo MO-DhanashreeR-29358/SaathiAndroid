@@ -16,4 +16,8 @@ sealed class IndirectProspestMeetingUiEvent {
     object OnIntrestedInCall: IndirectProspestMeetingUiEvent()
     data class SearchTextChangeCreateMeeting(val text: String) : IndirectProspestMeetingUiEvent()
     data class AttendeeItemClick(val position: Int): IndirectProspestMeetingUiEvent()
+
+    object OnSaveCall: IndirectProspestMeetingUiEvent()
+
+    object OnBDMSaveCall: IndirectProspestMeetingUiEvent()
 }

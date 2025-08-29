@@ -18,6 +18,7 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
 import com.mosl.app.core.data.saathiIndirect.SetAppointment.SetAppointmentMapper
 import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeetingIndirect
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
@@ -102,7 +103,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
             .map { it.meetingAddress }
     }
 
-    override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
+    override fun saveRequest(data: String): Observable<AddUpdateMeetingIndirect> {
         Log.d("Meeting Post Json",data)
         val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiIndrectApi.postAddUpdateMeeting(request)
@@ -111,11 +112,27 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
             }
     }
 
+    override fun saveBDMRequest(data: String): Observable<AddUpdateMeetingIndirect> {
+        Log.d("Meeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postBDMAddUpdateMeeting(request)
+            .map {
+                CreateMeetingMapper.transformAddUpdateMeetingNew(it)
+            }
+
+    }
+
     override fun saveRequetProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
         Log.d("ProMeeting Post Json",data)
         val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiIndrectApi.postAddUpdateMeeting(request)
 
+    }
+
+    override fun saveRequetBDMProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
+        Log.d("ProMeeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postBDMAddUpdateMeeting(request)
     }
 
     fun getType(type: Int): String {

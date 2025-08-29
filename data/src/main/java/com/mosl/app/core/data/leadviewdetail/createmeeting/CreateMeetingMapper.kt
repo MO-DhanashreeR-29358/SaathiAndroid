@@ -100,11 +100,13 @@ object CreateMeetingMapper {
     }
 
 
-    fun transformAddUpdateMeetingNew(addUpdateMeetingItem: AddUpdateMeetingNewResposne):AddUpdateMeeting  {
-        return AddUpdateMeeting(
+    fun transformAddUpdateMeetingNew(addUpdateMeetingItem: AddUpdateMeetingNewResposne):AddUpdateMeetingIndirect  {
+        return AddUpdateMeetingIndirect(
             leadId = addUpdateMeetingItem.response?.leadId ?: 0,
             ucidId = addUpdateMeetingItem.response?.uCID ?: 0,
-            meetingId = addUpdateMeetingItem.response?.meetingID ?: 0
+            meetingId = addUpdateMeetingItem.response?.meetingID ?: 0,
+            message = addUpdateMeetingItem.getMessage() ?: "",
+            status = addUpdateMeetingItem.isSuccessful
         )
     }
     fun mapToSendOtpResponse(

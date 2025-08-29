@@ -186,11 +186,23 @@ class IndirectProspestMeetingPresenter @Inject constructor(
             .addTo(disposable)
 
 
-        view.onSaveClicked().map {
+
+        view.onSaveCall().map {
             view.getInputData()
         }.flatMap {
                 input->validator.validate(input).flatMap {
-            indirectrepoCreateMeeting.saveRequetProspectMeeting(Gson().toJson(it))
+                indirectrepoCreateMeeting.saveRequetProspectMeeting(Gson().toJson(it))
+        }.compose(applyUiModel())
+        }.subscribe {
+            view.renderSaveRequest(it)
+        }.addTo(disposable)
+
+
+        view.onBDMSaveCall().map {
+            view.getInputData()
+        }.flatMap {
+                input->validator.validate(input).flatMap {
+            indirectrepoCreateMeeting.saveRequetBDMProspectMeeting(Gson().toJson(it))
         }.compose(applyUiModel())
         }.subscribe {
             view.renderSaveRequest(it)

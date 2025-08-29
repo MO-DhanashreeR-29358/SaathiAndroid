@@ -269,6 +269,19 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
             }
         }
 
+        binding.btnSave.setOnClickListener {
+            val isBDM = userManager.getUser()?.isBDMUser()
+            val isPersonal = getSelectedActivityType().isPersonalMeeting()
+            val isFranchisee = isEnterValueInFranchiseeCode()
+            //Toast.makeText(requireContext(), "isBDM: $isBDM, isPersonal: $isPersonal, isFranchisee: $isFranchisee", Toast.LENGTH_LONG).show()
+
+            if(isBDM == true && isPersonal && isFranchisee){
+                uiSubject.onNext(IndirectProspestMeetingUiEvent.OnBDMSaveCall)
+            }else{
+                uiSubject.onNext(IndirectProspestMeetingUiEvent.OnSaveCall)
+            }
+        }
+
     }
 
     override fun onTextSearchCalled(): Observable<IndirectProspestMeetingUiEvent.SearchTextChange> {
@@ -1006,16 +1019,31 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
                     }
                 }
 
-                renderOnResetClicked()
-
         }
         else
         {
-                        showErrorToast(it.message?:"")
+            MSFDialog.alertDialog(
+                requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                it.getMessage(), "OK", true
+            )
+            { action: MSFDialog.Action, _: Array<Any?>? ->
+                if (action == MSFDialog.Action.OK) {
+                    val bundle = Bundle()
+                    bundle.putString(
+                        MOSLConstants.LEAD_ID,
+                        requireArguments().getString(MOSLConstants.LEAD_ID)
+                    )
+                    bundle.putString(
+                        MOSLConstants.UCID,
+                        requireArguments().getString(MOSLConstants.UCID)
+                    )
+                    navigator.openHome()
+                }
+            }
 
         }
         }
-
+        renderOnResetClicked()
 
     }
     override fun onIndirectLocationSaveEventFired(): Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick> {
@@ -1057,6 +1085,21 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         }else{
             return MOSLConstants.INDIRECT_INTERESTED_IN_UAT
         }
+    }
+
+    override fun isEnterValueInFranchiseeCode(): Boolean {
+        if (!TextUtils.isEmpty(binding.edtFCode.getText())) {
+            return true
+        }
+        return false
+    }
+
+    override fun onSaveCall(): Observable<IndirectProspestMeetingUiEvent.OnSaveCall> {
+        return uiSubject.ofType()
+    }
+
+    override fun onBDMSaveCall(): Observable<IndirectProspestMeetingUiEvent.OnBDMSaveCall> {
+        return uiSubject.ofType()
     }
 
 }

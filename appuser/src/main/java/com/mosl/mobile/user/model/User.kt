@@ -115,6 +115,16 @@ data class User(
         return flag
     }
 
+    fun isBDMUser(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessProfileName.equals("BDM-Franchisee", ignoreCase = true)
+            || currentBusinessProfile.businessProfileName.equals("BDM-TL", ignoreCase = true)
+            ) {
+            flag = true
+        }
+        return flag
+    }
+
     fun isAllianceBusiness(): Boolean {
         return currentBusinessProfile.businessUnitId?.equals("11") ?: false
     }

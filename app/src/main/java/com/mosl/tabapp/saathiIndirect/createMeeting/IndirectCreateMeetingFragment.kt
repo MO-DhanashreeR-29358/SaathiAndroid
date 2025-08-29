@@ -1,7 +1,6 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -26,7 +25,6 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
@@ -37,7 +35,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
-import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeetingIndirect
 import com.mosl.mobile.domain.createmeeting.AddedAttendee
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
@@ -73,7 +71,6 @@ import java.util.Date
 import javax.inject.Inject
 import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingUiEvent
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ApiClient
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.MeetingFeedbackData
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
@@ -81,8 +78,6 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
 import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
 import com.mosl.tabapp.navigation.NavigationConstants
-import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEvent
-import com.mosl.tabapp.model.AddedSplAttendeeModel
 import com.mosl.tabapp.model.MeetingAttendeeItem
 import com.mosl.tabapp.urls.ApiBaseUrlImpl
 import retrofit2.Call
@@ -929,39 +924,68 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         return  binding.btnSave.clicks()
     }
 
-    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeeting>) {
+    override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingIndirect>) {
         toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
             Timber.d("IndirectCreateMeetingFragment renderSaveRequest showOnFailurePopup ${it.message}")
 
             showOnFailurePopup(it)
+
         }
 
         uiModel.onSuccess {
-            MSFDialog.alertDialog(
-                requireContext(), 0, resources.getString(R.string.motilal_oswal),
-                MOSLConstants.CREATE_MEETING, "OK", true
-            )
-            { action: MSFDialog.Action, _: Array<Any?>? ->
-                if (action == MSFDialog.Action.OK) {
-                   // callZykrrApi(it.meetingId)
-                    val bundle = Bundle()
-                    bundle.putString(
-                        MOSLConstants.LEAD_ID,
-                        requireArguments().getString(MOSLConstants.LEAD_ID)
-                    )
-                    bundle.putString(
-                        MOSLConstants.UCID,
-                        requireArguments().getString(MOSLConstants.UCID)
-                    )
-                    navigator.openPage(
-                        NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle,
-                        addToStack = true,
-                        forceReload = false
-                    )
+            if(it.message.isEmpty()){
+                MSFDialog.alertDialog(
+                    requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                    MOSLConstants.CREATE_MEETING, "OK", true
+                )
+                { action: MSFDialog.Action, _: Array<Any?>? ->
+                    if (action == MSFDialog.Action.OK) {
+                        // callZykrrApi(it.meetingId)
+                        val bundle = Bundle()
+                        bundle.putString(
+                            MOSLConstants.LEAD_ID,
+                            requireArguments().getString(MOSLConstants.LEAD_ID)
+                        )
+                        bundle.putString(
+                            MOSLConstants.UCID,
+                            requireArguments().getString(MOSLConstants.UCID)
+                        )
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(),
+                            bundle,
+                            addToStack = true,
+                            forceReload = false
+                        )
+                    }
+                }
+            }else{
+                MSFDialog.alertDialog(
+                    requireContext(), 0, resources.getString(R.string.motilal_oswal),
+                    it.message, "OK", true
+                )
+                { action: MSFDialog.Action, _: Array<Any?>? ->
+                    if (action == MSFDialog.Action.OK) {
+                        // callZykrrApi(it.meetingId)
+                        val bundle = Bundle()
+                        bundle.putString(
+                            MOSLConstants.LEAD_ID,
+                            requireArguments().getString(MOSLConstants.LEAD_ID)
+                        )
+                        bundle.putString(
+                            MOSLConstants.UCID,
+                            requireArguments().getString(MOSLConstants.UCID)
+                        )
+                        navigator.openPage(
+                            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN.toString(), bundle,
+                            addToStack = true,
+                            forceReload = false
+                        )
+                    }
                 }
             }
+
             renderOnResetClicked()
         }
 

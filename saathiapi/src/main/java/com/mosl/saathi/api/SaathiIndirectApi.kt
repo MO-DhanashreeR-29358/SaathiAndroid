@@ -135,6 +135,8 @@ interface SaathiIndirectApi {
     @POST("Meeting/AddUpdateMeeting")
     fun postAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingNewResposne>
 
+    @POST("Meeting/AddUpdateMeetingBDM")
+    fun postBDMAddUpdateMeeting(@Body request: RequestBody): Observable<AddUpdateMeetingNewResposne>
 
 
     @POST("Source/GetSourceList")

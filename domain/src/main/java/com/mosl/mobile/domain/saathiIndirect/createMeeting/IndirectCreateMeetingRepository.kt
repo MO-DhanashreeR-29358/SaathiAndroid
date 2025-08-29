@@ -1,6 +1,7 @@
 package com.mosl.mobile.domain.saathiIndirect.createMeeting
 
 import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeetingIndirect
 import com.mosl.mobile.domain.createmeeting.Attendee
 import com.mosl.mobile.domain.createmeeting.LookUp
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
@@ -20,8 +21,10 @@ interface IndirectCreateMeetingRepository {
         leadId: String
     ): Observable<String>
 
-    fun saveRequest(data: String): Observable<AddUpdateMeeting>
+    fun saveRequest(data: String): Observable<AddUpdateMeetingIndirect>
 
+    fun saveBDMRequest(data: String): Observable<AddUpdateMeetingIndirect>
     fun saveRequetProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne>
 
+    fun saveRequetBDMProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne>
 }

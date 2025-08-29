@@ -35,6 +35,7 @@ import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationPa
 import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.Function7
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class IndirectLeadCreationRepositoryImpl @Inject constructor(
@@ -106,7 +107,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     private fun getRowDatas(request: LookupRequest): Observable<List<RowData>> {
-        return indirectSaathiApi.getAllLookup(request)
+        return indirectSaathiApi.getAllLookup(request).delay(2, TimeUnit.SECONDS)
             .map { IndirectLeadCreationMapper.transformLookupData(it.response?: mutableListOf()
             )}
     }
@@ -117,7 +118,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
-        return indirectSaathiApi.getSourceList(stageRequest)
+        return indirectSaathiApi.getSourceList(stageRequest).delay(2, TimeUnit.SECONDS)
             .map { it.response?.mapToRowDataList()?: mutableListOf()  }
     }
 
@@ -127,7 +128,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
-        return indirectSaathiApi.getStageList(stageRequest)
+        return indirectSaathiApi.getStageList(stageRequest).delay(2, TimeUnit.SECONDS)
             .map { it.response?.stageItemsToRowDatas()?: mutableListOf()  }
     }
 
@@ -155,7 +156,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
     }
 
     override fun getCountryRowDatas(): Observable<List<RowData>> {
-        return indirectSaathiApi.getCountries()
+        return indirectSaathiApi.getCountries().delay(2, TimeUnit.SECONDS)
             .map { it.response?.countryItemsToRowDatas() ?: mutableListOf() }
     }
     override fun getBackgroundRowDatas(): Observable<List<RowData>> {
@@ -164,7 +165,7 @@ class IndirectLeadCreationRepositoryImpl @Inject constructor(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
                 { "businessUnitId in UserManager is not be null" })
         )
-        return indirectSaathiApi.getBackground(stageRequest)
+        return indirectSaathiApi.getBackground(stageRequest).delay(2, TimeUnit.SECONDS)
             .map { it.response?.backgroundItemsToRowDatas() ?: mutableListOf() }
     }
 

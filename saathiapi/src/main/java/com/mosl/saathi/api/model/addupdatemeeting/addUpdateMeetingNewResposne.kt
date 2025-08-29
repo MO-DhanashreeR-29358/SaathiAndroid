@@ -17,9 +17,19 @@ data class AddUpdateMeetingNewResposne(
 	val message: String? = null,
 
 	@JvmField @SerializedName("Erros")
-	val erros: List<Any?>? = null
-)
+	val erros: List<ApiError>? = null
+){
+	val isSuccessful: Boolean
+		get() = status == true
 
+	fun getMessage(): String {
+		return if(!erros.isNullOrEmpty()) erros.let { it[0].message } else ""
+	}
+}
+data class ApiError(
+	@JvmField @SerializedName("Code") val code: Int,
+	@JvmField @SerializedName("Message") val message: String
+)
 data class Response(
 
 	@JvmField @SerializedName("ParentID")
