@@ -119,6 +119,8 @@ class LoginActivity : BaseActivity(), Navigator, LoginView, LatLongDispatcher {
   override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
     Timber.d("Something LoginActivity oncreate")
+    val window = window
+    window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
     disposables = CompositeDisposable()
     AndroidInjection.inject(this)
     fusedLocation.initDispatcher(this)

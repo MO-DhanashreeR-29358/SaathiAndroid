@@ -117,7 +117,7 @@
     <color name="default_line_indicator_unselected_color">#FFBBBBBB</color>
     <color name="switch_on">#F9AF4E</color>
     <color name="switch_off">#cf9241</color>
-
+    <color name="status_bar_color">#FF006EB9</color>
 
     <!--Hyper Link-->
     <color name="hyper_link">#2d41ff</color>

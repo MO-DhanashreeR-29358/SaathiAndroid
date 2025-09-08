@@ -21,6 +21,7 @@ import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -226,6 +227,33 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAAAA Common Activity onCreate ")
 
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
+        val window = window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
+        binding.drawerMenu.post(Runnable {
+            var statusBarHeight = 0
+            var navBarHeight = 0
+
+            // Get status bar height
+            val statusBarResId = resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (statusBarResId > 0) {
+                statusBarHeight = resources.getDimensionPixelSize(statusBarResId)
+            }
+
+            // Get navigation bar height (only if device has soft keys)
+            val navBarResId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            if (navBarResId > 0) {
+                navBarHeight = resources.getDimensionPixelSize(navBarResId)
+            }
+
+            // Apply padding
+            binding.drawerMenu.setPadding(
+                binding.drawerMenu.getPaddingLeft(),
+                statusBarHeight,
+                binding.drawerMenu.getPaddingRight(),
+                navBarHeight
+            )
+        })
+
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
         binding.actionBar.setNotification(OnClickListener {
             screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION.toString(), true)

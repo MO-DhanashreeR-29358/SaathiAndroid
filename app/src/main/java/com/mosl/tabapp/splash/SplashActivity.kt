@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.core.content.ContextCompat
 import com.mosl.app.core.data.MOSLResponseWrapper.SERVER_ERROR_OCCURRED
 import com.mosl.app.core.exception.ServiceFailureException
 import com.mosl.app.core.network.isNetworkConnected
@@ -65,6 +66,8 @@ class SplashActivity : LeanBaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.bind(findViewById(R.id.splash_root))
+        val window = window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
         disposables = CompositeDisposable()
         setupView()
         forcePreferenceClear()
