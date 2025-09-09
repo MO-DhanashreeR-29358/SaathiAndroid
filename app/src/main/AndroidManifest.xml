@@ -138,24 +138,24 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCBwZ-oxAQ2ww1o7Y9zqpGGQZsGP1FBg3w" />-->
 
-<!--        <activity-->
-<!--            android:name="com.mosl.ekycexpress.core.CommonActivity"-->
-<!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/EkycTheme"-->
-<!--            android:windowSoftInputMode="stateHidden"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+        <activity
+            android:name="com.mosl.ekycexpress.core.CommonActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EkycTheme"
+            android:windowSoftInputMode="stateHidden"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 
-<!--        <activity-->
-<!--            android:name="com.mosl.ekycexpress.webview.WebViewActivity"-->
-<!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/EkycTheme"-->
-<!--            android:windowSoftInputMode="stateHidden" />-->
+        <activity
+            android:name="com.mosl.ekycexpress.webview.WebViewActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@style/EkycTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.digio.in.esign2sdk.DigioEsignActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
