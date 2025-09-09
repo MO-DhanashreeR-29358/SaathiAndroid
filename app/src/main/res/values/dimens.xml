@@ -80,4 +80,13 @@
     <dimen name="progress_bar_size">48dp</dimen>
 
     <dimen name="ekyc_text_size_large">18sp</dimen>
+
+    <dimen name="_15ssp">15sp</dimen>
+    <dimen name="_12ssp">12sp</dimen>
+    <dimen name="_24ssp">24sp</dimen>
+    <dimen name="_8ssp">8sp</dimen>
+    <dimen name="_20ssp">20sp</dimen>
+    <dimen name="_14ssp">14sp</dimen>
+    <dimen name="_10ssp">10sp</dimen>
+    <dimen name="_44ssp">44sp</dimen>
 </resources>

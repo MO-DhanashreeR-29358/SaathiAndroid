@@ -224,11 +224,13 @@ class CommonActivity : BaseActivity(),
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.d("AAAAA Common Activity onCreate ")
+        val window = window
+        window.addFlags(android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
+
 
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
-        val window = window
-        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
+
         binding.drawerMenu.post(Runnable {
             var statusBarHeight = 0
             var navBarHeight = 0

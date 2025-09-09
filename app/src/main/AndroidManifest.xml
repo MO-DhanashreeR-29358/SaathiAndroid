@@ -123,12 +123,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-<!--        <activity-->
-<!--            android:name="com.mosl.ekycexpress.login.core.LoginActivity"-->
-<!--            android:configChanges="keyboard|keyboardHidden|orientation|navigation"-->
-<!--            android:screenOrientation="portrait"-->
-<!--            android:theme="@style/EkycTheme"-->
-<!--            android:windowSoftInputMode="stateHidden|adjustPan" />-->
+        <activity
+            android:name="com.mosl.ekycexpress.login.core.LoginActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
+            android:screenOrientation="portrait"
+            android:theme="@style/EkycTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
