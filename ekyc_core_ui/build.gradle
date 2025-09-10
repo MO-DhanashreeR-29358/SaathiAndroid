@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('ekyccoreui-1.0.0-alpha3.aar'))

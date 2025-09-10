@@ -298,6 +298,15 @@ dependencies {
     implementation(deps.EkycArtifactDependencies.loginUi) {
         exclude group: 'MofslArtifacts'
     }*/
+    implementation files('..\\libs\\ekycdomain-1.0.1.jar')
+    implementation project(':ekyc_api')
+    implementation project(':ekyc_app')
+    implementation project(':ekyc_app_user')
+    implementation project(':ekyc_core')
+    implementation project(':ekyc_core_ui')
+    implementation project(':ekyc_data')
+    implementation project(':ekyc_login_api')
+    implementation project(':ekyc_login_ui')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
