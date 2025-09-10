@@ -100,3 +100,8 @@ Version : 3.1.6
 Update Date : 26.8.2025
 Release Note : 1. CRM-I1409 Integration of Franchisee BDM Meeting Validation in Saathi CRM App
 
+---------------------------------------------------------------------------------------------
+Version : 3.1.7
+Update Date : 10.09.2025
+Release Note : 1. AS issue - Resolve Pending esign tab not working (Adding ekyc artifacts manually)
+               2. AS issue - User not able to login, Resolve issue for android api level 15( Hiding bottom buttons to system navigation bars)

@@ -59,7 +59,7 @@
         <item name="android:editTextStyle">@style/CRMEdittextSelector</item>
         <item name="android:statusBarColor">#FF006EB9</item>
         <!-- Optionally, set the status bar icons to light (for dark backgrounds) -->
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
 
