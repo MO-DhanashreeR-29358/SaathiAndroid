@@ -1,7 +1,9 @@
 #~~~~~~~~~~~        DISTA PROGAURD STARTS       ~~~~~~~~~~~~~
 -keep class dataRepository.** {*;}
 -keep class intentFactory.** {*;}
+-keep class views.** {*;}
 -keep class ma.poi.models.** {*;}
+-keep class ma.poi.controllers.** {*;}
 -keep class ma.poi.enums.** {*;}
 -keep class processors.coreProcessors.** {*;}
 -keep class ma.dista.activities.reports.models.** {*;}
@@ -14,8 +16,13 @@
 #~~~~~~~~~~~ Custom Form Listener
 -keep public class * implements ma.poi.inject.IFormListener {
 #   public static final ** getInstance();
-   public static <methods>;
+  public static <methods>;
 }
+#~~~~~~~~~~~ Couchbase Repository Classes
+-keep class ma.dista.repository.**{*;}
+
+#~~~~~~~~~~~ Dynamic Form Listener Model Classes
+-keep class ma.dista.activities.poi.template.models.** {*;}
 
 #~~~~~~~~~~~~ Adapter classes ~~~~~~~~~~~~~~
 -keep class ma.dista.jobs.JobsAdapter
@@ -40,7 +47,7 @@
 #-keep class com.sun.jna.**{*;}
 
 -keep class utils.helpers.SequenceSortUtility {
-    public static <methods>;
+   public static <methods>;
 }
 #~~~~~~~~~~~        DISTA PROGAURD ENDS         ~~~~~~~~~~~~~
 -dontwarn java.lang.invoke.**
@@ -85,67 +92,67 @@
 # see http://proguard.sourceforge.net/manual/examples.html#beans
 #To remove debug logs:
 -assumenosideeffects class android.util.Log {
-    public static boolean isLoggable(java.lang.String, int);
-    public static int v(...);
-    public static int i(...);
-    public static int w(...);
-    public static int d(...);
-    public static int e(...);
-    public static int wtf(...);
+   public static boolean isLoggable(java.lang.String, int);
+   public static int v(...);
+   public static int i(...);
+   public static int w(...);
+   public static int d(...);
+   public static int e(...);
+   public static int wtf(...);
 }
 
 #Maintain java native methods
 -keepclasseswithmembernames class * {
-    native <methods>;
+   native <methods>;
 }
 #To maintain custom components names that are used on layouts XML:
 -keep public class * extends android.view.View {
-    public <init>(android.content.Context);
+   public <init>(android.content.Context);
 }
 -keep public class * extends android.view.View {
-    public <init>(android.content.Context, android.util.AttributeSet);
+   public <init>(android.content.Context, android.util.AttributeSet);
 }
 -keep public class * extends android.view.View {
-    public <init>(android.content.Context, android.util.AttributeSet, int);
+   public <init>(android.content.Context, android.util.AttributeSet, int);
 }
- -keepclassmembers public class * extends android.view.View {
-  void set*(***);
-  *** get*();
+-keepclassmembers public class * extends android.view.View {
+ void set*(***);
+ *** get*();
 }
 #Maintain enums
 -keepclassmembers enum * {
-    public static **[] values();
-    public static ** valueOf(java.lang.String);
+   public static **[] values();
+   public static ** valueOf(java.lang.String);
 }
 
 #To keep parcelable classes (to serialize - deserialize objects to sent through Intents)
 #Keep the R
 -keepclassmembers class **.R$* {
-    public static <fields>;
+   public static <fields>;
 }
 
 #Uncomment if using Serializable
 -keepclassmembers class * implements java.io.Serializable {
-    private static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
+   private static final java.io.ObjectStreamField[] serialPersistentFields;
+   private void writeObject(java.io.ObjectOutputStream);
+   private void readObject(java.io.ObjectInputStream);
+   java.lang.Object writeReplace();
+   java.lang.Object readResolve();
 }
 
 -keep class * extends java.util.ListResourceBundle {
-    protected Object[][] getContents();
+   protected Object[][] getContents();
 }
 
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
-    public static final *** NULL;
+   public static final *** NULL;
 }
 -keepnames @com.google.android.gms.common.annotation.KeepName class *
 -keepclassmembernames class * {
-    @com.google.android.gms.common.annotation.KeepName *;
+   @com.google.android.gms.common.annotation.KeepName *;
 }
 -keepnames class * implements android.os.Parcelable {
-    public static final ** CREATOR;
+   public static final ** CREATOR;
 }
 
 #~~~~~~~~~~~        BASIC PROGAURD SETTING  ENDS     ~~~~~~~~~~~~
@@ -153,14 +160,14 @@
 #~~~~~~~~~~~        RETROFIT STARTS     ~~~~~~~~~~~~
 # Needed by google-api-client to keep generic types and @Key annotations accessed via ma.pickme.reflection
 -keepclassmembers class * {
-  @com.google.api.client.util.Key <fields>;
+ @com.google.api.client.util.Key <fields>;
 }
 -keepclasseswithmembers class * {
-        @retrofit.http.* <methods>;
+       @retrofit.http.* <methods>;
 }
 -keepclasseswithmembers class * {
-        @retrofit2.http.* <methods>;
-        }
+       @retrofit2.http.* <methods>;
+       }
 -dontwarn com.squareup.okhttp.**
 -keep class com.squareup.okhttp.** { *;}
 -keep class retrofit.** { *; }
@@ -209,24 +216,24 @@
 #~~~~~~~~~~~        RX JAVA STARTS     ~~~~~~~~~~~~
 -keep class io.**
 -keep class rx.schedulers.Schedulers {
-    public static <methods>;
+   public static <methods>;
 }
 -keep class rx.schedulers.ImmediateScheduler {
-    public <methods>;
+   public <methods>;
 }
 -keep class rx.schedulers.TestScheduler {
-    public <methods>;
+   public <methods>;
 }
 -keep class rx.schedulers.Schedulers {
-    public static ** test();
+   public static ** test();
 }
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
-    long producerIndex;
-    long consumerIndex;
+   long producerIndex;
+   long consumerIndex;
 }
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueProducerNodeRef {
-    long producerNode;
-    long consumerNode;
+   long producerNode;
+   long consumerNode;
 }
 #~~~~~~~~~~~        RX JAVA ENDS     ~~~~~~~~~~~~
 
@@ -234,19 +241,19 @@
 -keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
 -keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
-  **[] $VALUES;
-  public *;
+ **[] $VALUES;
+ public *;
 }
 #~~~~~~~~~~~ LIFE CYCLER ARCH ~~~~~~~~~~~~~~~~~~
 ## Android architecture components: Lifecycle
 # LifecycleObserver's empty constructor is considered to be unused by proguard
 -keepclassmembers class * implements android.arch.lifecycle.LifecycleObserver {
-    <init>(...);
+   <init>(...);
 }
 
 # ViewModel's empty constructor is considered to be unused by proguard
 -keepclassmembers class * extends android.arch.lifecycle.ViewModel {
-    <init>(...);
+   <init>(...);
 }
 
 # keep Lifecycle State and Event enums values
@@ -255,10 +262,10 @@
 # keep methods annotated with @OnLifecycleEvent even if they seem to be unused
 # (Mostly for LiveData.LifecycleBoundObserver.onStateChange(), but who knows)
 -keepclassmembers class * {
-    @android.arch.lifecycle.OnLifecycleEvent *;
+   @android.arch.lifecycle.OnLifecycleEvent *;
 }
 -keep class * implements android.arch.lifecycle.LifecycleObserver {
-    <init>(...);
+   <init>(...);
 }
 -keepclassmembers class android.arch.** { *; }
 -keep class android.arch.** { *; }
@@ -276,14 +283,19 @@
 -keep class com.google.firebase.crashlytics.** { *; }
 -dontwarn com.google.firebase.crashlytics.**
 
+# Smartech Base SDK
+-dontwarn com.netcore.android.**
+-keep class com.netcore.android.**{*;}
+-keep class * implements com.netcore.android.**.* {*;}
+-keep class * extends com.netcore.android.**.* {*;}
+
+# Smartech Push SDK
+-dontwarn com.netcore.android.smartechpush.**
+-keep class com.netcore.android.smartechpush.**{*;}
+-keep class * implements com.netcore.android.smartechpush.**.* {*;}
+-keep class * extends com.netcore.android.smartechpush.**.* {*;}
 -keep class ma.dista.utils.DistaApplication {
-public *;
+   public *;
 }
 -keep class androidx.databinding.** { *; }
-
-
-
-
-
-
 

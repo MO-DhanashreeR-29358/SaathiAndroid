@@ -3,6 +3,7 @@ package com.mosl.tabapp.navigation
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.mosl.tabapp.advancesearch.QuickSearchTabFragment
 import com.mosl.tabapp.bankmeeting.BankMeetingFragment
 import com.mosl.tabapp.bankmeetingreport.BankMeetingReportFragmentNew
 import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryFragment
@@ -31,6 +32,24 @@ import com.mosl.tabapp.reactivation.detailTL.ReactivationDetailTLFragment
 import com.mosl.tabapp.reactivation.summary.ReactivationSummaryFragment
 import com.mosl.tabapp.report.ReportFragment
 import com.mosl.tabapp.report.hierarchy.HierarchyReportFragment
+import com.mosl.tabapp.saathiIndirect.LeadCreation.IndirectLeadCreationFragment
+import com.mosl.tabapp.saathiIndirect.createMeeting.IndirectCreateMeetingFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.CCDashboard.CCDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.DetailDashboard.IndirectIFADashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.IndirectIFADashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.Report.IndirectIFADashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.ReportDetails.IndirectIFAReportDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.myLeadDetials.IndirectIFAMyLeadDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.CncFocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.cncfoco.DetailDashboard.IndirectCncFocoDashboardDetailsFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.FocoDashboardFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.FocoDashboardReportFragment
+import com.mosl.tabapp.saathiIndirect.dashboard.foco.report.hierarchy.FocoHierarchyReportFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.leadDetail.IndirectLeadDetailFragment
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.main.IndirectLeadDetailMainFragment
+import com.mosl.tabapp.saathiIndirect.prospestMeeting.IndirectProspestmeetingFragment
+import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentFragment
 import com.mosl.tabapp.setappointment.SetAppointmentFragment
 import com.mosl.tabapp.settings.SettingFragment
 import com.mosl.tabapp.smt.SMTFragment
@@ -121,6 +140,27 @@ object MenuGetterNew {
                 args.putString(WebviewFragment.PAGE_ID, WebviewFragment.QUERY_FORM_ID)
                 arguments = args
             }
+            NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH-> QuickSearchTabFragment()
+
+
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> IndirectLeadCreationFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> IndirectDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> FocoDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->IndirectIFADashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->IndirectIFADashboardDetailsFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS ->IndirectIFAMyLeadDetailsFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS->IndirectIFAReportDetailsFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT->IndirectIFADashboardReportFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> FocoDashboardReportFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> FocoHierarchyReportFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> IndirectCreateMeetingFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> IndirectSetAppointmentFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> IndirectLeadDetailMainFragment()  //use this for navigation
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> IndirectLeadDetailFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->IndirectProspestmeetingFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD-> CncFocoDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->CCDashboardFragment()
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS->IndirectCncFocoDashboardDetailsFragment()
             else -> null
         }
     }
@@ -180,6 +220,35 @@ object MenuGetterNew {
             NavigationConstants.NAVIGATE_TO_REACTIVATION_CREATE -> true
             NavigationConstants.NAVIGATE_TO_DORMANT -> true
             NavigationConstants.NAVIGATE_TO_QUERY_FORM -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD ->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_DETAILS ->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_MYLEAD_DETAILS->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_REPORT_DETAILS->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD_REPORT->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD_REPORT -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_HIERARCHY_REPORT -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_CREATION -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_MEETING -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_APPOINTMENT -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_MAIN -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_LEAD_DETAIL_VIEW -> true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING ->true
+            NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH->true
+            NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC->true
+            NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD->true
+            NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD->true
+            NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD->true
+            NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD_DETAILS->true
+            NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING->true
+            NavigationConstants.NAVIGATE_TO_IP_EXECUTION-> true
+            NavigationConstants.NAVIGATE_TO_INSURANCE->true
+            NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT->true
+            NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT->true
+            NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD->true
             else -> return false
         }
     }

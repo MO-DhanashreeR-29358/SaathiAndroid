@@ -4,21 +4,22 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.viewpager.widget.ViewPager
+import com.app.aspirecollection.Util.FridaDetect
 import com.mosl.app.coreui.base.LeanBaseActivity
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.R
-import com.mosl.tabapp.birthdayanniversary.BirthdayAnniversaryUiEvent
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.databinding.ActivitySliderBinding
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.MSFDialog
 import com.mosl.tabapp.util.RootDeviceHelper.isEmulator
-import com.mosl.tabapp.util.RootDeviceHelper.isRooted
 import com.mosl.tabapp.util.rootbeer.RootBeer
 import dagger.android.AndroidInjection
 import timber.log.Timber
 import javax.inject.Inject
+
 
 class SliderActivity : LeanBaseActivity() {
 
@@ -40,12 +41,15 @@ class SliderActivity : LeanBaseActivity() {
     }
     binding = ActivitySliderBinding.bind(findViewById(R.id.slider_root))
 
-     val rootBeer = RootBeer(this)
+    val window = window
+    window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
 
-   /* if (!isEmulator() && rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck) {
+    val rootBeer = RootBeer(this)
+
+    if (!isEmulator() && (FridaDetect.isFridaDetected() || rootBeer.isRooted || rootBeer.isRootedWithBusyBoxCheck)) {
       showRootedMessage()
       return
-    }*/
+    }
 
     if (userManager.isLoggedIn()) {
       launchSplash()

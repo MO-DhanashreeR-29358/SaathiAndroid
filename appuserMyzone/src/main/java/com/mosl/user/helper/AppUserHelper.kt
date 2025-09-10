@@ -10,14 +10,14 @@ fun Context.getPref(name: String): SharedPreferences {
   return getSharedPreferences(name, Context.MODE_PRIVATE)
 }
 
-sealed class AccessToken {
+abstract class AccessToken {
   object OnRefresh : AccessToken()
   object OnUnauthorized : AccessToken()
   object OnExpire : AccessToken()
   object OnApiCall : AccessToken()
 }
 
-sealed class TokenEvents {
+abstract class TokenEvents {
   object Logout : TokenEvents()
   object ReInitiate : TokenEvents()
 }

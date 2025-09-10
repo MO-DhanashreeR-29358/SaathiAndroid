@@ -11,7 +11,8 @@ data class ClientDetail(
   @JvmField val isPotentialPMSProduct: String,
   @JvmField val sourceName: String,
   @JvmField val prospectSource: String,
-  @JvmField val activateOTPInApp: String
+  @JvmField val activateOTPInApp: String,
+  @JvmField val leadCreationDate: String
 )
 
 data class LookUp(
@@ -53,16 +54,23 @@ data class AddedAttendee(
   }
 }
 
+/*
 data class ClientData(
   @JvmField val clientDetail: ClientDetail,
   @JvmField val imageUrl: String,
-  @JvmField val listActivity: List<LookUp>,
   @JvmField val listMobileNumber: List<MobileListData>,
+  @JvmField val listActivity: List<LookUp>,
   @JvmField val listMeetingDuration: List<LookUp>,
   @JvmField val listInterestedIn: List<LookUp>,
   @JvmField val listMeetingObjective: List<LookUp>,
   @JvmField val listTravellingMode: List<LookUp>,
   @JvmField val listMeetingAdressID: List<LookUp>
+)
+*/
+data class ClientData(
+  @JvmField val clientDetail: ClientDetail,
+  @JvmField val imageUrl: String,
+  @JvmField val listMobileNumber: List<MobileListData>
 )
 
 
@@ -76,11 +84,27 @@ data class OTPRequestData(
 
 )
 
-data class AddUpdateMeeting(
-  @JvmField val leadId: Int,
-  @JvmField val ucidId: Int
+data class SurveyLinkData(
+  @JvmField val leadId: String,
+  @JvmField val clientCode: String,
+  @JvmField val meetingId: Int,
+  @JvmField val rmCode: String,
+  @JvmField val mobileNumber: String,
+  @JvmField val surveyLink: String
 )
 
+data class AddUpdateMeeting(
+  @JvmField val leadId: Int,
+  @JvmField val ucidId: Int,
+  @JvmField val meetingId: Int
+)
+data class AddUpdateMeetingIndirect(
+  @JvmField val leadId: Int,
+  @JvmField val ucidId: Int,
+  @JvmField val meetingId: Int,
+  @JvmField val message: String,
+  @JvmField val status: Boolean
+)
 data class SendOtpResponse(
   @JvmField val status: Boolean,
   @JvmField val errorMessage: String
@@ -99,5 +123,9 @@ data class ChipsEvent(
   override fun toString(): String {
     return eventName
   }
-
 }
+
+data class LeadStageDetail(
+  @JvmField val leadId: String?,
+  @JvmField val interestedIn: String?
+)

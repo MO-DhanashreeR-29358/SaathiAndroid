@@ -36,7 +36,7 @@
                     android:text="@string/lbl_view_client_details"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="500"
-                    android:textSize="@dimen/_18ssp"
+                    android:textSize="@dimen/_18sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView2"
                     app:layout_constraintEnd_toStartOf="@+id/appCompatImageView3"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView2"
@@ -76,7 +76,7 @@
                         android:text="@string/lbl_react_client_name"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtClientName"
@@ -91,7 +91,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
                         android:text="@string/lbl_react_final_seg"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtFinalSegment"
@@ -116,7 +116,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -126,7 +126,7 @@
                         android:text="@string/lbl_react_sub_seg"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtsubSegment"
@@ -141,7 +141,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -151,7 +151,7 @@
                         android:text="@string/lbl_react_branch"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtBranch"
@@ -166,7 +166,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -176,7 +176,7 @@
                         android:text="@string/lbl_react_final_act_date"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtFinalActDate"
@@ -191,7 +191,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -201,7 +201,7 @@
                         android:text="@string/lbl_react_last_trade_Date"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtLastTradeDate"
@@ -216,7 +216,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -226,7 +226,7 @@
                         android:text="@string/lbl_react_crm_code"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCurrentRM"
@@ -241,7 +241,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -251,7 +251,7 @@
                         android:text="@string/lbl_react_crm_name"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtCurrentRMName"
@@ -266,7 +266,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -276,7 +276,7 @@
                         android:text="@string/lbl_react_map_advisor"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMappedAdvisor"
@@ -291,7 +291,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -301,7 +301,7 @@
                         android:text="@string/lbl_react_map_name"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMappedAdvisorName"
@@ -316,7 +316,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -326,7 +326,7 @@
                         android:text="@string/lbl_react_margin"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMargin"
@@ -341,7 +341,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -351,7 +351,7 @@
                         android:text="@string/lbl_react_margin_col"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtMarginCollection"
@@ -366,7 +366,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:layout_width="wrap_content"
@@ -376,7 +376,7 @@
                         android:text="@string/lbl_react_tgs"
                         android:textColor="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/edtTgs"
@@ -391,7 +391,7 @@
                         android:textColor="@color/colorBlack"
                         android:textCursorDrawable="@color/colorBlack"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btnClosePopup"
@@ -400,12 +400,12 @@
                         android:layout_marginTop="@dimen/_20sdp"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_20sdp"
-                        android:background="@drawable/btn_yellow_background"
+                        android:background="@drawable/button_state_bg"
                         android:fontFamily="@font/lato_reg"
                         android:text="@string/lbl_react_close"
-                        android:textColor="@color/colorBlack"
+                        android:textColor="@color/white"
                         android:textFontWeight="500"
-                        android:textSize="@dimen/_14ssp" />
+                        android:textSize="@dimen/_14sdp" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.core.widget.NestedScrollView>

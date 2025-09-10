@@ -7,6 +7,10 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     return "https://saathiuat.motilaloswaluat.com:1023/api/"
   }
 
+  override fun getSaathiIndirectUrl(): String {
+    return "https://saathiuat.motilaloswaluat.com:1024/api/"
+  }
+
   override fun getUppermostApiUrl(): String {
     return "http://122.184.137.89/Partner/PartnerMobileWebServices.asmx/"
   }
@@ -34,6 +38,14 @@ class ApiBaseUrlImpl : CommonBaseUrls {
 
   companion object {
     const val SAATHI_BASE_URL = "https://saathiuat.motilaloswaluat.com:1023/api/"
+    const val INDIRECT_SAATHI_BASE_URL = "https://saathiuat.motilaloswaluat.com:1024/api/"
+    const val EKYC_DEMAT_ACCOUNT_LINK = "https://ekycuat.motilaloswaluat.com/superjetapi?"
+    const val EKYC_ONLY_MFD_LINK = "https://ekycuat.motilaloswaluat.com/superJetApi/mfd/?"
+    const val EKYC_MFD_LINK =  "https://ekycuat.motilaloswaluat.com/superjetapi?"
+    const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/superjetapi/nonBroking/?ri2Al2H3rY/1xfyl0Y7wB3V70hFFkc0qn1nG3fyT+5e/xSTcg9OGV4YYHEa3PpYyKSjmf+SuaZOmQJoRtaCdjFEfwf6Vr0uaSS8g6VKKpAYXuB8fH7WMYMIT5R01LcK5p/1ZRud+zK2fT9xrd1BzYalFhN9m1sc8I0PcwjyaeKMv/ji+BG2TSIPkS6OysRnr"
+    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekycuat.motilaloswaluat.com/Nri/TPP?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
+    const val EKYC_INSURANCE = "https://ekycuat.motilaloswaluat.com/superjetapi/insurance/?ri2Al2H3rY/1xfyl0Y7wB3V70hFFkc0qn1nG3fyT+5e/xSTcg9OGV4YYHEa3PpYyKSjmf+SuaZOmQJoRtaCdjFEfwf6Vr0uaSS8g6VKKpAYXuB8fH7WMYMIT5R01LcK5p/1ZRud+zK2fT9xrd1BzYalFhN9m1sc8I0PcwjyaeKMv/ji+BG2TSIPkS6OysRnr"
+
   }
 
 }

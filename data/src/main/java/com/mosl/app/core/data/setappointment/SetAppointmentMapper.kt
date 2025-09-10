@@ -206,18 +206,18 @@ fun LeadViewItem.responseLeadViewItemTransform(): LeadViewItemResponse {
 
 fun Product.transformProductResponse(): ProductResponse {
   return ProductResponse(
-    groupName = groupName,
+    groupName = groupName?:"",
     status = status,
     productName = productName,
     includeInGroup = includeInGroup,
     traderCode = traderCode,
     productId = productId,
     backOfficeProductId = backOfficeProductId,
-    clientProducts = clientProducts,
+    clientProducts = clientProducts?:"",
     inApproval = inApproval,
-    approvalFieldList = approvalFieldList,
+    approvalFieldList = approvalFieldList?:"",
     isAdminMode = isAdminMode,
-    effectiveFrom = effectiveFrom,
+    effectiveFrom = effectiveFrom?:"",
     advisoryMappingTypes = advisoryMappingTypes.responseAdvisoryMappingTypesItemTransform()
   )
 }
@@ -254,7 +254,7 @@ fun List<AdvisoryMappingTypesItem>.responseAdvisoryMappingTypesItemTransform()
       status = it.status,
       active = it.active,
       lookupType = it.lookupType,
-      employeeCode = it.employeeCode,
+      employeeCode = it.employeeCode?:"",
       lookUpid = it.lookUpid,
       lookUpName = it.lookUpName,
       businessUnitId = it.businessUnitId,
@@ -574,19 +574,21 @@ fun List<LookupItem>.responseLookupItemTransform(): List<LookupItemResponse> {
 
 fun SetAppointmentResponse.responseSetAppointmentTransform(): SetAppointmentResponseData {
   return SetAppointmentResponseData(
-    repeatEveryWeekCode = repeatEveryWeekCode,
-    repeatEveryDayCode = repeatEveryDayCode,
-    repeatationStartOn = repeatationStartOn,
-    meetingAttendee = meetingAttendee.responseAppointmentAttendeeItemTransform(),
+    repeatEveryWeekCode = repeatEveryWeekCode?:"",
+    repeatEveryDayCode = repeatEveryDayCode?:"",
+    repeatationStartOn = repeatationStartOn?:"",
+    meetingAttendee =if(meetingAttendee.isNullOrEmpty()){
+      mutableListOf()
+    }else{ meetingAttendee!!.responseAppointmentAttendeeItemTransform()},
     displayType = displayType,
-    activityTypeID = activityTypeID,
-    productTypeID = productTypeID,
-    uCID = uCID,
-    repeatationEndsOn = repeatationEndsOn,
-    meetingDate = meetingDate,
-    meetingType = meetingType,
-    leadId = leadId,
-    repeatOnCode = repeatOnCode
+    activityTypeID = activityTypeID?:0,
+    productTypeID = productTypeID?:0,
+    uCID = uCID?:"",
+    repeatationEndsOn = repeatationEndsOn?:"",
+    meetingDate = meetingDate?:"",
+    meetingType = meetingType?:"",
+    leadId = leadId?:"",
+    repeatOnCode = repeatOnCode?:""
   )
 
 }

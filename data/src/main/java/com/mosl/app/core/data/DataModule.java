@@ -5,6 +5,7 @@ import com.mosl.app.core.data.interceptor.HeaderInterceptor;
 import com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor;
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.MyZoneAPIClient;
+import com.mosl.app.core.data.meta.SaathiIndrectAPIClient;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.app.core.data.util.HttpListenerFactory;
 import com.mosl.user.AuthorizationInterceptor;
@@ -29,8 +30,8 @@ public abstract class DataModule {
     }*/
 
     private static OkHttpClient.Builder createOkHttpClient(CertificatePinner pinner) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS);
+        OkHttpClient.Builder builder = new OkHttpClient.Builder().readTimeout(300, TimeUnit.SECONDS)
+                .connectTimeout(300, TimeUnit.SECONDS);
 
         if (pinner != null) {
             builder.certificatePinner(pinner);
@@ -84,6 +85,24 @@ public abstract class DataModule {
                 .addInterceptor(loggingInterceptor)
                 .eventListenerFactory(listenerFactory)
                 .addInterceptor(authorizationInterceptor)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    @SaathiIndrectAPIClient
+    static OkHttpClient provideSaathiIndirectAPIOkHttpClient(
+            @Named("BaseOkClient")  OkHttpClient okHttpClient,
+            HttpLoggingInterceptor loggingInterceptor,
+            HeaderInterceptor headerInterceptor,
+            HttpListenerFactory listenerFactory,
+            EncryptionInterceptor encryptionInterceptor
+    ) {
+        return okHttpClient.newBuilder()
+                .addInterceptor(headerInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .addInterceptor(encryptionInterceptor)
+                .eventListenerFactory(listenerFactory)
                 .build();
     }
 

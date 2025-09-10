@@ -1,5 +1,6 @@
 package com.mosl.mobile.domain.createmeeting
 
+import com.mosl.mobile.domain.RowData
 import io.reactivex.rxjava3.core.Observable
 
 interface CreateMeetingRepository {
@@ -24,6 +25,11 @@ interface CreateMeetingRepository {
     fun getSplAttendeeData(searchText: String): Observable<List<Attendee>>
     fun sendOTP(data: OTPRequestData): Observable<SendOtpResponse>
     fun saveRequest(data: String): Observable<AddUpdateMeeting>
+
+    fun getLeadStageDetailById(leadId: String, productList: List<String>): Observable<List<LeadStageDetail>>
+    fun getStageRowDatas(): Observable<List<RowData>>
+    fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>>
+
     fun getMobileList(
         ucid: String,
         leadId: String

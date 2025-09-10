@@ -2,12 +2,13 @@ apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation deps.rx.java
     implementation deps.retrofit.core
     implementation deps.gson
     implementation deps.kotlin
-    api deps.mofslArtifacts.annotation
+   // implementation files('libs\\annotations-2.0.1.jar')
 }
 
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"
+sourceCompatibility = "17"
+targetCompatibility = "17"

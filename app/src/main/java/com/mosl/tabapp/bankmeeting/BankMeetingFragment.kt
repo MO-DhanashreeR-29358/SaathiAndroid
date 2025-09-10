@@ -21,6 +21,7 @@ import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.saathi.api.model.aubankmeeting.*
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.tabapp.R
@@ -32,6 +33,7 @@ import com.mosl.tabapp.bankmeeting.model.AddedBankEmployeeModel
 import com.mosl.tabapp.bankmeeting.model.BankMeetingInput
 import com.mosl.tabapp.bankmeeting.model.MeetingClientName
 import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
+import com.mosl.tabapp.bankmeeting.otp.OTPFragment
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMAppUtil.getDateFromString
 import com.mosl.tabapp.common.CustomListPickerDialog
@@ -39,17 +41,20 @@ import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.constants.MOSLConstants
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragmentAuBankMeetingBinding
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.SEND_OTP_LABEL
 import com.mosl.tabapp.model.bankmeeting.BankBranchCodeData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData
 import com.mosl.tabapp.model.bankmeeting.SubBrokerData.getNoData
 import com.mosl.tabapp.ui.MSFDialog.alertDialog
 import org.json.JSONObject
+import timber.log.Timber
 import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BankMeetingFragment : CommonFragment() {
+class BankMeetingFragment : CommonFragment(), OTPFragment.OTPDialogListener {
     private lateinit var binding: FragmentAuBankMeetingBinding
     private var arrMeetingType = ArrayList<RowData>()
     private var arrMeetingDuration = ArrayList<RowData>()
@@ -63,13 +68,14 @@ class BankMeetingFragment : CommonFragment() {
     private lateinit var bankBranchAdapter: ArrayAdapter<RowData>
     private var subBrokerId = -1
     private var bankBranchCode = "-1"
+    private var bankId = "-1"
     private lateinit var clientNameList: ArrayList<MeetingClientName>
     private lateinit var clientNameAdapter: ClientNameAdapter
     private var addedEmployeeCount: Int = 0
     private lateinit var bankEmployeeAdapter: BankEmployeeAdapter
     private lateinit var addedBankEmployeeAdapter: AddedBankEmployeeAdapter
     private var addedBankEmployeeList = ArrayList<AddedBankEmployeeModel>()
-
+    private var isSendOTPSuccesssful = false
     override fun getLayout(): Int = R.layout.fragment_au_bank_meeting
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -146,7 +152,72 @@ class BankMeetingFragment : CommonFragment() {
                 }
                 false
             }
+
+            btnSendOtp.setOnClickListener {
+                if(bankId == "-1" || bankBranchCode == "-1") {
+                    Toast.makeText(requireContext(), "Please select Bank or Bank Branch Code.", Toast.LENGTH_LONG)
+                        .show()
+                }else{
+                    if(isSendOTPSuccesssful){
+                        Toast.makeText(requireContext(), "OTP is already verified.", Toast.LENGTH_LONG)
+                            .show()
+                    }else{
+                       if(binding.btnSendOtp.text.toString().equals(SEND_OTP_LABEL)){
+                           // send otp api call
+                           sendOTPRequest()
+                       }else if(binding.btnSendOtp.text.toString().equals(VERIFY_OTP_LABEL)){
+                           showOTPDialog()
+                       }
+                    }
+                }
+            }
         }
+    }
+
+    fun showOTPDialog() {
+        val ft =
+            requireActivity().supportFragmentManager
+                .beginTransaction()
+
+        val dialogFragment = OTPFragment.newInstance(bankId, bankBranchCode)
+        dialogFragment.setTargetFragment(this, 1)
+        dialogFragment.setListener(this)
+        dialogFragment.show(ft, "")
+    }
+
+    private fun sendOTPRequest() {
+        if (CRMAppUtil.isNetworkEnabled(requireContext())) {
+            val request = BankMeetingSendOTPRequest(
+                bankId.toInt(), bankBranchCode
+            )
+            disposable.add(saathiApi.generateBankMeetingOTP(request)
+                .compose(applyUiModel())
+                .subscribe { this.renderSendOTP(it) })
+        } else {
+            noInternetConnectionDialog()
+        }
+
+    }
+
+    private fun renderSendOTP(uiModel: UiModel<SaathiCommonResponse<String>>) {
+        toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("OTPFragment renderResendOTP showOnFailurePopup ${it.message}")
+
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            if(it.status ){
+                Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT)
+                    .show()
+                binding.btnSendOtp.setText(R.string.btn_label_verify_otp)
+            }else{
+                Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
     }
 
     private val meetingTypeListener = object : AdapterView.OnItemSelectedListener {
@@ -159,7 +230,7 @@ class BankMeetingFragment : CommonFragment() {
             try {
 //        cityCodeStr = (spCity.getSelectedItem() as RowData).key
                 binding.tvMeetingTypeError.visibility = View.GONE
-                meetingTypeSpinnerChange()
+                meetingTypeSpinnerChange(position)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
@@ -180,6 +251,7 @@ class BankMeetingFragment : CommonFragment() {
         ) {
             try {
                 binding.tvBankError.visibility = View.GONE
+                bankId = getSelectedBank().key
                 callBranchList(arrBank[position].key)
             } catch (ex: Exception) {
                 ex.printStackTrace()
@@ -678,15 +750,16 @@ class BankMeetingFragment : CommonFragment() {
         }
     }
 
-    private fun meetingTypeSpinnerChange() {
+    private fun meetingTypeSpinnerChange(intposition:Int) {
         binding.apply {
             clientNameList.clear()
-            when (spMeetingType.getMeetingType()) {
+            when (intposition) {
                 BRANCH_VISIT -> {
                     groupBankBranch.toggelVisibility(true)
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(false)
                     ilMobileNumber.toggelInputLayoutVisibility(false)
+                    btnSendOtp.visibility = View.VISIBLE
                     rvClientName.visibility = View.GONE
                     callBankList()
                     bankBranchCode = "-1"
@@ -700,6 +773,7 @@ class BankMeetingFragment : CommonFragment() {
                     ilSubject.toggelInputLayoutVisibility(true)
                     ilClientName.toggelInputLayoutVisibility(false)
                     ilMobileNumber.toggelInputLayoutVisibility(false)
+                    btnSendOtp.visibility = View.GONE
                     rvClientName.visibility = View.GONE
                     callBankList()
                     bankBranchCode = "-1"
@@ -713,6 +787,7 @@ class BankMeetingFragment : CommonFragment() {
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(true)
                     ilMobileNumber.toggelInputLayoutVisibility(true)
+                    btnSendOtp.visibility = View.GONE
                     rvClientName.visibility = View.VISIBLE
                     callBankList()
                     bankBranchCode = "-1"
@@ -726,6 +801,7 @@ class BankMeetingFragment : CommonFragment() {
                     ilSubject.toggelInputLayoutVisibility(false)
                     ilClientName.toggelInputLayoutVisibility(false)
                     ilMobileNumber.toggelInputLayoutVisibility(false)
+                    btnSendOtp.visibility = View.GONE
                     rvClientName.visibility = View.GONE
                 }
             }
@@ -852,12 +928,15 @@ class BankMeetingFragment : CommonFragment() {
         if (CRMAppUtil.isNetworkEnabled(requireContext())) {
             if (getFormInput().validateForm(binding)) {
 
+                if(binding.spMeetingType.selectedItemPosition == BRANCH_VISIT){
+                    if(!isSendOTPSuccesssful){
+                        alert("Please verify OTP to create meeting")
+                        return
+                    }
+                }
                  saathiApi.inserBankMeeting(transformInput(getFormInput()))
                     .compose(applyUiModel())
                     .subscribe(this::render)
-
-
-
             }
         } else {
             noInternetConnectionDialog()
@@ -907,6 +986,7 @@ class BankMeetingFragment : CommonFragment() {
             actvSubBroker.setText("")
             actvBankBranch.setText("")
             bankBranchCode = "-1"
+            bankId = "-1"
             subBrokerId = -1
 //      actvBankEmployee.setText("")
             setCount(0)
@@ -914,6 +994,7 @@ class BankMeetingFragment : CommonFragment() {
             etClientName.setText("")
             clientNameList.clear()
             addedBankEmployeeList.clear()
+            btnSendOtp.setText(SEND_OTP_LABEL)
         }
     }
 
@@ -974,12 +1055,13 @@ class BankMeetingFragment : CommonFragment() {
 
     companion object {
         const val BRANCH_VISIT = 1
-        const val TRAINING = 2
-        const val CLIENT_MEETING = 3
-        const val BranchVisit = "Branch Visit/ Met AU Emp."
+        const val TRAINING = 3
+        const val CLIENT_MEETING = 2
+        const val BranchVisit = "Branch Visit/ Met Bank Employee"
         const val TrainingValue = "Training"
         const val ClientMeeting = "Client Meeting"
-
+        const val SEND_OTP_LABEL = "Send OTP"
+        const val VERIFY_OTP_LABEL = "Verify OTP"
         fun listHasEmployee(
             addedAttendeeModelList: List<AddedBankEmployeeModel>?,
             empID: String
@@ -1001,6 +1083,16 @@ class BankMeetingFragment : CommonFragment() {
             return has
         }
     }
+
+    override fun onSuccessResult(status: Boolean) {
+        isSendOTPSuccesssful = status
+    }
+
+    override fun cancelClick() {
+        binding.btnSendOtp.text = SEND_OTP_LABEL
+    }
+
+
 }
 
 

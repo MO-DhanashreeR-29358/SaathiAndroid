@@ -88,7 +88,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_margin="@dimen/margin_small"
             android:text="@string/btn_label_send_otp"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -447,7 +447,6 @@
                 android:visibility="gone"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_meeting_location"
                 android:layout_width="match_parent"
@@ -468,7 +467,6 @@
                     android:layout_height="wrap_content"
                     android:entries="@array/Select" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <TextView
                 android:id="@+id/tvTravellingMode"
                 android:layout_width="match_parent"
@@ -477,7 +475,6 @@
                 android:text="@string/txt_lable_travelling_mode"
                 android:textColor="@color/text_color_personal"
                 android:textSize="@dimen/_11sdp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_travelling_mode"
                 android:layout_width="match_parent"
@@ -499,13 +496,10 @@
                     android:entries="@array/Select" />
 
             </com.google.android.material.textfield.TextInputLayout>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvTravellingList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_amount"
                 android:layout_width="match_parent"
@@ -526,8 +520,6 @@
 
                     />
             </com.google.android.material.textfield.TextInputLayout>
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -558,7 +550,6 @@
                     android:textSize="18dp"
                     android:textCursorDrawable="@null" />
             </com.google.android.material.textfield.TextInputLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_location"
                 android:layout_width="match_parent"
@@ -590,6 +581,59 @@
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnrLeadStageDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_stage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false">
+
+            <TextView
+                android:id="@+id/tvStage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_lead_creation_stage"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp" />
+
+            <Spinner
+                android:id="@+id/spStage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorTextAppearance="@style/error_appearance"
+                app:hintEnabled="false">
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_lead_creation_status_compulsory"
+                android:textColor="@color/text_color_personal"
+                android:textSize="@dimen/_11sdp"
+                android:layout_marginLeft="5dp"/>
+
+
+            <Spinner
+                android:id="@+id/spStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <TextView
@@ -761,7 +805,7 @@
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:text="@string/btn_lable_save"
-                android:textColor="@color/black" />
+                android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnReset"

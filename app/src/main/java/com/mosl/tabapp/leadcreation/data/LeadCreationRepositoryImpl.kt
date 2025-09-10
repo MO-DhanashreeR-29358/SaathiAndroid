@@ -59,13 +59,13 @@ class LeadCreationRepositoryImpl @Inject constructor(
         )
     }
 
-    fun getBankFilter(): Observable<List<BankCodeModel>> {
+    override  fun getBankFilter(): Observable<List<BankCodeModel>> {
         return saathiApi.getBankFilter().map {
             it.banckCodeTransform()
         }
     }
 
-    private fun getCategoryRowDatas(): Observable<List<RowData>> {
+    override fun getCategoryRowDatas(): Observable<List<RowData>> {
         val categoryRequest = LookupRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -75,7 +75,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(categoryRequest)
     }
 
-    private fun getClientTypeRowDatas(): Observable<List<RowData>> {
+    override fun getClientTypeRowDatas(): Observable<List<RowData>> {
         val categoryRequest = LookupRequest(
             businessUnitId = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -118,7 +118,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
             .map { it.mapToRowDatas() }
     }
 
-    private fun getSourceRowDatas(): Observable<List<RowData>> {
+    override fun getSourceRowDatas(): Observable<List<RowData>> {
         val sourceRequest = SourceListRequest(
             id = requireNotNull(
                 userManager.getUser()?.currentBusinessProfile?.businessUnitId,
@@ -128,7 +128,7 @@ class LeadCreationRepositoryImpl @Inject constructor(
             .map { it.mapToRowDataList() }
     }
 
-    private fun getSTDCodeRowDatas(): Observable<List<RowData>> {
+    override fun getSTDCodeRowDatas(): Observable<List<RowData>> {
         return saathiApi.getSTDCode()
             .map { it.stdCodeItemsToRowDatas() }
     }
@@ -277,9 +277,50 @@ class LeadCreationRepositoryImpl @Inject constructor(
         return getRowDatas(request)
     }
 
+    override fun getStandardRemarkList(lookupTypeId : Int): Observable<List<RowData>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = lookupTypeId
+        )
+        return saathiApi.getAllLookup(request)
+            .map { it.mapToRowDatasWithNoDefault() }
+    }
+
     override fun getChipsList(): Observable<List<RowData>> {
         return saathiApi.getChipsList(ChipsEventsRequest(userManager.getUser()!!.employeeCode))
             .map { it.chipsItemsToRowDatas() }
+    }
+
+    override fun getSectorList(): Observable<List<LookupItem>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.SECTOR
+        )
+        return saathiApi.getAllLookup(request)
+    }
+
+    override fun getDesignationList(): Observable<List<LookupItem>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.DESIGNATION
+        )
+        return saathiApi.getAllLookup(request)
+    }
+
+    override fun getNetworthList(): Observable<List<LookupItem>> {
+        val request = LookupRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            lookupTypeId = MOSLConstants.NETWORTH
+        )
+        return saathiApi.getAllLookup(request)
     }
 
     override fun getStateRowDatas(selectedCountry: String): Observable<List<RowData>> {

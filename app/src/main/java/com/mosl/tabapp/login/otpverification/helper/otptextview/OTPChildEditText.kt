@@ -4,7 +4,7 @@ package com.mosl.tabapp.login.otpverification.helper.otptextview
 import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
-import com.mosl.ekycexpress.login.R
+import com.mosl.tabapp.R
 
 internal class OTPChildEditText : androidx.appcompat.widget.AppCompatEditText {
 

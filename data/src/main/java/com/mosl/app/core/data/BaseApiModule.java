@@ -1,24 +1,34 @@
 package com.mosl.app.core.data;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
 import com.mosl.app.core.data.meta.InternalAPIClient;
 import com.mosl.app.core.data.meta.InternalAPIRetrofit;
 import com.mosl.app.core.data.meta.MyZoneAPIClient;
 import com.mosl.app.core.data.meta.MyZoneAPIRetrofit;
+import com.mosl.app.core.data.meta.SaathiIndirectAPIRetrofit;
+import com.mosl.app.core.data.meta.SaathiIndrectAPIClient;
 import com.mosl.mobile.data.util.CommonBaseUrls;
 import com.mosl.saathi.api.MyZoneApi;
 import com.mosl.saathi.api.SaathiApi;
+import com.mosl.saathi.api.SaathiIndirectApi;
+
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module public abstract class BaseApiModule {
 
     @Provides @Singleton
     static SaathiApi provideSaathiApi(@InternalAPIClient OkHttpClient internalOkClient,
         @InternalAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+        Gson objGSOn =new GsonBuilder().disableHtmlEscaping().setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE).create();
         return builder.client(internalOkClient).baseUrl(apiBaseUrls.getSaathiApiUrl())
+                .addConverterFactory( GsonConverterFactory.create(objGSOn))
             .build()
             .create(SaathiApi.class);
     }
@@ -29,5 +39,15 @@ import retrofit2.Retrofit;
         return builder.client(internalOkClient).baseUrl(apiBaseUrls.getMyZoneApiUrl())
                 .build()
                 .create(MyZoneApi.class);
+    }
+
+    @Provides @Singleton
+    static SaathiIndirectApi provideSaathiIndirectApi(@SaathiIndrectAPIClient OkHttpClient internalOkClient,
+                                                      @SaathiIndirectAPIRetrofit Retrofit.Builder builder, CommonBaseUrls apiBaseUrls) {
+        Gson objGSOn =new GsonBuilder().disableHtmlEscaping().create();
+        return builder.client(internalOkClient).baseUrl(apiBaseUrls.getSaathiIndirectUrl())
+                .addConverterFactory( GsonConverterFactory.create(objGSOn))
+                .build()
+                .create(SaathiIndirectApi.class);
     }
 }

@@ -60,7 +60,8 @@ data class LeadDetail(
     @JvmField val bandhanBankEmpCode: String,
     @JvmField val auBankName: String,
     @JvmField val auBankBranchCode: String,
-    @JvmField val isStageCompleted: Int
+    @JvmField val isStageCompleted: Int,
+    @JvmField val standardRemarksId: Int
 )
 
 data class LeadProductMap(

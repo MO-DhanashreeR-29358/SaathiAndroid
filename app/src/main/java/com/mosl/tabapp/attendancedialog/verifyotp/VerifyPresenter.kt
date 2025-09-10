@@ -22,8 +22,7 @@ class VerifyPresenter @Inject constructor(
 
   override fun start() {
 //    view.setOtp(verifyAction.otp.toString())
-    val otpReceivedObs = view.onOtpReceived()
-        .share()
+
 
     val validOtpEntered = view.onOtpTextChanged()
         .map(CharSequenceToString)
@@ -32,7 +31,6 @@ class VerifyPresenter @Inject constructor(
 
     disposable.add(validOtpEntered.subscribe { view.renderOtpEntered() })
 
-    disposable.add(otpReceivedObs.subscribe { view.setOtp(it.toString()) })
 
     disposable.add(view.onResendOtpClicked()
         .switchMap {
@@ -62,7 +60,6 @@ class VerifyPresenter @Inject constructor(
             .map { view.getOtp() }
             .filter { it.length == OtpLength }
             .map { it.toInt() }
-            .mergeWith(otpReceivedObs)
             .map { VerifyAction(verifyAction.requestId, verifyAction.mobileNumber, view.getOtp()) }
             .switchMap {
               repository.verifyOtp(it)

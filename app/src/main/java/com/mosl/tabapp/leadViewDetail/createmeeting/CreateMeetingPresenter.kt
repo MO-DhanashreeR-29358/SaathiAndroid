@@ -2,11 +2,20 @@ package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.os.Bundle
 import com.mosl.app.core.base.BasePresenter
+import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.INTERESTEDIN
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGADDRESSID
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGDURATION
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGOBJECTIVE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.commons.rx.MapStringIsBlank
+import com.mosl.commons.rx.addTo
 import com.mosl.mobile.domain.createmeeting.CreateMeetingData
 import com.mosl.mobile.domain.createmeeting.CreateMeetingRepository
 import com.mosl.mobile.domain.createmeeting.OTPRequestData
+import com.mosl.mobile.domain.createmeeting.SurveyLinkData
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_LEAD_ID
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingFragment.Companion.ARG_UCID
@@ -19,7 +28,6 @@ import com.mosl.tabapp.navigation.NavigationConstants
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.kotlin.addTo
 import timber.log.Timber
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
@@ -28,7 +36,8 @@ class CreateMeetingPresenter @Inject constructor(
     view: CreateMeetingView,
     val repository: CreateMeetingRepository,
     private val createMeetingData: CreateMeetingData,
-    val screenNavigator: ScreenNavigatorImpl
+    val screenNavigator: ScreenNavigatorImpl,
+    val userManager: UserManager
 ) : BasePresenter<CreateMeetingView>(view) {
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
@@ -37,6 +46,54 @@ class CreateMeetingPresenter @Inject constructor(
                     .compose(applyUiModel())
             }
             .subscribe(view::render)
+            .addTo(disposable)
+
+        view.onActivityTypeCall()
+            .switchMap {
+                repository.getLookup(ACTIVITYTYPE)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderActivityTypeList)
+            .addTo(disposable)
+
+        view.onMeetingDurationApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGDURATION)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingDurationList)
+            .addTo(disposable)
+
+        view.onInterestedInApiCall()
+            .switchMap {
+                repository.getLookup(INTERESTEDIN)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderInterestedInList)
+            .addTo(disposable)
+
+        view.onMeetingObjectiveApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGOBJECTIVE)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingObjectiveList)
+            .addTo(disposable)
+
+        view.onTravellingModeApiCall()
+            .switchMap {
+                repository.getLookup(TRAVELLINGMODEID, true)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderTravellingModeList)
+            .addTo(disposable)
+
+        view.onMeetingAddressApiCall()
+            .switchMap {
+                repository.getLookup(MEETINGADDRESSID, true)
+                    .compose(applyUiModel())
+            }
+            .subscribe(view::renderMeetingAddressList)
             .addTo(disposable)
 
         val activityTypeSelectedObs = view.onActivityTypeSelected()
@@ -84,9 +141,8 @@ class CreateMeetingPresenter @Inject constructor(
             .addTo(disposable)
 
         productSelectedObs.filter { it != CreateMeetingConstants.SELECT_PRODUCT }
-            .subscribe {
-                view.getSelectedProduct()
-                    ?.let { it1 -> view.renderOnProductClick(it1) }
+            .map {view.getSelectedProduct()}
+            .subscribe {view.renderOnProductClick(it)
             }
             .addTo(disposable)
 
@@ -96,6 +152,11 @@ class CreateMeetingPresenter @Inject constructor(
                     ?.let { it1 -> view.renderOnTravellingModeClick(it1) }
             }
             .addTo(disposable)
+
+        view.onProductDeleteEventFired()
+            .subscribe {
+                view.renderProductDelete(it.id)
+            }.addTo(disposable)
 
         view.onDatePicker()
             .subscribe {
@@ -351,6 +412,35 @@ class CreateMeetingPresenter @Inject constructor(
                 view.renderLocationSave(it.data)
             }
             .addTo(disposable)
+
+        view.onLeadStageDetailEventFired()
+            .switchMap {
+                repository.getLeadStageDetailById(createMeetingData.leadId, view.getProductIdList())
+                    .compose(applyUiModel())
+            }.subscribe {
+                view.renderLeadStageDetail(it)
+            }.addTo(disposable)
+
+        view.onStageCall()
+            .switchMap {
+                repository.getStageRowDatas()
+                    .compose(applyUiModel())
+            }
+            .subscribe{view.renderInitialStageList(it)}
+            .addTo(disposable)
+
+        view.onStageSelected()
+            .filter(InvalidSelectionPredicate)
+            .map { view.getSelectedStage() }
+            .switchMap {
+                repository.getStatusRowDatas(it.key)
+                    .compose(applyUiModel())
+            }
+            .subscribe {
+                view.renderStatusOnStageSelection(it)
+            }
+            .addTo(disposable)
+
   }
 
     private fun getInputData(): MeetingApptModel {
@@ -412,6 +502,8 @@ class CreateMeetingPresenter @Inject constructor(
         data.touchedUntouchedId = view.getSelectedTouchedUntouched()?.lookUpID.toString()
         data.feedbackId = view.getSelectedFeedback()?.lookUpID.toString()
         data.meetingEventId = view.getSelectedEvent()
+        data.leadStageId = view.getSelectedStage().key.toInt()
+        data.leadStatusId = view.getSelectedStatus().key.toInt()
         return data
     }
 

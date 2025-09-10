@@ -104,7 +104,7 @@ class QRCodeFragment : CommonFragment(), QRCodeView {
             try {
                 Glide.with(binding.imgQRCode.context)
                     .load(imageUrl.replace("\"","").trim())
-                    .error(R.drawable.ekyc_ic_close_red_24)
+                    .error(R.drawable.ic_closed)
                     .listener(glideCallback)
                     .into(binding.imgQRCode)
             }catch (e: Exception){

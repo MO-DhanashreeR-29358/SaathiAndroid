@@ -16,7 +16,24 @@ import io.reactivex.rxjava3.core.Observable
 
 interface LeadCreationView : BaseView {
   fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>)
+  fun renderCategoryList(uiModel: UiModel<List<RowData>>)
+  fun onClientTypeCall(): Observable<CallClientType>
+  fun renderClientTypeList(uiModel: UiModel<List<RowData>>)
+  fun onProfessionCall(): Observable<CallProfession>
+  fun renderProfessionList(uiModel: UiModel<List<RowData>>)
 
+  fun onInterestedInCall(): Observable<CallInterestedIn>
+  fun renderInterestedInList(uiModel: UiModel<List<RowData>>)
+  fun onSourceCall(): Observable<CallSource>
+  fun renderSourceList(uiModel: UiModel<List<RowData>>)
+  fun onStageCall(): Observable<CallStage>
+  fun renderInitialStageList(uiModel: UiModel<List<RowData>>)
+  fun onCountryCall(): Observable<CallCountry>
+  fun renderCountryList(uiModel: UiModel<List<RowData>>)
+  fun onBankCall(): Observable<CallBankFilter>
+  fun renderBankList(uiModel: UiModel<List<BankCodeModel>>)
+  fun onSTDCodeCall(): Observable<CallSTDCode>
+  fun renderSTDCodeList(uiModel: UiModel<List<RowData>>)
   fun onPrimaryCheckboxChanged(): Observable<Boolean>
   fun renderOnPrimaryCheckboxChanges(isChecked: Boolean)
 

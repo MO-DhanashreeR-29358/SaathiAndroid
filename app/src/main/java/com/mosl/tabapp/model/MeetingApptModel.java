@@ -94,6 +94,26 @@ public class MeetingApptModel implements Serializable {
     private String feedbackId;
     private String meetingEventId;
 
+    private int leadStageId = 0;
+
+    private int leadStatusId = 0;
+
+    public int getLeadStageId() {
+        return leadStageId;
+    }
+
+    public void setLeadStageId(int leadStageId) {
+        this.leadStageId = leadStageId;
+    }
+
+    public int getLeadStatusId() {
+        return leadStatusId;
+    }
+
+    public void setLeadStatusId(int leadStatusId) {
+        this.leadStatusId = leadStatusId;
+    }
+
     public String getMeetingEventId() {
         return meetingEventId;
     }
@@ -510,12 +530,14 @@ public class MeetingApptModel implements Serializable {
         json += ",\"TouchedUntouchedID\":" + getTouchedUntouchedId();
         json += ",\"FeedbackID\":" + getFeedbackId();
         json += ",\"MeetingEventId\":\"" + getMeetingEventId()+ "\"";
+        json += ",\"LeadMeetingStageID\":\"" + getLeadStageId()+ "\"";
+        json += ",\"LeadMeetingStatusID\":\"" + getLeadStatusId()+ "\"";
         json += "}";
 
         return json;
     }
 
-    private String getProductJson() {
+   /* private String getProductJson() {
         String json = "[";
         for (CreateMeetingProductModel model : productList) {
             String meetingJson = model.getId();
@@ -525,6 +547,23 @@ public class MeetingApptModel implements Serializable {
         json = json.substring(0, json.length() - 1); //remove lash comma
         json += "]";
         return json;
+    }*/
+
+    private String getProductJson() {
+       if (productList == null || productList.isEmpty()) {
+            return "[]"; // Return empty array JSON if no products
+        }
+
+        StringBuilder json = new StringBuilder("[");
+        for (CreateMeetingProductModel model : productList) {
+            // Assuming getId() returns the product ID as a string,
+            // you need to add quotes around it for valid JSON strings:
+            json.append(model.getId()).append(",");
+        }
+
+        json.deleteCharAt(json.length() - 1); // Remove last comma
+        json.append("]");
+        return json.toString();
     }
 
     private String getTravellingJson() {

@@ -17,7 +17,7 @@ import androidx.core.content.FileProvider
 import base.fragments.BaseFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mosl.app.core.utils.alert
-import com.mosl.ekycexpress.R
+import com.mosl.tabapp.R
 import com.yalantis.ucrop.UCrop
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
@@ -164,35 +164,10 @@ class SaathiFileUploader(private val fragment:com.mosl.app.coreui.base.BaseFragm
                             }
                         }
                     }
-                    UCrop.REQUEST_CROP -> {
-                        if (resultCode == Activity.RESULT_OK) {
-                            data?.let {
-                                val resultUri = UCrop.getOutput(it)
-                                resultUri?.let { uri ->
-                                    docTypeStr = docTypePref.getString(DOCTYPE_PREF_KEY, "")
-                                        .toString()
-                                    subject.onNext(
-                                        if (docTypeStr.isEmpty()) {
-                                            SaathiUploadUiSubject.SelectedFileEvent(uri.toString())
-                                        } else {
-                                            SaathiUploadUiSubject.SelectedImageEvent(
-                                                uri.toString(),
-                                                docTypeStr
-                                            )
-                                        }
-                                    )
-//                                    clearPref()
-                                }
-                            }
-                        } else if (resultCode == UCrop.RESULT_ERROR) {
-                            data?.let {
-                                val error = UCrop.getError(it)
-                                Timber.d("onCaptureImageError---> $error")
-                            }
-                        }
+
                     }
                 }
-            }
+
         } catch (e: Exception) {
             Timber.e(e)
             context.alert("Please use Add From Device for better experience")
@@ -245,21 +220,13 @@ class SaathiFileUploader(private val fragment:com.mosl.app.coreui.base.BaseFragm
     }
 
     private fun startCrop(imageUri: Uri?) {
-        val destinationFileName: String =
-            SAMPLE_CROPPED_IMAGE_NAME
-        if (imageUri != null) {
-            UCrop.of(
-                imageUri,
-                Uri.fromFile(File(context.cacheDir, destinationFileName))
-            )
-                .start(fragment.requireContext(), fragment)
-        }
+
 
     }
 
     private fun alert() {
         MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.alert_dialog_title)
+            .setTitle(R.string.motilal_oswal)
             .setMessage(FILE_LARGE_MESSAGE)
             .setNegativeButton("Ok", null)
             .setCancelable(false)

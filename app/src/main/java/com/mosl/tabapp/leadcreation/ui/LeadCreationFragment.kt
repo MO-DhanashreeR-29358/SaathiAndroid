@@ -164,6 +164,10 @@ class LeadCreationFragment : CommonFragment(),
         dataActionSubject.onNext(Fetch)
     }
 
+    override fun onFragmentResume() {
+        super.onFragmentResume()
+        setAppTitle(R.string.page_title_lead_creation)
+    }
     private fun createDefaultSelectList() {
         selectedList.add(LeadCreationRepositoryImpl.SELECT_ROW_DATA)
     }
@@ -178,6 +182,7 @@ class LeadCreationFragment : CommonFragment(),
     }
 
     private fun setupView() {
+        toggleProgressBar(true)
         setupScrollView()
         setupAllianceSeconadaryRM()
         setupWealthManagementCodeSeconadaryRM()
@@ -534,8 +539,6 @@ class LeadCreationFragment : CommonFragment(),
             }
 
         }
-
-
 
 
 
@@ -933,22 +936,35 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderLeadCreationPageData(uiModel: UiModel<LeadCreationPageData>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+            //showOnFailurePopup(it)
+        }
         uiModel.onSuccess { data ->
-            binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
-            binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
-            bankAdapter.setSpinnerData(binding.spBank, data.listBank)
-            binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
-            var list = data.interestInRowDatas.toMutableList()
+            //binding.spCategory.setSpinnerData(categoryAdapter, data.categoryRowDatas)
+           // binding.spClientType.setSpinnerData(clientTypeAdapter, data.clientTyoeRowDatas)
+           // bankAdapter.setSpinnerData(binding.spBank, data.listBank)
+            //binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
+           /* var list = data.interestInRowDatas.toMutableList()
             list.removeIf { it.value == "Equity" }
             list.removeIf { it.value == "Only MFD" }
-            binding.spInterestIn.setSpinnerData(interestInAdapter, list)
-            binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
-            binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
-            binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
-            binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
-            binding.spStdCode.setSpinnerData(stdCodeAdapter, data.countryStdCodeList)
+            binding.spInterestIn.setSpinnerData(interestInAdapter, list)*/
+           // binding.spSource.setSpinnerData(sourceAdapter, data.sourceRowDatas)
+            //binding.spStage.setSpinnerData(stageAdapter, data.stageRowDatas)
+           // binding.spCountry.setSpinnerData(countryAdapter, data.countryRowDatas)
+          //  binding.spOffCountry.setSpinnerData(countryAdapterOff, data.countryRowDatas)
+           // binding.spStdCode.setSpinnerData(stdCodeAdapter, data.countryStdCodeList)
 
+
+        }
+    }
+
+    override fun renderCategoryList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallClientType)
+        }
+        uiModel.onSuccess { data ->
+            binding.spCategory.setSpinnerData(categoryAdapter, data)
             binding.spCategory.setOnItemSelectedListener(object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
                     when (getSelectedCategory().value) {
@@ -962,8 +978,23 @@ class LeadCreationFragment : CommonFragment(),
                         }
                     }
                 }
-               override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
             })
+            subject.onNext(CallClientType)
+        }
+    }
+
+    override fun onClientTypeCall(): Observable<CallClientType> {
+       return subject.ofType()
+    }
+
+    override fun renderClientTypeList(uiModel: UiModel<List<RowData>>) {
+       // toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallProfession)
+        }
+        uiModel.onSuccess { data ->
+            binding.spClientType.setSpinnerData(clientTypeAdapter, data)
 
             binding.spClientType.setOnItemSelectedListener(object : OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View, pos: Int, id: Long) {
@@ -997,6 +1028,126 @@ class LeadCreationFragment : CommonFragment(),
                 }
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
             })
+
+            subject.onNext(CallProfession)
+        }
+    }
+
+    override fun onProfessionCall(): Observable<CallProfession> {
+        return subject.ofType()
+    }
+
+    override fun renderProfessionList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallInterestedIn)
+        }
+        uiModel.onSuccess { data ->
+            binding.spProfession.setSpinnerData(professionAdapter, data)
+
+            subject.onNext(CallInterestedIn)
+        }
+    }
+
+    override fun onInterestedInCall(): Observable<CallInterestedIn> {
+        return subject.ofType()
+    }
+
+    override fun renderInterestedInList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallSource)
+        }
+        uiModel.onSuccess { data ->
+            var list = data.toMutableList()
+            list.removeIf { it.value == "Equity" }
+            list.removeIf { it.value == "Only MFD" }
+            list.removeIf { it.value == "Only Mutual Fund Distribution" }
+            list.removeIf { it.value == "Equity & Mutual Fund Distribution" }
+
+            binding.spInterestIn.setSpinnerData(interestInAdapter, list)
+
+            subject.onNext(CallSource)
+        }
+    }
+
+    override fun onSourceCall(): Observable<CallSource> {
+        return subject.ofType()
+    }
+
+    override fun renderSourceList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallStage)
+        }
+        uiModel.onSuccess { data ->
+            binding.spSource.setSpinnerData(sourceAdapter, data)
+
+            subject.onNext(CallStage)
+        }
+    }
+
+    override fun onStageCall(): Observable<CallStage> {
+        return  subject.ofType()
+    }
+
+    override fun renderInitialStageList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallCountry)
+        }
+        uiModel.onSuccess { data ->
+            binding.spStage.setSpinnerData(stageAdapter, data)
+
+            subject.onNext(CallCountry)
+        }
+    }
+
+    override fun onCountryCall(): Observable<CallCountry> {
+        return  subject.ofType()
+    }
+
+    override fun renderCountryList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallBankFilter)
+        }
+        uiModel.onSuccess { data ->
+            binding.spCountry.setSpinnerData(countryAdapter, data)
+            binding.spOffCountry.setSpinnerData(countryAdapterOff, data)
+            subject.onNext(CallBankFilter)
+        }
+    }
+
+    override fun onBankCall(): Observable<CallBankFilter> {
+        return  subject.ofType()
+    }
+
+    override fun renderBankList(uiModel: UiModel<List<BankCodeModel>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            subject.onNext(CallSTDCode)
+        }
+        uiModel.onSuccess { data ->
+            bankAdapter.setSpinnerData(binding.spBank, data)
+
+            subject.onNext(CallSTDCode)
+        }
+    }
+
+    override fun onSTDCodeCall(): Observable<CallSTDCode> {
+        return  subject.ofType()
+    }
+
+    override fun renderSTDCodeList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            toggleProgressBar(false)
+        }
+        uiModel.onSuccess { data ->
+            binding.spStdCode.setSpinnerData(stdCodeAdapter, data)
+            toggleProgressBar(false)
+
         }
     }
 
@@ -1537,7 +1688,7 @@ class LeadCreationFragment : CommonFragment(),
     override fun renderBranchFilter(uiModel: UiModel<List<BranchCodeModel>>) {
         toggleProgress(uiModel.inProgress)
         uiModel.onFailure { error ->
-            showOnFailurePopup(error)
+           // showOnFailurePopup(error)
         }
 
         uiModel.onSuccess {
@@ -1577,7 +1728,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderStageList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spStage.setSpinnerData(stageAdapter, it)
         }
@@ -1589,7 +1741,8 @@ class LeadCreationFragment : CommonFragment(),
 
     override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure { //showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spAccountType.setSpinnerData(accountTypeAdapter, it)
         }
@@ -1757,7 +1910,8 @@ class LeadCreationFragment : CommonFragment(),
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+          //  showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             binding.spChips.setSpinnerData(chipsAdapter, it)

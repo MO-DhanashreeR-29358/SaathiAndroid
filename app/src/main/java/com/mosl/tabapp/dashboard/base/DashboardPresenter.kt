@@ -1,9 +1,13 @@
 package com.mosl.tabapp.dashboard.base
 
+import android.annotation.SuppressLint
+import android.content.SharedPreferences
+import android.util.Log
 import com.mosl.app.core.base.BasePresenter
 import com.mosl.commons.rx.InvalidSelectionPredicate
 import com.mosl.mobile.domain.dashboard.DashboardRepository
 import com.mosl.mobile.domain.dashboard.DashboardRequestData
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.dashboard.base.DashboardUiEvent.*
 import com.mosl.tabapp.ekyc.EkycNavigator
 import com.mosl.tabapp.navigation.NavigationConstants
@@ -17,8 +21,10 @@ class DashboardPresenter @Inject constructor(
     view: DashboardView,
     val repository: DashboardRepository,
     val navigator: ScreenNavigatorImpl,
-    val ekycNavigator: EkycNavigator
+    val ekycNavigator: EkycNavigator,
+    val userManager: UserManager
 ) : BasePresenter<DashboardView>(view) {
+    @SuppressLint("WrongConstant")
     override fun start() {
         Observable.merge(onFetchCalled(), onRetryCalled())
             .map { getDashboardRequest() }
@@ -64,7 +70,10 @@ class DashboardPresenter @Inject constructor(
         view.onLeadCreationClicked()
             .subscribe {
                 view.collapseActionsMenu()
-                navigator.openPage(NavigationConstants.NAVIGATE_TO_LEAD_CREATION.toString(), true)
+                navigator.openPage(
+                    NavigationConstants.NAVIGATE_TO_LEAD_CREATION.toString(),
+                    true
+                )
             }
             .addTo(disposable)
 

@@ -23,7 +23,7 @@
                 android:id="@+id/appCompatTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/clr_heading"
+                android:background="@color/titleBarBackground"
                 android:fontFamily="@font/roboto_reg"
                 android:paddingTop="@dimen/_5sdp"
                 android:paddingBottom="@dimen/_5sdp"
@@ -31,7 +31,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textFontWeight="500"
-                android:textSize="@dimen/_16ssp"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
                     android:checked="true"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radio_btn_rm_request"
@@ -67,7 +67,7 @@
                     android:text="RM Change Request"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatRadioButton
                     android:id="@+id/radio_btn_date_request"
@@ -78,7 +78,7 @@
                     android:text="Activation Date Change Request"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </RadioGroup>
 
@@ -109,7 +109,7 @@
                     android:text="@string/lbl_enter_client_code"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -137,7 +137,7 @@
                     android:hint="@string/lbl_search_client"
                     android:text=""
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/imgSearchClient"
@@ -155,7 +155,7 @@
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:text=""
                 android:visibility="gone"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_14sdp"
                 android:textColor="@color/clr_astrik"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -193,7 +193,7 @@
                     android:text="@string/lbl_view_client"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="500"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -228,7 +228,7 @@
                     android:text="@string/lbl_select_file"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -254,7 +254,7 @@
                     android:text="@string/lbl_upload"
                     android:textColor="@color/colorBlack"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp"
+                    android:textSize="@dimen/_14sdp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/appCompatImageView2"
                     app:layout_constraintStart_toStartOf="parent"
@@ -299,7 +299,7 @@
                     android:text="@string/lbl_remarkt"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -323,7 +323,7 @@
                 android:textAlignment="textStart"
                 android:textColor="@color/colorBlack"
                 android:textFontWeight="400"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat5" />
@@ -355,7 +355,7 @@
                     android:text="@string/lbl_actual_date"
                     android:textColor="@color/clr_text_color"
                     android:textFontWeight="400"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -373,7 +373,7 @@
                 android:hint="@string/lbl_actual_hint"
                 android:textColor="@color/colorBlack"
                 android:textFontWeight="400"
-                android:textSize="@dimen/_14ssp"
+                android:textSize="@dimen/_14sdp"
                 android:padding="@dimen/_5sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -396,12 +396,12 @@
                     android:layout_height="@dimen/_40sdp"
                     android:layout_marginEnd="@dimen/_5sdp"
                     android:layout_weight="1"
-                    android:background="@drawable/btn_yellow_background"
+                    android:background="@drawable/button_state_bg"
                     android:fontFamily="@font/lato_reg"
                     android:text="@string/lead_detail_button_update"
-                    android:textColor="@color/colorBlack"
+                    android:textColor="@color/white"
                     android:textFontWeight="500"
-                    android:textSize="@dimen/_14ssp" />
+                    android:textSize="@dimen/_14sdp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_reset_lead"

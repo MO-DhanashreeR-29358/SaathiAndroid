@@ -12,8 +12,6 @@ class VerifyContract {
     fun onConfirmClicked(): Observable<Unit>
     fun onDoneClicked(): Observable<Int>
 
-    fun onOtpReceived(): Observable<Int>
-
     fun onOtpTextChanged(): Observable<CharSequence>
     fun getOtp(): String
 
@@ -24,7 +22,6 @@ class VerifyContract {
     fun renderSubmit(uiModel: UiModel<User>)
     fun showPopup()
     fun renderResendOtp(uiModel: UiModel<GenerateOTP>)
-    fun setOtp(otp: String)
   }
 
   companion object {

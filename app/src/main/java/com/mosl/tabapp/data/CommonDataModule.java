@@ -5,15 +5,16 @@ import android.content.Context;
 import com.mosl.app.core.data.RepositoryAliasProviders;
 import com.mosl.app.core.data.attendance.AttendanceRepositoryImpl;
 import com.mosl.app.core.data.location.LocationRepositoryImpl;
+import com.mosl.app.core.data.saathiIndirect.dashboard.cncfoco.CncFocoRepositoryImpl;
 import com.mosl.app.core.data.util.BaseDataModule;
 import com.mosl.app.core.data.util.CertPinProvider;
 import com.mosl.mobile.domain.attendance.AppInfo;
 import com.mosl.mobile.domain.attendance.AttendanceRepository;
 import com.mosl.mobile.data.util.CommonBaseUrls;
 import com.mosl.mobile.domain.location.LocationRepository;
+import com.mosl.mobile.domain.saathiIndirect.dashboard.cncfoco.CncFocoRepository;
 import com.mosl.tabapp.BuildConfig;
 import com.mosl.tabapp.CertPinProviderImpl;
-import com.mosl.tabapp.EkycAPIModule;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSource;
 import com.mosl.tabapp.drawermenu.data.source.MenuDataSourceImpl;
@@ -21,6 +22,12 @@ import com.mosl.tabapp.leadcreation.data.LeadCreationRepositoryImpl;
 import com.mosl.tabapp.leadcreation.domain.LeadCreationRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepository;
 import com.mosl.tabapp.leaddetail.LeadDetailRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.data.IndirectLeadCreationRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.LeadCreation.domain.IndirectLeadCreationRepository;
+import com.mosl.mobile.domain.saathiIndirect.dashboard.FocoRepository;
+import com.mosl.app.core.data.saathiIndirect.dashboard.FocoRepositoryImpl;
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository;
+import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepositoryImpl;
 import com.mosl.tabapp.urls.ApiBaseUrlImpl;
 
 import dagger.Binds;
@@ -28,7 +35,7 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
-@Module(includes = { BaseDataModule.class, RepositoryAliasProviders.class, EkycAPIModule.class })
+@Module(includes = { BaseDataModule.class, RepositoryAliasProviders.class })
 public abstract class CommonDataModule {
     @Provides
     @Singleton
@@ -48,11 +55,22 @@ public abstract class CommonDataModule {
     @Binds abstract LeadCreationRepository bindLeadCreationRepository(
         LeadCreationRepositoryImpl repository);
 
+    @Binds abstract IndirectLeadCreationRepository bindIndirectLeadCreationRepository(
+            IndirectLeadCreationRepositoryImpl repository);
+
+    @Binds abstract IndirectLeadDetailRepository bindIndirectLeadDetailRepository(
+            IndirectLeadDetailRepositoryImpl repository);
+
     @Binds abstract LeadDetailRepository bindLeadDetailRepository(
         LeadDetailRepositoryImpl repository);
 
     @Binds abstract AttendanceRepository bindAttendanceRepository(
             AttendanceRepositoryImpl repository);
+
+    @Binds abstract FocoRepository bindFocoDashboardRepository(
+            FocoRepositoryImpl repository);
+
+    @Binds abstract CncFocoRepository bindCncFocoRepository(CncFocoRepositoryImpl repository);
 
     @Singleton
     @Provides

@@ -38,10 +38,12 @@ class BaseMenuItem(
     txtRoot.setText(baseMenu.label)
 
     if (this.isSelected) {
+      txtRoot.setTextColor(ContextCompat.getColor(context, R.color.white))
       viewBinding.llListItem.setBackgroundColor(
-          ContextCompat.getColor(context, R.color.flush_orange)
+          ContextCompat.getColor(context, R.color.titleBarBackground)
       )
     } else {
+      txtRoot.setTextColor(ContextCompat.getColor(context, R.color.black))
       viewBinding.llListItem.setBackgroundColor(
           ContextCompat.getColor(context, R.color.light_white)
       )

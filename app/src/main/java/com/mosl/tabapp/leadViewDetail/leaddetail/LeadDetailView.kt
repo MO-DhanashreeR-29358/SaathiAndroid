@@ -4,12 +4,12 @@ import android.view.MotionEvent
 import com.mosl.app.core.base.BaseView
 import com.mosl.commons.data.UiModel
 import com.mosl.mobile.domain.leadviewdetail.leaddetail.LeadDetailPageData.LeadDetailArgument
+import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
 import com.mosl.tabapp.leadcreation.domain.LeadDetailPageData
 import com.mosl.tabapp.leadcreation.domain.SearchReferee
-import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
 import com.mosl.tabapp.leaddetail.*
 import io.reactivex.rxjava3.core.Observable
 
@@ -92,6 +92,33 @@ interface LeadDetailView : BaseView {
     fun renderOnRefereeNameChange(uiModel: UiModel<SearchReferee>)
 
     fun render(uiModel: UiModel<LeadDetailPageData>)
+    fun renderProfileList(uiModel: UiModel<List<RowData>>)
+    fun onBrokingProfileEventFired() : Observable<CallBrokingProfile>
+    fun renderBrokingProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onIpProfileEventFired() : Observable<CallIpProfile>
+    fun renderIpProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onFinalProfileEventFired() : Observable<CallFinalProfile>
+    fun renderFinalProfileList(uiModel: UiModel<List<RowData>>)
+
+    fun onInterestedInEventFired() : Observable<CallInterestedIn>
+    fun renderInterestedInList(uiModel: UiModel<List<RowData>>)
+    fun onCountyListEventFired() : Observable<CallCountry>
+    fun renderCountryList(uiModel: UiModel<List<RowData>>)
+
+    fun onSectorListEventFired() : Observable<CallSectorList>
+    fun renderSectorList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onDesignationListEventFired() : Observable<CallDesignationList>
+    fun renderDesignationList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onNetworthListEventFired() : Observable<CallNetworthList>
+    fun renderNetworthList(uiModel: UiModel<List<LookupItem>>)
+
+    fun onChipListEventFired() : Observable<CallEventChipList>
+    fun renderChipList(uiModel: UiModel<List<RowData>>)
+
     fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>)
 
     fun onUpdateProfileEventFired(): Observable<UpdateProfile>
@@ -99,6 +126,10 @@ interface LeadDetailView : BaseView {
     fun renderProductSpecial(uiModel: UiModel<List<LeadEmployees>>)
     fun addProductEventFired(): Observable<AddProductEvent>
     fun renderAddProduct(uiModel: UiModel<List<AddProductData>>)
+
+    fun mfdAddProductEventFired(): Observable<AddMFDProductEvent>
+    fun renderMfdAddProduct(uiModel: UiModel<String>)
+
     fun renderAssignTo(uiModel: UiModel<List<LeadEmployees>>)
     fun onAssignToEventFired(): Observable<AssignToEvent>
     fun renderUpdateProfile(uiModel: UiModel<Pair<String, String>>)
@@ -136,6 +167,11 @@ interface LeadDetailView : BaseView {
     fun renderAccountTypeList(uiModel: UiModel<List<RowData>>)
     fun getAccountTypeLookupId() : Int
 
+    fun onStandardRemarkFired(): Observable<StandardRemarks>
+    fun renderStandardRemark(uiModel: UiModel<List<RowData>>)
+
+    fun onLeadDetailEventFired(): Observable<CallLeadDetail>
+    fun renderLeadDetail(uiModel: UiModel<LeadDetail>)
     companion object {
         const val INVALID_SELECTION_KEY = "-1"
     }

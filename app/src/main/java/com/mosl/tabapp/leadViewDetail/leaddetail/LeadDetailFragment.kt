@@ -1,5 +1,6 @@
 package com.mosl.tabapp.leadViewDetail.leaddetail
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -103,6 +104,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     private var accountTypeLookupId = 0
     private var strAccountTypeName = ""
+    private var standardReamrkLookupId = 0
 
     private val addressDetailList: ArrayList<AddressDetailModel> = ArrayList()
     private val contactDetailList: ArrayList<ContactDetailModel> = ArrayList()
@@ -187,6 +189,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     private val chipsAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
     }
+    private val standardRemarkAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+
     private val defaultSelectionList = ArrayList<RowData>()
 
     override fun getLayout(): Int = R.layout.fragment_lead_detail
@@ -203,6 +209,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     private fun setupView() {
+        toggleProgressBar(true)
         defaultSelectionList.add(0, SELECT_ROW_DATA)
         with(binding) {
             val arrayPmsProduct =
@@ -247,9 +254,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             }
         }
 
-        setSectorSpinner()
+        /*setSectorSpinner()
         setDesignationSpinner()
-        setNetworthSpinner()
+        setNetworthSpinner()*/
 
         if(userManager.getUser()!!.isShowRINRI()){
             binding.ilClientType.isVisible = true
@@ -273,7 +280,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 binding.tvBandhanBankRMError.text = ""
             }
         }
-
+        profileVisibility()
 
     }
 
@@ -299,7 +306,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         uiModel.onFailure {
             Timber.d("LeadDetailFragment renderSector showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
             arrSector.clear()
@@ -342,7 +349,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
         uiModel.onFailure {
             Timber.d("LeadDetailFragment renderDesignation showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it)
+           // showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
             arrDesignation.clear()
@@ -386,7 +393,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure {
             Timber.d("LeadDetailFragment renderNetworth showOnFailurePopup %s", it.message)
 
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
         uiModel.onSuccess { data ->
             arrNetworth.clear()
@@ -628,6 +635,27 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    override fun mfdAddProductEventFired(): Observable<AddMFDProductEvent> {
+        return subject.ofType()
+    }
+
+    override fun renderMfdAddProduct(uiModel: UiModel<String>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            Timber.d("LeadDetailFragment renderAddProduct showOnFailurePopup %s", it.message)
+
+            showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            Toast.makeText(
+                requireContext(),
+                it,
+                Toast.LENGTH_LONG
+            ).show()
+            subject.onNext(CallLeadDetail)
+        }
+    }
+
     private fun getPrimaryRM(): String =
         if (isBlank(leadOwner.trim())) advisoryCode else leadOwner.trim()
 
@@ -857,17 +885,39 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                             this@LeadDetailFragment
                         )
                 }
-                if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true) {
+                if (leadDetailAddProductAdapter?.checkProduct(interestedInKey) == true
+                   // && leadDetailAddProductAdapter?.checkMFDProductAvailable(interestedInDisplayText) == false
+                    ) {
                     MSFDialog.alertDialog(
                         requireContext(),
                         0,
                         resources.getString(R.string.motilal_oswal),
-                        getString(R.string.error_message_already_added, interestedInDisplayText),
+                        getString(R.string.error_message_already_added),
                         getString(R.string.button_label_ok),
                         true,
                         null
                     )
-                } else {
+                } /*else if(leadDetailAddProductAdapter?.checkMFDProductAvailable(interestedInDisplayText) == true){
+                    MSFDialog.alertDialog(
+                        requireActivity(),
+                        0,
+                        resources.getString(R.string.motilal_oswal),
+                        getString(R.string.error_message_mfd_product_added,leadDetailAddProductAdapter?.getAddedProductNameList(), interestedInDisplayText),
+                        getString(R.string.button_label_ok),
+                        getString(R.string.button_label_cancel),
+                        false
+                    ) { action: Action, _: Array<Any?>? ->
+                         if (action == OK) {
+                             addMFDProduct(
+                                 (addProductDialogBinding.spInterestedIn.selectedItem as RowData).key,
+                                 (addProductDialogBinding.spInterestedIn.selectedItem as RowData).value,
+                                 (addProductDialogBinding.spStage.selectedItem as RowData).key,
+                                 (addProductDialogBinding.spStatus.selectedItem as RowData).key)
+                            dismiss()
+                             dialogBinding.btnClose.performClick()
+                         }
+                    }
+                }*/ else {
                     if (isPotentialPMSProduct) {
                         MSFDialog.alertDialog(
                             requireActivity(),
@@ -880,11 +930,14 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                         ) { action: Action, _: Array<Any?>? ->
                             val productMapping = if (action == OK) YES else NO
                             callAddProduct(productMapping)
+                            dismiss()
+                            dialogBinding.btnClose.performClick()
                         }
                     } else
                         callAddProduct()
+                    dismiss()
                 }
-                dismiss()
+
             }
 
             dialogBinding.btnClose.setOnClickListener {
@@ -909,6 +962,33 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             (addProductDialogBinding.spStatus.selectedItem as RowData).key,
             productMapping
         )
+    }
+
+    private fun addMFDProduct(
+        interestedIn: String,
+        productName: String,
+        stage: String,
+        status: String
+    ) {
+        //data
+        val data = InsertMFDLeadProductRequest(
+            leadId,
+            interestedIn,
+            productName,
+            getPrimaryRM() ?: "",
+            oaoUserId = "",
+            "",
+            "",
+            stage,
+            status,
+            profileName = userManager.getUser()?.currentBusinessProfile?.businessProfileName,
+            createdBy = userManager.getUser()?.employeeCode.toString(),
+            extra1 = "",
+            extra2 = "" ,
+            extra3 = ""
+
+        )
+        subject.onNext(AddMFDProductEvent(data))
     }
 
     private fun addProduct(
@@ -1208,7 +1288,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             Timber.d("LeadDetailFragment renderClientDetail showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess { data ->
 
             if (data.products.isNotEmpty()) {
@@ -1268,9 +1349,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     }
 
     override fun renderClientDetailWithPortfolioAndProfitLoss(uiModel: UiModel<ClientDetailWithPortfolioAndProfitLoss>) {
-        toggleProgressBar(uiModel.inProgress)
+        //toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderClientDetailWithPortfolioAndProfitLoss showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess { data ->
             data.detail.renderClient()
             data.portfolio.renderPortfolio()
@@ -1279,6 +1361,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    @SuppressLint("StringFormatInvalid")
     private fun ClientPortfolio.renderPortfolio() {
         binding.includePortfolio.apply {
             networth.text = StringStuff.commaDecorator(netWorth)
@@ -1776,7 +1859,17 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         leadDetailModel.bandhanBankEmp = binding.etBandhanBankRM.text.toString()
         leadDetailModel.auBankName = binding.etAuBankName.text.toString()
         leadDetailModel.auBankBranchCode = binding.etAuBranchCode.text.toString()
+        leadDetailModel.standardReamrkId = getStandardRemark()
+
         return updateLead(leadDetailModel)
+    }
+
+    private fun getStandardRemark() : String{
+        if(binding.spSatndardRemark.selectedItem == null){
+            return "-1"
+        }else{
+           return (binding.spSatndardRemark.selectedItem as RowData).key
+        }
     }
 
     private fun updateLead(model: LeadDetailModel): UpdateLeadRequest {
@@ -1838,7 +1931,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             model.isBandhanBankEmp,
             model.bandhanBankEmp,
             model.auBankName,
-            model.auBankBranchCode
+            model.auBankBranchCode,
+            model.standardReamrkId
         )
     }
 
@@ -2004,6 +2098,218 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         }
     }
 
+    override fun renderProfileList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+           // alert(it.message.toString(), "Profile")
+            subject.onNext(CallBrokingProfile)
+        }
+        uiModel.onSuccess { data ->
+            profileAdapter.addAll(data)
+            binding.spProfile.setSpinnerData(profileAdapter, data)
+            subject.onNext(CallBrokingProfile)
+        }
+    }
+
+    override fun onBrokingProfileEventFired(): Observable<CallBrokingProfile> {
+        return subject.ofType()
+    }
+
+    override fun renderBrokingProfileList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+           // alert(it.message.toString(), "Broking Profile")
+            subject.onNext(CallIpProfile)
+        }
+        uiModel.onSuccess { data ->
+            brokingProfileAdapter.addAll(data)
+            binding.spBrokingProfile.setSpinnerData(
+                brokingProfileAdapter,
+                data
+            )
+            subject.onNext(CallIpProfile)
+        }
+    }
+
+    override fun onIpProfileEventFired(): Observable<CallIpProfile> {
+        return subject.ofType()
+    }
+
+    override fun renderIpProfileList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+           // alert(it.message.toString(), "Ip Profile")
+            subject.onNext(CallFinalProfile)
+        }
+        uiModel.onSuccess { data ->
+            ipProfileAdapter.addAll(data)
+            binding.spIpProfile.setSpinnerData(ipProfileAdapter, data)
+            subject.onNext(CallFinalProfile)
+        }
+    }
+
+    override fun onFinalProfileEventFired(): Observable<CallFinalProfile> {
+        return subject.ofType()
+    }
+
+    override fun renderFinalProfileList(uiModel: UiModel<List<RowData>>) {
+       // toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            //alert(it.message.toString(), "Final Profile")
+            subject.onNext(CallInterestedIn)
+        }
+        uiModel.onSuccess { data ->
+            finalProfileAdapter.addAll(data)
+            binding.spFinalProfile.setSpinnerData(finalProfileAdapter, data)
+
+            subject.onNext(CallInterestedIn)
+        }
+    }
+
+    override fun onInterestedInEventFired(): Observable<CallInterestedIn> {
+        return subject.ofType()
+    }
+
+    override fun renderInterestedInList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            interestedData.toMutableList()
+                .clear()
+           // alert(it.message.toString(), "Interested In")
+            subject.onNext(CallCountry)
+        }
+        uiModel.onSuccess { data ->
+            interestedData = data
+            interestedAdapter.addAll(data)
+
+            subject.onNext(CallCountry)
+        }
+    }
+
+    override fun onCountyListEventFired(): Observable<CallCountry> {
+        return subject.ofType()
+    }
+
+    override fun renderCountryList(uiModel: UiModel<List<RowData>>) {
+       // toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            //alert(it.message.toString(), "Country")
+            subject.onNext(CallEventChipList)
+        }
+        uiModel.onSuccess { data ->
+            binding.spCountry.setSpinnerData(countryAdapter, data)
+            binding.spOffCountry.setSpinnerData(countryAdapterOff, data)
+            subject.onNext(CallEventChipList)
+        }
+    }
+    override fun onChipListEventFired(): Observable<CallEventChipList> {
+        return subject.ofType()
+    }
+
+    override fun renderChipList(uiModel: UiModel<List<RowData>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            //alert(it.message.toString(), "Chip Event List")
+            subject.onNext(CallSectorList)
+        }
+        uiModel.onSuccess { data ->
+            binding.spEvent.setSpinnerData(chipsAdapter, data)
+            subject.onNext(CallSectorList)
+        }
+    }
+
+    override fun onSectorListEventFired(): Observable<CallSectorList> {
+        return subject.ofType()
+    }
+
+    override fun renderSectorList(uiModel: UiModel<List<LookupItem>>) {
+       // toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+           // alert(it.message.toString(), "Sector List")
+            subject.onNext(CallDesignationList)
+        }
+        uiModel.onSuccess { data ->
+            arrSector.clear()
+            arrSector.add(
+                RowData(0, "-1", SELECT_SECTOR)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrSector.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spSector.adapter = sectorAdapter
+            sectorAdapter.setSpinnerData(binding.spSector, arrSector)
+            sectorAdapter.notifyDataSetChanged()
+            subject.onNext(CallDesignationList)
+        }
+    }
+
+    override fun onDesignationListEventFired(): Observable<CallDesignationList> {
+        return subject.ofType()
+    }
+
+    override fun renderDesignationList(uiModel: UiModel<List<LookupItem>>) {
+       // toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            //alert(it.message.toString(), "Designation List")
+            subject.onNext(CallNetworthList)
+        }
+        uiModel.onSuccess { data ->
+            arrDesignation.clear()
+            arrDesignation.add(
+                RowData(0, "-1", SELECT_DESIGNATION)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrDesignation.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spDesig.adapter = designationAdapter
+            designationAdapter.setSpinnerData(binding.spDesig, arrDesignation)
+            designationAdapter.notifyDataSetChanged()
+            subject.onNext(CallNetworthList)
+        }
+    }
+
+    override fun onNetworthListEventFired(): Observable<CallNetworthList> {
+        return subject.ofType()
+    }
+
+    override fun renderNetworthList(uiModel: UiModel<List<LookupItem>>) {
+        //toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            toggleProgressBar(false)
+           // alert(it.message.toString(), "Networth List")
+            binding.llEditLeadDetail.performClick()
+        }
+        uiModel.onSuccess { data ->
+            toggleProgressBar(false)
+            arrNetworth.clear()
+            arrNetworth.add(
+                RowData(0, "-1", SELECT_NETWORTH)
+            )
+            for (i in data.indices) {
+                val (_, _, _, _, _, lookUpid, lookUpName1) = data[i]
+                val lookUpId = stringOrEmpty(lookUpid.toString())
+                val lookUpName = stringOrEmpty(lookUpName1)
+                arrNetworth.add(
+                    RowData(i + 1, lookUpId, lookUpName)
+                )
+            }
+            binding.spNetworth.adapter = networthAdapter
+            networthAdapter.setSpinnerData(binding.spNetworth, arrNetworth)
+            binding.llEditLeadDetail.performClick()
+        }
+    }
+
+
     private fun profileVisibility() {
         userManager.getUser()?.let {
             if (it.isPCG()) {
@@ -2031,9 +2337,10 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
 
     override fun renderLeadDetailAndProfession(uiModel: UiModel<LeadDetailAndProfession>) {
-        toggleProgressBar(uiModel.inProgress)
+        //toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderLeadDetailAndProfession showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess { data ->
             binding.spProfession.setSpinnerData(professionAdapter, data.professionRowDatas)
             data.detail.renderLeadDetail()
@@ -2111,6 +2418,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
             etBandhanBankRM.isEnabled = status
             etAuBankName.isEnabled = status
             etAuBranchCode.isEnabled = status
+            spSatndardRemark.isEnabled = status
 
             if (status) {
                 if (cbPrimaryAddress.isChecked) {
@@ -2328,6 +2636,24 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
                 }
             }
             strAccountTypeName = accountTypeName
+
+            //for standard remark field
+            if (userManager.getUser()?.isAllianceBusiness()  == true &&
+                branchName == "AUSFBMAIN"
+            ){
+                binding.tvStandardRemark.isVisible = true
+                binding.tlStandardRemark.isVisible = true
+                standardReamrkLookupId = standardRemarksId
+                if(BuildConfig.FLAVOR == "prod"){
+                    subject.onNext(StandardRemarks(155))
+                }else{
+                    subject.onNext(StandardRemarks(159))
+                }
+
+            }else{
+                binding.tvStandardRemark.isVisible = false
+                binding.tlStandardRemark.isVisible = false
+            }
 
             subject.onNext(CallAccountType)
 
@@ -2588,7 +2914,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun renderStateOnCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderStateOnCountrySelection showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+            //showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spState.setSpinnerData(stateAdapter, it)
             if (selectedStateId != DEFAULT_SELECTION_ID) {
@@ -2611,7 +2938,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun renderOfficeStateOnOfficeCountrySelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure { Timber.d("LeadDetailFragment renderOfficeStateOnOfficeCountrySelection showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spOffState.setSpinnerData(stateAdapterOff, it)
             if (selectedStateOffId != DEFAULT_SELECTION_ID) {
@@ -2631,7 +2959,8 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
     override fun renderCityOnStateSelection(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {  Timber.d("LeadDetailFragment renderCityOnStateSelection showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it) }
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spCity.setSpinnerData(cityAdapter, it)
             if (selectedCityId != DEFAULT_SELECTION_ID) {
@@ -2693,7 +3022,9 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
 
     override fun renderAccountTypeList(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
-        uiModel.onFailure { showOnFailurePopup(it) }
+        uiModel.onFailure {
+           // showOnFailurePopup(it)
+        }
         uiModel.onSuccess {
             binding.spLeadAccountType.setSpinnerData(accountTypeAdapter, it)
             val dataAccountType = RowData.getSpinnerRowDataByValue(strAccountTypeName, accountTypeAdapter)
@@ -2708,12 +3039,44 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         return  accountTypeLookupId
     }
 
+    override fun onStandardRemarkFired(): Observable<StandardRemarks> {
+        return subject.ofType()
+    }
+
+    override fun renderStandardRemark(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            // showOnFailurePopup(it)
+            }
+        uiModel.onSuccess {
+            binding.spSatndardRemark.setSpinnerData(standardRemarkAdapter, it)
+            val dataAccountType = RowData.getSpinnerRowDataById(standardReamrkLookupId.toString(), standardRemarkAdapter)
+            dataAccountType?.let {
+                binding.spSatndardRemark.setSelection(it.position)
+            }
+        }
+    }
+
+    override fun onLeadDetailEventFired(): Observable<CallLeadDetail> {
+        return subject.ofType()
+    }
+
+    override fun renderLeadDetail(uiModel: UiModel<LeadDetail>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {
+            //showOnFailurePopup(it)
+        }
+        uiModel.onSuccess {
+            it.renderLeadDetail()
+        }
+    }
+
     override fun renderStage(uiModel: UiModel<List<RowData>>) {
         toggleProgressBar(uiModel.inProgress)
         uiModel.onFailure {
             stageData.clear()
             Timber.d("LeadDetailFragment renderStage showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it)
+           //showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             stageData.clear()
@@ -2728,7 +3091,7 @@ class LeadDetailFragment : CommonFragment(), LeadDetailView, LeadDetailAddProduc
         uiModel.onFailure {
             statusData.clear()
             Timber.d("LeadDetailFragment renderStatus showOnFailurePopup %s", it.message)
-            showOnFailurePopup(it)
+            //showOnFailurePopup(it)
         }
         uiModel.onSuccess {
             statusData.clear()

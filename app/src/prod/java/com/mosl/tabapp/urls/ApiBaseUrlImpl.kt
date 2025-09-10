@@ -31,7 +31,19 @@ class ApiBaseUrlImpl : CommonBaseUrls {
     return "https://myzonehr.motilaloswal.com/"
   }
 
+  override fun getSaathiIndirectUrl(): String {
+    return "https://saathi.motilaloswal.com:85/api/"
+  }
+
   companion object {
     const val SAATHI_BASE_URL = "https://saathi.motilaloswal.com:84/api/"
+    const val INDIRECT_SAATHI_BASE_URL = "https://saathi.motilaloswal.com:85/api/"
+    const val EKYC_DEMAT_ACCOUNT_LINK = "https://www.motilaloswal.com/open-demat-account/?"
+    const val EKYC_ONLY_MFD_LINK = "https://ekyc.motilaloswal.com/partner/mfd/?"
+    const val EKYC_MFD_LINK =  "https://www.motilaloswal.com/open-demat-account/?"
+    const val EKYC_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/partner/nonbroking/?"
+    const val EKYC_NRI_NON_BROKING_PRODUCT_LINK = "https://ekyc.motilaloswal.com/nri/tpp?kzZWSRubKJveEvdPSlKyT2Wu8sMrWJCBeLW7vgOPP/MvViI3pMgXNVgrTzdoiAUzpAM1vQ9LhXk3JGPQ+HpUI2tmKnANAxjIxhYMPcEiLrd9Dsa/1+Mhe7B1a6OzhXtvA22vnoxy0rxdroVH1tnynQ=="
+    const val EKYC_INSURANCE = "https://ekyc.motilaloswal.com/partner/insurance?ri2Al2H3rY/1xfyl0Y7wB3V70hFFkc0qn1nG3fyT+5e/xSTcg9OGV4YYHEa3PpYy+WnpU0KhQhOsKzVMCnng2zkqgZF594qjC/XbgTJtYgmc/xVy6fe3zxbii+s/9SZRK2o1q6Ep0+HnMbZe992iTg"
+
   }
 }

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid
-        android:color="@color/colorWhite"/>
+        android:color="@color/white"/>
 
     <corners
         android:bottomRightRadius="@dimen/_6sdp"
@@ -11,6 +11,6 @@
         android:topLeftRadius="@dimen/_6sdp"
         android:topRightRadius="@dimen/_6sdp"/>
     <stroke
-        android:color="@color/clr_yellow_border"
+        android:color="@color/titleBarBackground"
         android:width="@dimen/_1sdp"/>
 </shape>

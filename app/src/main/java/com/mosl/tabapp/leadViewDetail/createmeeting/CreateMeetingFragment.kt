@@ -1,6 +1,7 @@
 package com.mosl.tabapp.leadViewDetail.createmeeting
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
@@ -28,17 +29,19 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
 import com.jakewharton.rxbinding4.widget.itemSelections
-import com.mosl.app.core.error.getErrorOnFailure
 import com.mosl.app.core.events.DataAction
 import com.mosl.app.coreui.spinner.setSpinnerData
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
 import com.mosl.commons.rx.ofType
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.login.user
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE12
 import com.mosl.shared.util.AppDateFormats.DF_JSON_DATE9
 import com.mosl.shared.util.getFormatedDate
@@ -49,6 +52,8 @@ import com.mosl.tabapp.bankmeeting.clientsearch.DelayAutoCompleteTextView
 import com.mosl.tabapp.common.CRMAppUtil
 import com.mosl.tabapp.common.CRMMOSLCommon
 import com.mosl.tabapp.constants.MOSLConstants
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_DD_MMM_YYYY1
+import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_OF_TIME
 import com.mosl.tabapp.constants.MOSLConstants.DATE_FORMAT_TO_DISPLAY
 import com.mosl.tabapp.constants.MoslConstant.dd_MMM_yyyy_hh_mm
 import com.mosl.tabapp.constants.MoslConstant.dd_MM_yyyy
@@ -56,6 +61,8 @@ import com.mosl.tabapp.constants.MoslConstant.yyyy_MM_dd
 import com.mosl.tabapp.core.CommonActivity
 import com.mosl.tabapp.core.CommonFragment
 import com.mosl.tabapp.databinding.FragCreateMeetingBinding
+import com.mosl.tabapp.geoLocation.GeoTaggingFragment
+import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingProductModel
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
@@ -69,6 +76,7 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_M
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIONABLE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_ACTIVITY_TYPE
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_CATEGORY
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_EVENT
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_FEEDBACK
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_DURATION
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_LOCATION
@@ -76,6 +84,8 @@ import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_S
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MEETING_REASON
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_MOBILE_NUMBER
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_PRODUCT
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_STAGE
+import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_STATUS
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_SUB_CATEGORY
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TOUCHED_UNTOUCHED
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_TRAVELLING_MODE
@@ -105,22 +115,31 @@ import com.mosl.tabapp.util.setErrorMessages
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import com.mosl.tabapp.geoLocation.GeoTaggingFragment
-import com.mosl.tabapp.geoLocation.LocationItem
-import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants.MSG_SELECT_EVENT
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.ApiClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.MeetingFeedbackData
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.RetrofitClient
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerData
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.registerResponse
+import com.mosl.tabapp.leadViewDetail.createmeeting.zykrr.tokenModel
+import com.mosl.tabapp.leadcreation.ui.LeadCreationUiEvent
+import com.mosl.tabapp.urls.ApiBaseUrlImpl
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.OTPDialogListener,
-     AddedAttendeeAdapter.ClickListenerHandler {
+    AddedAttendeeAdapter.ClickListenerHandler {
     lateinit var binding: FragCreateMeetingBinding
     private lateinit var attendeeAdapter: AttendeeAdapter
     private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
     private lateinit var splAttendeeAdapter: AttendeeAdapter
     private lateinit var addedSplAttendeeAdapter: AddedAttendeeAdapter
-    var isAreaRestricted :Boolean = true
+    private var isAreaRestricted :Boolean = true
 
     @Inject
     lateinit var presenter: CreateMeetingPresenter
@@ -147,6 +166,13 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     private lateinit var chipsAdapter: ArrayAdapter<String>
+    private var addedProductList: ArrayList<CreateMeetingProductModel> = ArrayList()
+    private val stageAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
+    private val statusAdapter: ArrayAdapter<RowData> by lazy {
+        SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
+    }
 
     private val uiSubject = PublishSubject.create<CreateMeetingUiEvent>()
     private lateinit var mainFromDate: String
@@ -170,7 +196,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     var strSourceName : String = ""
     var strProspectSource : String = ""
     var strActivateOTPInApp : String = ""
-
+    var strLeadCreationDate : String = ""
+    var defaultMobileNumber : String = "0"
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -185,7 +212,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         if (permissionCheckHelper.locationPermission()) {
             // fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
         }
@@ -194,7 +221,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     private fun setupViews() {
-        meetingProductAdapter = CreateMeetingProductAdapter(requireContext())
+        toggleProgress(true)
+        meetingProductAdapter = CreateMeetingProductAdapter(requireContext(), uiSubject)
         travellingAdapter = CreateMeetingTravellingModeAdapter(requireContext())
         productAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spProduct.adapter = productAdapter
@@ -250,7 +278,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             isAreaRestricted = false
             if(getSelectedMeetingLocation().lookUpName != "Branch") {
                 val dialog = GeoTaggingFragment()
-                dialog.setData(uiSubject, isAreaRestricted)
+                dialog.setData(uiSubject, isAreaRestricted, userManager)
                 dialog.show(activity?.supportFragmentManager!!, "UserAddress")
             }
         }
@@ -307,10 +335,235 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             chipsAdapter.setSpinnerData(binding.spChips, it)
+        }
+    }
+
+    override fun onActivityTypeCall(): Observable<CallActivityTypeApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderActivityTypeList(uiModel: UiModel<List<LookUp>>) {
+        // toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingDurationApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            activityAdapter.setSpinnerData(binding.spActivityType, it)
+            uiSubject.onNext(CallMeetingDurationApi)
+        }
+    }
+
+    override fun onMeetingDurationApiCall(): Observable<CallMeetingDurationApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingDurationList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallInterestedInApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it)
+            uiSubject.onNext(CallInterestedInApi)
+        }
+    }
+
+    override fun onInterestedInApiCall(): Observable<CallInterestedInApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderInterestedInList(uiModel: UiModel<List<LookUp>>) {
+        // toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingObjectiveApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            var list = it.toMutableList()
+            list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
+            list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
+
+            productAdapter.setSpinnerData(binding.spProduct, list)
+
+            uiSubject.onNext(CallMeetingObjectiveApi)
+        }
+    }
+
+    override fun onMeetingObjectiveApiCall(): Observable<CallMeetingObjectiveApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingObjectiveList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallTravellingModeApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            meetingObjectiveAdapter.setSpinnerData(
+                binding.spMeetingObjective,
+                it
+            )
+
+            uiSubject.onNext(CallTravellingModeApi)
+        }
+    }
+
+    override fun onTravellingModeApiCall(): Observable<CallTravellingModeApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderTravellingModeList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            uiSubject.onNext(CallMeetingAddressApi)
+            // showOnFailurePopup(it)
+        }
+
+        uiModel.onSuccess {
+            travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it)
+
+            uiSubject.onNext(CallMeetingAddressApi)
+        }
+    }
+
+    override fun onMeetingAddressApiCall(): Observable<CallMeetingAddressApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderMeetingAddressList(uiModel: UiModel<List<LookUp>>) {
+        //toggleProgress(uiModel.inProgress)
+
+        uiModel.onFailure {
+            Timber.d("CreateMeetingFragment renderChipsList showOnFailurePopup ${it.message}")
+            // showOnFailurePopup(it)
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                uiSubject.onNext(CallStage)
+            }else{
+                toggleProgress(false)
+            }
+        }
+
+        uiModel.onSuccess {
+            meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it)
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                uiSubject.onNext(CallStage)
+            }else{
+                toggleProgress(false)
+            }
+
+        }
+    }
+
+    override fun onProductDeleteEventFired(): Observable<OnProductDelete> {
+       return uiSubject.ofType()
+    }
+
+    override fun renderProductDelete(id: String) {
+        addedProductList.removeAll { it.id == id }
+        if(addedProductList.size == 0){
+            binding.spProduct.setSelection(0)
+            binding.spStage.setSelection(0)
+            binding.spStatus.setSelection(0)
+            binding.lnrLeadStageDetail.isVisible = false
+        }else{
+            if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+                binding.spStage.setSelection(0)
+                binding.spStatus.setSelection(0)
+                uiSubject.onNext(CallLeadStageDetailApi)
+            }
+        }
+    }
+
+    override fun onLeadStageDetailEventFired(): Observable<CallLeadStageDetailApi> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderLeadStageDetail(uiModel: UiModel<List<LeadStageDetail>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onFailure {
+            binding.lnrLeadStageDetail.isVisible = false
+        }
+
+        uiModel.onSuccess {
+            binding.lnrLeadStageDetail.isVisible = it.isNotEmpty()
+        }
+    }
+
+    override fun getProductIdList(): List<String> {
+        val idList: List<String> = addedProductList.map { it.id }
+        return idList
+    }
+
+    override fun onStageCall(): Observable<CallStage> {
+        return uiSubject.ofType()
+    }
+
+    override fun renderInitialStageList(uiModel: UiModel<List<RowData>>) {
+
+        uiModel.onFailure {
+            toggleProgressBar(false)
+        }
+        uiModel.onSuccess { data ->
+            toggleProgressBar(false)
+            val list = data.toMutableList()
+            list.removeIf { it.value.contains("C1") }
+            binding.spStage.setSpinnerData(stageAdapter, list)
+        }
+    }
+    fun Spinner.setSpinnerData(
+        arrayAdapter: ArrayAdapter<RowData>,
+        rowData: List<RowData>
+    ) {
+        adapter = arrayAdapter
+        arrayAdapter.setSpinnerData(this, rowData)
+    }
+
+
+    override fun onStageSelected(): Observable<Int> {
+        return binding.spStage.itemSelections()
+    }
+
+    override fun getSelectedStage(): RowData {
+        if(binding.lnrLeadStageDetail.isVisible) {
+            return binding.spStage.selectedItem as RowData
+        }else{
+            return RowData("-1", "Select")
+        }
+    }
+
+    override fun renderStatusOnStageSelection(uiModel: UiModel<List<RowData>>) {
+        toggleProgressBar(uiModel.inProgress)
+        uiModel.onFailure {  }
+        uiModel.onSuccess { binding.spStatus.setSpinnerData(statusAdapter, it) }
+    }
+
+    override fun getSelectedStatus(): RowData {
+        if(binding.lnrLeadStageDetail.isVisible) {
+            return binding.spStatus.selectedItem as RowData
+        }else{
+            return RowData("0", "Select")
         }
     }
 
@@ -324,7 +577,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderTouchedUntouchedList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             touchedUntouchedAdapter.setSpinnerData(binding.spTouchedUntouched, it)
@@ -342,7 +596,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderFeedbackList showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            //showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             feedbackAdapter.setSpinnerData(binding.spFeedback, it)
@@ -350,16 +605,23 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun render(uiModel: UiModel<ClientData>) {
-        toggleProgress(uiModel.inProgress)
+        //toggleProgress(uiModel.inProgress)
 
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment render showOnFailurePopup ${it.message}")
-
-            showOnFailurePopup(it)
+            uiSubject.onNext(CallActivityTypeApi)
+            // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
             val clientDetail = it.clientDetail
+            if(it.listMobileNumber.size > 1){
+                defaultMobileNumber =  it.listMobileNumber[1].contactNumber
+            } else if(it.listMobileNumber.size == 1){
+                defaultMobileNumber =  it.listMobileNumber[0].contactNumber
+            }
+
+            strLeadCreationDate = it.clientDetail.leadCreationDate
             strActivateOTPInApp = it.clientDetail.activateOTPInApp
             strSourceName = clientDetail.sourceName
             strProspectSource = clientDetail.prospectSource
@@ -377,20 +639,20 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 CRMAppUtil.setImage(imageUrl, binding.layoutTopSection.ivLead, requireContext())
             }
             binding.tvDate.text = CRMAppUtil.getDBDate(Date(), DATE_FORMAT_TO_DISPLAY)
-            var list = it.listInterestedIn.toMutableList()
-            list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
-            list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
+            /* var list = it.listInterestedIn.toMutableList()
+             list.removeIf { it.lookUpName == "Demat account (Equity, FnO, MF in demat)" }
+             list.removeIf { it.lookUpName == "Only MFD (Mutual Fund Non-Demat)" }
 
-            productAdapter.setSpinnerData(binding.spProduct, list)
-            meetingObjectiveAdapter.setSpinnerData(
+             productAdapter.setSpinnerData(binding.spProduct, list)*/
+            /* meetingObjectiveAdapter.setSpinnerData(
                 binding.spMeetingObjective,
                 it.listMeetingObjective
-            )
-            meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
-            activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
+            )*/
+            //meetingLocationAdapter.setSpinnerData(binding.spMeetingLocation, it.listMeetingAdressID)
+            //activityAdapter.setSpinnerData(binding.spActivityType, it.listActivity)
             mobileNumberAdapter.setSpinnerData(binding.spMobileNumber, it.listMobileNumber)
-            meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
-            travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
+            //meetingDurationAdapter.setSpinnerData(binding.spMeetingDuration, it.listMeetingDuration)
+            // travellingModeAdapter.setSpinnerData(binding.spTravellingMode, it.listTravellingMode)
             isOnlyClient = clientDetail.isOnlyClient
             isPotentialPMSProduct = clientDetail.isPotentialPMSProduct.isEmpty()
             mainFromDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd)
@@ -402,6 +664,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                 binding.tilTouchedUntouched.visibility = View.GONE
                 binding.tilFeedback.visibility = View.GONE
             }
+            uiSubject.onNext(CallActivityTypeApi)
         }
     }
 
@@ -437,12 +700,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
         cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
+        if (getSelectedActivityType().lookUpName.equals("Personal Meeting", ignoreCase = true)
             && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
-        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
+        else if((getSelectedActivityType().lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
             && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
@@ -490,14 +753,21 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                         "%s %d:%d:00", fromPostingDate, hour,
                         minute
                     ) //dd-MM-yyyy hh:mm:ss
-                val finalSelectedDate =
-                    CRMAppUtil.getDate(finalSelectedDateStr, dd_MMM_yyyy_hh_mm)
+                //add below date format logic for getting issue 12:30 PM not set properly, instead showing 12:30 AM
+                val df = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH)
+                df.timeZone = TimeZone.getTimeZone("Asia/Kolkata");
+                val date = df.parse(finalSelectedDateStr)
+
+                val outputFormat = SimpleDateFormat("dd-MM-yyyy hh:mm a", Locale.ENGLISH)
+                outputFormat.timeZone = TimeZone.getTimeZone("Asia/Kolkata")
+                val formattedDate = outputFormat.format(date)
+                val finalSelectedDate =outputFormat.parse(formattedDate)
+
                 if (CRMAppUtil.isBeforeandEqualDate(
                         finalSelectedDate
                     )
                 ) { //
-                    binding.tvDate.text =
-                        CRMAppUtil.getDBDate(finalSelectedDate, DATE_FORMAT_TO_DISPLAY)
+                    binding.tvDate.text = CRMAppUtil.getDBDate(finalSelectedDate, DATE_FORMAT_TO_DISPLAY)
 
                     dialog.dismiss()
                 } else {
@@ -530,9 +800,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             binding.etLocation.setText("")
             Timber.d("CreateMeetingFragment renderAddress showOnFailurePopup ${it.message}")
 
-           /* if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
-                showOnFailurePopup(it)
-            }*/
+            /* if((it.getErrorOnFailure().getResolvedMessage(requireContext())).length > 0) {
+                 showOnFailurePopup(it)
+             }*/
         }
 
         uiModel.onSuccess {
@@ -551,7 +821,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderMeetingReason showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it)
+            // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -568,7 +838,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderSubCategory showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            // showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             if (it.size > 1) {
@@ -588,7 +859,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderCustomerServiceData showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it)
+            // showOnFailurePopup(it)
         }
 
         uiModel.onSuccess {
@@ -753,12 +1024,19 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         meetingProductAdapter.addProduct(
             CreateMeetingProductModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
+        meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.add(CreateMeetingProductModel(lookUp.lookUpID.toString(), lookUp.lookUpName))
+        addedProductList = addedProductList.distinctBy { it.id } as ArrayList<CreateMeetingProductModel>
+        if(userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true) {
+            uiSubject.onNext(CallLeadStageDetailApi)
+        }
     }
 
     override fun renderOnTravellingModeClick(lookUp: LookUp) {
         travellingAdapter.addTravellingMode(
             CreateMeetingTravellingModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
+        travellingAdapter.notifyDataSetChanged()
     }
 
     override fun toggleSearchState(
@@ -902,11 +1180,14 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getTravellingmodeList(): List<CreateMeetingTravellingModel> {
-        return travellingAdapter.travellingList
+        val list = travellingAdapter.getTravellingList()
+        return list
     }
 
     override fun getproductList(): List<CreateMeetingProductModel> {
-        return meetingProductAdapter.listProduct
+        //val list = meetingProductAdapter.getListProduct()
+        //return list
+        return addedProductList
     }
 
     override fun getGeoArea(): String {
@@ -926,18 +1207,18 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             }
         }*/
 
-            geoArea = strAddress
-            /*val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            try {
-                location?.apply {
-                    val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
-                    if (addressLine.size > 0) {
-                        geoArea = addressLine[0].getAddressLine(0)
-                    }
+        geoArea = strAddress
+        /*val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        try {
+            location?.apply {
+                val addressLine = geocoder.getFromLocation(latitude, longitude, 1)
+                if (addressLine.size > 0) {
+                    geoArea = addressLine[0].getAddressLine(0)
                 }
-            }catch (ex : Exception){
-                ex.printStackTrace()
-            }*/
+            }
+        }catch (ex : Exception){
+            ex.printStackTrace()
+        }*/
 
         println("Geo area found ::: $geoArea")
         return geoArea
@@ -951,7 +1232,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         return binding.btnReset.clicks()
     }
 
-     fun resetDataOnActivityTypeChange() {
+    fun resetDataOnActivityTypeChange() {
         errorDisabled()
         addedAttendeeList.clear()
         addedSplAttendeeList.clear()
@@ -975,9 +1256,12 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.etCustomerComment.setText("")
         binding.btnSendOtp.text = SEND_OTP_LABEL
         isSendOTPSuccesssful = false
-        meetingProductAdapter.deleteAllProduct()
-        travellingAdapter.deleteAllProduct()
-    }
+         meetingProductAdapter.deleteAllProduct()
+         meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+         travellingAdapter.deleteAllProduct()
+         travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.clear()
+        }
 
 
     override fun resetData() {
@@ -1008,7 +1292,10 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         isSendOTPSuccesssful = false
         toggleOTPVisibility(false)
         meetingProductAdapter.deleteAllProduct()
+        meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
         travellingAdapter.deleteAllProduct()
+        travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedProductList.clear()
     }
 
     private fun errorDisabled() {
@@ -1028,6 +1315,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         binding.tilEtCategory.disableErrorMessages()
         binding.tilEtSubCategory.disableErrorMessages()
         binding.tilMeetingLocation.disableErrorMessages()
+        binding.tilStage.disableErrorMessages()
+        binding.tilStatus.disableErrorMessages()
     }
 
     override fun validateFormData(): Boolean {
@@ -1085,6 +1374,16 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         } else if (enableLocationGroup && binding.etPinCode.text!!.length < 6) {
             binding.tilPinCode.setErrorMessages(MSG_INVALID_PINCODE_NUMBER)
             false
+        } else if (binding.lnrLeadStageDetail.isVisible &&
+            userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true
+            && getSelectedStage().key == "-1") {
+            binding.tilStage.setErrorMessages(MSG_SELECT_STAGE)
+            false
+        } else if (binding.lnrLeadStageDetail.isVisible &&
+            userManager.getUser()?.isShowLeadStageUpdateInMeeting() == true &&
+            getSelectedStatus().key == "-1") {
+            binding.tilStatus.setErrorMessages(MSG_SELECT_STATUS)
+            false
         } else if (binding.llActionables.visibility == View.VISIBLE && getSelectedSpinnerValue(
                 binding.spActionables
             ) == SELECT_ACTIONABLE
@@ -1131,7 +1430,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             //fusedLocation.initDispatcher(this)
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
             false
@@ -1306,8 +1605,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         if (userManager.getUser()?.EventListRequired == true && strSourceName == "Manual" && isBTLProspectSource()){
-                uiSubject.onNext(CallChipsApi)
-                binding.tilChips.isVisible = true
+            uiSubject.onNext(CallChipsApi)
+            binding.tilChips.isVisible = true
         }else{
             binding.tilChips.isVisible = false
         }
@@ -1351,7 +1650,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
 
                     //fusedLocation.initDispatcher(this)
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject, true)
+                    dialog.setData(uiSubject, true, userManager)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
@@ -1411,7 +1710,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         ) {
             // Toast.makeText(requireContext(),"call fusedLocation.initDispatcher",Toast.LENGTH_LONG).show()
             val dialog = GeoTaggingFragment()
-            dialog.setData(uiSubject, true)
+            dialog.setData(uiSubject, true, userManager)
             dialog.show(activity?.supportFragmentManager!!, "UserAddress")
             //fusedLocation.initDispatcher(this)
 
@@ -1517,7 +1816,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     if (permissionCheckHelper.locationPermission()) {
                         // fusedLocation.initDispatcher(this)
                         val dialog = GeoTaggingFragment()
-                        dialog.setData(uiSubject, true)
+                        dialog.setData(uiSubject, true, userManager)
                         dialog.show(activity?.supportFragmentManager!!, "UserAddress")
 
                     }
@@ -1576,7 +1875,8 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         uiModel.onFailure {
             Timber.d("CreateMeetingFragment renderOTP showOnFailurePopup ${it.message}")
 
-            showOnFailurePopup(it) }
+            //showOnFailurePopup(it)
+        }
 
         uiModel.onSuccess {
             if(it.status ){
@@ -1603,7 +1903,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
                     isMockLocation(meetingApptModel)
                 } else {
                     val dialog = GeoTaggingFragment()
-                    dialog.setData(uiSubject, true)
+                    dialog.setData(uiSubject, true, userManager)
                     dialog.show(activity?.supportFragmentManager!!, "UserAddress")
                 }
             }
@@ -1661,6 +1961,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
         }
 
         uiModel.onSuccess {
+
             MSFDialog.alertDialog(
                 requireContext(), 0, resources.getString(string.motilal_oswal),
                 MOSLConstants.CREATE_MEETING, "OK", true
@@ -1668,9 +1969,140 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             { action: Action, _: Array<Any?>? ->
                 if (action == OK) {
                     uiSubject.onNext(SaveConfirmClick)
+                     /*if (getSelectedActivityType().lookUpName.equals("Personal Meeting",
+                             ignoreCase = true) && userManager.user.isRetail()){
+                         callZykrrApi(it.meetingId)
+                     }*/
                 }
             }
         }
+    }
+
+    private fun callZykrrApi( meetingId : Int){
+        RetrofitClient.setBaseUrl("https://accounts.zykrr.com/api/")
+        val retro = RetrofitClient.retrofit
+        //UAT
+        //val callToken = ApiClient(retro).apiService.getToken("uat_tech_mofsl_user","f7b9ec74")
+        //Live
+        val callToken = ApiClient(retro).apiService.getToken("tech_mofsl_user_meetingfeedback","ae552240")
+
+        callToken.enqueue(object : Callback<tokenModel> {
+            override fun onResponse(call: Call<tokenModel>, response: Response<tokenModel>) {
+                if (response.isSuccessful) {
+                    val post = response.body() as tokenModel
+                    Timber.d("TokenResponse: ${post.token}")
+                    callZykrrRegisterApi(post, meetingId)
+                } else {
+                    Timber.d("TokenResponse: ${response.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<tokenModel>, t: Throwable) {
+                Timber.d("TokenResponse: ${t.localizedMessage}")
+            }
+        })
+
+
+    }
+
+    private fun callZykrrRegisterApi(tokenModel: tokenModel, meetingId :Int){
+        RetrofitClient.setBaseUrl("https://zapi.api.zykrr.com/api/rest/")
+        val retro = RetrofitClient.retrofit
+        //UAT
+        // val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+        //Live
+        val registerData = registerData("d583e3d0-58ea-4496-9c4f-f40078e17e75",getMeetingData())
+
+        val call = ApiClient(retro).apiService.registerParticipants("application/json","zykrr=" + tokenModel.token!!,registerData)
+
+        call.enqueue(object : Callback<registerResponse> {
+            override fun onResponse(call: Call<registerResponse>, response: Response<registerResponse>) {
+
+                if (response.isSuccessful) {
+                    val post = response.body() as registerResponse
+                    Timber.d("registerResponse: ${post.surveyLinks}")
+                    sendSurveyLink(post.surveyLinks[0],post.shortLinks[0],post.shortSMSLinks[0], meetingId)
+                } else {
+                    Timber.d("registerResponse: ${response.toString()}")
+                }
+            }
+
+            override fun onFailure(call: Call<registerResponse>, t: Throwable) {
+                Timber.d("registerResponse: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun sendSurveyLink(surveyLink: String,shortLink: String,shortSmsLink: String, meetingId :Int){
+        RetrofitClient.setBaseUrl(ApiBaseUrlImpl.SAATHI_BASE_URL)
+        val retro = RetrofitClient.retrofit
+        var mobile  = getMobileNumberType().contactNumber
+        if(getMobileNumberType().contactNumber.isEmpty() || getMobileNumberType().contactNumber == "0" ){
+            mobile = defaultMobileNumber
+        }
+        val data =  SurveyLinkRequest(
+            leadId = binding.layoutTopSection.tvLeadId.text.toString().toInt(),
+            clientCode = binding.layoutTopSection.tvClientCode.text.toString(),
+            meetingId = meetingId,
+            rmCode = userManager.getUser()?.employeeCode!!,
+            mobile = mobile,
+            surveyLink = surveyLink,
+            shortLink = shortLink,
+            shortSmsLink = shortSmsLink
+        )
+        val call = ApiClient(retro).apiService.sendSurveyLink(data)
+
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    uiSubject.onNext(SaveConfirmClick)
+                }
+            }
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                Timber.d("registerResponse: ${t.localizedMessage}")
+            }
+        })
+    }
+
+    private fun getMeetingData() : ArrayList<MeetingFeedbackData>{
+        val list = ArrayList<MeetingFeedbackData>()
+        try {
+            val strDateTime  = getFormatedDate(binding.tvDate.text.toString(), DF_JSON_DATE12, DF_JSON_DATE9)
+            val arrDateTime =  strDateTime.split(" ")
+            Timber.d("strDateTime: ${strDateTime}")
+            Timber.d("strDate: ${arrDateTime[0]}")
+            Timber.d("strTime: ${arrDateTime[1]}")
+            val attendeeList = if (getAttendeeList()
+                    .isEmpty()
+            ) {
+                emptyList()
+            } else getAttendeeList()
+                .map {
+                    AddedAttendeeModel(it.attendeeType, it.attended, it.attendeeName, it.attendeeCode)
+                }
+            val strAttendee =if(attendeeList.isNotEmpty()) Gson().toJson(attendeeList) else ""
+            val feedback = MeetingFeedbackData(
+                LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
+                RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
+                ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
+                AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
+                MeetingCreationDate = CRMAppUtil.getDate(Date(), yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
+                RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")
+
+            /*  val feedback = MeetingFeedbackData(
+                  LeadId =  "", RMName = "",
+                  RMEmpcode =  "", Clientcode =  "Test",
+                  ActivityType = "", MeetingDate = "", MeetingTime = "",
+                  AttendeeDetails = "", LeadCreationDate = "",
+                  MeetingCreationDate = "", MeetingDescription = "", Role = "",
+                  RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "99856")
+  */
+            list.add(feedback)
+
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+        return list
     }
 
     companion object {

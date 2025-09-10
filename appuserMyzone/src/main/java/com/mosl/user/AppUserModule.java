@@ -33,7 +33,6 @@ import javax.inject.Singleton;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import mosl.rx_preferences.BuildConfig;
 
 @Module
 public abstract class AppUserModule {

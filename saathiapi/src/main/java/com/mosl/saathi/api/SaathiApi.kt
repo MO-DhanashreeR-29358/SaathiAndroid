@@ -4,6 +4,7 @@ import com.mosl.app.core.annotation.ExcludeWrapper
 import com.mosl.saathi.api.ApiEndpoints.LoginEndPoint
 import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingItem
 import com.mosl.saathi.api.model.addupdatemeeting.SetAppointmentResponse
+import com.mosl.saathi.api.model.advanceSearch.AdvanceSearchCommonResponse
 import com.mosl.saathi.api.model.assignto.SecondaryRmFilterRequest
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.attendance.*
@@ -22,6 +23,7 @@ import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileRequest
 import com.mosl.saathi.api.model.clientprofile.ClientProfileResponse
 import com.mosl.saathi.api.model.clientviewhistory.ClientHistoryRequest
+import com.mosl.saathi.api.model.common.ExtraDataCommonResponse
 import com.mosl.saathi.api.model.common.ExtraDataWrapper
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.*
@@ -68,6 +70,7 @@ import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListResponse
 import com.mosl.saathi.api.model.lead.createmeeting.PostOTPForMeetingRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.saathi.api.model.lead.request.SearchRequest
 import com.mosl.saathi.api.model.lead.request.UpdateLeadMappingRequest
 import com.mosl.saathi.api.model.leadinteraction.LeadInteractionRequest
@@ -75,6 +78,7 @@ import com.mosl.saathi.api.model.leadprofile.LeadProfileItem
 import com.mosl.saathi.api.model.leadprofile.LeadProfileRequest
 import com.mosl.saathi.api.model.leadprofile.SaveLeadProfileRequest
 import com.mosl.saathi.api.model.leadviewactivities.*
+import com.mosl.saathi.api.model.leadviewhistory.IndirectLeadHistoryResponse
 import com.mosl.saathi.api.model.leadviewhistory.LeadHistoryRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import com.mosl.saathi.api.model.leadviewmain.RegisterProspectOnlineRequest
@@ -102,10 +106,12 @@ import com.mosl.saathi.api.model.prospect.ProspectResponse
 import com.mosl.saathi.api.model.prospect.SuggestMeRequest
 import com.mosl.saathi.api.model.query.QueryItem
 import com.mosl.saathi.api.model.query.QueryRequest
+import com.mosl.saathi.api.model.quickLink.QuickLinkRequest
 import com.mosl.saathi.api.model.reactivation.*
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportItem
 import com.mosl.saathi.api.model.reports.report.AssignedLeadReportRequest
 import com.mosl.saathi.api.model.reports.report.LeadReportRequest
+import com.mosl.saathi.api.model.search.AdvanceSearchRequestPost
 import com.mosl.saathi.api.model.search.DiyLinkResponse
 import com.mosl.saathi.api.model.search.DiyRequest
 import com.mosl.saathi.api.model.search.SearchResponse
@@ -225,6 +231,11 @@ interface SaathiApi {
     fun insertLeadProductMapping(
         @Body request: InsertLeadProductRequest
     ): Observable<List<LeadProductMappingItem>>
+
+    @POST("Lead/AddUpdateLeadProduct")
+    fun addUpdateLeadProduct(
+        @Body request: InsertMFDLeadProductRequest
+    ): Observable<SaathiCommonResponse<String>>
 
     @POST("Stage/GetStageList")
     fun getStageList(
@@ -836,4 +847,29 @@ interface SaathiApi {
 
     @POST("SMSCampaign/InsertReactivationWithFile")
     fun fnSubmitReactivation(@Body request:ReactivationSubmitRequest):Observable<SaathiCommonResponse<String>>
+
+    @POST("Client/SearchClient")
+    fun fnSearchClient(@Body request: AdvanceSearchRequestPost):Observable<SaathiCommonResponse<AdvanceSearchCommonResponse>>
+
+    //-------------Alliance sent otp ----------------------
+    @POST("BankMeeting/GenerateBankMeetingOTP")
+    fun generateBankMeetingOTP(
+        @Body request: BankMeetingSendOTPRequest
+    ): Observable<SaathiCommonResponse<String>>
+    @POST("BankMeeting/VerifyBankMeetingOTP")
+    fun verifyOtpForBankMeeting(
+        @Body request: BankMeetingVerifyOTPRequest
+    ): Observable<SubmitOTPResponse>
+
+    @POST("Lead/GetEKycExpressOpenAccountUrl")
+    fun getQuickLinkMenuURL(
+        @Body request: QuickLinkRequest
+    ): Observable<SaathiCommonResponse<String?>>
+
+    @ExcludeWrapper
+    @POST("Lead/PullLeadStageDetailByID")
+    fun getLeadStageDetailById(
+        @Body request: LeadStageDetailRequest
+    ): Observable<ExtraDataCommonResponse<List<LeadStageDetailResponse>>>
+
 }

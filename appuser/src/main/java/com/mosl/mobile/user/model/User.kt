@@ -29,8 +29,12 @@ data class User(
     @JvmField var EventListRequired: Boolean,
     @JvmField val collectionOfficer: Boolean = false,
     @JvmField var myZoneProfile: String,
-    @JvmField var isBankMeeting: Boolean
+    @JvmField var isBankMeeting: Boolean,
+    @JvmField var authState: Int,
+    @JvmField var usertype:Int
 ) {
+
+
     fun isAufsb(): Boolean {
         return userTypeSequence == "9"
     }
@@ -58,8 +62,19 @@ data class User(
     }
 
     fun isAuBankSalesSupport(): Boolean {
-
         return isBankMeeting
+    }
+
+    fun isIndirectUser(): Boolean {
+        Log.d("user type",usertype.toString())
+        if(usertype==0)
+        {
+            return authState==9
+        }
+        else{
+            return usertype==9
+        }
+
     }
 
     fun isRetail(): Boolean {
@@ -95,6 +110,16 @@ data class User(
                 }
             }
         } else {
+            flag = true
+        }
+        return flag
+    }
+
+    fun isBDMUser(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessProfileName.equals("BDM-Franchisee", ignoreCase = true)
+            || currentBusinessProfile.businessProfileName.equals("BDM-TL", ignoreCase = true)
+            ) {
             flag = true
         }
         return flag
@@ -152,11 +177,10 @@ data class User(
     fun isAttendanceAllowed(): Boolean {
         var flag = false
         if (myZoneProfile.equals("Relationship Manager", ignoreCase = true) ||
-                myZoneProfile.equals("Key Account Manager", ignoreCase = true)||
-            myZoneProfile.equals("Sales Manager-Branch", ignoreCase = true)||
+                myZoneProfile.equals("Priority Relationship Manager", ignoreCase = true)||
+            myZoneProfile.equals("Cluster Manager", ignoreCase = true)||
             myZoneProfile.equals("Area Sales Manager", ignoreCase = true)||
-            myZoneProfile.equals("Regional Sales Manager", ignoreCase = true)||
-            myZoneProfile.equals("Cluster Head", ignoreCase = true)) {
+            myZoneProfile.equals("Regional Sales Manager", ignoreCase = true)) {
             flag = true
         }
         return flag
@@ -170,4 +194,26 @@ data class User(
         }
         return flag
     }
+
+    fun isAttendanceAllowedForPCG(): Boolean {
+        var flag = false
+
+        if (myZoneProfile.equals("Group Leader-PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("HNI Sales", ignoreCase = true)) {
+            flag = true
+        }
+        return flag
+    }
+
+    fun isShowLeadStageUpdateInMeeting(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("1") &&
+            (currentBusinessProfile.businessProfileId.equals("12") ||
+                    currentBusinessProfile.businessProfileId.equals("1276")) ) {
+            flag = true
+        }
+        return flag
+    }
+
 }

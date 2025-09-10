@@ -1,0 +1,156 @@
+package com.mosl.app.core.data.saathiIndirect.createMeeting
+
+import android.util.Log
+import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIONABLES
+import com.mosl.app.core.data.leadviewdetail.createmeeting.ACTIVITYTYPE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.BACLIENTMEETING
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CATEGORY
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper
+import com.mosl.app.core.data.leadviewdetail.createmeeting.FEEDBACK
+import com.mosl.app.core.data.leadviewdetail.createmeeting.INTERESTEDIN
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGADDRESSID
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGDURATION
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGOBJECTIVE
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGREASON
+import com.mosl.app.core.data.leadviewdetail.createmeeting.OUTSTATIONMEETING
+import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
+import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
+import com.mosl.app.core.data.leadviewdetail.createmeeting.TRAVELLINGMODEID
+import com.mosl.app.core.data.saathiIndirect.SetAppointment.SetAppointmentMapper
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeeting
+import com.mosl.mobile.domain.createmeeting.AddUpdateMeetingIndirect
+import com.mosl.mobile.domain.createmeeting.Attendee
+import com.mosl.mobile.domain.createmeeting.LookUp
+import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
+import com.mosl.mobile.user.login.UserManagerImpl
+import com.mosl.saathi.api.SaathiIndirectApi
+import com.mosl.saathi.api.model.addupdatemeeting.AddUpdateMeetingNewResposne
+import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
+import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
+import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.LookupRequestNew
+import com.mosl.saathi.data.BuildConfig
+import io.reactivex.rxjava3.core.Observable
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import java.net.URLEncoder
+import javax.inject.Inject
+
+class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
+    val userManager: UserManagerImpl,
+    val saathiIndrectApi: SaathiIndirectApi
+): IndirectCreateMeetingRepository {
+    override fun getMeetingReason(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=15,parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(
+                MEETINGDURATION
+            ))
+        }
+    }
+
+    override fun getMeetingObjective(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=18,parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(
+                MEETINGOBJECTIVE
+            ))
+        }
+    }
+
+    override fun getLocationAddress(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=117,parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(MEETINGADDRESSID))
+        }
+    }
+
+    override fun getTravellingMode(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId="0",lookupTypeId=118,parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(TRAVELLINGMODEID))
+        }
+    }
+
+    override fun getInteresedIn( interestedInId : Int): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId= interestedInId,
+                parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(INTERESTEDIN))
+        }
+    }
+
+    override fun getAttendeeData(searchText: String): Observable<List<Attendee>> {
+        val request = AutoCompleteAttendeeRequest(
+            URLEncoder.encode(searchText, "utf-8"),
+            URLEncoder.encode(searchText, "utf-8")
+        )
+        return saathiIndrectApi.getAutoCompleteAttendee(request)
+            .map { CreateMeetingMapper.transformAttendeeData(it.response ?: mutableListOf()) }
+    }
+
+    override fun getAddress(
+        meetingID: String,
+        leadId: String
+    ): Observable<String> {
+        return saathiIndrectApi.getAddressByLeadId(AddressByLeadIdRequest(leadId, meetingID))
+            .map { it.meetingAddress }
+    }
+
+    override fun saveRequest(data: String): Observable<AddUpdateMeetingIndirect> {
+        Log.d("Meeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postAddUpdateMeeting(request)
+            .map {
+                CreateMeetingMapper.transformAddUpdateMeetingNew(it)
+            }
+    }
+
+    override fun saveBDMRequest(data: String): Observable<AddUpdateMeetingIndirect> {
+        Log.d("Meeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postBDMAddUpdateMeeting(request)
+            .map {
+                CreateMeetingMapper.transformAddUpdateMeetingNew(it)
+            }
+
+    }
+
+    override fun saveRequetProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
+        Log.d("ProMeeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postAddUpdateMeeting(request)
+
+    }
+
+    override fun saveRequetBDMProspectMeeting(data: String): Observable<AddUpdateMeetingNewResposne> {
+        Log.d("ProMeeting Post Json",data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
+        return saathiIndrectApi.postBDMAddUpdateMeeting(request)
+    }
+
+    fun getType(type: Int): String {
+        return when (type) {
+            INTERESTEDIN -> "Select Product"
+            MEETINGOBJECTIVE -> "Select Meeting Objective"
+            MEETINGDURATION -> "Select Meeting Duration"
+            MEETINGADDRESSID -> "Select Meeting Location"
+            TRAVELLINGMODEID -> "Select Travelling Mode"
+            MEETINGREASON -> "Select Meeting Reason"
+            CATEGORY -> "Select Category"
+            SUBCATEGORY -> "Select Sub Category"
+            ACTIONABLES -> "Select Actionables"
+            BACLIENTMEETING -> "Select BA Client Meeting"
+            OUTSTATIONMEETING -> "Select Out Station Meeting"
+            TOUCHEDUNTOUCHED -> "Select Touched Untouched"
+            FEEDBACK -> "Select Feedback"
+            else -> "Select Activity Type"
+        }
+    }
+}

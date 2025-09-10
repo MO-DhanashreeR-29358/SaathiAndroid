@@ -145,11 +145,16 @@ class DrawerMenuView : FrameLayout {
                      // it.defaultBusinessProfile.branchCode,
                     branchCode,
                       it.imageUrl,
+                    userManager,
                       closeSelectSubject,
                       menuSelectSubject
           )
         )
       }
+    source.getMenuItems(userManager, userManager.getReportMenuList(), userManager.getDigitalSalesKitMenuList())
+      .compose(applyUiModel())
+      .subscribe(this::render)
+      .addTo(disposable)
 
   }
 

@@ -6,6 +6,7 @@ import com.mosl.saathi.api.SaathiApi
 import com.mosl.saathi.api.model.assignto.UserBusinessProfileRequest
 import com.mosl.saathi.api.model.clientdetail.ClientDetailRequest
 import com.mosl.saathi.api.model.lead.InsertLeadProductRequest
+import com.mosl.saathi.api.model.lead.InsertMFDLeadProductRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
@@ -50,6 +51,11 @@ class LeadDetailRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun mfdAddProduct(request: InsertMFDLeadProductRequest): Observable<String> {
+        return saathiApi.addUpdateLeadProduct(request).map {
+            it.response.toString()
+        }
+    }
     override fun updateProduct(request: UpdateLeadRequest): Observable<UpdateLeadResponse> {
         return saathiApi.updateLead(request)
             .map {

@@ -1,9 +1,13 @@
 package com.mosl.app.core.data.leadviewdetail.createmeeting
 
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapLeadStageDetailList
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.mapToSendOtpResponse
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.stageItemsToRowDatas
+import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.statusItemsToRowDatas
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformEventChipsList
 import com.mosl.app.core.data.leadviewdetail.createmeeting.CreateMeetingMapper.transformMobileList
 import com.mosl.app.core.data.pendingapproval.report.mapToMultiUpdateApprovalresponse
+import com.mosl.mobile.domain.RowData
 import com.mosl.mobile.domain.createmeeting.*
 import com.mosl.mobile.user.helper.getData
 import com.mosl.mobile.user.login.UserManager
@@ -13,16 +17,22 @@ import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.createmeeting.ChipsEventsRequest
+import com.mosl.saathi.api.model.createmeeting.LeadStageDetailRequest
 import com.mosl.saathi.api.model.lead.LeadViewRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
+import com.mosl.saathi.api.model.lead.StageRequest
+import com.mosl.saathi.api.model.lead.StatusRequest
 import com.mosl.saathi.api.model.lead.createmeeting.MobileListRequest
 import com.mosl.saathi.api.model.lead.createmeeting.SendOTPRequest
+import com.mosl.saathi.api.model.lead.createmeeting.SurveyLinkRequest
 import com.mosl.saathi.api.model.leadviewmain.ClientImageRequest
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.functions.BiFunction
+import io.reactivex.rxjava3.functions.Function3
 import io.reactivex.rxjava3.functions.Function8
 import io.reactivex.rxjava3.functions.Function9
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import java.net.URLEncoder
 import javax.inject.Inject
@@ -73,7 +83,7 @@ class CreateMeetingRepositoryImpl @Inject constructor(
         }
     }
 
-    fun getClientData(ucid: String): Observable<ClientData> {
+   /* fun getClientData(ucid: String): Observable<ClientData> {
         return Observable.zip(
             getClientDetail(ucid.toInt()),
             getClientImage(ucid.toInt()),
@@ -88,10 +98,20 @@ class CreateMeetingRepositoryImpl @Inject constructor(
                         t5: List<LookUp>, t6: List<LookUp>, t7: List<LookUp>, t8: List<LookUp>, t9: List<LookUp> ->
                 ClientData(t1, t2, t3, t4, t5, t6, t7, t8, t9)
             })
+    }*/
+
+    fun getClientData(ucid: String): Observable<ClientData> {
+        return Observable.zip(
+            getClientDetail(ucid.toInt()),
+            getClientImage(ucid.toInt()),
+            getMobileList(leadId = "0", ucid = ucid),
+            Function3 { t1: ClientDetail, t2: String,  t3: List<MobileListData> ->
+                ClientData(t1, t2, t3)
+            })
     }
 
 
-    fun getLeadData(leadId: String): Observable<ClientData> {
+   /* fun getLeadData(leadId: String): Observable<ClientData> {
         return Observable.zip(getLeadView(leadId),
             getLookup(ACTIVITYTYPE),
             getMobileList(leadId = leadId, ucid = "0"),
@@ -107,6 +127,16 @@ class CreateMeetingRepositoryImpl @Inject constructor(
                 ClientData(t1, "", t2, t3, t4, t5, t6, t7, t8)
             })
     }
+*/
+   fun getLeadData(leadId: String): Observable<ClientData> {
+       return Observable.zip(getLeadView(leadId),
+           getMobileList(leadId = leadId, ucid = "0"),
+
+           BiFunction { t1: ClientDetail,  t2: List<MobileListData>  ->
+               ClientData(t1, "", t2)
+           })
+   }
+
 
     override fun getAddress(
         meetingID: String,
@@ -201,11 +231,38 @@ class CreateMeetingRepositoryImpl @Inject constructor(
     }
 
     override fun saveRequest(data: String): Observable<AddUpdateMeeting> {
-        val request = RequestBody.create(MediaType.parse("text/plain"), data)
+        val request = RequestBody.create("text/plain".toMediaTypeOrNull(), data)
         return saathiApi.postAddUpdateMeeting(request)
             .map {
                 CreateMeetingMapper.transformAddUpdateMeeting(it)
             }
+    }
+
+    override fun getLeadStageDetailById(
+        leadId: String,
+        productList: List<String>
+    ): Observable<List<LeadStageDetail>> {
+        val request = LeadStageDetailRequest(leadId = leadId, productIdList = productList)
+        return saathiApi.getLeadStageDetailById(request).map {
+            mapLeadStageDetailList(it.data!!)
+        }
+    }
+
+    override fun getStageRowDatas(): Observable<List<RowData>> {
+        val stageRequest = StageRequest(
+            businessUnitId = requireNotNull(
+                userManager.getUser()?.currentBusinessProfile?.businessUnitId,
+                { "businessUnitId in UserManager is not be null" }),
+            stageID = "2"
+        )
+        return saathiApi.getStageList(stageRequest)
+            .map { it.stageItemsToRowDatas() }
+    }
+
+    override fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>> {
+        val statusRequest = StatusRequest(stageID = selectedStage)
+        return saathiApi.getStatusList(statusRequest)
+            .map { it.statusItemsToRowDatas() }
     }
 }
 
@@ -223,3 +280,4 @@ const val OUTSTATIONMEETING = 17
 const val BACLIENTMEETING = 16
 const val TOUCHEDUNTOUCHED = 132
 const val FEEDBACK = 133
+

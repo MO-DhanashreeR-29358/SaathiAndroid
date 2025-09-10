@@ -56,6 +56,7 @@ class BusinessSnapshotFragment : CommonFragment(), BusinessSnapshotView {
     }
 
     private fun setUpView() {
+        binding.spFilterPeriodMyLead.visibility=View.GONE
         val groupModel = dashboardModel.getGroupModel(
             DashboardSystemModel.getBusinessSnapshotSystemName()
         )

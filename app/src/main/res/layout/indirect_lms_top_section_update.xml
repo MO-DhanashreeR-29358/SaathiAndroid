@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/title_black"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_4sdp"
+        >
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLeadViewArrow"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/_6sdp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/ic_more_vert_black_24dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/ivLead"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="@dimen/_60sdp"
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_size"
+        tools:text="Lead name"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/_10sdp"
+        android:layout_marginRight="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:baselineAligned="false"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_weight="1.1"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:text="@string/txt_lable_lead_id"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:text="@string/txt_lable_indirect_client_code"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:text="@string/txt_lable_branch_code"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:text="@string/txt_lable_current_stage"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:text="@string/txt_lable_lead_activation_date"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_weight="1"
+            android:gravity="end"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:id="@+id/tvLeadId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
+
+            <TextView
+                android:id="@+id/tvClientCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
+
+
+            <TextView
+                android:id="@+id/tvBranchCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
+
+            <TextView
+                android:id="@+id/tvCurrentStage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
+
+            <TextView
+                android:id="@+id/tvActivationdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_2sdp"
+                android:gravity="end"
+                android:textColor="@color/white"
+                android:textSize="@dimen/txt_size_lms_top_section"
+                tools:text="Data"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
+</layout>

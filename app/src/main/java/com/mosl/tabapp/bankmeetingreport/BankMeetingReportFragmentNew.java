@@ -242,7 +242,8 @@ public class BankMeetingReportFragmentNew extends CommonFragment {
             MeetingRequest
                     request =
                     new MeetingRequest(0,
-                            Integer.parseInt(MOSLConstants.REPORT_PAGE_SIZE),
+                            //Integer.parseInt(MOSLConstants.REPORT_PAGE_SIZE),
+                            500,
                             0,
                             false,
                             CRMAppUtil.getDateStr(fromDat, "yyyy-MM-dd"),

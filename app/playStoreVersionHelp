@@ -1,0 +1,102 @@
+Version : 2.6.9
+Upload Date : 20.12.2014
+Release Note :  adding indirect flow for pcg advisory and pcg admin
+                Modules cover - lead creation, lead view details, create meeting, set appointment,
+                                menu drawer, prospect meeting, lead search on dashboard.
+---------------------------------------------------------------------------------------------
+Version : 2.7.0
+Upload Date : 23.12.2014
+Release Note :  1. attendance for pcg (reverted code pushed)
+                2. Standard remark drop down added in lead detail page for alliance profile for AUSFBMAIN only
+                    Field should be mandatory and by default first value selected.
+
+---------------------------------------------------------------------------------------------
+Version : 2.9.3
+Update Date : 1.2.2025
+Release Note :  1. SAAT- 2542 : Mobile app rebranding
+                2. SAAT-2530 : Client PII unmasking and copy option
+                3. Create meeting page : resolve date format issue - while selecting 12 or 00 time shows 12 AM only.
+                                         while select 12 it should shows 12 PM and for 00 should shows 12 AM.
+                4. Adding 'HNI Sales' in PCG profile to show attendance button by request of Tausif Sir.
+                5. After upload app to play store getting isAccessibilityTools api service issue, to solve
+                    this generate small video upload to drive and set its link to solve this policy issue
+                6. Also getting READ_MEDIA_IMAGE and READ_MEDIA_VIDEO declaration issue. mark the declaration and send to review
+
+---------------------------------------------------------------------------------------------
+Version : 2.9.5
+Update Date : 8.2.2025
+Release Note :  1. SAAT- 1335 : Indirect dashboard IFA and FOCO
+                2. Resolve issue rooted device by adding FridaDetect classs
+                3. Resolve issue Key logger
+                4. Lead creation bug fixes for Indirect Foco user.
+---------------------------------------------------------------------------------------------
+Version : 3.0.0
+Update Date : 14.2.2025
+Release Note :  1. SAATH- 2557 : Advance search in mobile
+                2. add this functionality in menu for all channel
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.1
+Update Date : 21.2.2025
+Release Note :  1. Resolve live issue: 1200 code not able to search in prospect meeting
+                - Indirect prospect meeting change api for client code search.
+---------------------------------------------------------------------------------------------
+Version : 3.0.2
+Update Date : 13.3.2025
+Release Note :  1. ZohoId - ASZ-I341
+                   Resolve live issue: getting object reference not set to instance on create meeting page,
+                    while searching client code through advance search and moving to create meeting page.
+---------------------------------------------------------------------------------------------
+Version : 3.0.4
+Update Date : 24.3.2025
+Release Note :  1. Resolve live issue: Bank meeting page for au user getting 'Enter bank' issue on bank drop down.
+                2. Adding quick link menu in left menu drawer.
+                3. Comment Zykrr code.
+---------------------------------------------------------------------------------------------
+Version : 3.0.5
+Update Date : 11.4.2025
+Release Note :  1. Resolve live issue: Bank meeting page - meeting type drop down item change validation issue
+                2. Indirect dashboard - CC Admin and CNC foco advisory admin
+                3. SAAT-I2568 : OTP-Based Authentication in Client Meetings- Alliance
+---------------------------------------------------------------------------------------------
+Version : 3.0.6
+Update Date : 17.4.2025
+Release Note :  1. Saathi icon change due to app removed by console because of privacy policy.
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.7
+Update Date : 25.4.2025
+Release Note :  1. SAAT-I2548 OTP Verification for Branch Visit Meetings in Saathi Web - Alliance
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.8
+Update Date : 9.5.2025
+Release Note :  1. Resolve attendance issue : adding myzone profiles in user class for retail profile
+
+---------------------------------------------------------------------------------------------
+Version : 3.0.9
+Update Date : 30.5.2025
+Release Note :  SAAT-I2577 : IP Execution Dealer 2.0
+                SAAT-I2615 : NRI Non Broking Product KYC CTA in Saathi
+---------------------------------------------------------------------------------------------
+Version : 3.1.0
+Update Date : 13.6.2025
+Release Note :  Zykrr integration for direct channel only
+
+---------------------------------------------------------------------------------------------
+Version : 3.1.3
+Update Date : 11.7.2025
+Release Note : 1. Zykrr integration for retail direct channel only
+               2. SAAT- I2681 : Add Insurance Journey CTA in Quick Links & lead detail page
+
+---------------------------------------------------------------------------------------------
+Version : 3.1.5
+Update Date : 21.7.2025
+Release Note : 1. Zykrr integration comment as per requirement
+               2. SAAT-I2691  Prompt Lead Stage Update Post Meeting Creation – Retail Business
+
+---------------------------------------------------------------------------------------------
+Version : 3.1.6
+Update Date : 26.8.2025
+Release Note : 1. CRM-I1409 Integration of Franchisee BDM Meeting Validation in Saathi CRM App
+

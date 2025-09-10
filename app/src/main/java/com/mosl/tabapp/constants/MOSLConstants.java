@@ -256,6 +256,10 @@ public interface MOSLConstants extends LabelConfig {
     String DATE_FORMAT_TO_SERVER_MEETING_SEND = "yyyy-MM-dd";
     String DATE_FORMAT_OF_DD_MMM_YYYY = "dd-MMM-yyyy";
 
+    String DATE_FORMAT_OF_DD_MMM_YYYY1 = "dd MMM yyyy";
+
+    String DATE_FORMAT_OF_TIME = "hh:mm a";
+
     int FILE_UPLOAD_SIZE_LIMT = 5;
     int FILE_UPLOAD_COUNT_LIMT = 4;
     String FILE_LARGE_MESSAGE =
@@ -292,5 +296,42 @@ public interface MOSLConstants extends LabelConfig {
 
     String ROOTED_DEVICE_MESSAGE = "Your device is rooted, You will not be able to use the application!!";
     String REACTIVATION_SOURCE = "source_filter";
+
+    int INDIRECT_CATEGORY = 23;
+
+    //UAT
+    int INDIRECT_INTERESTED_IN_UAT = 5;
+    //Live
+    int INDIRECT_INTERESTED_IN_LIVE = 5;
+
+    int INDIRECT_WORK_EXP = 147;
+
+    String INDIRECT_TALK_TIME = "Talk Time";
+    String INDIRECT_TOP_INCENTIVE = "Top Inactive Clients";
+    String INDIRECT_CLIENT_REACTIVATION = "Client Reactivation";
+    String INDIRECT_TOP_CLIENT_LIST = "Top client list giving 25% or above revenue";
+
+    String INDIRECT_RUNRATE_FOR_ADVISOR = "Runrate for Advisor";
+
+    String INDIRECT_REPORT_IS_HERARCHY = "isHerarchy";
+
+    String INDIRECT_TODAY_BIRTHDAY="Today's Birthday And Anniversary";
+    String INDIRECT_1ST_MEETING="1st Meeting not Done";
+
+    String INDIRECT_LEADS_NOT_UPDATED="Leads not Updated";
+
+    String INDIRECT_INACTIVE_IFAS="Inactive IFAs";
+    String INDIRECT_TEAM_APPOINTMENT="Team Appointment";
+
+    String INDIRECT_NEW_LEAD="New Lead";
+    String PERIOD_FILTER= "PeriodFilter";
+    String PAGE_TYPE="pagetype";
+    String STAGE_CODE="stagecode";
+    String SEL_CATEGORY="selcategory";
+    String SEL_FILTER="selfilter";
+
+    String INDIRECT_CC_METTING_SUMMARY = "Meeting Summary";
+
+    String INDIRECT_CC_MEETING_REACH_SUMMARY = "Meeting Reach Summary";
 }
 

@@ -20,22 +20,24 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
   }
     namespace 'com.mosl.mobile.user'
 }
 
 dependencies {
-  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+  implementation files('..\\libs\\annotations-2.0.1.jar')
+  implementation files('..\\libs\\moslcommons-1.2.1.jar')
 
-    testImplementation deps.testing.junit
+  testImplementation deps.testing.junit
 
   implementation deps.kotlin
 
   implementation deps.rx.java
   implementation deps.rx.kotlin
-  implementation deps.rx.preferences
+
 
   implementation deps.dagger.core
   kapt deps.dagger.compiler
@@ -48,9 +50,19 @@ dependencies {
 
   implementation project (':saathiapi')
   implementation project (':shared')
-  api deps.mofslArtifacts.appcore
-  implementation deps.mofslArtifacts.tokenmanager
-  implementation deps.mofslArtifacts.moslcommons
-  implementation deps.mofslArtifacts.appcore
+  implementation project(':artifact_lib')
+  implementation project(':mosl_tokenmanager')
+  implementation project(':mosl_rxpref')
+  //api deps.mofslArtifacts.appcore
+  //implementation deps.mofslArtifacts.tokenmanager
+  //implementation deps.mofslArtifacts.moslcommons
+  //implementation deps.mofslArtifacts.appcore
+  //implementation deps.rx.preferences
+
+ // implementation files('app/libs/annotations-2.0.1.jar')
+ // implementation files('app/libs/moslcommons-1.2.1.jar')
+
+
+
   implementation(deps.androidx.security)
 }

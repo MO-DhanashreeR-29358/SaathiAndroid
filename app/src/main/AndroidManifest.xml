@@ -42,9 +42,10 @@
         android:name=".SaathiAppImpl"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/icon_app_saathi"
+        android:icon="@mipmap/icon_app_saathi_new"
         android:label="@string/main_app_name"
         android:largeHeap="true"
+        android:isAccessibilityTool="false"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
         android:theme="@style/CRMMOSLTheme"
@@ -55,6 +56,15 @@
         <activity android:name=".settings.SettingActivity"></activity>
 
         <meta-data android:name="google_analytics_default_allow_analytics_storage" android:value="true" />
+
+        <receiver
+            android:name="com.instacart.library.truetime.BootCompletedBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".slider.SliderActivity"
@@ -113,12 +123,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name="com.mosl.ekycexpress.login.core.LoginActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|navigation"
-            android:screenOrientation="portrait"
-            android:theme="@style/EkycTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
+<!--        <activity-->
+<!--            android:name="com.mosl.ekycexpress.login.core.LoginActivity"-->
+<!--            android:configChanges="keyboard|keyboardHidden|orientation|navigation"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/EkycTheme"-->
+<!--            android:windowSoftInputMode="stateHidden|adjustPan" />-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -128,24 +138,24 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCBwZ-oxAQ2ww1o7Y9zqpGGQZsGP1FBg3w" />-->
 
-        <activity
-            android:name="com.mosl.ekycexpress.core.CommonActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/EkycTheme"
-            android:windowSoftInputMode="stateHidden"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
+<!--        <activity-->
+<!--            android:name="com.mosl.ekycexpress.core.CommonActivity"-->
+<!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/EkycTheme"-->
+<!--            android:windowSoftInputMode="stateHidden"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.VIEW" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
-        <activity
-            android:name="com.mosl.ekycexpress.webview.WebViewActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@style/EkycTheme"
-            android:windowSoftInputMode="stateHidden" />
+<!--        <activity-->
+<!--            android:name="com.mosl.ekycexpress.webview.WebViewActivity"-->
+<!--            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:theme="@style/EkycTheme"-->
+<!--            android:windowSoftInputMode="stateHidden" />-->
         <activity
             android:name="com.digio.in.esign2sdk.DigioEsignActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
@@ -201,6 +211,8 @@
       	        android:value="androidx.startup"
                 tools:node="remove" />
     </provider>
+
+
 
 
 </application>

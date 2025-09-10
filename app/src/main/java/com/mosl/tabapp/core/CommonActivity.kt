@@ -15,11 +15,13 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
 import android.text.Html
+import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -35,6 +37,7 @@ import com.mosl.app.core.data.error.ErrorUtils
 import com.mosl.app.core.data.fcm.FcmTokenSyncHelper
 import com.mosl.app.core.data.util.HttpListenerFactory
 import com.mosl.app.core.exception.ServiceFailureException
+import com.mosl.app.core.network.isNetworkConnected
 import com.mosl.app.core.prefs.BooleanPreference
 import com.mosl.app.core.prefs.IntegerPreference
 import com.mosl.app.core.prefs.StringPreference
@@ -44,6 +47,7 @@ import com.mosl.app.coreui.base.BaseActivity
 import com.mosl.commons.data.UiModel
 import com.mosl.commons.data.onFailure
 import com.mosl.commons.data.onSuccess
+import com.mosl.mobile.data.util.CommonBaseUrls
 import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.annotation.PreferenceClear
 import com.mosl.mobile.user.annotation.RemoteConfigData
@@ -53,6 +57,10 @@ import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.ProfileInfo
 import com.mosl.navigator.*
+import com.mosl.saathi.api.SaathiApi
+import com.mosl.saathi.api.model.common.SaathiCommonResponse
+import com.mosl.saathi.api.model.prospect.SuggestMeRequest
+import com.mosl.saathi.api.model.quickLink.QuickLinkRequest
 import com.mosl.shared.BranchSelectNeeded
 import com.mosl.shared.util.MSFDialog
 import com.mosl.shared.util.MSFDialog.Action
@@ -77,6 +85,7 @@ import com.mosl.tabapp.service.location.LocationWorker
 import com.mosl.tabapp.splash.SplashActivity
 import com.mosl.tabapp.ui.quickdialog.ActionItem
 import com.mosl.tabapp.ui.quickdialog.QuickAction
+import com.mosl.tabapp.urls.ApiBaseUrlImpl
 import com.mosl.tabapp.util.adapters.AutoCompleteAdapter.*
 import com.mosl.tabapp.webview.WebviewFragment
 import com.mosl.user.data.login.MyZoneLoginRepositoryImpl
@@ -98,6 +107,8 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeUnit.MINUTES
 import javax.inject.Inject
 import kotlin.collections.set
+import com.mosl.tabapp.BuildConfig
+import io.reactivex.rxjava3.core.Observable
 
 
 class CommonActivity : BaseActivity(),
@@ -145,6 +156,9 @@ class CommonActivity : BaseActivity(),
 
     @Inject
     lateinit var fcmTokenSyncHelper: FcmTokenSyncHelper
+
+    @Inject
+    lateinit var saathiApi: SaathiApi
 
 
     @Inject
@@ -213,6 +227,33 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAAAA Common Activity onCreate ")
 
         binding = ActivityCommonbaseBinding.bind(findViewById(R.id.drawerLayout))
+        val window = window
+        window.statusBarColor = ContextCompat.getColor(this, R.color.status_bar_color)
+        binding.drawerMenu.post(Runnable {
+            var statusBarHeight = 0
+            var navBarHeight = 0
+
+            // Get status bar height
+            val statusBarResId = resources.getIdentifier("status_bar_height", "dimen", "android")
+            if (statusBarResId > 0) {
+                statusBarHeight = resources.getDimensionPixelSize(statusBarResId)
+            }
+
+            // Get navigation bar height (only if device has soft keys)
+            val navBarResId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            if (navBarResId > 0) {
+                navBarHeight = resources.getDimensionPixelSize(navBarResId)
+            }
+
+            // Apply padding
+            binding.drawerMenu.setPadding(
+                binding.drawerMenu.getPaddingLeft(),
+                statusBarHeight,
+                binding.drawerMenu.getPaddingRight(),
+                navBarHeight
+            )
+        })
+
         binding.actionBar.setHomeAction(OnClickListener { openMenuDrawer() })
         binding.actionBar.setNotification(OnClickListener {
             screenNavigator.openPage(NavigationConstants.NAVIGATE_TO_NOTIFICATION.toString(), true)
@@ -286,6 +327,7 @@ class CommonActivity : BaseActivity(),
         Timber.d("AAA onStop")
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public fun distaLoginApiCall(){
         // if(mDistaSdk.isLoggedIn) {
             AssetTracker.initialize(BaseApplication.getBaseApplication())
@@ -433,11 +475,11 @@ class CommonActivity : BaseActivity(),
         data: Intent?
     ) {
         Timber.d("AAA onActivityResult")
-        if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
-            val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
-            intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
-            startActivity(intent)
-        }
+//        if (resultCode == com.mosl.ekycexpress.core.meta.constants.LoginSuccess) {
+//            val intent = Intent(this, com.mosl.ekycexpress.core.CommonActivity::class.java)
+//            intent.putExtra(CommonActivity.IS_LOGGED_IN_SUCESS, true)
+//            startActivity(intent)
+//        }
         if (resultCode == BranchSelectNeeded) {
             menuTopSection(data?.getStringExtra(BranchActivity.BRANCHCODE))
         }
@@ -699,7 +741,7 @@ class CommonActivity : BaseActivity(),
     }
 
     private fun setupObservables() {
-        val mainThread = dispatchers.main
+       // val mainThread = dispatchers.main
         disposable.add(
             tokenPref.asObservable()
                 .distinctUntilChanged()
@@ -711,7 +753,7 @@ class CommonActivity : BaseActivity(),
                 }
                 .subscribe())
 
-        val Threshold = TimeUnit.SECONDS.toNanos(10)
+      /*  val Threshold = TimeUnit.SECONDS.toNanos(10)
         eventListenerFactory.getApiStatsObservable()
             .filter { callTime -> callTime > Threshold }
             .observeOn(mainThread)
@@ -721,7 +763,7 @@ class CommonActivity : BaseActivity(),
                     snackbar = showConnectivityIssueSnackbar()
                 }
             }
-            .addTo(disposable)
+            .addTo(disposable)*/
 
 
     }
@@ -785,6 +827,41 @@ class CommonActivity : BaseActivity(),
                     gotoEkycExpressPage(false, WebviewFragment.EQUITY_AND_MFD_ID)
                     binding.drawerLayout.closeDrawers()
                 }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC){
+                    getQuickLinkURL(this, "" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD){
+                    getQuickLinkURL(this, "MFD" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD){
+                    getQuickLinkURL(this, "EQUITY_MFD" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING){
+                    getQuickLinkURL(this, "NONBROK" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING){
+                    getQuickLinkURL(this, "nritpp" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_INSURANCE){
+                    getQuickLinkURL(this, "INSURANCE" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT){
+                    getQuickLinkURL(this, "" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT){
+                    getQuickLinkURL(this, "MINOR" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD){
+                    getQuickLinkURL(this, "MFDNRI" )
+                }
+                else if(menu.pageId==NavigationConstants.NAVIGATE_TO_IP_EXECUTION){
+                    var strUrl = "https://investmentproduct.motilaloswaluat.com:4346/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    if(BuildConfig.FLAVOR == "prod"){
+                        strUrl = "https://investmentproduct.motilaloswal.com/UI/redirect?source=MOSaathi&dealerId="+userManager.getUser()?.employeeCode +"&token="+ userManager.getUser()?.token
+                    }
+                   Log.d("IPExecutionUrl", strUrl)
+                    screenNavigator.openUrlInAppCrome(strUrl)
+                }
 
                 activityNavHelper.onMenuClicked(menu)
 
@@ -800,6 +877,46 @@ class CommonActivity : BaseActivity(),
             .addTo(disposable)
     }
 
+    fun getQuickLinkURL(
+        context: Context,
+        id: String
+    ) {
+        if (context.isNetworkConnected()) {
+            val request = QuickLinkRequest(id)
+            disposable.add(saathiApi
+                .getQuickLinkMenuURL(request)
+                .compose(applyUiModel())
+                .subscribe { this.renderQuickLinkURL(it) })
+
+        } else {
+            noInternetConnectionDialog(context)
+        }
+    }
+
+    private fun renderQuickLinkURL(uiModel: UiModel<SaathiCommonResponse<String?>>) {
+
+        uiModel.onFailure {
+
+        }
+        uiModel.onSuccess {
+            if(it.response != null && it.response!!.isNotEmpty()){
+                screenNavigator.openUrlInAppCrome(it.response!!)
+            }
+        }
+
+    }
+
+    private fun noInternetConnectionDialog(context: Context) {
+        com.mosl.tabapp.ui.MSFDialog.alertDialog(
+            context,
+            0,
+            context.getResources().getString(R.string.motilal_oswal),
+            MOSLConstants.INTERNET_CONNECTION,
+            MOSLConstants.OK,
+            true,
+            null
+        )
+    }
     private fun logoutCustomer() {
         MSFDialog.alertDialog(
             this@CommonActivity, 0, getString(R.string.alert_dialog_title),

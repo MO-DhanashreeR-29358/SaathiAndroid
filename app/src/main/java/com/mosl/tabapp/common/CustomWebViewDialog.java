@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import org.sufficientlysecure.htmltextview.HtmlTextView;
 import android.widget.TextView;
 
 import com.mosl.tabapp.R;
+
+import org.sufficientlysecure.htmltextview.HtmlTextView;
 
 
 /**

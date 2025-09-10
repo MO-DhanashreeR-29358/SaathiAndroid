@@ -1850,6 +1850,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@color/white"
                     android:background="@drawable/button_highlight"
                     android:text="@string/lbl_lead_creation_create" />
 
@@ -1859,6 +1860,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_10sdp"
                     android:layout_weight="1"
+                    android:textColor="@color/white"
                     android:background="@drawable/button_highlight"
                     android:text="@string/button_lbl_lead_creation_cancel" />
             </LinearLayout>

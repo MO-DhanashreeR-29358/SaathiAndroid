@@ -1,7 +1,9 @@
 package com.mosl.tabapp.leadcreation.domain
 
+import com.mosl.mobile.domain.bank.BankCodeModel
 import com.mosl.saathi.api.model.common.SaathiCommonResponse
 import com.mosl.saathi.api.model.createlead.CreateLeadResponse
+import com.mosl.saathi.api.model.lead.LookupItem
 import com.mosl.saathi.api.model.lead.UpdateLeadRequest
 import com.mosl.saathi.api.model.lead.UpdateLeadResponse
 import com.mosl.tabapp.common.RowData
@@ -11,6 +13,9 @@ import io.reactivex.rxjava3.core.Observable
 
 interface LeadCreationRepository {
     fun getLeadCreationPageData(): Observable<LeadCreationPageData>
+    fun getCategoryRowDatas(): Observable<List<RowData>>
+
+    fun getClientTypeRowDatas(): Observable<List<RowData>>
     fun getProductTypeRowDatas(selectedInterestedProduct: String): Observable<List<RowData>>
     fun getProspectSourceRowDatas(selectedSource: String): Observable<List<RowData>>
     fun getStatusRowDatas(selectedStage: String): Observable<List<RowData>>
@@ -32,7 +37,11 @@ interface LeadCreationRepository {
     fun updateLead(request: UpdateLeadRequest): Observable<UpdateLeadResponse>
 
     fun getInterestInRowDatas(): Observable<List<RowData>>
+    fun getSourceRowDatas(): Observable<List<RowData>>
+
     fun getCountryRowDatas(): Observable<List<RowData>>
+    fun getBankFilter(): Observable<List<BankCodeModel>>
+    fun getSTDCodeRowDatas(): Observable<List<RowData>>
     fun getProfileRowDatas(): Observable<List<RowData>>
     fun getBrokingProfileRowDatas(): Observable<List<RowData>>
     fun getIpProfileRowDatas(): Observable<List<RowData>>
@@ -44,6 +53,15 @@ interface LeadCreationRepository {
 
     fun getAccountTypeList(lookupTypeId : Int): Observable<List<RowData>>
 
+    fun getStandardRemarkList(lookupTypeId : Int): Observable<List<RowData>>
+
     fun getChipsList(
     ): Observable<List<RowData>>
+
+    fun getSectorList(): Observable<List<LookupItem>>
+
+    fun getDesignationList(): Observable<List<LookupItem>>
+
+    fun getNetworthList(): Observable<List<LookupItem>>
+
 }

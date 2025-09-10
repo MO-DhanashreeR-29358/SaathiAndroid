@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,7 @@ import com.mosl.tabapp.util.SpinnerAdapterFactory;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,6 +188,31 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
                 return true;
             }
         }
+        return false;
+    }
+
+    String getAddedProductNameList() {
+        StringBuilder sb = new StringBuilder();
+        for (LeadDetailAddProductModel model : leadDetailAddProductModelList) {
+            sb.append(model.getInterestedInValue()).append(",");
+        }
+        if (sb.length() > 0) {
+            String str = sb.toString();
+            if (!str.isEmpty()) {
+                return str.substring(0, str.length() - 1); // "exampl"
+            }
+        }
+        return "";
+    }
+    boolean checkMFDProductAvailable(String name) {
+         if (name.equalsIgnoreCase("Equity") ||
+                 name.equalsIgnoreCase("Only MFD") ||
+                 name.equalsIgnoreCase("Only MFD (Mutual Fund Distribution)") ||
+                 name.equalsIgnoreCase("Only Mutual Fund Distribution") ||
+                 name.equalsIgnoreCase("Equity & Mutual Fund Distribution") ) {
+                return true;
+            }
+
         return false;
     }
 
@@ -436,6 +463,41 @@ public class LeadDetailAddProductAdapter extends BaseAdapter {
         holder.llDeleteLeadDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String strAddedProductNames = getAddedProductNameList();
+                var hasEquity = false;
+                var hasCommodity  = false;
+                var hasMfd  = false;
+                if(strAddedProductNames.contains(",")) {
+                     hasEquity = Arrays.asList(strAddedProductNames.split(",")).contains("Equity");
+                     hasCommodity = Arrays.asList(strAddedProductNames.split(",")).contains("Commodity");
+                     hasMfd = Arrays.asList(strAddedProductNames.split(",")).contains("Only Mutual Fund Distribution");
+                }
+                String oldProductName = "";
+
+                if (hasCommodity && hasEquity && hasMfd) {
+                    oldProductName = "Equity & Mutual Fund Distribution";
+                }
+                else if (hasMfd) {
+                    oldProductName = "Only Mutual Fund Distribution";
+                }
+                else {
+                    oldProductName = "Equity";
+                }
+                String productName = leadDetailAddProductModel.getInterestedInValue();
+                // Restrict deletion for Commodity or Only MFD
+                if (oldProductName.equals("Equity") || oldProductName.equals("Equity & Mutual Fund Distribution")) {
+                    if (productName.equals("Commodity") || productName.equals("Only Mutual Fund Distribution")) {
+                        alertDialog(mContext, 0,
+                                mContext.getString(R.string.motilal_oswal),
+                                mContext.getString(
+                                        R.string.error_message_mfd_product_delete, oldProductName),
+                                mContext.getString(
+                                        R.string.button_label_ok), true, null);
+                        return;
+                    }
+                }
+
+
                 if (isLeadEditable
                         && !leadDetailAddProductModel.getIsProductDisabled().equals("1")) {
                     if (!leadDetailAddProductModel.isDefault()) {

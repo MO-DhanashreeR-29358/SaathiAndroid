@@ -1,6 +1,8 @@
 package com.mosl.tabapp.drawermenu.data.source
 
 import android.annotation.SuppressLint
+import com.mosl.app.core.prefs.StringPreference
+import com.mosl.mobile.user.annotation.BranchCode
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.mobile.user.login.user
 import com.mosl.mobile.user.model.User
@@ -16,32 +18,75 @@ import javax.inject.Inject
 open class MenuDataSourceImpl @Inject constructor(
 ) : MenuDataSource {
 
-    lateinit var user : User
+    lateinit var user: User
+
+    @Inject
+    @field:BranchCode
+    lateinit var branchCodePreference: StringPreference
+
     override fun getMenuItems(
         userManager: UserManager,
         menuItems: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        digitalSalesKitMenu : List<DigitalSalesKitData>
+        digitalSalesKitMenu: List<DigitalSalesKitData>
     ): Observable<List<BaseMenu>> {
         return Observable.fromCallable {
             user = userManager.user
             when {
-                user.isAufsb()  -> {
+                user.isIndirectUser() -> {
+                    getIndirectUserMenu(
+                        user.currentBusinessProfile?.businessUnitName ?: "",
+                        user.currentBusinessProfile?.businessProfileName ?: ""
+                    )
+                }
+
+                user.isAufsb() -> {
                     getAufsbUserMenu(user.isQRDownload)
                 }
+
                 user.isBandhanSales() -> {
                     getBandhanUserMenu(user.isQRDownload)
                 }
+
                 user.isAuBankSalesSupport() -> {
-                    getAuSalesBank(user.isCheckApprovalEnable(),digitalSalesKitMenu, user.isPrimeUser, user.isQRDownload)
+                    getAuSalesBank(
+                        user.isCheckApprovalEnable(),
+                        digitalSalesKitMenu,
+                        user.isPrimeUser,
+                        user.isQRDownload
+                    )
                 }
+
                 user.isSMTEnabled() -> {
-                    getSMTUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
+                    getSMTUserMenu(
+                        menuItems,
+                        digitalSalesKitMenu,
+                        user.isCheckApprovalEnable(),
+                        user.isPrimeUser,
+                        user.isQRDownload,
+                        user.isRetail()
+                    )
                 }
+
                 user.isEkycEnable() -> {
-                    getEkycUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
+                    getEkycUserMenu(
+                        menuItems,
+                        digitalSalesKitMenu,
+                        user.isCheckApprovalEnable(),
+                        user.isPrimeUser,
+                        user.isQRDownload,
+                        user.isRetail()
+                    )
                 }
+
                 else -> {
-                    getUserMenu(menuItems,digitalSalesKitMenu, user.isCheckApprovalEnable(), user.isPrimeUser, user.isQRDownload, user.isRetail())
+                    getUserMenu(
+                        menuItems,
+                        digitalSalesKitMenu,
+                        user.isCheckApprovalEnable(),
+                        user.isPrimeUser,
+                        user.isQRDownload,
+                        user.isRetail()
+                    )
                 }
             }
         }
@@ -50,18 +95,21 @@ open class MenuDataSourceImpl @Inject constructor(
 
     private fun getEkycUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        digitalSalesKitList : List<DigitalSalesKitData>,
+        digitalSalesKitList: List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
         isShowQRCode: Boolean,
-        isSHowReactivation : Boolean
+        isSHowReactivation: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -82,15 +130,18 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
-                 // hide as per requirement
+                getIPExecution(),
+                // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
                 getQueryFormCreate(),
@@ -109,22 +160,24 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         }
     }
 
     private fun getUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        digitalSalesKitList : List<DigitalSalesKitData>,
+        digitalSalesKitList: List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
         isShowQRCode: Boolean,
-        isSHowReactivation : Boolean
+        isSHowReactivation: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
+                getIPExecution(),
                 // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
@@ -145,13 +198,15 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
-                 // hide as per requirement
-                 // getSip(),
+                getAdvanceSearch(),
+                getIPExecution(),
+                // hide as per requirement
+                // getSip(),
                 getDormantReactivationCreate(),
                 getQueryFormCreate(),
                 getReactivationCreate(),
@@ -169,26 +224,29 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         }
     }
 
     private fun getSMTUserMenu(
         list: List<com.mosl.saathi.api.model.splash.ChildMenu>,
-        digitalSalesKitList : List<DigitalSalesKitData>,
+        digitalSalesKitList: List<DigitalSalesKitData>,
         isCheckApproval: Boolean,
         isPrimeUser: Boolean,
         isShowQRCode: Boolean,
-        isSHowReactivation : Boolean
+        isSHowReactivation: Boolean
     ): List<BaseMenu> {
         return if (isCheckApproval) {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
-                 // hide as per requirement
+                getIPExecution(),
+                // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
                 getQueryFormCreate(),
@@ -209,15 +267,18 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         } else {
             arrayListOf(
                 getDashboard(),
+                getAdvanceSearch(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
-                 // hide as per requirement
+                getIPExecution(),
+                // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
                 getQueryFormCreate(),
@@ -237,13 +298,15 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, isSHowReactivation)
+                checkForPrime(isPrimeUser, isShowQRCode, isSHowReactivation)
             }
         }
     }
 
-    private fun ArrayList<BaseMenu>.checkForPrime(isPrimeUser: Boolean,isShowQRCode: Boolean,
-                                                  isSHowReactivation : Boolean): List<BaseMenu> {
+    private fun ArrayList<BaseMenu>.checkForPrime(
+        isPrimeUser: Boolean, isShowQRCode: Boolean,
+        isSHowReactivation: Boolean
+    ): List<BaseMenu> {
         if (isPrimeUser) {
             add(3, getPrimeEntry())
         }
@@ -257,25 +320,39 @@ open class MenuDataSourceImpl @Inject constructor(
         return this
     }
 
-    private fun getAufsbUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
+
+    private fun getIndirectUserMenu(
+        strBuisnessUnitName: String,
+        strBuisnessProfileName: String
+    ): List<BaseMenu> {
+        return arrayListOf(
+            getIndirectDashboard(strBuisnessUnitName, strBuisnessProfileName),
+            getIndirectProspectMeeting(),
+            getLogout()
+        ).apply { checkForPrime(false, false, false) }
+    }
+
+    private fun getAufsbUserMenu(isShowQRCode: Boolean): List<BaseMenu> {
         return arrayListOf(
             getDashboard(),
             getOpenAccount(),
             getDeleteRequest(),
             getLogout()
-        ).apply { checkForPrime(false,isShowQRCode, false) }
+        ).apply { checkForPrime(false, isShowQRCode, false) }
     }
-    private fun getBandhanUserMenu( isShowQRCode : Boolean): List<BaseMenu> {
+
+    private fun getBandhanUserMenu(isShowQRCode: Boolean): List<BaseMenu> {
         return arrayListOf(
             getDashboard(),
             getBandhanOpenAccount(),
             getDeleteRequest(),
             getLogout()
-        ).apply { checkForPrime(false,isShowQRCode, false) }
+        ).apply { checkForPrime(false, isShowQRCode, false) }
     }
+
     private fun getAuSalesBank(
         isCheckApproval: Boolean,
-        digitalSalesKitList : List<DigitalSalesKitData>,
+        digitalSalesKitList: List<DigitalSalesKitData>,
         isPrimeUser: Boolean,
         isShowQRCode: Boolean
     ): List<BaseMenu> {
@@ -283,10 +360,12 @@ open class MenuDataSourceImpl @Inject constructor(
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
-                 // hide as per requirement
+                // hide as per requirement
                 // getSip(),
                 getDormantReactivationCreate(),
                 getQueryFormCreate(),
@@ -303,14 +382,16 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, false)
+                checkForPrime(isPrimeUser, isShowQRCode, false)
             }
         } else {
             arrayListOf(
                 getDashboard(),
                 getOpenAccount(),
+                getQuickLink(),
                 getDeleteRequest(),
                 getLASAccount(),
+                getIPExecution(),
                 getDigitalSalesKitMenu(digitalSalesKitList),
                 // hide as per requirement
                 // getSip(),
@@ -328,7 +409,7 @@ open class MenuDataSourceImpl @Inject constructor(
                 getSetting(),
                 getLogout()
             ).apply {
-                checkForPrime(isPrimeUser,isShowQRCode, false)
+                checkForPrime(isPrimeUser, isShowQRCode, false)
             }
         }
     }
@@ -339,6 +420,42 @@ open class MenuDataSourceImpl @Inject constructor(
             label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
             enabled = true,
             pageId = NavigationConstants.NAVIGATE_TO_DASHBOARD
+        )
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun getIndirectDashboard(
+        strBuisnessUnitName: String,
+        strBuisnessProfileName: String
+    ): BaseMenu {
+        var strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+        if (strBuisnessUnitName.equals("FOCO", true)) {
+            strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_FOCO_DASHBOARD
+        } else if (strBuisnessUnitName.equals("IFA", true)) {
+            strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_IFA_DASHBOARD
+        } else if (strBuisnessUnitName.equals("CURRENCYCOMMODITY", true)) {
+            if (strBuisnessProfileName.equals("CNC foco advisory admin", true)) {
+                strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_DASHBOARD
+            } else if (strBuisnessProfileName.equals("CNC Admin", true)) {
+                strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CNC_ADMIN_DASHBOARD
+            } else {
+                strPageId = NavigationConstants.NAVIGATE_TO_INDIRECT_DASHBOARD
+            }
+        }
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dashboard,
+            label = R.string.MOSL_MENU_My_DASHBOARD_TXT,
+            enabled = true,
+            pageId = strPageId
+        )
+    }
+
+    private fun getIndirectProspectMeeting(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_prime_entry,
+            label = R.string.MOSL_MENU_PROSPECT_MEETING_TXT,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_INDIRECT_CREATE_PROSPECT_MEETING
         )
     }
 
@@ -441,7 +558,7 @@ open class MenuDataSourceImpl @Inject constructor(
             icon = R.drawable.ic_update_ekyc,
             label = R.string.MOSL_MENU_EKYC_TXT,
             enabled = true,
-            children =  arrayListOf(
+            children = arrayListOf(
                 ChildMenu(
                     label = R.string.MOSL_MENU_FRESH_REGISTRATION_TXT,
                     enabled = true,
@@ -464,6 +581,258 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    @SuppressLint("WrongConstant")
+    private fun getQuickLink(): BaseMenu {
+        if (user.isMoInternationUser()) {
+            /*comment because of live link not getting , requirment is the show this menu for nri business only
+            and hide MFD + Demat and for other profiles show MFD + demat and hide NRI menu*/
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NRI_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NRI_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    ),
+                   /* ChildMenu(
+                        label = R.string.MOSL_MENU_MINOR_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
+                        navigateKey = ""
+                    )*/
+                )
+            )
+        } else {
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    )
+                )
+            )
+        }
+
+    }
+
+    @SuppressLint("WrongConstant")
+    private fun getQuickLinkForJOintMinorAccount(): BaseMenu {
+        if (user.isMoInternationUser()) {
+            /*comment because of live link not getting , requirment is the show this menu for nri business only
+            and hide MFD + Demat and for other profiles show MFD + demat and hide NRI menu*/
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NRI_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NRI_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NRI_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_MINOR_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
+                        navigateKey = ""
+                    )
+                )
+            )
+        } else {
+            return getQuickLinkMenu()
+        }
+
+    }
+
+    //comment joint account because of ekyc was not live
+    private fun getQuickLinkMenu(): BaseMenu {
+        if(branchCodePreference.get().equals("RETMUMONE") ||
+            branchCodePreference.get().equals("RJHANDEAMC") ||
+            branchCodePreference.get().equals("RBRVLIOWN") ||
+            branchCodePreference.get().equals("RPUNAOWN")){
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_JOINT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_JOINT_ACCOUNT,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_MINOR_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_MINOR_ACCOUNT,
+                        navigateKey = ""
+                    )
+                )
+            )
+        }else{
+            return BaseMenu(
+                icon = R.drawable.ic_menu_dormant_reactivation,
+                label = R.string.MOSL_MENU_QUICKLINK,
+                enabled = true,
+                children = arrayListOf(
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_ACC,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_ACC,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_ONLY_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_ONLY_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_DEMAT_MFD,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_DEMAT_MFD,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_NON_BROKING,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_QUICK_NON_BROKING,
+                        navigateKey = ""
+                    ),
+                    ChildMenu(
+                        label = R.string.MOSL_MENU_INSURANCE,
+                        enabled = true,
+                        pageId = NavigationConstants.NAVIGATE_TO_INSURANCE,
+                        navigateKey = ""
+                    )
+                )
+            )
+        }
+
+    }
     private fun getBandhanOpenAccount(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_update_ekyc,
@@ -516,6 +885,7 @@ open class MenuDataSourceImpl @Inject constructor(
             pageId = NavigationConstants.NAVIGATE_TO_DELETE_REQUEST
         )
     }
+
     @SuppressLint("WrongConstant")
     private fun getEModification(): BaseMenu {
         return BaseMenu(
@@ -635,7 +1005,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    private fun getReactivationCreate():BaseMenu{
+    private fun getReactivationCreate(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_reactivation_req,
             label = R.string.MOSL_MENU_REACTIVATION_REQ,
@@ -644,7 +1014,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    private fun getDormantReactivationCreate():BaseMenu{
+    private fun getDormantReactivationCreate(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_dormant_reactivation,
             label = R.string.MOSL_MENU_DORMANT,
@@ -653,7 +1023,7 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
-    private fun getQueryFormCreate():BaseMenu{
+    private fun getQueryFormCreate(): BaseMenu {
         return BaseMenu(
             icon = R.drawable.ic_menu_dormant_reactivation,
             label = R.string.MOSL_MENU_QUERY_FORM,
@@ -662,5 +1032,22 @@ open class MenuDataSourceImpl @Inject constructor(
         )
     }
 
+    private fun getAdvanceSearch(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_search_black_24dp,
+            label = R.string.MOSL_MENU_ADV_SEARCH,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_ADVANCE_SEARCH
+        )
+    }
+
+    private fun getIPExecution(): BaseMenu {
+        return BaseMenu(
+            icon = R.drawable.ic_menu_dormant_reactivation,
+            label = R.string.MOSL_MENU_IP_EXECUTION,
+            enabled = true,
+            pageId = NavigationConstants.NAVIGATE_TO_IP_EXECUTION
+        )
+    }
 
 }

@@ -45,11 +45,18 @@ class BusinessSnapshotRepositoryImpl @Inject constructor(
         for (i in 0 until jsonArray.length()) {
           val json = jsonArray.getJSONObject(i)
           val values: ArrayList<String> = ArrayList()
-
+          val hasMap: MutableMap<String, String> = mutableMapOf<String, String>()
           headers.forEach { header ->
             values.add(json.get(header).toString())
+            if(!json.isNull(header)){
+              hasMap[header] = json.get(header)
+                .toString()
+            }
+            else{
+              hasMap[header] = ""
+            }
           }
-          data.add(BusinessSnapshotData(setData(values), headers))
+          data.add(BusinessSnapshotData(setData(values), headers,hasMap))
         }
         BusinessSnapshotCombo(headers, data = data)
       } else {
