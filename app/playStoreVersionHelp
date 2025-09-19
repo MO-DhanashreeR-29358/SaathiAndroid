@@ -105,3 +105,7 @@ Version : 3.1.7
 Update Date : 10.09.2025
 Release Note : 1. AS issue - Resolve Pending esign tab not working (Adding ekyc artifacts manually)
                2. AS issue - User not able to login, Resolve issue for android api level 15( Hiding bottom buttons to system navigation bars)
+---------------------------------------------------------------------------------------------
+Version : 3.1.8
+Update Date : 19.09.2025
+Release Note : 1. SAAT-12881-Sales Contest update in saathi Mobile App

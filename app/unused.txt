@@ -78281,7 +78281,6 @@ com.google.firebase.remoteconfig.FirebaseRemoteConfig:
     public static com.google.android.gms.tasks.Task activate()
     public static com.google.android.gms.tasks.Task fetch()
     public static com.google.firebase.remoteconfig.FirebaseRemoteConfigInfo getInfo()
-    public static java.lang.String getString()
     public static com.google.firebase.remoteconfig.FirebaseRemoteConfigValue getValue()
     public static boolean processActivatePutTask()
     public static com.google.android.gms.tasks.Task setConfigSettingsAsync()

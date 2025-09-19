@@ -626,11 +626,22 @@ class CommonActivity : BaseActivity(),
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    val saathiInit =
+                    var saathiInit =
                         remoteConfig.getString(getString(R.string.saathi_init))
                     //alert("Banner response : $saathiInit")
                    // Toast.makeText(this@CommonActivity, "Banner response : $saathiInit", Toast.LENGTH_LONG).show()
                     Timber.d("OkHttp Banner response : %s", saathiInit)
+                    if(userManager.getUser()?.myZoneProfile == "Relationship Manager"){
+                        saathiInit = remoteConfig.getString("saathi_rm_dubai_contest")
+                    }else if(userManager.getUser()?.myZoneProfile == "Cluster Manager"){
+                        saathiInit = remoteConfig.getString("saathi_cm_dubai_contest")
+                    }else if(userManager.getUser()?.myZoneProfile == "Area Sales Manager" ||
+                        userManager.getUser()?.myZoneProfile == "Regional Sales Manager" ){
+                        saathiInit = remoteConfig.getString("saathi_asm_dubai_contest")
+                    }else if(userManager.getUser()?.myZoneProfile == "Priority Relationship Manager"){
+                        saathiInit = remoteConfig.getString("saathi_prm_dubai_contest")
+                    }
+
                     if (saathiInit != null && !saathiInit.isEmpty()) {
                         remoteConfigModel =
                             gson.fromJson(saathiInit, RemoteConfigModel::class.java)
@@ -644,10 +655,12 @@ class CommonActivity : BaseActivity(),
                         remoteCongigData.set(saathiInit)
 
                     }
+
                 }
             }
 
     }
+
 
     private fun openBanner(remoteConfigModel: RemoteConfigModel) {
 
