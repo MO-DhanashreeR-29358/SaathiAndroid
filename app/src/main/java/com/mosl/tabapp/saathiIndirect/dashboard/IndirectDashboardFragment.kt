@@ -78,10 +78,20 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.set
 
-class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView{
+class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView, AttendanceHelper.ClickListener {
     internal lateinit var binding: FragIndirectDashboardBinding
     @Inject
     lateinit var presenter: IndirectDashboardPresenter
+    @Inject
+    lateinit var myZoneLoginRepository: MyZoneLoginRepositoryImpl
+    @Inject
+    lateinit var myZoneUserManager: MyZoneUserManagerImpl
+    @Inject
+    lateinit var attendanceHelper: AttendanceHelper
+    @Inject
+    lateinit var userLocationHelper: UserLocationHelper
+
+    internal var isUserLogin = false
     override fun getLayout() = R.layout.frag_indirect_dashboard
     override fun onViewCreated(
         view: View,
@@ -96,7 +106,9 @@ class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView{
     }
 
     private fun setupViews() {
-
+        binding.btnMarkAttendance.setOnClickListener {
+            myZoneAttendanceLogic()
+        }
     }
     override fun onLeadCreationClicked(): Observable<Unit> {
         return binding.leadcreation.clicks()
@@ -105,5 +117,91 @@ class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView{
         presenter.stop()
         super.onDestroyView()
     }
+
+    private fun myZoneAttendanceLogic(){
+
+        if (myZoneUserManager.isLoggedIn()) {
+            showAttendancePopupIfNotMarked()
+        }else{
+            myZoneLoginProcess()
+        }
+    }
+
+    private fun myZoneLoginProcess(){
+        disposable.add(
+            myZoneLoginRepository.userAuthentication(userManager.user.mobile)
+                .compose(applyUiModel())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { uiModel ->
+                    toggleProgressBar(uiModel.inProgress)
+                    uiModel.onFailure {
+                        alert(ErrorUtils.getErrorOnFailure(it)
+                            .getResolvedMessage(context))
+                    }
+
+                    uiModel.data?.let {
+                        openVerifyOTPFragment(userManager.user.mobile, it)
+                    }
+
+                }
+        )
+    }
+
+    private fun openVerifyOTPFragment(
+        mobileNo: String,
+        generateOTP: GenerateOTP
+    ) {
+        val dialogFragment = VerifyDialogFragment()
+        val bundle = Bundle()
+        bundle.putSerializable(
+            VerifyDialogFragment.ARG_OTP_DATA, VerifyAction(
+                mobileNumber = mobileNo,
+                requestId = generateOTP.requestId, otp = generateOTP.oTP
+            )
+        )
+        dialogFragment.arguments = bundle
+        dialogFragment.show(childFragmentManager, "")
+
+
+    }
+
+    fun showAttendancePopupIfNotMarked() {
+        attendanceHelper.handleAttendanceAndLocation(this)
+    }
+    override fun exit() {
+        requireActivity().finish()
+    }
+
+    override fun setInTime(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("set in time called")
+        uiModel.onFailure {
+            Timber.d("set in time called" + it.message)
+        }
+        uiModel.data?.let {
+            Timber.d("set in time called" + it.attendanceCount.toString() + " " + it.attendanceType.toString())
+        }
+
+        if (uiModel.isSuccess) {
+
+            isUserLogin = true
+            userLocationHelper.stop()
+            Toast.makeText(requireContext(), "Attendance already marked.", Toast.LENGTH_SHORT)
+                .show()
+            // Dista login method calls here after successful attendance mark
+            (activity as CommonActivity?)!!.distaLoginApiCall()
+        }
+    }
+
+    override fun setMessageForAttendanceNotAllowed(uiModel: UiModel<ProfileInfo>) {
+        Timber.d("setMessageForAttendanceNotAllowed called")
+
+        if (uiModel.isSuccess) {
+            isUserLogin = true
+            userLocationHelper.stop()
+            Toast.makeText(requireContext(), "Attendance facility is not available, You have to mark your attendance from myZone App.", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
 
 }

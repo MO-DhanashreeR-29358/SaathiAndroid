@@ -32,11 +32,13 @@ import com.mosl.app.core.data.error.ErrorUtils;
 import com.mosl.app.core.events.DataAction;
 import com.mosl.commons.data.UiModel;
 import com.mosl.core.annotations.DepartmentIds;
+import com.mosl.mobile.user.login.UserManager;
 import com.mosl.tabapp.R;
 import com.mosl.tabapp.attendancedialog.AttendanceHelper;
 import com.mosl.tabapp.core.CommonActivity;
 import com.mosl.tabapp.dashboard.base.DashboardFragment;
 import com.mosl.tabapp.databinding.FragmentVerifyOtpBinding;
+import com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment;
 import com.mosl.user.domain.model.GenerateOTP;
 import com.mosl.user.domain.model.User;
 import com.mosl.user.login.cache.UserCacheImpl;
@@ -66,6 +68,9 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
     private FragmentVerifyOtpBinding binding;
     @Inject Gson gson;
     @Inject UserCacheImpl userCache;
+
+    @Inject
+    UserManager userManager;
     private Boolean hasDeptId = false;
 
     private PublishSubject<DataAction> dataActionSubject = PublishSubject.create();
@@ -194,7 +199,12 @@ public class VerifyDialogFragment extends DialogFragment implements VerifyContra
             }
             if (hasDeptId || deptIdData.size() == 0) {
                 //showToast("Login Successful.");
-                ((DashboardFragment) getParentFragment()).showAttendancePopupIfNotMarked();
+                if(userManager.getUser().isIndirectUser()){
+                    ((IndirectDashboardFragment) getParentFragment()).showAttendancePopupIfNotMarked();
+                }else{
+                    ((DashboardFragment) getParentFragment()).showAttendancePopupIfNotMarked();
+                }
+
                 dismissAllowingStateLoss();
             } else {
                 showPopup();

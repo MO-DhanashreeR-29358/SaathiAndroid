@@ -11,8 +11,21 @@
     <RelativeLayout
         android:id="@+id/llMain"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+    <Button
+        android:id="@+id/btnMarkAttendance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mark_attendance"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:background="@drawable/btn_attendance_background"/>
+
+
+    </RelativeLayout>
 
 
 

@@ -28,7 +28,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_activity_type" />
+                android:hint="@string/txt_lable_activity_type"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
             <Spinner
                 android:id="@+id/spActivityType"
@@ -153,7 +156,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_product" />
+                android:hint="@string/txt_lable_product"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
             <Spinner
                 android:id="@+id/spProduct"
@@ -164,10 +170,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvProductList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvProductList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
         <TextView
@@ -193,7 +199,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_meeting_duration" />
+                android:hint="@string/txt_lable_meeting_duration"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
             <Spinner
                 android:id="@+id/spMeetingDuration"
@@ -224,7 +233,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_meeting_objective" />
+                android:hint="@string/txt_lable_meeting_objective"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
             <Spinner
                 android:id="@+id/spMeetingObjective"
@@ -255,7 +267,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/txt_lable_meeting_reason" />
+                android:hint="@string/txt_lable_meeting_reason"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
             <Spinner
                 android:id="@+id/spMeetingReason"
                 android:layout_width="match_parent"
@@ -275,7 +290,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_touched_untouched" />
+                android:hint="@string/txt_lable_touched_untouched"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
             <Spinner
                 android:id="@+id/spTouchedUntouched"
                 android:layout_width="match_parent"
@@ -294,7 +312,10 @@
                 style="@style/EditTextHint"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_22sdp"
-                android:hint="@string/txt_lable_feedback" />
+                android:hint="@string/txt_lable_feedback"
+                android:clickable="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
             <Spinner
                 android:id="@+id/spFeedback"
                 android:layout_width="match_parent"
@@ -459,7 +480,10 @@
                     style="@style/EditTextHint"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_22sdp"
-                    android:hint="Meeting Location*" />
+                    android:hint="Meeting Location*"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
                 <Spinner
                     android:id="@+id/spMeetingLocation"
@@ -487,7 +511,10 @@
                     style="@style/EditTextHint"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_22sdp"
-                    android:hint="@string/txt_lable_travelling_mode" />
+                    android:hint="@string/txt_lable_travelling_mode"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"/>
 
                 <Spinner
                     android:id="@+id/spTravellingMode"
@@ -596,20 +623,20 @@
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false">
 
-            <TextView
-                android:id="@+id/tvStage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/text_lead_creation_stage"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp" />
+                <TextView
+                    android:id="@+id/tvStage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_lead_creation_stage"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp" />
 
-            <Spinner
-                android:id="@+id/spStage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp" />
+                <Spinner
+                    android:id="@+id/spStage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -618,21 +645,21 @@
                 android:layout_height="wrap_content"
                 app:errorTextAppearance="@style/error_appearance"
                 app:hintEnabled="false">
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/text_lead_creation_status_compulsory"
-                android:textColor="@color/text_color_personal"
-                android:textSize="@dimen/_11sdp"
-                android:layout_marginLeft="5dp"/>
+                <TextView
+                    android:id="@+id/tvStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_lead_creation_status_compulsory"
+                    android:textColor="@color/text_color_personal"
+                    android:textSize="@dimen/_11sdp"
+                    android:layout_marginLeft="5dp"/>
 
 
-            <Spinner
-                android:id="@+id/spStatus"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_3sdp" />
+                <Spinner
+                    android:id="@+id/spStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_3sdp" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 

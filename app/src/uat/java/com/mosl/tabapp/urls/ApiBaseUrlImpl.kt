@@ -33,7 +33,7 @@ class ApiBaseUrlImpl : CommonBaseUrls {
   }
 
   override fun getMyZoneApiUrl(): String {
-    return "https://myzonebeta.motilaloswal.com/"
+    return "https://myzonebeta.motilaloswaluat.com/"
   }
 
   companion object {
