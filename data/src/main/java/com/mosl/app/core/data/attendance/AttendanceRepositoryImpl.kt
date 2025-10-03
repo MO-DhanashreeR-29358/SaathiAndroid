@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.attendance
 
 import android.content.Context
+import com.mosl.app.core.data.LocationOutOfRangeException
 import com.mosl.app.core.data.util.LocationUtil
 import com.mosl.data.attendance.AttendanceMapper
 import com.mosl.mobile.data.util.CommonBaseUrls
@@ -39,9 +40,9 @@ class AttendanceRepositoryImpl @Inject constructor(
 
   override fun getNearestOfficeLocation(location: LatLng): Observable<UserLocationInfo> {
     return officeLocation().map { offices ->
-      val nearestOffice = offices.first {
+      val nearestOffice = offices.firstOrNull {
         it.distance(location) < ALLOWED_RADIUS
-      }
+      } ?: throw LocationOutOfRangeException("No office found within allowed radius")
 
         UserLocationInfo(
             distance = nearestOffice.distance(location),

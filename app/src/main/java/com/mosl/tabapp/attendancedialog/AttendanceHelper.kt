@@ -1,12 +1,22 @@
 package com.mosl.tabapp.attendancedialog
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
+import android.telephony.CellLocation.requestLocationUpdate
 import android.util.Pair
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.gson.Gson
+import com.mosl.app.core.data.LocationOutOfRangeException
 import com.mosl.app.core.data.util.LocationUtil
 import com.mosl.app.core.rx.applyUiModel
 import com.mosl.commons.data.UiModel
@@ -26,6 +36,7 @@ import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.Companion.ARGS_
 import com.mosl.tabapp.attendancedialog.AttendanceDialogFragment.Companion.ARGS_USER_LONG
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import java.util.*
 import javax.inject.Inject
@@ -37,7 +48,8 @@ class AttendanceHelper @Inject constructor(
     val userManager: UserManager,
     val activity: AppCompatActivity,
     val gson: Gson,
-    val screenNavigator: ScreenNavigatorImpl
+    val screenNavigator: ScreenNavigatorImpl,
+    val context: Context
 ) : AttendanceDialogFragment.SkipListener {
     lateinit var attendanceFragment: AttendanceDialogFragment
     lateinit var clickListener: ClickListener
@@ -50,7 +62,7 @@ class AttendanceHelper @Inject constructor(
         this.clickListener = clickListener
         showMockDialogIfLocationFromMockProvider()
 
-        val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
+        /*val attendanceObs = userLocationHelper.locationEvent.distinctUntilChanged()
             .filter { location ->
                 !MockLocationDetector.isLocationFromMockProvider(
                     activity,
@@ -62,8 +74,49 @@ class AttendanceHelper @Inject constructor(
                 loginRepo.getProfileInfo()
                     .map { Pair.create(it, location) }
             }
-            .share()
+            .share()*/
+        val attendanceObs = getProfileInfoWithCurrentLocation().toObservable()
         handleAttendanceData(attendanceObs)
+    }
+
+    fun getProfileInfoWithCurrentLocation(): Single<Pair<ProfileInfo, LatLng>> {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
+        return Single.create<Location> { emitter ->
+            if (ActivityCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    activity,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                emitter.onError(SecurityException("Location permission not granted"))
+            } else {
+                fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
+                    .addOnSuccessListener { location ->
+                        if (location != null) {
+                            emitter.onSuccess(location)
+                        } else {
+                            emitter.onError(Throwable("Location is null"))
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        emitter.onError(exception)
+                    }
+            }
+        }.flatMap { location ->
+            if (MockLocationDetector.isLocationFromMockProvider(activity, location)) {
+                Single.error(Throwable("Mock location detected"))
+            } else {
+                val latLng = LatLng(location.latitude, location.longitude)
+
+                // 🔥 Convert Observable<ProfileInfo> → Single<ProfileInfo>
+                loginRepo.getProfileInfo()
+                    .firstOrError()
+                    .map { profileInfo -> Pair(profileInfo, latLng) }
+            }
+        }
     }
 
     private fun handleAttendanceData(latLngObservable: Observable<Pair<ProfileInfo, LatLng>>) {
@@ -82,7 +135,7 @@ class AttendanceHelper @Inject constructor(
                 .subscribe(this::showAttendancePopupWFH))
         }else{*/
             disposable.add(latLngObservable
-                .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
+                .filter { t ->(t.first.attendanceType == 1 || t.first.attendanceType == 2 || t.first.attendanceType == 3) && t.first.attendanceCount != 1 }
                 .map { t -> t.second }
                 .switchMap { location ->
                     attendanceRepo.getNearestOfficeLocation(location)
@@ -99,13 +152,13 @@ class AttendanceHelper @Inject constructor(
                 clickListener.setInTime(it)
             })
 
-        disposable.add(latLngObservable
+      /*  disposable.add(latLngObservable
             .filter { t -> t.first.attendanceType == 1 || t.first.attendanceType == 2  }
             .map { it -> it.first }
             .compose<UiModel<ProfileInfo>>(applyUiModel<ProfileInfo>())
             .subscribe {
                 clickListener.setMessageForAttendanceNotAllowed(it)
-            })
+            })*/
     }
 
     fun OfficeLocation.distance(userLocation: LatLng): Double {
@@ -119,6 +172,24 @@ class AttendanceHelper @Inject constructor(
 
         uiModel.onFailure {
             userLocationHelper.stop()
+            val strError  = it.message
+            // Handle specific exceptions
+            when (it) {
+                is LocationOutOfRangeException -> {
+                    // User is outside allowed radius from any office
+                    showLocationOutOfRangeDialog()
+                }
+                is IllegalStateException -> {
+                    // Location service errors
+                    showLocationErrorDialog(strError)
+                }
+                else -> {
+                    // Generic error handling
+                    showGenericErrorDialog()
+                }
+            }
+            return@onFailure
+
         }
         uiModel.data?.let { data ->
 
@@ -150,6 +221,38 @@ class AttendanceHelper @Inject constructor(
             }
         }
     }
+
+    // Helper methods for error handling
+    private fun showLocationOutOfRangeDialog() {
+        AlertDialog.Builder(activity)
+            .setTitle("Location Error")
+            .setMessage("You are not within the allowed radius of any office location. Please move closer to your office to mark attendance.")
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    private fun showLocationErrorDialog(message: String?) {
+        AlertDialog.Builder(activity)
+            .setTitle("Location Error")
+            .setMessage(message ?: "Unable to determine your location. Please try again.")
+            .setPositiveButton("Retry") { _, _ ->
+                // Retry location request
+                requestLocationUpdate()
+            }
+            .setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+    private fun showGenericErrorDialog() {
+        AlertDialog.Builder(activity)
+            .setTitle("Error")
+            .setMessage("An error occurred while processing your location. Please try again.")
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
+    }
+
+
+
 
     private fun showAttendancePopupWFH(uiModel: UiModel<kotlin.Pair<List<OfficeLocation>, LatLng>>) {
         uiModel.onFailure {

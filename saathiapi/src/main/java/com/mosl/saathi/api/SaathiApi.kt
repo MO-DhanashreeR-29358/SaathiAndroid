@@ -160,7 +160,7 @@ interface SaathiApi {
         @Body request: CityListRequest
     ): Observable<List<CityItem>>
 
-    @POST("Master/GetAllLookup")
+    @POST("Master/GetAllLookupAsync")
     fun getAllLookup(
         @Body request: LookupRequest
     ): Observable<List<LookupItem>>
@@ -186,7 +186,7 @@ interface SaathiApi {
         @Body request: StatusRequest
     ): Observable<List<StatusItem>>
 
-    @POST("Lead/GetLeadView")
+    @POST("Lead/GetLeadViewAsync")
     fun getLeadView(
         @Body request: LeadViewRequest
     ): Observable<LeadViewItem>
@@ -196,7 +196,7 @@ interface SaathiApi {
         @Body request: UpdateLeadRequest
     ): Observable<UpdateLeadResponse>
 
-    @POST("Lead/SearchCommonMetaData")
+    @POST("Lead/SearchCommonMetaDataAsync")
     @ExtraDataWrapper
     fun getSearchData(
         @Body request: SearchRequest
@@ -252,7 +252,7 @@ interface SaathiApi {
         @Body request: StageMobileRequest
     ): Observable<List<StageMobileItem>>
 
-    @POST("Client/GetClientViewByCommand")
+    @POST("Client/GetClientViewByCommandAsync")
     fun getClientDetail(
         @Body request: ClientDetailRequest
     ): Observable<ClientDetailItem>

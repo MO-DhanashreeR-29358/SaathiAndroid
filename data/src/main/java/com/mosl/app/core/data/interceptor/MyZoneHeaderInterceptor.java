@@ -23,8 +23,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by lalkishore on 23-03-2018.
@@ -63,6 +65,8 @@ import okhttp3.Response;
             response = chain.proceed(builder.build());
         }
 
+        ResponseBody responseBody = null;
+        String responseBodyString = "";
         // Log request and response details
         try {
             StringBuilder logBuilder = new StringBuilder();
@@ -84,14 +88,10 @@ import okhttp3.Response;
             logBuilder.append("Response Code: ").append(response.code()).append("\n");
             logBuilder.append("Response Message: ").append(response.message()).append("\n");
 
-            // Log response headers
-            logBuilder.append("Response Headers:\n");
-            for (int i = 0; i < response.headers().size(); i++) {
-                logBuilder.append(response.headers().name(i))
-                        .append(": ")
-                        .append(response.headers().value(i))
-                        .append("\n");
-            }
+             responseBody = response.body();
+             responseBodyString = responseBody != null ? responseBody.string() : "";
+
+            logBuilder.append("Response Body: ").append(responseBodyString).append("\n");
 
             // Write the log to file (make sure context is accessible here)
             writeLogToFile(context, logBuilder.toString());
@@ -105,7 +105,15 @@ import okhttp3.Response;
         if (date != null) {
             serverTimePref.set(date.getTime());
         }
-        return response;
+
+        // Recreate the response so Retrofit can still read it
+        MediaType contentType = responseBody != null ? responseBody.contentType() : null;
+        ResponseBody newResponseBody = ResponseBody.create(contentType, responseBodyString);
+
+        return response.newBuilder()
+                .body(newResponseBody)
+                .build();
+
     }
 
     public static File getDailyLogFile(Context context) {
@@ -121,7 +129,7 @@ import okhttp3.Response;
     }
 
     public static void writeLogToFile(Context context, String logText) {
-       /* String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         String logLine = "[" + timestamp + "] " + logText;
 
         File logFile = getDailyLogFile(context);
@@ -132,6 +140,6 @@ import okhttp3.Response;
             writer.newLine();
         } catch (IOException e) {
             Log.e("Logger", "Failed to write log: " + e.getLocalizedMessage());
-        }*/
+        }
     }
 }
