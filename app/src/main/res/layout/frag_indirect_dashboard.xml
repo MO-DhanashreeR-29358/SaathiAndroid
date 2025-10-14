@@ -22,6 +22,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:textColor="@color/white"
         android:gravity="center"
+        android:visibility="gone"
         android:background="@drawable/btn_attendance_background"/>
 
 

@@ -216,4 +216,16 @@ data class User(
         return flag
     }
 
+    fun isAttendanceAllowedIndirectRemiser(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("8")) {
+            if (myZoneProfile.equals("Team Leader-Remisier", ignoreCase = true) ||
+                myZoneProfile.equals("Territory Manager", ignoreCase = true) ||
+                myZoneProfile.equals("Team Leader–Remisier", ignoreCase = true)) {
+                flag = true
+            }
+        }
+        return flag
+    }
+
 }

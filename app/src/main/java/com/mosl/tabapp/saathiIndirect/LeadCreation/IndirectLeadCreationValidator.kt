@@ -61,10 +61,10 @@ class IndirectLeadCreationValidator(val user: User) : Validator<IndirectLeadCrea
                 identifier = 8
                 R.string.error_message_invalid_landline
             }
-            input.panNo.isBlank()  -> {
+            /*input.panNo.isBlank()  -> {
                 identifier = 9
                 R.string.error_message_enter_pan
-            }
+            }*/
             input.panNo.isNotBlank() &&
                     input.panNo.invalidPan() -> {
                 identifier = 10

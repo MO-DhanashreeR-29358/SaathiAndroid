@@ -675,7 +675,7 @@ class IndirectLeadCreationFragment : CommonFragment(),
                 8 -> {
                     binding.tvLandLineError.setText(getString(it))
                 }
-                9, 10 -> {
+                10 -> {
                     binding.tvPANError.setText(getString(it))
                 }
                 11,12 -> {

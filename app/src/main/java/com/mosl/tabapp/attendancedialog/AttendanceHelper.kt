@@ -135,7 +135,7 @@ class AttendanceHelper @Inject constructor(
                 .subscribe(this::showAttendancePopupWFH))
         }else{*/
             disposable.add(latLngObservable
-                .filter { t ->(t.first.attendanceType == 1 || t.first.attendanceType == 2 || t.first.attendanceType == 3) && t.first.attendanceCount != 1 }
+                .filter { t -> t.first.attendanceType == 3 && t.first.attendanceCount != 1 }
                 .map { t -> t.second }
                 .switchMap { location ->
                     attendanceRepo.getNearestOfficeLocation(location)
@@ -152,13 +152,13 @@ class AttendanceHelper @Inject constructor(
                 clickListener.setInTime(it)
             })
 
-      /*  disposable.add(latLngObservable
+        disposable.add(latLngObservable
             .filter { t -> t.first.attendanceType == 1 || t.first.attendanceType == 2  }
             .map { it -> it.first }
             .compose<UiModel<ProfileInfo>>(applyUiModel<ProfileInfo>())
             .subscribe {
                 clickListener.setMessageForAttendanceNotAllowed(it)
-            })*/
+            })
     }
 
     fun OfficeLocation.distance(userLocation: LatLng): Double {

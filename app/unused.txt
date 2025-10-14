@@ -30759,21 +30759,17 @@ com.mosl.mobile.user.login.LoginRepositoryImpl_Factory:
     public static com.mosl.mobile.user.login.LoginRepositoryImpl newInstance(com.mosl.mobile.user.login.AppUserRepository,com.mosl.mobile.user.login.UserManagerImpl)
 com.mosl.mobile.user.login.UserCache:
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
     public abstract void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserCacheImpl_Factory:
     public static com.mosl.mobile.user.login.UserCacheImpl newInstance(com.google.gson.Gson,com.mosl.mobile.user.helper.UserPrefStore,com.mosl.app.core.prefs.IntegerPreference)
 com.mosl.mobile.user.login.UserManager:
     public abstract void fnSetIsOtpEnable(boolean)
     public abstract com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public abstract boolean isOtpEnable()
 com.mosl.mobile.user.login.UserManagerImpl:
     public com.mosl.mobile.user.model.LoginInfo getCredentials()
-    public boolean isOtpEnable()
     public final void saveCredentials(com.mosl.mobile.user.model.LoginInfo)
 com.mosl.mobile.user.login.UserManagerImpl_Factory:
     public static com.mosl.mobile.user.login.UserManagerImpl newInstance(com.mosl.mobile.user.login.UserCache)
@@ -36063,8 +36059,6 @@ com.mosl.tabapp.attendancedialog.AttendanceDialogView:
     static void <clinit>()
     public abstract io.reactivex.rxjava3.core.Observable onSubmitClick()
     public abstract void renderEmpAction(java.lang.String)
-com.mosl.tabapp.attendancedialog.AttendanceHelper$ClickListener:
-    public abstract void setMessageForAttendanceNotAllowed(com.mosl.commons.data.UiModel)
 com.mosl.tabapp.attendancedialog.AttendanceHelper:
     public final double distance(com.mosl.mobile.domain.attendance.model.OfficeLocation,com.mosl.mobile.domain.attendance.LatLng)
     public final android.content.Context getContext()
@@ -36746,7 +36740,6 @@ com.mosl.tabapp.dashboard.base.DashboardFragment:
     public final boolean isUserLogin$app_uatRelease()
     public final void setAttendanceHelper(com.mosl.tabapp.attendancedialog.AttendanceHelper)
     public final void setIcon(android.view.View,android.widget.ImageView)
-    public void setMessageForAttendanceNotAllowed(com.mosl.commons.data.UiModel)
     public final void setMyZoneLoginRepository(com.mosl.user.data.login.MyZoneLoginRepositoryImpl)
     public final void setMyZoneUserManager(com.mosl.user.login.MyZoneUserManagerImpl)
     public final void setPresenter(com.mosl.tabapp.dashboard.base.DashboardPresenter)
@@ -40861,7 +40854,6 @@ com.mosl.tabapp.saathiIndirect.dashboard.IFADashboard.snapshotIp.IndirectIFABuis
 com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardFragment:
     public final boolean isUserLogin$app_uatRelease()
     public final void setAttendanceHelper(com.mosl.tabapp.attendancedialog.AttendanceHelper)
-    public void setMessageForAttendanceNotAllowed(com.mosl.commons.data.UiModel)
     public final void setMyZoneLoginRepository(com.mosl.user.data.login.MyZoneLoginRepositoryImpl)
     public final void setMyZoneUserManager(com.mosl.user.login.MyZoneUserManagerImpl)
     public final void setPresenter(com.mosl.tabapp.saathiIndirect.dashboard.IndirectDashboardPresenter)
@@ -81210,7 +81202,6 @@ com.mosl.commons.data.UiModel:
     public static final com.mosl.commons.data.UiModel$Companion Companion
     public static void <clinit>()
     public final boolean isError()
-    public final boolean isSuccess()
 com.mosl.commons.data.UiModelHelper$applyRvUiModel$1$1:
     public final com.mosl.commons.data.UiModel apply()
 com.mosl.commons.data.UiModelHelper$applyRvUiModel$1$2:
@@ -83996,6 +83987,7 @@ com.mosl.mobile.user.model.User:
     public static boolean isAttendanceAllowed()
     public static boolean isAttendanceAllowedForOmni()
     public static boolean isAttendanceAllowedForPCG()
+    public static boolean isAttendanceAllowedIndirectRemiser()
     public static boolean isAuBankSalesSupport()
     public static boolean isBDMUser()
     public final boolean isCheckApprovalEnable()
@@ -85860,6 +85852,8 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper$getProfileInfoWithCurrentLocat
     public static android.util.Pair apply()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$getProfileInfoWithCurrentLocation$2:
     public static io.reactivex.rxjava3.core.SingleSource apply()
+com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$10:
+    public final void accept$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$1:
     public final boolean test$13()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$2:
@@ -85871,9 +85865,13 @@ com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$4:
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$5:
     public final boolean test$13()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$6:
-    public static com.mosl.mobile.user.model.ProfileInfo apply$1()
+    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$7:
     public final void accept$1()
+com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$8:
+    public final boolean test$13()
+com.mosl.tabapp.attendancedialog.AttendanceHelper$handleAttendanceData$9:
+    public final com.mosl.mobile.user.model.ProfileInfo apply$1()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$showMockDialogIfLocationFromMockProvider$1:
     public static boolean test$14()
 com.mosl.tabapp.attendancedialog.AttendanceHelper$showMockDialogIfLocationFromMockProvider$2:
@@ -90774,7 +90772,6 @@ com.mosl.tabapp.login.LoginActivity$fetchDigitalSalesKitParentMenu$1:
 com.mosl.tabapp.login.LoginActivity$renderDigitalSalesKitParentData$1$2:
     public final void accept$1()
 com.mosl.tabapp.login.LoginActivity:
-    public final boolean isCallOtp
     public final void buildAlertMessageNoGps()
     public static void checkKeyLogger()
     public final boolean checkMapServices()
@@ -90811,8 +90808,6 @@ com.mosl.tabapp.login.LoginActivityModule_ProvideNavigationCallbackFactory:
     public final com.mosl.navigator.NavigationCallback get()
 com.mosl.tabapp.login.LoginActivityModule_ProvidePermissionCheckHelperFactory
 com.mosl.tabapp.login.LoginActivityUiEvent$Companion
-com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin:
-    public static final com.mosl.tabapp.login.LoginActivityUiEvent$OnCallOtpLogin INSTANCE
 com.mosl.tabapp.login.LoginActivityUiEvent$OnOtpSucess:
     public static com.mosl.mobile.user.model.User getUser()
 com.mosl.tabapp.login.LoginActivityUiEvent:

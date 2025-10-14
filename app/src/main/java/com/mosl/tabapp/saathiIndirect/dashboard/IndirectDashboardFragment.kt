@@ -106,6 +106,7 @@ class IndirectDashboardFragment : CommonFragment(), IndirectDashboardView, Atten
     }
 
     private fun setupViews() {
+        binding.btnMarkAttendance.isVisible = userManager.getUser()?.isAttendanceAllowedIndirectRemiser() == true
         binding.btnMarkAttendance.setOnClickListener {
             myZoneAttendanceLogic()
         }
