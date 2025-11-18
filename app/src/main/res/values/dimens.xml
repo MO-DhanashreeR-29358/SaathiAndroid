@@ -89,4 +89,9 @@
     <dimen name="_14ssp">14sp</dimen>
     <dimen name="_10ssp">10sp</dimen>
     <dimen name="_44ssp">44sp</dimen>
+    <dimen name="_5ssp">5sp</dimen>
+
+    <dimen name="_90sdp">90.00dp</dimen>
+    <dimen name="_135sdp">135.00dp</dimen>
+    <dimen name="_40sdp">40.00dp</dimen>
 </resources>

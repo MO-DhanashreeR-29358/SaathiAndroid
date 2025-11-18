@@ -21,7 +21,7 @@ interface IndirectCreateMeetingView :BaseView{
     fun ononActivityCall():Observable<IndirectCreateMeetingUiEvent.onActivityCall>
     fun fnRenderActivityType(uiModel: UiModel<List<LookUp>>)
     fun onActivityTypeSelected(): Observable<Int>
-    fun getSelectedActivityType(): LookUp
+    fun getSelectedActivityType(): LookUp?
     fun fnRenderMeetingReason(uiModel: UiModel<List<LookUp>>)
     fun onMeetingDurationCall():Observable<IndirectCreateMeetingUiEvent.OnMeetingDurationCall>
     fun fnRenderMeetingDuration(uiModel: UiModel<List<LookUp>>)
@@ -60,7 +60,7 @@ interface IndirectCreateMeetingView :BaseView{
     fun getDate(): String
     fun getSelectedMeetingDuration(): LookUp?
     fun getSelectedMeetingObjective(): LookUp?
-    fun getSelectedMeetingReason(): LookUp
+    fun getSelectedMeetingReason(): LookUp?
     fun getMeetingDesc(): String
 
     fun onTravellingModeSelected(): Observable<Int>
@@ -78,8 +78,7 @@ interface IndirectCreateMeetingView :BaseView{
     fun onResetClicked(): Observable<Unit>
 
     fun renderOnResetClicked()
-    fun onSaveClicked(): Observable<Unit>
-    fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingIndirect>)
+     fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingIndirect>)
 
     fun onIndirectLocationSaveEventFired() : Observable<IndirectCreateMeetingUiEvent.OnIndirectLocationSaveClick>
 

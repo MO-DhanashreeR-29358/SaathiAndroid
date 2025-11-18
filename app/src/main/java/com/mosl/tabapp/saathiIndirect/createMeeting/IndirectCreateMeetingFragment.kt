@@ -208,7 +208,69 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             }
         }
 
+        binding.btnSave.setOnClickListener {
+            saveButtonClick()
+        }
     }
+
+   fun saveButtonClick(){
+        try{
+            val activityType = getSelectedActivityType()
+            val meetingReason = getSelectedMeetingReason()
+            val interestedIn = fnGetSelectedIntrestedIn()
+            val meetingDuration = getSelectedMeetingDuration()
+            val meetingObjective = getSelectedMeetingObjective()
+            val meetingDesc = getMeetingDesc()
+
+            val errorMessage = when {
+                activityType == null || activityType.lookUpID == 0 -> {
+                    "Select activity type"
+                }
+                meetingReason == null || meetingReason.lookUpID == 0 -> {
+                    "Select meeting reason"
+                }
+                interestedIn == null || interestedIn.lookUpID == 0 -> {
+                    "Select interested in"
+                }
+                meetingDuration == null || meetingDuration.lookUpID == 0 -> {
+                    "Select meeting duration"
+                }
+                meetingDesc.isNullOrBlank() -> {
+                    "Enter meeting description"
+                }
+                meetingDesc.length < 50 -> {
+                    "Enter atleast 50 characters"
+                }
+                meetingObjective == null || meetingObjective.lookUpID == 0 -> {
+                    "Select meeting objective"
+                }
+                activityType != null && activityType.lookUpID == 3743 && (getSelectedMeetingLocation() == null || getSelectedMeetingLocation()?.lookUpID == 0) -> {
+                    "Select meeting address"
+                }
+                activityType != null && activityType.lookUpID == 3743 && getTravellingmodeList().isEmpty() -> {
+                    "Select travelling mode"
+                }
+                activityType != null && activityType.lookUpID == 3743 && (getPincode()?.length ?: 0) < 6 -> {
+                    "Invalid pincode number"
+                }
+                userManager.getUser()?.isRemiser() == true && (binding.spMeetingType.selectedItem as? LookUp)?.lookUpName == "Select Meeting Type" -> {
+                    "Select Meeting Type"
+                }
+                else -> null
+            }
+
+            if (errorMessage != null) {
+                alert(errorMessage)
+            } else {
+                presenter.saveRequest(getInputData())
+            }
+        }catch (ex : Exception){
+            //alert(ex.message.toString())
+        }
+    }
+
+
+
 
     private fun setUpFromArguments() {
         try {
@@ -295,8 +357,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         return binding.spActivityType.itemSelections()
     }
 
-    override fun getSelectedActivityType(): LookUp {
-        return (binding.spActivityType.selectedItem as LookUp)
+    override fun getSelectedActivityType(): LookUp? {
+        return binding.spActivityType.selectedItem as? LookUp
     }
 
     override fun fnRenderMeetingReason(uiModel: UiModel<List<LookUp>>) {
@@ -434,12 +496,12 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         hour = cal.get(Calendar.HOUR_OF_DAY)
         minute = cal.get(Calendar.MINUTE)
         cal.add(Calendar.DAY_OF_MONTH, -1)
-        if (getSelectedActivityType().lookUpName.equals("Personal Meeting", ignoreCase = true)
+        if (getSelectedActivityType()?.lookUpName.equals("Personal Meeting", ignoreCase = true)
             && userManager.user.isRM()
         ) {
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
-        else if((getSelectedActivityType().lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
+        else if((getSelectedActivityType()?.lookUpName.equals("Phone", ignoreCase = true) ||getSelectedActivityType()?.lookUpName.equals("Video Conference", ignoreCase = true))
             && userManager.user.currentBusinessProfile.businessUnitId.equals("14")){
             dpFromDate.minDate = System.currentTimeMillis() - 1000
         }
@@ -735,8 +797,8 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
     override fun getSelectedMeetingObjective(): LookUp? {
         return getSelectedSpinnerValue(binding.spMeetingObjective)
     }
-    override fun getSelectedMeetingReason(): LookUp {
-        return binding.spMeetingReason.selectedItem as LookUp
+    override fun getSelectedMeetingReason(): LookUp? {
+        return binding.spMeetingReason.selectedItem as? LookUp
     }
     override fun getMeetingDesc(): String {
         return binding.etMeetingDescription.text.toString()
@@ -812,7 +874,6 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         data.meetingAddress = getMeetingAddress()
         data.meetingLatitude = getMeetingLatitude()
         data.meetingLongitude = getMeetingLongitude()
-        data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID.toString()
         data.leadId = leadID
         data.ucid = UcId
         when {
@@ -824,13 +885,16 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         data.meetingDuration = getSelectedMeetingDuration()?.lookUpName
         data.meetingDurationID=getSelectedMeetingDuration()?.lookUpID?:0
         data.meetingObjectiveID = getSelectedMeetingObjective()?.lookUpID.toString()
-        data.activityTypeID = getSelectedActivityType()?.lookUpID.toString()
+        data.activityTypeID = getSelectedActivityType()?.lookUpID?.toString() ?: "0"
         data.meetingReason = getSelectedMeetingReason()?.lookUpName
         data.meetingReasonID= getSelectedMeetingReason()?.lookUpID?:0
         data.meetingDes = CRMAppUtil.getJsonSafeString(getMeetingDesc())
         data.meetingAttendee = attendeeList
         data.splMeetingAttendee= emptyList()
         data.travellingList = getTravellingmodeList()
+
+        data.meetingAddressTypeId = getSelectedMeetingLocation()?.lookUpID?.toString() ?: "0"
+        data.meetingObjectiveID = getSelectedMeetingObjective()?.lookUpID?.toString() ?: "0"
 
 
         data.geoArea = strAddress
@@ -889,7 +953,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
         objPostData. meetingObjectiveID=data.meetingObjectiveID
         objPostData. meetingReasonID=data.meetingReasonID
         objPostData. activityTypeID=data.activityTypeID
-        objPostData.productTypeID=fnGetSelectedIntrestedIn()?.lookUpID.toString()
+        objPostData.productTypeID = fnGetSelectedIntrestedIn()?.lookUpID?.toString() ?: "0"
         var aId=""
         if(tempList.size!=0)
         {
@@ -936,9 +1000,6 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
 
     }
 
-    override fun onSaveClicked(): Observable<Unit> {
-        return  binding.btnSave.clicks()
-    }
 
     override fun renderSaveRequest(uiModel: UiModel<AddUpdateMeetingIndirect>) {
         toggleProgress(uiModel.inProgress)
@@ -1257,7 +1318,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             val feedback = MeetingFeedbackData(
                 LeadId =  binding.layoutTopSection.tvLeadId.text.toString(), RMName = userManager.getUser()?.firstName + " " + userManager.getUser()?.lastName,
                 RMEmpcode =  userManager.getUser()?.employeeCode, Clientcode =  binding.layoutTopSection.tvClientCode.text.toString(),
-                ActivityType = getSelectedActivityType().lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
+                ActivityType = getSelectedActivityType()?.lookUpName, MeetingDate = arrDateTime[0], MeetingTime = arrDateTime[1],
                 AttendeeDetails = strAttendee, LeadCreationDate = strLeadCreationDate,
                 MeetingCreationDate = CRMAppUtil.getDate(Date(), MoslConstant.yyyy_MM_dd), MeetingDescription = CRMAppUtil.getJsonSafeString(getMeetingDesc()), Role = "",
                 RHName = "", Region = "", CustomerName = "", RMSupervisorName = "", Phone = "")

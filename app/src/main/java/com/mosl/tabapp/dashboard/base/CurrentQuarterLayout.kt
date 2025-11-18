@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import com.mosl.tabapp.R
 import com.mosl.tabapp.R.color
 import com.mosl.tabapp.R.dimen
 import com.mosl.tabapp.R.drawable
@@ -189,7 +190,7 @@ class CurrentQuarterLayout @JvmOverloads constructor(
           TableRow.LayoutParams.WRAP_CONTENT
         )
         headingCell.setBackgroundResource(drawable.cell_shape)
-        val padding = resources.getDimension(dimen._5sdp)
+        val padding = resources.getDimension(R.dimen._5ssp)
           .toInt()
         headingCell.setPadding(padding, padding, padding, padding)
         //column.setTextAppearance(context, android.R.attr.textAppearanceMedium);
@@ -220,7 +221,7 @@ class CurrentQuarterLayout @JvmOverloads constructor(
           TableRow.LayoutParams.WRAP_CONTENT
         )
         textView.setBackgroundResource(drawable.cell_shape)
-        val padding = resources.getDimension(dimen._5sdp)
+        val padding = resources.getDimension(R.dimen._5ssp)
           .toInt()
         textView.setPadding(padding, padding, padding, padding)
         textView.text = value

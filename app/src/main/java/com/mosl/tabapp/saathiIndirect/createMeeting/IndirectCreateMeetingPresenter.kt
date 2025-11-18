@@ -8,6 +8,7 @@ import com.mosl.mobile.domain.saathiIndirect.SetAppointment.IndirectSetAppointme
 import com.mosl.mobile.domain.saathiIndirect.createMeeting.IndirectCreateMeetingRepository
 import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
+import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.navigation.ScreenNavigatorImpl
 import com.mosl.tabapp.saathiIndirect.leadViewDetail.domain.IndirectLeadDetailRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -44,7 +45,7 @@ class IndirectCreateMeetingPresenter @Inject constructor(
 
         val activityTypeSelectedObs = view.onActivityTypeSelected()
             .filter(InvalidSelectionPredicate)
-            .map { view.getSelectedActivityType() }
+            .map { view.getSelectedActivityType()!!}
             .share()
 
         activityTypeSelectedObs.map {
@@ -167,22 +168,16 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             }
             .addTo(disposable)
 
-
-        view.onSaveClicked().
-                map {
-                    view.getInputData()
-                }.flatMap {
-                    input->validator.validate(input).flatMap {
-           /* if(userManager.getUser()?.isBDMUser() == true){
-                indirectrepoCreateMeeting.saveBDMRequest(Gson().toJson(it))
-            }else{*/
-                indirectrepoCreateMeeting.saveRequest(Gson().toJson(it))
-            //}
-
-        }.compose(applyUiModel())
-        }.subscribe {
-          view.renderSaveRequest(it)
-        }.addTo(disposable)
+     /*   view.onSaveClicked()
+            .map { view.getInputData() }
+            .flatMap { input ->
+                indirectrepoCreateMeeting.saveRequest(Gson().toJson(input))
+            }
+            .compose(applyUiModel())
+            .subscribe { result ->
+                view.renderSaveRequest(result)
+            }
+            .addTo(disposable)*/
 
 
         view.onIndirectLocationSaveEventFired()
@@ -209,6 +204,15 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             }
             .subscribe {
                 view.renderMeetingByID(it)
+            }
+            .addTo(disposable)
+    }
+
+    fun saveRequest(inputData: CreateMeetingPostReq) {
+        indirectrepoCreateMeeting.saveRequest(Gson().toJson(inputData))
+            .compose(applyUiModel())
+            .subscribe { result ->
+                view.renderSaveRequest(result)
             }
             .addTo(disposable)
     }

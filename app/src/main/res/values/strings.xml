@@ -439,6 +439,7 @@ Page </string>
     <string name="txt_lable_time">Time</string>
     <string name="btn_submit">Submit</string>
     <string name="txt_lable_activity_type">Activity Type*</string>
+    <string name="txt_lable_meeting_type">Meeting Type*</string>
     <string name="txt_lable_chips">Event*</string>
     <string name="txt_lable_mobile_number">Mobile Number*</string>
     <string name="txt_lable_meeting_date">Meeting Date</string>
@@ -821,4 +822,24 @@ Page </string>
     <string name="label_FCode">Franchiseee Code</string>
     <string name="label_quick">Quick Search</string>
 
+
+    <string name="alert_dialog_title">Motilal Oswal</string>
+    <string name="button_label_cancel">Cancel</string>
+    <string name="check_connection">Please Check your Internet Connectivity</string>
+    <string name="error_message_no_data_available">No Data Available</string>
+    <string name="error_message_validation_failed">Data Validation failed</string>
+    <string name="network_failure">We can serve you better once you have your internet signal back.</string>
+    <string name="no_intent_handler">There are no applications available to handle this action.</string>
+    <string name="service_failure">Seems there is some Server Error</string>
+    <string name="unknown_failure">Oops! Something went wrong. Please try again!</string>
+
+
+    <color name="side_indicator_color">?android:attr/colorPrimary</color>
+    <color name="table_background_color">@android:color/white</color>
+    <color name="table_background_color_light">#F5F5F5</color>
+    <color name="table_cell_first_row_border_color">?android:attr/textColorSecondary</color>
+    <dimen name="table_sideline_width">4dp</dimen>
+    <declare-styleable name="table">
+        <attr format="boolean" name="state_sorted_ascending"/>
+    </declare-styleable>
 </resources>

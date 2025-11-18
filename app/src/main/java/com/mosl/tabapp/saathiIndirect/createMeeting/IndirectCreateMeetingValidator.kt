@@ -10,45 +10,43 @@ import javax.inject.Inject
 
 class IndirectCreateMeetingValidator @Inject constructor(val context: Context, val user: UserManager):Validator<CreateMeetingPostReq,CreateMeetingPostReq>() {
     override fun execute(input: CreateMeetingPostReq): ValidationResult<CreateMeetingPostReq> {
-        val errorMessage=when{
-                    input.activityTypeID.equals("0")->{
-                        "Select activity type"
-                    }
-            input.meetingReasonID==0->{
+        val errorMessage = when {
+            input.activityTypeID.isNullOrEmpty() || input.activityTypeID == "0" || input.activityTypeID == "null" -> {
+                "Select activity type"
+            }
+            input.meetingReasonID == null || input.meetingReasonID == 0 -> {
                 "Select meeting reason"
             }
-            input.productTypeID.equals("0")->{
+            input.productTypeID.isNullOrEmpty() || input.productTypeID == "0" || input.productTypeID == "null" -> {
                 "Select interested in"
             }
-            input.meetingDurationID==0->{
+            input.meetingDurationID == null || input.meetingDurationID == 0 -> {
                 "Select meeting duration"
             }
-            input.meetingDescription?.length==0->{
+            input.meetingDescription.isNullOrEmpty() -> {
                 "Enter meeting description"
             }
-            input.meetingDescription?.length!! < 50->{
+            (input.meetingDescription?.length ?: 0) < 50 -> {
                 "Enter atleast 50 characters"
             }
-            input.meetingObjectiveID.equals("0")->{
+            input.meetingObjectiveID.isNullOrEmpty() || input.meetingObjectiveID == "0" || input.meetingObjectiveID == "null" -> {
                 "Select meeting objective"
             }
-            input.meetingAddressTypeId.equals("0") && input.activityTypeID.equals("3743")->{
+            (input.meetingAddressTypeId.isNullOrEmpty() || input.meetingAddressTypeId == "0") && input.activityTypeID == "3743" -> {
                 "Select meeting address"
             }
-            input.travellingList?.length==0 && input.activityTypeID.equals("3743") ->{
+            (input.travellingList.isNullOrEmpty()) && input.activityTypeID == "3743" -> {
                 "Select travelling mode"
             }
-            input.pincode?.length ?: 0 < 6 && input.activityTypeID.equals("3743")->{
+            (input.pincode?.length ?: 0) < 6 && input.activityTypeID == "3743" -> {
                 "Invalid pincode number"
             }
-             user.getUser()?.isRemiser() == true &&
-                     input.meetingTypeR.equals("Select Meeting Type")->{
+            user.getUser()?.isRemiser() == true && (input.meetingTypeR.isNullOrEmpty() || input.meetingTypeR == "Select Meeting Type") -> {
                 "Select Meeting Type"
             }
-            else -> {
-                null
-            }
+            else -> null
         }
+
         return if (errorMessage != null) {
             withMessage(errorMessage)
         } else {

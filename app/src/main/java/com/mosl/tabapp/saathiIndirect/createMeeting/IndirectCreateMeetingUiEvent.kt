@@ -17,4 +17,6 @@ sealed class IndirectCreateMeetingUiEvent {
     data class OnIndirectLocationSaveClick(val data: LocationItem) : IndirectCreateMeetingUiEvent()
 
     data class GetMeeting(val meetingId: String) : IndirectCreateMeetingUiEvent()
+
+
 }
