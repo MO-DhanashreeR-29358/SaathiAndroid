@@ -221,11 +221,18 @@ data class User(
         if (currentBusinessProfile.businessUnitId.equals("8")) {
             if (myZoneProfile.equals("Team Leader-Remisier", ignoreCase = true) ||
                 myZoneProfile.equals("Territory Manager", ignoreCase = true) ||
-                myZoneProfile.equals("Team Leader–Remisier", ignoreCase = true)) {
+                myZoneProfile.equals("Team Leader–Remisier", ignoreCase = true) ||
+                myZoneProfile.equals("Advisor-Investment Products", ignoreCase = true)) {
                 flag = true
             }
         }
         return flag
     }
-
+    fun isRemiser(): Boolean {
+        var flag = false
+        if (currentBusinessProfile.businessUnitId.equals("8")) {
+             flag = true
+        }
+        return flag
+    }
 }

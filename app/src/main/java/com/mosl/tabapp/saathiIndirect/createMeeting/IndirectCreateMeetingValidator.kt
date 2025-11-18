@@ -1,13 +1,14 @@
 package com.mosl.tabapp.saathiIndirect.createMeeting
 
 import android.content.Context
+import com.mosl.mobile.user.login.UserManager
 import com.mosl.tabapp.model.CreateMeetingPostReq
 import com.mosl.tabapp.model.SetAppointmentPostReq
 import com.mosl.validator.core.Validator
 import com.mosl.validator.data.ValidationResult
 import javax.inject.Inject
 
-class IndirectCreateMeetingValidator @Inject constructor(val context: Context):Validator<CreateMeetingPostReq,CreateMeetingPostReq>() {
+class IndirectCreateMeetingValidator @Inject constructor(val context: Context, val user: UserManager):Validator<CreateMeetingPostReq,CreateMeetingPostReq>() {
     override fun execute(input: CreateMeetingPostReq): ValidationResult<CreateMeetingPostReq> {
         val errorMessage=when{
                     input.activityTypeID.equals("0")->{
@@ -25,6 +26,9 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
             input.meetingDescription?.length==0->{
                 "Enter meeting description"
             }
+            input.meetingDescription?.length!! < 50->{
+                "Enter atleast 50 characters"
+            }
             input.meetingObjectiveID.equals("0")->{
                 "Select meeting objective"
             }
@@ -36,6 +40,10 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
             }
             input.pincode?.length ?: 0 < 6 && input.activityTypeID.equals("3743")->{
                 "Invalid pincode number"
+            }
+             user.getUser()?.isRemiser() == true &&
+                     input.meetingTypeR.equals("Select Meeting Type")->{
+                "Select Meeting Type"
             }
             else -> {
                 null
@@ -73,7 +81,8 @@ class IndirectCreateMeetingValidator @Inject constructor(val context: Context):V
                          meetingReasonID=input.meetingReasonID,
                          activityTypeID=input.activityTypeID,
                         productTypeID=input.productTypeID,
-            attendeeCode=input.attendeeCode))
+            attendeeCode=input.attendeeCode,
+                meetingTypeR = input.meetingTypeR))
         }
     }
 

@@ -65,6 +65,14 @@ class IndirectCreateMeetingPresenter @Inject constructor(
             indirectrepoCreateMeeting.getInteresedIn(view.getInterestedInLookUpId()).compose(applyUiModel())
         }.subscribe { view.fnRenderIntrestedIn(it) }.addTo(disposable)
 
+        view.onMeetingTypeCall()
+            .switchMap {
+                indirectrepoCreateMeeting.getMeetingType().compose(applyUiModel())
+            }.subscribe {
+                view.fnRenderMeetingType(it)
+            }.addTo(disposable)
+
+
         view.onMeetingDurationCall()
             .switchMap {
                 indirectrepoCreateMeeting.getMeetingReason().compose(applyUiModel())

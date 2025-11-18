@@ -25,6 +25,7 @@ import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.jakewharton.rxbinding4.view.clicks
@@ -95,6 +96,7 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
     lateinit var presenter: IndirectCreateMeetingPresenter
 
     private lateinit var activityAdapter: ArrayAdapter<LookUp>
+    private lateinit var meetingTypeAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingAdapter: ArrayAdapter<LookUp>
     private lateinit var meetingDurationAdapter:ArrayAdapter<LookUp>
     private lateinit var meetingObjectiveAdapter:ArrayAdapter<LookUp>
@@ -159,11 +161,18 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
     private fun setupViews() {
         CRMAppUtil.setImage(ByteArray(0),  binding.layoutTopSection.ivLead, requireContext())
 
+        if(userManager.getUser()?.isRemiser() == true){
+            binding.tilMeetingType.isVisible = true
+        }
+
         binding.layoutTopSection.tvCurrentStageSince.visibility=View.GONE
         binding.layoutTopSection.lblCurrentStageSince.visibility=View.GONE
 
         activityAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spActivityType.adapter = activityAdapter
+
+        meetingTypeAdapter = SpinnerAdapterFactory.getDefaultAdapter(requireContext())
+        binding.spMeetingType.adapter = meetingTypeAdapter
 
         meetingAdapter= SpinnerAdapterFactory.getDefaultAdapter(requireContext())
         binding.spMeetingReason.adapter=meetingAdapter
@@ -272,6 +281,9 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             val index = it.indexOfFirst { it.lookUpID.toString() == meetingApptModel?.activityTypeID }
             binding.spActivityType.setSelection(index)
             uiSubject.onNext(IndirectCreateMeetingUiEvent.OnMeetingDurationCall)
+            if(userManager.getUser()?.isRemiser() == true){
+                uiSubject.onNext(IndirectCreateMeetingUiEvent.OnMeetingTypeCall)
+            }
         }
         uiModel.onFailure {
             Timber.d(it)
@@ -891,7 +903,11 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             }
         }
         objPostData.attendeeCode=aId
-
+        if(userManager.getUser()?.isRemiser() == true){
+            objPostData.meetingTypeR = (binding.spMeetingType.selectedItem as LookUp).lookUpName
+        }else{
+            objPostData.meetingTypeR = ""
+        }
 
         return objPostData
     }
@@ -1119,6 +1135,22 @@ class IndirectCreateMeetingFragment:CommonFragment(),IndirectCreateMeetingView ,
             return MOSLConstants.INDIRECT_INTERESTED_IN_LIVE
         }else{
             return MOSLConstants.INDIRECT_INTERESTED_IN_UAT
+        }
+    }
+
+    override fun onMeetingTypeCall(): Observable<IndirectCreateMeetingUiEvent.OnMeetingTypeCall> {
+        return uiSubject.ofType()
+    }
+
+    override fun fnRenderMeetingType(uiModel: UiModel<List<LookUp>>) {
+        toggleProgress(uiModel.inProgress)
+        uiModel.onSuccess {
+            meetingTypeAdapter.setSpinnerData(binding.spMeetingType,it)
+            binding.spMeetingType.setSelection(0)
+        }
+        uiModel.onFailure {
+            Timber.d(it)
+            showOnFailurePopup(it)
         }
     }
 

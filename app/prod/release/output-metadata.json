@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 319,
-      "versionName": "3.1.9",
-      "outputFile": "app-prodRelease-3.1.9.apk"
+      "versionCode": 320,
+      "versionName": "3.2.0",
+      "outputFile": "app-prodRelease-3.2.0.apk"
     }
   ],
   "elementType": "File"

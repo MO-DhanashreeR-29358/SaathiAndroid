@@ -9,6 +9,7 @@ import io.reactivex.rxjava3.core.Observable
 
 interface IndirectCreateMeetingRepository {
 
+    fun getMeetingType(): Observable<List<LookUp>>
     fun getMeetingReason(): Observable<List<LookUp>>
     fun getMeetingObjective(): Observable<List<LookUp>>
     fun getLocationAddress(): Observable<List<LookUp>>

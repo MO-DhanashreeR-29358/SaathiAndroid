@@ -3,8 +3,10 @@ package com.mosl.tabapp
 import android.Manifest
 import android.R.attr
 import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -70,6 +72,11 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean>, Conf
 
     //deleteOldLogs(this, maxAgeDays = 7) // delete logs older than 7 days
 
+    // Monitor memory usage for 16KB compatibility
+      if (Build.VERSION.SDK_INT >= 35) {
+      logMemoryInfo()
+    }
+    
       EventBroadcast.registerSessionExpiredObserver(this, this)
     init()
     CRMWebServiceHandler.initSaathiApi(this)
@@ -130,7 +137,13 @@ abstract class SaathiAppNew : DaggerApplication(), IEventObserver<Boolean>, Conf
     }
   }*/
 
+  private fun logMemoryInfo() {
+    val activityManager = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    val memoryInfo = ActivityManager.MemoryInfo()
+    activityManager.getMemoryInfo(memoryInfo)
 
+    Log.d("Memory16KB", "Available memory: ${memoryInfo.availMem / 1024 / 1024} MB")
+  }
   fun getDB(): AppDatabase? {
     return this.appDatabase
   }

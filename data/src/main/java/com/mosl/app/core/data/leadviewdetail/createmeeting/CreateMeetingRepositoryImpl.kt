@@ -280,4 +280,5 @@ const val OUTSTATIONMEETING = 17
 const val BACLIENTMEETING = 16
 const val TOUCHEDUNTOUCHED = 132
 const val FEEDBACK = 133
+const val MEETINGTYPE = 143
 

@@ -12,6 +12,7 @@ import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGADDRESSID
 import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGDURATION
 import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGOBJECTIVE
 import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGREASON
+import com.mosl.app.core.data.leadviewdetail.createmeeting.MEETINGTYPE
 import com.mosl.app.core.data.leadviewdetail.createmeeting.OUTSTATIONMEETING
 import com.mosl.app.core.data.leadviewdetail.createmeeting.SUBCATEGORY
 import com.mosl.app.core.data.leadviewdetail.createmeeting.TOUCHEDUNTOUCHED
@@ -29,7 +30,6 @@ import com.mosl.saathi.api.model.createmeeting.AddressByLeadIdRequest
 import com.mosl.saathi.api.model.createmeeting.AutoCompleteAttendeeRequest
 import com.mosl.saathi.api.model.lead.LookupRequest
 import com.mosl.saathi.api.model.lead.LookupRequestNew
-import com.mosl.saathi.data.BuildConfig
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -41,6 +41,16 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
     val userManager: UserManagerImpl,
     val saathiIndrectApi: SaathiIndirectApi
 ): IndirectCreateMeetingRepository {
+    override fun getMeetingType(): Observable<List<LookUp>> {
+        return saathiIndrectApi.getAllLookup(
+            LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=143,parentId="0",IgnoreBusinessUnit=false)
+        ).map {
+            SetAppointmentMapper.transformLookupData(it.response?: mutableListOf(), getType(
+                MEETINGTYPE
+            ))
+        }
+    }
+
     override fun getMeetingReason(): Observable<List<LookUp>> {
         return saathiIndrectApi.getAllLookup(
             LookupRequest(businessUnitId=userManager.getUser()?.currentBusinessProfile?.businessUnitId.toString(),lookupTypeId=15,parentId="0",IgnoreBusinessUnit=false)
@@ -150,6 +160,7 @@ class IndirectCreateMeetingRepositroyImpl  @Inject constructor(
             OUTSTATIONMEETING -> "Select Out Station Meeting"
             TOUCHEDUNTOUCHED -> "Select Touched Untouched"
             FEEDBACK -> "Select Feedback"
+            MEETINGTYPE -> "Select Meeting Type"
             else -> "Select Activity Type"
         }
     }

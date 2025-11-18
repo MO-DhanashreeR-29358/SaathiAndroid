@@ -6,6 +6,7 @@ import com.mosl.tabapp.saathiIndirect.setAppointment.IndirectSetAppointmentUiEve
 sealed class IndirectCreateMeetingUiEvent {
 
     object onActivityCall:IndirectCreateMeetingUiEvent()
+    object OnMeetingTypeCall:IndirectCreateMeetingUiEvent()
     object OnMeetingDurationCall:IndirectCreateMeetingUiEvent()
     object  OnMeetingObjectiveCall:IndirectCreateMeetingUiEvent()
     object OnLocationAddressCall:IndirectCreateMeetingUiEvent()

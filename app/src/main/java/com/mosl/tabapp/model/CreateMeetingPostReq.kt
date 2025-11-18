@@ -92,6 +92,10 @@ data class CreateMeetingPostReq(
 	var productTypeID:String?=null,
 
 	@SerializedName("AttendeeCode")
-	var attendeeCode:String?=null
+	var attendeeCode:String?=null,
+
+	@SerializedName("MeetingTypeR")
+	var meetingTypeR: String? = null
+
 )
 

@@ -93,4 +93,8 @@ interface IndirectCreateMeetingView :BaseView{
     fun toggleOTPVisibility(show: Boolean)
 
     fun getInterestedInLookUpId() : Int
+
+    fun onMeetingTypeCall():Observable<IndirectCreateMeetingUiEvent.OnMeetingTypeCall>
+    fun fnRenderMeetingType(uiModel: UiModel<List<LookUp>>)
+
 }
