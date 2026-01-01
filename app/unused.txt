@@ -24214,7 +24214,6 @@ com.mosl.app.core.data.interceptor.EncryptionInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.EncryptionInterceptor newInstance(com.mosl.shared.Encryptor.AESEncryptor)
 com.mosl.app.core.data.interceptor.HeaderInterceptor:
     public final android.content.Context getContext()
-    public final java.io.File getDailyLogFile(android.content.Context)
     public final com.mosl.shared.Encryptor.AESEncryptor getEncryptor()
     public final com.mosl.mobile.user.login.UserManager getUserManager()
 com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
@@ -24222,7 +24221,6 @@ com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
 com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor:
     private static final java.lang.String API_HEADER_DATE
     public static final java.lang.String NO_TIMEOUT
-    public static java.io.File getDailyLogFile(android.content.Context)
 com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor newInstance(com.mosl.user.prefs.LongPreference,com.mosl.mobile.domain.attendance.AppInfo,android.content.Context)
 com.mosl.app.core.data.lead.LeadRepositoryImpl:
@@ -80482,6 +80480,7 @@ com.mosl.app.core.data.interceptor.HeaderInterceptor:
     public static final java.lang.String API_HEADER_USER_ID
     public static final com.mosl.app.core.data.interceptor.HeaderInterceptor$Companion Companion
     public static void <clinit>()
+    public static java.io.File getDailyLogFile()
     public static boolean isExcludedEndpoint()
 com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory create$3(dagger.internal.InstanceFactory,dagger.internal.InstanceFactory,dagger.internal.Factory)
@@ -80491,7 +80490,6 @@ com.mosl.app.core.data.interceptor.HeaderInterceptor_Factory:
     public static com.mosl.navigator.NavigationHelper get()
 com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor:
     public final android.content.Context context
-    public static void writeLogToFile()
 com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor_Factory:
     public static com.mosl.app.core.data.interceptor.MyZoneHeaderInterceptor get()
     public static com.mosl.ekycexpress.core.ActivityNavigationHelper get()

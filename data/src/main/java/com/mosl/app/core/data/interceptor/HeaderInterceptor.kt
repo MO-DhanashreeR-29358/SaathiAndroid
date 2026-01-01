@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Environment
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -157,7 +158,8 @@ class HeaderInterceptor @Inject constructor(
   fun getDailyLogFile(context: Context): File {
     val date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     val fileName = "http_logs_$date.txt"
-    val logDir = File(context.getExternalFilesDir(null), "logs")
+    val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+    val logDir = File(downloadsDir, "SAATHI_Logs")
 
     if (!logDir.exists()) logDir.mkdirs()
 
@@ -165,7 +167,7 @@ class HeaderInterceptor @Inject constructor(
   }
 
   fun writeLogToFile(context: Context, logText: String) {
-  /* val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
+ /*  val timestamp = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
     val logLine = "[$timestamp] $logText"
 
     val logFile = getDailyLogFile(context)

@@ -1,6 +1,7 @@
 package com.mosl.app.core.data.interceptor;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -119,7 +120,8 @@ import okhttp3.ResponseBody;
     public static File getDailyLogFile(Context context) {
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         String fileName = "http_logs_" + date + ".txt";
-        File logDir = new File(context.getExternalFilesDir(null), "logs");
+        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File logDir = new File(downloadsDir, "SAATHI_Logs");
 
         if (!logDir.exists()) {
             logDir.mkdirs();
@@ -129,7 +131,7 @@ import okhttp3.ResponseBody;
     }
 
     public static void writeLogToFile(Context context, String logText) {
-       /* String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        /*String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         String logLine = "[" + timestamp + "] " + logText;
 
         File logFile = getDailyLogFile(context);
