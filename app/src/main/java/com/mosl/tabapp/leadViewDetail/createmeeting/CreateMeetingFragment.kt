@@ -166,6 +166,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     private lateinit var meetingProductAdapter: CreateMeetingProductAdapter
     private lateinit var travellingAdapter: CreateMeetingTravellingModeAdapter
     private lateinit var chipsAdapter: ArrayAdapter<String>
+    private var addedTravellingList: ArrayList<CreateMeetingTravellingModel> = ArrayList()
     private var addedProductList: ArrayList<CreateMeetingProductModel> = ArrayList()
     private val stageAdapter: ArrayAdapter<RowData> by lazy {
         SpinnerAdapterFactory.getDefaultAdapter<RowData>(requireContext())
@@ -1037,6 +1038,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
             CreateMeetingTravellingModel(lookUp.lookUpID.toString(), lookUp.lookUpName)
         )
         travellingAdapter.notifyDataSetChanged()
+        addedTravellingList.add(CreateMeetingTravellingModel(lookUp.lookUpID.toString(), lookUp.lookUpName))
+        addedTravellingList = addedTravellingList.distinctBy { it.travellingId } as ArrayList<CreateMeetingTravellingModel>
+
     }
 
     override fun toggleSearchState(
@@ -1180,8 +1184,9 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
     }
 
     override fun getTravellingmodeList(): List<CreateMeetingTravellingModel> {
-        val list = travellingAdapter.getTravellingList()
-        return list
+       /* val list = travellingAdapter.getTravellingList()
+        return list*/
+        return addedTravellingList
     }
 
     override fun getproductList(): List<CreateMeetingProductModel> {
@@ -1260,6 +1265,7 @@ class CreateMeetingFragment : CommonFragment(), CreateMeetingView, OTPFragment.O
          meetingProductAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
          travellingAdapter.deleteAllProduct()
          travellingAdapter.notifyDataSetChanged() // Ensure UI and data are in sync
+        addedTravellingList.clear()
         addedProductList.clear()
         }
 
