@@ -200,6 +200,7 @@ data class User(
 
         if (myZoneProfile.equals("Group Leader-PCG Wealth", ignoreCase = true) ||
             myZoneProfile.equals("PCG Wealth", ignoreCase = true) ||
+            myZoneProfile.equals("PCG Wealth Manager", ignoreCase = true) ||
             myZoneProfile.equals("HNI Sales", ignoreCase = true)) {
             flag = true
         }
