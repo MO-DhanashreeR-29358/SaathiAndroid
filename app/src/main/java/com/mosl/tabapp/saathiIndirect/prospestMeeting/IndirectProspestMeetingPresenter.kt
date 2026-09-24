@@ -185,7 +185,9 @@ class IndirectProspestMeetingPresenter @Inject constructor(
             }
             .addTo(disposable)
 
-
+        view.onAttendeeAddedClicked()
+            .subscribe { view.showAttendeAddedDialog() }
+            .addTo(disposable)
 
         view.onSaveCall().map {
             view.getInputData()

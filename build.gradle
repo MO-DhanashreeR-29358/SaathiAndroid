@@ -23,7 +23,7 @@ buildscript {
 }
 
 ext.versions = ["compileSdkVersion"   : 34,
-                "targetSdkVersion"    : 35,
+                "targetSdkVersion"    : 36,
                 "buildToolsVersion"   : "29.0.3",
                 'multidex'            : '2.0.1',
                 'pagerslidingtabstrip': '1.0.1',

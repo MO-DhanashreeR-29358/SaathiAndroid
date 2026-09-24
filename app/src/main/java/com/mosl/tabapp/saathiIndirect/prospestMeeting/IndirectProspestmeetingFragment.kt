@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.DatePicker
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -57,6 +58,7 @@ import com.mosl.tabapp.geoLocation.GeoTaggingFragment
 import com.mosl.tabapp.geoLocation.LocationItem
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModeAdapter
 import com.mosl.tabapp.leadViewDetail.CreateMeetingTravellingModel
+import com.mosl.tabapp.leadViewDetail.createmeeting.AddedAttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.AttendeeAdapter
 import com.mosl.tabapp.leadViewDetail.createmeeting.CreateMeetingConstants
 import com.mosl.tabapp.model.AddedAttendeeModel
@@ -78,7 +80,7 @@ import java.util.TimeZone
 import javax.inject.Inject
 
 
-class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingView {
+class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingView ,AddedAttendeeAdapter.ClickListenerHandler{
 
     internal  lateinit var binding:FragIndirectProspestMeetingBinding
 
@@ -96,7 +98,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
     private var handlerFCode: Handler? = null
     private var autoSuggestAdapterFCode: AutoSuggestAdapter? = null
 
-
+    private lateinit var addedAttendeeAdapter: AddedAttendeeAdapter
     // create meeting
 
     private lateinit var activityAdapter: ArrayAdapter<LookUp>
@@ -637,6 +639,10 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         return binding.tvAttendeeCount.clicks()
     }
 
+    override fun showAttendeAddedDialog() {
+        showAddedDialog(true)
+    }
+
     override fun showAttendeDialog() {
         attendeeDialog = Dialog(requireContext())
         attendeeDialog.apply {
@@ -660,7 +666,7 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
                 before: Int,
                 count: Int
             ) {
-                uiSubject.onNext(IndirectProspestMeetingUiEvent.SearchTextChange(s?.toString() ?: ""))
+                uiSubject.onNext(IndirectProspestMeetingUiEvent.SearchTextChangeCreateMeeting(s?.toString() ?: ""))
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -724,6 +730,39 @@ class IndirectProspestmeetingFragment: CommonFragment(),IndirectProspestMeetingV
         }
     }
 
+    private fun showAddedDialog(isAttendee: Boolean) {
+        val dialogAddedAttendee = Dialog(requireContext())
+        dialogAddedAttendee.apply {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.dialog_addedd_attendee_list)
+            window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            setCanceledOnTouchOutside(true)
+        }
+        val tvEmpty = dialogAddedAttendee.findViewById<TextView>(R.id.tvEmpty)
+        val lvAttendee = dialogAddedAttendee.findViewById<ListView>(R.id.lvAttendee)
+        lvAttendee.emptyView = tvEmpty
+        if (isAttendee) {
+            addedAttendeeAdapter = AddedAttendeeAdapter(
+                requireContext(), addedAttendeeList, this
+            )
+            lvAttendee.adapter = addedAttendeeAdapter
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+
+        }
+        dialogAddedAttendee.show()
+    }
+    override fun onDeleteClicked(position: Int, isAttendee: Boolean) {
+        if (isAttendee) {
+            addedAttendeeCount--
+            setCount(addedAttendeeCount, binding.tvAttendeeCount)
+            addedAttendeeList.removeAt(position)
+            addedAttendeeAdapter.notifyDataSetChanged()
+        } else {
+
+        }
+    }
     override fun renderOnAttendeeItemClick(position: Int) {
         val attendee = attendeeAdapter.getItem(position)
         if (!CreateMeetingConstants.hasAttendeeAdded(addedAttendeeList, attendee.empCode)) {

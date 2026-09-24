@@ -105,4 +105,5 @@ interface IndirectProspestMeetingView:BaseView {
 
     fun onBDMSaveCall():Observable<IndirectProspestMeetingUiEvent.OnBDMSaveCall>
 
+    fun showAttendeAddedDialog()
 }

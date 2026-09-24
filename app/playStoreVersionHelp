@@ -134,4 +134,9 @@ Release Note : SAAT-I3145. Joint holder CTA visible for all the branch
 Version : 3.2.3
 Update Date : 3.06.2026
 Release Note : SAAT-I3271.  User profile name update at backend - PCG sales RMs
-                            New Profile to be added – PCG Wealth Manager.
+                            New Profile to be added – PCG Wealth Manager
+
+---------------------------------------------------------------------------------------------
+Version : 3.2.6
+Update Date : 15.09.2026
+Release Note : ASZ-I24117.  Unable to add attendee in prospect meeting.

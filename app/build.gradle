@@ -143,6 +143,11 @@ android {
     namespace 'com.mosl.tabapp'
     configurations {
         implementation.exclude module:'protobuf-lite'
+        all {
+            resolutionStrategy {
+                force 'com.google.android.recaptcha:recaptcha:18.4.0'
+            }
+        }
     }
 
         compileOptions {
@@ -339,7 +344,7 @@ dependencies {
     api 'com.google.android.gms:play-services-auth-api-phone:18.0.1'
 
     implementation 'com.google.firebase:firebase-iid:21.1.0'
-
+    implementation 'com.google.android.recaptcha:recaptcha:18.4.0'
 }
 kapt {
     javacOptions {
