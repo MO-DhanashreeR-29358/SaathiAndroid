@@ -131,7 +131,7 @@ import okhttp3.ResponseBody;
     }
 
     public static void writeLogToFile(Context context, String logText) {
-       /* String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        String timestamp = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         String logLine = "[" + timestamp + "] " + logText;
 
         File logFile = getDailyLogFile(context);
@@ -142,6 +142,6 @@ import okhttp3.ResponseBody;
             writer.newLine();
         } catch (IOException e) {
             Log.e("Logger", "Failed to write log: " + e.getLocalizedMessage());
-        }*/
+        }
     }
 }

@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 323,
-      "versionName": "3.2.3",
-      "outputFile": "app-prodDebug-3.2.3.apk"
+      "versionCode": 326,
+      "versionName": "3.2.6",
+      "outputFile": "app-prodDebug-3.2.6.apk"
     }
   ],
   "elementType": "File"
